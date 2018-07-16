@@ -22,5 +22,5 @@ clean: clean-java
 .PHONY: clean
 
 clean-java:
-	rm -rf target
+	rm -rf target .deps .tested
 .PHONY: clean-java
