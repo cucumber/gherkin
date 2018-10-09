@@ -2,7 +2,7 @@
 set -ef -o pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [[ "$TRAVIS_PULL_REQUEST" == 'true' ]]; then
+if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then
   echo "Not deploying pull requests"
   exit 0
 fi
