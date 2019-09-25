@@ -605,10 +605,7 @@
       "Und "
     ],
     "background": [
-      "Grundlage",
-      "Hintergrund",
-      "Voraussetzungen",
-      "Vorbedingungen"
+      "Grundlage"
     ],
     "but": [
       "* ",
@@ -618,8 +615,7 @@
       "Beispiele"
     ],
     "feature": [
-      "Funktionalität",
-      "Funktion"
+      "Funktionalität"
     ],
     "given": [
       "* ",
@@ -630,16 +626,14 @@
     "name": "German",
     "native": "Deutsch",
     "rule": [
-      "Rule",
-      "Regel"
+      "Rule"
     ],
     "scenario": [
       "Beispiel",
       "Szenario"
     ],
     "scenarioOutline": [
-      "Szenariogrundriss",
-      "Szenarien"
+      "Szenariogrundriss"
     ],
     "then": [
       "* ",
