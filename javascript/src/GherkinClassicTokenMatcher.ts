@@ -1,15 +1,16 @@
 import DIALECTS from './gherkin-languages.json'
 import Dialect from './Dialect'
-import { NoSuchLanguageException } from './Errors'
+import { NoSuchLanguageException, ParserException } from './Errors'
+import IToken, { IGherkinLine, Item } from './IToken'
 import * as messages from '@cucumber/messages'
-import IToken from './IToken'
 import { TokenType } from './Parser'
 import ITokenMatcher from './ITokenMatcher'
+import countSymbols from './countSymbols'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const LANGUAGE_PATTERN = /^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/
 
-export default class TokenMatcher implements ITokenMatcher<TokenType> {
+export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenType> {
   private dialect: Dialect
   private dialectName: string
   private activeDocStringSeparator: string
@@ -39,7 +40,7 @@ export default class TokenMatcher implements ITokenMatcher<TokenType> {
 
   match_TagLine(token: IToken<TokenType>) {
     if (token.line.startsWith('@')) {
-      this.setTokenMatched(token, TokenType.TagLine, null, null, null, token.line.getTags())
+      this.setTokenMatched(token, TokenType.TagLine, null, null, null, this.getTags(token.line))
       return true
     }
     return false
@@ -127,8 +128,7 @@ export default class TokenMatcher implements ITokenMatcher<TokenType> {
         this.indentToRemove = 0
       }
 
-      // TODO: Use the separator as keyword. That's needed for pretty printing.
-      this.setTokenMatched(token, TokenType.DocStringSeparator, mediaType)
+      this.setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator)
       return true
     }
     return false
@@ -165,7 +165,31 @@ export default class TokenMatcher implements ITokenMatcher<TokenType> {
     return true
   }
 
-  matchTitleLine(token: IToken<TokenType>, tokenType: TokenType, keywords: readonly string[]) {
+  getTags(line: IGherkinLine): readonly Item[] {
+    const uncommentedLine = line.trimmedLineText.split(/\s#/g, 2)[0]
+    let column = line.indent + 1
+    const items = uncommentedLine.split('@')
+    const tags: any[] = []
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i].trimRight()
+      if (item.length == 0) {
+        continue
+      }
+      if (!item.match(/^\S+$/)) {
+        throw ParserException.create('A tag may not contain whitespace', line.lineNumber, column)
+      }
+      const span = { column, text: '@' + item }
+      tags.push(span)
+      column += countSymbols(items[i]) + 1
+    }
+    return tags
+  }
+
+  private matchTitleLine(
+    token: IToken<TokenType>,
+    tokenType: TokenType,
+    keywords: readonly string[]
+  ): boolean {
     for (const keyword of keywords) {
       if (token.line.startsWithTitleKeyword(keyword)) {
         const title = token.line.getRestTrimmed(keyword.length + ':'.length)
@@ -182,7 +206,7 @@ export default class TokenMatcher implements ITokenMatcher<TokenType> {
     text?: string,
     keyword?: string,
     indent?: number,
-    items?: any[]
+    items?: readonly Item[]
   ) {
     token.matchedType = matchedType
     token.matchedText = text
