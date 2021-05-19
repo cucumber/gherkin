@@ -169,5 +169,7 @@ Gherkin.NuGetPackages/bin/
 .built*
 .vscode
 .run_tests
-msbuild.binlog
 .generated
+.packed
+.tested
+.fixprotoc
