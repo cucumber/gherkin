@@ -1,0 +1,21 @@
+name: Release Go
+
+on:
+  push:
+    branches: [release/*]
+
+jobs:
+  publish-go-subrepo:
+    name: Publish to cucumber/messgaes-go subrepo
+    runs-on: ubuntu-latest
+    environment: Release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - uses: cucumber/action-publish-subrepo@v1.1.0
+        with:
+          working-directory: go
+          github-token: ${{ secrets.CUKEBOT_GITHUB_TOKEN }}

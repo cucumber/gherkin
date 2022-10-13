@@ -1,0 +1,51 @@
+name: test-codegen
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-codegen:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: validate the json schemas
+        run: make validate
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+
+      - run: composer install
+        working-directory: php
+
+      - name: generate code for all languages
+        run: |
+          make clean-all
+          make generate-all
+
+      - name: check the repo is still clean after generation
+        run: |
+          git status --porcelain
+          git diff HEAD
+          [ -z "$(git status --porcelain)" ]

@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "config:base",
+    ":preserveSemverRanges",
+    ":rebaseStalePrs",
+    ":disableDependencyDashboard"    
+  ],
+  "labels": [":robot: dependencies"],
+  "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "depTypeList": ["devDependencies", "dependencies"],
+      "updateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    }
+  ],
+  "ignorePaths": ["dotnet/**"]
+}

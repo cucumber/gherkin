@@ -1,0 +1,41 @@
+name: Release Python
+
+on:
+  push:
+    branches: [release/*]
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    environment: Release
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with: 
+          version: 1.1.13
+          
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Build
+        run: poetry build
+
+      - name: Config for PyPI release
+        run: |
+          poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
+
+      - name: Publish
+        run: |
+          poetry publish

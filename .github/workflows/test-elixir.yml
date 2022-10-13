@@ -1,0 +1,37 @@
+name: test-elixir
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-elixir:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: '22.2'
+          elixir-version: '1.10.x'
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+
+      - run: |
+          mix local.hex --force
+          mix deps.get
+        working-directory: elixir
+
+      - name: compile messages
+        run: MIX_ENV=prod mix protox.generate --multiple-files --output-path=lib/cucumber_messages/generated messages.proto
+        working-directory: elixir
+
+      - run: mix test
+        working-directory: elixir

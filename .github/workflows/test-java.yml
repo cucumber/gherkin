@@ -1,0 +1,41 @@
+name: test-java
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-java:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        java: ["11", "16"]
+        include:
+          - os: windows-latest
+            java: "16"
+          - os: macos-latest
+            java: "16"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java }}
+          cache: "maven"
+
+      - run: mvn install
+        working-directory: java
+
+      - run: mvn test
+        working-directory: java
