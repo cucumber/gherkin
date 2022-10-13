@@ -29,9 +29,5 @@ jobs:
           mix deps.get
         working-directory: elixir
 
-      - name: compile messages
-        run: MIX_ENV=prod mix protox.generate --multiple-files --output-path=lib/cucumber_messages/generated messages.proto
-        working-directory: elixir
-
       - run: mix test
         working-directory: elixir
