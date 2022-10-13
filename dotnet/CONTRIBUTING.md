@@ -1,6 +1,4 @@
 Please read [CONTRIBUTING](https://github.com/cucumber/gherkin/blob/master/CONTRIBUTING.md) first.
-You should clone the [cucumber/gherkin](https://github.com/cucumber/gherkin) repo if you want
-to contribute.
 
 ## Run tests
 

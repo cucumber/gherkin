@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cucumber/gherkin-javascript.git"
+    "url": "git+https://github.com/cucumber/gherkin.git"
   },
   "keywords": [
     "gherkin",
@@ -19,9 +19,9 @@
   "author": "Aslak Hellesøy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cucumber/cucumber/issues"
+    "url": "https://github.com/cucumber/gherkin/issues"
   },
-  "homepage": "https://github.com/cucumber/gherkin-javascript",
+  "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
     "@cucumber/gherkin-streams": "^5.0.1",
     "@types/mocha": "10.0.0",

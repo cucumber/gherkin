@@ -4,16 +4,16 @@ Gherkin is a parser and compiler for the Gherkin language.
 
 Gherkin is currently implemented for the following platforms (in order of birthday):
 
-- [.NET](https://github.com/cucumber/gherkin-dotnet)
-- [Java](https://github.com/cucumber/gherkin-java)
-- [JavaScript](https://github.com/cucumber/gherkin-javascript)
-- [Ruby](https://github.com/cucumber/gherkin-ruby)
-- [Go](https://github.com/cucumber/gherkin-go)
-- [Python](https://github.com/cucumber/gherkin-python)
-- [C](https://github.com/cucumber/common/tree/main/gherkin/c)
-- [Objective-C](https://github.com/cucumber/gherkin-objective-c)
-- [Perl](https://github.com/cucumber/gherkin-perl)
-- [PHP](https://github.com/cucumber/gherkin-php)
+- [.NET](./dotnet)
+- [Java](./java)
+- [JavaScript](./javascript)
+- [Ruby](./ruby)
+- [Go](./go)
+- [Python](./python)
+- [C](./c)
+- [Objective-C](./objective-c)
+- [Perl](./perl)
+- [PHP](./php)
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser for a new language.
 Our wish-list is (in no particular order):
@@ -205,7 +205,7 @@ design docs (which might be a little outdated, but mostly OK).
 
 The AST produced by the parser can be described with the following class diagram:
 
-![](https://github.com/cucumber/common/blob/main/gherkin/docs/ast.png)
+![](https://github.com/cucumber/gherkin/blob/main/docs/ast.png)
 
 Every class represents a node in the AST. Every node has a `Location` that describes
 the line number and column number in the input file. These numbers are 1-indexed.
@@ -220,7 +220,7 @@ Each node in the JSON representation also has a `type` property with the name
 of the node type.
 
 You can see some examples in the
-[testdata/good](https://github.com/cucumber/common/tree/main/gherkin/testdata/good)
+[testdata/good](https://github.com/cucumber/gherkin/tree/main/testdata/good)
 directory.
 
 ### Pickles
