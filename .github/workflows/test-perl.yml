@@ -24,7 +24,7 @@ jobs:
 
       - name: install the CCK
         run: npm ci
-        working-directory: perl/t/compatibility-kit
+        working-directory: t/compatibility-kit
 
       - name: run tests
         run: |
