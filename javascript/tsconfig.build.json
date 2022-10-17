@@ -1,24 +1,18 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "inlineSources": true,
-    "target": "es6",
-    "module": "commonjs"
+    "rootDir": ".",
+    "noEmit": false
   },
-  "files": [],
-  "references": [
-    {
-      "path": "./gherkin/javascript/tsconfig.build.json"
-    },
-    {
-      "path": "./gherkin-utils/javascript/tsconfig.build.json"
-    },
-    {
-      "path": "./query/javascript/tsconfig.build.json"
-    }
+  "files": [
+    "src/gherkin-languages.json"
+  ],
+  "include": [
+    "src",
+    "test"
   ]
 }
