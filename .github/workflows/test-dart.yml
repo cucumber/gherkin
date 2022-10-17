@@ -22,4 +22,4 @@ jobs:
       - name: run tests
         run: |
           dart test
-        working-directory: c
+        working-directory: dart
