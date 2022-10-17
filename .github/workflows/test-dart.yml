@@ -16,8 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: dart-lang/setup-dart@v1.3
-
+      - name: install dart
+        uses: dart-lang/setup-dart@v1.3
       - name: Test
         run:
           - cd dart
