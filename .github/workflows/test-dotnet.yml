@@ -1,4 +1,4 @@
-name: test-objective-c
+name: test-dotnet
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
   workflow_call:
 
 jobs:
-  test-objective-c:
+  test-dotnet:
     runs-on: ubuntu-latest
 
     steps:
