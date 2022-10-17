@@ -19,4 +19,4 @@ jobs:
       - name: run tests
         run:
           - make
-        working-directory: perl
+        working-directory: c
