@@ -19,6 +19,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Test
-        run: dart test
-        working-directory: perl
+        run:
+          - cd dart
+          - dart test
 
