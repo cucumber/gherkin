@@ -39,3 +39,8 @@ jobs:
     - name: test
       working-directory: go
       run: go test --v ./...
+
+    - name: run make
+      run: |
+        make
+      working-directory: go

@@ -39,3 +39,8 @@ jobs:
 
       - run: mvn test
         working-directory: java
+
+      - name: run make
+        run: |
+          make
+        working-directory: java

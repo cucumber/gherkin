@@ -27,3 +27,8 @@ jobs:
           prove -l
           AUTHOR_TESTS=1 prove -l
         working-directory: perl
+
+      - name: run make
+        run: |
+          make
+        working-directory: perl

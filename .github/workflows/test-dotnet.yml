@@ -20,7 +20,7 @@ jobs:
         with:
           dotnet-version: '5.0.x'
 
-      - name: run tests
+      - name: run make
         run: |
           make
         working-directory: dotnet

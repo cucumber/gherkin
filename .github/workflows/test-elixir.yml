@@ -31,3 +31,8 @@ jobs:
 
       - run: mix test
         working-directory: elixir
+
+      - name: run make
+        run: |
+          make
+        working-directory: elixir

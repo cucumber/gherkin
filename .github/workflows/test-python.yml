@@ -42,3 +42,8 @@ jobs:
           pip install -e .
       - name: Run tests
         run: pytest
+
+      - name: run make
+        run: |
+          make
+        working-directory: python

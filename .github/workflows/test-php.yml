@@ -52,3 +52,8 @@ jobs:
           vendor/bin/php-cs-fixer --dry-run --diff fix
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit
+
+      - name: run make
+        run: |
+          make
+        working-directory: php
