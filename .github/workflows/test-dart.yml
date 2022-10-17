@@ -23,7 +23,3 @@ jobs:
         run: |
           dart test
         working-directory: dart
-      - name: run make
-        run: |
-          make
-        working-directory: dart
