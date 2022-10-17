@@ -5,8 +5,18 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "test": "mocha",
-    "prepublishOnly": "tsc --build tsconfig.build.json"
+    "build:cjs": "tsc --build tsconfig.build-cjs.json",
+    "build:esm": "tsc --build tsconfig.build-esm.json",
+    "build:legacy": "tsc --build tsconfig.build.json",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:legacy",
+    "postbuild:cjs": "./scripts/npm-each npm run postbuild:cjs --if-present",
+    "clean": "npm run clean-tsc && ./scripts/npm-each rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
+    "clean-tsc": "./scripts/npm-each rm -rf dist",
+    "test": "./scripts/npm-each npm test",
+    "upgrade": "npm-check-updates --upgrade && ./scripts/npm-each npm-check-updates --upgrade",
+    "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix */javascript",
+    "eslint": "eslint --ext ts,tsx --max-warnings 0 */javascript",
+    "prepare": "./scripts/npm-each npm run prepare --if-present"
   },
   "repository": {
     "type": "git",
