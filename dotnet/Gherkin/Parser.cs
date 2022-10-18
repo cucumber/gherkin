@@ -6,7 +6,6 @@
 //      the code is regenerated.
 //  </auto-generated>
 // ------------------------------------------------------------------------------
-
 #region Designer generated code
 #pragma warning disable
 using System;
