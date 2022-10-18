@@ -20,10 +20,10 @@ OS := $(shell go env GOOS)
 ARCH := $(shell go env GOARCH)
 EXE := dist/$(EXE_BASE_NAME)-$(OS)-$(ARCH)
 
-ifndef NO_CROSS_COMPILE
-EXES = $(patsubst %,dist/$(EXE_BASE_NAME)-%,$(PLATFORMS))
-else
+ifndef CROSS_COMPILE
 EXES = $(EXE)
+else
+EXES = $(patsubst %,dist/$(EXE_BASE_NAME)-%,$(PLATFORMS))
 endif
 
 GO_REPLACEMENTS := $(shell sed -n "/^\s*github.com\/cucumber\/common/p" go.mod | perl -wpe 's/\s*(github.com\/cucumber\/common\/(.*)\/go\/v\d+).*/q{replace } . $$1 . q{ => ..\/..\/} . $$2 . q{\/go}/eg')
