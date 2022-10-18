@@ -42,17 +42,18 @@ acceptance/testdata/%.feature.errors.ndjson: ../testdata/%.feature ../testdata/%
 	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
 
 
-.codegen: build/classes.php
+.codegen: src-generated/Parser.php
 
-build/classes.php: gherkin-php.razor gherkin.berp
+src-generated/Parser.php: gherkin-php.razor gherkin.berp
 	$(berp-generate-parser)
 	csplit --quiet --prefix=build/Generated --suffix-format=%02d.php.tmp --elide-empty-files build/classes.php /^.*.php$$/ {*}
 	for file in build/Generated**; do mkdir -p src-generated/$$(head -n 1 $$file | sed 's/[^/]*.php$$//'); done
 	for file in build/Generated**; do tail -n +2 $$file > src-generated/$$(head -n 1 $$file); rm $$file; done
 	vendor/bin/php-cs-fixer --diff fix src-generated
+	rm -rf build/classes.php
 
 clean-build:
-	rm -rf build/classes.php
+	rm -rf build/*
 	rm -rf src-generated/*
 	rm -rf .compared acceptance
 
