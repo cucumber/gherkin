@@ -25,36 +25,6 @@ default: .tested
 .deps:
 	touch $@
 
-update-dependencies:
-	mvn versions:force-releases
-	mvn versions:use-latest-versions -Dmaven.version.rules=file://$(shell pwd)/maven-versions-rules.xml
-	ruby scripts/set_version_ranges.rb
-.PHONY: update-dependencies
-
-pre-release: update-version update-dependencies clean default
-.PHONY: pre-release
-
-update-version:
-ifdef NEW_VERSION
-	mvn versions:set -DnewVersion=$(NEW_VERSION) -DgenerateBackupPoms=false
-else
-	@echo -e "\033[0;31mNEW_VERSION is not defined. Can't update version :-(\033[0m"
-	exit 1
-endif
-.PHONY: update-version
-
-publish: .deps
-ifeq ($(IS_TESTDATA),-testdata)
-	# no-op
-else
-	mvn deploy -Psign-source-javadoc -DskipTests=true
-endif
-.PHONY: publish
-
-post-release:
-	scripts/post-release.sh
-.PHONY: post-release
-
 clean: clean-java
 .PHONY: clean
 
