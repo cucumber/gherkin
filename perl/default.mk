@@ -40,48 +40,6 @@ default: .tested
 	PERL5LIB=${PERL5LIB} prove -l
 	touch $@
 
-ifdef NEW_VERSION
-ifneq (,$(DISTINI))
-dist: $(DIST)
-else
-dist:
-	@echo "Not building dist because there is no dist.ini"
-endif
-endif
-.PHONY: dist
-
-$(DIST): .tested
-	@(git status --porcelain 2>/dev/null | grep "^??" | perl -ne\
-	    'die "The `release` target includes all files in the working directory. Please remove [$$_], or add it to .gitignore if it should be included\n" if s!.+ perl/(.+?)\n!$$1!')
-	PERL5LIB=${PERL5LIB} PATH=$$PATH:${PERL5PATH} dzil build
-	PERL5LIB=${PERL5LIB} PATH=$$PATH:${PERL5PATH} cpanm --local-lib $(shell mktemp -d) --test-only $(DIST)
-
-pre-release: update-version CHANGELOG.md dist
-.PHONY: pre-release
-
-update-version:
-ifdef NEW_VERSION
-	echo $(NEW_VERSION) > VERSION
-else
-	@echo -e "\033[0;31mNEW_VERSION is not defined. Can't update version :-(\033[0m"
-	exit 1
-endif
-.PHONY: update-version
-
-
-publish: dist
-ifeq ($(IS_TESTDATA),-testdata)
-	# no-op
-else
-ifneq (,$(DISTINI))
-	cpan-upload $(DIST)
-endif
-endif
-.PHONY: publish
-
-post-release:
-.PHONY: post-release
-
 perl-clean:
 	rm -rf ./perl5 .deps .cpanfile_dependencies .tested .build $(LIBNAME)-*
 .PHONY: perl-clean
