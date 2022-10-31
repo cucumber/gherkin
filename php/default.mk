@@ -20,27 +20,6 @@ endef
 default: .tested
 .PHONY: default
 
-pre-release: update-version update-dependencies default
-.PHONY: pre-release
-
-update-version:
-ifdef NEW_VERSION
-# no-op: composer rely on git tags
-endif
-.PHONY: update-version
-
-update-dependencies:
-	composer update ${COMPOSER_FLAGS}
-.PHONY: update-dependencies
-
-publish:
-# no-op: composer will rely on the subrepo tag
-.PHONY: publish
-
-post-release:
-# no-op
-.PHONY: post-release
-
 clean:
 	rm -rf .tested .deps .codegen
 	rm -rf vendor composer.lock
