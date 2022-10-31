@@ -22,59 +22,6 @@ Gemfile.lock: Gemfile $(GEMSPEC)
 	bundle exec rspec --color
 	touch $@
 
-update-dependencies:
-	./scripts/update-gemspec
-.PHONY: update-dependencies
-
-ifdef NEW_VERSION
-ifneq (,$(GEMSPEC))
-gem: $(GEM)
-else
-gem:
-	@echo "Not building gem because there is no gemspec"
-endif
-endif
-.PHONY: gem
-
-$(GEM): .tested
-	gem build $(GEMSPEC)
-	test -s "$(GEM)" || { echo "Gem not built: $(GEM)"; exit 1; }
-
-remove-local-dependencies:
-	cat Gemfile | sed 's/^gem /#gem /' > Gemfile.tmp
-	mv Gemfile.tmp Gemfile
-.PHONY: remove-local-dependencies
-
-pre-release: remove-local-dependencies update-version update-dependencies gem
-.PHONY: pre-release
-
-update-version:
-ifeq ($(IS_TESTDATA),-testdata)
-	# no-op
-else
-ifdef NEW_VERSION
-	@echo "$(NEW_VERSION)" > VERSION
-endif
-endif
-.PHONY: update-version
-
-publish: gem
-ifeq ($(IS_TESTDATA),-testdata)
-	# no-op
-else
-ifneq (,$(GEMSPEC))
-	gem push $(GEM)
-else
-	@echo "Not publishing because there is no gemspec"
-endif
-endif
-.PHONY: publish
-
-post-release:
-	cat Gemfile | sed 's/^#gem /gem /' > Gemfile.tmp
-	mv Gemfile.tmp Gemfile
-.PHONY: post-release
-
 clean: clean-ruby
 .PHONY: clean
 
