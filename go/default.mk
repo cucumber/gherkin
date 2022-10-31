@@ -79,37 +79,6 @@ ifndef NO_UPX_COMPRESSION
 	if [ -f "$@.upx" ]; then upx -t $@.upx && mv $@.upx $@ || rm -f $@.upx; fi
 endif
 
-update-dependencies:
-	go get -u && go mod tidy
-.PHONY: update-dependencies
-
-pre-release: remove-replaces update-version update-dependencies clean default
-.PHONY: pre-release
-
-update-version: update-major
-	# no-op
-.PHONY: update-version
-
-ifneq (,$(wildcard ./cmd/main.go))
-publish: dist
-ifdef NEW_VERSION
-	./scripts/github-release $(NEW_VERSION)
-else
-	@echo -e "\033[0;31mNEW_VERSION is not defined. Can't publish :-(\033[0m"
-	exit 1
-endif
-else
-publish:
-ifdef NEW_VERSION
-	git tag --sign "$(LIBNAME)/go/v$(NEW_VERSION)" -m "Release $(LIBNAME)/go v$(NEW_VERSION)"
-	git push --tags
-else
-	@echo -e "\033[0;31mNEW_VERSION is not defined. Can't publish :-(\033[0m"
-	exit 1
-endif
-endif
-.PHONY: publish
-
 .linted: $(GO_SOURCE_FILES)
 	gofmt -w $^
 	touch $@
@@ -118,38 +87,12 @@ endif
 	go test ./...
 	touch $@
 
-post-release:
-ifdef NEW_VERSION
-	pushd ../.. && \
-	source scripts/functions.sh && update_go_library_version $(LIBNAME) $(NEW_VERSION) && \
-	popd
-else
-	@echo -e "\033[0;31mNEW_VERSION is not defined. Can't post-release :-(\033[0m"
-	exit 1
-endif
-.PHONY: post-release
-
 clean: clean-go
 .PHONY: clean
 
 clean-go:
 	rm -rf .deps .tested* .linted dist/ acceptance/
 .PHONY: clean-go
-
-remove-replaces:
-	sed -i '/^replace/d' go.mod
-	sed -i 'N;/^\n$$/D;P;D;' go.mod
-.PHONY: remove-replaces
-
-update-major:
-ifeq ($(CURRENT_MAJOR), $(NEW_MAJOR))
-	# echo "No major version change"
-else
-	echo "Updating major from $(CURRENT_MAJOR) to $(NEW_MAJOR)"
-	sed -Ei "s/$(LIBNAME)\/go(\/v$(CURRENT_MAJOR))?/$(LIBNAME)\/go\/v$(NEW_MAJOR)/" go.mod
-	sed -Ei "s/$(LIBNAME)\/go(\/v$(CURRENT_MAJOR))?/$(LIBNAME)\/go\/v$(NEW_MAJOR)/" $(shell find . -name "*.go")
-endif
-.PHONY: update-major
 
 ### COMMON stuff for all platforms
 
