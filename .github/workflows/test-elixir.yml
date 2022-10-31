@@ -32,7 +32,9 @@ jobs:
       - run: mix test
         working-directory: elixir
 
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '5.0.x'
       - name: run make
-        run: |
-          make
+        run: make
         working-directory: elixir

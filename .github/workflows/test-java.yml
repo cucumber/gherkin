@@ -18,12 +18,12 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        java: ["11", "16"]
+        java: ["11", "17"]
         include:
           - os: windows-latest
-            java: "16"
+            java: "17"
           - os: macos-latest
-            java: "16"
+            java: "17"
 
     steps:
       - uses: actions/checkout@v3

@@ -53,7 +53,9 @@ jobs:
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit
 
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '5.0.x'
       - name: run make
-        run: |
-          make
+        run: make
         working-directory: php
