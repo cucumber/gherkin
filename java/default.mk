@@ -15,11 +15,7 @@ default: .tested
 .codegen:
 	touch $@
 
-.tested: .tested-jar-check
-
-.tested-jar-check: .deps .built
-	./scripts/check-jar.sh $(JAR)
-	touch $@
+.tested: .deps .built
 
 .built: pom.xml $(JAVA_SOURCE_FILES) .codegen
 	mvn install
