@@ -24,13 +24,13 @@ clean: ## Remove automatically generated files and related artifacts
 
 generate: src/gherkin-languages.json src/Parser.ts ## Generate Gherkin parser code
 
-node_modules:
+node_modules: generate
 	npm install
 
-acceptance: generate node_modules $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: node_modules $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
 src/gherkin-languages.json:
-	cp ../gherkin-languages.json src/gherkin-languages.json
+	cp ../gherkin-languages.json $@
 
 src/Parser.ts: gherkin-javascript.razor ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM

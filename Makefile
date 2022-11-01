@@ -1,4 +1,4 @@
-languages = javascript java
+languages = javascript java ruby
 
 .DEFAULT_GOAL = help
 
