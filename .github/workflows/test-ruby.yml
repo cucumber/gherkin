@@ -38,4 +38,4 @@ jobs:
 
       - name: run acceptance tests
         run: make acceptance
-        working-directory: java
+        working-directory: ruby
