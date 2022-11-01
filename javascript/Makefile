@@ -1,4 +1,4 @@
-include default.mk
+SHELL := /usr/bin/env bash
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature" -o -name "*.feature.md")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature" -o -name "*.feature.md")
@@ -8,56 +8,45 @@ PICKLES      = $(patsubst ../testdata/%,acceptance/testdata/%.pickles.ndjson,$(G
 SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GOOD_FEATURE_FILES))
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
+.DEFAULT_GOAL = help
 GHERKIN = npx gherkin-javascript
+
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+clean: ## Remove automatically generated files and related artifacts
+	rm -f src/gherkin-languages.json
+	rm -f src/Parser.ts
+	rm -rf acceptance
 
 .DELETE_ON_ERROR:
 
-.codegen: src/Parser.ts
+generate: src/gherkin-languages.json src/Parser.ts ## Generate Gherkin parser code
 
-src/Parser.ts: gherkin-javascript.razor gherkin.berp
-	$(berp-generate-parser)
+acceptance: generate $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-.tested: .compared
+src/gherkin-languages.json:
+	cp ../gherkin-languages.json src/gherkin-languages.json
 
-.compared: $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES)
-	touch $@
+src/Parser.ts: gherkin-javascript.razor ../gherkin.berp
+	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 
 acceptance/testdata/%.ast.ndjson: ../testdata/% ../testdata/%.ast.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-source --no-pickles --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-ifndef GOLDEN
 	diff --unified <(jq "." $<.ast.ndjson) <(jq "." $@)
-else
-	cp $@ $(word 2,$^)
-endif
 
 acceptance/testdata/%.pickles.ndjson: ../testdata/% ../testdata/%.pickles.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-source --no-ast --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-ifndef GOLDEN
 	diff --unified <(jq "." $<.pickles.ndjson) <(jq "." $@)
-else
-	cp $@ $(word 2,$^)
-endif
 
 acceptance/testdata/%.source.ndjson: ../testdata/% ../testdata/%.source.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-ast --no-pickles --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-ifndef GOLDEN
 	diff --unified <(jq "." $<.source.ndjson) <(jq "." $@)
-else
-	cp $@ $(word 2,$^)
-endif
 
 acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-source --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-ifndef GOLDEN
 	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
-else
-	cp $@ $(word 2,$^)
-endif
-
-clean:
-	rm -rf acceptance
-.PHONY: clean
