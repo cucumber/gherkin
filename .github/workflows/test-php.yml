@@ -53,7 +53,6 @@ jobs:
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit
 
-      - name: run make
-        run: |
-          make
+      - name: run acceptance tests
+        run: make acceptance
         working-directory: php

@@ -1,4 +1,4 @@
-languages = javascript java ruby go
+languages = javascript java ruby go php
 
 .DEFAULT_GOAL = help
 
