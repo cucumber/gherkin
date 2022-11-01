@@ -18,12 +18,16 @@ clean: ## Remove automatically generated files and related artifacts
 	rm -f src/gherkin-languages.json
 	rm -f src/Parser.ts
 	rm -rf acceptance
+	rm -rf node_modules
 
 .DELETE_ON_ERROR:
 
 generate: src/gherkin-languages.json src/Parser.ts ## Generate Gherkin parser code
 
-acceptance: generate $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+node_modules:
+	npm install
+
+acceptance: generate node_modules $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
 src/gherkin-languages.json:
 	cp ../gherkin-languages.json src/gherkin-languages.json

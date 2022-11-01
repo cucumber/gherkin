@@ -1,4 +1,4 @@
-languages = javascript
+languages = javascript java
 
 .DEFAULT_GOAL = help
 
