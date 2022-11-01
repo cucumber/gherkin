@@ -1,4 +1,4 @@
-languages = javascript java ruby
+languages = javascript java ruby go
 
 .DEFAULT_GOAL = help
 
