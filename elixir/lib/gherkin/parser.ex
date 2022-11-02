@@ -3,9 +3,6 @@
 #       Changes to this file may cause incorrect behavior and will be lost if
 #       the code is regenerated.
 
-
-
-
 defmodule CucumberGherkin.TokenTypes do
   @moduledoc false
   @token_types [
