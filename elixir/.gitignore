@@ -26,6 +26,7 @@ erl_crash.dump
 
 # End of https://www.toptal.com/developers/gitignore/api/elixir,vscode
 
+acceptance
 .deps
 .tested
 .compile_messages

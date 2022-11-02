@@ -32,7 +32,6 @@ jobs:
       - run: mix test
         working-directory: elixir
 
-      - name: run make
-        run: |
-          make
+      - name: run acceptance tests
+        run: make acceptance
         working-directory: elixir
