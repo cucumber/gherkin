@@ -38,7 +38,7 @@ jobs:
 
       - name: generate code for all languages
         run: |
-          make clean-all
+          make clean-generated-all
           make generate-all
 
       - name: check the repo is still clean after generation

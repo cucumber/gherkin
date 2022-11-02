@@ -1,4 +1,4 @@
-languages = javascript java ruby go php elixir python perl dotnet dart c
+languages = c dart dotnet elixir go java javascript perl php python ruby
 
 .DEFAULT_GOAL = help
 
@@ -6,25 +6,18 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 generate-all: $(patsubst %,generate-%,$(languages)) ## Generate code for all supported languages
-.PHONY: generate-code
+.PHONY: generate-all
 
-acceptance-all: $(patsubst %,acceptance-%,$(languages)) ## Run acceptance tests for all supported languages
-.PHONY: acceptance-all
-
-clean-all: $(patsubst %,clean-%,$(languages)) ## Clean generated code of all supported languages
-.PHONY: clean-all
+clean-generated-all: $(patsubst %,clean-generated-%,$(languages)) ## Clean generated code of all supported languages
+.PHONY: clean-generated-all
 
 generate-%: %
 	cd $< && make generate
 .PHONY: generate-%
 
-acceptance-%: %
-	cd $< && make acceptance
-.PHONY: acceptance-%
-
-clean-%: %
-	cd $< && make clean
-.PHONY: clean-%
+clean-generated-%: %
+	cd $< && make clean-generated
+.PHONY: clean-generated-%
 
 docker-run:
 	[ -d "${HOME}/.m2/repository" ] || mkdir -p "${HOME}/.m2/repository"

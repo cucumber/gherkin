@@ -17,9 +17,11 @@ GHERKIN_GENERATE_TOKENS = PERL5LIB=${PERL5LIB} bin/gherkin-generate-tokens
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean: ## Remove automatically generated files and related artifacts
+clean-generated:  ## Remove automatically generated files and related artifacts
 	rm -f lib/Gherkin/Generated/Languages.pm
 	rm -f lib/Gherkin/Generated/Parser.pm
+
+clean:
 	rm -rf acceptance
 	rm -rf perl5
 
@@ -27,7 +29,7 @@ clean: ## Remove automatically generated files and related artifacts
 
 generate: lib/Gherkin/Generated/Languages.pm lib/Gherkin/Generated/Parser.pm ## Generate Gherkin parser code
 
-acceptance: generate perl5 $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) #$(ERRORS) ## Build acceptance test dir and compare results with reference
+acceptance: perl5 $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) #$(ERRORS) ## Build acceptance test dir and compare results with reference
 
 perl5:
 	cpanm --notest --local-lib ./perl5 --installdeps --with-develop .

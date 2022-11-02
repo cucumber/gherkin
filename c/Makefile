@@ -38,7 +38,7 @@ generate: ./include/rule_type.h src/parser.c src/dialect.c
 	cd src; $(MAKE)
 	touch $@
 
-clean: clean-generated
+clean:
 	rm -rf .compared .built .run acceptance
 	cd src; $(MAKE) $@
 .PHONY: clean

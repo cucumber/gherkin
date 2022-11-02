@@ -14,9 +14,11 @@ GHERKIN = npx gherkin-javascript
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean: ## Remove automatically generated files and related artifacts
+clean-generated: ## Remove automatically generated files and related artifacts
 	rm -f src/gherkin-languages.json
 	rm -f src/Parser.ts
+
+clean:
 	rm -rf acceptance
 	rm -rf node_modules
 
@@ -24,7 +26,7 @@ clean: ## Remove automatically generated files and related artifacts
 
 generate: src/gherkin-languages.json src/Parser.ts ## Generate Gherkin parser code
 
-node_modules: generate
+node_modules:
 	npm install
 
 acceptance: node_modules $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference

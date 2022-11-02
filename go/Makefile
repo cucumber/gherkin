@@ -16,10 +16,12 @@ GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean: ## Remove automatically generated files and related artifacts
+clean-generated:  ## Remove automatically generated files and related artifacts
 	rm -f gherkin-languages.json
 	rm -f dialects_builtin.go
 	rm -f parser.go
+
+clean:
 	rm -rf acceptance
 	rm -rf bin
 
@@ -29,10 +31,10 @@ generate: dialects_builtin.go parser.go ## Generate Gherkin parser code
 
 acceptance: bin/gherkin-generate-tokens bin/gherkin $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-bin/gherkin-generate-tokens: generate
+bin/gherkin-generate-tokens:
 	go build -o $@ ./gherkin-generate-tokens
 
-bin/gherkin: generate
+bin/gherkin:
 	go build -o $@ -a ./cmd
 
 gherkin-languages.json:
