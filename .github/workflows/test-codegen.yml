@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Perl uses make to generate files other than the parser
+      # Please do not repeat this pattern if possible.
+      - name: install cpanm and multiple modules
+        uses: perl-actions/install-with-cpanm@v1
+        with:
+          cpanfile: "perl/cpanfile"
+
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '5.0.x'
