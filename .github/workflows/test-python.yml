@@ -43,7 +43,6 @@ jobs:
       - name: Run tests
         run: pytest
 
-      - name: run make
-        run: |
-          make
+      - name: run acceptance tests
+        run: make acceptance
         working-directory: python
