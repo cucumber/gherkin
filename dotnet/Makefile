@@ -1,55 +1,62 @@
-include default.mk
+SHELL := /usr/bin/env bash
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
-TOKENS   = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.tokens,$(GOOD_FEATURE_FILES))
-ASTS     = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.ast.ndjson,$(GOOD_FEATURE_FILES))
-PICKLES  = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.pickles.ndjson,$(GOOD_FEATURE_FILES))
-SOURCES  = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.source.ndjson,$(GOOD_FEATURE_FILES))
-ERRORS   = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.errors.ndjson,$(BAD_FEATURE_FILES))
+TOKENS       = $(patsubst ../testdata/%,acceptance/testdata/%.tokens,$(GOOD_FEATURE_FILES))
+ASTS         = $(patsubst ../testdata/%,acceptance/testdata/%.ast.ndjson,$(GOOD_FEATURE_FILES))
+PICKLES      = $(patsubst ../testdata/%,acceptance/testdata/%.pickles.ndjson,$(GOOD_FEATURE_FILES))
+SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GOOD_FEATURE_FILES))
+ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
+
+.DEFAULT_GOAL = help
+GHERKIN = bin/gherkin
+GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+clean: ## Remove automatically generated files and related artifacts
+	rm -f Gherkin/gherkin-languages.json
+	rm -f Gherkin/Parser.cs
+	rm -rf acceptance
 
 .DELETE_ON_ERROR:
 
-default: .compared
+generate: Gherkin/gherkin-languages.json Gherkin/Parser.cs ## Generate Gherkin parser code
 
-.deps: Gherkin/Parser.cs
+acceptance: generate build $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-Gherkin/Parser.cs: gherkin-csharp.razor gherkin.berp
-	$(berp-generate-parser)
+build:
+	dotnet build -c Release
 
-.compared: $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) $(ERRORS)
-	touch $@
+Gherkin/gherkin-languages.json:
+	cp ../gherkin-languages.json $@
 
-acceptance/testdata/%.feature.tokens: ../testdata/%.feature ../testdata/%.feature.tokens
+Gherkin/Parser.cs: gherkin-csharp.razor ../gherkin.berp
+	berp -g ../gherkin.berp -t $< -o $@ --noBOM
+
+acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
-	bin/gherkin-generate-tokens $< > $@
+	$(GHERKIN_GENERATE_TOKENS) $< > $@
 	diff --unified $<.tokens $@
 
-acceptance/testdata/%.feature.ast.ndjson: ../testdata/%.feature ../testdata/%.feature.ast.ndjson
+acceptance/testdata/%.ast.ndjson: ../testdata/% ../testdata/%.ast.ndjson
 	mkdir -p $(@D)
-	bin/gherkin --no-source --no-pickles $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN) --no-source --no-pickles $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.ast.ndjson) <(jq "." $@)
 
-acceptance/testdata/%.feature.pickles.ndjson: ../testdata/%.feature ../testdata/%.feature.pickles.ndjson
+acceptance/testdata/%.pickles.ndjson: ../testdata/% ../testdata/%.pickles.ndjson
 	mkdir -p $(@D)
-	bin/gherkin --no-source --no-ast $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN) --no-source --no-ast $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.pickles.ndjson) <(jq "." $@)
 
-acceptance/testdata/%.feature.source.ndjson: ../testdata/%.feature ../testdata/%.feature.source.ndjson
+acceptance/testdata/%.source.ndjson: ../testdata/% ../testdata/%.source.ndjson
 	mkdir -p $(@D)
-	bin/gherkin --no-ast --no-pickles $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN) --no-ast --no-pickles $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.source.ndjson) <(jq "." $@)
 
-acceptance/testdata/%.feature.errors.ndjson: ../testdata/%.feature ../testdata/%.feature.errors.ndjson
+acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 	mkdir -p $(@D)
-	bin/gherkin --no-source $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN) --no-source $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
-
-clean:
-	rm -rf .compared acceptance
-.PHONY: clean
-
-clobber: clean
-	rm -rf Gherkin/Parser.cs
-.PHONY: clobber
