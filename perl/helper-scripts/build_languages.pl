@@ -9,8 +9,8 @@ use Cpanel::JSON::XS;
 
 my $json = Cpanel::JSON::XS->new;
 
-open( my $fh, '<', 'gherkin-languages.json' )
-  || die "Can't open [gherkin-languages.json]";
+open( my $fh, '<', '../gherkin-languages.json' )
+  || die "Can't open [../gherkin-languages.json]";
 my $input = join '', (<$fh>);
 close $fh;
 

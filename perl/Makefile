@@ -1,62 +1,64 @@
-include default.mk
-
-ifeq ($(CI),)
-PERL5LIB  = $$PWD/perl5/lib/perl5
-else
-PERL5LIB  = $$PWD/../../messages/perl/lib:$$PWD/perl5/lib/perl5
-endif
-PERL5PATH = $$PWD/perl5/bin
+SHELL := /usr/bin/env bash
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
-TOKENS   = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.tokens,$(GOOD_FEATURE_FILES))
-ASTS     = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.ast.ndjson,$(GOOD_FEATURE_FILES))
-PICKLES  = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.pickles.ndjson,$(GOOD_FEATURE_FILES))
-ERRORS   = $(patsubst ../testdata/%.feature,acceptance/testdata/%.feature.errors.ndjson,$(BAD_FEATURE_FILES))
+TOKENS       = $(patsubst ../testdata/%,acceptance/testdata/%.tokens,$(GOOD_FEATURE_FILES))
+ASTS         = $(patsubst ../testdata/%,acceptance/testdata/%.ast.ndjson,$(GOOD_FEATURE_FILES))
+PICKLES      = $(patsubst ../testdata/%,acceptance/testdata/%.pickles.ndjson,$(GOOD_FEATURE_FILES))
+SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GOOD_FEATURE_FILES))
+ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
+
+.DEFAULT_GOAL = help
+PERL5LIB  = $$PWD/perl5/lib/perl5
+GHERKIN = PERL5LIB=${PERL5LIB} bin/gherkin
+GHERKIN_GENERATE_TOKENS = PERL5LIB=${PERL5LIB} bin/gherkin-generate-tokens
+
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+clean: ## Remove automatically generated files and related artifacts
+	rm -f lib/Gherkin/Generated/Languages.pm
+	rm -f lib/Gherkin/Generated/Parser.pm
+	rm -rf acceptance
+	rm -rf perl5
 
 .DELETE_ON_ERROR:
 
-default: .compared
+generate: lib/Gherkin/Generated/Languages.pm lib/Gherkin/Generated/Parser.pm ## Generate Gherkin parser code
 
-.deps: lib/Gherkin/Generated/Parser.pm lib/Gherkin/Generated/Languages.pm
+acceptance: generate perl5 $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) #$(ERRORS) ## Build acceptance test dir and compare results with reference
 
-.compared: $(TOKENS) $(ASTS) $(PICKLES) # $(ERRORS)
-	touch $@
+perl5:
+	cpanm --notest --local-lib ./perl5 --installdeps --with-develop .
 
-acceptance/testdata/%.feature.tokens: ../testdata/%.feature ../testdata/%.feature.tokens .deps
+lib/Gherkin/Generated/Languages.pm:
+	perl helper-scripts/build_languages.pl > $@
+
+lib/Gherkin/Generated/Parser.pm: gherkin-perl.razor ../gherkin.berp
+	berp -g ../gherkin.berp -t $< -o $@ --noBOM
+
+acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
-	PERL5LIB=${PERL5LIB} bin/gherkin-generate-tokens $< > $@
+	$(GHERKIN_GENERATE_TOKENS) $< > $@
 	diff --unified $<.tokens $@
 
-acceptance/testdata/%.feature.ast.ndjson: ../testdata/%.feature ../testdata/%.feature.ast.ndjson .deps
+acceptance/testdata/%.ast.ndjson: ../testdata/% ../testdata/%.ast.ndjson
 	mkdir -p $(@D)
-	PERL5LIB=${PERL5LIB} bin/gherkin --predictable-ids --no-source --no-pickles $< > $@
+	$(GHERKIN) --no-source --no-pickles --predictable-ids $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.ast.ndjson) <(jq "." $@)
 
-acceptance/testdata/%.feature.pickles.ndjson: ../testdata/%.feature ../testdata/%.feature.pickles.ndjson .deps
+acceptance/testdata/%.pickles.ndjson: ../testdata/% ../testdata/%.pickles.ndjson
 	mkdir -p $(@D)
-	PERL5LIB=${PERL5LIB} bin/gherkin --predictable-ids --no-source --no-ast $< > $@
+	$(GHERKIN) --no-source --no-ast --predictable-ids $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.pickles.ndjson) <(jq "." $@)
 
-#acceptance/testdata/%.feature.errors.ndjson: ../testdata/%.feature ../testdata/%.feature.errors.ndjson .deps
+acceptance/testdata/%.source.ndjson: ../testdata/% ../testdata/%.source.ndjson
+	mkdir -p $(@D)
+	$(GHERKIN) --no-ast --no-pickles --predictable-ids $< | jq --sort-keys --compact-output "." > $@
+	diff --unified <(jq "." $<.source.ndjson) <(jq "." $@)
+
+#acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 #	mkdir -p $(@D)
-#	PERL5LIB=${PERL5LIB} bin/gherkin --predictable-ids --no-pickles $< | jq --sort-keys --compact-output "." > $@
+#	$(GHERKIN) --no-source --predictable-ids $< | jq --sort-keys --compact-output "." > $@
 #	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
-
-clean:
-	rm -rf .compared acceptance
-.PHONY: clean
-
-clobber: clean
-	rm -rf lib/Gherkin/Generated
-.PHONY: clobber
-
-lib/Gherkin/Generated:
-	mkdir -p $@
-
-lib/Gherkin/Generated/Languages.pm: gherkin-languages.json .cpanfile_dependencies
-	PERL5LIB=./perl5/lib/perl5 perl helper-scripts/build_languages.pl < $< > $@
-
-lib/Gherkin/Generated/Parser.pm: gherkin-perl.razor gherkin.berp
-	$(berp-generate-parser)

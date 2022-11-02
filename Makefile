@@ -1,4 +1,4 @@
-languages = javascript java ruby go php elixir python
+languages = javascript java ruby go php elixir python perl
 
 .DEFAULT_GOAL = help
 
