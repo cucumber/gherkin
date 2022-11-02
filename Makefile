@@ -1,4 +1,4 @@
-languages = javascript java ruby go php elixir python perl dotnet dart
+languages = javascript java ruby go php elixir python perl dotnet dart c
 
 .DEFAULT_GOAL = help
 
