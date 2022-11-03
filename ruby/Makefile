@@ -2,6 +2,7 @@ SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = lib/gherkin/gherkin-languages.json
 GHERKIN_PARSER = lib/gherkin/gherkin-languages.json
+GHERKIN_RAZOR = gherkin-ruby.razor
 SOURCE_FILES = $(shell find . -name "*.rb")
 
 GHERKIN = bundle exec bin/gherkin
@@ -45,11 +46,11 @@ acceptance: .deps $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acc
 Gemfile.lock: Gemfile cucumber-gherkin.gemspec
 	bundle install
 
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
+	berp -g ../gherkin.berp -t $< -o $@ --noBOM
+
 $(GHERKIN_LANGUAGES_JSON):
 	cp ../gherkin-languages.json $@
-
-lib/gherkin/parser.rb: gherkin-ruby.razor ../gherkin.berp
-	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
