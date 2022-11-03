@@ -1,5 +1,13 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_LANGUAGES_JSON = gherkin/gherkin-languages.json
+GHERKIN_PARSER = gherkin/parser.py
+GHERKIN_RAZOR = gherkin-python.razor
+SOURCE_FILES = $(shell find . -name "*.py")
+
+GHERKIN = bin/gherkin
+GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature" -o -name "*.feature.md")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature" -o -name "*.feature.md")
 
@@ -10,34 +18,36 @@ SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GO
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
 .DEFAULT_GOAL = help
-GHERKIN = bin/gherkin
-GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: gherkin/parser.py ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f gherkin/parser.py
+	rm -f $(GHERKIN_PARSER)
 
-copy-gherkin-languages: gherkin/gherkin-languages.json ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f gherkin/gherkin-languages.json
+	rm -f $(GHERKIN_LANGUAGES_JSON)
 
 clean:
+	rm -f .built
 	rm -rf acceptance
 
 .DELETE_ON_ERROR:
 
-acceptance: $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-gherkin/gherkin-languages.json:
-	cp ../gherkin-languages.json $@
+.built: $(SOURCE_FILES)
+	touch $@
 
-gherkin/parser.py: gherkin-python.razor ../gherkin.berp
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
+
+$(GHERKIN_LANGUAGES_JSON):
+	cp ../gherkin-languages.json $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)

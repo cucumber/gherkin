@@ -33,14 +33,15 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	rm -f $(GHERKIN_LANGUAGES_JSON)
 
 clean:
+	rm -rf .built
 	rm -rf acceptance
 	rm -rf Gemfile.lock
 
 .DELETE_ON_ERROR:
 
-acceptance: .deps $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-.deps: Gemfile.lock $(SOURCE_FILES)
+.built: Gemfile.lock $(SOURCE_FILES)
 	touch $@
 
 Gemfile.lock: Gemfile cucumber-gherkin.gemspec
