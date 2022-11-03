@@ -81,7 +81,7 @@ file, indicating that the acceptance tests passed.
 ## Consistency between implementations
 
 TL;DR anyone who only knows one of the supported programming languages should be
-able to fix a bug or add a feature in all the other implementations. -Simply by
+able to fix a bug or add a feature in all the other implementations. - By virtue of
 finding their way around a consistently organised codebase.
 
 As of May 2016 Gherkin is implemented in 8 languages. This number is likely to
@@ -97,7 +97,7 @@ because I know where to find stuff since all implementations follow the same str
 If one implementation looks completely different, this becomes a huge burden that
 will slow everything down.
 
-So for this reason, please don't start a new implementation that doesn't use Berp,
+So for this reason, please don't start a new implementation that does not use Berp,
 or add a feature in one implementation without also doing it in all the other
 implementations. Don't refactor the code to follow some nice design pattern if
 it makes the code so different from the other implementations that it can no longer
@@ -112,7 +112,7 @@ of the existing implementations. Now, modify the parts of the `Makefile` that
 generates the `Parser.x` file, referring to the `gherkin-x.razor` file you're
 about to create.
 
-When you run `make` it should complain that `gherkin-x.razor` does not exist.
+When you run `make generate` it should complain that `gherkin-x.razor` does not exist.
 
 Now, copy a `.razor` file from one of the other implementations.
 
@@ -123,7 +123,7 @@ good), but writing a few during development might help you progress.
 You'll spend quite a bit of time fiddling with the `.razor` template to make it
 generate code that is syntactically correct.
 
-When you get to that stage, `make` will run the acceptance tests, which iterate
+When you get to that stage, `make clean acceptance` will run the acceptance tests, which iterate
 over all the `.feature` files under `../testdata`, passes them through your
 `bin/gherkin-generate-tokens` and `bin/gherkin-generate-ast` command-line programs,
 and compares the output using `diff`.
@@ -133,45 +133,12 @@ pass!
 
 Then send us a pull-request :-)
 
-And if you're stuck - please shoot an email to the *cukes-devs* Google Group
-or find us on [Gitter](https://gitter.im/cucumber/gherkin).
+And if you're stuck - please shoot message to the #commiters channel in the 
+[CucumberBDD Slack](https://cucumberbdd-slack-invite.herokuapp.com/) <sup>[direct link](https://cucumberbdd.slack.com/)</sup>.
 
 ## Make a release
 
-Start by modifying the version in all sub projects:
-
-    echo "X.Y.Z" > VERSION
-    make update-version
-    git commit -m "Update VERSION to X.Y.Z"
-
-Releases are made from the various subtrees. Before you release, update the subtrees:
-
-    make push-subtrees
-
-Next, clone each individual subtree repo (or `git pull -r origin master` if you've already done so)
-in your working copy of each subtree, then follow the release guidelines
-for each component in the respective `CONTRIBUTING.md` file.
-
-When all components are released, update the master repo:
-
-    make pull-subtrees
-
-This might cause some trivial merge conflicts. If that happens, resolve them manually,
-commit and pull subtrees again.
-
-Now, update `CHANGELOG.md` with the new release number and date, while keeping
-a section for the upcoming changes. Also update the links at the bottom of the file.
-
-Then finally create a tag in this master repo and push.
-
-    git commit -m "Release X.Y.Z"
-    git tag -a -m "Version X.Y.Z" vX.Y.Z
-    git push
-    git push --tags
-    make push-subtrees
-
-The last step might cause some conflicts. If that happens, force push the failing
-subtree (see Troubleshooting section) and run `make push-subtrees` again.
+See [RELEASING.md](./RELEASING.md)
 
 ## Verify all of Cucumber's i18n examples
 
@@ -188,7 +155,7 @@ With the parser:
 
 ## Adding or changing good testdata
 
-Test data for acceptance testing are available in the top-level `gherkin` directory in `testdata`
+Test data for acceptance testing are available in the top-level `testdata`
 
 ### Approach 1
 
