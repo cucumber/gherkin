@@ -1,5 +1,13 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_LANGUAGES_JSON = resources/gherkin-languages.json
+GHERKIN_PARSER = src-generated/Parser.php
+GHERKIN_RAZOR = gherkin-php.razor
+SOURCE_FILES = $(shell find . -name "*.php")
+
+GHERKIN = bin/gherkin
+GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
@@ -10,37 +18,35 @@ SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GO
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
 .DEFAULT_GOAL = help
-GHERKIN = bin/gherkin
-GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: src-generated/Parser.php ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -rf src-generated
+	rm -f $(GHERKIN_PARSER)
 
-copy-gherkin-languages: resources/gherkin-languages.json ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f resources/gherkin-languages.json
+	rm -f $(GHERKIN_LANGUAGES_JSON)
 
 clean:
+	rm -f .built
 	rm -rf acceptance
 	rm -rf vendor
 
 .DELETE_ON_ERROR:
 
-acceptance: vendor $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-vendor:
+.built: vendor $(SOURCE_FILES)
+
+vendor: composer.json
 	composer update
 
-resources/gherkin-languages.json:
-	cp ../gherkin-languages.json $@
-
-src-generated/Parser.php: gherkin-php.razor ../gherkin.berp
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	mkdir -p build
 	berp -g ../gherkin.berp -t $< -o build/classes.php --noBOM
 	csplit --quiet --prefix=build/Generated --suffix-format=%02d.php.tmp --elide-empty-files build/classes.php /^[A-Za-z\/]*\.php$$/ {*}
@@ -48,6 +54,9 @@ src-generated/Parser.php: gherkin-php.razor ../gherkin.berp
 	for file in build/Generated**; do tail -n +2 $$file > src-generated/$$(head -n 1 $$file); rm $$file; done
 	rm -f build/classes.php
 
+
+$(GHERKIN_LANGUAGES_JSON):
+	cp ../gherkin-languages.json $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
