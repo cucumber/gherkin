@@ -1,5 +1,12 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_LANGUAGES_JSON = lib/gherkin/gherkin-languages.json
+GHERKIN_PARSER = lib/gherkin/gherkin-languages.json
+SOURCE_FILES = $(shell find . -name "*.rb")
+
+GHERKIN = bundle exec bin/gherkin
+GHERKIN_GENERATE_TOKENS = bundle exec bin/gherkin-generate-tokens
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
@@ -10,21 +17,19 @@ SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GO
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
 .DEFAULT_GOAL = help
-GHERKIN = bundle exec bin/gherkin
-GHERKIN_GENERATE_TOKENS = bundle exec bin/gherkin-generate-tokens
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: lib/gherkin/parser.rb ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f lib/gherkin/parser.rb
+	rm -f $(GHERKIN_PARSER)
 
-copy-gherkin-languages: lib/gherkin/gherkin-languages.json ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f lib/gherkin/gherkin-languages.json
+	rm -f $(GHERKIN_LANGUAGES_JSON)
 
 clean:
 	rm -rf acceptance
@@ -32,12 +37,15 @@ clean:
 
 .DELETE_ON_ERROR:
 
-Gemfile.lock:
+acceptance: .deps $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+
+.deps: Gemfile.lock $(SOURCE_FILES)
+	touch $@
+
+Gemfile.lock: Gemfile cucumber-gherkin.gemspec
 	bundle install
 
-acceptance: Gemfile.lock $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
-
-lib/gherkin/gherkin-languages.json:
+$(GHERKIN_LANGUAGES_JSON):
 	cp ../gherkin-languages.json $@
 
 lib/gherkin/parser.rb: gherkin-ruby.razor ../gherkin.berp
