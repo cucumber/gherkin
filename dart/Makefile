@@ -8,12 +8,12 @@ help: ## Show this help
 generate:
 	echo "Nothing to do"
 
-clean-generate:
+clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
 	echo "Nothing to do"
 
-copy-gherkin-languages: assets/gherkin-languages.json
+copy-gherkin-languages: assets/gherkin-languages.json ## Copy gherkin-languages.json and/or generate derived files
 
-clean-gherkin-languages:
+clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	rm -f assets/gherkin-languages.json
 
 .DELETE_ON_ERROR:

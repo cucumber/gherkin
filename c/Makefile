@@ -31,16 +31,16 @@ default: .compared
 .compared: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) .run
 	touch $@
 
-generate: ./include/rule_type.h src/parser.c src/dialect.c
+generate: ./include/rule_type.h src/parser.c src/dialect.c ## Generate gherkin parser files
 
-clean-generate:
+clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
 	rm -f ./include/rule_type.h src/parser.c src/dialect.c
 .PHONY: clean-generate
 
 copy-gherkin-languages:
 	echo "Nothing to do"
 
-clean-gherkin-languages:
+clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	echo "Nothing to do"
 
 .built: generate $(SRC_FILES) src/Makefile
