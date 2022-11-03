@@ -16,9 +16,15 @@ GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean-generated: ## Remove automatically generated files and related artifacts
-	rm -f resources/gherkin-languages.json
+generate: src-generated/Parser.php
+
+clean-generate:
 	rm -rf src-generated
+
+copy-gherkin-languages: resources/gherkin-languages.json
+
+clean-gherkin-languages:
+	rm -f resources/gherkin-languages.json
 
 clean:
 	rm -rf acceptance
@@ -27,8 +33,6 @@ clean:
 .DELETE_ON_ERROR:
 
 acceptance: vendor $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
-
-generate: resources/gherkin-languages.json src-generated/Parser.php ## Generate Gherkin parser code
 
 vendor:
 	composer update

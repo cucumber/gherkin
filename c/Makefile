@@ -33,6 +33,16 @@ default: .compared
 
 generate: ./include/rule_type.h src/parser.c src/dialect.c
 
+clean-generate:
+	rm -f ./include/rule_type.h src/parser.c src/dialect.c
+.PHONY: clean-generate
+
+copy-gherkin-languages:
+	echo "Nothing to do"
+
+clean-gherkin-languages:
+	echo "Nothing to do"
+
 .built: generate $(SRC_FILES) src/Makefile
 	$(CC) --version
 	cd src; $(MAKE)
@@ -42,10 +52,6 @@ clean:
 	rm -rf .compared .built .run acceptance
 	cd src; $(MAKE) $@
 .PHONY: clean
-
-clean-generated:
-	rm -f ./include/rule_type.h src/parser.c src/dialect.c
-.PHONY: clean-generated
 
 cli: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makefile
 	cd src; $(MAKE) CC=$(CC) $@

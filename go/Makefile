@@ -16,18 +16,22 @@ GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean-generated:  ## Remove automatically generated files and related artifacts
-	rm -f gherkin-languages.json
-	rm -f dialects_builtin.go
+generate: parser.go
+
+clean-generate:
 	rm -f parser.go
+
+copy-gherkin-languages: dialects_builtin.go
+
+clean-gherkin-languages:
+	rm -f dialects_builtin.go
+	rm -f gherkin-languages.json
 
 clean:
 	rm -rf acceptance
 	rm -rf bin
 
 .DELETE_ON_ERROR:
-
-generate: dialects_builtin.go parser.go ## Generate Gherkin parser code
 
 acceptance: bin/gherkin-generate-tokens bin/gherkin $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
@@ -42,7 +46,6 @@ gherkin-languages.json:
 
 dialects_builtin.go: gherkin-languages.json dialects_builtin.go.jq
 	cat $< | jq --sort-keys --from-file dialects_builtin.go.jq --raw-output --compact-output > $@
-	gofmt -w $@
 
 parser.go: parser.go.razor ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM

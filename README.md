@@ -19,11 +19,6 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser for 
 Our wish-list is (in no particular order):
 
 - Rust
-- Elixir
-
-## Markdown with Gherkin
-
-See [Markdown with Gherkin](./MARKDOWN_WITH_GHERKIN.md).
 
 ## Usage
 
@@ -412,6 +407,10 @@ objects. `TestCase` objects link to user code such as Hooks and Step Definitions
 ## Building Gherkin
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
+## Markdown with Gherkin
+
+See [Markdown with Gherkin](./MARKDOWN_WITH_GHERKIN.md).
 
 ## Projects using Gherkin
 

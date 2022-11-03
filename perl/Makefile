@@ -17,17 +17,23 @@ GHERKIN_GENERATE_TOKENS = PERL5LIB=${PERL5LIB} bin/gherkin-generate-tokens
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean-generated:  ## Remove automatically generated files and related artifacts
-	rm -f lib/Gherkin/Generated/Languages.pm
+generate: lib/Gherkin/Generated/Parser.pm ## Generate Gherkin parser code
+
+clean-generate:
 	rm -f lib/Gherkin/Generated/Parser.pm
+
+copy-gherkin-languages: # lib/Gherkin/Generated/Languages.pm
+	echo "TODO: Depends on perl, this task should only depend on jq"
+
+clean-gherkin-languages:
+	# rm -f lib/Gherkin/Generated/Languages.pm
+	echo "TODO: Depends on perl, this task should only depend on jq"
 
 clean:
 	rm -rf acceptance
 	rm -rf perl5
 
 .DELETE_ON_ERROR:
-
-generate: lib/Gherkin/Generated/Languages.pm lib/Gherkin/Generated/Parser.pm ## Generate Gherkin parser code
 
 acceptance: perl5 $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) #$(ERRORS) ## Build acceptance test dir and compare results with reference
 

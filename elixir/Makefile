@@ -5,9 +5,15 @@ SHELL := /usr/bin/env bash
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-clean-generated:  ## Remove automatically generated files and related artifacts
-	rm -f priv/gherkin_languages.json
+generate: lib/gherkin/parser.ex
+
+clean-generate:
 	rm -f lib/gherkin/parser.ex
+
+copy-gherkin-languages: priv/gherkin_languages.json
+
+clean-gherkin-languages:
+	rm -f priv/gherkin_languages.json
 
 clean:
 	rm -rf acceptance
@@ -16,7 +22,6 @@ clean:
 
 .DELETE_ON_ERROR:
 
-generate: priv/gherkin_languages.json lib/gherkin/parser.ex ## Generate Gherkin parser code
 
 acceptance: ## Build acceptance test dir and compare results with reference
 	mix local.hex --force

@@ -1,41 +1,19 @@
 # Contributing to Gherkin
 
-Gherkin is implemented in several different languages. Each implementation is
-in a separate sub directory in this repository.
+Gherkin is implemented in several languages. Each implementation is
+in a separate subdirectory in this repository.
 
-A copy of each implementation also exists in a separate git repository,
-under `https://github.com/cucumber/gherkin-DIRNAME`.
+## Project organisation
 
-The code in each of those git repositories can be built and used independently.
-This is useful for people who only want to *use* Gherkin without *contributing*
-to Gherkin.
+Each subdirectory is a stand-alone project using the preferred tools for
+that language, you can find more detailed information in `<language>/CONTRIBUTING.md`.
 
-Gherkin *contributors* should clone *this* repository. This will automatically get
-you a copy of the files in the various `gherkin-*` repositories.
+Each gherkin implementation depends on two common files.
+ * `gherkin-langauges.json` containing translations of the Gherkin Keywords
+ * `gherkin.berp` from which a parser is generated.
 
-When you're done, just create a pull request against *this* repository.
-
-## Building
-
-Prerequisites:
-
-* .NET 5.0 (also needed for non-dotnet, to run `berp` to generate parsers)
-* JDK
-  * Maven
-* Node.js or IO.js
-* Ruby
-* Python (both python2 & python3)
-* Go
-* `make`
-* `jq` (>= 1.4 for `--sort-keys` option)
-* `diff`
-* `git`
-* Build the `messages` project (at minimum for the language(s) that you'll be working on in the `gherkin` project)
-
-With all this installed, just run `make` from the root directory.
-
-Notes:
-* on Ubuntu you need to create a symbolic link from `/usr/bin/nodejs` to `/usr/bin/node`
+To reduce the complexity of common tasks: copying and/or generating
+localisations and generating the parser is done separately from building each project.  
 
 ## Contributing changes
 
@@ -44,25 +22,42 @@ Notes:
 * If you change code, please make sure all implementations are changed accordingly.
   * If you don't to do this, we might reject your patch because the burden to keep parsers in sync is now on us.
 
+## Generating parsers
+
+Prerequisites:
+
+* .NET 5.0 (to run `berp` to generate parsers)
+* `berp` (install with `dotnet tool update Berp --version 1.3.0 --tool-path /usr/bin` )
+* `make`
+* `jq` (>= 1.4 for `--sort-keys` option)
+* `diff`
+* `git`
+
+With all this installed use Make:
+
+```
+make generate-all
+make clean-generate-all
+```
+
 ## Adding or updating an i18n language
+
+Prerequisites:
+
+* `make`
+* `jq` (>= 1.4 for `--sort-keys` option)
+* `git`
 
 1) Edit `gherkin-langauges.json`.
 
 2) Distribute the changes to the different parser implementations, this requires `make`, `jq`, `diff`, but no compiler/interpreters:
 
 ```
-source ../scripts/functions.sh
-rsync_files
-make clean
-make
+make clean-gherkin-languages
+make copy-gherkin-languages
 ```
 
 3) Make a pull request with the changed files.
-
-## Building individual parsers
-
-It's possible to build the parser for a single language too. Please refer to
-`CONTRIBUTING.md` files in each language directory for details.
 
 ## Running tests
 

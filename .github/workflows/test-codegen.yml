@@ -17,16 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Ideally make is only used to copy gherkin-languages.json
-      # and generate the parser. Unfortunately perl also generates
-      # other files using make.
-      #
-      # Please do not repeat this pattern if possible.
-      - name: install cpanm and multiple modules
-        uses: perl-actions/install-with-cpanm@v1
-        with:
-          cpanfile: "perl/cpanfile"
-
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '5.0.x'
@@ -38,7 +28,10 @@ jobs:
 
       - name: generate code for all languages
         run: |
-          make clean-generated-all
+          make clean-gherkin-languages-all
+          make copy-gherkin-languages-all
+          
+          make clean-generate-all
           make generate-all
 
       - name: check the repo is still clean after generation
