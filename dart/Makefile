@@ -1,5 +1,7 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_LANGUAGES_JSON = assets/gherkin-languages.json
+
 .DEFAULT_GOAL = help
 
 help: ## Show this help
@@ -9,14 +11,14 @@ generate:
 	echo "Nothing to do"
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	echo "Nothing to do"
+	rm -f $(GHERKIN_PARSER)
 
-copy-gherkin-languages: assets/gherkin-languages.json ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f assets/gherkin-languages.json
+	rm -f $(GHERKIN_LANGUAGES_JSON)
 
 .DELETE_ON_ERROR:
 
-assets/gherkin-languages.json:
+$(GHERKIN_LANGUAGES_JSON):
 	cp ../gherkin-languages.json $@
