@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = resources/gherkin-languages.json
 GHERKIN_PARSER = src-generated/Parser.php
 GHERKIN_RAZOR = gherkin-php.razor
-SOURCE_FILES = $(shell find . -name "*.php")
+SOURCE_FILES = $(shell find . -name "*.pm")
 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
@@ -53,7 +53,6 @@ $(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	for file in build/Generated**; do mkdir -p src-generated/$$(head -n 1 $$file | sed 's/[^/]*.php$$//'); done
 	for file in build/Generated**; do tail -n +2 $$file > src-generated/$$(head -n 1 $$file); rm $$file; done
 	rm -f build/classes.php
-
 
 $(GHERKIN_LANGUAGES_JSON):
 	cp ../gherkin-languages.json $@

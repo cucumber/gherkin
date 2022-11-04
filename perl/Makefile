@@ -1,5 +1,12 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_PARSER = lib/Gherkin/Generated/Parser.pm
+GHERKIN_RAZOR = gherkin-perl.razor
+SOURCE_FILES = $(shell find . -name "*.php")
+
+GHERKIN = bin/gherkin
+GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
@@ -17,10 +24,10 @@ GHERKIN_GENERATE_TOKENS = PERL5LIB=${PERL5LIB} bin/gherkin-generate-tokens
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: lib/Gherkin/Generated/Parser.pm ## Generate Gherkin parser code ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f lib/Gherkin/Generated/Parser.pm
+	rm -f $(GHERKIN_PARSER)
 
 copy-gherkin-languages: # lib/Gherkin/Generated/Languages.pm ## Copy gherkin-languages.json and/or generate derived files
 	echo "TODO: Depends on perl, this task should only depend on jq"
@@ -30,12 +37,15 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	echo "TODO: Depends on perl, this task should only depend on jq"
 
 clean:
+	rm -f .built
 	rm -rf acceptance
 	rm -rf perl5
 
 .DELETE_ON_ERROR:
 
-acceptance: perl5 $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) #$(ERRORS) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(SOURCES) #$(ERRORS) ## Build acceptance test dir and compare results with reference
+
+.built: perl5 $(SOURCE_FILES)
 
 perl5:
 	cpanm --notest --local-lib ./perl5 --installdeps --with-develop .
@@ -43,7 +53,7 @@ perl5:
 lib/Gherkin/Generated/Languages.pm:
 	perl helper-scripts/build_languages.pl > $@
 
-lib/Gherkin/Generated/Parser.pm: gherkin-perl.razor ../gherkin.berp
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
