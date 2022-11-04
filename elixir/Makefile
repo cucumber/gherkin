@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = priv/gherkin_languages.json
 GHERKIN_PARSER = lib/gherkin/parser.ex
 GHERKIN_RAZOR = gherkin-elixir.razor
-SOURCE_FILES = $(shell find . -name "*.ex")
+SOURCE_FILES = $(shell find . -name "*.ex" | grep -v $(GHERKIN_PARSER))
 
 .DEFAULT_GOAL = help
 

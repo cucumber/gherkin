@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash
 
 GHERKIN_PARSER = src/main/java/io/cucumber/gherkin/Parser.java
 GHERKIN_RAZOR = gherkin-java.razor
-SOURCE_FILES = $(shell find . -name "*.java")
+SOURCE_FILES = $(shell find . -name "*.java" | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens

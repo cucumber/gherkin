@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = lib/gherkin/gherkin-languages.json
 GHERKIN_PARSER = lib/gherkin/parser.rb
 GHERKIN_RAZOR = gherkin-ruby.razor
-SOURCE_FILES = $(shell find . -name "*.rb")
+SOURCE_FILES = $(shell find . -name "*.rb" | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = bundle exec bin/gherkin
 GHERKIN_GENERATE_TOKENS = bundle exec bin/gherkin-generate-tokens

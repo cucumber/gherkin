@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = resources/gherkin-languages.json
 GHERKIN_PARSER = src-generated/Parser.php
 GHERKIN_RAZOR = gherkin-php.razor
-SOURCE_FILES = $(shell find . -name "*.pm")
+SOURCE_FILES = $(shell find . -name "*.php"  | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens

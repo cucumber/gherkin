@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = Gherkin/gherkin-languages.json
 GHERKIN_PARSER = Gherkin/Parser.cs
 GHERKIN_RAZOR = gherkin-csharp.razor
-SOURCE_FILES = $(shell find . -name "*.cs")
+SOURCE_FILES = $(shell find . -name "*.cs" | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens

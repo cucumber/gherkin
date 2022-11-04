@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = dialects_builtin.go
 GHERKIN_PARSER = parser.go
 GHERKIN_RAZOR = parser.go.razor
-SOURCE_FILES = $(shell find . -name "*.go")
+SOURCE_FILES = $(shell find . -name "*.go" | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens

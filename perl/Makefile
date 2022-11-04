@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash
 
 GHERKIN_PARSER = lib/Gherkin/Generated/Parser.pm
 GHERKIN_RAZOR = gherkin-perl.razor
-SOURCE_FILES = $(shell find . -name "*.php")
+SOURCE_FILES = $(shell find . -name "*.pm" | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens

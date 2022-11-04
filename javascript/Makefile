@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = src/gherkin-languages.json
 GHERKIN_PARSER = src/Parser.ts
 GHERKIN_RAZOR = gherkin-javascript.razor
-SOURCE_FILES = $(shell find . -name "*.js")
+SOURCE_FILES = $(shell find . -name "*.js" | grep -v $(GHERKIN_PARSER))
 
 GHERKIN = npx gherkin-javascript
 
