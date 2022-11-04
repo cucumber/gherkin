@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = dialects_builtin.go
 GHERKIN_PARSER = parser.go
-GHERKIN_RAZOR = gherkin-go.razor
+GHERKIN_RAZOR = parser.go.razor
 SOURCE_FILES = $(shell find . -name "*.go")
 
 GHERKIN = bin/gherkin
