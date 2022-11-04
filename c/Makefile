@@ -28,6 +28,8 @@ endif
 default: .compared
 .PHONY: default
 
+acceptance: .compared ## Build acceptance test dir and compare results with reference
+
 .compared: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) .run
 	touch $@
 
@@ -37,7 +39,7 @@ clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin par
 	rm -f ./include/rule_type.h src/parser.c src/dialect.c
 .PHONY: clean-generate
 
-copy-gherkin-languages:
+copy-gherkin-languages: ## Copy gherkin-languages.json and/or generate derived files
 	echo "Nothing to do"
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files

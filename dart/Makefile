@@ -18,6 +18,12 @@ copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	rm -f $(GHERKIN_LANGUAGES_JSON)
 
+clean:
+	echo "Nothing to do"
+
+acceptance:
+	echo "Nothing to do"
+
 .DELETE_ON_ERROR:
 
 $(GHERKIN_LANGUAGES_JSON):

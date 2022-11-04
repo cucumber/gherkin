@@ -36,8 +36,8 @@ Prerequisites:
 With all this installed use Make:
 
 ```
-make generate-all
-make clean-generate-all
+make generate
+make clean-generate
 ```
 
 ## Adding or updating an i18n language
@@ -61,9 +61,9 @@ make copy-gherkin-languages
 
 ## Running tests
 
-Each sub project has its own unit tests that are run during the build of that project.
+Each subproject has its own unit tests that are run during the build of that project.
 
-In addition to these tests, `make` will run acceptance tests that verify the output of:
+In addition to these tests, `make acceptance` will run acceptance tests that verify the output of:
 
 * the scanner
 * the parser
@@ -204,4 +204,4 @@ Test data for acceptance testing are available in the top-level `testdata`
 
 7) Inspect the generated `.feature.pickles.json` file manually to see if it's good.
 
-8) Run `make` from the root directory to verify that all parsers parse it ok.
+8) Run `make acceptance` from the root directory to verify that all parsers parse it ok.

@@ -28,11 +28,11 @@ jobs:
 
       - name: generate code for all languages
         run: |
-          make clean-gherkin-languages-all
-          make copy-gherkin-languages-all
+          make clean-gherkin-languages
+          make copy-gherkin-languages
           
-          make clean-generate-all
-          make generate-all
+          make clean-generate
+          make generate
 
       - name: check the repo is still clean after generation
         run: |
