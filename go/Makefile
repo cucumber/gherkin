@@ -1,5 +1,13 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_LANGUAGES_JSON = dialects_builtin.go
+GHERKIN_PARSER = parser.go
+GHERKIN_RAZOR = gherkin-go.razor
+SOURCE_FILES = $(shell find . -name "*.go")
+
+GHERKIN = bin/gherkin
+GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
@@ -10,30 +18,30 @@ SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GO
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
 .DEFAULT_GOAL = help
-GHERKIN = bin/gherkin
-GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: parser.go ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f parser.go
+	rm -f $(GHERKIN_PARSER)
 
-copy-gherkin-languages: dialects_builtin.go ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f dialects_builtin.go
-	rm -f gherkin-languages.json
+	rm -f $(GHERKIN_LANGUAGES_JSON)
 
 clean:
+	rm -rf .built
 	rm -rf acceptance
 	rm -rf bin
 
 .DELETE_ON_ERROR:
 
-acceptance: bin/gherkin-generate-tokens bin/gherkin $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+
+.built: bin/gherkin-generate-tokens bin/gherkin
 
 bin/gherkin-generate-tokens:
 	go build -o $@ ./gherkin-generate-tokens
@@ -41,13 +49,10 @@ bin/gherkin-generate-tokens:
 bin/gherkin:
 	go build -o $@ -a ./cmd
 
-gherkin-languages.json:
-	cp ../gherkin-languages.json $@
-
-dialects_builtin.go: gherkin-languages.json dialects_builtin.go.jq
+dialects_builtin.go: ../gherkin-languages.json dialects_builtin.go.jq
 	cat $< | jq --sort-keys --from-file dialects_builtin.go.jq --raw-output --compact-output > $@
 
-parser.go: parser.go.razor ../gherkin.berp
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 	gofmt -w $@
 
