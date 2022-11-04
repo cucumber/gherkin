@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = lib/gherkin/gherkin-languages.json
-GHERKIN_PARSER = lib/gherkin/gherkin-languages.json
+GHERKIN_PARSER = lib/gherkin/parser.rb
 GHERKIN_RAZOR = gherkin-ruby.razor
 SOURCE_FILES = $(shell find . -name "*.rb")
 
