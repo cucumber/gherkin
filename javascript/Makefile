@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = src/gherkin-languages.json
-GHERKIN_PARSER = lib/gherkin/gherkin-languages.json
+GHERKIN_PARSER = src/Parser.ts
 GHERKIN_RAZOR = gherkin-javascript.razor
 SOURCE_FILES = $(shell find . -name "*.js")
 
@@ -20,10 +20,10 @@ ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BA
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: src/Parser.ts ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f src/Parser.ts
+	rm -f $(GHERKIN_PARSER)
 
 copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 

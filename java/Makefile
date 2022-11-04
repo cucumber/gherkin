@@ -1,5 +1,12 @@
 SHELL := /usr/bin/env bash
 
+GHERKIN_PARSER = src/main/java/io/cucumber/gherkin/Parser.java
+GHERKIN_RAZOR = gherkin-java.razor
+SOURCE_FILES = $(shell find . -name "*.java")
+
+GHERKIN = bin/gherkin
+GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
@@ -10,16 +17,14 @@ SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GO
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
 .DEFAULT_GOAL = help
-GHERKIN = bin/gherkin
-GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: src/main/java/io/cucumber/gherkin/Parser.java ## Generate gherkin parser files
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f src/main/java/io/cucumber/gherkin/Parser.java
+	rm -f $(GHERKIN_PARSER)
 
 copy-gherkin-languages:
 	echo "Nothing to do"
@@ -28,17 +33,20 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	echo "Nothing to do"
 
 clean:
+	rm -rf .built
 	rm -rf acceptance
 	rm -rf target
 
 .DELETE_ON_ERROR:
 
-acceptance: target/gherkin-*.jar $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+
+.built: target/gherkin-*.jar $(SOURCE_FILES)
 
 target/gherkin-*.jar:
 	mvn package
 
-src/main/java/io/cucumber/gherkin/Parser.java: gherkin-java.razor ../gherkin.berp
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
