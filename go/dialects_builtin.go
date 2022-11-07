@@ -2671,9 +2671,11 @@ var builtinDialects = gherkinDialectMap{
 			"ならば": messages.StepKeywordType_OUTCOME,
 
 			"且つ": messages.StepKeywordType_CONJUNCTION,
+
 			"かつ": messages.StepKeywordType_CONJUNCTION,
 
-			"然し":  messages.StepKeywordType_CONJUNCTION,
+			"然し": messages.StepKeywordType_CONJUNCTION,
+
 			"しかし": messages.StepKeywordType_CONJUNCTION,
 
 			"但し": messages.StepKeywordType_CONJUNCTION,
@@ -2808,22 +2810,29 @@ var builtinDialects = gherkinDialectMap{
 			},
 		},
 		map[string]messages.StepKeywordType{
-			"მოცემული ":  messages.StepKeywordType_CONTEXT,
-			"Მოცემულია ": messages.StepKeywordType_CONTEXT,
-			"ვთქვათ ":    messages.StepKeywordType_CONTEXT,
+			"მოცემული ": messages.StepKeywordType_CONTEXT,
 
-			"როდესაც ":   messages.StepKeywordType_ACTION,
-			"როცა ":      messages.StepKeywordType_ACTION,
+			"Მოცემულია ": messages.StepKeywordType_CONTEXT,
+
+			"ვთქვათ ": messages.StepKeywordType_CONTEXT,
+
+			"როდესაც ": messages.StepKeywordType_ACTION,
+
+			"როცა ": messages.StepKeywordType_ACTION,
+
 			"როგორც კი ": messages.StepKeywordType_ACTION,
-			"თუ ":        messages.StepKeywordType_ACTION,
+
+			"თუ ": messages.StepKeywordType_ACTION,
 
 			"მაშინ ": messages.StepKeywordType_OUTCOME,
 
-			"და ":    messages.StepKeywordType_CONJUNCTION,
+			"და ": messages.StepKeywordType_CONJUNCTION,
+
 			"ასევე ": messages.StepKeywordType_CONJUNCTION,
 
 			"მაგრამ ": messages.StepKeywordType_CONJUNCTION,
-			"თუმცა ":  messages.StepKeywordType_CONJUNCTION,
+
+			"თუმცა ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
