@@ -47,7 +47,7 @@ clean-gherkin-languages-%: %
 	cd $< && make clean-gherkin-languages
 .PHONY: clean-gherkin-languages-%
 
-docker-run:
+docker-run: ## Start a docker container with all languages and tools installed
 	[ -d "${HOME}/.m2/repository" ] || mkdir -p "${HOME}/.m2/repository"
 	docker run \
 	  --publish "6006:6006" \
