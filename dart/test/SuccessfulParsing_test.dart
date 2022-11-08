@@ -16,7 +16,7 @@ void main()
 
     var matcher = TokenMatcher(dialectProvider);
 
-    final goodDir = Directory('test/assets/testdata/good');
+    final goodDir = Directory('../testdata/good');
 
     final filesEntities = goodDir.listSync().where((file) => file.path.endsWith('.feature'));
 

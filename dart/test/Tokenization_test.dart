@@ -18,7 +18,7 @@ void main()
      * java/src/test/java/io/cucumber/gherkin/TokensGenerator.java
      * TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
      **/
-    final assetDir = 'test/assets';
+    final assetDir = '../';
     final testDataDir = 'testdata/good';
     final path = Directory('$assetDir/$testDataDir');
     final files = path.listSync().where((file) => file.path.endsWith('.feature'));

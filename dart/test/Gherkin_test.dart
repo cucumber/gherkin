@@ -8,7 +8,7 @@ void main()
   final idGenerator = IdGenerator.incrementingGenerator;
 
   test('Use this in readme', () async {
-    final paths = const <String>['test/assets/testdata/good/minimal.feature'];
+    final paths = const <String>['../testdata/good/minimal.feature'];
     final includeSource = false;
     final includeAst = true;
     final includePickles = true;
@@ -24,7 +24,7 @@ void main()
 
 
   test('Provides access to the ast', () async {
-    final paths = const <String>['test/assets/testdata/good/minimal.feature'];
+    final paths = const <String>['../testdata/good/minimal.feature'];
     final includeSource = false;
     final includeAst = true;
     final includePickles = false;
@@ -44,7 +44,7 @@ void main()
   } );
 
   test('Provides access to pickles which are compiled from the ast', () async {
-    final paths = const <String>['test/assets/testdata/good/scenario_outline.feature'];
+    final paths = const <String>['../testdata/good/scenario_outline.feature'];
     final envelopes = await Gherkin.fromPaths( paths
       , false, false, true, idGenerator).toList();
 
