@@ -1,0 +1,22 @@
+name: test-c
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-c:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: run make
+        run: make
+        working-directory: c

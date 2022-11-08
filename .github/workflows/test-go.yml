@@ -1,0 +1,46 @@
+name: test-go
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-go:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        go: ['1.13.x', '1.18.x']
+        include:
+# Integration tests don't work on Windows, reason unknown
+#          - os: windows-latest
+#            go: '1.18.x'
+          - os: macos-latest
+            go: '1.18.x'
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go }}
+
+    - name: lint
+      working-directory: go
+      run: gofmt -w .
+
+    - name: test
+      working-directory: go
+      run: go test --v ./...
+
+    - name: run acceptance tests
+      run: make acceptance
+      working-directory: go

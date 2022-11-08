@@ -1,0 +1,46 @@
+name: test-java
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-java:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        java: ["11", "17"]
+        include:
+# Integration tests don't work on windows, classpath must be seperated with a ';' instead.
+#          - os: windows-latest
+#            java: "17"
+          - os: macos-latest
+            java: "17"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java }}
+          cache: "maven"
+
+      - run: mvn install
+        working-directory: java
+
+      - run: mvn test
+        working-directory: java
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: java

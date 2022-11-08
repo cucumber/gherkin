@@ -1,4 +1,5 @@
-include default.mk
+SHELL := /usr/bin/env bash
+ALPINE := $(shell which apk 2> /dev/null)
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
@@ -56,10 +57,14 @@ clobber: clean
 	rm -rf Gherkin/GHParser.m Gherkin/GHParser.h
 .PHONY: clobber
 
-Gherkin/GHParser.h: gherkin-objective-c-header.razor gherkin.berp
+define berp-generate-parser =
+berp -g ../gherkin.berp -t $< -o $@ --noBOM
+endef
+
+Gherkin/GHParser.h: gherkin-objective-c-header.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-Gherkin/GHParser.m: gherkin-objective-c-implementation.razor gherkin.berp
+Gherkin/GHParser.m: gherkin-objective-c-implementation.razor ../gherkin.berp
 	$(berp-generate-parser)
 
 build/AstGenerator: Gherkin/GHParser.h Gherkin/GHParser.m $(M_FILES) GherkinLanguages/gherkin-languages.json

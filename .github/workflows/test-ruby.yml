@@ -1,0 +1,41 @@
+name: test-ruby
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-ruby:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        ruby: ["2.6", "2.7", "3.0", "3.1"]
+        include:
+          - os: macos-latest
+            ruby: "3.1"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+          working-directory: ruby
+
+      - run: bundle exec rake
+        working-directory: ruby
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: ruby

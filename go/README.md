@@ -1,8 +1,8 @@
 # Gherkin for Go
 
-[![GoDoc](https://godoc.org/github.com/cucumber/gherkin-go?status.svg)](http://godoc.org/github.com/cucumber/gherkin-go) [![Go Report Card](https://goreportcard.com/badge/github.com/cucumber/gherkin-go)](https://goreportcard.com/report/github.com/cucumber/gherkin-go)
+[![GoDoc](https://pkg.go.dev/github.com/cucumber/gherkin/go?status.svg)](http://godoc.org/github.com/cucumber/gherkin/go)
 
-Gherkin parser/compiler for Go. Please see [Gherkin](https://github.com/cucumber/common/tree/main/gherkin) for details.
+Gherkin parser/compiler for Go. Please see [Gherkin](https://github.com/cucumber/gherkin) for details.
 
 ## Building
 

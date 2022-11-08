@@ -1,0 +1,27 @@
+name: Release Go
+
+on:
+  push:
+    branches: [release/*]
+
+jobs:
+  read-version:
+    name: Read version to release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.versions.outputs.changelog-latest-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cucumber/action-get-versions@v1.0.0
+        id: versions
+
+  publish-go:
+    name: Create go/v* tag
+    runs-on: ubuntu-latest
+    needs: read-version
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create git tag
+        run: |
+          git tag "go/v${{ needs.read-version.outputs.version }}"
+          git push --tags

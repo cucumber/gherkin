@@ -135,9 +135,9 @@ cmake_minimum_required(VERSION 3.7)
 project(gherkincsample)
 include(ExternalProject)
 ExternalProject_Add(gherkin_proj
-  GIT_REPOSITORY https://github.com/cucumber/common.git
+  GIT_REPOSITORY https://github.com/cucumber/gherkin.git
   GIT_TAG        <commit SHA or tag>
-  SOURCE_SUBDIR  gherkin/c
+  SOURCE_SUBDIR  c
 )
 ...
 ```

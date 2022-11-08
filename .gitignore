@@ -4,3 +4,4 @@
 
 dotnet/.vs/*
 dotnet/output
+*.iml

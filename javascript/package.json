@@ -5,12 +5,20 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
+    "build:cjs": "tsc --build tsconfig.build-cjs.json",
+    "build:esm": "tsc --build tsconfig.build-esm.json",
+    "build:legacy": "tsc --build tsconfig.build.json",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:legacy",
+    "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
+    "clean-tsc": "rm -rf dist",
     "test": "mocha",
+    "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix",
+    "eslint": "eslint --ext ts,tsx --max-warnings 0",
     "prepublishOnly": "tsc --build tsconfig.build.json"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cucumber/gherkin-javascript.git"
+    "url": "git+https://github.com/cucumber/gherkin.git"
   },
   "keywords": [
     "gherkin",
@@ -19,9 +27,9 @@
   "author": "Aslak Hellesøy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cucumber/cucumber/issues"
+    "url": "https://github.com/cucumber/gherkin/issues"
   },
-  "homepage": "https://github.com/cucumber/gherkin-javascript",
+  "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
     "@cucumber/gherkin-streams": "^5.0.1",
     "@types/mocha": "10.0.0",

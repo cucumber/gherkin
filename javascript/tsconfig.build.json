@@ -1,12 +1,17 @@
 {
-  "extends": "../../tsconfig.build.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "rootDir": ".",
-    "outDir": "dist"
+    "noEmit": false
   },
+  "files": [
+    "src/gherkin-languages.json"
+  ],
   "include": [
-    "package.json",
-    "src/gherkin-languages.json",
     "src",
     "test"
   ]

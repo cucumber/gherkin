@@ -1,6 +1,4 @@
 Please read [CONTRIBUTING](https://github.com/cucumber/gherkin/blob/master/CONTRIBUTING.md) first.
-You should clone the [cucumber/gherkin](https://github.com/cucumber/gherkin) repo if you want
-to contribute.
 
 ## Run tests
 
@@ -8,7 +6,7 @@ to contribute.
 
 Install [.NET 5](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.7-download.md)
 
-Just run `make` from this directory.
+Run `make` from this directory.
 
 ### Windows
 

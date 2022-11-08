@@ -1,4 +1,4 @@
-include default.mk
+SHELL := /usr/bin/env bash
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
@@ -28,10 +28,24 @@ endif
 default: .compared
 .PHONY: default
 
+acceptance: .compared ## Build acceptance test dir and compare results with reference
+
 .compared: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) .run
 	touch $@
 
-.built: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makefile LICENSE
+generate: ./include/rule_type.h src/parser.c src/dialect.c ## Generate gherkin parser files
+
+clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
+	rm -f ./include/rule_type.h src/parser.c src/dialect.c
+.PHONY: clean-generate
+
+copy-gherkin-languages: ## Copy gherkin-languages.json and/or generate derived files
+	echo "Nothing to do"
+
+clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
+	echo "Nothing to do"
+
+.built: generate $(SRC_FILES) src/Makefile
 	$(CC) --version
 	cd src; $(MAKE)
 	touch $@
@@ -40,10 +54,6 @@ clean:
 	rm -rf .compared .built .run acceptance
 	cd src; $(MAKE) $@
 .PHONY: clean
-
-clobber: clean
-	rm -rf ./include/rule_type.h src/parser.c src/dialect.c
-.PHONY: clobber
 
 cli: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makefile
 	cd src; $(MAKE) CC=$(CC) $@
@@ -61,13 +71,17 @@ libs_so: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makef
 	$(RUN_GHERKIN) $(GOOD_FEATURE_FILES) | jq . > /dev/null
 	touch $@
 
+define berp-generate-parser =
+berp -g ../gherkin.berp -t $< -o $@ --noBOM
+endef
+
 ./include/rule_type.h: gherkin-c-rule-type.razor gherkin.berp
 	$(berp-generate-parser)
 
 src/parser.c: gherkin-c-parser.razor gherkin.berp
 	$(berp-generate-parser)
 
-src/dialect.c: gherkin-languages.json dialect.c.jq
+src/dialect.c: ../gherkin-languages.json dialect.c.jq
 	cat $< | jq -f dialect.c.jq -r -c > $@
 
 acceptance/testdata/%.feature.tokens: ../testdata/%.feature ../testdata/%.feature.tokens $(GHERKIN_GENERATE_TOKENS)
@@ -95,4 +109,3 @@ acceptance/testdata/%.feature.source.ndjson: ../testdata/%.feature ../testdata/%
 	mkdir -p $(@D)
 	$(RUN_GHERKIN) --no-ast --no-pickles $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.source.ndjson) <(jq "." $@)
-

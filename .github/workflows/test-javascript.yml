@@ -1,0 +1,46 @@
+name: test-javascript
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-javascript:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        node-version: ["16.x", "17.x", "18.x"]
+        include:
+          - os: windows-latest
+            node-version: "18.x"
+          - os: macos-latest
+            node-version: "18.x"
+
+    steps:
+      - name: set git core.autocrlf to 'input'
+        run: git config --global core.autocrlf input
+
+      - uses: actions/checkout@v3
+
+      - name: with Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: javascript/package-lock.json
+
+      - run: npm install-ci-test
+        working-directory: javascript
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: javascript

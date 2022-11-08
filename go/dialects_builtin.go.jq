@@ -14,73 +14,73 @@
           ]
       ) + [
         "\t\t},\n",
-        "map[string]messages.StepKeywordType {\n"
+        "\t\tmap[string]messages.StepKeywordType{\n"
       ] + (
         [ .value.given
           | (
               [ .[] | select(. != "* ") |
-                "\t\t\t\t",
+                "\t\t\t",
                 @json,
                 ": messages.StepKeywordType_CONTEXT",
-                ",\n"
+                ",\n\n"
               ] | add
             ),
-            "\t\t\t\n"
+            ""
         ]
         +
         [ .value.when
           | (
               [ .[] | select(. != "* ") |
-                "\t\t\t\t",
+                "\t\t\t",
                 @json,
                 ": messages.StepKeywordType_ACTION",
-                ",\n"
+                ",\n\n"
               ] | add
             ),
-            "\t\t\t\n"
+            ""
         ]
         +
         [ .value.then
           | (
               [ .[] | select(. != "* ") |
-                "\t\t\t\t",
+                "\t\t\t",
                 @json,
                 ": messages.StepKeywordType_OUTCOME",
-                ",\n"
+                ",\n\n"
               ] | add
             ),
-            "\t\t\t\n"
+            ""
         ]
         +
         [ .value.and
           | (
               [ .[] | select(. != "* ") |
-                "\t\t\t\t",
+                "\t\t\t",
                 @json,
                 ": messages.StepKeywordType_CONJUNCTION",
-                ",\n"
+                ",\n\n"
               ] | add
             ),
-            "\t\t\t\n"
+            ""
         ]
         +
         [ .value.but
           | (
               [ .[] | select(. != "* ") |
-                "\t\t\t\t",
+                "\t\t\t",
                 @json,
                 ": messages.StepKeywordType_CONJUNCTION",
-                ",\n"
+                ",\n\n"
               ] | add
             ),
-            "\t\t\t\n"
+            ""
         ]
         + [
-          "\"* \": messages.StepKeywordType_UNKNOWN,\n"
+          "\t\t\t\"* \": messages.StepKeywordType_UNKNOWN,\n"
         ]
       ) + [
-        "}",
-        "\t},\n"
+        "\t\t}",
+        "},\n"
       ]
     | add
   ]
@@ -93,11 +93,18 @@
 + "\treturn builtinDialects\n"
 + "}\n\n"
 + "const (\n"
-+ (
-  ["feature","rule","background","scenario","scenarioOutline","examples","given","when","then","and","but"]
-  | [ .[] | "\t" + . + " = " + (.|@json) + "\n" ]
-  | add )
++ "	feature         = \"feature\"\n"
++ "	rule            = \"rule\"\n"
++ "	background      = \"background\"\n"
++ "	scenario        = \"scenario\"\n"
++ "	scenarioOutline = \"scenarioOutline\"\n"
++ "	examples        = \"examples\"\n"
++ "	given           = \"given\"\n"
++ "	when            = \"when\"\n"
++ "	then            = \"then\"\n"
++ "	and             = \"and\"\n"
++ "	but             = \"but\"\n"
 + ")\n\n"
 + "var builtinDialects = gherkinDialectMap{\n"
 + .
-+ "}\n"
++ "}"

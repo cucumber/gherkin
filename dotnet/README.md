@@ -1,5 +1,5 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/aa1b8h3y7pqnbhnn?svg=true)](https://ci.appveyor.com/project/aslakhellesoy/gherkin)
+# Gherkin for .NET
 
-Gherkin parser/compiler for .NET. Please see [Gherkin](https://github.com/cucumber/common/tree/main/gherkin) for details.
+Gherkin parser/compiler for .NET.
 
 NuGet Repository: https://ci.appveyor.com/nuget/gherkin-pgwyovw4bucb

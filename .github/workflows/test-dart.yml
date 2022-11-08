@@ -1,0 +1,25 @@
+name: test-dart
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-dart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install dart
+        uses: dart-lang/setup-dart@v1.3
+
+      - name: run tests
+        run: dart test
+        working-directory: dart

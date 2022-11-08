@@ -1,0 +1,58 @@
+name: test-php
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-php:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1']
+        composer-mode: ['low-deps', 'high-deps']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+
+      - name: Discover composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-dir)"
+        working-directory: php
+
+      - name: Cache composer
+        uses: actions/cache@v3
+        with:
+          path: "${{ steps.composer-cache.outputs.dir }}"
+          key: composer
+
+      - name: Install dependencies
+        working-directory: php
+        run: |
+          if [[ "${{ matrix.composer-mode }}" = "low-deps" ]]; then
+            composer update --prefer-lowest
+          else
+            composer update
+          fi
+
+      - name: Run tests
+        working-directory: php
+        run: |
+          vendor/bin/php-cs-fixer --dry-run --diff fix
+          vendor/bin/psalm --no-cache
+          vendor/bin/phpunit
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: php
