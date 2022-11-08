@@ -21,9 +21,6 @@ jobs:
           otp-version: '22.2'
           elixir-version: '1.10.x'
 
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v1
-
       - run: |
           mix local.hex --force
           mix deps.get
