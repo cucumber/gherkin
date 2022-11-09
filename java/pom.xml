@@ -8,7 +8,7 @@
         <version>3.0.0</version>
     </parent>
     <artifactId>gherkin</artifactId>
-    <version>25.0.2</version>
+    <version>25.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Gherkin</name>
     <description>Gherkin parser</description>
@@ -22,7 +22,7 @@
         <connection>scm:git:git://github.com/cucumber/gherkin-java.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber/gherkin-java.git</developerConnection>
         <url>git://github.com/cucumber/gherkin-java.git</url>
-        <tag>v25.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencyManagement>
