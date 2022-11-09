@@ -5,8 +5,8 @@ on:
     branches: [release/*]
 
 jobs:
-  create-php-release:
-    name: Publish to PHP subrepo
+  publish-php-subrepo:
+    name: Publish to cucumber/php-go subrepo
     runs-on: ubuntu-latest
     environment: Release
     permissions:
