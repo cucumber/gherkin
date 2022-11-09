@@ -33,17 +33,17 @@ acceptance: .compared ## Build acceptance test dir and compare results with refe
 .compared: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) .run
 	touch $@
 
-generate: ./include/rule_type.h src/parser.c src/dialect.c ## Generate gherkin parser files
+generate: ./include/rule_type.h src/parser.c ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f ./include/rule_type.h src/parser.c src/dialect.c
+	rm -f ./include/rule_type.h src/parser.c
 .PHONY: clean-generate
 
-copy-gherkin-languages: ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: src/dialect.c ## Copy gherkin-languages.json and/or generate derived files
 	echo "Nothing to do"
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	echo "Nothing to do"
+	rm -f src/dialect.c
 
 .built: generate $(SRC_FILES) src/Makefile
 	$(CC) --version

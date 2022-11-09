@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- Fix half-glyph in Georgian translations ([#44](https://github.com/cucumber/gherkin/pull/44))
+
 ## [25.0.1] - 2022-11-09
 ### Fixed
 - Fix release process for perl and elixir
