@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [25.0.0] - 2022-11-09
 ### Added
 - Additional `ja` (Japanese) translations for `and`, `but`
 - Added `amh` (Amharic) translation
@@ -575,7 +577,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/cucumber/compare/gherkin/v24.1.0...main
+[Unreleased]: https://github.com/cucumber/cucumber/compare/gherkin/v25.0.0...main
+[25.0.0]: https://github.com/cucumber/cucumber/compare/gherkin/v24.1.0...main
 [24.1.0]: https://github.com/cucumber/cucumber/compare/gherkin/v24.0.0...gherkin/v24.1.0
 [24.0.0]: https://github.com/cucumber/cucumber/compare/gherkin/v23.0.1...gherkin/v24.0.0
 [23.0.1]: https://github.com/cucumber/cucumber/compare/gherkin/v23.0.0...gherkin/v23.0.1
