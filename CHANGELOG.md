@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [25.0.2] - 2022-11-09
 ### Fixed
 - Fix half-glyph in Georgian translations ([#44](https://github.com/cucumber/gherkin/pull/44))
 
@@ -584,7 +585,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/cucumber/compare/gherkin/v25.0.1...main
+[Unreleased]: https://github.com/cucumber/cucumber/compare/gherkin/v25.0.2...main
+[25.0.2]: https://github.com/cucumber/cucumber/compare/gherkin/v25.0.1...main
 [25.0.1]: https://github.com/cucumber/cucumber/compare/gherkin/v25.0.0...main
 [25.0.0]: https://github.com/cucumber/cucumber/compare/gherkin/v24.1.0...main
 [24.1.0]: https://github.com/cucumber/cucumber/compare/gherkin/v24.0.0...gherkin/v24.1.0
