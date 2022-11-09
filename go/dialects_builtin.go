@@ -2784,7 +2784,7 @@ var builtinDialects = gherkinDialectMap{
 			given: {
 				"* ",
 				"მოცემული ",
-				"Მოცემულია ",
+				"მოცემულია ",
 				"ვთქვათ ",
 			},
 			when: {
@@ -2812,7 +2812,7 @@ var builtinDialects = gherkinDialectMap{
 		map[string]messages.StepKeywordType{
 			"მოცემული ": messages.StepKeywordType_CONTEXT,
 
-			"Მოცემულია ": messages.StepKeywordType_CONTEXT,
+			"მოცემულია ": messages.StepKeywordType_CONTEXT,
 
 			"ვთქვათ ": messages.StepKeywordType_CONTEXT,
 

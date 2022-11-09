@@ -1989,7 +1989,7 @@ static const Keywords ka_examples_keywords = { 1, ka_examples_KEYWORDS };
 static const wchar_t* const ka_feature_KEYWORDS[] = { L"თვისება", L"მოთხოვნა" };
 static const Keywords ka_feature_keywords = { 2, ka_feature_KEYWORDS };
 
-static const wchar_t* const ka_given_KEYWORDS[] = { L"* ", L"მოცემული ", L"Მოცემულია ", L"ვთქვათ " };
+static const wchar_t* const ka_given_KEYWORDS[] = { L"* ", L"მოცემული ", L"მოცემულია ", L"ვთქვათ " };
 static const Keywords ka_given_keywords = { 4, ka_given_KEYWORDS };
 
 static const wchar_t* const ka_rule_KEYWORDS[] = { L"წესი" };
