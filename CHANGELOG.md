@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- Fix release process for perl and elixir
+
 ## [25.0.0] - 2022-11-09
 ### Added
 - Additional `ja` (Japanese) translations for `and`, `but`
