@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- Link to the correct repository in various package meta-data. 
 
 ## [25.0.2] - 2022-11-09
 ### Fixed
