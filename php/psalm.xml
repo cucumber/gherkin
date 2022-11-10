@@ -7,7 +7,6 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <file name="bin/gherkin-generate-tokens"/>
         <file name="bin/gherkin"/>
         <directory name="src"/>
         <directory name="src-generated"/>

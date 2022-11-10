@@ -56,7 +56,7 @@ jobs:
         run: |
           vendor/bin/php-cs-fixer --dry-run --diff fix
           vendor/bin/psalm --no-cache
-          vendor/bin/phpunit
+          vendor/bin/phpunit --testsuite unit
 
       - name: run acceptance tests
         run: make acceptance
