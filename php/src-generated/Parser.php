@@ -398,11 +398,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::FeatureHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -468,12 +468,12 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::FeatureHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -538,11 +538,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::FeatureHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -607,11 +607,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -676,12 +676,12 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -745,11 +745,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -818,12 +818,12 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -895,13 +895,13 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1010,20 +1010,20 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1098,22 +1098,22 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::Description);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1188,20 +1188,20 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1280,22 +1280,22 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1378,24 +1378,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1517,24 +1517,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1619,26 +1619,26 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1723,24 +1723,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1817,26 +1817,26 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -1960,11 +1960,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::RuleHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2033,12 +2033,12 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::RuleHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2106,11 +2106,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::RuleHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2178,11 +2178,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2250,12 +2250,12 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2322,11 +2322,11 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2398,12 +2398,12 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2478,13 +2478,13 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2596,20 +2596,20 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2687,22 +2687,22 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::Description);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2780,20 +2780,20 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2875,22 +2875,22 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -2976,24 +2976,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3118,24 +3118,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3223,26 +3223,26 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3330,24 +3330,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3427,26 +3427,26 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3559,24 +3559,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 37;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3684,13 +3684,13 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 31;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3787,24 +3787,24 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 17;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -3909,13 +3909,13 @@ final class Parser
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 11;
             }
         }
         if ($this->match_TagLine($context, $token)) {
