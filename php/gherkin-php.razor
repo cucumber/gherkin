@@ -175,7 +175,15 @@ final class @Model.ParserClassName
             }
             foreach(var production in transition.Productions)
             {
+                if (transition.LookAheadHint != null)
+                {
+                    <text>    </text>
+                }
                 @CallProduction(production)
+            }
+            if (transition.LookAheadHint != null)
+            {
+                <text>    </text>
             }
             @:return @transition.TargetState;
             if (transition.LookAheadHint != null)
