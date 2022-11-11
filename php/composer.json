@@ -23,7 +23,8 @@
         "friendsofphp/php-cs-fixer": "^3.5",
         "psalm/plugin-phpunit": "^0.18.0",
         "nikic/php-parser": "^4.14",
-        "infection/infection": "^0.26.16"
+        "infection/infection": "^0.26.16",
+        "roave/infection-static-analysis-plugin": "^1.25"
     },
     "repositories": [
         {
