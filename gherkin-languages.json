@@ -2669,7 +2669,9 @@
     "feature": [
       "Funcionalidade",
       "Característica",
-      "Caracteristica"
+      "Caracteristica",
+      "Necessidade de Negócio",
+      "Habilidade"
     ],
     "given": [
       "* ",
