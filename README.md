@@ -15,16 +15,30 @@ Gherkin is currently implemented for the following platforms (in order of birthd
 - [Perl](./perl)
 - [PHP](./php)
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser for a new language.
-Our wish-list is (in no particular order):
+
+## Contributing Translations (i18n)
+
+In order to allow Gherkin to be written in a number of languages, the keywords
+have been translated into multiple languages. To improve readability and flow,
+some languages may have more than one translation for any given keyword.
+
+If you are looking to add, update or improve these translations please see
+[`CONTRIBUTING.md`](CONTRIBUTING.md#adding-or-updating-an-i18n-language).
+
+## Contributing a Parser Implementation
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser
+for a new programming language. Our wish-list is (in no particular order):
 
 - Rust
 
 ## Usage
 
-Gherkin can be used either through its command line interface (CLI) or as a library.
+Gherkin can be used either through its command line interface (CLI) or as a
+library.
 
-It is designed to be used in conjunction with other tools such as Cucumber which consumes the output from the CLI or library as [Cucumber Messages](../messages).
+It is designed to be used in conjunction with other tools such as Cucumber
+which consumes the output from the CLI or library as [Cucumber Messages](../messages).
 
 ### Library
 
