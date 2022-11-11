@@ -58,6 +58,17 @@ jobs:
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit --testsuite unit
 
-      - name: run acceptance tests
+      - name: Run acceptance tests
         run: make acceptance
+        working-directory: php
+
+      - name: Mutation tests - minimum thresholds
+        run: |
+          vendor/bin/infection --min-msi=85 --min-covered-msi=88
+        working-directory: php
+
+      - name: Mutation tests - modifications
+        run: |
+          git fetch --depth=1 origin $GITHUB_BASE_REF
+          vendor/bin/infection --git-diff-lines --git-diff-base=origin/$GITHUB_BASE_REF --logger-github --ignore-msi-with-no-mutations
         working-directory: php
