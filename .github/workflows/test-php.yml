@@ -10,6 +10,9 @@ on:
       - main
   workflow_call:
 
+permissions:
+  contents: read
+
 jobs:
   test-php:
     runs-on: ubuntu-latest
