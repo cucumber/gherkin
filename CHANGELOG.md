@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [Java] Enabled reproducible builds
+
 ### Fixed
 - Link to the correct repository in various package meta-data. 
 
