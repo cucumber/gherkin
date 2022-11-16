@@ -2,8 +2,7 @@
   "extends": [
     "config:base",
     ":preserveSemverRanges",
-    ":rebaseStalePrs",
-    ":disableDependencyDashboard"    
+    ":rebaseStalePrs"
   ],
   "labels": [":robot: dependencies"],
   "prHourlyLimit": 0,
