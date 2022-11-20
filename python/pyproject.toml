@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "gherkin-official"
+version = "25.0.2"
+description = "Gherkin parser (official, by Cucumber team)"
+authors = ["Cucumber Ltd, Björn Rasmusson"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/cucumber/gherkin"
+repository = "https://github.com/cucumber/gherkin"
+documentation = "https://github.com/cucumber/gherkin"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+packages = [
+    { include = "gherkin"}
+]
+include = [
+    { path = "bin/gherkin"},
+    { path = "bin/gherkin-generate-tokens", format = "sdist"},
+    { path = "bin/gherkin_generate_tokens.py", format = "sdist" },
+    { path = "tests", format = "sdist" },
+]
+
+[tool.poetry.dependencies]
+python = ">=2.7"
+
+[tool.poetry.dev-dependencies]
+pytest = [
+    {version = "<5.0", python = ">=2.7, <3.5"},
+    {version = ">=5.0", python = ">=3.5, <3.7"},
+    {version = ">=7.2", python = ">=3.7"},
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
