@@ -230,3 +230,12 @@ def test_it_matches_ExamplesLine():
     assert token.matched_type == 'ExamplesLine'
     assert token.matched_keyword == 'Examples'
     assert token.matched_text == ''
+
+def test_it_matches_Empty():
+    tm = GherkinInMarkdownTokenMatcher('en')
+    line = GherkinLine('''''',location['line'])
+    token = Token(gherkin_line=line, location=location)
+    assert tm.match_Empty(token)
+    assert token.matched_type == 'Empty'
+    assert token.matched_keyword == None
+    assert token.matched_text == None

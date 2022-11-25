@@ -83,7 +83,7 @@ class GherkinInMarkdownTokenMatcher(object):
             table_cells = token.line.table_cells
             if(self._is_gfm_table_separator(table_cells)):
                 return True
-        return self._set_token_matched(token,None,False)
+        return self._set_token_matched(token,None)
 
     def match_Empty(self, token):
 
