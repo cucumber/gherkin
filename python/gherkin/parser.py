@@ -250,6 +250,11 @@ class Parser(object):
         if self.match_Empty(context, token):
                 self.build(context, token)
                 return 0
+        # FIXME - move into gherkin-python.razor
+        if self.match_ScenarioLine(context,token):
+                self.build(context, token)
+                return 12
+                
 
         state_comment = "State: 0 - Start"
         token.detach
