@@ -11,7 +11,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Java] Enabled reproducible builds
 
 ### Fixed
-- Link to the correct repository in various package meta-data. 
+- Link to the correct repository in various package meta-data.
+- [Perl] Specify version range for `Cucumber::Messages` dependency ([#50](https://github.com/cucumber/gherkin/pull/50))
 
 ## [25.0.2] - 2022-11-09
 ### Fixed
