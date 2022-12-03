@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
-	<LangVersion>11.0</LangVersion>
-	<OutputType>Exe</OutputType>
+    <LangVersion>11.0</LangVersion>
+    <OutputType>Exe</OutputType>
     <StartupObject>Gherkin.Specs.CLI.Program</StartupObject>
   </PropertyGroup>
 
