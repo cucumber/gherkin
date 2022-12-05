@@ -33,7 +33,7 @@
   "devDependencies": {
     "@cucumber/gherkin-streams": "^5.0.1",
     "@types/mocha": "10.0.1",
-    "@types/node": "18.11.10",
+    "@types/node": "18.11.11",
     "core-js": "3.26.1",
     "mocha": "10.1.0",
     "ts-node": "10.9.1",
