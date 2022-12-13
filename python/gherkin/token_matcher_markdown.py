@@ -181,11 +181,16 @@ class GherkinInMarkdownTokenMatcher(object):
         match = re.search(u'{}({}){}(.*)'.format(prefix, keywords_or_list, keywordSuffix), token.line.get_line_text())
         indent = token.line.indent
         result = False
-        
+        matchedKeywordType=None
         if(match):
             matchedKeyword = match.group(2)
             indent += len(match.group(1))
-            self._set_token_matched(token, token_type, match.group(3).strip(), matchedKeyword, indent=indent)
+
+            # only set the keyword type if this is a step keyword
+            if( matchedKeyword in self.dialect.given_keywords ):
+                matchedKeywordType = self.keyword_types[matchedKeyword][0]    
+
+            self._set_token_matched(token, token_type, match.group(3).strip(), matchedKeyword, keyword_type=matchedKeywordType, indent=indent)
             return True
         return False
 
