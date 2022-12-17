@@ -48,7 +48,7 @@ bin/gherkin-generate-tokens:
 	go build -o $@ ./gherkin-generate-tokens
 
 bin/gherkin:
-	go build -o $@ -a ./cmd
+	go build -o $@ -a ./main
 
 dialects_builtin.go: ../gherkin-languages.json dialects_builtin.go.jq
 	cat $< | jq --sort-keys --from-file dialects_builtin.go.jq --raw-output --compact-output > $@
