@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [26.0.1] - 2022-12-17
 ### Fixed
 - [Go] Fix module names
 
@@ -599,7 +601,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.0.0...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.0.1...main
+[26.0.1]: https://github.com/cucumber/gherkin/compare/v26.0.0...main
 [26.0.0]: https://github.com/cucumber/gherkin/compare/v25.0.2...main
 [25.0.2]: https://github.com/cucumber/gherkin/compare/v25.0.1...main
 [25.0.1]: https://github.com/cucumber/gherkin/compare/v25.0.0...main
