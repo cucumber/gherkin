@@ -8,12 +8,13 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [26.0.0] - 2022-12-17
+### Added
+- [Java] Enabled reproducible builds
+
 ### Changed
 - Upgraded messages to v21
 - [.NET] Update target frameworks fo .NET 6, .NET Framework 4.6.2, .NET Standard 2.0
-
-### Added
-- [Java] Enabled reproducible builds
 
 ### Fixed
 - Link to the correct repository in various package meta-data.
@@ -596,7 +597,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v25.0.2...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.0.0...main
+[26.0.0]: https://github.com/cucumber/gherkin/compare/v25.0.2...main
 [25.0.2]: https://github.com/cucumber/gherkin/compare/v25.0.1...main
 [25.0.1]: https://github.com/cucumber/gherkin/compare/v25.0.0...main
 [25.0.0]: https://github.com/cucumber/gherkin/compare/v24.1.0...main
