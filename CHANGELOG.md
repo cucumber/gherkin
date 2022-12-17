@@ -7,9 +7,13 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+### Changed
+- Upgraded messages to v21
+- [.NET] Update target frameworks fo .NET 6, .NET Framework 4.6.2, .NET Standard 2.0
+
 ### Added
 - [Java] Enabled reproducible builds
-- [dotnet] Update target frameworks fo .NET 6, .NET Framework 4.6.2, .NET Standard 2.0
 
 ### Fixed
 - Link to the correct repository in various package meta-data.
