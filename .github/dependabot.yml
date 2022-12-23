@@ -8,5 +8,7 @@ updates:
   - package-ecosystem: "bundler" # See documentation for possible values
     directory: "/ruby" # Location of package manifests
     versioning-strategy: increase
+    commit-message:
+      prefix: "chore(deps):"
     schedule:
       interval: "daily"
