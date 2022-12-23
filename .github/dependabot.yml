@@ -7,5 +7,6 @@ version: 2
 updates:
   - package-ecosystem: "bundler" # See documentation for possible values
     directory: "/ruby" # Location of package manifests
+    versioning-strategy: increase
     schedule:
       interval: "daily"
