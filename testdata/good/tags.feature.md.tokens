@@ -5,12 +5,12 @@
 (5:1)TagLine://2:@scenario_tag1,19:@scenario_tag2
 (6:3)TagLine://4:@scenario_tag3
 (7:4)ScenarioLine:()Scenario/minimalistic/
-(8:3)StepLine:()Given /the minimalism/
+(8:3)StepLine:(Context)Given /the minimalism/
 (9:1)Empty://
 (10:1)TagLine://2:@so_tag1,14:@so_tag2
 (11:3)TagLine://4:@so_tag3
 (12:4)ScenarioLine:()Scenario Outline/minimalistic outline/
-(13:3)StepLine:()Given /the <what>/
+(13:3)StepLine:(Context)Given /the <what>/
 (14:1)Empty://
 (15:1)TagLine://2:@ex_tag1,13:@ex_tag2
 (16:3)TagLine://4:@ex_tag3
