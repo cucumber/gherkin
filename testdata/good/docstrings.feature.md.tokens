@@ -2,7 +2,7 @@
 (2:1)Empty://
 (3:5)ScenarioLine:()Scenario/minimalistic/
 (4:1)Empty://
-(5:3)StepLine:()And /a DocString with an implicitly escaped separator inside/
+(5:3)StepLine:(Conjunction)And /a DocString with an implicitly escaped separator inside/
 (6:1)DocStringSeparator:()````//
 (7:1)Other:/```/
 (8:1)DocStringSeparator:()````//
