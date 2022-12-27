@@ -81,12 +81,13 @@ class GherkinInMarkdownTokenMatcher(object):
         return self._match_title_line(KEYWORD_PREFIX_BULLET, nonStarStepKeywords, '', token, 'StepLine')
         
     def match_Comment(self, token):
+        result = False
         if(token.line.startswith('|')):
             table_cells = token.line.table_cells
             if(self._is_gfm_table_separator(table_cells)):
-                self._set_token_matched(token,"Comment")
-                return True
-        return self._set_token_matched(token,None)
+                result= True
+        self._set_token_matched(token, "Comment")
+        return result
 
     def match_Empty(self, token):
 
@@ -195,6 +196,15 @@ class GherkinInMarkdownTokenMatcher(object):
             self._set_token_matched(token, token_type, match.group(3).strip(), matchedKeyword, keyword_type=matchedKeywordType, indent=indent)
             return True
         return False
+
+    def _set_token_matched2(self, token, matched, indent=None, ):
+        token.matched_gherkin_dialect = self.dialect_name
+        if indent is not None:
+            token.matched_indent = indent
+        else:
+            token.matched_indent = token.line.indent if token.line else 0
+        token.location['column'] = token.matched_indent + 1
+        return matched
 
     def _set_token_matched(self, token, matched_type, text=None,
                            keyword=None, keyword_type=None, indent=None, items=None):
