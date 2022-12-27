@@ -136,7 +136,6 @@ description
             'column': 1,
           },
           'language': 'en',
-        #   'keyword': None,
           'name': '# Hello',
           'description': '',
           'children': [
@@ -161,8 +160,6 @@ description
                     'keyword': 'Given ',
                     'keywordType': "Context",
                     'text': 'a step',
-                    # 'dataTable': None,
-                    # 'docString': None,
                   },
                 ],
                 'examples': [],
