@@ -5,6 +5,8 @@ from gherkin.parser import Parser
 from gherkin.errors import ParserError
 import pytest
 
+from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
+
 
 def test_parser():
     parser = Parser()
@@ -89,3 +91,85 @@ def test_change_the_default_language():
     }
 
     assert expected == feature_file
+
+def test_parsing_markdown_does_not_parse_a_feature_description():
+    parser = Parser()
+    matcher = GherkinInMarkdownTokenMatcher()
+    
+    feature_file = """# Feature: hello
+This is the
+description
+"""
+    ast = parser.parse(TokenScanner(feature_file), matcher)
+    expected = {
+        'feature': {
+          'tags': [],
+          'description': '',
+          'location': { 'line': 1, 'column': 3 },
+          'language': 'en',
+          'keyword': 'Feature',
+          'name': 'hello',
+          'children': [],
+        },
+        'comments': [],
+      }
+    assert ast == expected
+
+def test_parsing_markdown_parses_a_feature_without_a_hash_Feature_header():
+    parser = Parser()
+    matcher = GherkinInMarkdownTokenMatcher()
+    feature_file = """# Hello
+This is the
+description
+
+## Scenario: hello
++ Given a step
+
+## Some other header
+"""
+    ast = parser.parse(TokenScanner(feature_file), matcher)
+    expected = {
+        'feature': {
+          'tags': [],
+          'location': {
+            'line': 1,
+            'column': 1,
+          },
+          'language': 'en',
+        #   'keyword': None,
+          'name': '# Hello',
+          'description': '',
+          'children': [
+            {
+              'scenario': {
+                'id': '1',
+                'tags': [],
+                'location': {
+                  'line': 5,
+                  'column': 4,
+                },
+                'keyword': 'Scenario',
+                'name': 'hello',
+                'description': '',
+                'steps': [
+                  {
+                    'id': '0',
+                    'location': {
+                      'line': 6,
+                      'column': 3,
+                    },
+                    'keyword': 'Given ',
+                    'keywordType': "Context",
+                    'text': 'a step',
+                    # 'dataTable': None,
+                    # 'docString': None,
+                  },
+                ],
+                'examples': [],
+              },
+            },
+          ],
+        },
+        'comments': [],
+      }
+    assert ast == expected

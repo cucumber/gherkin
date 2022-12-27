@@ -25,6 +25,7 @@ class GherkinInMarkdownTokenMatcher(object):
 
         if(self.matched_feature_line):
             self._set_token_matched(token,None)
+            return False
 
         # We first try to match "# Feature: blah"
         result = self._match_title_line(KEYWORD_PREFIX_HEADER, self.dialect.feature_keywords, ':', token, 'FeatureLine')
@@ -34,6 +35,7 @@ class GherkinInMarkdownTokenMatcher(object):
 
         if not result:
             self._set_token_matched(token,'FeatureLine',token.line.get_line_text())
+            result=True
         self.matched_feature_line=result
         return result
         
