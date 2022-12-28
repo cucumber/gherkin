@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish-php-subrepo:
-    name: Publish to cucumber/php-go subrepo
+    name: Publish to cucumber/gherkin-php subrepo
     runs-on: ubuntu-latest
     environment: Release
     permissions:
