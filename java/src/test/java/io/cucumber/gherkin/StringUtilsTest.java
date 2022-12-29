@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StringUtilTest {
+public class StringUtilsTest {
     private static final String WHITESPACE = "\u00A0 \t";
     private static final String CUCUMBER = "🥒";
 
