@@ -11,7 +11,7 @@ public class StringUtilTest {
 
     @Test
     void testRtrim() {
-        assertEquals(WHITESPACE + CUCUMBER, StringUtils1.rtrim(WHITESPACE + CUCUMBER + WHITESPACE));
+        assertEquals(WHITESPACE + CUCUMBER, StringUtils.rtrim(WHITESPACE + CUCUMBER + WHITESPACE));
     }
 
     @Test
