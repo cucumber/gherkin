@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [26.0.3] - 2023-01-03
 ### Fixed
 - [Javascript, PHP, Ruby] Allow messages v19.1.4 to v20.0.1 to be used
 - [Java] Improve text trim performance ([#84](https://github.com/cucumber/gherkin/issues/84))
@@ -608,7 +610,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.0.2...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.0.3...main
+[26.0.3]: https://github.com/cucumber/gherkin/compare/v26.0.2...main
 [26.0.2]: https://github.com/cucumber/gherkin/compare/v26.0.1...main
 [26.0.1]: https://github.com/cucumber/gherkin/compare/v26.0.0...main
 [26.0.0]: https://github.com/cucumber/gherkin/compare/v25.0.2...main
