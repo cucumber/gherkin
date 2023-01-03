@@ -7,9 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-- [Javascript, PHP, Ruby] Allow messages v19.1.4 to v20.0.1 to be used
-
 ### Fixed
+- [Javascript, PHP, Ruby] Allow messages v19.1.4 to v20.0.1 to be used
 - [Java] Improve text trim performance ([#84](https://github.com/cucumber/gherkin/issues/84))
 
 ## [26.0.2] - 2022-12-27
