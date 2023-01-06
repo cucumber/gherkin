@@ -15,11 +15,21 @@ class StringUtils {
         return LTRIM.matcher(s).replaceAll("");
     }
 
+    /**
+     * Trims whitespace on the left-hand side up to the first 
+     * non-whitespace character and exclude new lines from the 
+     * usual definition of whitespace.
+     */
     static String ltrimKeepNewLines(String s) {
         // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
         return LTRIM_KEEP_NEW_LINES.matcher(s).replaceAll("");
     }
 
+    /**
+     * Trims whitespace on the right-hand side up to the first 
+     * non-whitespace character and exclude new lines from the 
+     * usual definition of whitespace.
+     */
     static String rtrimKeepNewLines(String s) {
         // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
         return RTRIM_KEEP_NEW_LINES.matcher(s).replaceAll("");
