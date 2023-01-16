@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: install dart
-        uses: dart-lang/setup-dart@v1.3
+        uses: dart-lang/setup-dart@v1.4
 
       - name: run tests
         run: dart test
