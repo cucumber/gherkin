@@ -47,6 +47,7 @@ describe Gherkin::Query do
         Examples:
           | Status |
           | passed |
+          | failed |
 
       @rule-tag
       Rule: this is a rule
@@ -68,6 +69,56 @@ describe Gherkin::Query do
           messages.each { |message| subject.update(message) }
         end.not_to raise_exception
       end
+    end
+  end
+
+  describe '#scenario_parent_locations' do
+    before do
+      messages.each { |message| subject.update(message) }
+    end
+
+    let(:background) { find_message_by_attribute(gherkin_document.feature.children, :background) }
+    let(:scenarios) { filter_messages_by_attribute(gherkin_document.feature.children, :scenario) }
+
+    context 'without rule' do
+      let(:scenario) { scenarios.first }
+
+      it 'provides the feature and background locations of a given scenario node id' do
+        expect(subject.scenario_parent_locations(scenario.id)).to eq([
+          gherkin_document.feature.location,
+          background.location,
+        ])
+      end
+    end
+
+    context 'with rule' do
+      let(:rule) { find_message_by_attribute(gherkin_document.feature.children, :rule) }
+      let(:rule_background) { find_message_by_attribute(rule.children, :background) }
+      let(:scenario) { find_message_by_attribute(rule.children, :scenario) }
+
+      it 'provides the feature, background, rule, and rule background locations of a given scenario node id' do
+        expect(subject.scenario_parent_locations(scenario.id)).to eq([
+          gherkin_document.feature.location,
+          background.location,
+          rule.location,
+          rule_background.location,
+        ])
+      end
+    end
+
+    context 'in a scenario outline' do
+      let(:scenario) { scenarios.last }
+
+      it 'provides the feature and background locations of a given scenario outline node id' do
+        expect(subject.scenario_parent_locations(scenario.id)).to eq([
+          gherkin_document.feature.location,
+          background.location,
+        ])
+      end
+    end
+
+    it 'raises an exception if called with an invalid id' do
+      expect { subject.scenario_parent_locations("BAD") }.to raise_error(Gherkin::AstNodeNotLocatedException)
     end
   end
 
