@@ -3,6 +3,7 @@ from gherkin.parser import Parser
 from gherkin.pickles.compiler import Compiler
 from gherkin.errors import ParserError, CompositeParserException
 from gherkin.stream.id_generator import IdGenerator
+from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
 
 def create_errors(errors, uri):
     for error in errors:
@@ -28,7 +29,10 @@ class GherkinEvents:
         source = source_event['source']['data']
 
         try:
-            gherkin_document = self.parser.parse(source)
+            matcher=None
+            if(uri.endswith('.md')):
+                matcher=GherkinInMarkdownTokenMatcher()
+            gherkin_document = self.parser.parse(source, matcher)
             gherkin_document['uri'] = uri
 
             if (self.options.print_source):

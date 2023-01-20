@@ -6,7 +6,16 @@ from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
 from gherkin.gherkin_line import GherkinLine
 location = { 'line': 1, 'column': 1 }
 
-def test_it_matches_FeatureLine():
+def test_it_matches_FeatureLineH1():
+    tm = GherkinInMarkdownTokenMatcher('en')
+    line = GherkinLine('''# Feature: hello''',location['line'])
+    token = Token(gherkin_line=line, location=location)
+    assert tm.match_FeatureLine(token)
+    assert token.matched_type == 'FeatureLine'
+    assert token.matched_keyword == 'Feature'
+    assert token.matched_text == 'hello'
+
+def test_it_matches_FeatureLineH2():
     tm = GherkinInMarkdownTokenMatcher('en')
     line = GherkinLine('''## Feature: hello''',location['line'])
     token = Token(gherkin_line=line, location=location)
@@ -23,6 +32,15 @@ def test_it_matches_FeatureLine_in_French():
     assert token.matched_type == 'FeatureLine'
     assert token.matched_keyword == u'Fonctionnalité'
     assert token.matched_text == 'hello'
+
+def test_it_matches_FeatureLine_without_the_Feature_keyword():
+    tm = GherkinInMarkdownTokenMatcher('en')
+    line = GherkinLine('''# hello''',location['line'])
+    token = Token(gherkin_line=line, location=location)
+    assert tm.match_FeatureLine(token)
+    assert token.matched_type == 'FeatureLine'
+    assert token.matched_keyword == None
+    assert token.matched_text == '# hello'
 
 def test_it_matches_bullet_Step():
     tm = GherkinInMarkdownTokenMatcher('en')
@@ -41,6 +59,7 @@ def test_it_matches_plus_Step():
     assert tm.match_StepLine(token)
     assert token.matched_type == 'StepLine'
     assert token.matched_keyword == 'Given '
+    assert token.matched_keyword_type == 'Context'
     assert token.matched_text == 'I have 3 cukes'
     assert token.location['column'] == 6
 
@@ -51,8 +70,21 @@ def test_it_matches_hyphen_Step():
     assert tm.match_StepLine(token)
     assert token.matched_type == 'StepLine'
     assert token.matched_keyword == 'Given '
+    assert token.matched_keyword_type == 'Context'
     assert token.matched_text == 'I have 3 cukes'
     assert token.location['column'] == 6
+
+def test_it_matches_a_when_Step():
+    tm = GherkinInMarkdownTokenMatcher('en')
+    line = GherkinLine('''  -  When I do something''',location['line'])
+    token = Token(gherkin_line=line, location=location)
+    assert tm.match_StepLine(token)
+    assert token.matched_type == 'StepLine'
+    assert token.matched_keyword == 'When '
+    assert token.matched_keyword_type == 'Action'
+    assert token.matched_text == 'I do something'
+    assert token.location['column'] == 6
+
 
 def test_it_matches_arbitrary_text_as_Other():
     tm = GherkinInMarkdownTokenMatcher('en')
@@ -151,11 +183,13 @@ def test_it_matches_table_separator_row_as_comment():
     l1 = GherkinLine('  | h1 | h2 |',location['line'])
     t1 = Token(l1,location)
     assert tm.match_TableRow(t1)
+    assert t1.location['column'] == 3
 
     l2 = GherkinLine('  | --- | --- |',location['line'])
     t2 = Token(l2,location)
     assert not tm.match_TableRow(t2)
     assert tm.match_Comment(t2)
+    assert t2.location['column'] == 3
 
 def test_it_matches_indented_tags():
     tm = GherkinInMarkdownTokenMatcher('en')
@@ -230,3 +264,31 @@ def test_it_matches_ExamplesLine():
     assert token.matched_type == 'ExamplesLine'
     assert token.matched_keyword == 'Examples'
     assert token.matched_text == ''
+
+def test_it_matches_Empty():
+    tm = GherkinInMarkdownTokenMatcher('en')
+    line = GherkinLine('''''',location['line'])
+    token = Token(gherkin_line=line, location=location)
+    assert tm.match_Empty(token)
+    assert token.matched_type == 'Empty'
+    assert token.matched_keyword == None
+    assert token.matched_text == None
+
+def test_it_matches_arbitrary_text_as_Empty_after_the_FeatureLine_has_already_been_matched():
+    # White Box testing - implementation detail...
+    # Given the FeatureLine has already been matched
+    tm = GherkinInMarkdownTokenMatcher('en')
+
+    line = GherkinLine('''# something arbitrary''',location['line'])
+    token = Token(gherkin_line=line, location=location)
+    assert(tm.match_FeatureLine(token))
+
+    line = GherkinLine('''arbitrary text''',location['line'])
+    token=Token(gherkin_line=line, location=location)
+
+    assert(tm.match_Empty(token))
+    assert token.matched_type == 'Empty'
+    assert token.matched_items == []
+    assert token.matched_keyword == None
+    assert token.matched_text == None
+    pass

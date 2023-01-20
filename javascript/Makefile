@@ -5,6 +5,7 @@ GHERKIN_PARSER = src/Parser.ts
 GHERKIN_RAZOR = gherkin-javascript.razor
 SOURCE_FILES = $(shell find . -name "*.js" | grep -v $(GHERKIN_PARSER))
 
+# HELP - is this correnct now?
 GHERKIN = npx gherkin-javascript
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature" -o -name "*.feature.md")
