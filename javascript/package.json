@@ -31,9 +31,9 @@
   },
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
-    "@cucumber/gherkin-streams": "^5.0.1",
     "@types/mocha": "10.0.1",
     "@types/node": "18.11.18",
+    "commander": "^10.0.0",
     "core-js": "3.27.2",
     "mocha": "10.2.0",
     "ts-node": "10.9.1",
