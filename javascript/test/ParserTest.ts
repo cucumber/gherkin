@@ -6,6 +6,8 @@ import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher'
 import AstNode from '../src/AstNode'
 import generateMessages from '../src/generateMessages'
 import GherkinInMarkdownTokenMatcher from '../src/GherkinInMarkdownTokenMatcher'
+import CustomFlavorRegistry from "../src/flavors/CustomFlavorRegistry";
+import GherkinInAsciidocTokenMatcher from "./GherkinInAsciidocTokenMatcher";
 
 describe('Parser', function () {
   describe('with Gherkin Classic', () => {
@@ -161,7 +163,7 @@ describe('Parser', function () {
           '    | is (not) triggered | value |\n' +
           '    | is triggered       | foo   |\n ',
         '',
-        messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN,
+        'text/x.cucumber.gherkin+plain',
         { includePickles: true, newId: messages.IdGenerator.incrementing() }
       )
 
@@ -291,7 +293,7 @@ description
       const envelopes = generateMessages(
         markdown,
         'test.md',
-        messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN,
+        'text/x.cucumber.gherkin+markdown',
         {
           includePickles: true,
           includeGherkinDocument: true,
@@ -309,4 +311,30 @@ description
       assert.strictEqual(pickle.steps[0].argument.docString.content, '```what')
     })
   })
-})
+
+  it('parses custom flavor Gherkin such as asciidoc', async () => {
+    const asciidoc = `
+= Feature: DocString variations
+== Scenario: minimalistic
+* Given a step
+`
+    CustomFlavorRegistry.getInstance().registerFlavor('asciidoc', 'adoc', new GherkinInAsciidocTokenMatcher())
+
+    const envelopes = generateMessages(
+      asciidoc,
+      'test.feature.adoc',
+      'text/x.cucumber.gherkin+asciidoc',
+      {
+        includePickles: true,
+        includeGherkinDocument: true,
+        newId: messages.IdGenerator.incrementing(),
+      }
+    )
+
+    const pickle = envelopes.find((envelope) => envelope.pickle).pickle
+
+    assert.strictEqual(pickle.uri, 'test.feature.adoc');
+    assert.strictEqual(pickle.name, 'minimalistic');
+    assert.strictEqual(pickle.steps[0].text, 'a step');
+  });
+});
