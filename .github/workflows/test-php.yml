@@ -28,6 +28,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
+          ini-values: "memory_limit=-1"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,8 +57,23 @@ jobs:
         run: |
           vendor/bin/php-cs-fixer --dry-run --diff fix
           vendor/bin/psalm --no-cache
-          vendor/bin/phpunit
+          vendor/bin/phpunit --testsuite unit
 
-      - name: run acceptance tests
+      - name: Run acceptance tests
         run: make acceptance
+        working-directory: php
+
+      - name: Mutation tests - minimum thresholds
+        run: |
+          vendor/bin/roave-infection-static-analysis-plugin \
+            --min-msi=90 \
+            --min-covered-msi=90
+        working-directory: php
+
+      - name: Mutation tests - modifications
+        run: |
+          git fetch --depth=1 origin $GITHUB_BASE_REF
+          vendor/bin/roave-infection-static-analysis-plugin \
+            --git-diff-lines --git-diff-base=origin/$GITHUB_BASE_REF \
+            --logger-github --ignore-msi-with-no-mutations
         working-directory: php
