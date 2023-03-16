@@ -282,6 +282,53 @@ static const Dialect az_dialect = {
         &az_then_keywords,
         &az_when_keywords };
 
+static const wchar_t* const be_and_KEYWORDS[] = { L"* ", L"I ", L"Ды ", L"Таксама " };
+static const Keywords be_and_keywords = { 4, be_and_KEYWORDS };
+
+static const wchar_t* const be_background_KEYWORDS[] = { L"Кантэкст" };
+static const Keywords be_background_keywords = { 1, be_background_KEYWORDS };
+
+static const wchar_t* const be_but_KEYWORDS[] = { L"* ", L"Але ", L"Інакш " };
+static const Keywords be_but_keywords = { 3, be_but_KEYWORDS };
+
+static const wchar_t* const be_examples_KEYWORDS[] = { L"Прыклады" };
+static const Keywords be_examples_keywords = { 1, be_examples_KEYWORDS };
+
+static const wchar_t* const be_feature_KEYWORDS[] = { L"Функцыянальнасць", L"Фіча" };
+static const Keywords be_feature_keywords = { 2, be_feature_KEYWORDS };
+
+static const wchar_t* const be_given_KEYWORDS[] = { L"* ", L"Няхай ", L"Дадзена " };
+static const Keywords be_given_keywords = { 3, be_given_KEYWORDS };
+
+static const wchar_t* const be_rule_KEYWORDS[] = { L"Правілы" };
+static const Keywords be_rule_keywords = { 1, be_rule_KEYWORDS };
+
+static const wchar_t* const be_scenario_KEYWORDS[] = { L"Сцэнарый", L"Cцэнар" };
+static const Keywords be_scenario_keywords = { 2, be_scenario_KEYWORDS };
+
+static const wchar_t* const be_scenarioOutline_KEYWORDS[] = { L"Шаблон сцэнарыя", L"Узор сцэнара" };
+static const Keywords be_scenarioOutline_keywords = { 2, be_scenarioOutline_KEYWORDS };
+
+static const wchar_t* const be_then_KEYWORDS[] = { L"* ", L"Тады " };
+static const Keywords be_then_keywords = { 2, be_then_KEYWORDS };
+
+static const wchar_t* const be_when_KEYWORDS[] = { L"* ", L"Калі " };
+static const Keywords be_when_keywords = { 2, be_when_KEYWORDS };
+
+static const Dialect be_dialect = {
+        L"be",
+        &be_and_keywords,
+        &be_background_keywords,
+        &be_but_keywords,
+        &be_examples_keywords,
+        &be_feature_keywords,
+        &be_given_keywords,
+        &be_rule_keywords,
+        &be_scenario_keywords,
+        &be_scenarioOutline_keywords,
+        &be_then_keywords,
+        &be_when_keywords };
+
 static const wchar_t* const bg_and_KEYWORDS[] = { L"* ", L"И " };
 static const Keywords bg_and_keywords = { 2, bg_and_KEYWORDS };
 
@@ -3679,6 +3726,8 @@ const Dialect* Dialect_for(const wchar_t* language) {
         return &ast_dialect;
     if (wcscmp(az_dialect.language_name, language) == 0)
         return &az_dialect;
+    if (wcscmp(be_dialect.language_name, language) == 0)
+        return &be_dialect;
     if (wcscmp(bg_dialect.language_name, language) == 0)
         return &bg_dialect;
     if (wcscmp(bm_dialect.language_name, language) == 0)
