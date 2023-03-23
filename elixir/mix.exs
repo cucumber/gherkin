@@ -6,7 +6,7 @@ defmodule CucumberGherkin.MixProject do
   def project do
     [
       app: :cucumber_gherkin,
-      version: "26.0.3",
+      version: "26.1.0",
       name: "CucumberGherkin",
       description: description(),
       package: package(),
