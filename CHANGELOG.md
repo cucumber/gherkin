@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [26.2.0] - 2023-04-07
 ### Changed
 - Upgraded messages to v22
 
@@ -616,7 +618,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.1.0...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.2.0...main
+[26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...main
 [26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...main
 [26.0.3]: https://github.com/cucumber/gherkin/compare/v26.0.2...main
 [26.0.2]: https://github.com/cucumber/gherkin/compare/v26.0.1...main
