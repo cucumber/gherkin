@@ -20,7 +20,8 @@ const (
 )
 
 var (
-	defaultLanguagePattern = regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$")
+	defaultLanguagePattern  = regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$")
+	commentDelimiterPattern = regexp.MustCompile(`\s+` + CommentPrefix)
 )
 
 type matcher struct {
@@ -99,7 +100,7 @@ func (m *matcher) MatchTagLine(line *Line) (ok bool, token *Token, err error) {
 	if !line.StartsWith(TagPrefix) {
 		return
 	}
-	uncommentedLine := strings.SplitN(line.TrimmedLineText, CommentPrefix, 2)[0]
+	uncommentedLine := commentDelimiterPattern.Split(line.TrimmedLineText, 2)[0]
 	var tags []*LineSpan
 	var column = line.Indent() + 1
 
