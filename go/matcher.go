@@ -19,6 +19,10 @@ const (
 	DocstringAlternativeSeparator = "```"
 )
 
+var (
+	defaultLanguagePattern = regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$")
+)
+
 type matcher struct {
 	gdp                      DialectProvider
 	defaultLang              string
@@ -35,7 +39,7 @@ func NewMatcher(gdp DialectProvider) Matcher {
 		defaultLang:     DefaultDialect,
 		lang:            DefaultDialect,
 		dialect:         gdp.GetDialect(DefaultDialect),
-		languagePattern: regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$"),
+		languagePattern: defaultLanguagePattern,
 	}
 }
 
@@ -45,7 +49,7 @@ func NewLanguageMatcher(gdp DialectProvider, language string) Matcher {
 		defaultLang:     language,
 		lang:            language,
 		dialect:         gdp.GetDialect(language),
-		languagePattern: regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$"),
+		languagePattern: defaultLanguagePattern,
 	}
 }
 
