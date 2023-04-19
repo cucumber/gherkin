@@ -99,8 +99,7 @@ func (m *matcher) MatchTagLine(line *Line) (ok bool, token *Token, err error) {
 	if !line.StartsWith(TagPrefix) {
 		return
 	}
-	commentDelimiter := regexp.MustCompile(`\s+` + CommentPrefix)
-	uncommentedLine := commentDelimiter.Split(line.TrimmedLineText, 2)[0]
+	uncommentedLine := strings.SplitN(line.TrimmedLineText, CommentPrefix, 2)[0]
 	var tags []*LineSpan
 	var column = line.Indent() + 1
 
@@ -112,7 +111,7 @@ func (m *matcher) MatchTagLine(line *Line) (ok bool, token *Token, err error) {
 		if len(txt) == 0 {
 			continue
 		}
-		if !regexp.MustCompile(`^\S+$`).MatchString(txt) {
+		if strings.ContainsAny(txt, "\t\n\f\r ") {
 			location := &Location{line.LineNumber, column}
 			msg := "A tag may not contain whitespace"
 			err = &parseError{msg, location}
