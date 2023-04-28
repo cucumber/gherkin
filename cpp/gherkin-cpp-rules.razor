@@ -1,0 +1,14 @@
+// This file is generated. Do not edit! Edit gherkin-cpp-rules.razor instead.
+#pragma once
+
+namespace gherkin {
+
+enum class rule {
+    None = 0,
+    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+    {<text>    @rule.Name.Replace("#", ""), /* @rule.ToString(true) */
+</text>}
+    Count
+};
+
+}
