@@ -18,14 +18,22 @@ struct next_line_result
 class token_scanner
 {
 public:
+    token_scanner();
     token_scanner(const std::string& text);
     token_scanner(const file& file);
 
     virtual ~token_scanner();
 
+    void reset(const std::string& text);
+    void reset(const file& file);
+
+    token_scanner(const file& file);
+
     token read();
 
 private:
+    void reset();
+
     next_line_result next_line();
 
     std::istream& input();
