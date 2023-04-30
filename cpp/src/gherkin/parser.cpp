@@ -1,361 +1,344 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
 #include <gherkin/parser.hpp>
+#include <gherkin/parser_context.hpp>
 #include <gherkin/token_scanner.hpp>
-//#include <gherkin/error_list.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 
-enum class rule_type {
-    None = 0,
-    EOF,
-    Empty,
-    Comment,
-    TagLine,
-    FeatureLine,
-    RuleLine,
-    BackgroundLine,
-    ScenarioLine,
-    ExamplesLine,
-    StepLine,
-    DocStringSeparator,
-    TableRow,
-    Language,
-    Other,
-    GherkinDocument,
-    Feature,
-    FeatureHeader,
-    Rule,
-    RuleHeader,
-    Background,
-    ScenarioDefinition,
-    Scenario,
-    ExamplesDefinition,
-    Examples,
-    ExamplesTable,
-    Step,
-    StepArg,
-    DataTable,
-    DocString,
-    Tags,
-    DescriptionHelper,
-    Description,
-    Count
-};
+parser::parser(const parser_info& pi)
+: pi_{pi}
+{}
 
-struct ParserContext {
-    bool stop_at_first_error;
-    TokenScanner* token_scanner;
-    TokenMatcher* token_matcher;
-    Builder* builder;
-    TokenQueue* token_queue;
-    ErrorList* errors;
-} ParserContext;
+int
+parser::parse(const file& file)
+{
+    ast_builder_.reset();
+    token_scanner_.reset();
+    token_matcher_.reset();
 
-struct Parser {
-    ParserContext* parser_context;
-    Builder* builder;
-    ErrorList* errors;
-};
-
-static Token* read_token(ParserContext* context);
-
-static void start_rule(ParserContext* context, RuleType rule_type);
-
-static void end_rule(ParserContext* context, RuleType rule_type);
-
-static int match_token(int state, Token* token, ParserContext* context);
-
-ParserContext* ParserContext_new(TokenScanner* token_scanner, TokenMatcher* token_matcher, Builder* builder, TokenQueue* token_queue, ErrorList* errors) {
-    ParserContext* parser_context = (ParserContext*)malloc(sizeof(ParserContext));
-    parser_context->stop_at_first_error = false;
-    parser_context->token_scanner = token_scanner;
-    parser_context->token_matcher = token_matcher;
-    parser_context->builder = builder;
-    parser_context->token_queue = token_queue;
-    parser_context->errors = errors;
-    return parser_context;
-}
-
-void ParserContext_delete(ParserContext* parser_context) {
-    free((void*)parser_context);
-}
-
-Parser* Parser_new(Builder* builder) {
-    Parser* parser = (Parser*)malloc(sizeof(Parser));
-    parser->parser_context = 0;
-    parser->builder = builder;
-    parser->errors = ErrorList_new();
-    return parser;
-}
-
-void Parser_delete(Parser* parser) {
-    if (parser->errors) {
-        ErrorList_delete(parser->errors);
-    }
-    if (parser->parser_context) {
-        ParserContext_delete(parser->parser_context);
-    }
-    free((void*)parser);
-}
-
-int Parser_parse(Parser* parser, TokenMatcher* token_matcher, TokenScanner* token_scanner) {
-    parser->builder->reset(parser->builder);
-    parser->builder->set_error_context(parser->builder, parser->errors);
-    token_matcher->reset(token_matcher);
-    token_matcher->errors = parser->errors;
-    TokenQueue* token_queue = TokenQueue_new();
-    ParserContext* context = ParserContext_new(token_scanner, token_matcher, parser->builder, token_queue, parser->errors);
-
-    int val = 0;
-    jmp_buf env;
-    val = setjmp(env);
-    ErrorList_set_global_rescue_env(parser->errors, &env);
-
-    if (val == 0) {
-        start_rule(context, Rule_GherkinDocument);
-        int state = 0;
-        bool token_is_eof;
-        Token* token = 0;
-        do {
-            token = read_token(context);
-            token_is_eof = Token_is_eof(token);
-            state = match_token(state, token, context);
-        } while (!token_is_eof);
-
-        end_rule(context, Rule_GherkinDocument);
-    }
-
-    int result_code = ErrorList_is_empty(context->errors) ? 0 : 1;
-
-    ParserContext_delete(context);
-    TokenQueue_delete(token_queue);
-    return result_code;
-}
-bool Parser_has_more_errors(Parser* parser) {
-    return ErrorList_has_more_errors(parser->errors);
-}
-
-Error* Parser_next_error(Parser* parser) {
-    return ErrorList_next_error(parser->errors);
-}
-
-static Token* read_token(ParserContext* context) {
-    if (!TokenQueue_is_empty(context->token_queue))
-        return TokenQueue_remove(context->token_queue);
-    else
-        return context->token_scanner->read(context->token_scanner);
-}
-
-static void build(ParserContext* context, Token* token) {
-    context->builder->build(context->builder, token);
-}
-
-static void handle_ast_error(ParserContext* context, RuleType rule_type, rule_function action) {
-    if (context->stop_at_first_error) {
-        action(context->builder, rule_type);
-        return;
-    }
-
-    jmp_buf env;
-    int val = setjmp(env);
-    ErrorList_set_local_rescue_env(context->errors, &env);
-    if (val == 0) {
-        action(context->builder, rule_type);
-    }
-}
-
-static void start_rule(ParserContext* context, RuleType rule_type) {
-    handle_ast_error(context, rule_type, context->builder->start_rule);
-}
-
-static void end_rule(ParserContext* context, RuleType rule_type) {
-    handle_ast_error(context, rule_type, context->builder->end_rule);
-}
-
-static bool handle_external_error(ParserContext* context, Token* token, match_function action) {
-    if (context->stop_at_first_error) {
-        return action(context->token_matcher, token);
-    }
-
-    jmp_buf env;
-    int val = setjmp(env);
-    ErrorList_set_local_rescue_env(context->errors, &env);
-    if (val == 0) {
-        return action(context->token_matcher, token);
-    }
-    return false;
-}
-
-
-static bool match_EOF(ParserContext* context, Token* token) {
-    return handle_external_error(context, token, context->token_matcher->match_EOF);
-}
-static bool match_Empty(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
+    parser_context context{
+        .token_scanner = token_scanner_,
+        .token_matcher = token_matcher_
     };
-    return handle_external_error(context, token, context->token_matcher->match_Empty);
-}
-static bool match_Comment(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_Comment);
-}
-static bool match_TagLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    bool match_result = handle_external_error(context, token, context->token_matcher->match_TagLine);
-    if (match_result) {
-        bool tag_error = ErrorList_check_token_tags_for_whitespace(context->errors, token);
-        if (tag_error && context->stop_at_first_error) {
-            ErrorList_jump_to_global_rescue_env(context->errors);
-        }
-    }
-    return match_result;
-}
-static bool match_FeatureLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_FeatureLine);
-}
-static bool match_RuleLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_RuleLine);
-}
-static bool match_BackgroundLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_BackgroundLine);
-}
-static bool match_ScenarioLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_ScenarioLine);
-}
-static bool match_ExamplesLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_ExamplesLine);
-}
-static bool match_StepLine(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_StepLine);
-}
-static bool match_DocStringSeparator(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_DocStringSeparator);
-}
-static bool match_TableRow(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_TableRow);
-}
-static bool match_Language(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_Language);
-}
-static bool match_Other(ParserContext* context, Token* token) {
-    if (token->matched_type == Token_EOF) {
-        return false;
-    };
-    return handle_external_error(context, token, context->token_matcher->match_Other);
-}
 
-static bool lookahead_0(ParserContext* context) {
-    Token* token = 0;
-    TokenQueue* queue = TokenQueue_new();
-    bool match = false;
+    start_rule(context, rule_type::GherkinDocument);
+
+    std::size_t state = 0;
+
     while (true) {
-        token = read_token(context);
-        TokenQueue_add(queue, token);
+        auto token = read_token(context);
+        state = match_token(state, token, context);
 
-        if (match_ScenarioLine(context, token) || false) {
-            match = true;
-            break;
-        }
-
-        if (!(match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token) || false)) {
+        if (token.is_eof()) {
             break;
         }
     }
 
-    TokenQueue_extend(context->token_queue, queue);
+    end_rule(context, rule_type::GherkinDocument);
 
-    return match;
-}
-
-static bool lookahead_1(ParserContext* context) {
-    Token* token = 0;
-    TokenQueue* queue = TokenQueue_new();
-    bool match = false;
-    while (true) {
-        token = read_token(context);
-        TokenQueue_add(queue, token);
-
-        if (match_ExamplesLine(context, token) || false) {
-            match = true;
-            break;
-        }
-
-        if (!(match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token) || false)) {
-            break;
-        }
+    if (context.has_errors()) {
+        // TODO: thow coumpound error
     }
 
-    TokenQueue_extend(context->token_queue, queue);
+    return get_result();
+}
 
-    return match;
+void
+parser::match_token(parser_context& context, token& token)
+{
+
+}
+
+token
+parser::read_token(parser_context& context)
+{
+    token t;
+
+    if (context.has_token()) {
+        t = context.pop_token());
+    } else {
+        t = context.token_scanner.read();
+    }
+
+    return t;
+}
+
+void
+parser::handle_ast_error(parser_context& context)
+{}
+
+
+parser::match_EOF(parser_context& context, token& token)
+{
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_EOF
+        );
+}
+
+parser::match_Empty(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_Empty
+        );
+}
+
+parser::match_Comment(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_Comment
+        );
+}
+
+parser::match_TagLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_TagLine
+        );
+}
+
+parser::match_FeatureLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_FeatureLine
+        );
+}
+
+parser::match_RuleLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_RuleLine
+        );
+}
+
+parser::match_BackgroundLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_BackgroundLine
+        );
+}
+
+parser::match_ScenarioLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_ScenarioLine
+        );
+}
+
+parser::match_ExamplesLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_ExamplesLine
+        );
+}
+
+parser::match_StepLine(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_StepLine
+        );
+}
+
+parser::match_DocStringSeparator(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_DocStringSeparator
+        );
+}
+
+parser::match_TableRow(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_TableRow
+        );
+}
+
+parser::match_Language(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_Language
+        );
+}
+
+parser::match_Other(parser_context& context, token& token)
+{
+    if token.eof():
+        return False
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_Other
+        );
+}
+
+parser::match_token(parser_context& context, token& token)
+{
+    state_map = {
+        0: self.match_token_at_0,
+        1: self.match_token_at_1,
+        2: self.match_token_at_2,
+        3: self.match_token_at_3,
+        4: self.match_token_at_4,
+        5: self.match_token_at_5,
+        6: self.match_token_at_6,
+        7: self.match_token_at_7,
+        8: self.match_token_at_8,
+        9: self.match_token_at_9,
+        10: self.match_token_at_10,
+        11: self.match_token_at_11,
+        12: self.match_token_at_12,
+        13: self.match_token_at_13,
+        14: self.match_token_at_14,
+        15: self.match_token_at_15,
+        16: self.match_token_at_16,
+        17: self.match_token_at_17,
+        18: self.match_token_at_18,
+        19: self.match_token_at_19,
+        20: self.match_token_at_20,
+        21: self.match_token_at_21,
+        22: self.match_token_at_22,
+        23: self.match_token_at_23,
+        24: self.match_token_at_24,
+        25: self.match_token_at_25,
+        26: self.match_token_at_26,
+        27: self.match_token_at_27,
+        28: self.match_token_at_28,
+        29: self.match_token_at_29,
+        30: self.match_token_at_30,
+        31: self.match_token_at_31,
+        32: self.match_token_at_32,
+        33: self.match_token_at_33,
+        34: self.match_token_at_34,
+        35: self.match_token_at_35,
+        36: self.match_token_at_36,
+        37: self.match_token_at_37,
+        38: self.match_token_at_38,
+        39: self.match_token_at_39,
+        40: self.match_token_at_40,
+        41: self.match_token_at_41,
+        43: self.match_token_at_43,
+        44: self.match_token_at_44,
+        45: self.match_token_at_45,
+        46: self.match_token_at_46,
+        47: self.match_token_at_47,
+        48: self.match_token_at_48,
+        49: self.match_token_at_49,
+        50: self.match_token_at_50,
+    }
+    if state in state_map:
+        return state_map[state](token, context)
+    else:
+        raise RuntimeError("Unknown state: " + str(state))
 }
 
 
-/* Start */
-static int match_token_at_0(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+// Start
+parser::match_token_at_0(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         build(context, token);
-        return 42;
-    }
-    if (match_Language(context, token)) {
+            return 42
+    if self.match_Language(context, token):
         start_rule(context, Rule_Feature);
         start_rule(context, Rule_FeatureHeader);
         build(context, token);
-        return 1;
-    }
-    if (match_TagLine(context, token)) {
+            return 1
+    if self.match_TagLine(context, token):
         start_rule(context, Rule_Feature);
         start_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 2;
-    }
-    if (match_FeatureLine(context, token)) {
+            return 2
+    if self.match_FeatureLine(context, token):
         start_rule(context, Rule_Feature);
         start_rule(context, Rule_FeatureHeader);
         build(context, token);
-        return 3;
-    }
-    if (match_Comment(context, token)) {
+            return 3
+    if self.match_Comment(context, token):
         build(context, token);
-        return 0;
-    }
-    if (match_Empty(context, token)) {
+            return 0
+    if self.match_Empty(context, token):
         build(context, token);
-        return 0;
-    }
+            return 0
+
 
     /* "State: 0 - Start" */
     std::string expected_tokens = L"#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty";
@@ -373,25 +356,24 @@ static int match_token_at_0(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 0;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0 */
-static int match_token_at_1(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
+parser::match_token_at_1(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 2;
-    }
-    if (match_FeatureLine(context, token)) {
+            return 2
+    if self.match_FeatureLine(context, token):
         build(context, token);
-        return 3;
-    }
-    if (match_Comment(context, token)) {
+            return 3
+    if self.match_Comment(context, token):
         build(context, token);
-        return 1;
-    }
-    if (match_Empty(context, token)) {
+            return 1
+    if self.match_Empty(context, token):
         build(context, token);
-        return 1;
-    }
+            return 1
+
 
     /* "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0" */
     std::string expected_tokens = L"#TagLine, #FeatureLine, #Comment, #Empty";
@@ -409,25 +391,24 @@ static int match_token_at_1(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 1;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0 */
-static int match_token_at_2(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
+parser::match_token_at_2(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         build(context, token);
-        return 2;
-    }
-    if (match_FeatureLine(context, token)) {
+            return 2
+    if self.match_FeatureLine(context, token):
         end_rule(context, Rule_Tags);
         build(context, token);
-        return 3;
-    }
-    if (match_Comment(context, token)) {
+            return 3
+    if self.match_Comment(context, token):
         build(context, token);
-        return 2;
-    }
-    if (match_Empty(context, token)) {
+            return 2
+    if self.match_Empty(context, token):
         build(context, token);
-        return 2;
-    }
+            return 2
+
 
     /* "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0" */
     std::string expected_tokens = L"#TagLine, #FeatureLine, #Comment, #Empty";
@@ -445,64 +426,57 @@ static int match_token_at_2(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 2;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0 */
-static int match_token_at_3(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
+parser::match_token_at_3(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 3;
-    }
-    if (match_Comment(context, token)) {
+            return 3
+    if self.match_Comment(context, token):
         build(context, token);
-        return 5;
-    }
-    if (match_BackgroundLine(context, token)) {
+            return 5
+    if self.match_BackgroundLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 6;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 6
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 4;
-    }
+            return 4
+
 
     /* "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -520,66 +494,60 @@ static int match_token_at_3(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 3;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_4(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_4(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 5;
-    }
-    if (match_BackgroundLine(context, token)) {
+            return 5
+    if self.match_BackgroundLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 6;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 6
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 4;
-    }
+            return 4
+
 
     /* "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -597,59 +565,53 @@ static int match_token_at_4(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 4;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_5(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0
+parser::match_token_at_5(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 5;
-    }
-    if (match_BackgroundLine(context, token)) {
+            return 5
+    if self.match_BackgroundLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 6;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 6
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 5;
-    }
+            return 5
+
 
     /* "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
@@ -667,63 +629,56 @@ static int match_token_at_5(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 5;}
-/* GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0 */
-static int match_token_at_6(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
+parser::match_token_at_6(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 6;
-    }
-    if (match_Comment(context, token)) {
+            return 6
+    if self.match_Comment(context, token):
         build(context, token);
-        return 8;
-    }
-    if (match_StepLine(context, token)) {
+            return 8
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 9
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 7;
-    }
+            return 7
+
 
     /* "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -741,65 +696,59 @@ static int match_token_at_6(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 6;}
-/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_7(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_7(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 8;
-    }
-    if (match_StepLine(context, token)) {
+            return 8
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 9
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 7;
-    }
+            return 7
+
 
     /* "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -817,58 +766,52 @@ static int match_token_at_7(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 7;}
-/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_8(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0
+parser::match_token_at_8(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 8;
-    }
-    if (match_StepLine(context, token)) {
+            return 8
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 9
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 8;
-    }
+            return 8
+
 
     /* "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
@@ -886,74 +829,66 @@ static int match_token_at_8(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 8;}
-/* GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0 */
-static int match_token_at_9(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
+parser::match_token_at_9(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_DataTable);
         build(context, token);
-        return 10;
-    }
-    if (match_DocStringSeparator(context, token)) {
+            return 10
+    if self.match_DocStringSeparator(context, token):
         start_rule(context, Rule_DocString);
         build(context, token);
-        return 49;
-    }
-    if (match_StepLine(context, token)) {
+            return 49
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 9
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 9;
-    }
-    if (match_Empty(context, token)) {
+            return 9
+    if self.match_Empty(context, token):
         build(context, token);
-        return 9;
-    }
+            return 9
+
 
     /* "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -971,39 +906,36 @@ static int match_token_at_9(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 9;}
-/* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_10(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+parser::match_token_at_10(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         build(context, token);
-        return 10;
-    }
-    if (match_StepLine(context, token)) {
+            return 10
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 9
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -1011,34 +943,30 @@ static int match_token_at_10(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 10;
-    }
-    if (match_Empty(context, token)) {
+            return 10
+    if self.match_Empty(context, token):
         build(context, token);
-        return 10;
-    }
+            return 10
+
 
     /* "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -1056,26 +984,25 @@ static int match_token_at_10(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 10;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_11(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+parser::match_token_at_11(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         build(context, token);
-        return 11;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 11
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_Comment(context, token)) {
+            return 12
+    if self.match_Comment(context, token):
         build(context, token);
-        return 11;
-    }
-    if (match_Empty(context, token)) {
+            return 11
+    if self.match_Empty(context, token):
         build(context, token);
-        return 11;
-    }
+            return 11
+
 
     /* "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
     std::string expected_tokens = L"#TagLine, #ScenarioLine, #Comment, #Empty";
@@ -1093,82 +1020,72 @@ static int match_token_at_11(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 11;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0 */
-static int match_token_at_12(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+parser::match_token_at_12(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 12;
-    }
-    if (match_Comment(context, token)) {
+            return 12
+    if self.match_Comment(context, token):
         build(context, token);
-        return 14;
-    }
-    if (match_StepLine(context, token)) {
+            return 14
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 15
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 13;
-    }
+            return 13
+
 
     /* "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -1186,48 +1103,43 @@ static int match_token_at_12(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 12;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_13(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_13(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 14;
-    }
-    if (match_StepLine(context, token)) {
+            return 14
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 15
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -1235,37 +1147,33 @@ static int match_token_at_13(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 13;
-    }
+            return 13
+
 
     /* "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -1283,77 +1191,68 @@ static int match_token_at_13(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 13;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_14(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
+parser::match_token_at_14(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 14;
-    }
-    if (match_StepLine(context, token)) {
+            return 14
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 15
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 14;
-    }
+            return 14
+
 
     /* "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
@@ -1371,53 +1270,47 @@ static int match_token_at_14(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 14;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0 */
-static int match_token_at_15(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+parser::match_token_at_15(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_DataTable);
         build(context, token);
-        return 16;
-    }
-    if (match_DocStringSeparator(context, token)) {
+            return 16
+    if self.match_DocStringSeparator(context, token):
         start_rule(context, Rule_DocString);
         build(context, token);
-        return 47;
-    }
-    if (match_StepLine(context, token)) {
+            return 47
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 15
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -1425,41 +1318,36 @@ static int match_token_at_15(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 15;
-    }
-    if (match_Empty(context, token)) {
+            return 15
+    if self.match_Empty(context, token):
         build(context, token);
-        return 15;
-    }
+            return 15
+
 
     /* "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -1477,40 +1365,37 @@ static int match_token_at_15(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 15;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_16(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+parser::match_token_at_16(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         build(context, token);
-        return 16;
-    }
-    if (match_StepLine(context, token)) {
+            return 16
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 15
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -1518,10 +1403,8 @@ static int match_token_at_16(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -1530,17 +1413,15 @@ static int match_token_at_16(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -1548,9 +1429,8 @@ static int match_token_at_16(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -1558,16 +1438,14 @@ static int match_token_at_16(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 16;
-    }
-    if (match_Empty(context, token)) {
+            return 16
+    if self.match_Empty(context, token):
         build(context, token);
-        return 16;
-    }
+            return 16
+
 
     /* "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -1585,26 +1463,25 @@ static int match_token_at_16(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 16;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_17(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+parser::match_token_at_17(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         build(context, token);
-        return 17;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 17
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_Comment(context, token)) {
+            return 18
+    if self.match_Comment(context, token):
         build(context, token);
-        return 17;
-    }
-    if (match_Empty(context, token)) {
+            return 17
+    if self.match_Empty(context, token):
         build(context, token);
-        return 17;
-    }
+            return 17
+
 
     /* "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
     std::string expected_tokens = L"#TagLine, #ExamplesLine, #Comment, #Empty";
@@ -1622,42 +1499,38 @@ static int match_token_at_17(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 17;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0 */
-static int match_token_at_18(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+parser::match_token_at_18(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 18;
-    }
-    if (match_Comment(context, token)) {
+            return 18
+    if self.match_Comment(context, token):
         build(context, token);
-        return 20;
-    }
-    if (match_TableRow(context, token)) {
+            return 20
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 21
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1665,10 +1538,8 @@ static int match_token_at_18(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1677,17 +1548,15 @@ static int match_token_at_18(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1695,9 +1564,8 @@ static int match_token_at_18(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1705,13 +1573,12 @@ static int match_token_at_18(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 19;
-    }
+            return 19
+
 
     /* "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -1729,9 +1596,11 @@ static int match_token_at_18(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 18;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_19(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_19(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1739,32 +1608,27 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 20;
-    }
-    if (match_TableRow(context, token)) {
+            return 20
+    if self.match_TableRow(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 21
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1773,10 +1637,8 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1786,18 +1648,16 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1806,9 +1666,8 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1817,12 +1676,11 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 19;
-    }
+            return 19
+
 
     /* "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -1840,38 +1698,35 @@ static int match_token_at_19(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 19;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_20(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
+parser::match_token_at_20(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 20;
-    }
-    if (match_TableRow(context, token)) {
+            return 20
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 21
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1879,10 +1734,8 @@ static int match_token_at_20(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1891,17 +1744,15 @@ static int match_token_at_20(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1909,9 +1760,8 @@ static int match_token_at_20(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1919,12 +1769,11 @@ static int match_token_at_20(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 20;
-    }
+            return 20
+
 
     /* "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
@@ -1942,9 +1791,11 @@ static int match_token_at_20(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 20;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0 */
-static int match_token_at_21(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+parser::match_token_at_21(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1952,25 +1803,21 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 21
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1979,10 +1826,8 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1992,18 +1837,16 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -2012,9 +1855,8 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -2023,16 +1865,14 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 21;
-    }
-    if (match_Empty(context, token)) {
+            return 21
+    if self.match_Empty(context, token):
         build(context, token);
-        return 21;
-    }
+            return 21
+
 
     /* "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -2050,25 +1890,24 @@ static int match_token_at_21(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 21;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0 */
-static int match_token_at_22(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+parser::match_token_at_22(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         build(context, token);
-        return 22;
-    }
-    if (match_RuleLine(context, token)) {
+            return 22
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Tags);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 22;
-    }
-    if (match_Empty(context, token)) {
+            return 22
+    if self.match_Empty(context, token):
         build(context, token);
-        return 22;
-    }
+            return 22
+
 
     /* "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0" */
     std::string expected_tokens = L"#TagLine, #RuleLine, #Comment, #Empty";
@@ -2086,67 +1925,60 @@ static int match_token_at_22(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 22;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0 */
-static int match_token_at_23(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+parser::match_token_at_23(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 25;
-    }
-    if (match_BackgroundLine(context, token)) {
+            return 25
+    if self.match_BackgroundLine(context, token):
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 26;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 26
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 24;
-    }
+            return 24
+
 
     /* "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -2164,39 +1996,36 @@ static int match_token_at_23(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 23;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_24(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_24(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 25;
-    }
-    if (match_BackgroundLine(context, token)) {
+            return 25
+    if self.match_BackgroundLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 26;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 26
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
@@ -2204,29 +2033,26 @@ static int match_token_at_24(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 24;
-    }
+            return 24
+
 
     /* "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -2244,62 +2070,56 @@ static int match_token_at_24(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 24;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_25(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0
+parser::match_token_at_25(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 25;
-    }
-    if (match_BackgroundLine(context, token)) {
+            return 25
+    if self.match_BackgroundLine(context, token):
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 26;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 26
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 25;
-    }
+            return 25
+
 
     /* "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
@@ -2317,66 +2137,59 @@ static int match_token_at_25(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 25;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0 */
-static int match_token_at_26(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
+parser::match_token_at_26(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 26;
-    }
-    if (match_Comment(context, token)) {
+            return 26
+    if self.match_Comment(context, token):
         build(context, token);
-        return 28;
-    }
-    if (match_StepLine(context, token)) {
+            return 28
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 29
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 27;
-    }
+            return 27
+
 
     /* "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -2394,38 +2207,35 @@ static int match_token_at_26(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 26;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_27(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_27(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 28;
-    }
-    if (match_StepLine(context, token)) {
+            return 28
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 29
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
@@ -2433,29 +2243,26 @@ static int match_token_at_27(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 27;
-    }
+            return 27
+
 
     /* "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
@@ -2473,61 +2280,55 @@ static int match_token_at_27(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 27;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_28(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0
+parser::match_token_at_28(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 28;
-    }
-    if (match_StepLine(context, token)) {
+            return 28
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 29
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 28;
-    }
+            return 28
+
 
     /* "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
@@ -2545,43 +2346,39 @@ static int match_token_at_28(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 28;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0 */
-static int match_token_at_29(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
+parser::match_token_at_29(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_DataTable);
         build(context, token);
-        return 30;
-    }
-    if (match_DocStringSeparator(context, token)) {
+            return 30
+    if self.match_DocStringSeparator(context, token):
         start_rule(context, Rule_DocString);
         build(context, token);
-        return 45;
-    }
-    if (match_StepLine(context, token)) {
+            return 45
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 29
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
@@ -2589,33 +2386,29 @@ static int match_token_at_29(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 29;
-    }
-    if (match_Empty(context, token)) {
+            return 29
+    if self.match_Empty(context, token):
         build(context, token);
-        return 29;
-    }
+            return 29
+
 
     /* "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -2633,40 +2426,37 @@ static int match_token_at_29(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 29;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_30(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+parser::match_token_at_30(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         build(context, token);
-        return 30;
-    }
-    if (match_StepLine(context, token)) {
+            return 30
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 29
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -2675,18 +2465,16 @@ static int match_token_at_30(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -2694,16 +2482,14 @@ static int match_token_at_30(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 30;
-    }
-    if (match_Empty(context, token)) {
+            return 30
+    if self.match_Empty(context, token):
         build(context, token);
-        return 30;
-    }
+            return 30
+
 
     /* "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -2721,26 +2507,25 @@ static int match_token_at_30(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 30;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_31(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+parser::match_token_at_31(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         build(context, token);
-        return 31;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 31
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_Comment(context, token)) {
+            return 32
+    if self.match_Comment(context, token):
         build(context, token);
-        return 31;
-    }
-    if (match_Empty(context, token)) {
+            return 31
+    if self.match_Empty(context, token):
         build(context, token);
-        return 31;
-    }
+            return 31
+
 
     /* "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
     std::string expected_tokens = L"#TagLine, #ScenarioLine, #Comment, #Empty";
@@ -2758,48 +2543,42 @@ static int match_token_at_31(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 31;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0 */
-static int match_token_at_32(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+parser::match_token_at_32(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 32;
-    }
-    if (match_Comment(context, token)) {
+            return 32
+    if self.match_Comment(context, token):
         build(context, token);
-        return 34;
-    }
-    if (match_StepLine(context, token)) {
+            return 34
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 35
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
@@ -2807,36 +2586,32 @@ static int match_token_at_32(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 33;
-    }
+            return 33
+
 
     /* "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -2854,49 +2629,44 @@ static int match_token_at_32(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 32;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_33(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_33(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 34;
-    }
-    if (match_StepLine(context, token)) {
+            return 34
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 35
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -2905,25 +2675,22 @@ static int match_token_at_33(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -2931,12 +2698,11 @@ static int match_token_at_33(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 33;
-    }
+            return 33
+
 
     /* "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -2954,44 +2720,39 @@ static int match_token_at_33(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 33;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_34(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
+parser::match_token_at_34(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 34;
-    }
-    if (match_StepLine(context, token)) {
+            return 34
+    if self.match_StepLine(context, token):
         start_rule(context, Rule_Step);
         build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 35
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
@@ -2999,35 +2760,31 @@ static int match_token_at_34(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 34;
-    }
+            return 34
+
 
     /* "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
@@ -3045,54 +2802,48 @@ static int match_token_at_34(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 34;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0 */
-static int match_token_at_35(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+parser::match_token_at_35(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_DataTable);
         build(context, token);
-        return 36;
-    }
-    if (match_DocStringSeparator(context, token)) {
+            return 36
+    if self.match_DocStringSeparator(context, token):
         start_rule(context, Rule_DocString);
         build(context, token);
-        return 43;
-    }
-    if (match_StepLine(context, token)) {
+            return 43
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 35
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -3101,25 +2852,22 @@ static int match_token_at_35(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -3127,16 +2875,14 @@ static int match_token_at_35(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 35;
-    }
-    if (match_Empty(context, token)) {
+            return 35
+    if self.match_Empty(context, token):
         build(context, token);
-        return 35;
-    }
+            return 35
+
 
     /* "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -3154,9 +2900,11 @@ static int match_token_at_35(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 35;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_36(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+parser::match_token_at_36(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3164,31 +2912,26 @@ static int match_token_at_36(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         build(context, token);
-        return 36;
-    }
-    if (match_StepLine(context, token)) {
+            return 36
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 35
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3196,10 +2939,8 @@ static int match_token_at_36(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3209,17 +2950,15 @@ static int match_token_at_36(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3227,9 +2966,8 @@ static int match_token_at_36(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3238,16 +2976,14 @@ static int match_token_at_36(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 36;
-    }
-    if (match_Empty(context, token)) {
+            return 36
+    if self.match_Empty(context, token):
         build(context, token);
-        return 36;
-    }
+            return 36
+
 
     /* "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -3265,26 +3001,25 @@ static int match_token_at_36(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 36;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_37(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+parser::match_token_at_37(token& token, parser_context& context)
+{
+    if self.match_TagLine(context, token):
         build(context, token);
-        return 37;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 37
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_Comment(context, token)) {
+            return 38
+    if self.match_Comment(context, token):
         build(context, token);
-        return 37;
-    }
-    if (match_Empty(context, token)) {
+            return 37
+    if self.match_Empty(context, token):
         build(context, token);
-        return 37;
-    }
+            return 37
+
 
     /* "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
     std::string expected_tokens = L"#TagLine, #ExamplesLine, #Comment, #Empty";
@@ -3302,9 +3037,11 @@ static int match_token_at_37(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 37;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0 */
-static int match_token_at_38(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+parser::match_token_at_38(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3312,33 +3049,27 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
+            return 42
+    if self.match_Empty(context, token):
         build(context, token);
-        return 38;
-    }
-    if (match_Comment(context, token)) {
+            return 38
+    if self.match_Comment(context, token):
         build(context, token);
-        return 40;
-    }
-    if (match_TableRow(context, token)) {
+            return 40
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 41;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 41
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3346,10 +3077,8 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3359,17 +3088,15 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3377,9 +3104,8 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3388,13 +3114,12 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         start_rule(context, Rule_Description);
         build(context, token);
-        return 39;
-    }
+            return 39
+
 
     /* "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
     std::string expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -3412,9 +3137,11 @@ static int match_token_at_38(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 38;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_39(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
+parser::match_token_at_39(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3423,32 +3150,27 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         end_rule(context, Rule_Description);
         build(context, token);
-        return 40;
-    }
-    if (match_TableRow(context, token)) {
+            return 40
+    if self.match_TableRow(context, token):
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 41;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 41
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3457,10 +3179,8 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3471,18 +3191,16 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3491,9 +3209,8 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3503,12 +3220,11 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
+            return 23
+    if self.match_Other(context, token):
         build(context, token);
-        return 39;
-    }
+            return 39
+
 
     /* "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
     std::string expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
@@ -3526,9 +3242,11 @@ static int match_token_at_39(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 39;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_40(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
+parser::match_token_at_40(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3536,29 +3254,24 @@ static int match_token_at_40(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
+            return 42
+    if self.match_Comment(context, token):
         build(context, token);
-        return 40;
-    }
-    if (match_TableRow(context, token)) {
+            return 40
+    if self.match_TableRow(context, token):
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 41;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 41
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3566,10 +3279,8 @@ static int match_token_at_40(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3579,17 +3290,15 @@ static int match_token_at_40(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3597,9 +3306,8 @@ static int match_token_at_40(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3608,12 +3316,11 @@ static int match_token_at_40(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
+            return 23
+    if self.match_Empty(context, token):
         build(context, token);
-        return 40;
-    }
+            return 40
+
 
     /* "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0" */
     std::string expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
@@ -3631,9 +3338,11 @@ static int match_token_at_40(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 40;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0 */
-static int match_token_at_41(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+parser::match_token_at_41(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3642,25 +3351,21 @@ static int match_token_at_41(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
+            return 42
+    if self.match_TableRow(context, token):
         build(context, token);
-        return 41;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 41
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3669,10 +3374,8 @@ static int match_token_at_41(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3683,18 +3386,16 @@ static int match_token_at_41(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3703,9 +3404,8 @@ static int match_token_at_41(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3715,16 +3415,14 @@ static int match_token_at_41(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 41;
-    }
-    if (match_Empty(context, token)) {
+            return 41
+    if self.match_Empty(context, token):
         build(context, token);
-        return 41;
-    }
+            return 41
+
 
     /* "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
     std::string expected_tokens = L"#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -3742,16 +3440,17 @@ static int match_token_at_41(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 41;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_43(Token* token, ParserContext* context) {
-    if (match_DocStringSeparator(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
+parser::match_token_at_43(token& token, parser_context& context)
+{
+    if self.match_DocStringSeparator(context, token):
         build(context, token);
-        return 44;
-    }
-    if (match_Other(context, token)) {
+            return 44
+    if self.match_Other(context, token):
         build(context, token);
-        return 43;
-    }
+            return 43
+
 
     /* "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
     std::string expected_tokens = L"#DocStringSeparator, #Other";
@@ -3769,9 +3468,11 @@ static int match_token_at_43(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 43;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_44(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+parser::match_token_at_44(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3779,27 +3480,23 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_StepLine(context, token)) {
+            return 42
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 35
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 37
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3807,10 +3504,8 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3820,17 +3515,15 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 38
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3838,9 +3531,8 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3849,16 +3541,14 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 44;
-    }
-    if (match_Empty(context, token)) {
+            return 44
+    if self.match_Empty(context, token):
         build(context, token);
-        return 44;
-    }
+            return 44
+
 
     /* "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     std::string expected_tokens = L"#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -3876,16 +3566,17 @@ static int match_token_at_44(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 44;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_45(Token* token, ParserContext* context) {
-    if (match_DocStringSeparator(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
+parser::match_token_at_45(token& token, parser_context& context)
+{
+    if self.match_DocStringSeparator(context, token):
         build(context, token);
-        return 46;
-    }
-    if (match_Other(context, token)) {
+            return 46
+    if self.match_Other(context, token):
         build(context, token);
-        return 45;
-    }
+            return 45
+
 
     /* "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
     std::string expected_tokens = L"#DocStringSeparator, #Other";
@@ -3903,36 +3594,34 @@ static int match_token_at_45(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 45;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_46(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+parser::match_token_at_46(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_StepLine(context, token)) {
+            return 42
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 29
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 31
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -3941,18 +3630,16 @@ static int match_token_at_46(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
+            return 32
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -3960,16 +3647,14 @@ static int match_token_at_46(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 46;
-    }
-    if (match_Empty(context, token)) {
+            return 46
+    if self.match_Empty(context, token):
         build(context, token);
-        return 46;
-    }
+            return 46
+
 
     /* "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     std::string expected_tokens = L"#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -3987,16 +3672,17 @@ static int match_token_at_46(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 46;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_47(Token* token, ParserContext* context) {
-    if (match_DocStringSeparator(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
+parser::match_token_at_47(token& token, parser_context& context)
+{
+    if self.match_DocStringSeparator(context, token):
         build(context, token);
-        return 48;
-    }
-    if (match_Other(context, token)) {
+            return 48
+    if self.match_Other(context, token):
         build(context, token);
-        return 47;
-    }
+            return 47
+
 
     /* "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
     std::string expected_tokens = L"#DocStringSeparator, #Other";
@@ -4014,36 +3700,34 @@ static int match_token_at_47(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 47;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_48(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+parser::match_token_at_48(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_StepLine(context, token)) {
+            return 42
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+            return 15
+    if self.match_TagLine(context, token):
+        if self.lookahead_1(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 17
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -4051,10 +3735,8 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -4063,17 +3745,15 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
+            return 22
+    if self.match_ExamplesLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 18
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -4081,9 +3761,8 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -4091,16 +3770,14 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 48;
-    }
-    if (match_Empty(context, token)) {
+            return 48
+    if self.match_Empty(context, token):
         build(context, token);
-        return 48;
-    }
+            return 48
+
 
     /* "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     std::string expected_tokens = L"#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -4118,16 +3795,17 @@ static int match_token_at_48(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 48;}
-/* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_49(Token* token, ParserContext* context) {
-    if (match_DocStringSeparator(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
+parser::match_token_at_49(token& token, parser_context& context)
+{
+    if self.match_DocStringSeparator(context, token):
         build(context, token);
-        return 50;
-    }
-    if (match_Other(context, token)) {
+            return 50
+    if self.match_Other(context, token):
         build(context, token);
-        return 49;
-    }
+            return 49
+
 
     /* "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
     std::string expected_tokens = L"#DocStringSeparator, #Other";
@@ -4145,35 +3823,33 @@ static int match_token_at_49(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 49;}
-/* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_50(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
+
+// GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+parser::match_token_at_50(token& token, parser_context& context)
+{
+    if self.match_EOF(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_StepLine(context, token)) {
+            return 42
+    if self.match_StepLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
+            return 9
+    if self.match_TagLine(context, token):
+        if self.lookahead_0(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
+            return 11
+    if self.match_TagLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -4181,34 +3857,30 @@ static int match_token_at_50(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
+            return 22
+    if self.match_ScenarioLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
+            return 12
+    if self.match_RuleLine(context, token):
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
+            return 23
+    if self.match_Comment(context, token):
         build(context, token);
-        return 50;
-    }
-    if (match_Empty(context, token)) {
+            return 50
+    if self.match_Empty(context, token):
         build(context, token);
-        return 50;
-    }
+            return 50
+
 
     /* "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     std::string expected_tokens = L"#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
@@ -4226,113 +3898,63 @@ static int match_token_at_50(Token* token, ParserContext* context) {
     add_error(error, token, expected_tokens);
 
     return 50;}
-static int match_token(int state, Token* token, ParserContext* context) {
-    switch (state) {
-    case 0:
-        return match_token_at_0(token, context);
-    case 1:
-        return match_token_at_1(token, context);
-    case 2:
-        return match_token_at_2(token, context);
-    case 3:
-        return match_token_at_3(token, context);
-    case 4:
-        return match_token_at_4(token, context);
-    case 5:
-        return match_token_at_5(token, context);
-    case 6:
-        return match_token_at_6(token, context);
-    case 7:
-        return match_token_at_7(token, context);
-    case 8:
-        return match_token_at_8(token, context);
-    case 9:
-        return match_token_at_9(token, context);
-    case 10:
-        return match_token_at_10(token, context);
-    case 11:
-        return match_token_at_11(token, context);
-    case 12:
-        return match_token_at_12(token, context);
-    case 13:
-        return match_token_at_13(token, context);
-    case 14:
-        return match_token_at_14(token, context);
-    case 15:
-        return match_token_at_15(token, context);
-    case 16:
-        return match_token_at_16(token, context);
-    case 17:
-        return match_token_at_17(token, context);
-    case 18:
-        return match_token_at_18(token, context);
-    case 19:
-        return match_token_at_19(token, context);
-    case 20:
-        return match_token_at_20(token, context);
-    case 21:
-        return match_token_at_21(token, context);
-    case 22:
-        return match_token_at_22(token, context);
-    case 23:
-        return match_token_at_23(token, context);
-    case 24:
-        return match_token_at_24(token, context);
-    case 25:
-        return match_token_at_25(token, context);
-    case 26:
-        return match_token_at_26(token, context);
-    case 27:
-        return match_token_at_27(token, context);
-    case 28:
-        return match_token_at_28(token, context);
-    case 29:
-        return match_token_at_29(token, context);
-    case 30:
-        return match_token_at_30(token, context);
-    case 31:
-        return match_token_at_31(token, context);
-    case 32:
-        return match_token_at_32(token, context);
-    case 33:
-        return match_token_at_33(token, context);
-    case 34:
-        return match_token_at_34(token, context);
-    case 35:
-        return match_token_at_35(token, context);
-    case 36:
-        return match_token_at_36(token, context);
-    case 37:
-        return match_token_at_37(token, context);
-    case 38:
-        return match_token_at_38(token, context);
-    case 39:
-        return match_token_at_39(token, context);
-    case 40:
-        return match_token_at_40(token, context);
-    case 41:
-        return match_token_at_41(token, context);
-    case 43:
-        return match_token_at_43(token, context);
-    case 44:
-        return match_token_at_44(token, context);
-    case 45:
-        return match_token_at_45(token, context);
-    case 46:
-        return match_token_at_46(token, context);
-    case 47:
-        return match_token_at_47(token, context);
-    case 48:
-        return match_token_at_48(token, context);
-    case 49:
-        return match_token_at_49(token, context);
-    case 50:
-        return match_token_at_50(token, context);
-    default:
-        ErrorList_add_invalid_operation_error(context->errors, state);
-        ErrorList_jump_to_global_rescue_env(context->errors);
-        return -1;
-    }
-}
 
-}
+
+    def lookahead_0(self, context, currentToken):
+        currentToken.detach
+        token = None
+        queue = []
+        match = False
+        while True:
+            token = self.read_token(context)
+            token.detach
+            queue.append(token)
+
+            if (self.match_ScenarioLine(context, token) or False):
+                match = True
+                break
+
+            if not (self.match_Empty(context, token) or self.match_Comment(context, token) or self.match_TagLine(context, token) or False):
+                break
+
+        context.token_queue.extend(queue)
+
+        return match
+    def lookahead_1(self, context, currentToken):
+        currentToken.detach
+        token = None
+        queue = []
+        match = False
+        while True:
+            token = self.read_token(context)
+            token.detach
+            queue.append(token)
+
+            if (self.match_ExamplesLine(context, token) or False):
+                match = True
+                break
+
+            if not (self.match_Empty(context, token) or self.match_Comment(context, token) or self.match_TagLine(context, token) or False):
+                break
+
+        context.token_queue.extend(queue)
+
+        return match
+    # private
+
+    def handle_ast_error(self, context, argument, action):
+        self.handle_external_error(context, True, argument, action)
+
+    def handle_external_error(self, context, default_value, argument, action):
+        if self.stop_at_first_error:
+            return action(argument)
+
+        try:
+            return action(argument)
+        except CompositeParserException as e:
+            for error in e.errors:
+                self.add_error(context, error)
+        except ParserException as e:
+            self.add_error(context, e)
+        return default_value
+

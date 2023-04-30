@@ -1,4 +1,4 @@
-﻿@using Berp;
+@using Berp;
 @helper CallProduction(ProductionRule production)
 {
   switch(production.Type)
@@ -36,18 +36,11 @@
 {<text>match_@(tokenType)(context, token)</text>}
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
 #include <gherkin/parser.hpp>
+#include <gherkin/parser_context.hpp>
 #include <gherkin/token_scanner.hpp>
-//#include <gherkin/error_list.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
-
-enum class rule_type {
-    None = 0,
-    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    @rule.Name.Replace("#", ""),
-</text>}
-    Count
-};
 
 parser::parser(const parser_info& pi)
 : pi_{pi}
@@ -56,7 +49,164 @@ parser::parser(const parser_info& pi)
 int
 parser::parse(const file& file)
 {
-    ts_.reset(file);
+    ast_builder_.reset();
+    token_scanner_.reset();
+    token_matcher_.reset();
 
-    return 0;
+    parser_context context{
+        .token_scanner = token_scanner_,
+        .token_matcher = token_matcher_
+    };
+
+@{
+    var rname = Model.RuleSet.StartRule.Name.Replace("#", "");
 }
+    start_rule(context, rule_type::@rname);
+
+    std::size_t state = 0;
+
+    while (true) {
+        auto token = read_token(context);
+        state = match_token(state, token, context);
+
+        if (token.is_eof()) {
+            break;
+        }
+    }
+
+    end_rule(context, rule_type::@rname);
+
+    if (context.has_errors()) {
+        // TODO: thow coumpound error
+    }
+
+    return get_result();
+}
+
+void
+parser::match_token(parser_context& context, token& token)
+{
+
+}
+
+token
+parser::read_token(parser_context& context)
+{
+    token t;
+
+    if (context.has_token()) {
+        t = context.pop_token());
+    } else {
+        t = context.token_scanner.read();
+    }
+
+    return t;
+}
+
+void
+parser::handle_ast_error(parser_context& context)
+{}
+
+@foreach(var rule in Model.RuleSet.TokenRules)
+{
+<text>
+parser::match_@(rule.Name.Replace("#", ""))(parser_context& context, token& token)
+{
+    @if (rule.Name != "#EOF")
+    {
+    @:if token.eof():
+    @:    return False
+    }
+    return
+        handle_external_error(
+            context,
+            false,
+            token,
+            context.token_matcher.match_@(rule.Name.Replace("#", ""))
+        );
+}
+</text>
+}
+
+parser::match_token(parser_context& context, token& token)
+{
+    state_map = {
+    @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+    {
+    @:    @state.Id: self.match_token_at_@(state.Id),
+    }
+    }
+    if state in state_map:
+        return state_map[state](token, context)
+    else:
+        raise RuntimeError("Unknown state: " + str(state))
+}
+
+@foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+{<text>
+// @Raw(state.Comment)
+std::size_t
+match_token_at_@(state.Id)(parser& parser, token& token, parser_context& context)
+{
+    @foreach(var transition in state.Transitions)
+    {
+    @:if @MatchToken(transition.TokenType)
+        if (transition.LookAheadHint != null)
+        {
+        @:if lookahead_@(transition.LookAheadHint.Id)(context, token)
+        }
+            foreach(var production in transition.Productions)
+            {
+                @CallProduction(production)
+            }
+            @:return @transition.TargetState
+    }
+
+    @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)
+}
+</text>
+}
+
+@foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
+{
+<text>
+    def lookahead_@(lookAheadHint.Id)(self, context, currentToken):
+        currentToken.detach
+        token = None
+        queue = []
+        match = False
+        while True:
+            token = self.read_token(context)
+            token.detach
+            queue.append(token)
+
+            if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>self.@MatchToken(tokenType) or </text>}False):
+                match = True
+                break
+
+            if not (@foreach(var tokenType in lookAheadHint.Skip) {<text>self.@MatchToken(tokenType) or </text>}False):
+                break
+
+        context.token_queue.extend(queue)
+
+        return match</text>
+}
+
+    # private
+
+    def handle_ast_error(self, context, argument, action):
+        self.handle_external_error(context, True, argument, action)
+
+    def handle_external_error(self, context, default_value, argument, action):
+        if self.stop_at_first_error:
+            return action(argument)
+
+        try:
+            return action(argument)
+        except CompositeParserException as e:
+            for error in e.errors:
+                self.add_error(context, error)
+        except ParserException as e:
+            self.add_error(context, e)
+        return default_value
+

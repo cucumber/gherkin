@@ -24,11 +24,6 @@ public:
 
     virtual ~token_scanner();
 
-    void reset(const std::string& text);
-    void reset(const file& file);
-
-    token_scanner(const file& file);
-
     token read();
 
 private:
@@ -43,5 +38,12 @@ private:
     std::size_t line_ = 0;
     input_ptr ip_;
 };
+
+using token_scanner_ptr = std::unique_ptr<token_scanner>;
+
+template <typename... Args>
+token_scanner_ptr
+new_token_scanner(Args&&... args)
+{ return std::make_unique<token_scanner>(std::forward<Args>(args)...); }
 
 }

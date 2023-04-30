@@ -1,10 +1,10 @@
 SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
-GHERKIN_I18N = src/gherkin/i18n.cpp
-GHERKIN_PARSER = src/gherkin/parser.cpp
-GHERKIN_RAZOR = gherkin-cpp.razor
-
+GHERKIN_GENERATED = \
+	include/gherkin/rule_type.hpp \
+	src/gherkin/parser.cpp \
+	src/gherkin/i18n.cpp
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
@@ -19,10 +19,14 @@ ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BA
 
 .DEFAULT_GOAL = help
 
+define berp-generate-parser =
+berp -g ../gherkin.berp -t $< -o $@ --noBOM
+endef
+
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-generate: $(GHERKIN_PARSER) $(GHERKIN_I18N) ## Generate gherkin parser files
+generate: $(GHERKIN_GENERATED) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
 	rm -f $(GHERKIN_PARSER) $(GHERKIN_I18N)
@@ -44,10 +48,13 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 .built: $(SOURCE_FILES)
 	touch $@
 
-$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
-	berp -g ../gherkin.berp -t $< -o $@ --noBOM
+include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
+	$(berp-generate-parser)
 
-$(GHERKIN_I18N): $(GHERKIN_LANGUAGES_JSON)
+src/gherkin/parser.cpp: gherkin-cpp.razor ../gherkin.berp
+	$(berp-generate-parser)
+
+src/gherkin/i18n.cpp: $(GHERKIN_LANGUAGES_JSON)
 	jq -f gherkin-i18n.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens

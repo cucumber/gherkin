@@ -3,21 +3,15 @@
 namespace gherkin {
 
 token_scanner::token_scanner(const std::string& text)
-{ reset(text); }
+: ip_(std::make_unique<std::istringstream>(text))
+{}
 
 token_scanner::token_scanner(const file& file)
-{ reset(file); }
+: ip_(std::make_unique<std::ifstream>(file.path))
+{}
 
 token_scanner::~token_scanner()
 {}
-
-void
-token_scanner::reset(const std::string& text)
-{ reset(std::make_unique<std::istringstream>(text)); }
-
-void
-token_scanner::reset(const file& file)
-{ reset(std::make_unique<std::ifstream>(file.path)); }
 
 token
 token_scanner::read()
