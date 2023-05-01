@@ -1,4 +1,20 @@
 @using Berp;
+@functions {
+public static string ToSnakeCase(string str)
+{
+    return
+        string.Concat(
+            str.Select(
+                (x, i) => i > 0 && char.IsUpper(x)
+                ? "_" + x
+                : x.ToString()
+            )
+        ).ToLower();
+}
+
+public static string NameOf(Rule rule)
+{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+}
 @helper CallProduction(ProductionRule production)
 {
   switch(production.Type)
@@ -46,7 +62,7 @@ parser::parser(const parser_info& pi)
 : pi_{pi}
 {}
 
-int
+std::size_t
 parser::parse(const file& file)
 {
     ast_builder_.reset();
@@ -58,10 +74,7 @@ parser::parse(const file& file)
         .token_matcher = token_matcher_
     };
 
-@{
-    var rname = Model.RuleSet.StartRule.Name.Replace("#", "");
-}
-    start_rule(context, rule_type::@rname);
+    start_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
 
     std::size_t state = 0;
 
@@ -74,7 +87,7 @@ parser::parse(const file& file)
         }
     }
 
-    end_rule(context, rule_type::@rname);
+    end_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
 
     if (context.has_errors()) {
         // TODO: thow coumpound error
@@ -83,10 +96,10 @@ parser::parse(const file& file)
     return get_result();
 }
 
-void
-parser::match_token(parser_context& context, token& token)
+std::size_t
+parser::match_token(std::size_t state, token& token, parser_context& context)
 {
-
+    return state;
 }
 
 token
@@ -95,7 +108,7 @@ parser::read_token(parser_context& context)
     token t;
 
     if (context.has_token()) {
-        t = context.pop_token());
+        t = context.pop_token();
     } else {
         t = context.token_scanner.read();
     }
@@ -103,26 +116,35 @@ parser::read_token(parser_context& context)
     return t;
 }
 
+std::size_t
+parser::get_result() const
+{ return 0; }
+
+namespace detail {
+
 void
-parser::handle_ast_error(parser_context& context)
+handle_ast_error(parser_context& context)
 {}
 
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
 <text>
-parser::match_@(rule.Name.Replace("#", ""))(parser_context& context, token& token)
+bool
+match_@(NameOf(rule))(parser_context& context, token& token)
 {
     @if (rule.Name != "#EOF")
     {
-    @:if token.eof():
-    @:    return False
+    @:if (token.eof()) {
+    @:    return false;
+    @:}
+    @:
     }
     return
         handle_external_error(
             context,
             false,
             token,
-            context.token_matcher.match_@(rule.Name.Replace("#", ""))
+            context.token_matcher.match_@(NameOf(rule))
         );
 }
 </text>
@@ -148,18 +170,25 @@ parser::match_token(parser_context& context, token& token)
 std::size_t
 match_token_at_@(state.Id)(parser& parser, token& token, parser_context& context)
 {
+@{var indent = "";}
     @foreach(var transition in state.Transitions)
     {
-    @:if @MatchToken(transition.TokenType)
+    @:if (@MatchToken(transition.TokenType)) {
         if (transition.LookAheadHint != null)
         {
-        @:if lookahead_@(transition.LookAheadHint.Id)(context, token)
+        @:if (lookahead_@(transition.LookAheadHint.Id)(context, token)) {
+            indent = "    ";
         }
-            foreach(var production in transition.Productions)
-            {
-                @CallProduction(production)
-            }
-            @:return @transition.TargetState
+        foreach(var production in transition.Productions)
+        {
+            @indent@CallProduction(production)
+        }
+        @:@(indent)return transition.TargetState;
+        if (transition.LookAheadHint != null)
+        {
+        @:}
+        }
+    @:}
     }
 
     @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)
@@ -170,43 +199,57 @@ match_token_at_@(state.Id)(parser& parser, token& token, parser_context& context
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-    def lookahead_@(lookAheadHint.Id)(self, context, currentToken):
-        currentToken.detach
-        token = None
-        queue = []
-        match = False
-        while True:
-            token = self.read_token(context)
-            token.detach
-            queue.append(token)
+bool
+lookahead_@(lookAheadHint.Id)(parser_context& context, token& current_token)
+{
+    current_token.detach();
+    token token;
+    token_queue queue;
+    bool match = false;
 
-            if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>self.@MatchToken(tokenType) or </text>}False):
-                match = True
-                break
+    while (true) {
+        token = context.read_token();
+        token.detach()
+        queue.push_back(token);
 
-            if not (@foreach(var tokenType in lookAheadHint.Skip) {<text>self.@MatchToken(tokenType) or </text>}False):
-                break
+        if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>s@MatchToken(tokenType) || </text>}false) {
+            match = true;
+            break;
+        }
 
-        context.token_queue.extend(queue)
+        if not (@foreach(var tokenType in lookAheadHint.Skip) {<text>@MatchToken(tokenType) || </text>}false) {
+            break;
+        }
 
-        return match</text>
+        context.push_tokens(queue);
+
+        return match;
+}</text>
 }
 
-    # private
+void
+handle_ast_error(parser_context& context, token& token, match_function action)
+{ handle_external_error(context, true, token, action); }
 
-    def handle_ast_error(self, context, argument, action):
-        self.handle_external_error(context, True, argument, action)
+bool
+handle_external_error(
+    parser_context& context,
+    bool default_value,
+    token& token,
+    match_function action
+)
+{
+    if (context.stop_at_first_error) {
+        return action(token);
+    }
 
-    def handle_external_error(self, context, default_value, argument, action):
-        if self.stop_at_first_error:
-            return action(argument)
+    try {
+        return action(token);
+    } catch (const std::exception& e) {
+        add_error(context, e);
+    }
 
-        try:
-            return action(argument)
-        except CompositeParserException as e:
-            for error in e.errors:
-                self.add_error(context, error)
-        except ParserException as e:
-            self.add_error(context, e)
-        return default_value
+    return default_value;
+}
 
+} // namespace detail

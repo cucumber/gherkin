@@ -3,8 +3,8 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_GENERATED = \
 	include/gherkin/rule_type.hpp \
-	src/gherkin/parser.cpp \
-	src/gherkin/i18n.cpp
+	src/lib/gherkin/parser.cpp \
+	src/lib/gherkin/i18n.cpp
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
@@ -29,7 +29,7 @@ help: ## Show this help
 generate: $(GHERKIN_GENERATED) ## Generate gherkin parser files
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
-	rm -f $(GHERKIN_PARSER) $(GHERKIN_I18N)
+	rm -f $(GHERKIN_GENERATED)
 
 copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
 	echo "Nothing to do"
@@ -51,10 +51,10 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-src/gherkin/parser.cpp: gherkin-cpp.razor ../gherkin.berp
+src/lib/gherkin/parser.cpp: gherkin-cpp.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-src/gherkin/i18n.cpp: $(GHERKIN_LANGUAGES_JSON)
+src/lib/gherkin/i18n.cpp: $(GHERKIN_LANGUAGES_JSON)
 	jq -f gherkin-i18n.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens

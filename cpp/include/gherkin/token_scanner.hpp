@@ -24,11 +24,11 @@ public:
 
     virtual ~token_scanner();
 
+    void reset();
+
     token read();
 
 private:
-    void reset();
-
     next_line_result next_line();
 
     std::istream& input();

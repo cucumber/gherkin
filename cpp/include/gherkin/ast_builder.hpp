@@ -10,6 +10,8 @@ public:
     ast_builder();
     virtual ~ast_builder();
 
+    void reset();
+
 private:
 };
 

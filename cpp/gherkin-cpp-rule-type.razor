@@ -1,15 +1,33 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
+@using Berp;
+@functions {
+public static string ToSnakeCase(string str)
+{
+    return
+        string.Concat(
+            str.Select(
+                (x, i) => i > 0 && char.IsUpper(x)
+                ? "_" + x
+                : x.ToString()
+            )
+        ).ToLower();
+}
+
+public static string NameOf(Rule rule)
+{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+
+}
 #pragma once
 
 namespace gherkin {
 
 enum class rule_type
 {
-    None = 0,
+    none = 0,
     @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    @rule.Name.Replace("#", ""),
+    {<text>    @NameOf(rule),
 </text>}
-    Count
+    count
 };
 
 }

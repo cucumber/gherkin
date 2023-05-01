@@ -10,10 +10,12 @@ namespace gherkin {
 
 struct token
 {
-    line line;
-    std::size_t location:
+    gherkin::line line;
+    std::size_t location;
 
     bool is_eof() const;
+
+    void detach();
 
     std::string_view value() const;
 };
