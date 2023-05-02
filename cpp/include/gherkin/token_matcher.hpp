@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+
+#include <gherkin/token.hpp>
+
 namespace gherkin {
 
 struct token_matcher_info

@@ -17,13 +17,15 @@ public static string NameOf(Rule rule)
 }
 @helper CallProduction(ProductionRule production)
 {
+  var rname = ToSnakeCase(production.RuleName);
+
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:  start_rule(context, Rule_@production.RuleName);
+      @:  start_rule(context, rule_type::@rname);
       break;
     case ProductionRuleType.End:
-      @:  end_rule(context, Rule_@production.RuleName);
+      @:  end_rule(context, rule_type::@rname);
       break;
     case ProductionRuleType.Process:
       @:  build(context, token);
@@ -33,7 +35,7 @@ public static string NameOf(Rule rule)
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
     /* "State: @state.Id - @Raw(state.Comment)" */
-    std::string expected_tokens = L"@Raw(string.Join(", ", expectedTokens))";
+    std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
     auto error =
         token.is_eof()
@@ -41,11 +43,11 @@ public static string NameOf(Rule rule)
         : error_type::unexpected_token
         ;
 
-    if (stop_at_first_error()) {
-        throw_error(error, token, expected_tokens);
+    if (context.stop_at_first_error) {
+        //throw_error(error, token, expected_tokens);
     }
 
-    add_error(error, token, expected_tokens);
+    context.add_error(expected_tokens);
 
     return @state.Id;</text>}
 @helper MatchToken(TokenType tokenType)
@@ -80,6 +82,9 @@ struct parser_context
         return t;
     }
 
+    token read_token()
+    { return has_token() ? pop_token() : scanner.read(); }
+
     void push_tokens(const token_queue& q)
     { queue.insert(queue.end(), q.begin(), q.end()); }
 
@@ -93,16 +98,24 @@ struct parser_context
     { add_error(e.what()); }
 };
 
+enum class error_type
+{
+    unexpected_eof,
+    unexpected_token
+};
+
 using match_function = std::function<std::size_t(parser_context&, token&)>;
 using match_functions = std::unordered_map<std::size_t, match_function>;
-
-static token read_token(parser_context& context);
 
 static void start_rule(parser_context& context, rule_type rule_type);
 
 static void end_rule(parser_context& context, rule_type rule_type);
 
-static int match_token(int state, token& token, parser_context& context);
+static std::size_t match_token(
+    std::size_t state,
+    token& token,
+    parser_context& context
+);
 
 template <typename Argument, typename Action>
 bool
@@ -113,12 +126,24 @@ handle_external_error(
     Action&& action
 )
 {
+    using ret_type = decltype(action(argument));
+
     if (context.stop_at_first_error) {
-        return action(argument);
+        if constexpr (std::is_same_v<ret_type, void>) {
+            action(argument);
+            return default_value;
+        } else {
+            return action(argument);
+        }
     }
 
     try {
-        return action(argument);
+        if constexpr (std::is_same_v<ret_type, void>) {
+            action(argument);
+            return default_value;
+        } else {
+            return action(argument);
+        }
     } catch (const std::exception& e) {
         context.add_error(e);
     }
@@ -157,7 +182,7 @@ parser::parse(const file& file)
     std::size_t state = 0;
 
     while (true) {
-        auto token = read_token(context);
+        auto token = context.read_token();
         state = match_token(state, token, context);
 
         if (token.is_eof()) {
@@ -175,30 +200,42 @@ parser::parse(const file& file)
 }
 
 static
-token
-read_token(parser_context& context)
+void
+build(parser_context& context, token& token)
+{ context.builder.build(token); }
+
+static
+void
+start_rule(parser_context& context, rule_type rule_type)
 {
-    token t;
-
-    if (context.has_token()) {
-        t = context.pop_token();
-    } else {
-        t = context.scanner.read();
-    }
-
-    return t;
+    handle_ast_error(
+        context,
+        rule_type,
+        [&context](auto rtype) {
+            context.builder.start_rule(rtype);
+        }
+    );
 }
 
 static
 void
-build(parser_context& context, token& token)
-{ context.builder.build(token); }
+end_rule(parser_context& context, rule_type rule_type)
+{
+    handle_ast_error(
+        context,
+        rule_type,
+        [&context](auto rtype) {
+            context.builder.end_rule(rtype);
+        }
+    );
+}
 
 namespace detail {
 
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
 <text>
+static
 bool
 match_@(NameOf(rule))(parser_context& context, token& token)
 {
@@ -222,11 +259,46 @@ match_@(NameOf(rule))(parser_context& context, token& token)
 </text>
 }
 
+@foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
+{
+<text>
+static
+bool
+lookahead_@(lookAheadHint.Id)(parser_context& context, token& current_token)
+{
+    current_token.detach();
+    token token;
+    token_queue queue;
+    bool match = false;
+
+    while (true) {
+        token = context.read_token();
+        token.detach();
+        queue.push_back(token);
+
+        if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>@MatchToken(tokenType) || </text>}false) {
+            match = true;
+            break;
+        }
+
+        if (!(@foreach(var tokenType in lookAheadHint.Skip) {<text>@MatchToken(tokenType) || </text>}false)) {
+            break;
+        }
+    }
+
+    context.push_tokens(queue);
+
+    return match;
+}
+</text>
+}
+
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
 // @Raw(state.Comment)
+static
 std::size_t
-match_token_at_@(state.Id)(parser& parser, token& token, parser_context& context)
+match_token_at_@(state.Id)(token& token, parser_context& context)
 {
 @{var indent = "";}
     @foreach(var transition in state.Transitions)
@@ -241,7 +313,7 @@ match_token_at_@(state.Id)(parser& parser, token& token, parser_context& context
         {
             @indent@CallProduction(production)
         }
-        @:@(indent)return transition.TargetState;
+        @:@(indent)return @transition.TargetState;
         if (transition.LookAheadHint != null)
         {
         @:}
@@ -254,48 +326,22 @@ match_token_at_@(state.Id)(parser& parser, token& token, parser_context& context
 </text>
 }
 
-@foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
-{
-<text>
-bool
-lookahead_@(lookAheadHint.Id)(parser_context& context, token& current_token)
-{
-    current_token.detach();
-    token token;
-    token_queue queue;
-    bool match = false;
-
-    while (true) {
-        token = context.read_token();
-        token.detach()
-        queue.push_back(token);
-
-        if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>s@MatchToken(tokenType) || </text>}false) {
-            match = true;
-            break;
-        }
-
-        if not (@foreach(var tokenType in lookAheadHint.Skip) {<text>@MatchToken(tokenType) || </text>}false) {
-            break;
-        }
-
-        context.push_tokens(queue);
-
-        return match;
-}</text>
-}
-
 } // namespace detail
 
+static
 std::size_t
-parser::match_token(std::size_t state, token& token, parser_context& context)
+match_token(std::size_t state, token& token, parser_context& context)
 {
-    using match_function = int (parser::*)(token&, parser_context&);
-    using match_functions = std::unordered_map<std::size_t, match_function>;
+    switch (state) {
+    @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+    {
+    @:case @state.Id:
+        @:return detail::match_token_at_@(state.Id)(token, context);
+    }
+    default:
+        context.add_error("invalid operation: " + std::to_string(state));
+        return -1;
+    }
+}
 
-    static const match_functions = {
-        { 0, &parser::}
-    };
-
-    return state;
 }

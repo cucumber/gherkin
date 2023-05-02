@@ -2,13 +2,14 @@
 
 namespace gherkin {
 
-token_matcher::token_matcher(const token_matcher_info& tmi = {})
+token_matcher::token_matcher(const token_matcher_info& tmi)
 : tmi_(tmi)
 {}
 
 token_matcher::~token_matcher()
 {}
 
+void
 token_matcher::reset()
 {}
 

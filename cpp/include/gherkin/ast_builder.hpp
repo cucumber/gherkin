@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <gherkin/token.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 
@@ -15,6 +16,8 @@ public:
     void reset();
 
     void build(token& token);
+    void start_rule(rule_type rule_type);
+    void end_rule(rule_type rule_type);
 
 private:
 };
