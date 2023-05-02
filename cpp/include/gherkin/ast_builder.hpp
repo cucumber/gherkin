@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <gherkin/token.hpp>
+
 namespace gherkin {
 
 class ast_builder
@@ -11,6 +13,8 @@ public:
     virtual ~ast_builder();
 
     void reset();
+
+    void build(token& token);
 
 private:
 };

@@ -11,16 +11,17 @@ target_sources(
         ${INC_DIR}/gherkin/i18n.hpp
         ${INC_DIR}/gherkin/line.hpp
         ${INC_DIR}/gherkin/location.hpp
-        ${INC_DIR}/gherkin/parser_context.hpp
         ${INC_DIR}/gherkin/parser.hpp
         ${INC_DIR}/gherkin/rule_type.hpp
         ${INC_DIR}/gherkin/token.hpp
+        ${INC_DIR}/gherkin/token_matcher.hpp
         ${INC_DIR}/gherkin/token_scanner.hpp
         ${INC_DIR}/gherkin/types.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ast_builder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/i18n.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser_context.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/token.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/token_matcher.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/token_scanner.cpp
 )
 

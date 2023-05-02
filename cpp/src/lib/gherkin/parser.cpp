@@ -1,10 +1,87 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
+#include <functional>
+
 #include <gherkin/parser.hpp>
-#include <gherkin/parser_context.hpp>
-#include <gherkin/token_scanner.hpp>
+#include <gherkin/token.hpp>
 #include <gherkin/rule_type.hpp>
+#include <gherkin/types.hpp>
 
 namespace gherkin {
+
+struct parser_context
+{
+    ast_builder& builder;
+    token_scanner& scanner;
+    token_matcher& matcher;
+    token_queue queue;
+    strings errors;
+    bool stop_at_first_error = false;
+
+    bool has_token() const
+    { return !queue.empty(); }
+
+    token pop_token()
+    {
+        auto t = std::move(queue.front());
+        queue.pop_front();
+
+        return t;
+    }
+
+    void push_tokens(const token_queue& q)
+    { queue.insert(queue.end(), q.begin(), q.end()); }
+
+    bool has_errors() const
+    { return !errors.empty(); }
+
+    void add_error(const std::string& e)
+    { errors.push_back(e); }
+
+    void add_error(const std::exception& e)
+    { add_error(e.what()); }
+};
+
+using match_function = std::function<std::size_t(parser_context&, token&)>;
+using match_functions = std::unordered_map<std::size_t, match_function>;
+
+static token read_token(parser_context& context);
+
+static void start_rule(parser_context& context, rule_type rule_type);
+
+static void end_rule(parser_context& context, rule_type rule_type);
+
+static int match_token(int state, token& token, parser_context& context);
+
+template <typename Argument, typename Action>
+bool
+handle_external_error(
+    parser_context& context,
+    bool default_value,
+    Argument&& argument,
+    Action&& action
+)
+{
+    if (context.stop_at_first_error) {
+        return action(argument);
+    }
+
+    try {
+        return action(argument);
+    } catch (const std::exception& e) {
+        context.add_error(e);
+    }
+
+    return default_value;
+}
+
+template <typename Argument, typename Action>
+void
+handle_ast_error(
+    parser_context& context,
+    Argument&& argument,
+    Action&& action
+)
+{ handle_external_error(context, true, argument, action); }
 
 parser::parser(const parser_info& pi)
 : pi_{pi}
@@ -13,13 +90,14 @@ parser::parser(const parser_info& pi)
 std::size_t
 parser::parse(const file& file)
 {
-    ast_builder_.reset();
-    token_scanner_.reset();
-    token_matcher_.reset();
+    builder_.reset();
+    scanner_.reset();
+    matcher_.reset();
 
     parser_context context{
-        .token_scanner = token_scanner_,
-        .token_matcher = token_matcher_
+        .builder = builder_,
+        .scanner = scanner_,
+        .matcher = matcher_
     };
 
     start_rule(context, rule_type::gherkin_document);
@@ -41,38 +119,30 @@ parser::parse(const file& file)
         // TODO: thow coumpound error
     }
 
-    return get_result();
+    return 0;
 }
 
-std::size_t
-parser::match_token(std::size_t state, token& token, parser_context& context)
-{
-    return state;
-}
-
+static
 token
-parser::read_token(parser_context& context)
+read_token(parser_context& context)
 {
     token t;
 
     if (context.has_token()) {
         t = context.pop_token();
     } else {
-        t = context.token_scanner.read();
+        t = context.scanner.read();
     }
 
     return t;
 }
 
-std::size_t
-parser::get_result() const
-{ return 0; }
+static
+void
+build(parser_context& context, token& token)
+{ context.builder.build(token); }
 
 namespace detail {
-
-void
-handle_ast_error(parser_context& context)
-{}
 
 
 bool
@@ -83,14 +153,16 @@ match_e_o_f(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_e_o_f
+            [&context](auto& t) {
+                return context.matcher.match_e_o_f(t);
+            }
         );
 }
 
 bool
 match_empty(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -99,14 +171,16 @@ match_empty(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_empty
+            [&context](auto& t) {
+                return context.matcher.match_empty(t);
+            }
         );
 }
 
 bool
 match_comment(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -115,14 +189,16 @@ match_comment(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_comment
+            [&context](auto& t) {
+                return context.matcher.match_comment(t);
+            }
         );
 }
 
 bool
 match_tag_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -131,14 +207,16 @@ match_tag_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_tag_line
+            [&context](auto& t) {
+                return context.matcher.match_tag_line(t);
+            }
         );
 }
 
 bool
 match_feature_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -147,14 +225,16 @@ match_feature_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_feature_line
+            [&context](auto& t) {
+                return context.matcher.match_feature_line(t);
+            }
         );
 }
 
 bool
 match_rule_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -163,14 +243,16 @@ match_rule_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_rule_line
+            [&context](auto& t) {
+                return context.matcher.match_rule_line(t);
+            }
         );
 }
 
 bool
 match_background_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -179,14 +261,16 @@ match_background_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_background_line
+            [&context](auto& t) {
+                return context.matcher.match_background_line(t);
+            }
         );
 }
 
 bool
 match_scenario_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -195,14 +279,16 @@ match_scenario_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_scenario_line
+            [&context](auto& t) {
+                return context.matcher.match_scenario_line(t);
+            }
         );
 }
 
 bool
 match_examples_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -211,14 +297,16 @@ match_examples_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_examples_line
+            [&context](auto& t) {
+                return context.matcher.match_examples_line(t);
+            }
         );
 }
 
 bool
 match_step_line(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -227,14 +315,16 @@ match_step_line(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_step_line
+            [&context](auto& t) {
+                return context.matcher.match_step_line(t);
+            }
         );
 }
 
 bool
 match_doc_string_separator(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -243,14 +333,16 @@ match_doc_string_separator(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_doc_string_separator
+            [&context](auto& t) {
+                return context.matcher.match_doc_string_separator(t);
+            }
         );
 }
 
 bool
 match_table_row(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -259,14 +351,16 @@ match_table_row(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_table_row
+            [&context](auto& t) {
+                return context.matcher.match_table_row(t);
+            }
         );
 }
 
 bool
 match_language(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -275,14 +369,16 @@ match_language(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_language
+            [&context](auto& t) {
+                return context.matcher.match_language(t);
+            }
         );
 }
 
 bool
 match_other(parser_context& context, token& token)
 {
-    if (token.eof()) {
+    if (token.is_eof()) {
         return false;
     }
     
@@ -291,68 +387,10 @@ match_other(parser_context& context, token& token)
             context,
             false,
             token,
-            context.token_matcher.match_other
+            [&context](auto& t) {
+                return context.matcher.match_other(t);
+            }
         );
-}
-
-parser::match_token(parser_context& context, token& token)
-{
-    state_map = {
-        0: self.match_token_at_0,
-        1: self.match_token_at_1,
-        2: self.match_token_at_2,
-        3: self.match_token_at_3,
-        4: self.match_token_at_4,
-        5: self.match_token_at_5,
-        6: self.match_token_at_6,
-        7: self.match_token_at_7,
-        8: self.match_token_at_8,
-        9: self.match_token_at_9,
-        10: self.match_token_at_10,
-        11: self.match_token_at_11,
-        12: self.match_token_at_12,
-        13: self.match_token_at_13,
-        14: self.match_token_at_14,
-        15: self.match_token_at_15,
-        16: self.match_token_at_16,
-        17: self.match_token_at_17,
-        18: self.match_token_at_18,
-        19: self.match_token_at_19,
-        20: self.match_token_at_20,
-        21: self.match_token_at_21,
-        22: self.match_token_at_22,
-        23: self.match_token_at_23,
-        24: self.match_token_at_24,
-        25: self.match_token_at_25,
-        26: self.match_token_at_26,
-        27: self.match_token_at_27,
-        28: self.match_token_at_28,
-        29: self.match_token_at_29,
-        30: self.match_token_at_30,
-        31: self.match_token_at_31,
-        32: self.match_token_at_32,
-        33: self.match_token_at_33,
-        34: self.match_token_at_34,
-        35: self.match_token_at_35,
-        36: self.match_token_at_36,
-        37: self.match_token_at_37,
-        38: self.match_token_at_38,
-        39: self.match_token_at_39,
-        40: self.match_token_at_40,
-        41: self.match_token_at_41,
-        43: self.match_token_at_43,
-        44: self.match_token_at_44,
-        45: self.match_token_at_45,
-        46: self.match_token_at_46,
-        47: self.match_token_at_47,
-        48: self.match_token_at_48,
-        49: self.match_token_at_49,
-        50: self.match_token_at_50,
-    }
-    if state in state_map:
-        return state_map[state](token, context)
-    else:
-        raise RuntimeError("Unknown state: " + str(state))
 }
 
 
@@ -360,34 +398,34 @@ parser::match_token(parser_context& context, token& token)
 std::size_t
 match_token_at_0(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Language(context, token)) {
+    if (match_language(context, token)) {
         start_rule(context, Rule_Feature);
         start_rule(context, Rule_FeatureHeader);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         start_rule(context, Rule_Feature);
         start_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_FeatureLine(context, token)) {
+    if (match_feature_line(context, token)) {
         start_rule(context, Rule_Feature);
         start_rule(context, Rule_FeatureHeader);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -414,20 +452,20 @@ match_token_at_0(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_1(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         start_rule(context, Rule_Tags);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_FeatureLine(context, token)) {
+    if (match_feature_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -454,20 +492,20 @@ match_token_at_1(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_2(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_FeatureLine(context, token)) {
+    if (match_feature_line(context, token)) {
         end_rule(context, Rule_Tags);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -494,27 +532,27 @@ match_token_at_2(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_3(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_BackgroundLine(context, token)) {
+    if (match_background_line(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_ScenarioDefinition);
@@ -523,7 +561,7 @@ match_token_at_3(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
@@ -531,21 +569,21 @@ match_token_at_3(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -573,26 +611,26 @@ match_token_at_3(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_4(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_BackgroundLine(context, token)) {
+    if (match_background_line(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_FeatureHeader);
@@ -602,7 +640,7 @@ match_token_at_4(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_Rule);
@@ -611,7 +649,7 @@ match_token_at_4(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_ScenarioDefinition);
@@ -619,7 +657,7 @@ match_token_at_4(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_Rule);
@@ -627,7 +665,7 @@ match_token_at_4(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -654,23 +692,23 @@ match_token_at_4(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_5(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_BackgroundLine(context, token)) {
+    if (match_background_line(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_ScenarioDefinition);
@@ -679,7 +717,7 @@ match_token_at_5(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
@@ -687,21 +725,21 @@ match_token_at_5(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_FeatureHeader);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -728,26 +766,26 @@ match_token_at_5(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_6(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -756,7 +794,7 @@ match_token_at_6(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
@@ -764,21 +802,21 @@ match_token_at_6(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -806,25 +844,25 @@ match_token_at_6(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_7(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
@@ -834,7 +872,7 @@ match_token_at_7(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
@@ -843,7 +881,7 @@ match_token_at_7(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -851,7 +889,7 @@ match_token_at_7(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
@@ -859,7 +897,7 @@ match_token_at_7(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -886,22 +924,22 @@ match_token_at_7(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_8(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -910,7 +948,7 @@ match_token_at_8(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
@@ -918,21 +956,21 @@ match_token_at_8(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
             start_rule(context, Rule_RuleHeader);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -959,30 +997,30 @@ match_token_at_8(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_9(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_DataTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         start_rule(context, Rule_DocString);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -992,7 +1030,7 @@ match_token_at_9(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
@@ -1001,7 +1039,7 @@ match_token_at_9(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -1009,7 +1047,7 @@ match_token_at_9(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_Rule);
@@ -1017,11 +1055,11 @@ match_token_at_9(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1048,7 +1086,7 @@ match_token_at_9(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_10(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -1056,18 +1094,18 @@ match_token_at_10(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
@@ -1078,7 +1116,7 @@ match_token_at_10(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -1088,7 +1126,7 @@ match_token_at_10(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -1097,7 +1135,7 @@ match_token_at_10(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -1106,11 +1144,11 @@ match_token_at_10(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1137,21 +1175,21 @@ match_token_at_10(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_11(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Scenario);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -1178,27 +1216,27 @@ match_token_at_11(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_12(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Tags);
@@ -1206,7 +1244,7 @@ match_token_at_12(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1216,7 +1254,7 @@ match_token_at_12(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Rule);
@@ -1225,13 +1263,13 @@ match_token_at_12(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_ScenarioDefinition);
@@ -1239,7 +1277,7 @@ match_token_at_12(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Rule);
@@ -1247,7 +1285,7 @@ match_token_at_12(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -1275,7 +1313,7 @@ match_token_at_12(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_13(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -1283,18 +1321,18 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Description);
             start_rule(context, Rule_ExamplesDefinition);
@@ -1303,7 +1341,7 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
@@ -1314,7 +1352,7 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1324,14 +1362,14 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Description);
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1340,7 +1378,7 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1349,7 +1387,7 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1376,23 +1414,23 @@ match_token_at_13(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_14(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Tags);
@@ -1400,7 +1438,7 @@ match_token_at_14(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1410,7 +1448,7 @@ match_token_at_14(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Rule);
@@ -1419,13 +1457,13 @@ match_token_at_14(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_ScenarioDefinition);
@@ -1433,7 +1471,7 @@ match_token_at_14(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Rule);
@@ -1441,7 +1479,7 @@ match_token_at_14(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1468,7 +1506,7 @@ match_token_at_14(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_15(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -1476,23 +1514,23 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_DataTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         start_rule(context, Rule_DocString);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
@@ -1501,7 +1539,7 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -1512,7 +1550,7 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1522,14 +1560,14 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1538,7 +1576,7 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -1547,11 +1585,11 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1578,7 +1616,7 @@ match_token_at_15(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_16(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -1587,18 +1625,18 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
@@ -1608,7 +1646,7 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
@@ -1620,7 +1658,7 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -1631,7 +1669,7 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
@@ -1639,7 +1677,7 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -1649,7 +1687,7 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -1659,11 +1697,11 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1690,21 +1728,21 @@ match_token_at_16(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_17(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Examples);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -1731,7 +1769,7 @@ match_token_at_17(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_18(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1740,20 +1778,20 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1763,7 +1801,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1775,7 +1813,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -1786,7 +1824,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_ExamplesDefinition);
@@ -1794,7 +1832,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -1804,7 +1842,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -1814,7 +1852,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -1842,7 +1880,7 @@ match_token_at_18(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_19(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -1852,18 +1890,18 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
@@ -1874,7 +1912,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
@@ -1887,7 +1925,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1899,7 +1937,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1908,7 +1946,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1919,7 +1957,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1930,7 +1968,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -1957,7 +1995,7 @@ match_token_at_19(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_20(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -1966,16 +2004,16 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1985,7 +2023,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -1997,7 +2035,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -2008,7 +2046,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_ExamplesDefinition);
@@ -2016,7 +2054,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -2026,7 +2064,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -2036,7 +2074,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2063,7 +2101,7 @@ match_token_at_20(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_21(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -2073,11 +2111,11 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
@@ -2088,7 +2126,7 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
@@ -2101,7 +2139,7 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -2113,7 +2151,7 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -2122,7 +2160,7 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -2133,7 +2171,7 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -2144,11 +2182,11 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2175,20 +2213,20 @@ match_token_at_21(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_22(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
         end_rule(context, Rule_Tags);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -2215,28 +2253,28 @@ match_token_at_22(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_23(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_BackgroundLine(context, token)) {
+    if (match_background_line(context, token)) {
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Background);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_RuleHeader);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2245,7 +2283,7 @@ match_token_at_23(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_RuleHeader);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2254,14 +2292,14 @@ match_token_at_23(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_RuleHeader);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_RuleHeader);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2269,7 +2307,7 @@ match_token_at_23(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -2297,7 +2335,7 @@ match_token_at_23(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_24(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
@@ -2305,19 +2343,19 @@ match_token_at_24(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_BackgroundLine(context, token)) {
+    if (match_background_line(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Background);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_RuleHeader);
@@ -2327,7 +2365,7 @@ match_token_at_24(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_RuleHeader);
             end_rule(context, Rule_Rule);
@@ -2337,7 +2375,7 @@ match_token_at_24(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_RuleHeader);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2345,7 +2383,7 @@ match_token_at_24(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_RuleHeader);
             end_rule(context, Rule_Rule);
@@ -2354,7 +2392,7 @@ match_token_at_24(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2381,24 +2419,24 @@ match_token_at_24(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_25(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_RuleHeader);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_BackgroundLine(context, token)) {
+    if (match_background_line(context, token)) {
         end_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Background);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_RuleHeader);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2407,7 +2445,7 @@ match_token_at_25(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_RuleHeader);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2416,14 +2454,14 @@ match_token_at_25(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_RuleHeader);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_RuleHeader);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2431,7 +2469,7 @@ match_token_at_25(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2458,27 +2496,27 @@ match_token_at_25(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_26(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2487,7 +2525,7 @@ match_token_at_26(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2496,14 +2534,14 @@ match_token_at_26(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2511,7 +2549,7 @@ match_token_at_26(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -2539,7 +2577,7 @@ match_token_at_26(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_27(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
@@ -2547,18 +2585,18 @@ match_token_at_27(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
@@ -2568,7 +2606,7 @@ match_token_at_27(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
@@ -2578,7 +2616,7 @@ match_token_at_27(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2586,7 +2624,7 @@ match_token_at_27(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
@@ -2595,7 +2633,7 @@ match_token_at_27(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2622,23 +2660,23 @@ match_token_at_27(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_28(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2647,7 +2685,7 @@ match_token_at_28(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2656,14 +2694,14 @@ match_token_at_28(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_Scenario);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
             start_rule(context, Rule_Rule);
@@ -2671,7 +2709,7 @@ match_token_at_28(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2698,7 +2736,7 @@ match_token_at_28(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_29(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
@@ -2706,23 +2744,23 @@ match_token_at_29(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_DataTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         start_rule(context, Rule_DocString);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -2732,7 +2770,7 @@ match_token_at_29(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
@@ -2742,7 +2780,7 @@ match_token_at_29(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2750,7 +2788,7 @@ match_token_at_29(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
             end_rule(context, Rule_Rule);
@@ -2759,11 +2797,11 @@ match_token_at_29(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2790,7 +2828,7 @@ match_token_at_29(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_30(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -2799,18 +2837,18 @@ match_token_at_30(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
@@ -2821,7 +2859,7 @@ match_token_at_30(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -2832,7 +2870,7 @@ match_token_at_30(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -2841,7 +2879,7 @@ match_token_at_30(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -2851,11 +2889,11 @@ match_token_at_30(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -2882,21 +2920,21 @@ match_token_at_30(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_31(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Scenario);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -2923,7 +2961,7 @@ match_token_at_31(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_32(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
@@ -2931,20 +2969,20 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Tags);
@@ -2952,7 +2990,7 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -2962,7 +3000,7 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             end_rule(context, Rule_Rule);
@@ -2972,13 +3010,13 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_ScenarioDefinition);
@@ -2986,7 +3024,7 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             end_rule(context, Rule_Rule);
@@ -2995,7 +3033,7 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -3023,7 +3061,7 @@ match_token_at_32(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_33(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -3032,18 +3070,18 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Description);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Description);
             start_rule(context, Rule_ExamplesDefinition);
@@ -3052,7 +3090,7 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
@@ -3063,7 +3101,7 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3074,14 +3112,14 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Description);
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3090,7 +3128,7 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3100,7 +3138,7 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3127,7 +3165,7 @@ match_token_at_33(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_34(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Rule);
@@ -3135,16 +3173,16 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Tags);
@@ -3152,7 +3190,7 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3162,7 +3200,7 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             end_rule(context, Rule_Rule);
@@ -3172,13 +3210,13 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             start_rule(context, Rule_ScenarioDefinition);
@@ -3186,7 +3224,7 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
             end_rule(context, Rule_Rule);
@@ -3195,7 +3233,7 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3222,7 +3260,7 @@ match_token_at_34(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_35(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
@@ -3231,23 +3269,23 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_DataTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         start_rule(context, Rule_DocString);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
@@ -3256,7 +3294,7 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -3267,7 +3305,7 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3278,14 +3316,14 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_Examples);
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3294,7 +3332,7 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
             end_rule(context, Rule_ScenarioDefinition);
@@ -3304,11 +3342,11 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3335,7 +3373,7 @@ match_token_at_35(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_36(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3345,18 +3383,18 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DataTable);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
@@ -3366,7 +3404,7 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
@@ -3378,7 +3416,7 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -3390,7 +3428,7 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
@@ -3398,7 +3436,7 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -3408,7 +3446,7 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DataTable);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -3419,11 +3457,11 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3450,21 +3488,21 @@ match_token_at_36(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_37(parser& parser, token& token, parser_context& context)
 {
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
         end_rule(context, Rule_Tags);
         start_rule(context, Rule_Examples);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -3491,7 +3529,7 @@ match_token_at_37(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_38(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3501,20 +3539,20 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3524,7 +3562,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3536,7 +3574,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -3548,7 +3586,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_ExamplesDefinition);
@@ -3556,7 +3594,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -3566,7 +3604,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -3577,7 +3615,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             start_rule(context, Rule_Description);
             build(context, token);
             return transition.TargetState;
@@ -3605,7 +3643,7 @@ match_token_at_38(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_39(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3616,18 +3654,18 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         end_rule(context, Rule_Description);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
@@ -3638,7 +3676,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
@@ -3651,7 +3689,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3664,7 +3702,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3673,7 +3711,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3684,7 +3722,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Description);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3696,7 +3734,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3723,7 +3761,7 @@ match_token_at_39(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_40(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3733,16 +3771,16 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3752,7 +3790,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3764,7 +3802,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -3776,7 +3814,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             start_rule(context, Rule_ExamplesDefinition);
@@ -3784,7 +3822,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -3794,7 +3832,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
             end_rule(context, Rule_Scenario);
@@ -3805,7 +3843,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3832,7 +3870,7 @@ match_token_at_40(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_41(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
@@ -3843,11 +3881,11 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TableRow(context, token)) {
+    if (match_table_row(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
@@ -3858,7 +3896,7 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
@@ -3871,7 +3909,7 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3884,7 +3922,7 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3893,7 +3931,7 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3904,7 +3942,7 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_ExamplesTable);
             end_rule(context, Rule_Examples);
             end_rule(context, Rule_ExamplesDefinition);
@@ -3916,11 +3954,11 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -3947,11 +3985,11 @@ match_token_at_41(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_43(parser& parser, token& token, parser_context& context)
 {
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -3978,7 +4016,7 @@ match_token_at_43(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_44(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -3988,14 +4026,14 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
@@ -4005,7 +4043,7 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
@@ -4017,7 +4055,7 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -4029,7 +4067,7 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
@@ -4037,7 +4075,7 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -4047,7 +4085,7 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -4058,11 +4096,11 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -4089,11 +4127,11 @@ match_token_at_44(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_45(parser& parser, token& token, parser_context& context)
 {
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -4120,7 +4158,7 @@ match_token_at_45(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_46(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -4129,14 +4167,14 @@ match_token_at_46(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
@@ -4147,7 +4185,7 @@ match_token_at_46(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -4158,7 +4196,7 @@ match_token_at_46(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -4167,7 +4205,7 @@ match_token_at_46(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -4177,11 +4215,11 @@ match_token_at_46(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -4208,11 +4246,11 @@ match_token_at_46(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_47(parser& parser, token& token, parser_context& context)
 {
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -4239,7 +4277,7 @@ match_token_at_47(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_48(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Scenario);
@@ -4248,14 +4286,14 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_1(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
@@ -4265,7 +4303,7 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
@@ -4277,7 +4315,7 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -4288,7 +4326,7 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_examples_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             start_rule(context, Rule_ExamplesDefinition);
@@ -4296,7 +4334,7 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -4306,7 +4344,7 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Scenario);
@@ -4316,11 +4354,11 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -4347,11 +4385,11 @@ match_token_at_48(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_49(parser& parser, token& token, parser_context& context)
 {
-    if (match_DocStringSeparator(context, token)) {
+    if (match_doc_string_separator(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
-    if (match_Other(context, token)) {
+    if (match_other(context, token)) {
         build(context, token);
         return transition.TargetState;
     }
@@ -4378,7 +4416,7 @@ match_token_at_49(parser& parser, token& token, parser_context& context)
 std::size_t
 match_token_at_50(parser& parser, token& token, parser_context& context)
 {
-    if (match_EOF(context, token)) {
+    if (match_e_o_f(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
@@ -4386,14 +4424,14 @@ match_token_at_50(parser& parser, token& token, parser_context& context)
         build(context, token);
         return transition.TargetState;
     }
-    if (match_StepLine(context, token)) {
+    if (match_step_line(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
         return transition.TargetState;
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
         if (lookahead_0(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
@@ -4404,7 +4442,7 @@ match_token_at_50(parser& parser, token& token, parser_context& context)
             return transition.TargetState;
         }
     }
-    if (match_TagLine(context, token)) {
+    if (match_tag_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -4414,7 +4452,7 @@ match_token_at_50(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_ScenarioLine(context, token)) {
+    if (match_scenario_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -4423,7 +4461,7 @@ match_token_at_50(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_RuleLine(context, token)) {
+    if (match_rule_line(context, token)) {
             end_rule(context, Rule_DocString);
             end_rule(context, Rule_Step);
             end_rule(context, Rule_Background);
@@ -4432,11 +4470,11 @@ match_token_at_50(parser& parser, token& token, parser_context& context)
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Comment(context, token)) {
+    if (match_comment(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
-    if (match_Empty(context, token)) {
+    if (match_empty(context, token)) {
             build(context, token);
             return transition.TargetState;
     }
@@ -4473,12 +4511,12 @@ lookahead_0(parser_context& context, token& current_token)
         token.detach()
         queue.push_back(token);
 
-        if (smatch_ScenarioLine(context, token) || false) {
+        if (smatch_scenario_line(context, token) || false) {
             match = true;
             break;
         }
 
-        if not (match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token) || false) {
+        if not (match_empty(context, token) || match_comment(context, token) || match_tag_line(context, token) || false) {
             break;
         }
 
@@ -4499,12 +4537,12 @@ lookahead_1(parser_context& context, token& current_token)
         token.detach()
         queue.push_back(token);
 
-        if (smatch_ExamplesLine(context, token) || false) {
+        if (smatch_examples_line(context, token) || false) {
             match = true;
             break;
         }
 
-        if not (match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token) || false) {
+        if not (match_empty(context, token) || match_comment(context, token) || match_tag_line(context, token) || false) {
             break;
         }
 
@@ -4512,29 +4550,17 @@ lookahead_1(parser_context& context, token& current_token)
 
         return match;
 }
-void
-handle_ast_error(parser_context& context, token& token, match_function action)
-{ handle_external_error(context, true, token, action); }
-
-bool
-handle_external_error(
-    parser_context& context,
-    bool default_value,
-    token& token,
-    match_function action
-)
-{
-    if (context.stop_at_first_error) {
-        return action(token);
-    }
-
-    try {
-        return action(token);
-    } catch (const std::exception& e) {
-        add_error(context, e);
-    }
-
-    return default_value;
-}
-
 } // namespace detail
+
+std::size_t
+parser::match_token(std::size_t state, token& token, parser_context& context)
+{
+    using match_function = int (parser::*)(token&, parser_context&);
+    using match_functions = std::unordered_map<std::size_t, match_function>;
+
+    static const match_functions = {
+        { 0, &parser::}
+    };
+
+    return state;
+}
