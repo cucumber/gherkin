@@ -3,6 +3,7 @@
 #include <string>
 
 #include <gherkin/token.hpp>
+#include <gherkin/types.hpp>
 
 namespace gherkin {
 
@@ -26,7 +27,6 @@ public:
     bool match_examples_line(token& token);
     bool match_language(token& token);
     bool match_tag_line(token& token);
-    bool match_title_line(token& token);
     bool match_e_o_f(token& token);
     bool match_empty(token& token);
     bool match_comment(token& token);
@@ -36,6 +36,14 @@ public:
     bool match_table_row(token& token);
 
 private:
+    bool match_title_line(
+        token& token,
+        std::string_view text,
+        string_views keywords
+    );
+
+    const string_views& keywords(std::string_view kw) const;
+
     token_matcher_info tmi_;
 };
 

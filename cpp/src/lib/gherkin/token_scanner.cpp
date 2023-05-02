@@ -21,15 +21,12 @@ token_scanner::read()
 {
     auto r = next_line();
 
-    /*if (r.has_line) {
-        $line =~ s/\r$//; # \n as well as \r\n are considered lines separators
-        $line_token =
-            Gherkin::Line->new(
-                { line_text => $line, line_number => $line_number }
-            );
-    }
-    return Gherkin::Token->new(line => $line_token, location => $location);*/
-    return {};
+    line_++;
+
+    return token{
+        .line = gherkin::line(r.text, line_),
+        .location = line_
+    };
 }
 
 void

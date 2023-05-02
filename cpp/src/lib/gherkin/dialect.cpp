@@ -1,4 +1,4 @@
-#include <gherkin/i18n.hpp>
+#include <gherkin/dialect.hpp>
 
 namespace gherkin {
 

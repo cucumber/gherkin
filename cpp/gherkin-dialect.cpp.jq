@@ -1,6 +1,6 @@
 . as $root |
 [
-  "#include <gherkin/i18n.hpp>\n\n",
+  "#include <gherkin/dialect.hpp>\n\n",
   "namespace gherkin {\n\n",
   "const keywords_map&\n",
   "keywords(const std::string_view& language)\n",

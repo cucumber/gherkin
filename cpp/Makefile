@@ -4,7 +4,7 @@ GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_GENERATED = \
 	include/gherkin/rule_type.hpp \
 	src/lib/gherkin/parser.cpp \
-	src/lib/gherkin/i18n.cpp
+	src/lib/gherkin/dialect.cpp
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
@@ -54,8 +54,8 @@ include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 src/lib/gherkin/parser.cpp: gherkin-cpp.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-src/lib/gherkin/i18n.cpp: $(GHERKIN_LANGUAGES_JSON)
-	jq -f gherkin-i18n.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@
+src/lib/gherkin/dialect.cpp: $(GHERKIN_LANGUAGES_JSON)
+	jq -f gherkin-dialect.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)

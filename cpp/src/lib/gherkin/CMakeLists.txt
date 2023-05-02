@@ -8,7 +8,8 @@ target_sources(
     PRIVATE
         ${INC_DIR}/gherkin/ast_builder.hpp
         ${INC_DIR}/gherkin/file.hpp
-        ${INC_DIR}/gherkin/i18n.hpp
+        ${INC_DIR}/gherkin/dialect.hpp
+        ${INC_DIR}/gherkin/items.hpp
         ${INC_DIR}/gherkin/line.hpp
         ${INC_DIR}/gherkin/location.hpp
         ${INC_DIR}/gherkin/parser.hpp
@@ -16,13 +17,15 @@ target_sources(
         ${INC_DIR}/gherkin/token.hpp
         ${INC_DIR}/gherkin/token_matcher.hpp
         ${INC_DIR}/gherkin/token_scanner.hpp
+        ${INC_DIR}/gherkin/utils.hpp
         ${INC_DIR}/gherkin/types.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ast_builder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/i18n.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/token.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/token_matcher.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/token_scanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
 )
 
 target_include_directories(
