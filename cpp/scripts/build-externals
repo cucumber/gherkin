@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+
+###############################################################################
+#
+# Barebones dependency installer
+#
+###############################################################################
+set -e
+trap "exit 1" TERM
+
+ME=$(basename $0)
+MYDIR=$(cd $(dirname $0)/.. && pwd)
+MYPID=$$
+
+BUILDER=$MYDIR/scripts/build-ext
+
+EXTDIR=$MYDIR/ext
+DLFILE=$EXTDIR/.downloaded
+INSTFILE=$EXTDIR/.installed
+TMPDIR=$EXTDIR/tmp
+ARCDIR=$EXTDIR/archives
+
+function error() {
+    echo "$@" >&2
+    kill -TERM $MYPID
+    exit 1
+}
+
+function clean_tmp() {
+    rm -rf $TMPDIR && mkdir -p $TMPDIR
+}
+
+function get_unique() {
+    local WHERE=$1
+    local TYPE=$2
+
+    local COUNT=$(find $WHERE -mindepth 1 -maxdepth 1 -type $TYPE | wc -l)
+
+    [ "$COUNT" -ne "1" ] && error "no unique entry of type $TYPE in $WHERE"
+
+    local ENTRY=$(find $WHERE -mindepth 1 -maxdepth 1 -type $TYPE)
+
+    echo $ENTRY
+}
+
+function get_md5() {
+    local WHAT=$1
+    local MD5
+
+    case $(uname -s) in
+        Darwin)
+        MD5=$(md5 -qs "$WHAT")
+        ;;
+        *)
+        MD5=$(echo -n "$WHAT" | md5sum | cut -d ' ' -f 1)
+        ;;
+    esac
+
+    echo $MD5
+}
+
+function download() {
+    local PKG=$1
+
+    local MD5=$(get_md5 "$PKG")
+    local ARCHIVE=$(grep $MD5 $DLFILE | cut -d ' ' -f 2)
+
+    if [ -z "$ARCHIVE" ]; then
+        clean_tmp
+
+        (cd $TMPDIR && curl -LJO $PKG)
+
+        mkdir -p $ARCDIR
+
+        ARCHIVE=$(get_unique $TMPDIR f)
+
+        mv $ARCHIVE $ARCDIR
+
+        ARCHIVE=$(basename $ARCHIVE)
+        echo "$MD5 $ARCHIVE" >> $DLFILE
+    fi
+
+    echo $ARCHIVE
+}
+
+function extract() {
+    local ARCHIVE=$1
+
+    local ARCFILE=$ARCDIR/$ARCHIVE
+    local TAROPTS
+
+    case $(uname -s) in
+        Darwin)
+        TAROPTS=xf
+        ;;
+        *)
+        TAROPTS=xaf
+        ;;
+    esac
+
+    clean_tmp
+
+    if [[ "$ARCFILE" =~ \.zip$ ]]; then
+        (cd $TMPDIR && unzip -q $ARCFILE)
+    elif [[ "$ARCFILE" =~ \.tar\.(gz|bz2|xz)$ ]]; then
+        (cd $TMPDIR && tar $TAROPTS $ARCFILE)
+    else
+        error "unhandled archive format $ARCHIVE"
+    fi
+
+    DIR=$(get_unique $TMPDIR d)
+
+    echo $DIR
+}
+
+function build() {
+    local URL=$1
+    shift
+
+    local ARCHIVE=$(download $URL)
+    local INSTALLED=$(grep $ARCHIVE $INSTFILE)
+
+    if [ -z "$INSTALLED" ]; then
+        local DEPDIR=$(extract $ARCHIVE)
+
+        echo "building from $URL"
+
+        $BUILDER $DEPDIR "$@"
+
+        echo $ARCHIVE >> $INSTFILE
+    else
+        echo "skipping already installed $ARCHIVE from $URL"
+    fi
+}
+
+function build_list() {
+    local EXTFILE=$1
+    local -a SPEC=()
+
+    while read LINE; do
+        [[ "$LINE" =~ ^([[:space:]]*(#.*)?)?$ ]] && continue
+
+        build $LINE
+    done < $EXTFILE
+}
+
+mkdir -p $EXTDIR
+touch $DLFILE $INSTFILE
+
+[ -z "$1" ] && echo "usage: $ME FILE|URL" && exit 1
+
+WHAT=$1
+shift
+
+if [ -f $WHAT ]; then
+    # Assume a dependency list file
+    if [ -n "$1" ]; then
+        # Short keyword to easily select something in the list file
+        LINE=$(grep "$1" $WHAT)
+
+        if [ -n "$LINE" ]; then
+            build $LINE
+        fi
+    else
+        build_list $WHAT
+    fi
+else
+    # Assume a URL
+    build $WHAT "$@"
+fi
+
+exit 0
