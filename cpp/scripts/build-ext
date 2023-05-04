@@ -64,6 +64,8 @@ CMAKEARGS=
 if [ -n "$NPROCS" ]; then
     CMAKEARGS="--parallel $NPROCS"
     MAKEARGS="-j$NPROCS"
+else
+    CMAKEARGS="--parallel"
 fi
 
 ###############################################################################

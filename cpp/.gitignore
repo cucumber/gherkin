@@ -1,2 +1,4 @@
 ext/
 build/
+.built
+.configured

@@ -1,11 +1,16 @@
-add_library(gherkin-cpp_library)
-add_library(weezu::gherkin-cpp ALIAS gherkin-cpp_library)
+add_library(gherkin-cpp)
+add_library(gherkin::gherkin-cpp ALIAS gherkin-cpp)
 
 set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
 
 target_sources(
-    gherkin-cpp_library
-    PRIVATE
+    gherkin-cpp
+    PUBLIC
+    FILE_SET
+        "gherkin_cpp_headers"
+        TYPE HEADERS
+        BASE_DIRS ${INC_DIR}
+        FILES
         ${INC_DIR}/gherkin/ast_builder.hpp
         ${INC_DIR}/gherkin/file.hpp
         ${INC_DIR}/gherkin/dialect.hpp
@@ -19,6 +24,7 @@ target_sources(
         ${INC_DIR}/gherkin/token_scanner.hpp
         ${INC_DIR}/gherkin/utils.hpp
         ${INC_DIR}/gherkin/types.hpp
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/ast_builder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/dialect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp
@@ -29,16 +35,22 @@ target_sources(
 )
 
 target_include_directories(
-    gherkin-cpp_library
+    gherkin-cpp
     PUBLIC
         $<BUILD_INTERFACE:${INC_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/gherkin>
     PRIVATE
-        ${INC_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(
+    gherkin-cpp
+    PRIVATE
+        cucumber::cucumber-messages
 )
 
 set_target_properties(
-    gherkin-cpp_library
+    gherkin-cpp
     PROPERTIES
     OUTPUT_NAME gherkin-cpp
 )

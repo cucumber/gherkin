@@ -9,12 +9,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+find_package(cucumber-messages CONFIG REQUIRED)
+
 add_subdirectory(src/lib/gherkin)
 
 install(
     TARGETS
-        gherkin-cpp_library
+        gherkin-cpp
     EXPORT gherkin-cpp-config
+    FILE_SET gherkin_cpp_headers
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
