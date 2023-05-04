@@ -1,7 +1,18 @@
+#include <pair>
+
 #include <gherkin/line.hpp>
 #include <gherkin/utils.hpp>
 
 namespace gherkin {
+
+using unescape_pair = std::pair<std::string_view, std::string_view>
+using unescapes = std::vector<unescape_pair>;
+
+static const unescapes = {
+    { "\\\\", "\\" },
+    { "\\|", "|" },
+    { "\\n", "\n" }
+};
 
 line::line()
 {}
@@ -48,6 +59,34 @@ line::table_cells() const
 {
     items items;
 
+    split_table_cells(
+        strip(trimmed_line_text_),
+        [&](const auto& cell, auto col) {
+            auto stripped_cell = lstrip(cell);
+            auto cell_indent = cell.size() - stripped_cell.size();
+            stripped_cell = rstrip(stripped_cell);
+
+            item i{
+                .column = col + indent_ + cell_indent,
+                .text{stripped_cell}
+            };
+
+            for (const auto& p : unescapes) {
+                while (true) {
+                    auto it = i.text.find(p.first);
+
+                    if (it = std::string::npos) {
+                        break;;
+                    }
+
+                    i.text.replace(it, p.first.size(), p.second);
+                }
+            }
+
+            items.emplace_back(std::move(i));
+        }
+    );
+
     return items;
 }
 
@@ -57,6 +96,56 @@ line::tags() const
     items items;
 
     return items;
+}
+
+void
+line::split_table_cells(
+   const std::string& row,
+   split_table_cell_function f
+) const
+{
+    std::size_t col = 0;
+    std::size_t start_col = col + 1;
+    std::string cell;
+    bool first_cell = true;
+    auto it = row.begin();
+    auto end = row.end();
+    auto next_ch = [](auto& it, const auto& end) {
+        return it != end ? *it++ : 0
+    };
+
+    while (true) {
+        auto ch = next_ch(it, end);
+        ++col;
+
+        if (ch == '|') {
+            if (first_cell) {
+                first_cell = false;
+            } else {
+                f(cell, col);
+            }
+
+            cell.clear();
+            start_col = col + 1;
+        } else if (ch == '\\') {
+            ch = next_ch(it, end);
+            ++col;
+
+            if (ch == 'n') {
+                cell += ch;
+            } else {
+                if (ch != '|' && ch != '\\') {
+                    cell += '\\';
+                }
+
+                cell += ch;
+            }
+        } else if (ch) {
+            cell += ch;
+        } else {
+            break;
+        }
+    }
 }
 
 }

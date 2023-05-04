@@ -5,12 +5,12 @@
 namespace gherkin {
 
 std::string_view
-lstrip(std::string_view in);
+lstrip(std::string_view in, std::string_view chars = " ");
 
 std::string_view
-rstrip(std::string_view in);
+rstrip(std::string_view in, std::string_view chars = " ");
 
 std::string_view
-strip(std::string_view in);
+strip(std::string_view in, std::string_view chars = " ");
 
 }

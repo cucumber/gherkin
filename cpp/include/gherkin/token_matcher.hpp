@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include <gherkin/dialect.hpp>
 #include <gherkin/token.hpp>
 #include <gherkin/types.hpp>
 
@@ -11,6 +12,8 @@ struct token_matcher_info
 {
     std::string dialect = "en";
 };
+
+using keyword_types_map = std::unordered_map<std::string_view, string_views>;
 
 class token_matcher
 {
@@ -42,9 +45,31 @@ private:
         string_views keywords
     );
 
+    struct token_info
+    {
+        std::string text;
+        std::string keyword;
+        std::string keyword_type;
+        std::size_t indent;
+        gherkin::items items;
+    };
+
+    void set_token_matched(
+        token& token,
+        std::string_view text,
+        const token_info& ti = {}
+    );
+
     const string_views& keywords(std::string_view kw) const;
 
+    std::string_view keyword_type(std::string_view keyword) const;
+
+    void change_dialect(const std::string& dialect_name);
+
     token_matcher_info tmi_;
+
+    std::string dialect_name_;
+    keyword_types_map keyword_types_;
 };
 
 }
