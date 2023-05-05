@@ -20,10 +20,14 @@ public:
         std::size_t indent_to_remove=std::string::npos
     ) const;
 
+    std::string_view line_text() const;
+
+    std::size_t indent() const;
+
     bool is_empty() const;
 
     bool startswith(std::string_view prefix) const;
-    bool startswith_title_keyword(std::string_view keyword) const;
+    bool startswith_title_keyword(const std::string& keyword) const;
 
     items table_cells() const;
 
@@ -35,7 +39,7 @@ private:
     >;
 
     void split_table_cells(
-        const std::string& row,
+        std::string_view row,
         split_table_cell_function f
     ) const;
 

@@ -3,6 +3,10 @@ add_library(gherkin::gherkin-cpp ALIAS gherkin-cpp)
 
 set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
 
+# We prefer it that way...
+file(GLOB_RECURSE GHERKIN_CPP_HEADERS ${INC_DIR}/*.[ch]pp)
+file(GLOB_RECURSE GHERKIN_CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch]pp)
+
 target_sources(
     gherkin-cpp
     PUBLIC
@@ -11,27 +15,9 @@ target_sources(
         TYPE HEADERS
         BASE_DIRS ${INC_DIR}
         FILES
-        ${INC_DIR}/gherkin/ast_builder.hpp
-        ${INC_DIR}/gherkin/file.hpp
-        ${INC_DIR}/gherkin/dialect.hpp
-        ${INC_DIR}/gherkin/items.hpp
-        ${INC_DIR}/gherkin/line.hpp
-        ${INC_DIR}/gherkin/location.hpp
-        ${INC_DIR}/gherkin/parser.hpp
-        ${INC_DIR}/gherkin/rule_type.hpp
-        ${INC_DIR}/gherkin/token.hpp
-        ${INC_DIR}/gherkin/token_matcher.hpp
-        ${INC_DIR}/gherkin/token_scanner.hpp
-        ${INC_DIR}/gherkin/utils.hpp
-        ${INC_DIR}/gherkin/types.hpp
+        ${GHERKIN_CPP_HEADERS}
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/ast_builder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/dialect.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/token.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/token_matcher.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/token_scanner.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
+        ${GHERKIN_CPP_SOURCES}
 )
 
 target_include_directories(

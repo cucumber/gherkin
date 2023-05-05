@@ -1,14 +1,14 @@
-#include <pair>
+#include <utility>
 
 #include <gherkin/line.hpp>
 #include <gherkin/utils.hpp>
 
 namespace gherkin {
 
-using unescape_pair = std::pair<std::string_view, std::string_view>
+using unescape_pair = std::pair<std::string_view, std::string_view>;
 using unescapes = std::vector<unescape_pair>;
 
-static const unescapes = {
+static const unescapes line_unescapes = {
     { "\\\\", "\\" },
     { "\\|", "|" },
     { "\\n", "\n" }
@@ -42,17 +42,25 @@ line::get_line_text(std::size_t indent_to_remove) const
     }
 }
 
+std::string_view
+line::line_text() const
+{ return line_text_; }
+
+std::size_t
+line::indent() const
+{ return indent_; }
+
 bool
 line::is_empty() const
 { return trimmed_line_text_.empty(); }
 
 bool
 line::startswith(std::string_view prefix) const
-{ return trimmed_line_text_.startswith(prefix); }
+{ return trimmed_line_text_.starts_with(prefix); }
 
 bool
-line::startswith_title_keyword(std::string_view keyword) const
-{ return trimmed_line_text_.startswith(keyword + ":"); }
+line::startswith_title_keyword(const std::string& keyword) const
+{ return trimmed_line_text_.starts_with(keyword); }
 
 items
 line::table_cells() const
@@ -68,15 +76,15 @@ line::table_cells() const
 
             item i{
                 .column = col + indent_ + cell_indent,
-                .text{stripped_cell}
+                .text = std::string(stripped_cell)
             };
 
-            for (const auto& p : unescapes) {
+            for (const auto& p : line_unescapes) {
                 while (true) {
                     auto it = i.text.find(p.first);
 
                     if (it = std::string::npos) {
-                        break;;
+                        break;
                     }
 
                     i.text.replace(it, p.first.size(), p.second);
@@ -100,7 +108,7 @@ line::tags() const
 
 void
 line::split_table_cells(
-   const std::string& row,
+   std::string_view row,
    split_table_cell_function f
 ) const
 {
@@ -111,7 +119,7 @@ line::split_table_cells(
     auto it = row.begin();
     auto end = row.end();
     auto next_ch = [](auto& it, const auto& end) {
-        return it != end ? *it++ : 0
+        return it != end ? *it++ : 0;
     };
 
     while (true) {

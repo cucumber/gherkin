@@ -6,7 +6,7 @@ namespace gherkin {
 
 struct item
 {
-    std::size_t column = 0;
+    std::size_t column;
     std::string text;
 };
 

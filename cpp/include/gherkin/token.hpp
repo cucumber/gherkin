@@ -16,8 +16,9 @@ struct token
     std::string matched_type;
     std::string matched_keyword;
     std::string matched_keyword_type;
-    std::size_t indent = 0;
-    gherkin::items items;
+    std::size_t matched_indent = 0;
+    gherkin::items matched_items;
+    std::string matched_text;
     std::string matched_gherkin_dialect;
 
     bool is_eof() const;

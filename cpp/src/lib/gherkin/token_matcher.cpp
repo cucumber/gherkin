@@ -1,7 +1,14 @@
+
 #include <gherkin/token_matcher.hpp>
 #include <gherkin/dialect.hpp>
+#include <gherkin/utils.hpp>
+#include <gherkin/regex.hpp>
 
 namespace gherkin {
+
+static const std::regex language_re{
+    "\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*"
+};
 
 token_matcher::token_matcher(const token_matcher_info& tmi)
 : tmi_(tmi)
@@ -58,11 +65,34 @@ token_matcher::match_table_row(token& token)
 
 bool
 token_matcher::match_language(token& token)
-{ return true; }
+{
+    std::string dialect_name;
+
+    if (!full_match(token.line.line_text(), language_re, dialect_name)) {
+        return false;
+    }
+
+    set_token_matched(token, "Language", { .text = dialect_name });
+    change_dialect(dialect_name);
+
+    return true;
+}
 
 bool
 token_matcher::match_tag_line(token& token)
-{ return true; }
+{
+    if (!token.line.startswith("@")) {
+        return false;
+    }
+
+    set_token_matched(
+        token, "TagLine", {
+            .items = std::move(token.line.tags())
+        }
+    );
+
+    return true;
+}
 
 bool
 token_matcher::match_title_line(
@@ -78,11 +108,31 @@ token_matcher::match_e_o_f(token& token)
 
 bool
 token_matcher::match_empty(token& token)
-{ return true; }
+{
+    if (!token.line.is_empty()) {
+        return false;
+    }
+
+    set_token_matched(token, "Empty", { .indent = 0 } );
+
+    return true;
+}
 
 bool
 token_matcher::match_comment(token& token)
-{ return true; }
+{
+    if (!token.line.startswith("#")) {
+        return false;
+    }
+
+    set_token_matched(
+        token, "Comment", {
+            .text = std::string(token.line.line_text())
+        }
+    );
+
+    return true;
+}
 
 bool
 token_matcher::match_other(token& token)
@@ -101,6 +151,13 @@ token_matcher::match_step_line(token& token)
 
         auto title = token.line.get_rest_trimmed(keyword.size());
 
+        set_token_matched(
+            token, "StepLine", {
+                .text = std::string(title),
+                .keyword = std::string(keyword),
+                .keyword_type = std::string(keyword_type(keyword))
+            }
+        );
 
         return true;
     }
@@ -116,20 +173,20 @@ void
 token_matcher::set_token_matched(
     token& token,
     std::string_view text,
-    token_matched_info& tmi
+    const token_info& ti
 )
 {
-    token.matched_type = tmi.matched_type;
-    token.matched_text.assign(rstrip(tmi.text, "\r\n"));
-    token.matched_keyword = tmi.matched_keyword;
+    token.matched_type = ti.keyword_type;
+    token.matched_text.assign(rstrip(ti.text, "\r\n"));
+    token.matched_keyword = ti.keyword;
 
-    if (tmi.indent) {
-        token.matched_indent = tmi.indent;
+    if (ti.indent) {
+        token.matched_indent = ti.indent;
     } else {
-        token.matched_indent = token.line.indent;
+        token.matched_indent = token.line.indent();
     }
-    token.matched_items = std::move(tmi.items);
-    token.mathed_gherkin_dialect = dialect_name;
+    token.matched_items = std::move(ti.items);
+    token.matched_gherkin_dialect = dialect_name_;
 }
 
 const string_views&
@@ -157,7 +214,7 @@ token_matcher::change_dialect(const std::string& dialect_name)
 {
     dialect_name_ = dialect_name;
 
-    d = get_dialect(dialect_name_);
+    auto d = get_dialect(dialect_name_);
 
     keyword_types_.clear();
 

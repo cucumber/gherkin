@@ -17,8 +17,13 @@ PICKLES      = $(patsubst ../testdata/%,acceptance/testdata/%.pickles.ndjson,$(G
 SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GOOD_FEATURE_FILES))
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
+SRC_FILES = \
+	$(shell find include -name "*.[ch]*") \
+	$(shell find src -name "*.[ch]*")
+
 HERE = $(shell pwd)
-CMAKE_BUILDROOT=$(HERE)/build/root
+CMAKE_BUILDROOT = $(HERE)/build/root
+CMAKELISTS = $(shell find src -name CMakeLists.txt)
 
 .DEFAULT_GOAL = help
 
@@ -54,14 +59,14 @@ install-deps:
 
 acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
 
-.built: $(SOURCE_FILES) .configured
+.built: $(SRC_FILES) .configured
 	cmake \
 	    --build build/gherkin \
 	    --parallel \
 	    && touch $@
 
-.configured:
-	mkdir -p build/gherkin
+.configured: $(CMAKELISTS)
+	rm -rf build/gherkin && mkdir -p build/gherkin
 	cmake \
 	    -DCMAKE_PREFIX_PATH=$(CMAKE_BUILDROOT) \
 	    -DCMAKE_INSTALL_PREFIX=$(CMAKE_BUILDROOT) \
