@@ -75,6 +75,11 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 	    --toolchain cmake/toolchains/ext.cmake \
 	    && touch $@
 
+clean-configure:
+	rm -f .configured
+
+reconfigure: clean-configure .configured
+
 include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 

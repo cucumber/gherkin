@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <string_view>
 
 namespace gherkin {
@@ -12,5 +13,11 @@ rstrip(std::string_view in, std::string_view chars = " ");
 
 std::string_view
 strip(std::string_view in, std::string_view chars = " ");
+
+void
+replace(std::string& s, std::string_view what, std::string_view with);
+
+std::string
+replace(const std::string& s, std::string_view what, std::string_view with);
 
 }

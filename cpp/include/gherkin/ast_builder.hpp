@@ -1,9 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <stack>
 
 #include <gherkin/token.hpp>
 #include <gherkin/rule_type.hpp>
+#include <gherkin/ast_node.hpp>
 
 namespace gherkin {
 
@@ -15,11 +17,20 @@ public:
 
     void reset();
 
-    void build(token& token);
     void start_rule(rule_type rule_type);
     void end_rule(rule_type rule_type);
+    void build(token& token);
 
 private:
+    using ast_node_stack = std::stack<ast_node>;
+
+    message transform_node(ast_node& node);
+
+    ast_node pop_node();
+    ast_node& current_node();
+    const ast_node& current_node() const;
+
+    ast_node_stack stack_;
 };
 
 using ast_builder_ptr = std::unique_ptr<ast_builder>;

@@ -60,7 +60,7 @@ line::startswith(std::string_view prefix) const
 
 bool
 line::startswith_title_keyword(const std::string& keyword) const
-{ return trimmed_line_text_.starts_with(keyword); }
+{ return trimmed_line_text_.starts_with(keyword + ":"); }
 
 items
 line::table_cells() const
@@ -80,15 +80,7 @@ line::table_cells() const
             };
 
             for (const auto& p : line_unescapes) {
-                while (true) {
-                    auto it = i.text.find(p.first);
-
-                    if (it = std::string::npos) {
-                        break;
-                    }
-
-                    i.text.replace(it, p.first.size(), p.second);
-                }
+                replace(i.text, p.first, p.second);
             }
 
             items.emplace_back(std::move(i));

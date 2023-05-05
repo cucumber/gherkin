@@ -8,17 +8,12 @@
 
 namespace gherkin {
 
-struct token_matcher_info
-{
-    std::string dialect = "en";
-};
-
 using keyword_types_map = std::unordered_map<std::string_view, string_views>;
 
 class token_matcher
 {
 public:
-    token_matcher(const token_matcher_info& tmi = {});
+    token_matcher(const std::string& dialect_name = "en");
     virtual ~token_matcher();
 
     void reset();
@@ -39,9 +34,15 @@ public:
     bool match_table_row(token& token);
 
 private:
+    bool match_doc_string_separator_(
+        token& token,
+        std::string_view separator,
+        bool is_open
+    );
+
     bool match_title_line(
         token& token,
-        std::string_view text,
+        std::string_view token_type,
         string_views keywords
     );
 
@@ -56,7 +57,7 @@ private:
 
     void set_token_matched(
         token& token,
-        std::string_view text,
+        std::string_view matched_type,
         const token_info& ti = {}
     );
 
@@ -66,10 +67,12 @@ private:
 
     void change_dialect(const std::string& dialect_name);
 
-    token_matcher_info tmi_;
+    std::string unescape_docstring(const std::string& text) const;
 
     std::string dialect_name_;
     keyword_types_map keyword_types_;
+    std::string active_doc_string_separator_;
+    std::size_t indent_to_remove_;
 };
 
 }
