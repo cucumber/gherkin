@@ -32,13 +32,36 @@ void
 build(token& token)
 {}
 
-message
+std::string
+ast_builder::next_id()
+{ return std::to_string(id_counter_++); }
+
+node_item
 ast_builder::transform_node(ast_node& node)
 {
     if (node.is(rule_type::step)) {
-        cucumber::messages::step s{{}, {"titi"}, "toto"};
+        const auto& step_line = node.get_token(rule_type::step_line);
+        const auto& data_table = node.get_single(rule_type::data_table);
+        const auto& doc_string = node.get_single(rule_type::doc_string);
+
+        cucumber::messages::step s{
+            .location = get_location(step_line),
+            .keyword = step_line.matched_keyword,
+            .keyword_type = step_line.matched_keyword_type,
+            .text = step_line.matched_text,
+            .id = next_id()
+        };
     }
 
+    return {};
+}
+
+cucumber::messages::location
+ast_builder::get_location(
+    const token& token,
+    std::size_t column
+) const
+{
     return {};
 }
 

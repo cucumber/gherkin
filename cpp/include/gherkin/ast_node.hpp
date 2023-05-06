@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <gherkin/messages.hpp>
+#include <gherkin/node_item.hpp>
 
 namespace gherkin {
 
@@ -22,11 +22,18 @@ public:
 
     rule_type type() const;
 
-    void add(rule_type rt, message&& m);
+    void add(rule_type rule_type, node_item&& m);
+
+    const node_item& get_single(rule_type rule_type) const;
+    const node_items& get_items(rule_type rule_type) const;
+    const token& get_token(rule_type rule_type) const;
+    const node_items& get_tokens(rule_type rule_type) const;
 
 private:
     rule_type rule_type_;
-    messages_map sub_items_;
+    node_items_map sub_items_;
+    node_item empty_node_item_;
+    node_items empty_node_items_;
 };
 
 }

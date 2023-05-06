@@ -2,13 +2,17 @@
 
 #include <string>
 
+#include <cucumber/messages/step_keyword_type.hpp>
+
 #include <gherkin/dialect.hpp>
 #include <gherkin/token.hpp>
 #include <gherkin/types.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 
-using keyword_types_map = std::unordered_map<std::string_view, string_views>;
+using keyword_types = std::vector<cucumber::messages::step_keyword_type>;
+using keyword_types_map = std::unordered_map<std::string_view, keyword_types>;
 
 class token_matcher
 {
@@ -42,7 +46,7 @@ private:
 
     bool match_title_line(
         token& token,
-        std::string_view token_type,
+        rule_type token_type,
         string_views keywords
     );
 
@@ -50,20 +54,21 @@ private:
     {
         std::string text;
         std::string keyword;
-        std::string keyword_type;
+        cucumber::messages::step_keyword_type keyword_type;
         std::size_t indent;
         gherkin::items items;
     };
 
     void set_token_matched(
         token& token,
-        std::string_view matched_type,
+        rule_type matched_type,
         const token_info& ti = {}
     );
 
     const string_views& keywords(std::string_view kw) const;
 
-    std::string_view keyword_type(std::string_view keyword) const;
+    cucumber::messages::step_keyword_type
+    keyword_type(std::string_view keyword) const;
 
     void change_dialect(const std::string& dialect_name);
 

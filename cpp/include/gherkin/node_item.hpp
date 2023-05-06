@@ -23,10 +23,11 @@
 #include <cucumber/messages/tag.hpp>
 
 #include <gherkin/rule_type.hpp>
+#include <gherkin/token.hpp>
 
 namespace gherkin {
 
-using message = std::variant<
+using node_item = std::variant<
     cucumber::messages::background,
     cucumber::messages::comment,
     cucumber::messages::data_table,
@@ -43,10 +44,12 @@ using message = std::variant<
     cucumber::messages::step,
     cucumber::messages::table_cell,
     cucumber::messages::table_row,
-    cucumber::messages::tag
+    cucumber::messages::tag,
+    token,
+    tokens
 >;
 
-using messages = std::vector<message>;
-using messages_map = std::unordered_map<rule_type, messages>;
+using node_items = std::vector<node_item>;
+using node_items_map = std::unordered_map<rule_type, node_items>;
 
 }

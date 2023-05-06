@@ -24,13 +24,22 @@ public:
 private:
     using ast_node_stack = std::stack<ast_node>;
 
-    message transform_node(ast_node& node);
+    std::string next_id();
+
+    node_item transform_node(ast_node& node);
+
+    cucumber::messages::location get_location(
+        const token& token,
+        std::size_t column = 0
+    ) const;
 
     ast_node pop_node();
     ast_node& current_node();
     const ast_node& current_node() const;
 
+    std::size_t id_counter_ = 0;
     ast_node_stack stack_;
+    std::string uri_;
 };
 
 using ast_builder_ptr = std::unique_ptr<ast_builder>;

@@ -27,29 +27,52 @@ token_matcher::reset()
 
 bool
 token_matcher::match_feature_line(token& token)
-{ return match_title_line(token, "FeatureLine", keywords("feature")); }
+{
+    return
+        match_title_line(
+            token,
+            rule_type::feature_line,
+            keywords("feature")
+        );
+}
 
 bool
 token_matcher::match_rule_line(token& token)
-{ return match_title_line(token, "RuleLine", keywords("rule")); }
+{ return match_title_line(token, rule_type::rule_line, keywords("rule")); }
 
 bool
 token_matcher::match_scenario_line(token& token)
 {
+    auto rt = rule_type::scenario_line;
+
     return
-        match_title_line(token, "ScenarioLine", keywords("scenario"))
+        match_title_line(token, rt, keywords("scenario"))
         ||
-        match_title_line(token, "ScenarioLine", keywords("scenarioOutline"))
+        match_title_line(token, rt, keywords("scenarioOutline"))
         ;
 }
 
 bool
 token_matcher::match_background_line(token& token)
-{ return match_title_line(token, "BackgroundLine", keywords("background")); }
+{
+    return
+        match_title_line(
+            token,
+            rule_type::background_line,
+            keywords("background")
+        );
+}
 
 bool
 token_matcher::match_examples_line(token& token)
-{ return match_title_line(token, "ExamplesLine", keywords("examples")); }
+{
+    return
+        match_title_line(
+            token,
+            rule_type::examples_line,
+            keywords("examples")
+        );
+}
 
 bool
 token_matcher::match_table_row(token& token)
@@ -59,7 +82,7 @@ token_matcher::match_table_row(token& token)
     }
 
     set_token_matched(
-        token, "TableRow", { .items = token.line.table_cells() }
+        token, rule_type::table_row, { .items = token.line.table_cells() }
     );
 
     return true;
@@ -74,7 +97,7 @@ token_matcher::match_language(token& token)
         return false;
     }
 
-    set_token_matched(token, "Language", { .text = dialect_name });
+    set_token_matched(token, rule_type::language, { .text = dialect_name });
     change_dialect(dialect_name);
 
     return true;
@@ -88,7 +111,7 @@ token_matcher::match_tag_line(token& token)
     }
 
     set_token_matched(
-        token, "TagLine", {
+        token, rule_type::tag_line, {
             .items = std::move(token.line.tags())
         }
     );
@@ -99,7 +122,7 @@ token_matcher::match_tag_line(token& token)
 bool
 token_matcher::match_title_line(
     token& token,
-    std::string_view token_type,
+    rule_type token_type,
     string_views keywords
 )
 {
@@ -137,7 +160,7 @@ token_matcher::match_empty(token& token)
         return false;
     }
 
-    set_token_matched(token, "Empty", { .indent = 0 } );
+    set_token_matched(token, rule_type::empty, { .indent = 0 } );
 
     return true;
 }
@@ -150,7 +173,7 @@ token_matcher::match_comment(token& token)
     }
 
     set_token_matched(
-        token, "Comment", {
+        token, rule_type::comment, {
             .text = std::string(token.line.line_text())
         }
     );
@@ -164,7 +187,7 @@ token_matcher::match_other(token& token)
     std::string text = std::string(token.line.get_line_text(indent_to_remove_));
 
     set_token_matched(
-        token, "Other", {
+        token, rule_type::other, {
             .text = unescape_docstring(text),
             .indent = 0
         }
@@ -187,10 +210,10 @@ token_matcher::match_step_line(token& token)
         auto title = token.line.get_rest_trimmed(keyword.size());
 
         set_token_matched(
-            token, "StepLine", {
+            token, rule_type::step_line, {
                 .text = std::string(title),
                 .keyword = std::string(keyword),
-                .keyword_type = std::string(keyword_type(keyword))
+                .keyword_type = keyword_type(keyword)
             }
         );
 
@@ -239,7 +262,7 @@ token_matcher::match_doc_string_separator_(
     }
 
     set_token_matched(
-        token, "DocStringSeparator", {
+        token, rule_type::doc_string_separator, {
             .text = content_type,
             .keyword = std::string(separator)
         }
@@ -251,7 +274,7 @@ token_matcher::match_doc_string_separator_(
 void
 token_matcher::set_token_matched(
     token& token,
-    std::string_view matched_type,
+    rule_type matched_type,
     const token_info& ti
 )
 {
@@ -273,7 +296,7 @@ const string_views&
 token_matcher::keywords(std::string_view kw) const
 { return gherkin::keywords(dialect_name_, kw); }
 
-std::string_view
+cucumber::messages::step_keyword_type
 token_matcher::keyword_type(std::string_view keyword) const
 {
     auto it = keyword_types_.find(keyword);
@@ -286,7 +309,7 @@ token_matcher::keyword_type(std::string_view keyword) const
         }
     }
 
-    return "Unknown";
+    return cucumber::messages::step_keyword_type::UNKNOWN;
 }
 
 void
@@ -299,23 +322,33 @@ token_matcher::change_dialect(const std::string& dialect_name)
     keyword_types_.clear();
 
     for (const auto& keyword : d.given_keywords) {
-        keyword_types_[keyword].push_back("Context");
+        keyword_types_[keyword].push_back(
+            cucumber::messages::step_keyword_type::CONTEXT
+        );
     }
 
     for (const auto& keyword : d.when_keywords) {
-        keyword_types_[keyword].push_back("Action");
+        keyword_types_[keyword].push_back(
+            cucumber::messages::step_keyword_type::ACTION
+        );
     }
 
     for (const auto& keyword : d.then_keywords) {
-        keyword_types_[keyword].push_back("Outcome");
+        keyword_types_[keyword].push_back(
+            cucumber::messages::step_keyword_type::OUTCOME
+        );
     }
 
     for (const auto& keyword : d.and_keywords) {
-        keyword_types_[keyword].push_back("Conjunction");
+        keyword_types_[keyword].push_back(
+            cucumber::messages::step_keyword_type::CONJUNCTION
+        );
     }
 
     for (const auto& keyword : d.but_keywords) {
-        keyword_types_[keyword].push_back("Conjunction");
+        keyword_types_[keyword].push_back(
+            cucumber::messages::step_keyword_type::CONJUNCTION
+        );
     }
 }
 
