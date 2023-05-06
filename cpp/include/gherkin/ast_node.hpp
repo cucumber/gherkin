@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <optional>
+#include <functional>
 
 #include <gherkin/node_item.hpp>
 
@@ -24,16 +26,33 @@ public:
 
     void add(rule_type rule_type, node_item&& m);
 
-    const node_item& get_single(rule_type rule_type) const;
-    const node_items& get_items(rule_type rule_type) const;
-    const token& get_token(rule_type rule_type) const;
-    const node_items& get_tokens(rule_type rule_type) const;
+    template <typename T>
+    auto get_single(rule_type rule_type)
+    {
+        using ptr_type = std::unique_ptr<T>;
+        using ret_type = std::optional<std::reference_wrapper<T>>;
+        ret_type r;
+
+        auto it = sub_items_.find(rule_type);
+
+        if (it != sub_items_.end()) {
+            auto& items = it->second;
+
+            if (!items.empty()) {
+                auto& p = std::get<ptr_type>(items.front());
+                r = std::ref(*p);
+            }
+        }
+
+        return r;
+    }
+
+    auto get_token(rule_type rule_type)
+    { return get_single<token>(rule_type); }
 
 private:
     rule_type rule_type_;
     node_items_map sub_items_;
-    node_item empty_node_item_;
-    node_items empty_node_items_;
 };
 
 }

@@ -3,6 +3,7 @@
 #include <variant>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 #include <cucumber/messages/background.hpp>
 #include <cucumber/messages/comment.hpp>
@@ -27,26 +28,29 @@
 
 namespace gherkin {
 
+struct null_node_item {};
+
 using node_item = std::variant<
-    cucumber::messages::background,
-    cucumber::messages::comment,
-    cucumber::messages::data_table,
-    cucumber::messages::doc_string,
-    cucumber::messages::envelope,
-    cucumber::messages::examples,
-    cucumber::messages::feature,
-    cucumber::messages::feature_child,
-    cucumber::messages::gherkin_document,
-    cucumber::messages::location,
-    cucumber::messages::rule,
-    cucumber::messages::rule_child,
-    cucumber::messages::scenario,
-    cucumber::messages::step,
-    cucumber::messages::table_cell,
-    cucumber::messages::table_row,
-    cucumber::messages::tag,
-    token,
-    tokens
+    null_node_item,
+    std::unique_ptr<cucumber::messages::background>,
+    std::unique_ptr<cucumber::messages::comment>,
+    std::unique_ptr<cucumber::messages::data_table>,
+    std::unique_ptr<cucumber::messages::doc_string>,
+    std::unique_ptr<cucumber::messages::envelope>,
+    std::unique_ptr<cucumber::messages::examples>,
+    std::unique_ptr<cucumber::messages::feature>,
+    std::unique_ptr<cucumber::messages::feature_child>,
+    std::unique_ptr<cucumber::messages::gherkin_document>,
+    std::unique_ptr<cucumber::messages::location>,
+    std::unique_ptr<cucumber::messages::rule>,
+    std::unique_ptr<cucumber::messages::rule_child>,
+    std::unique_ptr<cucumber::messages::scenario>,
+    std::unique_ptr<cucumber::messages::step>,
+    std::unique_ptr<cucumber::messages::table_cell>,
+    std::unique_ptr<cucumber::messages::table_row>,
+    std::unique_ptr<cucumber::messages::tag>,
+    std::unique_ptr<token>,
+    std::unique_ptr<tokens>
 >;
 
 using node_items = std::vector<node_item>;

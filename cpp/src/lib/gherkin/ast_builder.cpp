@@ -40,9 +40,11 @@ node_item
 ast_builder::transform_node(ast_node& node)
 {
     if (node.is(rule_type::step)) {
-        const auto& step_line = node.get_token(rule_type::step_line);
-        const auto& data_table = node.get_single(rule_type::data_table);
-        const auto& doc_string = node.get_single(rule_type::doc_string);
+        auto step_line = node.get_token(rule_type::step_line);
+        auto data_table = node.get_single<cucumber::messages::data_table>(
+            rule_type::data_table
+        );
+        //auto doc_string = node.get_single(rule_type::doc_string);
 
         cucumber::messages::step s{
             .location = get_location(step_line),
