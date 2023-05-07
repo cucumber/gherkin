@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <type_traits>
 
 #include <cucumber/messages/background.hpp>
 #include <cucumber/messages/comment.hpp>
@@ -55,5 +56,15 @@ using node_item = std::variant<
 
 using node_items = std::vector<node_item>;
 using node_items_map = std::unordered_map<rule_type, node_items>;
+
+template <typename T>
+node_item
+make_node_item(T&& v)
+{
+    using type = std::remove_reference_t<decltype(v)>;
+    auto p = std::make_unique<type>(std::move(v));
+
+    return node_item(std::move(p));
+}
 
 }

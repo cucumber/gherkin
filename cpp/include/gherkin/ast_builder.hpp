@@ -2,12 +2,17 @@
 
 #include <memory>
 #include <stack>
+#include <vector>
 
 #include <gherkin/token.hpp>
 #include <gherkin/rule_type.hpp>
 #include <gherkin/ast_node.hpp>
 
 namespace gherkin {
+
+namespace cms = cucumber::messages;
+using table_rows = std::vector<cms::table_row>;
+using table_cells = std::vector<cms::table_cell>;
 
 class ast_builder
 {
@@ -28,10 +33,13 @@ private:
 
     node_item transform_node(ast_node& node);
 
-    cucumber::messages::location get_location(
+    cms::location get_location(
         const token& token,
         std::size_t column = 0
     ) const;
+
+    table_rows get_table_rows(ast_node& node);
+    table_cells get_table_cells(const token& token);
 
     ast_node pop_node();
     ast_node& current_node();

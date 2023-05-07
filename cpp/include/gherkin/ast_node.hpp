@@ -24,14 +24,22 @@ public:
 
     rule_type type() const;
 
-    void add(rule_type rule_type, node_item&& m);
+    void add(rule_type rule_type, node_item&& n);
+
+    template <typename T>
+    void add(rule_type rule_type, T&& v)
+    {
+        auto n = make_node_item(std::move(v));
+
+        add(n);
+    }
 
     template <typename T>
     auto get_single(rule_type rule_type)
     {
-        using ptr_type = std::unique_ptr<T>;
-        using ret_type = std::optional<std::reference_wrapper<T>>;
-        ret_type r;
+        using type = std::remove_reference_t<T>;
+        using ptr_type = std::unique_ptr<type>;
+        type* ret = nullptr;
 
         auto it = sub_items_.find(rule_type);
 
@@ -40,15 +48,33 @@ public:
 
             if (!items.empty()) {
                 auto& p = std::get<ptr_type>(items.front());
-                r = std::ref(*p);
+                ret = p.get();
             }
         }
 
-        return r;
+        return ret;
     }
 
-    auto get_token(rule_type rule_type)
-    { return get_single<token>(rule_type); }
+    token& get_token(rule_type rule_type)
+    { return *get_single<token>(rule_type); }
+
+    tokens& get_tokens(rule_type rule_type)
+    { return *get_single<tokens>(rule_type); }
+
+    token& get_first_token(rule_type rule_type)
+    { return get_tokens(rule_type).front(); }
+
+    template <typename T>
+    void set_from_single(rule_type rule_type, T&& v)
+    {
+        using type = std::remove_reference_t<decltype(v)>;
+
+        auto p = get_single<type>(rule_type);
+
+        if (p) {
+            v = *p;
+        }
+    }
 
 private:
     rule_type rule_type_;
