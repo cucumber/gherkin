@@ -1,12 +1,63 @@
 #pragma once
 
+#include <variant>
+#include <vector>
+#include <string>
+#include <unordered_map>
 #include <memory>
-#include <optional>
-#include <functional>
+#include <type_traits>
 
-#include <gherkin/node_item.hpp>
+#include <cucumber/messages/background.hpp>
+#include <cucumber/messages/comment.hpp>
+#include <cucumber/messages/data_table.hpp>
+#include <cucumber/messages/doc_string.hpp>
+#include <cucumber/messages/envelope.hpp>
+#include <cucumber/messages/examples.hpp>
+#include <cucumber/messages/feature.hpp>
+#include <cucumber/messages/feature_child.hpp>
+#include <cucumber/messages/gherkin_document.hpp>
+#include <cucumber/messages/location.hpp>
+#include <cucumber/messages/rule.hpp>
+#include <cucumber/messages/rule_child.hpp>
+#include <cucumber/messages/scenario.hpp>
+#include <cucumber/messages/step.hpp>
+#include <cucumber/messages/table_cell.hpp>
+#include <cucumber/messages/table_row.hpp>
+#include <cucumber/messages/tag.hpp>
+
+#include <gherkin/rule_type.hpp>
+#include <gherkin/token.hpp>
 
 namespace gherkin {
+
+class ast_node;
+
+using ast_nodes = std::vector<ast_node>;
+
+using ast_node_data = std::variant<
+    ast_nodes,
+    std::vector<cucumber::messages::background>,
+    std::vector<cucumber::messages::comment>,
+    std::vector<cucumber::messages::data_table>,
+    std::vector<cucumber::messages::doc_string>,
+    std::vector<cucumber::messages::envelope>,
+    std::vector<cucumber::messages::examples>,
+    std::vector<cucumber::messages::feature>,
+    std::vector<cucumber::messages::feature_child>,
+    std::vector<cucumber::messages::gherkin_document>,
+    std::vector<cucumber::messages::location>,
+    std::vector<cucumber::messages::rule>,
+    std::vector<cucumber::messages::rule_child>,
+    std::vector<cucumber::messages::scenario>,
+    std::vector<cucumber::messages::step>,
+    std::vector<cucumber::messages::table_cell>,
+    std::vector<cucumber::messages::table_row>,
+    std::vector<cucumber::messages::tag>,
+    strings,
+    tokens
+>;
+
+using ast_node_items = std::unordered_map<rule_type, ast_node_data>;
 
 class ast_node
 {
@@ -24,61 +75,64 @@ public:
 
     rule_type type() const;
 
-    void add(rule_type rule_type, node_item&& n);
-
     template <typename T>
     void add(rule_type rule_type, T&& v)
     {
-        auto n = make_node_item(std::move(v));
-
-        add(n);
     }
 
-    template <typename T>
-    auto get_single(rule_type rule_type)
+    tokens& get_tokens(rule_type rule_type)
+    { return std::get<tokens>(sub_items_[rule_type]); }
+
+    token& get_token(rule_type rule_type)
+    { return get_tokens(rule_type).front(); }
+
+    template <typename T, typename Callable>
+    void visit(rule_type rule_type, Callable cb)
     {
         using type = std::remove_reference_t<T>;
-        using ptr_type = std::unique_ptr<type>;
-        type* ret = nullptr;
+        using vtype = std::vector<type>;
 
         auto it = sub_items_.find(rule_type);
 
-        if (it != sub_items_.end()) {
-            auto& items = it->second;
-
-            if (!items.empty()) {
-                auto& p = std::get<ptr_type>(items.front());
-                ret = p.get();
-            }
+        if (it == sub_items_.end()) {
+            return;
         }
 
-        return ret;
+        auto& items = std::get<vtype>(it->second);
+
+        if (!items.empty()) {
+            cb(items);
+        }
     }
-
-    token& get_token(rule_type rule_type)
-    { return *get_single<token>(rule_type); }
-
-    tokens& get_tokens(rule_type rule_type)
-    { return *get_single<tokens>(rule_type); }
-
-    token& get_first_token(rule_type rule_type)
-    { return get_tokens(rule_type).front(); }
 
     template <typename T>
     void set_from_single(rule_type rule_type, T&& v)
     {
-        using type = std::remove_reference_t<decltype(v)>;
+        visit<T>(
+            rule_type,
+            [&](auto& items) {
+                v = items.front();
+            }
+        );
+    }
 
-        auto p = get_single<type>(rule_type);
-
-        if (p) {
-            v = *p;
-        }
+    template <typename T>
+    void set_from_items(rule_type rule_type, std::vector<T>& vs)
+    {
+        visit<T>(
+            rule_type,
+            [&](auto& items) {
+                std::copy(
+                    items.begin(), items.end(),
+                    std::back_inserter(vs)
+                );
+            }
+        );
     }
 
 private:
     rule_type rule_type_;
-    node_items_map sub_items_;
+    ast_node_items sub_items_;
 };
 
 }

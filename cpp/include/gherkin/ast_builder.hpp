@@ -11,6 +11,7 @@
 namespace gherkin {
 
 namespace cms = cucumber::messages;
+
 using table_rows = std::vector<cms::table_row>;
 using table_cells = std::vector<cms::table_cell>;
 
@@ -31,7 +32,19 @@ private:
 
     std::string next_id();
 
-    node_item transform_node(ast_node& node);
+    ast_node transform_node(ast_node& node);
+
+    cms::step make_step(ast_node& node);
+    cms::doc_string make_doc_string(ast_node& node);
+    cms::data_table make_data_table(ast_node& node);
+    cms::background make_background(ast_node& node);
+    cms::scenario make_scenario_definition(ast_node& node);
+    cms::examples make_examples_definition(ast_node& node);
+    table_rows make_examples_table(ast_node& node);
+    std::string make_description(ast_node& node);
+    cms::feature make_feature(ast_node& node);
+    cms::rule make_rule(ast_node& node);
+    cms::gherkin_document make_gherkin_document(ast_node& node);
 
     cms::location get_location(
         const token& token,

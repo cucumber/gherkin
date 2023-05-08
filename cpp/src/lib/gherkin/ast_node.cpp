@@ -31,8 +31,4 @@ rule_type
 ast_node::type() const
 { return rule_type_; }
 
-void
-ast_node::add(rule_type rt, node_item&& n)
-{ sub_items_[rt].emplace_back(std::move(n)); }
-
 }
