@@ -14,6 +14,8 @@ namespace cms = cucumber::messages;
 
 using table_rows = std::vector<cms::table_row>;
 using table_cells = std::vector<cms::table_cell>;
+using tags = std::vector<cms::tag>;
+using comments = std::vector<cms::comment>;
 
 class ast_builder
 {
@@ -53,6 +55,7 @@ private:
 
     table_rows get_table_rows(ast_node& node);
     table_cells get_table_cells(const token& token);
+    tags get_tags(ast_node& node);
 
     ast_node pop_node();
     ast_node& current_node();
@@ -61,6 +64,7 @@ private:
     std::size_t id_counter_ = 0;
     ast_node_stack stack_;
     std::string uri_;
+    comments comments_;
 };
 
 using ast_builder_ptr = std::unique_ptr<ast_builder>;

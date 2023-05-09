@@ -80,14 +80,27 @@ public:
     {
     }
 
-    tokens& get_tokens(rule_type rule_type)
-    { return std::get<tokens>(sub_items_[rule_type]); }
+    template <typename T>
+    auto& get_items(rule_type rule_type)
+    {
+        using type = std::remove_reference_t<T>;
+        using vtype = std::vector<type>;
 
-    token& get_token(rule_type rule_type)
-    { return get_tokens(rule_type).front(); }
+        return std::get<vtype>(sub_items_[rule_type]);
+    }
+
+    template <typename T>
+    auto& get_single(rule_type rule_type)
+    { return get_items<T>(rule_type).front(); }
+
+    auto& get_tokens(rule_type rule_type)
+    { return get_items<token>(rule_type); }
+
+    auto& get_token(rule_type rule_type)
+    { return get_single<token>(rule_type); }
 
     template <typename T, typename Callable>
-    void visit(rule_type rule_type, Callable cb)
+    void visit_items(rule_type rule_type, Callable cb)
     {
         using type = std::remove_reference_t<T>;
         using vtype = std::vector<type>;
@@ -105,21 +118,27 @@ public:
         }
     }
 
-    template <typename T>
-    void set_from_single(rule_type rule_type, T&& v)
+    template <typename T, typename Callable>
+    void visit_item(rule_type rule_type, Callable cb)
     {
-        visit<T>(
+        visit_items<T>(
             rule_type,
-            [&](auto& items) {
-                v = items.front();
+            [&cb](auto& items) {
+                if (!items.empty()) {
+                    cb(items.front());
+                }
             }
         );
     }
 
     template <typename T>
+    void set_from_single(rule_type rule_type, T&& v)
+    { visit_item<T>(rule_type, [&](auto& item) { v = item; } ); }
+
+    template <typename T>
     void set_from_items(rule_type rule_type, std::vector<T>& vs)
     {
-        visit<T>(
+        visit_items<T>(
             rule_type,
             [&](auto& items) {
                 std::copy(
