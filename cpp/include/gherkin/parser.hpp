@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <gherkin/ast_builder.hpp>
 #include <gherkin/token_scanner.hpp>
 #include <gherkin/token_matcher.hpp>
@@ -15,10 +17,12 @@ struct parser_info
 class parser
 {
 public:
-    parser(const parser_info& pi);
+    parser(const parser_info& pi = {});
     virtual ~parser();
 
-    std::size_t parse(const file& file);
+    const cms::gherkin_document& parse(const file& file);
+
+    const cms::gherkin_document& get_result() const;
 
 private:
     parser_info pi_;

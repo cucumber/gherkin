@@ -11,5 +11,11 @@ struct options
 
 int main(int ac, char** av)
 {
+    gherkin::parser p;
+
+    const auto& d = p.parse(gherkin::file{ av[1] });
+
+    std::cout << d.to_json() << std::endl;
+
     return 0;
 }

@@ -29,12 +29,14 @@ public:
     void end_rule(rule_type rule_type);
     void build(token& token);
 
+    const cms::gherkin_document& get_result() const;
+
 private:
     using ast_node_stack = std::stack<ast_node>;
 
     std::string next_id();
 
-    ast_node transform_node(ast_node& node);
+    void transform_node(ast_node& from, ast_node& to);
 
     cms::step make_step(ast_node& node);
     cms::doc_string make_doc_string(ast_node& node);

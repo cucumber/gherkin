@@ -5,13 +5,14 @@
 
 namespace gherkin {
 
-token_scanner::token_scanner(const std::string& text)
-: ip_{std::make_unique<std::istringstream>(text)}
+token_scanner::token_scanner()
 {}
 
+token_scanner::token_scanner(const std::string& text)
+{ reset(text); }
+
 token_scanner::token_scanner(const file& file)
-: ip_{std::make_unique<std::ifstream>(file.path)}
-{}
+{ reset(file); }
 
 token_scanner::~token_scanner()
 {}
@@ -24,6 +25,7 @@ token_scanner::read()
     line_++;
 
     return token{
+        .eof = r.eof,
         .line = gherkin::line(r.text, line_),
         .location = line_
     };
@@ -35,21 +37,35 @@ token_scanner::reset()
     line_ = 0;
 }
 
+void
+token_scanner::reset(const std::string& text)
+{
+    reset();
+    ip_ = std::make_unique<std::istringstream>(text);
+}
+
+void
+token_scanner::reset(const file& file)
+{
+    reset();
+    ip_ = std::make_unique<std::ifstream>(file.path);
+}
+
+
 next_line_result
 token_scanner::next_line()
 {
     next_line_result r;
 
-    if (ip_) {
+    if (!ip_) {
         return r;
     }
 
-    input() >> r.text;
-    line_++;
+    std::getline(input(), r.text);
 
-    r.has_line = !r.text.empty();
+    r.eof = input().eof();
 
-    if (!r.has_line) {
+    if (r.eof) {
         ip_.reset();
     }
 

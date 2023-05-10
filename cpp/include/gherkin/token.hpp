@@ -16,6 +16,7 @@ namespace gherkin {
 
 struct token
 {
+    bool eof = false;
     gherkin::line line;
     rule_type matched_type;
     std::string matched_keyword;

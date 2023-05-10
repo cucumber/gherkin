@@ -151,7 +151,15 @@ token_matcher::match_title_line(
 
 bool
 token_matcher::match_e_o_f(token& token)
-{ return true; }
+{
+    if (!token.eof) {
+        return false;
+    }
+
+    set_token_matched(token, rule_type::e_o_f);
+
+    return true;
+}
 
 bool
 token_matcher::match_empty(token& token)

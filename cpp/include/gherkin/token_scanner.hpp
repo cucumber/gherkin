@@ -11,7 +11,7 @@ namespace gherkin {
 
 struct next_line_result
 {
-    bool has_line = false;
+    bool eof = true;
     std::string text;
 };
 
@@ -25,6 +25,8 @@ public:
     virtual ~token_scanner();
 
     void reset();
+    void reset(const std::string& text);
+    void reset(const file& file);
 
     token read();
 

@@ -31,7 +31,7 @@ target_include_directories(
 
 target_link_libraries(
     gherkin-cpp
-    PRIVATE
+    PUBLIC
         cucumber::cucumber-messages
 )
 

@@ -4,7 +4,7 @@ namespace gherkin {
 
 bool
 token::is_eof() const
-{ return line.is_empty(); }
+{ return eof; }
 
 void
 token::detach()

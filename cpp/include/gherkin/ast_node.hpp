@@ -62,7 +62,7 @@ using ast_node_items = std::unordered_map<rule_type, ast_node_data>;
 class ast_node
 {
 public:
-    ast_node(rule_type rule_type);
+    ast_node(rule_type rule_type = rule_type::none);
     ast_node(const ast_node& other) = delete;
     ast_node(ast_node&& other);
 
@@ -76,8 +76,34 @@ public:
     rule_type type() const;
 
     template <typename T>
+    void add(rule_type rule_type, std::vector<T>&& vs)
+    {
+        using type = std::remove_reference_t<T>;
+        using vtype = std::vector<type>;
+
+        auto& data = sub_items_[rule_type];
+
+        if (!std::holds_alternative<vtype>(data)) {
+            data = vs;
+        } else {
+            auto& vdata = std::get<vtype>(data);
+            vdata.insert(vdata.end(), vs.begin(), vs.end());
+        }
+    }
+
+    template <typename T>
     void add(rule_type rule_type, T&& v)
     {
+        using type = std::remove_reference_t<T>;
+        using vtype = std::vector<type>;
+
+        auto& data = sub_items_[rule_type];
+
+        if (!std::holds_alternative<vtype>(data)) {
+            data = vtype{};
+        }
+
+        std::get<vtype>(data).emplace_back(std::move(v));
     }
 
     template <typename T>
@@ -90,7 +116,20 @@ public:
     }
 
     template <typename T>
+    auto& get_items(rule_type rule_type) const
+    {
+        using type = std::remove_reference_t<T>;
+        using vtype = std::vector<type>;
+
+        return std::get<vtype>(sub_items_.at(rule_type));
+    }
+
+    template <typename T>
     auto& get_single(rule_type rule_type)
+    { return get_items<T>(rule_type).front(); }
+
+    template <typename T>
+    auto& get_single(rule_type rule_type) const
     { return get_items<T>(rule_type).front(); }
 
     auto& get_tokens(rule_type rule_type)

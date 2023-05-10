@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <cucumber/messages/step.hpp>
 
 #include <gherkin/ast_builder.hpp>
@@ -6,14 +8,19 @@
 namespace gherkin {
 
 ast_builder::ast_builder()
-{}
+{
+    reset();
+}
 
 ast_builder::~ast_builder()
 {}
 
 void
 ast_builder::reset()
-{}
+{
+    stack_ = {};
+    stack_.emplace(rule_type::none);
+}
 
 void
 ast_builder::start_rule(rule_type rule_type)
@@ -24,47 +31,64 @@ ast_builder::end_rule(rule_type rule_type)
 {
     auto n = pop_node();
     auto rt = n.type();
-    auto p = transform_node(n);
 
-    current_node().add(rt, std::move(p));
+    transform_node(n, current_node());
 }
 
 void
-build(token& token)
-{}
+ast_builder::build(token& token)
+{
+    if (token.matched_type == rule_type::comment) {
+        cms::comment c{
+            .location = get_location(token),
+            .text = token.matched_text
+        };
+
+        comments_.emplace_back(std::move(c));
+    } else {
+        current_node().add(token.matched_type, std::move(token));
+    }
+}
+
+const cms::gherkin_document&
+ast_builder::get_result() const
+{
+    return
+        current_node().get_single<cms::gherkin_document>(
+            rule_type::gherkin_document
+        );
+};
 
 std::string
 ast_builder::next_id()
 { return std::to_string(id_counter_++); }
 
-ast_node
-ast_builder::transform_node(ast_node& node)
+void
+ast_builder::transform_node(ast_node& from, ast_node& to)
 {
-    if (node.is(rule_type::step)) {
-        make_step(node);
-    } else if (node.is(rule_type::doc_string)) {
-        make_doc_string(node);
-    } else if (node.is(rule_type::data_table)) {
-        make_data_table(node);
-    } else if (node.is(rule_type::background)) {
-        make_background(node);
-    } else if (node.is(rule_type::scenario_definition)) {
-        make_scenario_definition(node);
-    } else if (node.is(rule_type::examples_definition)) {
-        make_examples_definition(node);
-    } else if (node.is(rule_type::examples_table)) {
-        make_examples_table(node);
-    } else if (node.is(rule_type::description)) {
-        make_description(node);
-    } else if (node.is(rule_type::feature)) {
-        make_feature(node);
-    } else if (node.is(rule_type::rule)) {
-        make_rule(node);
-    } else if (node.is(rule_type::gherkin_document)) {
-        make_gherkin_document(node);
+    if (from.is(rule_type::step)) {
+        to.add(from.type(), make_step(from));
+    } else if (from.is(rule_type::doc_string)) {
+        to.add(from.type(), make_doc_string(from));
+    } else if (from.is(rule_type::data_table)) {
+        to.add(from.type(), make_data_table(from));
+    } else if (from.is(rule_type::background)) {
+        to.add(from.type(), make_background(from));
+    } else if (from.is(rule_type::scenario_definition)) {
+        to.add(from.type(), make_scenario_definition(from));
+    } else if (from.is(rule_type::examples_definition)) {
+        to.add(from.type(), make_examples_definition(from));
+    } else if (from.is(rule_type::examples_table)) {
+        to.add(from.type(), make_examples_table(from));
+    } else if (from.is(rule_type::description)) {
+        to.add(from.type(), make_description(from));
+    } else if (from.is(rule_type::feature)) {
+        to.add(from.type(), make_feature(from));
+    } else if (from.is(rule_type::rule)) {
+        to.add(from.type(), make_rule(from));
+    } else if (from.is(rule_type::gherkin_document)) {
+        to.add(from.type(), make_gherkin_document(from));
     }
-
-    return ast_node(rule_type::none);
 }
 
 cms::step
@@ -228,13 +252,12 @@ ast_builder::make_rule(ast_node& node)
 cms::gherkin_document
 ast_builder::make_gherkin_document(ast_node& node)
 {
-    auto& feature = node.get_single<cms::feature>(rule_type::feature);
-
     cms::gherkin_document gd{
         .uri = uri_,
-        .feature = feature,
         .comments = comments_
     };
+
+    node.set_from_single(rule_type::feature, gd.feature);
 
     return gd;
 }

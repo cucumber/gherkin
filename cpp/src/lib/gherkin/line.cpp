@@ -20,25 +20,30 @@ line::line()
 line::line(const std::string& line_text, std::size_t line_number)
 : line_text_(line_text),
 line_number_(line_number),
-trimmed_line_text_(lstrip(line_text_)),
-indent_(line_text_.size() - trimmed_line_text_.size())
-{}
+trimmed_line_text_(lstrip(line_text_))
+{
+    indent_ = line_text_.size() - trimmed_line_text_.size();
+}
 
 std::string_view
 line::get_rest_trimmed(std::size_t length) const
 {
     auto pos = std::min(length, trimmed_line_text_.size());
+    std::string_view sv = trimmed_line_text_;
 
-    return strip(trimmed_line_text_.substr(pos));
+    return strip(sv.substr(pos));
 }
 
 std::string_view
 line::get_line_text(std::size_t indent_to_remove) const
 {
+    std::string_view sv;
+
     if (indent_to_remove == std::string::npos || indent_to_remove > indent_) {
         return trimmed_line_text_;
     } else {
-        return line_text_.substr(indent_to_remove);
+        sv = line_text_;
+        return sv.substr(indent_to_remove);
     }
 }
 

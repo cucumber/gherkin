@@ -5,7 +5,7 @@ namespace gherkin {
 const keywords_map&
 keywords(const std::string_view& language)
 {
-    const keywords_maps kwms = {
+    static const keywords_maps kwms = {
     {
         "af",
         {

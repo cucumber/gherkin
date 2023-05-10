@@ -110,7 +110,10 @@ parser::parser(const parser_info& pi)
 : pi_{pi}
 {}
 
-std::size_t
+parser::~parser()
+{}
+
+const cms::gherkin_document&
 parser::parse(const file& file)
 {
     builder_.reset();
@@ -142,8 +145,12 @@ parser::parse(const file& file)
         // TODO: thow coumpound error
     }
 
-    return 0;
+    return get_result();
 }
+
+const cms::gherkin_document&
+parser::get_result() const
+{ return builder_.get_result(); }
 
 static
 void
