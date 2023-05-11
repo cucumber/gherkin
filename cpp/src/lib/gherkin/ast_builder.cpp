@@ -53,10 +53,11 @@ ast_builder::build(token& token)
 const cms::gherkin_document&
 ast_builder::get_result() const
 {
-    return
-        current_node().get_single<cms::gherkin_document>(
-            rule_type::gherkin_document
-        );
+    auto dp = current_node().get_single<cms::gherkin_document>(
+        rule_type::gherkin_document
+    );
+
+    return dp ? *dp : doc_;
 };
 
 std::string
@@ -94,41 +95,52 @@ ast_builder::transform_node(ast_node& from, ast_node& to)
 cms::step
 ast_builder::make_step(ast_node& node)
 {
-    auto& step_line = node.get_token(rule_type::step_line);
+    cms::step m;
 
-    cms::step s{
-        .location = get_location(step_line),
-        .keyword = step_line.matched_keyword,
-        .keyword_type = step_line.matched_keyword_type,
-        .text = step_line.matched_text,
-        .id = next_id()
-    };
+    node.visit_token(
+        rule_type::step_line,
+        [&](auto& step_line) {
+            m.location = get_location(step_line);
+            m.keyword = step_line.matched_keyword;
+            m.keyword_type = step_line.matched_keyword_type;
+            m.text = step_line.matched_text;
+            m.id = next_id();
+        }
+    );
 
-    node.set_from_single(rule_type::doc_string, s.doc_string);
-    node.set_from_single(rule_type::data_table, s.data_table);
+    node.set(rule_type::doc_string, m.doc_string);
+    node.set(rule_type::data_table, m.data_table);
 
-    return s;
+    return m;
 }
 
 cms::doc_string
 ast_builder::make_doc_string(ast_node& node)
 {
-    auto& separator_token = node.get_token(rule_type::doc_string_separator);
+    cms::doc_string m;
 
-    string_views svs;
+    node.visit_token(
+        rule_type::doc_string_separator,
+        [&](auto& separator_token) {
+            string_views svs;
 
-    for (const auto& t : node.get_tokens(rule_type::other)) {
-        svs.push_back(t.matched_text);
-    }
+            node.visit_tokens(
+                rule_type::other,
+                [&](auto& line_tokens) {
+                    for (const auto& t : line_tokens) {
+                        svs.push_back(t.matched_text);
+                    }
+                }
+            );
 
-    cms::doc_string ds{
-        .location = get_location(separator_token),
-        .media_type = separator_token.matched_text,
-        .content = join("\n", svs),
-        .delimiter = separator_token.matched_keyword
-    };
+            m.location = get_location(separator_token);
+            m.media_type = separator_token.matched_text;
+            m.content = join("\n", svs);
+            m.delimiter = separator_token.matched_keyword;
+        }
+    );
 
-    return ds;
+    return m;
 }
 
 cms::data_table
@@ -136,70 +148,106 @@ ast_builder::make_data_table(ast_node& node)
 {
     auto rows = get_table_rows(node);
 
-    cms::data_table dt{
-        .location = rows.front().location,
+    cms::data_table m{
         .rows = std::move(rows)
     };
 
-    return dt;
+    if (!m.rows.empty()) {
+        m.location = rows.front().location;
+    }
+
+    return m;
 }
 
 cms::background
 ast_builder::make_background(ast_node& node)
 {
-    auto& background_line = node.get_token(rule_type::background_line);
+    cms::background m;
 
-    cms::background b{
-        .location = get_location(background_line),
-        .keyword = background_line.matched_keyword,
-        .name = background_line.matched_text,
-        .id = next_id()
-    };
+    node.visit_token(
+        rule_type::background_line,
+        [&](auto& background_line) {
+            m.location = get_location(background_line);
+            m.keyword = background_line.matched_keyword;
+            m.name = background_line.matched_text;
+            m.id = next_id();
+        }
+    );
 
-    node.set_from_single(rule_type::description, b.description);
-    node.set_from_items(rule_type::step, b.steps);
+    node.set(rule_type::description, m.description);
+    node.set(rule_type::step, m.steps);
 
-    return b;
+    return m;
 }
 
 cms::scenario
 ast_builder::make_scenario_definition(ast_node& node)
 {
-    auto& scenario_node = node.get_single<ast_node>(rule_type::scenario);
-    auto& scenario_line = scenario_node.get_token(rule_type::scenario_line);
+    cms::scenario m;
 
-    cms::scenario s{
-        .location = get_location(scenario_line),
-        .tags = get_tags(node),
-        .keyword = scenario_line.matched_keyword,
-        .name = scenario_line.matched_text,
-        .id = next_id()
-    };
+    node.visit_item<ast_node>(
+        rule_type::scenario,
+        [&](auto& scenario_node) {
+            scenario_node.visit_token(
+                rule_type::scenario_line,
+                [&](auto& scenario_line) {
+                    m.location = get_location(scenario_line);
+                    m.tags = get_tags(node);
+                    m.keyword = scenario_line.matched_keyword;
+                    m.name = scenario_line.matched_text;
+                    m.id = next_id();
+                }
+            );
 
-    scenario_node.set_from_single(rule_type::description, s.description);
-    scenario_node.set_from_items(rule_type::step, s.steps);
-    scenario_node.set_from_items(rule_type::examples_definition, s.examples);
+            scenario_node.set(rule_type::description, m.description);
+            scenario_node.set(rule_type::step, m.steps);
+            scenario_node.set(rule_type::examples_definition, m.examples);
+        }
+    );
 
-    return s;
+    return m;
 }
 
 cms::examples
 ast_builder::make_examples_definition(ast_node& node)
 {
-    auto& examples_node = node.get_single<ast_node>(rule_type::examples);
-    auto& examples_line = examples_node.get_token(rule_type::examples_line);
+    cms::examples m;
 
-    cms::examples es{
-        .location = get_location(examples_line),
-        .tags = get_tags(node),
-        .keyword = examples_line.matched_keyword,
-        .name = examples_line.matched_text,
-        .id = next_id()
-    };
+    node.visit_item<ast_node>(
+        rule_type::examples,
+        [&](auto& examples_node) {
+            examples_node.visit_token(
+                rule_type::examples_line,
+                [&](auto& examples_line) {
+                    m.location = get_location(examples_line);
+                    m.tags = get_tags(node);
+                    m.keyword = examples_line.matched_keyword;
+                    m.name = examples_line.matched_text;
+                    m.id = next_id();
+                }
+            );
 
-    examples_node.set_from_single(rule_type::description, es.description);
+            examples_node.set(rule_type::description, m.description);
 
-    return es;
+            examples_node.template visit_items<cms::table_row>(
+                rule_type::examples_table,
+                [&](auto& rows) {
+                    if (rows.size() > 0) {
+                        m.table_header = rows.front();
+                    }
+
+                    if (rows.size() > 1) {
+                        std::copy(
+                            rows.begin() + 1, rows.end(),
+                            std::back_inserter(m.table_body)
+                        );
+                    }
+                }
+            );
+        }
+    );
+
+    return m;
 }
 
 table_rows
@@ -215,38 +263,93 @@ ast_builder::make_description(ast_node& node)
 cms::feature
 ast_builder::make_feature(ast_node& node)
 {
-    auto& header = node.get_single<ast_node>(rule_type::feature_header);
-    auto& feature_line = header.get_token(rule_type::feature_line);
+    cms::feature m;
 
-    cms::feature f{
-        .location = get_location(feature_line),
-        .tags = get_tags(header),
-        .keyword = feature_line.matched_keyword,
-        .name = feature_line.matched_text
-    };
+    node.visit_item<ast_node>(
+        rule_type::feature_header,
+        [&](auto& header) {
+            header.visit_token(
+                rule_type::feature_line,
+                [&](auto& feature_line) {
+                    m.location = get_location(feature_line);
+                    m.tags = get_tags(header);
+                    m.keyword = feature_line.matched_keyword;
+                    m.name = feature_line.matched_text;
+                }
+            );
 
-    header.set_from_single(rule_type::description, f.description);
+            header.set(rule_type::description, m.description);
+        }
+    );
 
-    return f;
+    node.visit_item<cms::background>(
+        rule_type::background,
+        [&](auto& item) {
+            m.children.emplace_back(cms::feature_child{.background = item});
+        }
+    );
+
+    node.visit_items<cms::scenario>(
+        rule_type::scenario_definition,
+        [&](auto& items) {
+            for (auto& item : items) {
+                m.children.emplace_back(cms::feature_child{.scenario = item});
+            }
+        }
+    );
+
+    node.visit_items<cms::rule>(
+        rule_type::rule,
+        [&](auto& items) {
+            for (auto& item : items) {
+                m.children.emplace_back(cms::feature_child{.rule = item});
+            }
+        }
+    );
+
+    return m;
 }
 
 cms::rule
 ast_builder::make_rule(ast_node& node)
 {
-    auto& header = node.get_single<ast_node>(rule_type::rule_header);
-    auto& rule_line = header.get_token(rule_type::rule_line);
+    cms::rule m;
 
-    cms::rule r{
-        .location = get_location(rule_line),
-        .tags = get_tags(header),
-        .keyword = rule_line.matched_keyword,
-        .name = rule_line.matched_text,
-        .id = next_id()
-    };
+    node.visit_item<ast_node>(
+        rule_type::rule_header,
+        [&](auto& header) {
+            header.visit_token(
+                rule_type::rule_line,
+                [&](auto& rule_line) {
+                    m.location = get_location(rule_line);
+                    m.tags = get_tags(header);
+                    m.keyword = rule_line.matched_keyword;
+                    m.name = rule_line.matched_text;
+                    m.id = next_id();
+                }
+            );
 
-    header.set_from_single(rule_type::description, r.description);
+            header.set(rule_type::description, m.description);
+        }
+    );
 
-    return r;
+    node.visit_item<cms::background>(
+        rule_type::background,
+        [&](auto& item) {
+            m.children.emplace_back(cms::rule_child{.background = item});
+        }
+    );
+
+    node.visit_items<cms::scenario>(
+        rule_type::scenario_definition,
+        [&](auto& items) {
+            for (auto& item : items) {
+                m.children.emplace_back(cms::rule_child{.scenario = item});
+            }
+        }
+    );
+
+    return m;
 }
 
 cms::gherkin_document
@@ -257,7 +360,7 @@ ast_builder::make_gherkin_document(ast_node& node)
         .comments = comments_
     };
 
-    node.set_from_single(rule_type::feature, gd.feature);
+    node.set(rule_type::feature, gd.feature);
 
     return gd;
 }
@@ -272,19 +375,23 @@ ast_builder::get_location(
 }
 
 table_rows
-ast_builder::get_table_rows(ast_node& node)
+ast_builder::get_table_rows(const ast_node& node)
 {
     table_rows rows;
 
-    for (const auto& t : node.get_tokens(rule_type::table_row)) {
-        cms::table_row row{
-            .location = get_location(t),
-            .cells = get_table_cells(t),
-            .id = next_id()
-        };
+    node.visit_tokens(
+        rule_type::table_row,
+        [&](auto& tokens) {
+            for (const auto& t : tokens) {
+                rows.emplace_back(cms::table_row{
+                    .location = get_location(t),
+                    .cells = get_table_cells(t),
+                    .id = next_id()
+                });
 
-        rows.emplace_back(std::move(row));
-    }
+            }
+        }
+    );
 
     return rows;
 }
@@ -295,38 +402,39 @@ ast_builder::get_table_cells(const token& token)
     table_cells cells;
 
     for (const auto& i : token.matched_items) {
-        cms::table_cell cell{
+        cells.emplace_back(cms::table_cell{
             .location = get_location(token, i.column),
             .value = i.text
-        };
-
-        cells.emplace_back(std::move(cell));
+        });
     }
 
     return cells;
 }
 
 tags
-ast_builder::get_tags(ast_node& node)
+ast_builder::get_tags(const ast_node& node)
 {
     tags ts;
 
     node.visit_item<ast_node>(
         rule_type::tags,
         [&](auto& tags_node) {
-            auto& tokens = tags_node.get_tokens(rule_type::tag_line);
+            tags_node.visit_tokens(
+                rule_type::tag_line,
+                [&](auto& tokens) {
+                    for (auto& token : tokens) {
+                        for (auto& tag_item : token.matched_items) {
+                            cms::tag t{
+                                .location = get_location(token, tag_item.column),
+                                .name = tag_item.text,
+                                .id = next_id()
+                            };
 
-            for (auto& token : tokens) {
-                for (auto& tag_item : token.matched_items) {
-                    cms::tag t{
-                        .location = get_location(token, tag_item.column),
-                        .name = tag_item.text,
-                        .id = next_id()
-                    };
-
-                    ts.emplace_back(std::move(t));
+                            ts.emplace_back(std::move(t));
+                        }
+                    }
                 }
-            }
+            );
         }
     );
 

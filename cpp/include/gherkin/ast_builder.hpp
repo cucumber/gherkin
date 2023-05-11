@@ -55,9 +55,9 @@ private:
         std::size_t column = 0
     ) const;
 
-    table_rows get_table_rows(ast_node& node);
+    table_rows get_table_rows(const ast_node& node);
     table_cells get_table_cells(const token& token);
-    tags get_tags(ast_node& node);
+    tags get_tags(const ast_node& node);
 
     ast_node pop_node();
     ast_node& current_node();
@@ -67,6 +67,7 @@ private:
     ast_node_stack stack_;
     std::string uri_;
     comments comments_;
+    cms::gherkin_document doc_;
 };
 
 using ast_builder_ptr = std::unique_ptr<ast_builder>;

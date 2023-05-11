@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <memory>
 #include <type_traits>
+#include <optional>
+#include <functional>
 
 #include <cucumber/messages/background.hpp>
 #include <cucumber/messages/comment.hpp>
@@ -106,40 +108,8 @@ public:
         std::get<vtype>(data).emplace_back(std::move(v));
     }
 
-    template <typename T>
-    auto& get_items(rule_type rule_type)
-    {
-        using type = std::remove_reference_t<T>;
-        using vtype = std::vector<type>;
-
-        return std::get<vtype>(sub_items_[rule_type]);
-    }
-
-    template <typename T>
-    auto& get_items(rule_type rule_type) const
-    {
-        using type = std::remove_reference_t<T>;
-        using vtype = std::vector<type>;
-
-        return std::get<vtype>(sub_items_.at(rule_type));
-    }
-
-    template <typename T>
-    auto& get_single(rule_type rule_type)
-    { return get_items<T>(rule_type).front(); }
-
-    template <typename T>
-    auto& get_single(rule_type rule_type) const
-    { return get_items<T>(rule_type).front(); }
-
-    auto& get_tokens(rule_type rule_type)
-    { return get_items<token>(rule_type); }
-
-    auto& get_token(rule_type rule_type)
-    { return get_single<token>(rule_type); }
-
     template <typename T, typename Callable>
-    void visit_items(rule_type rule_type, Callable cb)
+    void visit_items(rule_type rule_type, Callable cb) const
     {
         using type = std::remove_reference_t<T>;
         using vtype = std::vector<type>;
@@ -158,7 +128,7 @@ public:
     }
 
     template <typename T, typename Callable>
-    void visit_item(rule_type rule_type, Callable cb)
+    void visit_item(rule_type rule_type, Callable cb) const
     {
         visit_items<T>(
             rule_type,
@@ -170,12 +140,59 @@ public:
         );
     }
 
+    template <typename Callable>
+    void visit_tokens(rule_type rule_type, Callable cb) const
+    { visit_items<token>(rule_type, cb); }
+
+    template <typename Callable>
+    void visit_token(rule_type rule_type, Callable cb) const
+    { visit_item<token>(rule_type, cb); }
+
     template <typename T>
-    void set_from_single(rule_type rule_type, T&& v)
+    auto get_items(rule_type rule_type) const
+    {
+        using type = std::remove_reference_t<T>;
+        using vtype = std::vector<type>;
+        using ret_type = const vtype*;
+
+        ret_type r = nullptr;
+
+        visit_items<T>(
+            rule_type,
+            [&r](auto& items) { r = std::addressof(items); }
+        );
+
+        return r;
+    }
+
+    template <typename T>
+    auto get_single(rule_type rule_type) const
+    {
+        using type = std::remove_reference_t<T>;
+        using ret_type = const type*;
+
+        ret_type r = nullptr;
+
+        visit_item<T>(
+            rule_type,
+            [&r](auto& item) { r = std::addressof(item); }
+        );
+
+        return r;
+    }
+
+    auto get_tokens(rule_type rule_type) const
+    { return get_items<token>(rule_type); }
+
+    auto get_token(rule_type rule_type) const
+    { return get_single<token>(rule_type); }
+
+    template <typename T>
+    void set(rule_type rule_type, T& v) const
     { visit_item<T>(rule_type, [&](auto& item) { v = item; } ); }
 
     template <typename T>
-    void set_from_items(rule_type rule_type, std::vector<T>& vs)
+    void set(rule_type rule_type, std::vector<T>& vs) const
     {
         visit_items<T>(
             rule_type,
