@@ -117,7 +117,7 @@ const cms::gherkin_document&
 parser::parse(const file& file)
 {
     builder_.reset();
-    scanner_.reset();
+    scanner_.reset(file);
     matcher_.reset();
 
     parser_context context{

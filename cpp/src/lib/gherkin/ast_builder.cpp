@@ -95,7 +95,7 @@ ast_builder::transform_node(ast_node& from, ast_node& to)
 cms::step
 ast_builder::make_step(ast_node& node)
 {
-    cms::step m;
+    cms::step m{};
 
     node.visit_token(
         rule_type::step_line,
@@ -117,7 +117,7 @@ ast_builder::make_step(ast_node& node)
 cms::doc_string
 ast_builder::make_doc_string(ast_node& node)
 {
-    cms::doc_string m;
+    cms::doc_string m{};
 
     node.visit_token(
         rule_type::doc_string_separator,
@@ -162,7 +162,7 @@ ast_builder::make_data_table(ast_node& node)
 cms::background
 ast_builder::make_background(ast_node& node)
 {
-    cms::background m;
+    cms::background m{};
 
     node.visit_token(
         rule_type::background_line,
@@ -183,7 +183,7 @@ ast_builder::make_background(ast_node& node)
 cms::scenario
 ast_builder::make_scenario_definition(ast_node& node)
 {
-    cms::scenario m;
+    cms::scenario m{};
 
     node.visit_item<ast_node>(
         rule_type::scenario,
@@ -211,7 +211,7 @@ ast_builder::make_scenario_definition(ast_node& node)
 cms::examples
 ast_builder::make_examples_definition(ast_node& node)
 {
-    cms::examples m;
+    cms::examples m{};
 
     node.visit_item<ast_node>(
         rule_type::examples,
@@ -263,7 +263,7 @@ ast_builder::make_description(ast_node& node)
 cms::feature
 ast_builder::make_feature(ast_node& node)
 {
-    cms::feature m;
+    cms::feature m{};
 
     node.visit_item<ast_node>(
         rule_type::feature_header,
@@ -313,7 +313,7 @@ ast_builder::make_feature(ast_node& node)
 cms::rule
 ast_builder::make_rule(ast_node& node)
 {
-    cms::rule m;
+    cms::rule m{};
 
     node.visit_item<ast_node>(
         rule_type::rule_header,

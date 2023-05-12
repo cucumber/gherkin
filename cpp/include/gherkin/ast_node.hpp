@@ -29,6 +29,7 @@
 
 #include <gherkin/rule_type.hpp>
 #include <gherkin/token.hpp>
+#include <gherkin/type_traits.hpp>
 
 namespace gherkin {
 
@@ -61,6 +62,32 @@ using ast_node_data = std::variant<
 
 using ast_node_items = std::unordered_map<rule_type, ast_node_data>;
 
+template <typename T, typename V>
+auto&
+init_and_get(V& v)
+{
+    if (!std::holds_alternative<T>(v)) {
+        v = T{};
+    }
+
+    return std::get<T>(v);
+}
+
+template <typename T>
+auto&
+get_vdata(rule_type rule_type, ast_node_items& items)
+{
+    auto& data = items[rule_type];
+
+    if constexpr (is_container_v<std::vector, T>) {
+        return init_and_get<T>(data);
+    } else {
+        using vtype = std::vector<T>;
+
+        return init_and_get<vtype>(data);
+    }
+}
+
 class ast_node
 {
 public:
@@ -78,34 +105,17 @@ public:
     rule_type type() const;
 
     template <typename T>
-    void add(rule_type rule_type, std::vector<T>&& vs)
-    {
-        using type = std::remove_reference_t<T>;
-        using vtype = std::vector<type>;
-
-        auto& data = sub_items_[rule_type];
-
-        if (!std::holds_alternative<vtype>(data)) {
-            data = vs;
-        } else {
-            auto& vdata = std::get<vtype>(data);
-            vdata.insert(vdata.end(), vs.begin(), vs.end());
-        }
-    }
-
-    template <typename T>
     void add(rule_type rule_type, T&& v)
     {
-        using type = std::remove_reference_t<T>;
-        using vtype = std::vector<type>;
+        using type = std::remove_cvref_t<T>;
 
-        auto& data = sub_items_[rule_type];
+        auto& vdata = get_vdata<type>(rule_type, sub_items_);
 
-        if (!std::holds_alternative<vtype>(data)) {
-            data = vtype{};
+        if constexpr (is_container_v<std::vector, type>) {
+            vdata.insert(vdata.end(), v.begin(), v.end());
+        } else {
+            vdata.emplace_back(std::move(v));
         }
-
-        std::get<vtype>(data).emplace_back(std::move(v));
     }
 
     template <typename T, typename Callable>
@@ -187,22 +197,37 @@ public:
     auto get_token(rule_type rule_type) const
     { return get_single<token>(rule_type); }
 
-    template <typename T>
-    void set(rule_type rule_type, T& v) const
-    { visit_item<T>(rule_type, [&](auto& item) { v = item; } ); }
+    template <typename T, typename>
+    void set_value(rule_type rule_type, T& v) const
+    {
+
+    }
+
+    template <typename T, typename Callable>
+    void set_value(rule_type rule_type, Callable&& cb) const
+    {
+
+        if constexpr (is_container_v<std::vector, T>) {
+            using value_type = typename T::value_type;
+
+            visit_items<value_type>(rule_type, cb);
+        } else {
+            visit_item<T>(rule_type, cb);
+        }
+    }
 
     template <typename T>
-    void set(rule_type rule_type, std::vector<T>& vs) const
+    void set(rule_type rule_type, T& v) const
     {
-        visit_items<T>(
-            rule_type,
-            [&](auto& items) {
-                std::copy(
-                    items.begin(), items.end(),
-                    std::back_inserter(vs)
-                );
-            }
-        );
+        auto cb = [&](auto& val) { v = val; };
+
+        if constexpr (is_container_v<std::optional, T>) {
+            using value_type = typename T::value_type;
+
+            set_value<value_type>(rule_type, cb);
+        } else {
+            set_value<T>(rule_type, cb);
+        }
     }
 
 private:
