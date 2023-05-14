@@ -1,92 +1,17 @@
 #pragma once
 
-#include <variant>
+#include <any>
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include <memory>
-#include <type_traits>
 #include <optional>
-#include <functional>
-
-#include <cucumber/messages/background.hpp>
-#include <cucumber/messages/comment.hpp>
-#include <cucumber/messages/data_table.hpp>
-#include <cucumber/messages/doc_string.hpp>
-#include <cucumber/messages/envelope.hpp>
-#include <cucumber/messages/examples.hpp>
-#include <cucumber/messages/feature.hpp>
-#include <cucumber/messages/feature_child.hpp>
-#include <cucumber/messages/gherkin_document.hpp>
-#include <cucumber/messages/location.hpp>
-#include <cucumber/messages/rule.hpp>
-#include <cucumber/messages/rule_child.hpp>
-#include <cucumber/messages/scenario.hpp>
-#include <cucumber/messages/step.hpp>
-#include <cucumber/messages/table_cell.hpp>
-#include <cucumber/messages/table_row.hpp>
-#include <cucumber/messages/tag.hpp>
+#include <ranges>
 
 #include <gherkin/rule_type.hpp>
 #include <gherkin/token.hpp>
 #include <gherkin/type_traits.hpp>
 
 namespace gherkin {
-
-class ast_node;
-
-using ast_nodes = std::vector<ast_node>;
-
-using ast_node_data = std::variant<
-    ast_nodes,
-    std::vector<cucumber::messages::background>,
-    std::vector<cucumber::messages::comment>,
-    std::vector<cucumber::messages::data_table>,
-    std::vector<cucumber::messages::doc_string>,
-    std::vector<cucumber::messages::envelope>,
-    std::vector<cucumber::messages::examples>,
-    std::vector<cucumber::messages::feature>,
-    std::vector<cucumber::messages::feature_child>,
-    std::vector<cucumber::messages::gherkin_document>,
-    std::vector<cucumber::messages::location>,
-    std::vector<cucumber::messages::rule>,
-    std::vector<cucumber::messages::rule_child>,
-    std::vector<cucumber::messages::scenario>,
-    std::vector<cucumber::messages::step>,
-    std::vector<cucumber::messages::table_cell>,
-    std::vector<cucumber::messages::table_row>,
-    std::vector<cucumber::messages::tag>,
-    strings,
-    tokens
->;
-
-using ast_node_items = std::unordered_map<rule_type, ast_node_data>;
-
-template <typename T, typename V>
-auto&
-init_and_get(V& v)
-{
-    if (!std::holds_alternative<T>(v)) {
-        v = T{};
-    }
-
-    return std::get<T>(v);
-}
-
-template <typename T>
-auto&
-get_vdata(rule_type rule_type, ast_node_items& items)
-{
-    auto& data = items[rule_type];
-
-    if constexpr (is_container_v<std::vector, T>) {
-        return init_and_get<T>(data);
-    } else {
-        using vtype = std::vector<T>;
-
-        return init_and_get<vtype>(data);
-    }
-}
 
 class ast_node
 {
@@ -107,70 +32,38 @@ public:
     template <typename T>
     void add(rule_type rule_type, T&& v)
     {
-        using type = std::remove_cvref_t<T>;
+        using value_type = std::remove_cvref_t<T>;
+        using vector_type = std::vector<value_type>;
 
-        auto& vdata = get_vdata<type>(rule_type, sub_items_);
+        auto& a = sub_items_[rule_type];
 
-        if constexpr (is_container_v<std::vector, type>) {
-            vdata.insert(vdata.end(), v.begin(), v.end());
-        } else {
-            vdata.emplace_back(std::move(v));
-        }
-    }
-
-    template <typename T, typename Callable>
-    void visit_items(rule_type rule_type, Callable cb) const
-    {
-        using type = std::remove_reference_t<T>;
-        using vtype = std::vector<type>;
-
-        auto it = sub_items_.find(rule_type);
-
-        if (it == sub_items_.end()) {
-            return;
+        if (!a.has_value()) {
+            a = vector_type{};
         }
 
-        auto& items = std::get<vtype>(it->second);
-
-        if (!items.empty()) {
-            cb(items);
-        }
+        auto& vs = std::any_cast<vector_type&>(a);
+        vs.emplace_back(std::move(v));
     }
-
-    template <typename T, typename Callable>
-    void visit_item(rule_type rule_type, Callable cb) const
-    {
-        visit_items<T>(
-            rule_type,
-            [&cb](auto& items) {
-                if (!items.empty()) {
-                    cb(items.front());
-                }
-            }
-        );
-    }
-
-    template <typename Callable>
-    void visit_tokens(rule_type rule_type, Callable cb) const
-    { visit_items<token>(rule_type, cb); }
-
-    template <typename Callable>
-    void visit_token(rule_type rule_type, Callable cb) const
-    { visit_item<token>(rule_type, cb); }
 
     template <typename T>
     auto get_items(rule_type rule_type) const
     {
-        using type = std::remove_reference_t<T>;
-        using vtype = std::vector<type>;
-        using ret_type = const vtype*;
+        using value_type = std::remove_cvref_t<T>;
+        using vector_type = std::vector<value_type>;
+        using view_type = std::ranges::ref_view<const vector_type>;
+        using ret_type = std::optional<view_type>;
 
-        ret_type r = nullptr;
+        auto it = sub_items_.find(rule_type);
 
-        visit_items<T>(
-            rule_type,
-            [&r](auto& items) { r = std::addressof(items); }
-        );
+        ret_type r;
+
+        if (it != sub_items_.end()) {
+            auto& vs = std::any_cast<const vector_type&>(it->second);
+
+            if (!vs.empty()) {
+                r = std::views::all(vs);
+            }
+        }
 
         return r;
     }
@@ -178,61 +71,73 @@ public:
     template <typename T>
     auto get_single(rule_type rule_type) const
     {
-        using type = std::remove_reference_t<T>;
-        using ret_type = const type*;
+        using value_type = std::remove_cvref_t<T>;
+        using ref_type = std::reference_wrapper<const value_type>;
+        using ret_type = std::optional<ref_type>;
 
-        ret_type r = nullptr;
+        auto opt_items = get_items<T>(rule_type);
+        ret_type r;
 
-        visit_item<T>(
-            rule_type,
-            [&r](auto& item) { r = std::addressof(item); }
-        );
+        if (opt_items) {
+            auto& items = *opt_items;
+            r = std::cref(items[0]);
+        }
 
         return r;
     }
 
     auto get_tokens(rule_type rule_type) const
-    { return get_items<token>(rule_type); }
+    { return *get_items<token>(rule_type); }
 
-    auto get_token(rule_type rule_type) const
-    { return get_single<token>(rule_type); }
+    const auto& get_token(rule_type rule_type) const
+    { return get_single<token>(rule_type)->get(); }
 
-    template <typename T, typename>
-    void set_value(rule_type rule_type, T& v) const
+    template <typename T, typename V = T>
+    void set_value(rule_type rule_type, V& v) const
     {
+        using type = std::remove_cvref_t<T>;
 
-    }
+        if constexpr (is_container_v<std::vector, type>) {
+            using value_type = typename type::value_type;
+            using vector_type = std::vector<value_type>;
 
-    template <typename T, typename Callable>
-    void set_value(rule_type rule_type, Callable&& cb) const
-    {
+            auto opt_items = get_items<value_type>(rule_type);
 
-        if constexpr (is_container_v<std::vector, T>) {
-            using value_type = typename T::value_type;
+            if (opt_items) {
+                auto& items = *opt_items;
 
-            visit_items<value_type>(rule_type, cb);
+                for (const auto& i : items) {
+                    v.emplace_back(i);
+                }
+            }
         } else {
-            visit_item<T>(rule_type, cb);
+            auto item = get_single<type>(rule_type);
+
+            if (item) {
+                v = item->get();
+            }
         }
     }
 
     template <typename T>
     void set(rule_type rule_type, T& v) const
     {
-        auto cb = [&](auto& val) { v = val; };
+        using type = std::remove_cvref_t<T>;
 
-        if constexpr (is_container_v<std::optional, T>) {
-            using value_type = typename T::value_type;
+        if constexpr (is_container_v<std::optional, type>) {
+            using value_type = typename type::value_type;
 
-            set_value<value_type>(rule_type, cb);
+            set_value<value_type>(rule_type, v);
         } else {
-            set_value<T>(rule_type, cb);
+            set_value<type>(rule_type, v);
         }
     }
 
 private:
+    using sub_items = std::unordered_map<rule_type, std::any>;
+
     rule_type rule_type_;
-    ast_node_items sub_items_;
+    sub_items sub_items_;
 };
 
 }

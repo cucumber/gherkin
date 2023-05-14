@@ -20,4 +20,20 @@ replace(std::string& s, std::string_view what, std::string_view with);
 std::string
 replace(const std::string& s, std::string_view what, std::string_view with);
 
+template <typename C>
+struct reverse
+{
+    reverse(C& c)
+    : c_(c)
+    {}
+
+    auto begin()
+    { return c_.rbegin(); }
+
+    auto end()
+    { return c_.rend(); }
+
+    C& c_;
+};
+
 }

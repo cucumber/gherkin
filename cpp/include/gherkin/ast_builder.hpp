@@ -4,6 +4,8 @@
 #include <stack>
 #include <vector>
 
+#include <cucumber/messages/all.hpp>
+
 #include <gherkin/token.hpp>
 #include <gherkin/rule_type.hpp>
 #include <gherkin/ast_node.hpp>
