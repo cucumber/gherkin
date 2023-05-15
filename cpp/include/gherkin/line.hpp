@@ -17,7 +17,7 @@ public:
 
     std::string_view get_rest_trimmed(std::size_t length) const;
     std::string_view get_line_text(
-        std::size_t indent_to_remove=std::string::npos
+        std::size_t indent_to_remove = std::string::npos
     ) const;
 
     std::string_view line_text() const;

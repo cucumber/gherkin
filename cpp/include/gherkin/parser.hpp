@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+#include <cucumber/messages/source.hpp>
 
 #include <gherkin/ast_builder.hpp>
 #include <gherkin/token_scanner.hpp>
@@ -8,6 +8,8 @@
 #include <gherkin/file.hpp>
 
 namespace gherkin {
+
+namespace cms = cucumber::messages;
 
 struct parser_info
 {
@@ -20,6 +22,7 @@ public:
     parser(const parser_info& pi = {});
     virtual ~parser();
 
+    const cms::gherkin_document& parse(const cms::source& source);
     const cms::gherkin_document& parse(const file& file);
 
     const cms::gherkin_document& get_result() const;

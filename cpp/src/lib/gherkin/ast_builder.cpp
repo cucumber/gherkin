@@ -17,10 +17,12 @@ ast_builder::~ast_builder()
 {}
 
 void
-ast_builder::reset()
+ast_builder::reset(const std::string& uri)
 {
     stack_ = {};
     stack_.emplace(rule_type::none);
+    comments_.clear();
+    uri_ = uri;
 }
 
 void

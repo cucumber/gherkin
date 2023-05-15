@@ -25,7 +25,7 @@ public:
     ast_builder();
     virtual ~ast_builder();
 
-    void reset();
+    void reset(const std::string& uri = "");
 
     void start_rule(rule_type rule_type);
     void end_rule(rule_type rule_type);
