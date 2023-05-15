@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <any>
+#include <memory>
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -13,16 +15,50 @@
 
 namespace gherkin {
 
+template <typename T>
+struct sub_node
+{
+    using type = std::remove_cvref_t<T>;
+    using vector_type = std::vector<type>;
+    using ptr_type = std::shared_ptr<vector_type>;
+
+    sub_node(std::any& sub_item)
+    : ref_(sub_item)
+    {
+        if (!ref_.has_value()) {
+            ref_ = make();
+        }
+    }
+
+    static
+    auto make()
+    { return std::make_shared<vector_type>(); }
+
+    auto& cast()
+    { return std::any_cast<ptr_type&>(ref_); }
+
+    auto get_ptr()
+    { return cast().get(); }
+
+    auto& get()
+    { return *cast(); }
+
+    void emplace_back(const T& v)
+    { get().emplace_back(v); }
+
+    std::any& ref_;
+};
+
 class ast_node
 {
 public:
     ast_node(rule_type rule_type = rule_type::none);
-    ast_node(const ast_node& other) = delete;
+    ast_node(const ast_node& other);
     ast_node(ast_node&& other);
 
     virtual ~ast_node();
 
-    ast_node& operator=(const ast_node& other) = delete;
+    ast_node& operator=(const ast_node& other);
     ast_node& operator=(ast_node&& other);
 
     bool is(rule_type rule_type) const;
@@ -30,67 +66,55 @@ public:
     rule_type type() const;
 
     template <typename T>
-    void add(rule_type rule_type, T&& v)
+    void add(rule_type rule_type, const T& v)
     {
-        using value_type = std::remove_cvref_t<T>;
-        using vector_type = std::vector<value_type>;
+        sub_node<T> sn(sub_items_[rule_type]);
 
-        auto& a = sub_items_[rule_type];
-
-        if (!a.has_value()) {
-            a = vector_type{};
-        }
-
-        auto& vs = std::any_cast<vector_type&>(a);
-        vs.emplace_back(std::move(v));
+        sn.emplace_back(v);
     }
 
     template <typename T>
-    auto get_items(rule_type rule_type) const
+    auto get_items(
+        rule_type rule_type,
+        const std::vector<T>* default_result = nullptr
+    ) const
     {
-        using value_type = std::remove_cvref_t<T>;
-        using vector_type = std::vector<value_type>;
-        using view_type = std::ranges::ref_view<const vector_type>;
-        using ret_type = std::optional<view_type>;
+        using stype = sub_node<T>;
+        using ret_type = const typename stype::vector_type*;
+
+        ret_type ret = default_result;
 
         auto it = sub_items_.find(rule_type);
 
-        ret_type r;
-
         if (it != sub_items_.end()) {
-            auto& vs = std::any_cast<const vector_type&>(it->second);
+            stype sn(const_cast<std::any&>(it->second));
 
-            if (!vs.empty()) {
-                r = std::views::all(vs);
-            }
+            ret = sn.get_ptr();
         }
 
-        return r;
+        return ret;
     }
 
     template <typename T>
-    auto get_single(rule_type rule_type) const
+    const T* get_single(
+        rule_type rule_type,
+        const T* default_result = nullptr
+    ) const
     {
-        using value_type = std::remove_cvref_t<T>;
-        using ref_type = std::reference_wrapper<const value_type>;
-        using ret_type = std::optional<ref_type>;
+        auto items = get_items<T>(rule_type);
 
-        auto opt_items = get_items<T>(rule_type);
-        ret_type r;
-
-        if (opt_items) {
-            auto& items = *opt_items;
-            r = std::cref(items[0]);
+        if (items && !items->empty()) {
+            return std::addressof(items->at(0));
         }
 
-        return r;
+        return default_result;
     }
 
-    auto get_tokens(rule_type rule_type) const
-    { return *get_items<token>(rule_type); }
+    const auto& get_tokens(rule_type rule_type) const
+    { return *get_items<token>(rule_type, &empty_tokens_); }
 
     const auto& get_token(rule_type rule_type) const
-    { return get_single<token>(rule_type)->get(); }
+    { return *get_single<token>(rule_type, &null_token_); }
 
     template <typename T, typename V = T>
     void set_value(rule_type rule_type, V& v) const
@@ -111,10 +135,10 @@ public:
                 }
             }
         } else {
-            auto item = get_single<type>(rule_type);
+            auto pitem = get_single<type>(rule_type);
 
-            if (item) {
-                v = item->get();
+            if (pitem) {
+                v = *pitem;
             }
         }
     }
@@ -138,6 +162,8 @@ private:
 
     rule_type rule_type_;
     sub_items sub_items_;
+    token null_token_;
+    std::vector<token> empty_tokens_;
 };
 
 }

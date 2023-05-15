@@ -80,11 +80,15 @@ clean-configure:
 
 reconfigure: clean-configure .configured
 
+rebuild: reconfigure .built
+
 include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
+	rm -f .configured
 
 src/lib/gherkin/parser.cpp: gherkin-cpp.razor ../gherkin.berp
 	$(berp-generate-parser)
+	rm -f .configured
 
 src/lib/gherkin/dialect.cpp: $(GHERKIN_LANGUAGES_JSON)
 	jq -f gherkin-dialect.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@

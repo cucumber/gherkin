@@ -29,7 +29,7 @@ public:
 
     void start_rule(rule_type rule_type);
     void end_rule(rule_type rule_type);
-    void build(token& token);
+    void build(const token& token);
 
     const cms::gherkin_document& get_result() const;
 

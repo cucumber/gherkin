@@ -37,7 +37,7 @@ ast_builder::end_rule(rule_type rule_type)
 }
 
 void
-ast_builder::build(token& token)
+ast_builder::build(const token& token)
 {
     if (token.matched_type == rule_type::comment) {
         cms::comment c{
@@ -47,7 +47,7 @@ ast_builder::build(token& token)
 
         comments_.emplace_back(std::move(c));
     } else {
-        current_node().add(token.matched_type, std::move(token));
+        current_node().add(token.matched_type, token);
     }
 }
 
@@ -58,7 +58,7 @@ ast_builder::get_result() const
         rule_type::gherkin_document
     );
 
-    return dp ? (*dp).get() : doc_;
+    return dp ? *dp : doc_;
 };
 
 std::string
@@ -90,6 +90,8 @@ ast_builder::transform_node(ast_node& from, ast_node& to)
         to.add(from.type(), make_rule(from));
     } else if (from.is(rule_type::gherkin_document)) {
         to.add(from.type(), make_gherkin_document(from));
+    } else {
+        to.add(from.type(), from);
     }
 }
 
@@ -115,8 +117,8 @@ ast_builder::make_step(ast_node& node)
 cms::doc_string
 ast_builder::make_doc_string(ast_node& node)
 {
-    auto& separator_token =
-        node.get_tokens(rule_type::doc_string_separator)[0];
+    auto& tokens = node.get_tokens(rule_type::doc_string_separator);
+    auto& separator_token = tokens[0];
 
     string_views svs;
 
@@ -179,8 +181,8 @@ ast_builder::make_background(ast_node& node)
 cms::scenario
 ast_builder::make_scenario_definition(ast_node& node)
 {
-    auto opt = node.get_single<ast_node>(rule_type::scenario);
-    auto& scenario_node = opt->get();
+    auto pnode = node.get_single<ast_node>(rule_type::scenario);
+    auto& scenario_node = *pnode;
     auto& scenario_line = scenario_node.get_token(rule_type::scenario_line);
 
     cms::scenario m{
@@ -201,8 +203,8 @@ ast_builder::make_scenario_definition(ast_node& node)
 cms::examples
 ast_builder::make_examples_definition(ast_node& node)
 {
-    auto opt = node.get_single<ast_node>(rule_type::examples);
-    auto& examples_node = opt->get();
+    auto pnode = node.get_single<ast_node>(rule_type::examples);
+    auto& examples_node = *pnode;
     auto& examples_line = examples_node.get_token(rule_type::examples_line);
 
     cms::examples m{
@@ -213,11 +215,10 @@ ast_builder::make_examples_definition(ast_node& node)
         .id = next_id()
     };
 
-    auto opt_table =
-        examples_node.get_single<ast_node>(rule_type::examples_table);
+    auto table = examples_node.get_single<ast_node>(rule_type::examples_table);
 
-    if (opt_table) {
-        auto rows = get_table_rows(opt_table->get());
+    if (table) {
+        auto rows = get_table_rows(*table);
 
         m.table_header = rows.front();
 
@@ -266,11 +267,11 @@ ast_builder::make_description(ast_node& node)
 cms::feature
 ast_builder::make_feature(ast_node& node)
 {
-    auto opt_header = node.get_single<ast_node>(rule_type::feature_header);
-    auto& header = opt_header->get();
+    auto pnode = node.get_single<ast_node>(rule_type::feature_header);
+    auto& header = *pnode;
 
-    auto opt_feature_line = node.get_single<token>(rule_type::feature_line);
-    auto& feature_line = opt_feature_line->get();
+    auto ptoken = header.get_single<token>(rule_type::feature_line);
+    auto& feature_line = *ptoken;
 
     cms::feature m{
         .location = get_location(feature_line),
@@ -281,28 +282,24 @@ ast_builder::make_feature(ast_node& node)
 
     header.set(rule_type::description, m.description);
 
-    auto opt_background =
-        node.get_single<cms::background>(rule_type::background);
+    auto pb = node.get_single<cms::background>(rule_type::background);
 
-    if (opt_background) {
-        m.children.emplace_back(cms::feature_child{
-            .background = opt_background->get()
-        });
+    if (pb) {
+        m.children.emplace_back(cms::feature_child{ .background = *pb });
     }
 
-    auto opt_scenarios =
-        node.get_items<cms::scenario>(rule_type::scenario_definition);
+    auto ps = node.get_items<cms::scenario>(rule_type::scenario_definition);
 
-    if (opt_scenarios) {
-        for (auto& scenario : *opt_scenarios) {
+    if (ps) {
+        for (auto& scenario : *ps) {
             m.children.emplace_back(cms::feature_child{.scenario = scenario});
         }
     }
 
-    auto opt_rules = node.get_items<cms::rule>(rule_type::rule);
+    auto pr = node.get_items<cms::rule>(rule_type::rule);
 
-    if (opt_rules) {
-        for (auto& rule : *opt_rules) {
+    if (pr) {
+        for (auto& rule : *pr) {
             m.children.emplace_back(cms::feature_child{.rule = rule});
         }
     }
@@ -313,11 +310,11 @@ ast_builder::make_feature(ast_node& node)
 cms::rule
 ast_builder::make_rule(ast_node& node)
 {
-    auto opt_header = node.get_single<ast_node>(rule_type::rule_header);
-    auto& header = opt_header->get();
+    auto pnode = node.get_single<ast_node>(rule_type::rule_header);
+    auto& header = *pnode;
 
-    auto opt_rule_line = node.get_single<token>(rule_type::rule_line);
-    auto& rule_line = opt_rule_line->get();
+    auto ptoken = header.get_single<token>(rule_type::rule_line);
+    auto& rule_line = *ptoken;
 
     cms::rule m{
         .location = get_location(rule_line),
@@ -329,20 +326,16 @@ ast_builder::make_rule(ast_node& node)
 
     header.set(rule_type::description, m.description);
 
-    auto opt_background =
-        node.get_single<cms::background>(rule_type::background);
+    auto pb = node.get_single<cms::background>(rule_type::background);
 
-    if (opt_background) {
-        m.children.emplace_back(cms::rule_child{
-            .background = opt_background->get()
-        });
+    if (pb) {
+        m.children.emplace_back(cms::rule_child{ .background = *pb });
     }
 
-    auto opt_scenarios =
-        node.get_items<cms::scenario>(rule_type::scenario_definition);
+    auto ps = node.get_items<cms::scenario>(rule_type::scenario_definition);
 
-    if (opt_scenarios) {
-        for (auto& scenario : *opt_scenarios) {
+    if (ps) {
+        for (auto& scenario : *ps) {
             m.children.emplace_back(cms::rule_child{.scenario = scenario});
         }
     }
@@ -413,10 +406,10 @@ ast_builder::get_tags(const ast_node& node)
 {
     tags ts;
 
-    auto opt_tags = node.get_single<ast_node>(rule_type::tags);
+    auto pnode = node.get_single<ast_node>(rule_type::tags);
 
-    if (opt_tags) {
-        auto& tags_node = opt_tags->get();
+    if (pnode) {
+        auto& tags_node = *pnode;
 
         for (const auto& token : tags_node.get_tokens(rule_type::tag_line)) {
             for (auto& tag_item : token.matched_items) {

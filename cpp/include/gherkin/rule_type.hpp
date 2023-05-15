@@ -1,6 +1,9 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 #pragma once
 
+#include <ostream>
+#include <string_view>
+
 namespace gherkin {
 
 enum class rule_type
@@ -40,5 +43,17 @@ enum class rule_type
     description,
     count
 };
+
+std::string_view
+to_string(rule_type r);
+
+inline
+std::ostream&
+operator<<(std::ostream& os, rule_type r)
+{
+    os << to_string(r);
+
+    return os;
+}
 
 }
