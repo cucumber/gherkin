@@ -11,27 +11,17 @@ parser_base::parser_base(const parser_info& pi)
 parser_base::~parser_base()
 {}
 
-const cms::gherkin_document&
+void
 parser_base::parse(const std::string& data)
-{
-    cms::source s{ .data = data };
+{ parse_from_source({ .data = data }); }
 
-    reset(s);
-
-    return parse(s);
-}
-
-const cms::gherkin_document&
+void
 parser_base::parse(const gherkin::file& file)
 {
-    cms::source s{
+    parse_from_source({
         .uri = file.path,
         .data = slurp(file.path)
-    };
-
-    reset(s);
-
-    return parse(s);
+    });
 }
 
 void
@@ -40,6 +30,29 @@ parser_base::reset(const cms::source& source)
     builder_.reset(source.uri);
     scanner_.reset(source.data);
     matcher_.reset();
+}
+
+void
+parser_base::parse_from_source(const cms::source& source)
+{
+    if (pi_.source_events) {
+
+    }
+
+    if (pi_.ast_events || pi_.pickle_events) {
+        reset(source);
+
+        const auto& ast_msg = parse(source);
+
+        if (pi_.ast_events) {
+
+        }
+
+        if (pi_.pickle_events) {
+            // pickles compiler
+        }
+    }
+
 }
 
 const cms::gherkin_document&
