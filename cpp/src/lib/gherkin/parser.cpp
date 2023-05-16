@@ -106,20 +106,9 @@ handle_ast_error(
 )
 { handle_external_error(context, true, argument, action); }
 
-parser::parser(const parser_info& pi)
-: pi_{pi}
-{}
-
-parser::~parser()
-{}
-
 const cms::gherkin_document&
-parser::parse(const file& file)
+parser::parse(const cms::source& source)
 {
-    builder_.reset();
-    scanner_.reset(file);
-    matcher_.reset();
-
     parser_context context{
         .builder = builder_,
         .scanner = scanner_,
@@ -147,10 +136,6 @@ parser::parse(const file& file)
 
     return get_result();
 }
-
-const cms::gherkin_document&
-parser::get_result() const
-{ return builder_.get_result(); }
 
 static
 void

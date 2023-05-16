@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <gherkin/parser.hpp>
+#include <gherkin/file.hpp>
 
 struct options
 {

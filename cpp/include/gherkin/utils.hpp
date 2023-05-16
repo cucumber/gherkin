@@ -20,6 +20,9 @@ replace(std::string& s, std::string_view what, std::string_view with);
 std::string
 replace(const std::string& s, std::string_view what, std::string_view with);
 
+std::string
+slurp(const std::string& path);
+
 template <typename C>
 struct reverse
 {
