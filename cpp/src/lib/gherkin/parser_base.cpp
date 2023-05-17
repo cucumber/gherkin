@@ -1,6 +1,7 @@
 #include <gherkin/utils.hpp>
 
 #include <gherkin/parser_base.hpp>
+#include <gherkin/pickle_compiler.hpp>
 
 namespace gherkin {
 
@@ -11,14 +12,14 @@ parser_base::parser_base(const parser_info& pi)
 parser_base::~parser_base()
 {}
 
-void
+data
 parser_base::parse(const std::string& data)
-{ parse_from_source({ .data = data }); }
+{ return parse_from_source({ .data = data }); }
 
-void
+data
 parser_base::parse(const gherkin::file& file)
 {
-    parse_from_source({
+    return parse_from_source({
         .uri = file.path,
         .data = slurp(file.path)
     });
@@ -32,9 +33,11 @@ parser_base::reset(const cms::source& source)
     matcher_.reset();
 }
 
-void
+data
 parser_base::parse_from_source(const cms::source& source)
 {
+    data data;
+
     if (pi_.source_events) {
 
     }
@@ -42,17 +45,20 @@ parser_base::parse_from_source(const cms::source& source)
     if (pi_.ast_events || pi_.pickle_events) {
         reset(source);
 
-        const auto& ast_msg = parse(source);
+        data.document = parse(source);
 
         if (pi_.ast_events) {
 
         }
 
         if (pi_.pickle_events) {
-            // pickles compiler
+            gherkin::pickle_compiler c;
+
+            data.pickles = c.compile(data.document, source.uri);
         }
     }
 
+    return data;
 }
 
 const cms::gherkin_document&
