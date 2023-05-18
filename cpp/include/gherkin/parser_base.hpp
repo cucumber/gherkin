@@ -1,40 +1,69 @@
 #pragma once
 
+#include <string_view>
+
 #include <cucumber/messages/source.hpp>
 
 #include <gherkin/ast_builder.hpp>
 #include <gherkin/token_scanner.hpp>
 #include <gherkin/token_matcher.hpp>
-#include <gherkin/file.hpp>
 #include <gherkin/parser_info.hpp>
-#include <gherkin/data.hpp>
+#include <gherkin/parser_context.hpp>
 
 namespace gherkin {
 
 namespace cms = cucumber::messages;
 
+template <
+    typename Builder = ast_builder,
+    typename Scanner = token_scanner,
+    typename Matcher = token_matcher
+>
 class parser_base
 {
 public:
-    parser_base(const parser_info& pi = {});
-    virtual ~parser_base();
+    using result_type = typename Builder::result_type;
+    using context_type = parser_context<Builder, Scanner, Matcher>;
 
-    data parse(const std::string& data);
-    data parse(const gherkin::file& file);
+    parser_base(const parser_info& pi = {})
+    : pi_{pi}
+    {}
 
-    const cms::gherkin_document& get_result() const;
+    virtual ~parser_base()
+    {}
 
 protected:
-    void reset(const cms::source& source);
-    data parse_from_source(const cms::source& source);
+    void reset(std::string_view uri, std::string_view data)
+    {
+        builder_.reset(uri);
+        scanner_.reset(data);
+        matcher_.reset();
+    }
 
-    // Concrete implementation in derived classes
-    virtual const cms::gherkin_document& parse(const cms::source& source) = 0;
+    result_type parse(std::string_view uri, std::string_view data)
+    {
+        reset(uri, data);
+
+        context_type context{
+            .builder = builder_,
+            .scanner = scanner_,
+            .matcher = matcher_
+        };
+
+        parse(context);
+
+        return get_result();
+    }
+
+    result_type get_result() const
+    { return builder_.get_result(); }
+
+    virtual void parse(context_type& context) = 0;
 
     parser_info pi_;
-    ast_builder builder_;
-    token_scanner scanner_;
-    token_matcher matcher_;
+    Builder builder_;
+    Scanner scanner_;
+    Matcher matcher_;
 };
 
 }

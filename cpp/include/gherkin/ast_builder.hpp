@@ -3,6 +3,7 @@
 #include <memory>
 #include <stack>
 #include <vector>
+#include <string_view>
 
 #include <cucumber/messages/all.hpp>
 
@@ -25,7 +26,7 @@ public:
     ast_builder();
     virtual ~ast_builder();
 
-    void reset(const std::string& uri = "");
+    void reset(std::string_view uri);
 
     void start_rule(rule_type rule_type);
     void end_rule(rule_type rule_type);
@@ -67,7 +68,7 @@ private:
 
     std::size_t id_counter_ = 0;
     ast_node_stack stack_;
-    std::string uri_;
+    std::string_view uri_;
     comments comments_;
     cms::gherkin_document doc_;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 #include <memory>
 
 #include <gherkin/file.hpp>
@@ -19,13 +19,13 @@ class token_scanner
 {
 public:
     token_scanner();
-    token_scanner(const std::string& text);
+    token_scanner(std::string_view data);
     token_scanner(const file& file);
 
     virtual ~token_scanner();
 
     void reset();
-    void reset(const std::string& text);
+    void reset(std::string_view data);
     void reset(const file& file);
 
     token read();

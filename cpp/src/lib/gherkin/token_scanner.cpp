@@ -8,8 +8,8 @@ namespace gherkin {
 token_scanner::token_scanner()
 {}
 
-token_scanner::token_scanner(const std::string& text)
-{ reset(text); }
+token_scanner::token_scanner(std::string_view data)
+{ reset(data); }
 
 token_scanner::token_scanner(const file& file)
 { reset(file); }
@@ -38,10 +38,10 @@ token_scanner::reset()
 }
 
 void
-token_scanner::reset(const std::string& text)
+token_scanner::reset(std::string_view data)
 {
     reset();
-    ip_ = std::make_unique<std::istringstream>(text);
+    ip_ = std::make_unique<std::istringstream>(std::string(data));
 }
 
 void

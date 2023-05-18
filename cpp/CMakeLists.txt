@@ -18,10 +18,14 @@ install(
     TARGETS
         gherkin-cpp gherkin-bin
     EXPORT gherkin-cpp-config
-    FILE_SET gherkin_cpp_headers
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY "${CMAKE_SOURCE_DIR}/include/"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gherkin
 )
 
 install(

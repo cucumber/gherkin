@@ -9,15 +9,13 @@
 namespace gherkin {
 
 ast_builder::ast_builder()
-{
-    reset();
-}
+{}
 
 ast_builder::~ast_builder()
 {}
 
 void
-ast_builder::reset(const std::string& uri)
+ast_builder::reset(std::string_view uri)
 {
     stack_ = {};
     stack_.emplace(rule_type::none);
@@ -349,7 +347,7 @@ cms::gherkin_document
 ast_builder::make_gherkin_document(ast_node& node)
 {
     cms::gherkin_document gd{
-        .uri = uri_,
+        .uri = std::string(uri_),
         .comments = comments_
     };
 

@@ -22,11 +22,11 @@ parse_options(int ac, char** av)
         std::string_view arg(av[opts.last_arg]);
 
         if (arg == "--no-source") {
-            opts.pi.source_events = false;
+            opts.pi.include_source = false;
         } else if (arg == "--no-ast") {
-            opts.pi.ast_events = false;
+            opts.pi.include_ast = false;
         } else if (arg == "--no-pickles") {
-            opts.pi.pickle_events = false;
+            opts.pi.include_pickles = false;
         } else if (arg.starts_with('-')) {
             if (arg != "-h" && arg != "--help") {
                 std::cout << "Unknown option: " << arg << std::endl;
@@ -59,11 +59,11 @@ int main(int ac, char** av)
         return opts.exit_code;
     }
 
-    gherkin::parser p(opts.pi);
+    /*gherkin::parser p(opts.pi);
 
     for ( ; opts.last_arg < ac; ++opts.last_arg) {
         p.parse(gherkin::file{ av[opts.last_arg] });
-    }
+    }*/
 
     return 0;
 }

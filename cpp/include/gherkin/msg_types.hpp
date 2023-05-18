@@ -15,5 +15,6 @@ using pickle_table_cells = std::vector<cms::pickle_table_cell>;
 using steps = std::vector<cms::step>;
 using tags = std::vector<cms::tag>;
 using table_cells = std::vector<cms::table_cell>;
+using envelopes = std::vector<cms::envelope>;
 
 }

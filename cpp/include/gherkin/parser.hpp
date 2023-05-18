@@ -1,16 +1,41 @@
-#pragma once
-
-#include <gherkin/parser_base.hpp>
+#include <gherkin/basic_parser.hpp>
+#include <gherkin/file.hpp>
+#include <gherkin/utils.hpp>
+#include <gherkin/msg_types.hpp>
 
 namespace gherkin {
 
-class parser : public parser_base
+template <
+    typename Builder = ast_builder
+>
+class parser : public basic_parser<Builder>
 {
 public:
-    using parser_base::parser_base;
-    using parser_base::parse;
+    using parent = basic_parser<Builder>;
+    using parent::basic_parser;
+    using result_type = typename parent::result_type;
 
-    const cms::gherkin_document& parse(const cms::source& source) override;
+    envelopes parse(const file& file)
+    {
+        return
+            parse(cms::source{
+                .uri = file.path,
+                .data = slurp(file.path)
+            });
+    }
+
+    // TODO: add more of these with proper move semantics...
+    result_type parse(const std::string& uri, const std::string& data)
+    {
+        return
+            parse(cms::source{
+                .uri = uri,
+                .data = data
+            });
+    }
+
+private:
 };
+
 
 }

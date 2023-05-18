@@ -9,14 +9,8 @@ file(GLOB_RECURSE GHERKIN_CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch]pp)
 
 target_sources(
     gherkin-cpp
-    PUBLIC
-    FILE_SET
-        "gherkin_cpp_headers"
-        TYPE HEADERS
-        BASE_DIRS ${INC_DIR}
-        FILES
-        ${GHERKIN_CPP_HEADERS}
     PRIVATE
+        ${GHERKIN_CPP_HEADERS}
         ${GHERKIN_CPP_SOURCES}
 )
 
