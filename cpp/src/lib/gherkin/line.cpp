@@ -2,6 +2,7 @@
 
 #include <gherkin/line.hpp>
 #include <gherkin/utils.hpp>
+#include <gherkin/regex.hpp>
 
 namespace gherkin {
 
@@ -98,9 +99,25 @@ line::table_cells() const
 items
 line::tags() const
 {
-    items items;
+    items tags;
 
-    return items;
+    auto column = indent_ + 1;
+    auto items_line = subst(trimmed_line_text_, "\\s+(?:#.*)?$", "");
+    auto items = split("@", items_line);
+
+    for (std::size_t i = 1; i < items.size(); ++i) {
+        auto original_item = items[i];
+        auto sitem = strip(items[i]);
+
+        tags.emplace_back(item{
+            .column = column,
+            .text = "@" + std::string(sitem)
+        });
+
+        column += original_item.size() + 1;
+    }
+
+    return tags;
 }
 
 void
@@ -127,7 +144,7 @@ line::split_table_cells(
             if (first_cell) {
                 first_cell = false;
             } else {
-                f(cell, col);
+                f(cell, start_col);
             }
 
             cell.clear();
@@ -137,7 +154,7 @@ line::split_table_cells(
             ++col;
 
             if (ch == 'n') {
-                cell += ch;
+                cell += '\n';
             } else {
                 if (ch != '|' && ch != '\\') {
                     cell += '\\';

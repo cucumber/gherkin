@@ -1,6 +1,6 @@
 
 #include <gherkin/token_matcher.hpp>
-#include <gherkin/dialect.hpp>
+#include <gherkin/keywords.hpp>
 #include <gherkin/utils.hpp>
 #include <gherkin/regex.hpp>
 
@@ -296,7 +296,9 @@ token_matcher::set_token_matched(
     } else {
         token.matched_indent = token.line.indent();
     }
+
     token.matched_items = std::move(ti.items);
+    token.location.column = token.matched_indent + 1;
     token.matched_gherkin_dialect = dialect_name_;
 }
 

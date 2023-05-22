@@ -23,6 +23,8 @@ using comments = std::vector<cms::comment>;
 class ast_builder
 {
 public:
+    using result_type = cms::gherkin_document;
+
     ast_builder();
     virtual ~ast_builder();
 

@@ -1,4 +1,6 @@
 ext/
 build/
+acceptance/
+stage/
 .built
 .configured

@@ -19,10 +19,12 @@ class basic_parser : public parser_base<Builder, Scanner, Matcher>
 {
 public:
     using parent = parser_base<Builder, Scanner, Matcher>;
-    using parent::parser_base;
+    using parent::parent;
     using context_type = typename parent::context_type;
 
 protected:
+    using parent::parse;
+
     void parse(context_type& context) override
     {
         start_rule(context, rule_type::gherkin_document);

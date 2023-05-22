@@ -5,8 +5,8 @@ GHERKIN_GENERATED = \
 	include/gherkin/rule_type.hpp \
 	include/gherkin/basic_parser.hpp \
 	src/lib/gherkin/dialect.cpp
-GHERKIN = bin/gherkin
-GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+GHERKIN = stage/bin/gherkin
+GHERKIN_GENERATE_TOKENS = stage/bin/gherkin-generate-tokens
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
@@ -64,12 +64,13 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 	    --build build/gherkin \
 	    --parallel \
 	    && touch $@
+	cmake --install build/gherkin
 
 .configured: $(CMAKELISTS)
 	rm -rf build/gherkin && mkdir -p build/gherkin
 	cmake \
 	    -DCMAKE_PREFIX_PATH=$(CMAKE_BUILDROOT) \
-	    -DCMAKE_INSTALL_PREFIX=$(CMAKE_BUILDROOT) \
+	    -DCMAKE_INSTALL_PREFIX=$(HERE)/stage \
 	    -S . \
 	    -B build/gherkin \
 	    --toolchain cmake/toolchains/ext.cmake \

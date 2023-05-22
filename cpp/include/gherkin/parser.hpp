@@ -12,10 +12,13 @@ class parser : public basic_parser<Builder>
 {
 public:
     using parent = basic_parser<Builder>;
-    using parent::basic_parser;
     using result_type = typename parent::result_type;
 
-    envelopes parse(const file& file)
+    parser(const parser_info& pi = {})
+    : parent(pi)
+    {}
+
+    result_type parse(const file& file)
     {
         return
             parse(cms::source{
@@ -24,18 +27,10 @@ public:
             });
     }
 
-    // TODO: add more of these with proper move semantics...
-    result_type parse(const std::string& uri, const std::string& data)
-    {
-        return
-            parse(cms::source{
-                .uri = uri,
-                .data = data
-            });
-    }
+    result_type parse(const cms::source& source)
+    { return parent::parse(source.uri, source.data); }
 
 private:
 };
-
 
 }

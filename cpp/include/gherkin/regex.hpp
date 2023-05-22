@@ -16,6 +16,19 @@ struct regex_result
     string_views matches;
 };
 
+void
+split(
+    const std::string& re,
+    const std::string& expr,
+    strings& list
+);
+
+strings
+split(const std::string& re, const std::string& expr);
+
+std::string
+subst(const std::string& s, const std::string& re, const std::string& what);
+
 namespace detail {
 
 struct null_arg{};

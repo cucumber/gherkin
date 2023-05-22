@@ -27,7 +27,9 @@ token_scanner::read()
     return token{
         .eof = r.eof,
         .line = gherkin::line(r.text, line_),
-        .location = line_
+        .location = {
+            .line = line_
+        }
     };
 }
 

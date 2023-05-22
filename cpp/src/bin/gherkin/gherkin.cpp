@@ -59,11 +59,11 @@ int main(int ac, char** av)
         return opts.exit_code;
     }
 
-    /*gherkin::parser p(opts.pi);
+    gherkin::parser p{opts.pi};
 
     for ( ; opts.last_arg < ac; ++opts.last_arg) {
         p.parse(gherkin::file{ av[opts.last_arg] });
-    }*/
+    }
 
     return 0;
 }

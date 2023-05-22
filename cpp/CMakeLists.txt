@@ -13,10 +13,13 @@ find_package(cucumber-messages CONFIG REQUIRED)
 
 add_subdirectory(src/lib/gherkin)
 add_subdirectory(src/bin/gherkin)
+add_subdirectory(src/bin/gherkin-generate-tokens)
 
 install(
     TARGETS
-        gherkin-cpp gherkin-bin
+        gherkin-cpp
+        gherkin-bin
+        gherkin-generate-tokens-bin
     EXPORT gherkin-cpp-config
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

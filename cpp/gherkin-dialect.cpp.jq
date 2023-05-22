@@ -5,7 +5,7 @@
   "const keywords_map&\n",
   "keywords(const std::string_view& language)\n",
   "{\n",
-  "    const keywords_maps kwms = {\n",
+  "    static const keywords_maps kwms = {\n",
   "    ",
   (
     [
@@ -23,9 +23,7 @@
             [
                 "{ \"", .key, "\", { ",
                 (
-                  [.value[] |
-                  sub("^[[:space:]]+"; "") | sub("[[:space:]]+$"; "") |
-                  [@json] | add] | join(", ")
+                  [.value[] | [@json] | add] | join(", ")
                 ),
                 " } }"
             ] | add
@@ -38,8 +36,5 @@
   "\n    };\n\n",
   "    return kwms.at(language);\n",
   "}\n\n",
-  "const string_views&\n",
-  "keyword(const std::string_view& language, const std::string_view& kw)\n",
-  "{ return keywords(language).at(kw); }\n\n",
   "}\n"
 ] | add

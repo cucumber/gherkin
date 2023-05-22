@@ -9,1305 +9,1270 @@ keywords(const std::string_view& language)
     {
         "af",
         {
-            { "and", { "*", "En" } },
+            { "and", { "* ", "En " } },
             { "background", { "Agtergrond" } },
-            { "but", { "*", "Maar" } },
+            { "but", { "* ", "Maar " } },
             { "examples", { "Voorbeelde" } },
             { "feature", { "Funksie", "Besigheid Behoefte", "Vermoë" } },
-            { "given", { "*", "Gegewe" } },
+            { "given", { "* ", "Gegewe " } },
             { "rule", { "Regel" } },
             { "scenario", { "Voorbeeld", "Situasie" } },
             { "scenarioOutline", { "Situasie Uiteensetting" } },
-            { "then", { "*", "Dan" } },
-            { "when", { "*", "Wanneer" } }
+            { "then", { "* ", "Dan " } },
+            { "when", { "* ", "Wanneer " } }
         }
     },
     {
         "am",
         {
-            { "and", { "*", "Եվ" } },
+            { "and", { "* ", "Եվ " } },
             { "background", { "Կոնտեքստ" } },
-            { "but", { "*", "Բայց" } },
+            { "but", { "* ", "Բայց " } },
             { "examples", { "Օրինակներ" } },
             { "feature", { "Ֆունկցիոնալություն", "Հատկություն" } },
-            { "given", { "*", "Դիցուք" } },
+            { "given", { "* ", "Դիցուք " } },
             { "rule", { "Rule" } },
             { "scenario", { "Օրինակ", "Սցենար" } },
             { "scenarioOutline", { "Սցենարի կառուցվացքը" } },
-            { "then", { "*", "Ապա" } },
-            { "when", { "*", "Եթե", "Երբ" } }
+            { "then", { "* ", "Ապա " } },
+            { "when", { "* ", "Եթե ", "Երբ " } }
         }
     },
     {
         "an",
         {
-            { "and", { "*", "Y", "E" } },
+            { "and", { "* ", "Y ", "E " } },
             { "background", { "Antecedents" } },
-            { "but", { "*", "Pero" } },
+            { "but", { "* ", "Pero " } },
             { "examples", { "Eixemplos" } },
             { "feature", { "Caracteristica" } },
-            { "given", { "*", "Dau", "Dada", "Daus", "Dadas" } },
+            { "given", { "* ", "Dau ", "Dada ", "Daus ", "Dadas " } },
             { "rule", { "Rule" } },
             { "scenario", { "Eixemplo", "Caso" } },
             { "scenarioOutline", { "Esquema del caso" } },
-            { "then", { "*", "Alavez", "Allora", "Antonces" } },
-            { "when", { "*", "Cuan" } }
+            { "then", { "* ", "Alavez ", "Allora ", "Antonces " } },
+            { "when", { "* ", "Cuan " } }
         }
     },
     {
         "ar",
         {
-            { "and", { "*", "و" } },
+            { "and", { "* ", "و " } },
             { "background", { "الخلفية" } },
-            { "but", { "*", "لكن" } },
+            { "but", { "* ", "لكن " } },
             { "examples", { "امثلة" } },
             { "feature", { "خاصية" } },
-            { "given", { "*", "بفرض" } },
+            { "given", { "* ", "بفرض " } },
             { "rule", { "Rule" } },
             { "scenario", { "مثال", "سيناريو" } },
             { "scenarioOutline", { "سيناريو مخطط" } },
-            { "then", { "*", "اذاً", "ثم" } },
-            { "when", { "*", "متى", "عندما" } }
+            { "then", { "* ", "اذاً ", "ثم " } },
+            { "when", { "* ", "متى ", "عندما " } }
         }
     },
     {
         "ast",
         {
-            { "and", { "*", "Y", "Ya" } },
+            { "and", { "* ", "Y ", "Ya " } },
             { "background", { "Antecedentes" } },
-            { "but", { "*", "Peru" } },
+            { "but", { "* ", "Peru " } },
             { "examples", { "Exemplos" } },
             { "feature", { "Carauterística" } },
-            { "given", { "*", "Dáu", "Dada", "Daos", "Daes" } },
+            { "given", { "* ", "Dáu ", "Dada ", "Daos ", "Daes " } },
             { "rule", { "Rule" } },
             { "scenario", { "Exemplo", "Casu" } },
             { "scenarioOutline", { "Esbozu del casu" } },
-            { "then", { "*", "Entós" } },
-            { "when", { "*", "Cuando" } }
+            { "then", { "* ", "Entós " } },
+            { "when", { "* ", "Cuando " } }
         }
     },
     {
         "az",
         {
-            { "and", { "*", "Və", "Həm" } },
+            { "and", { "* ", "Və ", "Həm " } },
             { "background", { "Keçmiş", "Kontekst" } },
-            { "but", { "*", "Amma", "Ancaq" } },
+            { "but", { "* ", "Amma ", "Ancaq " } },
             { "examples", { "Nümunələr" } },
             { "feature", { "Özəllik" } },
-            { "given", { "*", "Tutaq ki", "Verilir" } },
+            { "given", { "* ", "Tutaq ki ", "Verilir " } },
             { "rule", { "Rule" } },
             { "scenario", { "Nümunə", "Ssenari" } },
             { "scenarioOutline", { "Ssenarinin strukturu" } },
-            { "then", { "*", "O halda" } },
-            { "when", { "*", "Əgər", "Nə vaxt ki" } }
+            { "then", { "* ", "O halda " } },
+            { "when", { "* ", "Əgər ", "Nə vaxt ki " } }
         }
     },
     {
         "be",
         {
-            { "and", { "*", "I", "Ды", "Таксама" } },
+            { "and", { "* ", "I ", "Ды ", "Таксама " } },
             { "background", { "Кантэкст" } },
-            { "but", { "*", "Але", "Інакш" } },
+            { "but", { "* ", "Але ", "Інакш " } },
             { "examples", { "Прыклады" } },
             { "feature", { "Функцыянальнасць", "Фіча" } },
-            { "given", { "*", "Няхай", "Дадзена" } },
+            { "given", { "* ", "Няхай ", "Дадзена " } },
             { "rule", { "Правілы" } },
             { "scenario", { "Сцэнарый", "Cцэнар" } },
             { "scenarioOutline", { "Шаблон сцэнарыя", "Узор сцэнара" } },
-            { "then", { "*", "Тады" } },
-            { "when", { "*", "Калі" } }
+            { "then", { "* ", "Тады " } },
+            { "when", { "* ", "Калі " } }
         }
     },
     {
         "bg",
         {
-            { "and", { "*", "И" } },
+            { "and", { "* ", "И " } },
             { "background", { "Предистория" } },
-            { "but", { "*", "Но" } },
+            { "but", { "* ", "Но " } },
             { "examples", { "Примери" } },
             { "feature", { "Функционалност" } },
-            { "given", { "*", "Дадено" } },
+            { "given", { "* ", "Дадено " } },
             { "rule", { "Правило" } },
             { "scenario", { "Пример", "Сценарий" } },
             { "scenarioOutline", { "Рамка на сценарий" } },
-            { "then", { "*", "То" } },
-            { "when", { "*", "Когато" } }
+            { "then", { "* ", "То " } },
+            { "when", { "* ", "Когато " } }
         }
     },
     {
         "bm",
         {
-            { "and", { "*", "Dan" } },
+            { "and", { "* ", "Dan " } },
             { "background", { "Latar Belakang" } },
-            { "but", { "*", "Tetapi", "Tapi" } },
+            { "but", { "* ", "Tetapi ", "Tapi " } },
             { "examples", { "Contoh" } },
             { "feature", { "Fungsi" } },
-            { "given", { "*", "Diberi", "Bagi" } },
+            { "given", { "* ", "Diberi ", "Bagi " } },
             { "rule", { "Rule" } },
             { "scenario", { "Senario", "Situasi", "Keadaan" } },
             { "scenarioOutline", { "Kerangka Senario", "Kerangka Situasi", "Kerangka Keadaan", "Garis Panduan Senario" } },
-            { "then", { "*", "Maka", "Kemudian" } },
-            { "when", { "*", "Apabila" } }
+            { "then", { "* ", "Maka ", "Kemudian " } },
+            { "when", { "* ", "Apabila " } }
         }
     },
     {
         "bs",
         {
-            { "and", { "*", "I", "A" } },
+            { "and", { "* ", "I ", "A " } },
             { "background", { "Pozadina" } },
-            { "but", { "*", "Ali" } },
+            { "but", { "* ", "Ali " } },
             { "examples", { "Primjeri" } },
             { "feature", { "Karakteristika" } },
-            { "given", { "*", "Dato" } },
+            { "given", { "* ", "Dato " } },
             { "rule", { "Rule" } },
             { "scenario", { "Primjer", "Scenariju", "Scenario" } },
             { "scenarioOutline", { "Scenariju-obris", "Scenario-outline" } },
-            { "then", { "*", "Zatim" } },
-            { "when", { "*", "Kada" } }
+            { "then", { "* ", "Zatim " } },
+            { "when", { "* ", "Kada " } }
         }
     },
     {
         "ca",
         {
-            { "and", { "*", "I" } },
+            { "and", { "* ", "I " } },
             { "background", { "Rerefons", "Antecedents" } },
-            { "but", { "*", "Però" } },
+            { "but", { "* ", "Però " } },
             { "examples", { "Exemples" } },
             { "feature", { "Característica", "Funcionalitat" } },
-            { "given", { "*", "Donat", "Donada", "Atès", "Atesa" } },
+            { "given", { "* ", "Donat ", "Donada ", "Atès ", "Atesa " } },
             { "rule", { "Rule" } },
             { "scenario", { "Exemple", "Escenari" } },
             { "scenarioOutline", { "Esquema de l'escenari" } },
-            { "then", { "*", "Aleshores", "Cal" } },
-            { "when", { "*", "Quan" } }
+            { "then", { "* ", "Aleshores ", "Cal " } },
+            { "when", { "* ", "Quan " } }
         }
     },
     {
         "cs",
         {
-            { "and", { "*", "A také", "A" } },
+            { "and", { "* ", "A také ", "A " } },
             { "background", { "Pozadí", "Kontext" } },
-            { "but", { "*", "Ale" } },
+            { "but", { "* ", "Ale " } },
             { "examples", { "Příklady" } },
             { "feature", { "Požadavek" } },
-            { "given", { "*", "Pokud", "Za předpokladu" } },
+            { "given", { "* ", "Pokud ", "Za předpokladu " } },
             { "rule", { "Pravidlo" } },
             { "scenario", { "Příklad", "Scénář" } },
             { "scenarioOutline", { "Náčrt Scénáře", "Osnova scénáře" } },
-            { "then", { "*", "Pak" } },
-            { "when", { "*", "Když" } }
+            { "then", { "* ", "Pak " } },
+            { "when", { "* ", "Když " } }
         }
     },
     {
         "cy_GB",
         {
-            { "and", { "*", "A" } },
+            { "and", { "* ", "A " } },
             { "background", { "Cefndir" } },
-            { "but", { "*", "Ond" } },
+            { "but", { "* ", "Ond " } },
             { "examples", { "Enghreifftiau" } },
             { "feature", { "Arwedd" } },
-            { "given", { "*", "Anrhegedig a" } },
+            { "given", { "* ", "Anrhegedig a " } },
             { "rule", { "Rule" } },
             { "scenario", { "Enghraifft", "Scenario" } },
             { "scenarioOutline", { "Scenario Amlinellol" } },
-            { "then", { "*", "Yna" } },
-            { "when", { "*", "Pryd" } }
+            { "then", { "* ", "Yna " } },
+            { "when", { "* ", "Pryd " } }
         }
     },
     {
         "da",
         {
-            { "and", { "*", "Og" } },
+            { "and", { "* ", "Og " } },
             { "background", { "Baggrund" } },
-            { "but", { "*", "Men" } },
+            { "but", { "* ", "Men " } },
             { "examples", { "Eksempler" } },
             { "feature", { "Egenskab" } },
-            { "given", { "*", "Givet" } },
+            { "given", { "* ", "Givet " } },
             { "rule", { "Rule" } },
             { "scenario", { "Eksempel", "Scenarie" } },
             { "scenarioOutline", { "Abstrakt Scenario" } },
-            { "then", { "*", "Så" } },
-            { "when", { "*", "Når" } }
+            { "then", { "* ", "Så " } },
+            { "when", { "* ", "Når " } }
         }
     },
     {
         "de",
         {
-            { "and", { "*", "Und" } },
+            { "and", { "* ", "Und " } },
             { "background", { "Grundlage", "Hintergrund", "Voraussetzungen", "Vorbedingungen" } },
-            { "but", { "*", "Aber" } },
+            { "but", { "* ", "Aber " } },
             { "examples", { "Beispiele" } },
             { "feature", { "Funktionalität", "Funktion" } },
-            { "given", { "*", "Angenommen", "Gegeben sei", "Gegeben seien" } },
+            { "given", { "* ", "Angenommen ", "Gegeben sei ", "Gegeben seien " } },
             { "rule", { "Rule", "Regel" } },
             { "scenario", { "Beispiel", "Szenario" } },
             { "scenarioOutline", { "Szenariogrundriss", "Szenarien" } },
-            { "then", { "*", "Dann" } },
-            { "when", { "*", "Wenn" } }
+            { "then", { "* ", "Dann " } },
+            { "when", { "* ", "Wenn " } }
         }
     },
     {
         "el",
         {
-            { "and", { "*", "Και" } },
+            { "and", { "* ", "Και " } },
             { "background", { "Υπόβαθρο" } },
-            { "but", { "*", "Αλλά" } },
+            { "but", { "* ", "Αλλά " } },
             { "examples", { "Παραδείγματα", "Σενάρια" } },
             { "feature", { "Δυνατότητα", "Λειτουργία" } },
-            { "given", { "*", "Δεδομένου" } },
+            { "given", { "* ", "Δεδομένου " } },
             { "rule", { "Rule" } },
             { "scenario", { "Παράδειγμα", "Σενάριο" } },
             { "scenarioOutline", { "Περιγραφή Σεναρίου", "Περίγραμμα Σεναρίου" } },
-            { "then", { "*", "Τότε" } },
-            { "when", { "*", "Όταν" } }
+            { "then", { "* ", "Τότε " } },
+            { "when", { "* ", "Όταν " } }
         }
     },
     {
         "em",
         {
-            { "and", { "*", "😂" } },
+            { "and", { "* ", "😂" } },
             { "background", { "💤" } },
-            { "but", { "*", "😔" } },
+            { "but", { "* ", "😔" } },
             { "examples", { "📓" } },
             { "feature", { "📚" } },
-            { "given", { "*", "😐" } },
+            { "given", { "* ", "😐" } },
             { "rule", { "Rule" } },
             { "scenario", { "🥒", "📕" } },
             { "scenarioOutline", { "📖" } },
-            { "then", { "*", "🙏" } },
-            { "when", { "*", "🎬" } }
+            { "then", { "* ", "🙏" } },
+            { "when", { "* ", "🎬" } }
         }
     },
     {
         "en",
         {
-            { "and", { "*", "And" } },
+            { "and", { "* ", "And " } },
             { "background", { "Background" } },
-            { "but", { "*", "But" } },
+            { "but", { "* ", "But " } },
             { "examples", { "Examples", "Scenarios" } },
             { "feature", { "Feature", "Business Need", "Ability" } },
-            { "given", { "*", "Given" } },
+            { "given", { "* ", "Given " } },
             { "rule", { "Rule" } },
             { "scenario", { "Example", "Scenario" } },
             { "scenarioOutline", { "Scenario Outline", "Scenario Template" } },
-            { "then", { "*", "Then" } },
-            { "when", { "*", "When" } }
+            { "then", { "* ", "Then " } },
+            { "when", { "* ", "When " } }
         }
     },
     {
         "en_Scouse",
         {
-            { "and", { "*", "An" } },
+            { "and", { "* ", "An " } },
             { "background", { "Dis is what went down" } },
-            { "but", { "*", "Buh" } },
+            { "but", { "* ", "Buh " } },
             { "examples", { "Examples" } },
             { "feature", { "Feature" } },
-            { "given", { "*", "Givun", "Youse know when youse got" } },
+            { "given", { "* ", "Givun ", "Youse know when youse got " } },
             { "rule", { "Rule" } },
             { "scenario", { "The thing of it is" } },
             { "scenarioOutline", { "Wharrimean is" } },
-            { "then", { "*", "Dun", "Den youse gotta" } },
-            { "when", { "*", "Wun", "Youse know like when" } }
+            { "then", { "* ", "Dun ", "Den youse gotta " } },
+            { "when", { "* ", "Wun ", "Youse know like when " } }
         }
     },
     {
         "en_au",
         {
-            { "and", { "*", "Too right" } },
+            { "and", { "* ", "Too right " } },
             { "background", { "First off" } },
-            { "but", { "*", "Yeah nah" } },
+            { "but", { "* ", "Yeah nah " } },
             { "examples", { "You'll wanna" } },
             { "feature", { "Pretty much" } },
-            { "given", { "*", "Y'know" } },
+            { "given", { "* ", "Y'know " } },
             { "rule", { "Rule" } },
             { "scenario", { "Awww, look mate" } },
             { "scenarioOutline", { "Reckon it's like" } },
-            { "then", { "*", "But at the end of the day I reckon" } },
-            { "when", { "*", "It's just unbelievable" } }
+            { "then", { "* ", "But at the end of the day I reckon " } },
+            { "when", { "* ", "It's just unbelievable " } }
         }
     },
     {
         "en_lol",
         {
-            { "and", { "*", "AN" } },
+            { "and", { "* ", "AN " } },
             { "background", { "B4" } },
-            { "but", { "*", "BUT" } },
+            { "but", { "* ", "BUT " } },
             { "examples", { "EXAMPLZ" } },
             { "feature", { "OH HAI" } },
-            { "given", { "*", "I CAN HAZ" } },
+            { "given", { "* ", "I CAN HAZ " } },
             { "rule", { "Rule" } },
             { "scenario", { "MISHUN" } },
             { "scenarioOutline", { "MISHUN SRSLY" } },
-            { "then", { "*", "DEN" } },
-            { "when", { "*", "WEN" } }
+            { "then", { "* ", "DEN " } },
+            { "when", { "* ", "WEN " } }
         }
     },
     {
         "en_old",
         {
-            { "and", { "*", "Ond", "7" } },
+            { "and", { "* ", "Ond ", "7 " } },
             { "background", { "Aer", "Ær" } },
-            { "but", { "*", "Ac" } },
+            { "but", { "* ", "Ac " } },
             { "examples", { "Se the", "Se þe", "Se ðe" } },
             { "feature", { "Hwaet", "Hwæt" } },
-            { "given", { "*", "Thurh", "Þurh", "Ðurh" } },
+            { "given", { "* ", "Thurh ", "Þurh ", "Ðurh " } },
             { "rule", { "Rule" } },
             { "scenario", { "Swa" } },
             { "scenarioOutline", { "Swa hwaer swa", "Swa hwær swa" } },
-            { "then", { "*", "Tha", "Þa", "Ða", "Tha the", "Þa þe", "Ða ðe" } },
-            { "when", { "*", "Bæþsealf", "Bæþsealfa", "Bæþsealfe", "Ciricæw", "Ciricæwe", "Ciricæwa" } }
+            { "then", { "* ", "Tha ", "Þa ", "Ða ", "Tha the ", "Þa þe ", "Ða ðe " } },
+            { "when", { "* ", "Bæþsealf ", "Bæþsealfa ", "Bæþsealfe ", "Ciricæw ", "Ciricæwe ", "Ciricæwa " } }
         }
     },
     {
         "en_pirate",
         {
-            { "and", { "*", "Aye" } },
+            { "and", { "* ", "Aye " } },
             { "background", { "Yo-ho-ho" } },
-            { "but", { "*", "Avast!" } },
+            { "but", { "* ", "Avast! " } },
             { "examples", { "Dead men tell no tales" } },
             { "feature", { "Ahoy matey!" } },
-            { "given", { "*", "Gangway!" } },
+            { "given", { "* ", "Gangway! " } },
             { "rule", { "Rule" } },
             { "scenario", { "Heave to" } },
             { "scenarioOutline", { "Shiver me timbers" } },
-            { "then", { "*", "Let go and haul" } },
-            { "when", { "*", "Blimey!" } }
+            { "then", { "* ", "Let go and haul " } },
+            { "when", { "* ", "Blimey! " } }
         }
     },
     {
         "en_tx",
         {
-            { "and", { "Come hell or high water" } },
+            { "and", { "Come hell or high water " } },
             { "background", { "Lemme tell y'all a story" } },
-            { "but", { "Well now hold on, I'll you what" } },
+            { "but", { "Well now hold on, I'll you what " } },
             { "examples", { "Now that's a story longer than a cattle drive in July" } },
             { "feature", { "This ain’t my first rodeo", "All gussied up" } },
-            { "given", { "Fixin' to", "All git out" } },
-            { "rule", { "Rule" } },
+            { "given", { "Fixin' to ", "All git out " } },
+            { "rule", { "Rule " } },
             { "scenario", { "All hat and no cattle" } },
             { "scenarioOutline", { "Serious as a snake bite", "Busy as a hound in flea season" } },
-            { "then", { "There’s no tree but bears some fruit" } },
-            { "when", { "Quick out of the chute" } }
+            { "then", { "There’s no tree but bears some fruit " } },
+            { "when", { "Quick out of the chute " } }
         }
     },
     {
         "eo",
         {
-            { "and", { "*", "Kaj" } },
+            { "and", { "* ", "Kaj " } },
             { "background", { "Fono" } },
-            { "but", { "*", "Sed" } },
+            { "but", { "* ", "Sed " } },
             { "examples", { "Ekzemploj" } },
             { "feature", { "Trajto" } },
-            { "given", { "*", "Donitaĵo", "Komence" } },
+            { "given", { "* ", "Donitaĵo ", "Komence " } },
             { "rule", { "Rule" } },
             { "scenario", { "Ekzemplo", "Scenaro", "Kazo" } },
             { "scenarioOutline", { "Konturo de la scenaro", "Skizo", "Kazo-skizo" } },
-            { "then", { "*", "Do" } },
-            { "when", { "*", "Se" } }
+            { "then", { "* ", "Do " } },
+            { "when", { "* ", "Se " } }
         }
     },
     {
         "es",
         {
-            { "and", { "*", "Y", "E" } },
+            { "and", { "* ", "Y ", "E " } },
             { "background", { "Antecedentes" } },
-            { "but", { "*", "Pero" } },
+            { "but", { "* ", "Pero " } },
             { "examples", { "Ejemplos" } },
             { "feature", { "Característica", "Necesidad del negocio", "Requisito" } },
-            { "given", { "*", "Dado", "Dada", "Dados", "Dadas" } },
+            { "given", { "* ", "Dado ", "Dada ", "Dados ", "Dadas " } },
             { "rule", { "Regla", "Regla de negocio" } },
             { "scenario", { "Ejemplo", "Escenario" } },
             { "scenarioOutline", { "Esquema del escenario" } },
-            { "then", { "*", "Entonces" } },
-            { "when", { "*", "Cuando" } }
+            { "then", { "* ", "Entonces " } },
+            { "when", { "* ", "Cuando " } }
         }
     },
     {
         "et",
         {
-            { "and", { "*", "Ja" } },
+            { "and", { "* ", "Ja " } },
             { "background", { "Taust" } },
-            { "but", { "*", "Kuid" } },
+            { "but", { "* ", "Kuid " } },
             { "examples", { "Juhtumid" } },
             { "feature", { "Omadus" } },
-            { "given", { "*", "Eeldades" } },
+            { "given", { "* ", "Eeldades " } },
             { "rule", { "Reegel" } },
             { "scenario", { "Juhtum", "Stsenaarium" } },
             { "scenarioOutline", { "Raamjuhtum", "Raamstsenaarium" } },
-            { "then", { "*", "Siis" } },
-            { "when", { "*", "Kui" } }
+            { "then", { "* ", "Siis " } },
+            { "when", { "* ", "Kui " } }
         }
     },
     {
         "fa",
         {
-            { "and", { "*", "و" } },
+            { "and", { "* ", "و " } },
             { "background", { "زمینه" } },
-            { "but", { "*", "اما" } },
+            { "but", { "* ", "اما " } },
             { "examples", { "نمونه ها" } },
             { "feature", { "وِیژگی" } },
-            { "given", { "*", "با فرض" } },
+            { "given", { "* ", "با فرض " } },
             { "rule", { "Rule" } },
             { "scenario", { "مثال", "سناریو" } },
             { "scenarioOutline", { "الگوی سناریو" } },
-            { "then", { "*", "آنگاه" } },
-            { "when", { "*", "هنگامی" } }
+            { "then", { "* ", "آنگاه " } },
+            { "when", { "* ", "هنگامی " } }
         }
     },
     {
         "fi",
         {
-            { "and", { "*", "Ja" } },
+            { "and", { "* ", "Ja " } },
             { "background", { "Tausta" } },
-            { "but", { "*", "Mutta" } },
+            { "but", { "* ", "Mutta " } },
             { "examples", { "Tapaukset" } },
             { "feature", { "Ominaisuus" } },
-            { "given", { "*", "Oletetaan" } },
+            { "given", { "* ", "Oletetaan " } },
             { "rule", { "Rule" } },
             { "scenario", { "Tapaus" } },
             { "scenarioOutline", { "Tapausaihio" } },
-            { "then", { "*", "Niin" } },
-            { "when", { "*", "Kun" } }
+            { "then", { "* ", "Niin " } },
+            { "when", { "* ", "Kun " } }
         }
     },
     {
         "fr",
         {
-            { "and", { "*", "Et que", "Et qu'", "Et" } },
+            { "and", { "* ", "Et que ", "Et qu'", "Et " } },
             { "background", { "Contexte" } },
-            { "but", { "*", "Mais que", "Mais qu'", "Mais" } },
+            { "but", { "* ", "Mais que ", "Mais qu'", "Mais " } },
             { "examples", { "Exemples" } },
             { "feature", { "Fonctionnalité" } },
-            { "given", { "*", "Soit", "Sachant que", "Sachant qu'", "Sachant", "Etant donné que", "Etant donné qu'", "Etant donné", "Etant donnée", "Etant donnés", "Etant données", "Étant donné que", "Étant donné qu'", "Étant donné", "Étant donnée", "Étant donnés", "Étant données" } },
+            { "given", { "* ", "Soit ", "Sachant que ", "Sachant qu'", "Sachant ", "Etant donné que ", "Etant donné qu'", "Etant donné ", "Etant donnée ", "Etant donnés ", "Etant données ", "Étant donné que ", "Étant donné qu'", "Étant donné ", "Étant donnée ", "Étant donnés ", "Étant données " } },
             { "rule", { "Règle" } },
             { "scenario", { "Exemple", "Scénario" } },
             { "scenarioOutline", { "Plan du scénario", "Plan du Scénario" } },
-            { "then", { "*", "Alors", "Donc" } },
-            { "when", { "*", "Quand", "Lorsque", "Lorsqu'" } }
+            { "then", { "* ", "Alors ", "Donc " } },
+            { "when", { "* ", "Quand ", "Lorsque ", "Lorsqu'" } }
         }
     },
     {
         "ga",
         {
-            { "and", { "*", "Agus" } },
+            { "and", { "* ", "Agus" } },
             { "background", { "Cúlra" } },
-            { "but", { "*", "Ach" } },
+            { "but", { "* ", "Ach" } },
             { "examples", { "Samplaí" } },
             { "feature", { "Gné" } },
-            { "given", { "*", "Cuir i gcás go", "Cuir i gcás nach", "Cuir i gcás gur", "Cuir i gcás nár" } },
+            { "given", { "* ", "Cuir i gcás go", "Cuir i gcás nach", "Cuir i gcás gur", "Cuir i gcás nár" } },
             { "rule", { "Rule" } },
             { "scenario", { "Sampla", "Cás" } },
             { "scenarioOutline", { "Cás Achomair" } },
-            { "then", { "*", "Ansin" } },
-            { "when", { "*", "Nuair a", "Nuair nach", "Nuair ba", "Nuair nár" } }
+            { "then", { "* ", "Ansin" } },
+            { "when", { "* ", "Nuair a", "Nuair nach", "Nuair ba", "Nuair nár" } }
         }
     },
     {
         "gj",
         {
-            { "and", { "*", "અને" } },
+            { "and", { "* ", "અને " } },
             { "background", { "બેકગ્રાઉન્ડ" } },
-            { "but", { "*", "પણ" } },
+            { "but", { "* ", "પણ " } },
             { "examples", { "ઉદાહરણો" } },
             { "feature", { "લક્ષણ", "વ્યાપાર જરૂર", "ક્ષમતા" } },
-            { "given", { "*", "આપેલ છે" } },
+            { "given", { "* ", "આપેલ છે " } },
             { "rule", { "Rule" } },
             { "scenario", { "ઉદાહરણ", "સ્થિતિ" } },
             { "scenarioOutline", { "પરિદ્દશ્ય રૂપરેખા", "પરિદ્દશ્ય ઢાંચો" } },
-            { "then", { "*", "પછી" } },
-            { "when", { "*", "ક્યારે" } }
+            { "then", { "* ", "પછી " } },
+            { "when", { "* ", "ક્યારે " } }
         }
     },
     {
         "gl",
         {
-            { "and", { "*", "E" } },
+            { "and", { "* ", "E " } },
             { "background", { "Contexto" } },
-            { "but", { "*", "Mais", "Pero" } },
+            { "but", { "* ", "Mais ", "Pero " } },
             { "examples", { "Exemplos" } },
             { "feature", { "Característica" } },
-            { "given", { "*", "Dado", "Dada", "Dados", "Dadas" } },
+            { "given", { "* ", "Dado ", "Dada ", "Dados ", "Dadas " } },
             { "rule", { "Rule" } },
             { "scenario", { "Exemplo", "Escenario" } },
             { "scenarioOutline", { "Esbozo do escenario" } },
-            { "then", { "*", "Entón", "Logo" } },
-            { "when", { "*", "Cando" } }
+            { "then", { "* ", "Entón ", "Logo " } },
+            { "when", { "* ", "Cando " } }
         }
     },
     {
         "he",
         {
-            { "and", { "*", "וגם" } },
+            { "and", { "* ", "וגם " } },
             { "background", { "רקע" } },
-            { "but", { "*", "אבל" } },
+            { "but", { "* ", "אבל " } },
             { "examples", { "דוגמאות" } },
             { "feature", { "תכונה" } },
-            { "given", { "*", "בהינתן" } },
+            { "given", { "* ", "בהינתן " } },
             { "rule", { "כלל" } },
             { "scenario", { "דוגמא", "תרחיש" } },
             { "scenarioOutline", { "תבנית תרחיש" } },
-            { "then", { "*", "אז", "אזי" } },
-            { "when", { "*", "כאשר" } }
+            { "then", { "* ", "אז ", "אזי " } },
+            { "when", { "* ", "כאשר " } }
         }
     },
     {
         "hi",
         {
-            { "and", { "*", "और", "तथा" } },
+            { "and", { "* ", "और ", "तथा " } },
             { "background", { "पृष्ठभूमि" } },
-            { "but", { "*", "पर", "परन्तु", "किन्तु" } },
+            { "but", { "* ", "पर ", "परन्तु ", "किन्तु " } },
             { "examples", { "उदाहरण" } },
             { "feature", { "रूप लेख" } },
-            { "given", { "*", "अगर", "यदि", "चूंकि" } },
+            { "given", { "* ", "अगर ", "यदि ", "चूंकि " } },
             { "rule", { "नियम" } },
             { "scenario", { "परिदृश्य" } },
             { "scenarioOutline", { "परिदृश्य रूपरेखा" } },
-            { "then", { "*", "तब", "तदा" } },
-            { "when", { "*", "जब", "कदा" } }
+            { "then", { "* ", "तब ", "तदा " } },
+            { "when", { "* ", "जब ", "कदा " } }
         }
     },
     {
         "hr",
         {
-            { "and", { "*", "I" } },
+            { "and", { "* ", "I " } },
             { "background", { "Pozadina" } },
-            { "but", { "*", "Ali" } },
+            { "but", { "* ", "Ali " } },
             { "examples", { "Primjeri", "Scenariji" } },
             { "feature", { "Osobina", "Mogućnost", "Mogucnost" } },
-            { "given", { "*", "Zadan", "Zadani", "Zadano", "Ukoliko" } },
+            { "given", { "* ", "Zadan ", "Zadani ", "Zadano ", "Ukoliko " } },
             { "rule", { "Rule" } },
             { "scenario", { "Primjer", "Scenarij" } },
             { "scenarioOutline", { "Skica", "Koncept" } },
-            { "then", { "*", "Onda" } },
-            { "when", { "*", "Kada", "Kad" } }
+            { "then", { "* ", "Onda " } },
+            { "when", { "* ", "Kada ", "Kad " } }
         }
     },
     {
         "ht",
         {
-            { "and", { "*", "Ak", "Epi", "E" } },
+            { "and", { "* ", "Ak ", "Epi ", "E " } },
             { "background", { "Kontèks", "Istorik" } },
-            { "but", { "*", "Men" } },
+            { "but", { "* ", "Men " } },
             { "examples", { "Egzanp" } },
             { "feature", { "Karakteristik", "Mak", "Fonksyonalite" } },
-            { "given", { "*", "Sipoze", "Sipoze ke", "Sipoze Ke" } },
+            { "given", { "* ", "Sipoze ", "Sipoze ke ", "Sipoze Ke " } },
             { "rule", { "Rule" } },
             { "scenario", { "Senaryo" } },
             { "scenarioOutline", { "Plan senaryo", "Plan Senaryo", "Senaryo deskripsyon", "Senaryo Deskripsyon", "Dyagram senaryo", "Dyagram Senaryo" } },
-            { "then", { "*", "Lè sa a", "Le sa a" } },
-            { "when", { "*", "Lè", "Le" } }
+            { "then", { "* ", "Lè sa a ", "Le sa a " } },
+            { "when", { "* ", "Lè ", "Le " } }
         }
     },
     {
         "hu",
         {
-            { "and", { "*", "És" } },
+            { "and", { "* ", "És " } },
             { "background", { "Háttér" } },
-            { "but", { "*", "De" } },
+            { "but", { "* ", "De " } },
             { "examples", { "Példák" } },
             { "feature", { "Jellemző" } },
-            { "given", { "*", "Amennyiben", "Adott" } },
+            { "given", { "* ", "Amennyiben ", "Adott " } },
             { "rule", { "Szabály" } },
             { "scenario", { "Példa", "Forgatókönyv" } },
             { "scenarioOutline", { "Forgatókönyv vázlat" } },
-            { "then", { "*", "Akkor" } },
-            { "when", { "*", "Majd", "Ha", "Amikor" } }
+            { "then", { "* ", "Akkor " } },
+            { "when", { "* ", "Majd ", "Ha ", "Amikor " } }
         }
     },
     {
         "id",
         {
-            { "and", { "*", "Dan" } },
+            { "and", { "* ", "Dan " } },
             { "background", { "Dasar", "Latar Belakang" } },
-            { "but", { "*", "Tapi", "Tetapi" } },
+            { "but", { "* ", "Tapi ", "Tetapi " } },
             { "examples", { "Contoh", "Misal" } },
             { "feature", { "Fitur" } },
-            { "given", { "*", "Dengan", "Diketahui", "Diasumsikan", "Bila", "Jika" } },
+            { "given", { "* ", "Dengan ", "Diketahui ", "Diasumsikan ", "Bila ", "Jika " } },
             { "rule", { "Rule", "Aturan" } },
             { "scenario", { "Skenario" } },
             { "scenarioOutline", { "Skenario konsep", "Garis-Besar Skenario" } },
-            { "then", { "*", "Maka", "Kemudian" } },
-            { "when", { "*", "Ketika" } }
+            { "then", { "* ", "Maka ", "Kemudian " } },
+            { "when", { "* ", "Ketika " } }
         }
     },
     {
         "is",
         {
-            { "and", { "*", "Og" } },
+            { "and", { "* ", "Og " } },
             { "background", { "Bakgrunnur" } },
-            { "but", { "*", "En" } },
+            { "but", { "* ", "En " } },
             { "examples", { "Dæmi", "Atburðarásir" } },
             { "feature", { "Eiginleiki" } },
-            { "given", { "*", "Ef" } },
+            { "given", { "* ", "Ef " } },
             { "rule", { "Rule" } },
             { "scenario", { "Atburðarás" } },
             { "scenarioOutline", { "Lýsing Atburðarásar", "Lýsing Dæma" } },
-            { "then", { "*", "Þá" } },
-            { "when", { "*", "Þegar" } }
+            { "then", { "* ", "Þá " } },
+            { "when", { "* ", "Þegar " } }
         }
     },
     {
         "it",
         {
-            { "and", { "*", "E" } },
+            { "and", { "* ", "E " } },
             { "background", { "Contesto" } },
-            { "but", { "*", "Ma" } },
+            { "but", { "* ", "Ma " } },
             { "examples", { "Esempi" } },
             { "feature", { "Funzionalità", "Esigenza di Business", "Abilità" } },
-            { "given", { "*", "Dato", "Data", "Dati", "Date" } },
+            { "given", { "* ", "Dato ", "Data ", "Dati ", "Date " } },
             { "rule", { "Regola" } },
             { "scenario", { "Esempio", "Scenario" } },
             { "scenarioOutline", { "Schema dello scenario" } },
-            { "then", { "*", "Allora" } },
-            { "when", { "*", "Quando" } }
+            { "then", { "* ", "Allora " } },
+            { "when", { "* ", "Quando " } }
         }
     },
     {
         "ja",
         {
-            { "and", { "*", "且つ", "かつ" } },
+            { "and", { "* ", "且つ", "かつ" } },
             { "background", { "背景" } },
-            { "but", { "*", "然し", "しかし", "但し", "ただし" } },
+            { "but", { "* ", "然し", "しかし", "但し", "ただし" } },
             { "examples", { "例", "サンプル" } },
             { "feature", { "フィーチャ", "機能" } },
-            { "given", { "*", "前提" } },
+            { "given", { "* ", "前提" } },
             { "rule", { "ルール" } },
             { "scenario", { "シナリオ" } },
             { "scenarioOutline", { "シナリオアウトライン", "シナリオテンプレート", "テンプレ", "シナリオテンプレ" } },
-            { "then", { "*", "ならば" } },
-            { "when", { "*", "もし" } }
+            { "then", { "* ", "ならば" } },
+            { "when", { "* ", "もし" } }
         }
     },
     {
         "jv",
         {
-            { "and", { "*", "Lan" } },
+            { "and", { "* ", "Lan " } },
             { "background", { "Dasar" } },
-            { "but", { "*", "Tapi", "Nanging", "Ananging" } },
+            { "but", { "* ", "Tapi ", "Nanging ", "Ananging " } },
             { "examples", { "Conto", "Contone" } },
             { "feature", { "Fitur" } },
-            { "given", { "*", "Nalika", "Nalikaning" } },
+            { "given", { "* ", "Nalika ", "Nalikaning " } },
             { "rule", { "Rule" } },
             { "scenario", { "Skenario" } },
             { "scenarioOutline", { "Konsep skenario" } },
-            { "then", { "*", "Njuk", "Banjur" } },
-            { "when", { "*", "Manawa", "Menawa" } }
+            { "then", { "* ", "Njuk ", "Banjur " } },
+            { "when", { "* ", "Manawa ", "Menawa " } }
         }
     },
     {
         "ka",
         {
-            { "and", { "*", "და", "ასევე" } },
+            { "and", { "* ", "და ", "ასევე " } },
             { "background", { "კონტექსტი" } },
-            { "but", { "*", "მაგრამ", "თუმცა" } },
+            { "but", { "* ", "მაგრამ ", "თუმცა " } },
             { "examples", { "მაგალითები" } },
             { "feature", { "თვისება", "მოთხოვნა" } },
-            { "given", { "*", "მოცემული", "მოცემულია", "ვთქვათ" } },
+            { "given", { "* ", "მოცემული ", "მოცემულია ", "ვთქვათ " } },
             { "rule", { "წესი" } },
             { "scenario", { "მაგალითად", "მაგალითი", "მაგ", "სცენარი" } },
             { "scenarioOutline", { "სცენარის ნიმუში", "სცენარის შაბლონი", "ნიმუში", "შაბლონი" } },
-            { "then", { "*", "მაშინ" } },
-            { "when", { "*", "როდესაც", "როცა", "როგორც კი", "თუ" } }
+            { "then", { "* ", "მაშინ " } },
+            { "when", { "* ", "როდესაც ", "როცა ", "როგორც კი ", "თუ " } }
         }
     },
     {
         "kn",
         {
-            { "and", { "*", "ಮತ್ತು" } },
+            { "and", { "* ", "ಮತ್ತು " } },
             { "background", { "ಹಿನ್ನೆಲೆ" } },
-            { "but", { "*", "ಆದರೆ" } },
+            { "but", { "* ", "ಆದರೆ " } },
             { "examples", { "ಉದಾಹರಣೆಗಳು" } },
             { "feature", { "ಹೆಚ್ಚಳ" } },
-            { "given", { "*", "ನೀಡಿದ" } },
+            { "given", { "* ", "ನೀಡಿದ " } },
             { "rule", { "Rule" } },
             { "scenario", { "ಉದಾಹರಣೆ", "ಕಥಾಸಾರಾಂಶ" } },
             { "scenarioOutline", { "ವಿವರಣೆ" } },
-            { "then", { "*", "ನಂತರ" } },
-            { "when", { "*", "ಸ್ಥಿತಿಯನ್ನು" } }
+            { "then", { "* ", "ನಂತರ " } },
+            { "when", { "* ", "ಸ್ಥಿತಿಯನ್ನು " } }
         }
     },
     {
         "ko",
         {
-            { "and", { "*", "그리고" } },
+            { "and", { "* ", "그리고" } },
             { "background", { "배경" } },
-            { "but", { "*", "하지만", "단" } },
+            { "but", { "* ", "하지만", "단" } },
             { "examples", { "예" } },
             { "feature", { "기능" } },
-            { "given", { "*", "조건", "먼저" } },
+            { "given", { "* ", "조건", "먼저" } },
             { "rule", { "Rule" } },
             { "scenario", { "시나리오" } },
             { "scenarioOutline", { "시나리오 개요" } },
-            { "then", { "*", "그러면" } },
-            { "when", { "*", "만일", "만약" } }
+            { "then", { "* ", "그러면" } },
+            { "when", { "* ", "만일", "만약" } }
         }
     },
     {
         "lt",
         {
-            { "and", { "*", "Ir" } },
+            { "and", { "* ", "Ir " } },
             { "background", { "Kontekstas" } },
-            { "but", { "*", "Bet" } },
+            { "but", { "* ", "Bet " } },
             { "examples", { "Pavyzdžiai", "Scenarijai", "Variantai" } },
             { "feature", { "Savybė" } },
-            { "given", { "*", "Duota" } },
+            { "given", { "* ", "Duota " } },
             { "rule", { "Rule" } },
             { "scenario", { "Pavyzdys", "Scenarijus" } },
             { "scenarioOutline", { "Scenarijaus šablonas" } },
-            { "then", { "*", "Tada" } },
-            { "when", { "*", "Kai" } }
+            { "then", { "* ", "Tada " } },
+            { "when", { "* ", "Kai " } }
         }
     },
     {
         "lu",
         {
-            { "and", { "*", "an", "a" } },
+            { "and", { "* ", "an ", "a " } },
             { "background", { "Hannergrond" } },
-            { "but", { "*", "awer", "mä" } },
+            { "but", { "* ", "awer ", "mä " } },
             { "examples", { "Beispiller" } },
             { "feature", { "Funktionalitéit" } },
-            { "given", { "*", "ugeholl" } },
+            { "given", { "* ", "ugeholl " } },
             { "rule", { "Rule" } },
             { "scenario", { "Beispill", "Szenario" } },
             { "scenarioOutline", { "Plang vum Szenario" } },
-            { "then", { "*", "dann" } },
-            { "when", { "*", "wann" } }
+            { "then", { "* ", "dann " } },
+            { "when", { "* ", "wann " } }
         }
     },
     {
         "lv",
         {
-            { "and", { "*", "Un" } },
+            { "and", { "* ", "Un " } },
             { "background", { "Konteksts", "Situācija" } },
-            { "but", { "*", "Bet" } },
+            { "but", { "* ", "Bet " } },
             { "examples", { "Piemēri", "Paraugs" } },
             { "feature", { "Funkcionalitāte", "Fīča" } },
-            { "given", { "*", "Kad" } },
+            { "given", { "* ", "Kad " } },
             { "rule", { "Rule" } },
             { "scenario", { "Piemērs", "Scenārijs" } },
             { "scenarioOutline", { "Scenārijs pēc parauga" } },
-            { "then", { "*", "Tad" } },
-            { "when", { "*", "Ja" } }
+            { "then", { "* ", "Tad " } },
+            { "when", { "* ", "Ja " } }
         }
     },
     {
         "mk_Cyrl",
         {
-            { "and", { "*", "И" } },
+            { "and", { "* ", "И " } },
             { "background", { "Контекст", "Содржина" } },
-            { "but", { "*", "Но" } },
+            { "but", { "* ", "Но " } },
             { "examples", { "Примери", "Сценарија" } },
             { "feature", { "Функционалност", "Бизнис потреба", "Можност" } },
-            { "given", { "*", "Дадено", "Дадена" } },
+            { "given", { "* ", "Дадено ", "Дадена " } },
             { "rule", { "Rule" } },
             { "scenario", { "Пример", "Сценарио", "На пример" } },
             { "scenarioOutline", { "Преглед на сценарија", "Скица", "Концепт" } },
-            { "then", { "*", "Тогаш" } },
-            { "when", { "*", "Кога" } }
+            { "then", { "* ", "Тогаш " } },
+            { "when", { "* ", "Кога " } }
         }
     },
     {
         "mk_Latn",
         {
-            { "and", { "*", "I" } },
+            { "and", { "* ", "I " } },
             { "background", { "Kontekst", "Sodrzhina" } },
-            { "but", { "*", "No" } },
+            { "but", { "* ", "No " } },
             { "examples", { "Primeri", "Scenaria" } },
             { "feature", { "Funkcionalnost", "Biznis potreba", "Mozhnost" } },
-            { "given", { "*", "Dadeno", "Dadena" } },
+            { "given", { "* ", "Dadeno ", "Dadena " } },
             { "rule", { "Rule" } },
             { "scenario", { "Scenario", "Na primer" } },
             { "scenarioOutline", { "Pregled na scenarija", "Skica", "Koncept" } },
-            { "then", { "*", "Togash" } },
-            { "when", { "*", "Koga" } }
+            { "then", { "* ", "Togash " } },
+            { "when", { "* ", "Koga " } }
         }
     },
     {
         "mn",
         {
-            { "and", { "*", "Мөн", "Тэгээд" } },
+            { "and", { "* ", "Мөн ", "Тэгээд " } },
             { "background", { "Агуулга" } },
-            { "but", { "*", "Гэхдээ", "Харин" } },
+            { "but", { "* ", "Гэхдээ ", "Харин " } },
             { "examples", { "Тухайлбал" } },
             { "feature", { "Функц", "Функционал" } },
-            { "given", { "*", "Өгөгдсөн нь", "Анх" } },
+            { "given", { "* ", "Өгөгдсөн нь ", "Анх " } },
             { "rule", { "Rule" } },
             { "scenario", { "Сценар" } },
             { "scenarioOutline", { "Сценарын төлөвлөгөө" } },
-            { "then", { "*", "Тэгэхэд", "Үүний дараа" } },
-            { "when", { "*", "Хэрэв" } }
+            { "then", { "* ", "Тэгэхэд ", "Үүний дараа " } },
+            { "when", { "* ", "Хэрэв " } }
         }
     },
     {
         "ne",
         {
-            { "and", { "*", "र", "अनि" } },
+            { "and", { "* ", "र ", "अनि " } },
             { "background", { "पृष्ठभूमी" } },
-            { "but", { "*", "तर" } },
+            { "but", { "* ", "तर " } },
             { "examples", { "उदाहरण", "उदाहरणहरु" } },
             { "feature", { "सुविधा", "विशेषता" } },
-            { "given", { "*", "दिइएको", "दिएको", "यदि" } },
+            { "given", { "* ", "दिइएको ", "दिएको ", "यदि " } },
             { "rule", { "नियम" } },
             { "scenario", { "परिदृश्य" } },
             { "scenarioOutline", { "परिदृश्य रूपरेखा" } },
-            { "then", { "*", "त्यसपछि", "अनी" } },
-            { "when", { "*", "जब" } }
+            { "then", { "* ", "त्यसपछि ", "अनी " } },
+            { "when", { "* ", "जब " } }
         }
     },
     {
         "nl",
         {
-            { "and", { "*", "En" } },
+            { "and", { "* ", "En " } },
             { "background", { "Achtergrond" } },
-            { "but", { "*", "Maar" } },
+            { "but", { "* ", "Maar " } },
             { "examples", { "Voorbeelden" } },
             { "feature", { "Functionaliteit" } },
-            { "given", { "*", "Gegeven", "Stel" } },
+            { "given", { "* ", "Gegeven ", "Stel " } },
             { "rule", { "Rule" } },
             { "scenario", { "Voorbeeld", "Scenario" } },
             { "scenarioOutline", { "Abstract Scenario" } },
-            { "then", { "*", "Dan" } },
-            { "when", { "*", "Als", "Wanneer" } }
+            { "then", { "* ", "Dan " } },
+            { "when", { "* ", "Als ", "Wanneer " } }
         }
     },
     {
         "no",
         {
-            { "and", { "*", "Og" } },
+            { "and", { "* ", "Og " } },
             { "background", { "Bakgrunn" } },
-            { "but", { "*", "Men" } },
+            { "but", { "* ", "Men " } },
             { "examples", { "Eksempler" } },
             { "feature", { "Egenskap" } },
-            { "given", { "*", "Gitt" } },
+            { "given", { "* ", "Gitt " } },
             { "rule", { "Regel" } },
             { "scenario", { "Eksempel", "Scenario" } },
             { "scenarioOutline", { "Scenariomal", "Abstrakt Scenario" } },
-            { "then", { "*", "Så" } },
-            { "when", { "*", "Når" } }
+            { "then", { "* ", "Så " } },
+            { "when", { "* ", "Når " } }
         }
     },
     {
         "pa",
         {
-            { "and", { "*", "ਅਤੇ" } },
+            { "and", { "* ", "ਅਤੇ " } },
             { "background", { "ਪਿਛੋਕੜ" } },
-            { "but", { "*", "ਪਰ" } },
+            { "but", { "* ", "ਪਰ " } },
             { "examples", { "ਉਦਾਹਰਨਾਂ" } },
             { "feature", { "ਖਾਸੀਅਤ", "ਮੁਹਾਂਦਰਾ", "ਨਕਸ਼ ਨੁਹਾਰ" } },
-            { "given", { "*", "ਜੇਕਰ", "ਜਿਵੇਂ ਕਿ" } },
+            { "given", { "* ", "ਜੇਕਰ ", "ਜਿਵੇਂ ਕਿ " } },
             { "rule", { "Rule" } },
             { "scenario", { "ਉਦਾਹਰਨ", "ਪਟਕਥਾ" } },
             { "scenarioOutline", { "ਪਟਕਥਾ ਢਾਂਚਾ", "ਪਟਕਥਾ ਰੂਪ ਰੇਖਾ" } },
-            { "then", { "*", "ਤਦ" } },
-            { "when", { "*", "ਜਦੋਂ" } }
+            { "then", { "* ", "ਤਦ " } },
+            { "when", { "* ", "ਜਦੋਂ " } }
         }
     },
     {
         "pl",
         {
-            { "and", { "*", "Oraz", "I" } },
+            { "and", { "* ", "Oraz ", "I " } },
             { "background", { "Założenia" } },
-            { "but", { "*", "Ale" } },
+            { "but", { "* ", "Ale " } },
             { "examples", { "Przykłady" } },
             { "feature", { "Właściwość", "Funkcja", "Aspekt", "Potrzeba biznesowa" } },
-            { "given", { "*", "Zakładając", "Mając", "Zakładając, że" } },
+            { "given", { "* ", "Zakładając ", "Mając ", "Zakładając, że " } },
             { "rule", { "Zasada", "Reguła" } },
             { "scenario", { "Przykład", "Scenariusz" } },
             { "scenarioOutline", { "Szablon scenariusza" } },
-            { "then", { "*", "Wtedy" } },
-            { "when", { "*", "Jeżeli", "Jeśli", "Gdy", "Kiedy" } }
+            { "then", { "* ", "Wtedy " } },
+            { "when", { "* ", "Jeżeli ", "Jeśli ", "Gdy ", "Kiedy " } }
         }
     },
     {
         "pt",
         {
-            { "and", { "*", "E" } },
+            { "and", { "* ", "E " } },
             { "background", { "Contexto", "Cenário de Fundo", "Cenario de Fundo", "Fundo" } },
-            { "but", { "*", "Mas" } },
+            { "but", { "* ", "Mas " } },
             { "examples", { "Exemplos", "Cenários", "Cenarios" } },
             { "feature", { "Funcionalidade", "Característica", "Caracteristica" } },
-            { "given", { "*", "Dado", "Dada", "Dados", "Dadas" } },
+            { "given", { "* ", "Dado ", "Dada ", "Dados ", "Dadas " } },
             { "rule", { "Regra" } },
             { "scenario", { "Exemplo", "Cenário", "Cenario" } },
             { "scenarioOutline", { "Esquema do Cenário", "Esquema do Cenario", "Delineação do Cenário", "Delineacao do Cenario" } },
-            { "then", { "*", "Então", "Entao" } },
-            { "when", { "*", "Quando" } }
+            { "then", { "* ", "Então ", "Entao " } },
+            { "when", { "* ", "Quando " } }
         }
     },
     {
         "ro",
         {
-            { "and", { "*", "Si", "Și", "Şi" } },
+            { "and", { "* ", "Si ", "Și ", "Şi " } },
             { "background", { "Context" } },
-            { "but", { "*", "Dar" } },
+            { "but", { "* ", "Dar " } },
             { "examples", { "Exemple" } },
             { "feature", { "Functionalitate", "Funcționalitate", "Funcţionalitate" } },
-            { "given", { "*", "Date fiind", "Dat fiind", "Dată fiind", "Dati fiind", "Dați fiind", "Daţi fiind" } },
+            { "given", { "* ", "Date fiind ", "Dat fiind ", "Dată fiind", "Dati fiind ", "Dați fiind ", "Daţi fiind " } },
             { "rule", { "Rule" } },
             { "scenario", { "Exemplu", "Scenariu" } },
             { "scenarioOutline", { "Structura scenariu", "Structură scenariu" } },
-            { "then", { "*", "Atunci" } },
-            { "when", { "*", "Cand", "Când" } }
+            { "then", { "* ", "Atunci " } },
+            { "when", { "* ", "Cand ", "Când " } }
         }
     },
     {
         "ru",
         {
-            { "and", { "*", "И", "К тому же", "Также" } },
+            { "and", { "* ", "И ", "К тому же ", "Также " } },
             { "background", { "Предыстория", "Контекст" } },
-            { "but", { "*", "Но", "А", "Иначе" } },
+            { "but", { "* ", "Но ", "А ", "Иначе " } },
             { "examples", { "Примеры" } },
             { "feature", { "Функция", "Функциональность", "Функционал", "Свойство", "Фича" } },
-            { "given", { "*", "Допустим", "Дано", "Пусть" } },
+            { "given", { "* ", "Допустим ", "Дано ", "Пусть " } },
             { "rule", { "Правило" } },
             { "scenario", { "Пример", "Сценарий" } },
             { "scenarioOutline", { "Структура сценария", "Шаблон сценария" } },
-            { "then", { "*", "То", "Затем", "Тогда" } },
-            { "when", { "*", "Когда", "Если" } }
+            { "then", { "* ", "То ", "Затем ", "Тогда " } },
+            { "when", { "* ", "Когда ", "Если " } }
         }
     },
     {
         "sk",
         {
-            { "and", { "*", "A", "A tiež", "A taktiež", "A zároveň" } },
+            { "and", { "* ", "A ", "A tiež ", "A taktiež ", "A zároveň " } },
             { "background", { "Pozadie" } },
-            { "but", { "*", "Ale" } },
+            { "but", { "* ", "Ale " } },
             { "examples", { "Príklady" } },
             { "feature", { "Požiadavka", "Funkcia", "Vlastnosť" } },
-            { "given", { "*", "Pokiaľ", "Za predpokladu" } },
+            { "given", { "* ", "Pokiaľ ", "Za predpokladu " } },
             { "rule", { "Rule" } },
             { "scenario", { "Príklad", "Scenár" } },
             { "scenarioOutline", { "Náčrt Scenáru", "Náčrt Scenára", "Osnova Scenára" } },
-            { "then", { "*", "Tak", "Potom" } },
-            { "when", { "*", "Keď", "Ak" } }
+            { "then", { "* ", "Tak ", "Potom " } },
+            { "when", { "* ", "Keď ", "Ak " } }
         }
     },
     {
         "sl",
         {
-            { "and", { "In", "Ter" } },
+            { "and", { "In ", "Ter " } },
             { "background", { "Kontekst", "Osnova", "Ozadje" } },
-            { "but", { "Toda", "Ampak", "Vendar" } },
+            { "but", { "Toda ", "Ampak ", "Vendar " } },
             { "examples", { "Primeri", "Scenariji" } },
             { "feature", { "Funkcionalnost", "Funkcija", "Možnosti", "Moznosti", "Lastnost", "Značilnost" } },
-            { "given", { "Dano", "Podano", "Zaradi", "Privzeto" } },
+            { "given", { "Dano ", "Podano ", "Zaradi ", "Privzeto " } },
             { "rule", { "Rule" } },
             { "scenario", { "Primer", "Scenarij" } },
             { "scenarioOutline", { "Struktura scenarija", "Skica", "Koncept", "Oris scenarija", "Osnutek" } },
-            { "then", { "Nato", "Potem", "Takrat" } },
-            { "when", { "Ko", "Ce", "Če", "Kadar" } }
+            { "then", { "Nato ", "Potem ", "Takrat " } },
+            { "when", { "Ko ", "Ce ", "Če ", "Kadar " } }
         }
     },
     {
         "sr_Cyrl",
         {
-            { "and", { "*", "И" } },
+            { "and", { "* ", "И " } },
             { "background", { "Контекст", "Основа", "Позадина" } },
-            { "but", { "*", "Али" } },
+            { "but", { "* ", "Али " } },
             { "examples", { "Примери", "Сценарији" } },
             { "feature", { "Функционалност", "Могућност", "Особина" } },
-            { "given", { "*", "За дато", "За дате", "За дати" } },
+            { "given", { "* ", "За дато ", "За дате ", "За дати " } },
             { "rule", { "Правило" } },
             { "scenario", { "Пример", "Сценарио", "Пример" } },
             { "scenarioOutline", { "Структура сценарија", "Скица", "Концепт" } },
-            { "then", { "*", "Онда" } },
-            { "when", { "*", "Када", "Кад" } }
+            { "then", { "* ", "Онда " } },
+            { "when", { "* ", "Када ", "Кад " } }
         }
     },
     {
         "sr_Latn",
         {
-            { "and", { "*", "I" } },
+            { "and", { "* ", "I " } },
             { "background", { "Kontekst", "Osnova", "Pozadina" } },
-            { "but", { "*", "Ali" } },
+            { "but", { "* ", "Ali " } },
             { "examples", { "Primeri", "Scenariji" } },
             { "feature", { "Funkcionalnost", "Mogućnost", "Mogucnost", "Osobina" } },
-            { "given", { "*", "Za dato", "Za date", "Za dati" } },
+            { "given", { "* ", "Za dato ", "Za date ", "Za dati " } },
             { "rule", { "Pravilo" } },
             { "scenario", { "Scenario", "Primer" } },
             { "scenarioOutline", { "Struktura scenarija", "Skica", "Koncept" } },
-            { "then", { "*", "Onda" } },
-            { "when", { "*", "Kada", "Kad" } }
+            { "then", { "* ", "Onda " } },
+            { "when", { "* ", "Kada ", "Kad " } }
         }
     },
     {
         "sv",
         {
-            { "and", { "*", "Och" } },
+            { "and", { "* ", "Och " } },
             { "background", { "Bakgrund" } },
-            { "but", { "*", "Men" } },
+            { "but", { "* ", "Men " } },
             { "examples", { "Exempel" } },
             { "feature", { "Egenskap" } },
-            { "given", { "*", "Givet" } },
+            { "given", { "* ", "Givet " } },
             { "rule", { "Regel" } },
             { "scenario", { "Scenario" } },
             { "scenarioOutline", { "Abstrakt Scenario", "Scenariomall" } },
-            { "then", { "*", "Så" } },
-            { "when", { "*", "När" } }
+            { "then", { "* ", "Så " } },
+            { "when", { "* ", "När " } }
         }
     },
     {
         "ta",
         {
-            { "and", { "*", "மேலும்", "மற்றும்" } },
+            { "and", { "* ", "மேலும்  ", "மற்றும் " } },
             { "background", { "பின்னணி" } },
-            { "but", { "*", "ஆனால்" } },
+            { "but", { "* ", "ஆனால்  " } },
             { "examples", { "எடுத்துக்காட்டுகள்", "காட்சிகள்", "நிலைமைகளில்" } },
             { "feature", { "அம்சம்", "வணிக தேவை", "திறன்" } },
-            { "given", { "*", "கொடுக்கப்பட்ட" } },
+            { "given", { "* ", "கொடுக்கப்பட்ட " } },
             { "rule", { "Rule" } },
             { "scenario", { "உதாரணமாக", "காட்சி" } },
             { "scenarioOutline", { "காட்சி சுருக்கம்", "காட்சி வார்ப்புரு" } },
-            { "then", { "*", "அப்பொழுது" } },
-            { "when", { "*", "எப்போது" } }
+            { "then", { "* ", "அப்பொழுது " } },
+            { "when", { "* ", "எப்போது " } }
         }
     },
     {
         "th",
         {
-            { "and", { "*", "และ" } },
+            { "and", { "* ", "และ " } },
             { "background", { "แนวคิด" } },
-            { "but", { "*", "แต่" } },
+            { "but", { "* ", "แต่ " } },
             { "examples", { "ชุดของตัวอย่าง", "ชุดของเหตุการณ์" } },
             { "feature", { "โครงหลัก", "ความต้องการทางธุรกิจ", "ความสามารถ" } },
-            { "given", { "*", "กำหนดให้" } },
+            { "given", { "* ", "กำหนดให้ " } },
             { "rule", { "Rule" } },
             { "scenario", { "เหตุการณ์" } },
             { "scenarioOutline", { "สรุปเหตุการณ์", "โครงสร้างของเหตุการณ์" } },
-            { "then", { "*", "ดังนั้น" } },
-            { "when", { "*", "เมื่อ" } }
+            { "then", { "* ", "ดังนั้น " } },
+            { "when", { "* ", "เมื่อ " } }
         }
     },
     {
         "te",
         {
-            { "and", { "*", "మరియు" } },
+            { "and", { "* ", "మరియు " } },
             { "background", { "నేపథ్యం" } },
-            { "but", { "*", "కాని" } },
+            { "but", { "* ", "కాని " } },
             { "examples", { "ఉదాహరణలు" } },
             { "feature", { "గుణము" } },
-            { "given", { "*", "చెప్పబడినది" } },
+            { "given", { "* ", "చెప్పబడినది " } },
             { "rule", { "Rule" } },
             { "scenario", { "ఉదాహరణ", "సన్నివేశం" } },
             { "scenarioOutline", { "కథనం" } },
-            { "then", { "*", "అప్పుడు" } },
-            { "when", { "*", "ఈ పరిస్థితిలో" } }
+            { "then", { "* ", "అప్పుడు " } },
+            { "when", { "* ", "ఈ పరిస్థితిలో " } }
         }
     },
     {
         "tlh",
         {
-            { "and", { "*", "'ej", "latlh" } },
+            { "and", { "* ", "'ej ", "latlh " } },
             { "background", { "mo'" } },
-            { "but", { "*", "'ach", "'a" } },
+            { "but", { "* ", "'ach ", "'a " } },
             { "examples", { "ghantoH", "lutmey" } },
             { "feature", { "Qap", "Qu'meH 'ut", "perbogh", "poQbogh malja'", "laH" } },
-            { "given", { "*", "ghu' noblu'", "DaH ghu' bejlu'" } },
+            { "given", { "* ", "ghu' noblu' ", "DaH ghu' bejlu' " } },
             { "rule", { "Rule" } },
             { "scenario", { "lut" } },
             { "scenarioOutline", { "lut chovnatlh" } },
-            { "then", { "*", "vaj" } },
-            { "when", { "*", "qaSDI'" } }
+            { "then", { "* ", "vaj " } },
+            { "when", { "* ", "qaSDI' " } }
         }
     },
     {
         "tr",
         {
-            { "and", { "*", "Ve" } },
+            { "and", { "* ", "Ve " } },
             { "background", { "Geçmiş" } },
-            { "but", { "*", "Fakat", "Ama" } },
+            { "but", { "* ", "Fakat ", "Ama " } },
             { "examples", { "Örnekler" } },
             { "feature", { "Özellik" } },
-            { "given", { "*", "Diyelim ki" } },
+            { "given", { "* ", "Diyelim ki " } },
             { "rule", { "Kural" } },
             { "scenario", { "Örnek", "Senaryo" } },
             { "scenarioOutline", { "Senaryo taslağı" } },
-            { "then", { "*", "O zaman" } },
-            { "when", { "*", "Eğer ki" } }
+            { "then", { "* ", "O zaman " } },
+            { "when", { "* ", "Eğer ki " } }
         }
     },
     {
         "tt",
         {
-            { "and", { "*", "Һәм", "Вә" } },
+            { "and", { "* ", "Һәм ", "Вә " } },
             { "background", { "Кереш" } },
-            { "but", { "*", "Ләкин", "Әмма" } },
+            { "but", { "* ", "Ләкин ", "Әмма " } },
             { "examples", { "Үрнәкләр", "Мисаллар" } },
             { "feature", { "Мөмкинлек", "Үзенчәлеклелек" } },
-            { "given", { "*", "Әйтик" } },
+            { "given", { "* ", "Әйтик " } },
             { "rule", { "Rule" } },
             { "scenario", { "Сценарий" } },
             { "scenarioOutline", { "Сценарийның төзелеше" } },
-            { "then", { "*", "Нәтиҗәдә" } },
-            { "when", { "*", "Әгәр" } }
+            { "then", { "* ", "Нәтиҗәдә " } },
+            { "when", { "* ", "Әгәр " } }
         }
     },
     {
         "uk",
         {
-            { "and", { "*", "І", "А також", "Та" } },
+            { "and", { "* ", "І ", "А також ", "Та " } },
             { "background", { "Передумова" } },
-            { "but", { "*", "Але" } },
+            { "but", { "* ", "Але " } },
             { "examples", { "Приклади" } },
             { "feature", { "Функціонал" } },
-            { "given", { "*", "Припустимо", "Припустимо, що", "Нехай", "Дано" } },
+            { "given", { "* ", "Припустимо ", "Припустимо, що ", "Нехай ", "Дано " } },
             { "rule", { "Rule" } },
             { "scenario", { "Приклад", "Сценарій" } },
             { "scenarioOutline", { "Структура сценарію" } },
-            { "then", { "*", "То", "Тоді" } },
-            { "when", { "*", "Якщо", "Коли" } }
+            { "then", { "* ", "То ", "Тоді " } },
+            { "when", { "* ", "Якщо ", "Коли " } }
         }
     },
     {
         "ur",
         {
-            { "and", { "*", "اور" } },
+            { "and", { "* ", "اور " } },
             { "background", { "پس منظر" } },
-            { "but", { "*", "لیکن" } },
+            { "but", { "* ", "لیکن " } },
             { "examples", { "مثالیں" } },
             { "feature", { "صلاحیت", "کاروبار کی ضرورت", "خصوصیت" } },
-            { "given", { "*", "اگر", "بالفرض", "فرض کیا" } },
+            { "given", { "* ", "اگر ", "بالفرض ", "فرض کیا " } },
             { "rule", { "Rule" } },
             { "scenario", { "منظرنامہ" } },
             { "scenarioOutline", { "منظر نامے کا خاکہ" } },
-            { "then", { "*", "پھر", "تب" } },
-            { "when", { "*", "جب" } }
+            { "then", { "* ", "پھر ", "تب " } },
+            { "when", { "* ", "جب " } }
         }
     },
     {
         "uz",
         {
-            { "and", { "*", "Ва" } },
+            { "and", { "* ", "Ва " } },
             { "background", { "Тарих" } },
-            { "but", { "*", "Лекин", "Бирок", "Аммо" } },
+            { "but", { "* ", "Лекин ", "Бирок ", "Аммо " } },
             { "examples", { "Мисоллар" } },
             { "feature", { "Функционал" } },
-            { "given", { "*", "Belgilangan" } },
+            { "given", { "* ", "Belgilangan " } },
             { "rule", { "Rule" } },
             { "scenario", { "Сценарий" } },
             { "scenarioOutline", { "Сценарий структураси" } },
-            { "then", { "*", "Унда" } },
-            { "when", { "*", "Агар" } }
+            { "then", { "* ", "Унда " } },
+            { "when", { "* ", "Агар " } }
         }
     },
     {
         "vi",
         {
-            { "and", { "*", "Và" } },
+            { "and", { "* ", "Và " } },
             { "background", { "Bối cảnh" } },
-            { "but", { "*", "Nhưng" } },
+            { "but", { "* ", "Nhưng " } },
             { "examples", { "Dữ liệu" } },
             { "feature", { "Tính năng" } },
-            { "given", { "*", "Biết", "Cho" } },
+            { "given", { "* ", "Biết ", "Cho " } },
             { "rule", { "Rule" } },
             { "scenario", { "Tình huống", "Kịch bản" } },
             { "scenarioOutline", { "Khung tình huống", "Khung kịch bản" } },
-            { "then", { "*", "Thì" } },
-            { "when", { "*", "Khi" } }
+            { "then", { "* ", "Thì " } },
+            { "when", { "* ", "Khi " } }
         }
     },
     {
         "zh_CN",
         {
-            { "and", { "*", "而且", "并且", "同时" } },
+            { "and", { "* ", "而且", "并且", "同时" } },
             { "background", { "背景" } },
-            { "but", { "*", "但是" } },
+            { "but", { "* ", "但是" } },
             { "examples", { "例子" } },
             { "feature", { "功能" } },
-            { "given", { "*", "假如", "假设", "假定" } },
+            { "given", { "* ", "假如", "假设", "假定" } },
             { "rule", { "Rule", "规则" } },
             { "scenario", { "场景", "剧本" } },
             { "scenarioOutline", { "场景大纲", "剧本大纲" } },
-            { "then", { "*", "那么" } },
-            { "when", { "*", "当" } }
+            { "then", { "* ", "那么" } },
+            { "when", { "* ", "当" } }
         }
     },
     {
         "zh_TW",
         {
-            { "and", { "*", "而且", "並且", "同時" } },
+            { "and", { "* ", "而且", "並且", "同時" } },
             { "background", { "背景" } },
-            { "but", { "*", "但是" } },
+            { "but", { "* ", "但是" } },
             { "examples", { "例子" } },
             { "feature", { "功能" } },
-            { "given", { "*", "假如", "假設", "假定" } },
+            { "given", { "* ", "假如", "假設", "假定" } },
             { "rule", { "Rule" } },
             { "scenario", { "場景", "劇本" } },
             { "scenarioOutline", { "場景大綱", "劇本大綱" } },
-            { "then", { "*", "那麼" } },
-            { "when", { "*", "當" } }
+            { "then", { "* ", "那麼" } },
+            { "when", { "* ", "當" } }
         }
     },
     {
         "mr",
         {
-            { "and", { "*", "आणि", "तसेच" } },
+            { "and", { "* ", "आणि ", "तसेच " } },
             { "background", { "पार्श्वभूमी" } },
-            { "but", { "*", "पण", "परंतु" } },
+            { "but", { "* ", "पण ", "परंतु " } },
             { "examples", { "उदाहरण" } },
             { "feature", { "वैशिष्ट्य", "सुविधा" } },
-            { "given", { "*", "जर", "दिलेल्या प्रमाणे" } },
+            { "given", { "* ", "जर", "दिलेल्या प्रमाणे " } },
             { "rule", { "नियम" } },
             { "scenario", { "परिदृश्य" } },
             { "scenarioOutline", { "परिदृश्य रूपरेखा" } },
-            { "then", { "*", "मग", "तेव्हा" } },
-            { "when", { "*", "जेव्हा" } }
+            { "then", { "* ", "मग ", "तेव्हा " } },
+            { "when", { "* ", "जेव्हा " } }
         }
     },
     {
         "amh",
         {
-            { "and", { "*", "እና" } },
+            { "and", { "* ", "እና " } },
             { "background", { "ቅድመ ሁኔታ", "መነሻ", "መነሻ ሀሳብ" } },
-            { "but", { "*", "ግን" } },
+            { "but", { "* ", "ግን " } },
             { "examples", { "ምሳሌዎች", "ሁናቴዎች" } },
             { "feature", { "ስራ", "የተፈለገው ስራ", "የሚፈለገው ድርጊት" } },
-            { "given", { "*", "የተሰጠ" } },
+            { "given", { "* ", "የተሰጠ " } },
             { "rule", { "ህግ" } },
             { "scenario", { "ምሳሌ", "ሁናቴ" } },
             { "scenarioOutline", { "ሁናቴ ዝርዝር", "ሁናቴ አብነት" } },
-            { "then", { "*", "ከዚያ" } },
-            { "when", { "*", "መቼ" } }
+            { "then", { "* ", "ከዚያ " } },
+            { "when", { "* ", "መቼ " } }
         }
     }
     };
 
     return kwms.at(language);
-}
-
-const string_views&
-keywords(const std::string_view& language, const std::string_view& kw)
-{ return keywords(language).at(kw); }
-
-string_views
-keywords(const std::string_view& language, const string_views& kws)
-{
-    string_views svs;
-
-    for (const auto& kw : kws) {
-        auto ksvs = keywords(language, kw);
-        svs.insert(svs.end(), ksvs.begin(), ksvs.end());
-    }
-
-    return svs;
-}
-
-dialect
-get_dialect(const std::string_view& language)
-{
-    return {
-        .feature_keywords = keywords(language, "feature"),
-        .rule_keywords = keywords(language, "rule"),
-        .scenario_keywords = keywords(language, "scenario"),
-        .scenario_outline_keywords = keywords(language, "scenarioOutline"),
-        .background_keywords = keywords(language, "background"),
-        .examples_keywords = keywords(language, "examples"),
-        .given_keywords = keywords(language, "given"),
-        .when_keywords = keywords(language, "when"),
-        .then_keywords = keywords(language, "then"),
-        .and_keywords = keywords(language, "and"),
-        .but_keywords = keywords(language, "but")
-    };
 }
 
 }
