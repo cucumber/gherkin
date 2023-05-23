@@ -48,10 +48,6 @@ token_formatter_builder::format_token(const token& token)
         ;
 
     if (token.matched_keyword) {
-        if (token.matched_keyword_type == cms::step_keyword_type::UNKNOWN) {
-            std::clog << "YALLAH" << std::endl;
-        }
-
         oss << "(";
 
         if (token.matched_keyword_type) {

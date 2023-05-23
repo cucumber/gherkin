@@ -243,7 +243,7 @@ token_matcher::match_doc_string_separator(token& token)
 
     return
         match_doc_string_separator_(
-            token, active_doc_string_separator_, true
+            token, active_doc_string_separator_, false
         );
 }
 
@@ -259,10 +259,11 @@ token_matcher::match_doc_string_separator_(
     }
 
     std::string content_type;
+    std::string tseparator = std::string(separator);
 
     if (is_open) {
         content_type = token.line.get_rest_trimmed(separator.size());
-        active_doc_string_separator_ = separator;
+        active_doc_string_separator_ = tseparator;
         indent_to_remove_ = token.line.indent();
     } else {
         active_doc_string_separator_.clear();
@@ -272,7 +273,7 @@ token_matcher::match_doc_string_separator_(
     set_token_matched(
         token, rule_type::doc_string_separator, {
             .text = content_type,
-            .keyword = std::string(separator)
+            .keyword = tseparator
         }
     );
 
