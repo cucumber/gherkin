@@ -164,8 +164,6 @@ line::split_table_cells(
             }
         } else if (ch) {
             cell += ch;
-        } else {
-            break;
         }
     }
 }

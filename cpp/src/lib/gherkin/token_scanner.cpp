@@ -1,3 +1,4 @@
+#include <iostream>
 #include <sstream>
 #include <fstream>
 
@@ -59,16 +60,12 @@ token_scanner::next_line()
 {
     next_line_result r;
 
-    if (!ip_) {
-        return r;
-    }
-
-    std::getline(input(), r.text);
-
-    r.eof = input().eof();
-
-    if (r.eof) {
-        ip_.reset();
+    if (ip_) {
+        if (!input().eof()) {
+            r.eof = !std::getline(input(), r.text);
+        } else {
+            ip_.reset();
+        }
     }
 
     return r;
