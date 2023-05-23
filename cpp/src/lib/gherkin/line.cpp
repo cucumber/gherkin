@@ -136,7 +136,7 @@ line::split_table_cells(
         return it != end ? *it++ : 0;
     };
 
-    while (true) {
+    while (col < row.size()) {
         auto ch = next_ch(it, end);
         ++col;
 

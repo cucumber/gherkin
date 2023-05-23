@@ -37,19 +37,25 @@ template <typename SubMatch, typename Arg = null_arg>
 std::string_view
 extract_submatch(const SubMatch& sm, Arg&& a)
 {
+    using arg_type = std::remove_cvref_t<Arg>;
+
+    constexpr bool is_string =
+        std::is_same_v<arg_type, std::string>
+        ||
+        std::is_same_v<arg_type, std::string_view>
+        ;
+
+    constexpr bool is_number =
+        std::is_integral_v<arg_type>
+        ||
+        std::is_floating_point_v<arg_type>
+        ;
+
     std::string_view sv{sm.first, sm.second};
 
-    if constexpr (
-        std::is_same_v<Arg, std::string>
-        ||
-        std::is_same_v<Arg, std::string_view>
-    ) {
+    if constexpr (is_string) {
         a.assign(sv);
-    } else if constexpr (
-        std::is_integral_v<Arg>
-        ||
-        std::is_floating_point_v<Arg>
-    ) {
+    } else if constexpr (is_number) {
         auto [p, ec] = std::from_chars(sv.begin(), sv.end(), a);
 
         die_unless(
@@ -59,7 +65,7 @@ extract_submatch(const SubMatch& sm, Arg&& a)
             "\" to ",
             declname(a)
         );
-    } else if constexpr (!std::is_same_v<Arg, null_arg>) {
+    } else if constexpr (!std::is_same_v<arg_type, null_arg>) {
         die("unsupported argument: ", declname(a));
     }
 

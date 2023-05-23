@@ -7,7 +7,7 @@
 namespace gherkin {
 
 static const std::regex language_re{
-    "\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*"
+    "^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$"
 };
 
 token_matcher::token_matcher(const std::string& dialect_name)
