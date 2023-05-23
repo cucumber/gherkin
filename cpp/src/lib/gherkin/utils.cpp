@@ -5,6 +5,21 @@
 
 namespace gherkin {
 
+std::size_t
+utf8_size(std::string_view s)
+{
+    std::size_t size = s.size();
+    std::size_t count = 0;
+    std::size_t u = 0;
+
+    while(u < size) {
+        u += mblen(s[u], size - u);
+        ++count;
+    }
+
+    return count;
+}
+
 std::string_view
 lstrip(std::string_view in, std::string_view chars)
 {

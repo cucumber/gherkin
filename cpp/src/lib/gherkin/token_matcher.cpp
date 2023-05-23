@@ -182,7 +182,8 @@ token_matcher::match_comment(token& token)
 
     set_token_matched(
         token, rule_type::comment, {
-            .text = std::string(token.line.line_text())
+            .text = std::string(token.line.get_line_text(0)),
+            .indent = 0
         }
     );
 

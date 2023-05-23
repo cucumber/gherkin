@@ -5,6 +5,9 @@
 
 namespace gherkin {
 
+std::size_t
+utf8_size(std::string_view s);
+
 std::string_view
 lstrip(std::string_view in, std::string_view chars = " ");
 

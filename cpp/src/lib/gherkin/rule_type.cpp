@@ -11,7 +11,7 @@ to_string(rule_type r)
         { rule_type::none, "None" },
         { rule_type::e_o_f, "EOF" },
         { rule_type::empty, "Empty" },
-        { rule_type::comment, "Ccomment" },
+        { rule_type::comment, "Comment" },
         { rule_type::tag_line, "TagLine" },
         { rule_type::feature_line, "FeatureLine" },
         { rule_type::rule_line, "RuleLine" },
