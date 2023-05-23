@@ -287,12 +287,21 @@ token_matcher::set_token_matched(
 )
 {
     token.matched_type = matched_type;
-    token.matched_text.assign(rstrip(ti.text, "\r\n"));
-    token.matched_keyword = ti.keyword;
-    token.matched_keyword_type = ti.keyword_type;
+
+    if (ti.text) {
+        token.matched_text.assign(rstrip(*ti.text, "\r\n"));
+    }
+
+    if (ti.keyword) {
+        token.matched_keyword = *ti.keyword;
+    }
+
+    if (ti.keyword_type) {
+        token.matched_keyword_type = *ti.keyword_type;
+    }
 
     if (ti.indent) {
-        token.matched_indent = ti.indent;
+        token.matched_indent = *ti.indent;
     } else {
         token.matched_indent = token.line.indent();
     }
@@ -314,7 +323,7 @@ token_matcher::keyword_type(std::string_view keyword) const
     if (it != keyword_types_.end()) {
         const auto& kws = it->second;
 
-        if (!kws.empty()) {
+        if (kws.size() == 1) {
             return kws[0];
         }
     }

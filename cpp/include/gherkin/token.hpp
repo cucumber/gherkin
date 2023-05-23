@@ -4,6 +4,7 @@
 #include <string>
 #include <deque>
 #include <vector>
+#include <optional>
 
 #include <cucumber/messages/step_keyword_type.hpp>
 
@@ -14,13 +15,15 @@
 
 namespace gherkin {
 
+namespace cms = cucumber::messages;
+
 struct token
 {
     bool eof = false;
     gherkin::line line;
     rule_type matched_type;
-    std::string matched_keyword;
-    cucumber::messages::step_keyword_type matched_keyword_type;
+    std::optional<std::string> matched_keyword;
+    std::optional<cms::step_keyword_type> matched_keyword_type;
     std::size_t matched_indent = 0;
     gherkin::items matched_items;
     std::string matched_text;

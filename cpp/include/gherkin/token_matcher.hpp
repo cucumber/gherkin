@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <optional>
 
 #include <cucumber/messages/step_keyword_type.hpp>
 
@@ -52,10 +53,10 @@ private:
 
     struct token_info
     {
-        std::string text;
-        std::string keyword;
-        cucumber::messages::step_keyword_type keyword_type;
-        std::size_t indent;
+        std::optional<std::string> text;
+        std::optional<std::string> keyword;
+        std::optional<cms::step_keyword_type> keyword_type;
+        std::optional<std::size_t> indent;
         gherkin::items items;
     };
 

@@ -47,17 +47,18 @@ token_formatter_builder::format_token(const token& token)
         << token.matched_type << ":"
         ;
 
-    if (!token.matched_keyword.empty()) {
-        oss << "(";
-
-        if (token.matched_keyword_type != cms::step_keyword_type::UNKNOWN) {
-            oss << token.matched_keyword_type;
+    if (token.matched_keyword) {
+        if (token.matched_keyword_type == cms::step_keyword_type::UNKNOWN) {
+            std::clog << "YALLAH" << std::endl;
         }
 
-        oss
-            << ")"
-            << token.matched_keyword
-            ;
+        oss << "(";
+
+        if (token.matched_keyword_type) {
+            oss << *token.matched_keyword_type;
+        }
+
+        oss << ")" << token.matched_keyword.value();
     }
 
     oss << "/" << token.matched_text << "/";

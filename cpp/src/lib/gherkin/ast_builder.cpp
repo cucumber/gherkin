@@ -102,7 +102,7 @@ ast_builder::make_step(ast_node& node)
 
     cms::step m{
         .location = get_location(step_line),
-        .keyword = step_line.matched_keyword,
+        .keyword = step_line.matched_keyword.value_or(""),
         .keyword_type = step_line.matched_keyword_type,
         .text = step_line.matched_text,
         .id = next_id()
@@ -138,7 +138,7 @@ ast_builder::make_doc_string(ast_node& node)
         .location = get_location(separator_token),
         .media_type = separator_token.matched_text,
         .content = content,
-        .delimiter = separator_token.matched_keyword
+        .delimiter = separator_token.matched_keyword.value_or("")
     };
 
     return m;
@@ -167,7 +167,7 @@ ast_builder::make_background(ast_node& node)
 
     cms::background m{
         .location = get_location(background_line),
-        .keyword = background_line.matched_keyword,
+        .keyword = background_line.matched_keyword.value_or(""),
         .name = background_line.matched_text,
         .id = next_id()
     };
@@ -188,7 +188,7 @@ ast_builder::make_scenario_definition(ast_node& node)
     cms::scenario m{
         .location = get_location(scenario_line),
         .tags = get_tags(node),
-        .keyword = scenario_line.matched_keyword,
+        .keyword = scenario_line.matched_keyword.value_or(""),
         .name = scenario_line.matched_text,
         .id = next_id()
     };
@@ -210,7 +210,7 @@ ast_builder::make_examples_definition(ast_node& node)
     cms::examples m{
         .location = get_location(examples_line),
         .tags = get_tags(node),
-        .keyword = examples_line.matched_keyword,
+        .keyword = examples_line.matched_keyword.value_or(""),
         .name = examples_line.matched_text,
         .id = next_id()
     };
@@ -276,7 +276,7 @@ ast_builder::make_feature(ast_node& node)
     cms::feature m{
         .location = get_location(feature_line),
         .tags = get_tags(header),
-        .keyword = feature_line.matched_keyword,
+        .keyword = feature_line.matched_keyword.value_or(""),
         .name = feature_line.matched_text
     };
 
@@ -319,7 +319,7 @@ ast_builder::make_rule(ast_node& node)
     cms::rule m{
         .location = get_location(rule_line),
         .tags = get_tags(header),
-        .keyword = rule_line.matched_keyword,
+        .keyword = rule_line.matched_keyword.value_or(""),
         .name = rule_line.matched_text,
         .id = next_id()
     };
