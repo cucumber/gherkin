@@ -199,7 +199,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "cy_GB",
+        "cy-GB",
         {
             { "and", { "* ", "A " } },
             { "background", { "Cefndir" } },
@@ -295,7 +295,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "en_Scouse",
+        "en-Scouse",
         {
             { "and", { "* ", "An " } },
             { "background", { "Dis is what went down" } },
@@ -311,7 +311,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "en_au",
+        "en-au",
         {
             { "and", { "* ", "Too right " } },
             { "background", { "First off" } },
@@ -327,7 +327,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "en_lol",
+        "en-lol",
         {
             { "and", { "* ", "AN " } },
             { "background", { "B4" } },
@@ -343,7 +343,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "en_old",
+        "en-old",
         {
             { "and", { "* ", "Ond ", "7 " } },
             { "background", { "Aer", "Ær" } },
@@ -359,7 +359,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "en_pirate",
+        "en-pirate",
         {
             { "and", { "* ", "Aye " } },
             { "background", { "Yo-ho-ho" } },
@@ -375,7 +375,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "en_tx",
+        "en-tx",
         {
             { "and", { "Come hell or high water " } },
             { "background", { "Lemme tell y'all a story" } },
@@ -791,7 +791,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "mk_Cyrl",
+        "mk-Cyrl",
         {
             { "and", { "* ", "И " } },
             { "background", { "Контекст", "Содржина" } },
@@ -807,7 +807,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "mk_Latn",
+        "mk-Latn",
         {
             { "and", { "* ", "I " } },
             { "background", { "Kontekst", "Sodrzhina" } },
@@ -999,7 +999,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "sr_Cyrl",
+        "sr-Cyrl",
         {
             { "and", { "* ", "И " } },
             { "background", { "Контекст", "Основа", "Позадина" } },
@@ -1015,7 +1015,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "sr_Latn",
+        "sr-Latn",
         {
             { "and", { "* ", "I " } },
             { "background", { "Kontekst", "Osnova", "Pozadina" } },
@@ -1207,7 +1207,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "zh_CN",
+        "zh-CN",
         {
             { "and", { "* ", "而且", "并且", "同时" } },
             { "background", { "背景" } },
@@ -1223,7 +1223,7 @@ keywords(const std::string_view& language)
         }
     },
     {
-        "zh_TW",
+        "zh-TW",
         {
             { "and", { "* ", "而且", "並且", "同時" } },
             { "background", { "背景" } },

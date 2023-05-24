@@ -33,16 +33,17 @@ namespace detail {
 
 struct null_arg{};
 
-template <typename SubMatch, typename Arg = null_arg>
-std::string_view
+template <typename CharT, typename SubMatch, typename Arg = null_arg>
+auto
 extract_submatch(const SubMatch& sm, Arg&& a)
 {
     using arg_type = std::remove_cvref_t<Arg>;
+    using sv_type = std::basic_string_view<CharT>;
 
     constexpr bool is_string =
-        std::is_same_v<arg_type, std::string>
+        std::is_same_v<arg_type, std::basic_string<CharT>>
         ||
-        std::is_same_v<arg_type, std::string_view>
+        std::is_same_v<arg_type, std::basic_string_view<CharT>>
         ;
 
     constexpr bool is_number =
@@ -51,7 +52,7 @@ extract_submatch(const SubMatch& sm, Arg&& a)
         std::is_floating_point_v<arg_type>
         ;
 
-    std::string_view sv{sm.first, sm.second};
+    sv_type sv{sm.first, sm.second};
 
     if constexpr (is_string) {
         a.assign(sv);
@@ -88,7 +89,7 @@ check_match_args(MatchResult&& m)
     }
 }
 
-template <typename MatchResult, typename... Args>
+template <typename CharT, typename MatchResult, typename... Args>
 void
 extract_submatches(MatchResult&& m, Args&&... args)
 {
@@ -99,13 +100,19 @@ extract_submatches(MatchResult&& m, Args&&... args)
     auto mit = m.begin();
 
     if constexpr (nargs > 0) {
-        (extract_submatch(*++mit, std::forward<Args>(args)), ...);
+        (extract_submatch<CharT>(*++mit, std::forward<Args>(args)), ...);
     }
 }
 
-template <typename MatchResult>
+template <
+    typename CharT,
+    typename MatchResult
+>
 void
-extract_submatches(MatchResult&& m, string_views& vs)
+extract_submatches(
+    MatchResult&& m,
+    std::vector<std::basic_string_view<CharT>>& vs
+)
 {
     auto mit = m.begin();
 
@@ -116,11 +123,11 @@ extract_submatches(MatchResult&& m, string_views& vs)
 
 } // namespace detail
 
-template <typename... Args>
+template <typename CharT, typename... Args>
 bool
 full_match(
-    const std::string_view& e,
-    const std::regex& re,
+    std::basic_string_view<CharT> e,
+    const std::basic_regex<CharT>& re,
     Args&&... args
 )
 {
@@ -129,30 +136,35 @@ full_match(
     bool match = std::regex_match(e.begin(), e.end(), m, re);
 
     if (match) {
-        detail::extract_submatches(m, std::forward<Args>(args)...);
+        detail::extract_submatches<CharT>(m, std::forward<Args>(args)...);
     }
 
     return match;
 }
 
-template <typename... Args>
+template <typename CharT, typename... Args>
 bool
 full_match(
-    const std::string_view& e,
-    const std::string_view& pat,
+    std::basic_string_view<CharT> e,
+    std::basic_string_view<CharT> pat,
     Args&&... args
 )
 {
-    std::regex re(pat.data(), pat.size());
+    std::basic_regex<CharT> re(pat.data(), pat.size());
 
     return full_match(e, re, std::forward<Args>(args)...);
 }
 
-template <typename... Args>
+template <typename CharT, typename... Args>
+bool
+full_match(const std::basic_string<CharT>& e, Args&&... args)
+{ return full_match(e, std::forward<Args>(args)...); }
+
+template <typename CharT, typename... Args>
 bool
 partial_match(
-    const std::string_view& e,
-    const std::string_view& pat,
+    std::basic_string_view<CharT> e,
+    std::basic_string_view<CharT> pat,
     Args&&... args
 )
 {

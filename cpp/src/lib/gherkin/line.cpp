@@ -1,4 +1,7 @@
 #include <utility>
+#include <string_view>
+
+#include <dbj/meta_converter.hpp>
 
 #include <gherkin/line.hpp>
 #include <gherkin/utils.hpp>
@@ -6,7 +9,7 @@
 
 namespace gherkin {
 
-using unescape_pair = std::pair<std::string_view, std::string_view>;
+using unescape_pair = std::pair<std::string, std::string>;
 using unescapes = std::vector<unescape_pair>;
 
 static const unescapes line_unescapes = {
@@ -14,6 +17,56 @@ static const unescapes line_unescapes = {
     { "\\|", "|" },
     { "\\n", "\n" }
 };
+
+template <typename Callabble>
+void
+split_table_cells(std::string_view row, Callabble&& cell_cb)
+{
+    dbj::wchar_range_to_string to_wstring{};
+
+    auto wrow = to_wstring(row);
+
+    std::size_t col = 0;
+    std::size_t start_col = col + 1;
+    std::wstring cell;
+    bool first_cell = true;
+    auto it = wrow.begin();
+    auto end = wrow.end();
+    auto next_ch = [](auto& it, const auto& end) {
+        return it != end ? *it++ : 0;
+    };
+
+    while (col < wrow.size()) {
+        auto ch = next_ch(it, end);
+        ++col;
+
+        if (ch == '|') {
+            if (first_cell) {
+                first_cell = false;
+            } else {
+                cell_cb(cell, start_col);
+            }
+
+            cell.clear();
+            start_col = col + 1;
+        } else if (ch == '\\') {
+            ch = next_ch(it, end);
+            ++col;
+
+            if (ch == 'n') {
+                cell += '\n';
+            } else {
+                if (ch != '|' && ch != '\\') {
+                    cell += '\\';
+                }
+
+                cell += ch;
+            }
+        } else if (ch) {
+            cell += ch;
+        }
+    }
+}
 
 line::line()
 {}
@@ -72,21 +125,24 @@ items
 line::table_cells() const
 {
     items items;
+    dbj::char_range_to_string to_string{};
 
     split_table_cells(
         strip(trimmed_line_text_),
         [&](const auto& cell, auto col) {
-            auto stripped_cell = lstrip(cell);
+            using namespace std::literals;
+
+            auto stripped_cell = lstrip(cell, L" "sv);
             auto cell_indent = cell.size() - stripped_cell.size();
-            stripped_cell = rstrip(stripped_cell);
+            stripped_cell = rstrip(stripped_cell, L" "sv);
 
             item i{
                 .column = col + indent_ + cell_indent,
-                .text = std::string(stripped_cell)
+                .text = to_string(stripped_cell)
             };
 
             for (const auto& p : line_unescapes) {
-                replace(i.text, p.first, p.second);
+                std::regex_replace(i.text, std::regex(p.first), p.second);
             }
 
             items.emplace_back(std::move(i));
@@ -118,54 +174,6 @@ line::tags() const
     }
 
     return tags;
-}
-
-void
-line::split_table_cells(
-   std::string_view row,
-   split_table_cell_function f
-) const
-{
-    std::size_t col = 0;
-    std::size_t start_col = col + 1;
-    std::string cell;
-    bool first_cell = true;
-    auto it = row.begin();
-    auto end = row.end();
-    auto next_ch = [](auto& it, const auto& end) {
-        return it != end ? *it++ : 0;
-    };
-
-    while (col < row.size()) {
-        auto ch = next_ch(it, end);
-        ++col;
-
-        if (ch == '|') {
-            if (first_cell) {
-                first_cell = false;
-            } else {
-                f(cell, start_col);
-            }
-
-            cell.clear();
-            start_col = col + 1;
-        } else if (ch == '\\') {
-            ch = next_ch(it, end);
-            ++col;
-
-            if (ch == 'n') {
-                cell += '\n';
-            } else {
-                if (ch != '|' && ch != '\\') {
-                    cell += '\\';
-                }
-
-                cell += ch;
-            }
-        } else if (ch) {
-            cell += ch;
-        }
-    }
 }
 
 }

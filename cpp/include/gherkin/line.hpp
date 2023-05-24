@@ -1,8 +1,6 @@
 #pragma once
 
-#include <cstddef>
 #include <string>
-#include <functional>
 
 #include <gherkin/types.hpp>
 #include <gherkin/items.hpp>
@@ -34,15 +32,6 @@ public:
     items tags() const;
 
 private:
-    using split_table_cell_function = std::function<
-        void(std::string_view cell, std::size_t col)
-    >;
-
-    void split_table_cells(
-        std::string_view row,
-        split_table_cell_function f
-    ) const;
-
     std::string line_text_;
     std::size_t line_number_ = 0;
     std::size_t indent_ = 0;

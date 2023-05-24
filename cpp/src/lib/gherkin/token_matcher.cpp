@@ -288,10 +288,12 @@ token_matcher::set_token_matched(
     const token_info& ti
 )
 {
+    using namespace std::literals;
+
     token.matched_type = matched_type;
 
     if (ti.text) {
-        token.matched_text.assign(rstrip(*ti.text, "\r\n"));
+        token.matched_text.assign(rstrip(*ti.text, "\r\n"sv));
     }
 
     if (ti.keyword) {
@@ -376,12 +378,14 @@ token_matcher::change_dialect(const std::string& dialect_name)
 std::string
 token_matcher::unescape_docstring(const std::string& text) const
 {
+    using namespace std::literals;
+
     std::string u = text;
 
     if (active_doc_string_separator_ == "\"\"\"") {
-        replace(u, "\\\"\\\"\\\"", "\"\"\"");
+        replace(u, "\\\"\\\"\\\""sv, "\"\"\""sv);
     } else if (active_doc_string_separator_ == "```") {
-        replace(u, "\\`\\`\\`", "```");
+        replace(u, "\\`\\`\\`"sv, "```"sv);
     }
 
     return u;

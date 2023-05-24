@@ -91,7 +91,7 @@ include/gherkin/basic_parser.hpp: gherkin-cpp.razor ../gherkin.berp
 	$(berp-generate-parser)
 	rm -f .configured
 
-src/lib/gherkin/dialect.cpp: $(GHERKIN_LANGUAGES_JSON)
+src/lib/gherkin/dialect.cpp: $(GHERKIN_LANGUAGES_JSON) gherkin-dialect.cpp.jq
 	jq -f gherkin-dialect.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens

@@ -9,8 +9,7 @@
   "    ",
   (
     [
-      to_entries[] | .key as $lang_orig |
-      (.key | split("-") | join("_")) as $lang | .value |
+      to_entries[] | .key as $lang | .value |
       [
         ("{\n        \"",$lang,"\",\n        {\n"),
         ("            "),
