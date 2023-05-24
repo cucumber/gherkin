@@ -20,11 +20,13 @@ static const unescapes line_unescapes = {
 
 template <typename Callabble>
 void
-split_table_cells(std::string_view row, Callabble&& cell_cb)
+split_table_cells(std::string_view svrow, Callabble&& cell_cb)
 {
     dbj::wchar_range_to_string to_wstring{};
 
-    auto wrow = to_wstring(row);
+    auto wrow = to_wstring(svrow);
+    wrow = std::regex_replace(wrow, std::wregex(L"^\\s+"), std::wstring{});
+    wrow = std::regex_replace(wrow, std::wregex(L"\\s+$"), std::wstring{});
 
     std::size_t col = 0;
     std::size_t start_col = col + 1;
@@ -73,9 +75,12 @@ line::line()
 
 line::line(const std::string& line_text, std::size_t line_number)
 : line_text_(line_text),
-line_number_(line_number),
-trimmed_line_text_(lstrip(line_text_))
+line_number_(line_number)
 {
+    trimmed_line_text_ = std::regex_replace(
+        line_text_, std::regex("^\\s+"), std::string{}
+    );
+
     indent_ = line_text_.size() - trimmed_line_text_.size();
 }
 
@@ -126,15 +131,23 @@ line::table_cells() const
 {
     items items;
     dbj::char_range_to_string to_string{};
+    dbj::wchar_range_to_string to_wstring{};
+
+    auto spaces = to_wstring("[ \t\v\f\r\u0085\u00A0]*");
+    std::wstring lspaces = L"^"; lspaces += spaces;
+    std::wregex lstrip(lspaces);
+    std::wstring rspaces = spaces; rspaces += L"$";
+    std::wregex rstrip(rspaces);
+    std::wstring empty{};
 
     split_table_cells(
-        strip(trimmed_line_text_),
+        trimmed_line_text_,
         [&](const auto& cell, auto col) {
             using namespace std::literals;
 
-            auto stripped_cell = lstrip(cell, L" "sv);
+            auto stripped_cell = std::regex_replace(cell, lstrip, empty);
             auto cell_indent = cell.size() - stripped_cell.size();
-            stripped_cell = rstrip(stripped_cell, L" "sv);
+            stripped_cell = std::regex_replace(stripped_cell, rstrip, empty);
 
             item i{
                 .column = col + indent_ + cell_indent,

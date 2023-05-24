@@ -2,6 +2,7 @@
 
 #include <string>
 #include <string_view>
+#include <regex>
 
 namespace gherkin {
 
@@ -10,8 +11,9 @@ slurp(const std::string& path);
 
 namespace detail {
 
-void
-strip(auto& it, auto end, auto chars)
+template <typename CharT>
+auto
+strip(auto it, auto end, std::basic_string_view<CharT> chars)
 {
     while (it != end) {
         std::size_t count = 0;
@@ -26,6 +28,8 @@ strip(auto& it, auto end, auto chars)
 
         ++it;
     }
+
+    return it;
 }
 
 } // namespace detail
@@ -40,7 +44,7 @@ lstrip(
     auto it = in.begin();
     auto end = in.end();
 
-    detail::strip(it, end, chars);
+    it = detail::strip(it, end, chars);
 
     return {it, end};
 }
@@ -63,7 +67,7 @@ rstrip(
     auto it = in.rbegin();
     auto end = in.rend();
 
-    detail::strip(it, end, chars);
+    it = detail::strip(it, end, chars);
 
     return {end.base(), it.base()};
 }
