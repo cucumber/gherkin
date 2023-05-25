@@ -1,7 +1,33 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 #include <fstream>
 #include <filesystem>
+#include <string_view>
 
 namespace gherkin {
+
+std::size_t
+unicode_size(std::string_view s)
+{
+    std::mblen(nullptr, 0); // reset the conversion state
+
+    std::size_t result = 0;
+    const char* ptr = s.data();
+
+    for (const char* const end = ptr + s.size(); ptr < end; ++result) {
+        const int next = std::mblen(ptr, end - ptr);
+
+        if (next == -1) {
+            throw std::runtime_error("strlen_mb(): conversion error");
+        }
+
+        ptr += next;
+    }
+
+    return result;
+}
 
 std::string
 slurp(const std::string& path)

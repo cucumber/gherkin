@@ -6,6 +6,9 @@
 
 namespace gherkin {
 
+std::size_t
+unicode_size(std::string_view s);
+
 std::string
 slurp(const std::string& path);
 

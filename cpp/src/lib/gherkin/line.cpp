@@ -140,6 +140,13 @@ line::table_cells() const
     std::wregex rstrip(rspaces);
     std::wstring empty{};
 
+    {
+        auto toto = trimmed_line_text_;
+        auto totos = unicode_size(toto);
+
+        std::clog << "YALLAH" << std::endl;
+    }
+
     split_table_cells(
         trimmed_line_text_,
         [&](const auto& cell, auto col) {
