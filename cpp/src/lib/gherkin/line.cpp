@@ -131,17 +131,13 @@ line::table_cells() const
         [&](const auto& cell, auto col) {
             using namespace std::literals;
 
-            auto stripped_cell = lstrip(cell, spaces_no_nl_pattern());
-
-            auto cell_indent =
-                codepoint_count(cell)
-                -
-                codepoint_count(stripped_cell)
-                ;
+            auto wcell = to_wstring(cell);
+            auto stripped_cell = lstrip(wcell, re_pattern::spaces_no_nl);
+            auto cell_indent = wcell.size() - stripped_cell.size();
 
             item i{
                 .column = col + indent_ + cell_indent,
-                .text = rstrip(stripped_cell, spaces_no_nl_pattern())
+                .text = to_string(rstrip(stripped_cell, re_pattern::spaces_no_nl))
             };
 
             for (const auto& p : line_unescapes) {

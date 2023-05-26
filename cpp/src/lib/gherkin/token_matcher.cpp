@@ -387,6 +387,8 @@ token_matcher::unescape_docstring(const std::string& text) const
         u = subst(text, "\\\"\\\"\\\"", "\"\"\"");
     } else if (active_doc_string_separator_ == "```") {
         u = subst(text, "\\`\\`\\`", "```");
+    } else {
+        u = text;
     }
 
     return u;

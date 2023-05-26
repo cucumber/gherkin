@@ -1,4 +1,3 @@
-#include <clocale>
 #include <cwchar>
 #include <fstream>
 #include <filesystem>
@@ -9,83 +8,38 @@
 
 namespace gherkin {
 
-std::string_view
-spaces_pattern()
-{ return { "[ \\t\\n\\v\\f\\r\\u0085\\u00A0]+" }; }
-
-std::string_view
-spaces_no_nl_pattern()
-{ return { "[ \\t\\v\\f\\r\\u0085\\u00A0]+" }; }
-
-std::size_t
-codepoint_count(std::string_view s)
+template <typename To, typename From, typename Conv>
+auto
+mb_conv_core(From&& from, Conv&& c)
 {
-    std::size_t count = 0;
-    std::mbstate_t mb = std::mbstate_t();
-    auto data = s.data();
-    auto size = s.size();
+    using result_type = std::remove_cvref_t<To>;
 
-    for (std::size_t i = 0; i < size; ) {
-        int l = std::mbrlen(&data[i], size - i, &mb);
+    result_type res;
+    std::mbstate_t state = std::mbstate_t();
+    auto from_data = from.data();
 
-        if (l == -2) {
-            // Incomplete character
-            l = std::mbrlen(&data[i + 1], size - i - 1, &mb);
+    std::size_t len = c(nullptr, &from_data, 0, &state);
 
-            if (l > 0) {
-                count += l;
-                i += l;
-            }
-        } else {
-            ++count;
-            ++i;
-        }
+    res.resize(len);
+
+    auto res_data = res.data();
+
+    int rc = c(&res_data[0], &from_data, len, &state);
+
+    if (rc < 0) {
+        res.clear();
     }
 
-    return count;
+    return res;
 }
 
-std::string
-strip_pattern::str() const
-{
-    std::string s(prefix.size() + chars.size() + suffix.size(), ' ');
-
-    s = prefix;
-    s += chars;
-    s += suffix;
-
-    return s;
-}
+std::wstring
+to_wstring(const std::string& s)
+{ return mb_conv_core<std::wstring>(s, std::mbsrtowcs); }
 
 std::string
-strip(std::string_view what, const strip_pattern& p)
-{
-    auto pat = p.str();
-    std::regex re(pat);
-    std::string empty;
-    std::string result;
-
-    std::regex_replace(
-        std::back_inserter(result),
-        what.begin(), what.end(),
-        re,
-        empty
-    );
-
-    return result;
-}
-
-std::string
-lstrip(std::string_view in, std::string_view chars)
-{ return strip(in, strip_pattern{ .prefix = "^", .chars = chars }); }
-
-std::string
-rstrip(std::string_view in, std::string_view chars)
-{ return strip(in, strip_pattern{ .chars = chars, .suffix = "$" }); }
-
-std::string
-strip(std::string_view in, std::string_view chars)
-{ return lstrip(rstrip(in, chars), chars); }
+to_string(const std::wstring& s)
+{ return mb_conv_core<std::string>(s, std::wcsrtombs); }
 
 std::string
 slurp(const std::string& path)
