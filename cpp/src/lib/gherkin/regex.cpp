@@ -49,4 +49,8 @@ subst(const std::string& s, const std::string& re, const std::string& what)
     );
 }
 
+void
+subst(std::string& s, const std::string& re, const std::string& what)
+{ s = subst(static_cast<const std::string&>(s), re, what); }
+
 }

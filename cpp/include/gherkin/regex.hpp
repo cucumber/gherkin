@@ -27,7 +27,10 @@ strings
 split(const std::string& re, const std::string& expr);
 
 std::string
-subst(const std::string& s, const std::string& re, const std::string& what);
+subst(const std::string& s, const std::string& re, const std::string& what = {});
+
+void
+subst(std::string& s, const std::string& re, const std::string& what = {});
 
 namespace detail {
 

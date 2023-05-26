@@ -133,12 +133,9 @@ token_matcher::match_title_line(
             continue;
         }
 
-        auto ksize = k.size() + 1; // keyword ends with ':'
-        auto title = token.line.get_rest_trimmed(ksize);
-
         set_token_matched(
             token, token_type, {
-                .text = std::string(title),
+                .text = token.line.get_keyword_trimmed(k),
                 .keyword = k
             }
         );
@@ -180,9 +177,13 @@ token_matcher::match_comment(token& token)
         return false;
     }
 
+    auto comment_text = std::string(token.line.get_line_text(0));
+
+    subst(comment_text, "[\\r\\n]+$");
+
     set_token_matched(
         token, rule_type::comment, {
-            .text = std::string(token.line.get_line_text(0)),
+            .text = comment_text,
             .indent = 0
         }
     );
@@ -220,7 +221,7 @@ token_matcher::match_step_line(token& token)
 
         set_token_matched(
             token, rule_type::step_line, {
-                .text = std::string(title),
+                .text = title,
                 .keyword = std::string(keyword),
                 .keyword_type = keyword_type(keyword)
             }
@@ -380,12 +381,12 @@ token_matcher::unescape_docstring(const std::string& text) const
 {
     using namespace std::literals;
 
-    std::string u = text;
+    std::string u;
 
     if (active_doc_string_separator_ == "\"\"\"") {
-        replace(u, "\\\"\\\"\\\""sv, "\"\"\""sv);
+        u = subst(text, "\\\"\\\"\\\"", "\"\"\"");
     } else if (active_doc_string_separator_ == "```") {
-        replace(u, "\\`\\`\\`"sv, "```"sv);
+        u = subst(text, "\\`\\`\\`", "```");
     }
 
     return u;

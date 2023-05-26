@@ -1,4 +1,5 @@
 #include <gherkin/utils.hpp>
+#include <gherkin/regex.hpp>
 #include <gherkin/pickle_compiler.hpp>
 
 namespace gherkin {
@@ -390,7 +391,7 @@ pickle_compiler::interpolate(
         const auto& value_cell = value_cells[col++];
         header = "<" + variable_cell.value + ">";
 
-        replace(iname, header, value_cell.value);
+        subst(iname, header, value_cell.value);
     }
 
     return iname;

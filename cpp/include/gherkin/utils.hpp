@@ -6,137 +6,38 @@
 
 namespace gherkin {
 
+std::string_view
+spaces_pattern();
+
+std::string_view
+spaces_no_nl_pattern();
+
 std::size_t
-unicode_size(std::string_view s);
+codepoint_count(std::string_view s);
 
 std::string
 slurp(const std::string& path);
 
-namespace detail {
-
-template <typename CharT>
-auto
-strip(auto it, auto end, std::basic_string_view<CharT> chars)
+struct strip_pattern
 {
-    while (it != end) {
-        std::size_t count = 0;
+    std::string_view prefix;
+    std::string_view chars;
+    std::string_view suffix;
 
-        for (auto c: chars) {
-            count += *it == c;
-        }
+    std::string str() const;
+};
 
-        if (count == 0) {
-            break;
-        }
+std::string
+strip(std::string_view what, const strip_pattern& p);
 
-        ++it;
-    }
+std::string
+lstrip(std::string_view in, std::string_view chars = spaces_pattern());
 
-    return it;
-}
+std::string
+rstrip(std::string_view in, std::string_view chars = spaces_pattern());
 
-} // namespace detail
-
-template <typename CharT>
-std::basic_string_view<CharT>
-lstrip(
-    std::basic_string_view<CharT> in,
-    std::basic_string_view<CharT> chars = " "
-)
-{
-    auto it = in.begin();
-    auto end = in.end();
-
-    it = detail::strip(it, end, chars);
-
-    return {it, end};
-}
-
-template <typename CharT>
-std::basic_string_view<CharT>
-lstrip(
-    const std::basic_string<CharT>& in,
-    std::basic_string_view<CharT> chars = " "
-)
-{ return lstrip(std::basic_string_view<CharT>{in.data(), in.size()}, chars); }
-
-template <typename CharT>
-std::basic_string_view<CharT>
-rstrip(
-    std::basic_string_view<CharT> in,
-    std::basic_string_view<CharT> chars = " "
-)
-{
-    auto it = in.rbegin();
-    auto end = in.rend();
-
-    it = detail::strip(it, end, chars);
-
-    return {end.base(), it.base()};
-}
-
-template <typename CharT>
-std::basic_string_view<CharT>
-rstrip(
-    const std::basic_string<CharT>& in,
-    std::basic_string_view<CharT> chars = " "
-)
-{ return rstrip(std::basic_string_view<CharT>{in.data(), in.size()}, chars); }
-
-template <typename CharT>
-std::basic_string_view<CharT>
-strip(
-    std::basic_string_view<CharT> in,
-    std::basic_string_view<CharT> chars = " "
-)
-{ return lstrip(rstrip(in, chars), chars); }
-
-template <typename CharT>
-std::basic_string_view<CharT>
-strip(
-    const std::basic_string<CharT>& in,
-    std::basic_string_view<CharT> chars = " "
-)
-{ return strip(std::basic_string_view<CharT>{in.data(), in.size()}, chars); }
-
-template <typename CharT>
-void
-replace(
-    std::basic_string<CharT>& s,
-    std::basic_string_view<CharT> what,
-    std::basic_string_view<CharT> with
-)
-{
-    std::string::size_type pos;
-
-    while ((pos = s.find(what)) != std::basic_string<CharT>::npos) {
-        s.replace(pos, what.size(), with);
-    }
-}
-
-template <typename CharT>
-std::basic_string<CharT>
-replace(
-    const std::basic_string<CharT>& s,
-    std::basic_string_view<CharT> what,
-    std::basic_string_view<CharT> with
-)
-{
-    std::basic_string<CharT> t = s;
-
-    replace(t, what, with);
-
-    return t;
-}
-
-template <typename CharT>
-std::basic_string<CharT>
-replace(
-    const std::basic_string<CharT>& s,
-    const std::basic_string<CharT>& what,
-    const std::basic_string<CharT>& with
-)
-{ return replace(s, what, with); }
+std::string
+strip(std::string_view in, std::string_view chars = spaces_pattern());
 
 template <typename C>
 struct reverse

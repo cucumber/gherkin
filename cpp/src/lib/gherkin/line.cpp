@@ -1,8 +1,6 @@
 #include <utility>
 #include <string_view>
 
-#include <dbj/meta_converter.hpp>
-
 #include <gherkin/line.hpp>
 #include <gherkin/utils.hpp>
 #include <gherkin/regex.hpp>
@@ -20,25 +18,19 @@ static const unescapes line_unescapes = {
 
 template <typename Callabble>
 void
-split_table_cells(std::string_view svrow, Callabble&& cell_cb)
+split_table_cells(std::string_view row, Callabble&& cell_cb)
 {
-    dbj::wchar_range_to_string to_wstring{};
-
-    auto wrow = to_wstring(svrow);
-    wrow = std::regex_replace(wrow, std::wregex(L"^\\s+"), std::wstring{});
-    wrow = std::regex_replace(wrow, std::wregex(L"\\s+$"), std::wstring{});
-
     std::size_t col = 0;
     std::size_t start_col = col + 1;
-    std::wstring cell;
+    std::string cell;
     bool first_cell = true;
-    auto it = wrow.begin();
-    auto end = wrow.end();
+    auto it = row.begin();
+    auto end = row.end();
     auto next_ch = [](auto& it, const auto& end) {
         return it != end ? *it++ : 0;
     };
 
-    while (col < wrow.size()) {
+    while (col < row.size()) {
         auto ch = next_ch(it, end);
         ++col;
 
@@ -75,22 +67,25 @@ line::line()
 
 line::line(const std::string& line_text, std::size_t line_number)
 : line_text_(line_text),
-line_number_(line_number)
+line_number_(line_number),
+trimmed_line_text_(lstrip(line_text_))
 {
-    trimmed_line_text_ = std::regex_replace(
-        line_text_, std::regex("^\\s+"), std::string{}
-    );
-
     indent_ = line_text_.size() - trimmed_line_text_.size();
 }
 
-std::string_view
+std::string
 line::get_rest_trimmed(std::size_t length) const
 {
     auto pos = std::min(length, trimmed_line_text_.size());
-    std::string_view sv = trimmed_line_text_;
 
-    return strip(sv.substr(pos));
+    return strip(trimmed_line_text_.substr(pos));
+}
+
+std::string
+line::get_keyword_trimmed(std::string_view kw) const
+{
+    // Keyword ends with ':'
+    return get_rest_trimmed(kw.size() + 1);
 }
 
 std::string_view
@@ -130,39 +125,27 @@ items
 line::table_cells() const
 {
     items items;
-    dbj::char_range_to_string to_string{};
-    dbj::wchar_range_to_string to_wstring{};
-
-    auto spaces = to_wstring("[ \t\v\f\r\u0085\u00A0]*");
-    std::wstring lspaces = L"^"; lspaces += spaces;
-    std::wregex lstrip(lspaces);
-    std::wstring rspaces = spaces; rspaces += L"$";
-    std::wregex rstrip(rspaces);
-    std::wstring empty{};
-
-    {
-        auto toto = trimmed_line_text_;
-        auto totos = unicode_size(toto);
-
-        std::clog << "YALLAH" << std::endl;
-    }
 
     split_table_cells(
         trimmed_line_text_,
         [&](const auto& cell, auto col) {
             using namespace std::literals;
 
-            auto stripped_cell = std::regex_replace(cell, lstrip, empty);
-            auto cell_indent = cell.size() - stripped_cell.size();
-            stripped_cell = std::regex_replace(stripped_cell, rstrip, empty);
+            auto stripped_cell = lstrip(cell, spaces_no_nl_pattern());
+
+            auto cell_indent =
+                codepoint_count(cell)
+                -
+                codepoint_count(stripped_cell)
+                ;
 
             item i{
                 .column = col + indent_ + cell_indent,
-                .text = to_string(stripped_cell)
+                .text = rstrip(stripped_cell, spaces_no_nl_pattern())
             };
 
             for (const auto& p : line_unescapes) {
-                std::regex_replace(i.text, std::regex(p.first), p.second);
+                subst(i.text, p.first, p.second);
             }
 
             items.emplace_back(std::move(i));
@@ -187,7 +170,7 @@ line::tags() const
 
         tags.emplace_back(item{
             .column = column,
-            .text = "@" + std::string(sitem)
+            .text = "@" + sitem
         });
 
         column += original_item.size() + 1;

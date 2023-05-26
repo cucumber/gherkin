@@ -13,7 +13,9 @@ public:
     line();
     line(const std::string& line_text, std::size_t line_number);
 
-    std::string_view get_rest_trimmed(std::size_t length) const;
+    std::string get_rest_trimmed(std::size_t length) const;
+    std::string get_keyword_trimmed(std::string_view kw) const;
+
     std::string_view get_line_text(
         std::size_t indent_to_remove = std::string::npos
     ) const;
