@@ -294,7 +294,7 @@ token_matcher::set_token_matched(
     token.matched_type = matched_type;
 
     if (ti.text) {
-        token.matched_text.assign(rstrip(*ti.text, "\r\n"sv));
+        token.matched_text.assign(rstrip(*ti.text, re_pattern::crlf));
     }
 
     if (ti.keyword) {
@@ -384,9 +384,9 @@ token_matcher::unescape_docstring(const std::string& text) const
     std::string u;
 
     if (active_doc_string_separator_ == "\"\"\"") {
-        u = subst(text, "\\\"\\\"\\\"", "\"\"\"");
+        u = subst(text, "\\\\\"\\\\\"\\\\\"", "\"\"\"");
     } else if (active_doc_string_separator_ == "```") {
-        u = subst(text, "\\`\\`\\`", "```");
+        u = subst(text, "\\\\`\\\\`\\\\`", "```");
     } else {
         u = text;
     }

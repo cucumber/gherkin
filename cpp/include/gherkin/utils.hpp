@@ -1,22 +1,53 @@
 #pragma once
 
+#include <codecvt>
 #include <string>
 #include <string_view>
 #include <regex>
 
 namespace gherkin {
 
-std::wstring
-to_wstring(const std::string& s);
+// utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
+template <class Facet>
+struct deletable_facet : Facet
+{
+    template <class... Args>
+    deletable_facet(Args&&... args)
+    : Facet(std::forward<Args>(args)...)
+    {}
 
+    ~deletable_facet()
+    {}
+};
+
+inline
+std::wstring
+to_wide(const std::string& s)
+{
+    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> cv;
+
+    auto ws = cv.from_bytes(s);
+
+    return {ws.begin(), ws.end()};
+}
+
+inline
 std::string
-to_string(const std::wstring& s);
+to_narrow(const std::wstring& ws)
+{
+    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> cv;
+
+    std::u32string s{ws.begin(), ws.end()};
+
+    return cv.to_bytes(s);
+}
 
 enum class re_pattern
 {
     none,
     all_spaces,
     spaces_no_nl,
+    crlf,
     bol,
     eol
 };
@@ -24,17 +55,15 @@ enum class re_pattern
 template <typename CharT>
 struct re_patterns
 {
-
-
     static
     auto
     convert(std::string_view sv)
     {
         if constexpr (sizeof(CharT) > sizeof(char)) {
-            return to_wstring(std::string(sv));
+            return to_wide(std::string(sv));
+        } else {
+            return std::string(sv);
         }
-
-        return std::string(sv);
     }
 
     static
@@ -51,6 +80,9 @@ struct re_patterns
             break;
             case re_pattern::spaces_no_nl:
             sv = "[ \\t\\v\\f\\r\\u0085\\u00A0]+"sv;
+            break;
+            case re_pattern::crlf:
+            sv = "\\r\\n"sv;
             break;
             case re_pattern::bol:
             sv = "^"sv;

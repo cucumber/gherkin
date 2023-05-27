@@ -43,7 +43,7 @@ protected:
         end_rule(context, rule_type::gherkin_document);
 
         if (context.has_errors()) {
-            // TODO: thow coumpound error
+            context.report_errors();
         }
     }
 
@@ -444,12 +444,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -483,12 +483,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -522,12 +522,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -600,12 +600,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -680,12 +680,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -753,12 +753,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -830,12 +830,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -909,12 +909,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -981,12 +981,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1069,12 +1069,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1157,12 +1157,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1197,12 +1197,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1293,12 +1293,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1393,12 +1393,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1484,12 +1484,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1593,12 +1593,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1704,12 +1704,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1744,12 +1744,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1854,12 +1854,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -1968,12 +1968,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2073,12 +2073,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2184,12 +2184,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2223,12 +2223,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2304,12 +2304,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2387,12 +2387,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2463,12 +2463,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2543,12 +2543,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2625,12 +2625,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2700,12 +2700,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2791,12 +2791,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2882,12 +2882,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -2922,12 +2922,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3021,12 +3021,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3124,12 +3124,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3218,12 +3218,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3330,12 +3330,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3444,12 +3444,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3484,12 +3484,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3597,12 +3597,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3714,12 +3714,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3822,12 +3822,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3936,12 +3936,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -3966,12 +3966,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4076,12 +4076,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4106,12 +4106,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4193,12 +4193,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4223,12 +4223,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4330,12 +4330,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4360,12 +4360,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);
@@ -4444,12 +4444,12 @@ protected:
 
         auto error =
             token.is_eof()
-            ? error_type::unexpected_eof
-            : error_type::unexpected_token
+            ? "unexpected eof: "
+            : "unexpected token: "
             ;
 
         if (context.stop_at_first_error) {
-            //throw_error(error, token, expected_tokens);
+            throw std::runtime_error(error + expected_tokens);
         }
 
         context.add_error(expected_tokens);

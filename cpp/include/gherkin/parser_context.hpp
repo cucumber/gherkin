@@ -1,5 +1,6 @@
 #include <gherkin/token.hpp>
 #include <gherkin/types.hpp>
+#include <gherkin/join_utils.hpp>
 
 namespace gherkin {
 
@@ -43,6 +44,13 @@ struct parser_context
 
     void add_error(const std::exception& e)
     { add_error(e.what()); }
+
+    void report_errors() const
+    {
+        auto es = join("\n", errors);
+
+        throw std::runtime_error("errors:\n" + es);
+    }
 };
 
 }
