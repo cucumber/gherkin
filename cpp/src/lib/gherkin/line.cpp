@@ -20,12 +20,14 @@ template <typename Callabble>
 void
 split_table_cells(std::string_view row, Callabble&& cell_cb)
 {
+    auto wrow = to_wide(std::string(row));
+
     std::size_t col = 0;
     std::size_t start_col = col + 1;
-    std::string cell;
+    std::wstring cell;
     bool first_cell = true;
-    auto it = row.begin();
-    auto end = row.end();
+    auto it = wrow.begin();
+    auto end = wrow.end();
     auto next_ch = [](auto& it, const auto& end) {
         return it != end ? *it++ : 0;
     };
@@ -131,9 +133,8 @@ line::table_cells() const
         [&](const auto& cell, auto col) {
             using namespace std::literals;
 
-            auto wcell = to_wide(cell);
-            auto stripped_cell = lstrip(wcell, re_pattern::spaces_no_nl);
-            auto cell_indent = wcell.size() - stripped_cell.size();
+            auto stripped_cell = lstrip(cell, re_pattern::spaces_no_nl);
+            auto cell_indent = cell.size() - stripped_cell.size();
             stripped_cell = rstrip(stripped_cell, re_pattern::spaces_no_nl);
 
             item i{

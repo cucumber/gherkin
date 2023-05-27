@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include <gherkin/token_scanner.hpp>
+#include <gherkin/utils.hpp>
 
 namespace gherkin {
 
@@ -59,10 +60,12 @@ next_line_result
 token_scanner::next_line()
 {
     next_line_result r;
+    std::string line;
 
     if (ip_) {
         if (!input().eof()) {
-            r.eof = !std::getline(input(), r.text);
+            r.eof = !std::getline(input(), line);
+            r.text = rstrip(line, re_pattern::cr);
         } else {
             ip_.reset();
         }

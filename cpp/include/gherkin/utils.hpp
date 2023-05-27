@@ -48,6 +48,7 @@ enum class re_pattern
     all_spaces,
     spaces_no_nl,
     crlf,
+    cr,
     bol,
     eol
 };
@@ -83,6 +84,8 @@ struct re_patterns
             break;
             case re_pattern::crlf:
             sv = "\\r\\n"sv;
+            case re_pattern::cr:
+            sv = "\\r"sv;
             break;
             case re_pattern::bol:
             sv = "^"sv;
