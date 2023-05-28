@@ -215,10 +215,12 @@ ast_builder::make_examples_definition(ast_node& node)
         .id = next_id()
     };
 
-    auto table = examples_node.get_single<ast_node>(rule_type::examples_table);
+    auto prows = examples_node.get_single<table_rows>(
+        rule_type::examples_table
+    );
 
-    if (table) {
-        auto rows = get_table_rows(*table);
+    if (prows) {
+        auto& rows = *prows;
 
         m.table_header = rows.front();
 

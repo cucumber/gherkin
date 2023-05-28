@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_GENERATED = \
 	include/gherkin/rule_type.hpp \
-	include/gherkin/basic_parser.hpp \
+	include/gherkin/parser.hpp \
 	src/lib/gherkin/dialect.cpp
 GHERKIN = stage/bin/gherkin
 GHERKIN_GENERATE_TOKENS = stage/bin/gherkin-generate-tokens
@@ -87,7 +87,7 @@ include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 	rm -f .configured
 
-include/gherkin/basic_parser.hpp: gherkin-cpp.razor ../gherkin.berp
+include/gherkin/parser.hpp: gherkin-cpp.razor ../gherkin.berp
 	$(berp-generate-parser)
 	rm -f .configured
 

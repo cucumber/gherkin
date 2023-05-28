@@ -36,21 +36,22 @@ pickle_compiler::~pickle_compiler()
 pickles
 pickle_compiler::compile(
     const cms::gherkin_document& d,
-    const std::string& uri
+    const std::string& uri,
+    pickle_cb sink
 )
 {
-    pickles pickles;
+    pickle_compiler_context ctx{ .sink = sink };
 
     if (d.feature) {
-        compile_feature(pickles, *d.feature, d.feature->language, uri);
+        compile_feature(ctx, *d.feature, d.feature->language, uri);
     }
 
-    return pickles;
+    return ctx.pickles;
 }
 
 void
 pickle_compiler::compile_feature(
-    pickles& pickles,
+    pickle_compiler_context& ctx,
     const cms::feature& f,
     const std::string& language,
     const std::string& uri
@@ -64,7 +65,7 @@ pickle_compiler::compile_feature(
             append(background_steps, child.background->steps);
         } else if (child.rule) {
             compile_rule(
-                pickles,
+                ctx,
                 *child.rule,
                 tags,
                 background_steps,
@@ -76,7 +77,7 @@ pickle_compiler::compile_feature(
 
             if (scenario.examples.empty()) {
                 compile_scenario(
-                    pickles,
+                    ctx,
                     scenario,
                     tags,
                     background_steps,
@@ -85,7 +86,7 @@ pickle_compiler::compile_feature(
                 );
             } else {
                 compile_scenario_outline(
-                    pickles,
+                    ctx,
                     scenario,
                     tags,
                     background_steps,
@@ -99,7 +100,7 @@ pickle_compiler::compile_feature(
 
 void
 pickle_compiler::compile_rule(
-    pickles& pickles,
+    pickle_compiler_context& ctx,
     const cms::rule& r,
     const tags& parent_tags,
     const steps& background_steps,
@@ -120,7 +121,7 @@ pickle_compiler::compile_rule(
 
             if (scenario.examples.empty()) {
                 compile_scenario(
-                    pickles,
+                    ctx,
                     scenario,
                     tags,
                     steps,
@@ -129,7 +130,7 @@ pickle_compiler::compile_rule(
                 );
             } else {
                 compile_scenario_outline(
-                    pickles,
+                    ctx,
                     scenario,
                     tags,
                     steps,
@@ -143,7 +144,7 @@ pickle_compiler::compile_rule(
 
 void
 pickle_compiler::compile_scenario(
-    pickles& pickles,
+    pickle_compiler_context& ctx,
     const cms::scenario& s,
     const tags& parent_tags,
     const steps& background_steps,
@@ -177,7 +178,7 @@ pickle_compiler::compile_scenario(
     strings source_ids = { s.id };
 
     cms::pickle p{
-        .id = next_id(),
+        .id = ctx.next_id(),
         .uri = uri,
         .name = s.name,
         .language = language,
@@ -186,12 +187,12 @@ pickle_compiler::compile_scenario(
         .ast_node_ids = source_ids
     };
 
-    pickles.emplace_back(std::move(p));
+    ctx.add_pickle(p);
 }
 
 void
 pickle_compiler::compile_scenario_outline(
-    pickles& pickles,
+    pickle_compiler_context& ctx,
     const cms::scenario& s,
     const tags& parent_tags,
     const steps& background_steps,
@@ -240,7 +241,7 @@ pickle_compiler::compile_scenario_outline(
             strings source_ids = { s.id, values_row.id };
 
             cms::pickle p{
-                .id = next_id(),
+                .id = ctx.next_id(),
                 .uri = uri,
                 .name = interpolate(s.name, variable_cells, value_cells),
                 .language = language,
@@ -249,7 +250,7 @@ pickle_compiler::compile_scenario_outline(
                 .ast_node_ids = source_ids
             };
 
-            pickles.emplace_back(std::move(p));
+            ctx.add_pickle(p);
         }
     }
 }
@@ -396,9 +397,5 @@ pickle_compiler::interpolate(
 
     return iname;
 }
-
-std::string
-pickle_compiler::next_id()
-{ return std::to_string(id_counter_++); }
 
 }

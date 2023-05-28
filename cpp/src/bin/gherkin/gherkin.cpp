@@ -1,8 +1,6 @@
 #include <iostream>
-#include <string_view>
 
-#include <gherkin/parser.hpp>
-#include <gherkin/parser_info.hpp>
+#include <gherkin/app.hpp>
 #include <gherkin/file.hpp>
 
 struct options
@@ -10,7 +8,9 @@ struct options
     bool exit = false;
     int exit_code = 0;
     int last_arg = 0;
-    gherkin::parser_info pi;
+    bool include_source = true;
+    bool include_ast = true;
+    bool include_pickles = true;
 };
 
 options
@@ -22,11 +22,11 @@ parse_options(int ac, char** av)
         std::string_view arg(av[opts.last_arg]);
 
         if (arg == "--no-source") {
-            opts.pi.include_source = false;
+            opts.include_source = false;
         } else if (arg == "--no-ast") {
-            opts.pi.include_ast = false;
+            opts.include_ast = false;
         } else if (arg == "--no-pickles") {
-            opts.pi.include_pickles = false;
+            opts.include_pickles = false;
         } else if (arg.starts_with('-')) {
             if (arg != "-h" && arg != "--help") {
                 std::cout << "Unknown option: " << arg << std::endl;
@@ -59,10 +59,29 @@ int main(int ac, char** av)
         return opts.exit_code;
     }
 
-    gherkin::parser p{opts.pi};
+    gherkin::app app;
+    gherkin::app::callbacks cbs{
+        .source = [&](const auto& s) {
+            std::cout << s.to_json() << std::endl;
+        },
+        .ast = [&](const auto& a) {
+            nlohmann::json j;
+
+            a.to_json(j["gerkinDocument"]);
+
+            std::cout << j << std::endl;
+        },
+        .pickle = [&](const auto& p) {
+            std::cout << p.to_json() << std::endl;
+        }
+    };
+
+    app.include_source(opts.include_source);
+    app.include_ast(opts.include_ast);
+    app.include_pickles(opts.include_pickles);
 
     for ( ; opts.last_arg < ac; ++opts.last_arg) {
-        p.parse(gherkin::file{ av[opts.last_arg] });
+        app.parse(gherkin::file{ av[opts.last_arg] }, cbs);
     }
 
     return 0;

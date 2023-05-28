@@ -7,7 +7,6 @@
 #include <gherkin/ast_builder.hpp>
 #include <gherkin/token_scanner.hpp>
 #include <gherkin/token_matcher.hpp>
-#include <gherkin/parser_info.hpp>
 #include <gherkin/parser_context.hpp>
 
 namespace gherkin {
@@ -25,20 +24,11 @@ public:
     using result_type = typename Builder::result_type;
     using context_type = parser_context<Builder, Scanner, Matcher>;
 
-    parser_base(const parser_info& pi = {})
-    : pi_{pi}
+    parser_base()
     {}
 
     virtual ~parser_base()
     {}
-
-protected:
-    void reset(std::string_view uri, std::string_view data)
-    {
-        builder_.reset(uri);
-        scanner_.reset(data);
-        matcher_.reset();
-    }
 
     result_type parse(std::string_view uri, std::string_view data)
     {
@@ -55,12 +45,19 @@ protected:
         return get_result();
     }
 
+protected:
+    void reset(std::string_view uri, std::string_view data)
+    {
+        builder_.reset(uri);
+        scanner_.reset(data);
+        matcher_.reset();
+    }
+
     result_type get_result() const
     { return builder_.get_result(); }
 
     virtual void parse(context_type& context) = 0;
 
-    parser_info pi_;
     Builder builder_;
     Scanner scanner_;
     Matcher matcher_;

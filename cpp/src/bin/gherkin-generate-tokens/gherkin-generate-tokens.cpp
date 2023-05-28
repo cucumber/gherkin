@@ -3,8 +3,8 @@
 
 #include <gherkin/parser.hpp>
 #include <gherkin/token_formatter_builder.hpp>
-#include <gherkin/file.hpp>
 #include <gherkin/join_utils.hpp>
+#include <gherkin/utils.hpp>
 
 int main(int ac, char** av)
 {
@@ -14,7 +14,11 @@ int main(int ac, char** av)
     parser p;
 
     for (std::size_t i = 1; i < ac; ++i) {
-        auto ss = p.parse(gherkin::file{ av[i] });
+        std::string file(av[i]);
+
+        auto data = gherkin::slurp(file);
+
+        auto ss = p.parse(file, data);
 
         std::cout << gherkin::join("\n", ss);
     }

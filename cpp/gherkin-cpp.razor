@@ -70,16 +70,15 @@ template <
     typename Scanner = token_scanner,
     typename Matcher = token_matcher
 >
-class basic_parser : public parser_base<Builder, Scanner, Matcher>
+class parser : public parser_base<Builder, Scanner, Matcher>
 {
 public:
     using parent = parser_base<Builder, Scanner, Matcher>;
     using parent::parent;
+    using parent::parse;
     using context_type = typename parent::context_type;
 
 protected:
-    using parent::parse;
-
     void parse(context_type& context) override
     {
         start_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));

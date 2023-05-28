@@ -4,6 +4,8 @@
 
 #include <gherkin/types.hpp>
 #include <gherkin/msg_types.hpp>
+#include <gherkin/cb_types.hpp>
+#include <gherkin/pickle_compiler_context.hpp>
 
 namespace gherkin {
 
@@ -15,19 +17,20 @@ public:
 
     pickles compile(
         const cms::gherkin_document& d,
-        const std::string& uri
+        const std::string& uri,
+        pickle_cb sink = {}
     );
 
 private:
     void compile_feature(
-        pickles& pickles,
+        pickle_compiler_context& ctx,
         const cms::feature& f,
         const std::string& language,
         const std::string& uri
     );
 
     void compile_rule(
-        pickles& pickles,
+        pickle_compiler_context& ctx,
         const cms::rule& r,
         const tags& parent_tags,
         const steps& background_steps,
@@ -36,7 +39,7 @@ private:
     );
 
     void compile_scenario(
-        pickles& pickles,
+        pickle_compiler_context& ctx,
         const cms::scenario& s,
         const tags& parent_tags,
         const steps& background_steps,
@@ -45,7 +48,7 @@ private:
     );
 
     void compile_scenario_outline(
-        pickles& pickles,
+        pickle_compiler_context& ctx,
         const cms::scenario& s,
         const tags& parent_tags,
         const steps& background_steps,
