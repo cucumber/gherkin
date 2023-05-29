@@ -5,7 +5,8 @@
 
 namespace gherkin {
 
-token_formatter_builder::token_formatter_builder()
+token_formatter_builder::token_formatter_builder(id_generator_ptr idp)
+: idp_(idp)
 {}
 
 token_formatter_builder::~token_formatter_builder()

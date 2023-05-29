@@ -72,7 +72,11 @@ int main(int ac, char** av)
             std::cout << j << std::endl;
         },
         .pickle = [&](const auto& p) {
-            std::cout << p.to_json() << std::endl;
+            nlohmann::json j;
+
+            p.to_json(j["pickle"]);
+
+            std::cout << j << std::endl;
         }
     };
 

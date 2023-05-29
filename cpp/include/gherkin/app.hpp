@@ -5,6 +5,7 @@
 #include <gherkin/file.hpp>
 #include <gherkin/parser.hpp>
 #include <gherkin/cb_types.hpp>
+#include <gherkin/id_generator.hpp>
 
 namespace gherkin {
 
@@ -27,6 +28,7 @@ public:
     void parse(const cms::source& s, const callbacks& cbs = {});
 
 private:
+    id_generator_ptr idp_;
     parser p_;
     bool include_source_ = true;
     bool include_ast_ = true;

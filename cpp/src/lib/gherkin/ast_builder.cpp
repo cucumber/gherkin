@@ -9,6 +9,11 @@
 namespace gherkin {
 
 ast_builder::ast_builder()
+: ast_builder(new_id_generator())
+{}
+
+ast_builder::ast_builder(id_generator_ptr idp)
+: idp_(idp)
 {}
 
 ast_builder::~ast_builder()
@@ -63,7 +68,7 @@ ast_builder::get_result() const
 
 std::string
 ast_builder::next_id()
-{ return std::to_string(id_counter_++); }
+{ return idp_->next_id(); }
 
 void
 ast_builder::transform_node(ast_node& from, ast_node& to)

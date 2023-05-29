@@ -27,7 +27,8 @@ void
 append(Vector& to, const Vector& from)
 { to.insert(to.end(), from.begin(), from.end()); }
 
-pickle_compiler::pickle_compiler()
+pickle_compiler::pickle_compiler(id_generator_ptr idp)
+: idp_(idp)
 {}
 
 pickle_compiler::~pickle_compiler()
@@ -40,7 +41,7 @@ pickle_compiler::compile(
     pickle_cb sink
 )
 {
-    pickle_compiler_context ctx{ .sink = sink };
+    pickle_compiler_context ctx{ .idp = idp_, .sink = sink };
 
     if (d.feature) {
         compile_feature(ctx, *d.feature, d.feature->language, uri);
@@ -271,6 +272,7 @@ pickle_compiler::make_pickle_step(
 
     cms::pickle_step ps{
         .ast_node_ids = { step.id },
+        .id = next_id(),
         .type = to_pickle_step_type(keyword_type),
         .text = interpolate(step.text, variable_cells, value_cells)
     };
@@ -397,5 +399,9 @@ pickle_compiler::interpolate(
 
     return iname;
 }
+
+std::string
+pickle_compiler::next_id()
+{ return idp_->next_id(); }
 
 }

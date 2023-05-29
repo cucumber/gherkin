@@ -5,6 +5,8 @@
 namespace gherkin {
 
 app::app()
+: idp_(new_id_generator()),
+p_(idp_)
 {}
 
 app::~app()
@@ -52,7 +54,7 @@ app::parse(const cms::source& s, const callbacks& cbs)
     }
 
     if (include_pickles_ && cbs.pickle) {
-        pickle_compiler pc;
+        pickle_compiler pc(idp_);
 
         pc.compile(ast, s.uri, cbs.pickle);
     }

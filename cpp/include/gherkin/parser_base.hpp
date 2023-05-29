@@ -8,6 +8,7 @@
 #include <gherkin/token_scanner.hpp>
 #include <gherkin/token_matcher.hpp>
 #include <gherkin/parser_context.hpp>
+#include <gherkin/id_generator.hpp>
 
 namespace gherkin {
 
@@ -25,6 +26,10 @@ public:
     using context_type = parser_context<Builder, Scanner, Matcher>;
 
     parser_base()
+    {}
+
+    parser_base(id_generator_ptr idp)
+    : builder_(idp)
     {}
 
     virtual ~parser_base()

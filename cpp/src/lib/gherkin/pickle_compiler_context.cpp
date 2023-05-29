@@ -4,7 +4,7 @@ namespace gherkin {
 
 std::string
 pickle_compiler_context::next_id()
-{ return std::to_string(id_counter_++); }
+{ return idp->next_id(); }
 
 void
 pickle_compiler_context::add_pickle(cms::pickle& p)

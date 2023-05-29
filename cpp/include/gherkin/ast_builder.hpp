@@ -10,6 +10,7 @@
 #include <gherkin/token.hpp>
 #include <gherkin/rule_type.hpp>
 #include <gherkin/ast_node.hpp>
+#include <gherkin/id_generator.hpp>
 
 namespace gherkin {
 
@@ -26,6 +27,8 @@ public:
     using result_type = cms::gherkin_document;
 
     ast_builder();
+    ast_builder(id_generator_ptr idp);
+
     virtual ~ast_builder();
 
     void reset(std::string_view uri);
@@ -68,7 +71,7 @@ private:
     ast_node& current_node();
     const ast_node& current_node() const;
 
-    std::size_t id_counter_ = 0;
+    id_generator_ptr idp_;
     ast_node_stack stack_;
     std::string_view uri_;
     comments comments_;

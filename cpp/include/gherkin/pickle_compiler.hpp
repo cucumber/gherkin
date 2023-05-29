@@ -6,13 +6,14 @@
 #include <gherkin/msg_types.hpp>
 #include <gherkin/cb_types.hpp>
 #include <gherkin/pickle_compiler_context.hpp>
+#include <gherkin/id_generator.hpp>
 
 namespace gherkin {
 
 class pickle_compiler
 {
 public:
-    pickle_compiler();
+    pickle_compiler(id_generator_ptr idp);
     virtual ~pickle_compiler();
 
     pickles compile(
@@ -90,7 +91,7 @@ private:
 
     std::string next_id();
 
-    std::size_t id_counter_ = 0;
+    id_generator_ptr idp_;
 };
 
 }

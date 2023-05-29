@@ -5,6 +5,7 @@
 #include <gherkin/token.hpp>
 #include <gherkin/rule_type.hpp>
 #include <gherkin/ast_node.hpp>
+#include <gherkin/id_generator.hpp>
 
 namespace gherkin {
 
@@ -20,7 +21,7 @@ class token_formatter_builder
 public:
     using result_type = strings;
 
-    token_formatter_builder();
+    token_formatter_builder(id_generator_ptr idp = {});
     virtual ~token_formatter_builder();
 
     void reset(std::string_view uri);
@@ -34,6 +35,7 @@ public:
 private:
     std::string format_token(const token& token);
 
+    id_generator_ptr idp_;
     strings formatted_tokens_;
 };
 
