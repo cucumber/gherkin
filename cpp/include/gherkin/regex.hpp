@@ -161,7 +161,13 @@ full_match(
 template <typename CharT, typename... Args>
 bool
 full_match(const std::basic_string<CharT>& e, Args&&... args)
-{ return full_match(e, std::forward<Args>(args)...); }
+{
+    return
+        full_match(
+            std::string_view{ e.data(), e.size() },
+            std::forward<Args>(args)...
+        );
+}
 
 template <typename CharT, typename... Args>
 bool

@@ -136,10 +136,13 @@ ast_builder::make_doc_string(ast_node& node)
 
     cms::doc_string m{
         .location = get_location(separator_token),
-        .media_type = separator_token.matched_text,
         .content = content,
         .delimiter = separator_token.matched_keyword.value_or("")
     };
+
+    if (!separator_token.matched_text.empty()) {
+        m.media_type = separator_token.matched_text;
+    }
 
     return m;
 }
@@ -154,7 +157,7 @@ ast_builder::make_data_table(ast_node& node)
     };
 
     if (!m.rows.empty()) {
-        m.location = rows.front().location;
+        m.location = m.rows.front().location;
     }
 
     return m;
@@ -215,6 +218,8 @@ ast_builder::make_examples_definition(ast_node& node)
         .id = next_id()
     };
 
+    examples_node.set(rule_type::description, m.description);
+
     auto prows = examples_node.get_single<table_rows>(
         rule_type::examples_table
     );
@@ -243,24 +248,21 @@ std::string
 ast_builder::make_description(ast_node& node)
 {
     std::regex only_spaces("\\s*");
+    auto toks = node.get_tokens(rule_type::other);
+    std::size_t ntoks = toks.size();
 
-    auto no_spaces = [&](const auto& t) {
-        return !full_match(t.matched_text, only_spaces);
-    };
+    while (
+        ntoks
+        &&
+        full_match(toks[ntoks - 1].matched_text, only_spaces)
+    ) {
+        --ntoks;
+    }
 
     string_views svs;
 
-    auto toks =
-        node.get_tokens(rule_type::other)
-        | std::views::reverse
-        | std::views::filter(no_spaces)
-        | std::views::transform([](const auto& t) {
-            return std::string_view(t.matched_text);
-        })
-        ;
-
-    for (const auto& t : toks) {
-        svs.emplace_back(t);
+    for (std::size_t i = 0; i < ntoks; ++i) {
+        svs.emplace_back(toks[i].matched_text);
     }
 
     return join("\n", svs);
