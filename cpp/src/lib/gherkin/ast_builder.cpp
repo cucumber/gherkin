@@ -278,6 +278,7 @@ ast_builder::make_feature(ast_node& node)
     cms::feature m{
         .location = get_location(feature_line),
         .tags = get_tags(header),
+        .language = feature_line.matched_gherkin_dialect,
         .keyword = feature_line.matched_keyword.value_or(""),
         .name = feature_line.matched_text
     };

@@ -67,7 +67,7 @@ int main(int ac, char** av)
         .ast = [&](const auto& a) {
             nlohmann::json j;
 
-            a.to_json(j["gerkinDocument"]);
+            a.to_json(j["gherkinDocument"]);
 
             std::cout << j << std::endl;
         },
