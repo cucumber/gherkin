@@ -2,8 +2,8 @@
 [
   "#include <gherkin/dialect.hpp>\n\n",
   "namespace gherkin {\n\n",
-  "const keywords_map&\n",
-  "keywords(const std::string_view& language)\n",
+  "const keywords_maps&\n",
+  "all_keywords()\n",
   "{\n",
   "    static const keywords_maps kwms = {\n",
   "    ",
@@ -33,7 +33,12 @@
     ] | join(",\n    ")
   ),
   "\n    };\n\n",
-  "    return kwms.at(language);\n",
+  "    return kwms;",
+  "}\n\n",
+  "const keywords_map&\n",
+  "keywords(const std::string_view& language)\n",
+  "{\n",
+  "    return all_keywords().at(language);\n",
   "}\n\n",
   "}\n"
 ] | add

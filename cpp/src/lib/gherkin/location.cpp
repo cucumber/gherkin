@@ -14,4 +14,15 @@ location::to_string() const
     return oss.str();
 }
 
+json
+location::to_json() const
+{
+    json j;
+
+    j["line"] = line;
+    j["column"] = column;
+
+    return j;
+}
+
 }

@@ -3,6 +3,7 @@
 #include <gherkin/keywords.hpp>
 #include <gherkin/utils.hpp>
 #include <gherkin/regex.hpp>
+#include <gherkin/exceptions.hpp>
 
 namespace gherkin {
 
@@ -337,8 +338,15 @@ token_matcher::keyword_type(std::string_view keyword) const
 }
 
 void
-token_matcher::change_dialect(const std::string& dialect_name)
+token_matcher::change_dialect(
+    const std::string& dialect_name,
+    const gherkin::location& location
+)
 {
+    if (all_keywords().find(dialect_name) == all_keywords().end()) {
+        throw no_such_language_error(dialect_name, location);
+    }
+
     dialect_name_ = dialect_name;
 
     auto d = get_dialect(dialect_name_);

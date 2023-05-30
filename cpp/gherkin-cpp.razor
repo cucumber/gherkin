@@ -34,23 +34,24 @@ public static string NameOf(Rule rule)
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
-        /* "State: @state.Id - @Raw(state.Comment)" */
+        std::string state_comment = "State: @state.Id - @Raw(state.Comment)";
         std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return @state.Id;
 </text>}
@@ -61,12 +62,6 @@ public static string NameOf(Rule rule)
 #include <gherkin/rule_type.hpp>
 
 namespace gherkin {
-
-enum class error_type
-{
-    unexpected_eof,
-    unexpected_token
-};
 
 template <
     typename Builder = ast_builder,
@@ -100,7 +95,7 @@ protected:
         end_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
 
         if (context.has_errors()) {
-            context.report_errors();
+            throw composite_parser_error(context.eptrs);
         }
     }
 
@@ -139,15 +134,6 @@ protected:
     {
         using ret_type = decltype(action(argument));
 
-        if (context.stop_at_first_error) {
-            if constexpr (std::is_same_v<ret_type, void>) {
-                action(argument);
-                return default_value;
-            } else {
-                return action(argument);
-            }
-        }
-
         try {
             if constexpr (std::is_same_v<ret_type, void>) {
                 action(argument);
@@ -155,8 +141,13 @@ protected:
             } else {
                 return action(argument);
             }
-        } catch (const std::exception& e) {
-            context.add_error(e);
+        } catch (const composite_parser_error& e) {
+            for (const auto& ep : e.errors()) {
+                context.add_error(ep);
+            }
+        } catch (const parser_error& e) {
+            auto ep = new_parser_error<parser_error>(e);
+            context.add_error(ep);
         }
 
         return default_value;
@@ -267,7 +258,11 @@ protected:
             @:return match_token_at_@(state.Id)(token, context);
     }
         default:
-            context.add_error("invalid operation: " + std::to_string(state));
+            throw
+                std::runtime_error(
+                    "invalid operation: " + std::to_string(state)
+                );
+
             return -1;
         }
     }

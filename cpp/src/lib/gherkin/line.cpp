@@ -4,6 +4,7 @@
 #include <gherkin/line.hpp>
 #include <gherkin/utils.hpp>
 #include <gherkin/regex.hpp>
+#include <gherkin/exceptions.hpp>
 
 namespace gherkin {
 
@@ -161,10 +162,23 @@ line::tags() const
     auto column = indent_ + 1;
     auto items_line = subst(trimmed_line_text_, "\\s+(?:#.*)?$", "");
     auto items = split("@", items_line);
+    std::regex no_spaces("^\\S+$");
 
     for (std::size_t i = 1; i < items.size(); ++i) {
         auto original_item = items[i];
         auto sitem = strip(items[i]);
+
+        if (sitem.empty()) {
+            continue;
+        }
+
+        if (!full_match(sitem, no_spaces)) {
+            throw
+                parser_error(
+                    "A tag may not contain whitespace",
+                    location{ .line = line_number_, .column = column }
+                );
+        }
 
         tags.emplace_back(item{
             .column = column,

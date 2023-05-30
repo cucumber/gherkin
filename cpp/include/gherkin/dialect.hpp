@@ -22,6 +22,9 @@ struct dialect
     const string_views& but_keywords;
 };
 
+const keywords_maps&
+all_keywords();
+
 const keywords_map&
 keywords(const std::string_view& language);
 

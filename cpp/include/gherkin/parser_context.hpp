@@ -1,5 +1,6 @@
 #include <gherkin/token.hpp>
 #include <gherkin/types.hpp>
+#include <gherkin/exceptions.hpp>
 #include <gherkin/join_utils.hpp>
 
 namespace gherkin {
@@ -16,8 +17,9 @@ struct parser_context
     Matcher& matcher;
 
     token_queue queue;
-    strings errors;
+    parser_error_ptrs eptrs;
     bool stop_at_first_error = false;
+    std::size_t max_errors = 10;
 
     bool has_token() const
     { return !queue.empty(); }
@@ -37,19 +39,23 @@ struct parser_context
     { queue.insert(queue.end(), q.begin(), q.end()); }
 
     bool has_errors() const
-    { return !errors.empty(); }
+    { return !eptrs.empty(); }
 
-    void add_error(const std::string& e)
-    { errors.push_back(e); }
-
-    void add_error(const std::exception& e)
-    { add_error(e.what()); }
-
-    void report_errors() const
+    void add_error(parser_error_ptr ep)
     {
-        auto es = join("\n", errors);
+        for (const auto& p : eptrs) {
+            if (p->same_message(*ep)) {
+                return;
+            }
 
-        throw std::runtime_error("errors:\n" + es);
+            std::cerr << "not duplicate" << std::endl;
+        }
+
+        eptrs.emplace_back(std::move(ep));
+
+        if (eptrs.size() > max_errors) {
+            throw composite_parser_error(eptrs);
+        }
     }
 };
 

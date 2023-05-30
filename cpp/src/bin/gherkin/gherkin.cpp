@@ -77,6 +77,9 @@ int main(int ac, char** av)
             p.to_json(j["pickle"]);
 
             std::cout << j << std::endl;
+        },
+        .error = [&](const auto& e) {
+            std::cout << e.to_json() << std::endl;
         }
     };
 

@@ -4,12 +4,6 @@
 
 namespace gherkin {
 
-enum class error_type
-{
-    unexpected_eof,
-    unexpected_token
-};
-
 template <
     typename Builder = ast_builder,
     typename Scanner = token_scanner,
@@ -42,7 +36,7 @@ protected:
         end_rule(context, rule_type::gherkin_document);
 
         if (context.has_errors()) {
-            context.report_errors();
+            throw composite_parser_error(context.eptrs);
         }
     }
 
@@ -81,15 +75,6 @@ protected:
     {
         using ret_type = decltype(action(argument));
 
-        if (context.stop_at_first_error) {
-            if constexpr (std::is_same_v<ret_type, void>) {
-                action(argument);
-                return default_value;
-            } else {
-                return action(argument);
-            }
-        }
-
         try {
             if constexpr (std::is_same_v<ret_type, void>) {
                 action(argument);
@@ -97,8 +82,13 @@ protected:
             } else {
                 return action(argument);
             }
-        } catch (const std::exception& e) {
-            context.add_error(e);
+        } catch (const composite_parser_error& e) {
+            for (const auto& ep : e.errors()) {
+                context.add_error(ep);
+            }
+        } catch (const parser_error& e) {
+            auto ep = new_parser_error<parser_error>(e);
+            context.add_error(ep);
         }
 
         return default_value;
@@ -438,23 +428,24 @@ protected:
             return 0;
         }
 
-        /* "State: 0 - Start" */
+        std::string state_comment = "State: 0 - Start";
         std::string expected_tokens = "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 0;
     }
@@ -480,23 +471,24 @@ protected:
             return 1;
         }
 
-        /* "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0" */
+        std::string state_comment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0";
         std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 1;
     }
@@ -522,23 +514,24 @@ protected:
             return 2;
         }
 
-        /* "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0" */
+        std::string state_comment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0";
         std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 2;
     }
@@ -603,23 +596,24 @@ protected:
             return 4;
         }
 
-        /* "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0" */
+        std::string state_comment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 3;
     }
@@ -686,23 +680,24 @@ protected:
             return 4;
         }
 
-        /* "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 4;
     }
@@ -762,23 +757,24 @@ protected:
             return 5;
         }
 
-        /* "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 5;
     }
@@ -842,23 +838,24 @@ protected:
             return 7;
         }
 
-        /* "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0" */
+        std::string state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 6;
     }
@@ -924,23 +921,24 @@ protected:
             return 7;
         }
 
-        /* "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 7;
     }
@@ -999,23 +997,24 @@ protected:
             return 8;
         }
 
-        /* "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 8;
     }
@@ -1090,23 +1089,24 @@ protected:
             return 9;
         }
 
-        /* "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0" */
+        std::string state_comment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 9;
     }
@@ -1181,23 +1181,24 @@ protected:
             return 10;
         }
 
-        /* "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+        std::string state_comment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 10;
     }
@@ -1224,23 +1225,24 @@ protected:
             return 11;
         }
 
-        /* "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
+        std::string state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
         std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 11;
     }
@@ -1323,23 +1325,24 @@ protected:
             return 13;
         }
 
-        /* "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
+        std::string state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 12;
     }
@@ -1426,23 +1429,24 @@ protected:
             return 13;
         }
 
-        /* "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 13;
     }
@@ -1520,23 +1524,24 @@ protected:
             return 14;
         }
 
-        /* "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 14;
     }
@@ -1632,23 +1637,24 @@ protected:
             return 15;
         }
 
-        /* "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
+        std::string state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 15;
     }
@@ -1746,23 +1752,24 @@ protected:
             return 16;
         }
 
-        /* "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+        std::string state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 16;
     }
@@ -1789,23 +1796,24 @@ protected:
             return 17;
         }
 
-        /* "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
+        std::string state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
         std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 17;
     }
@@ -1902,23 +1910,24 @@ protected:
             return 19;
         }
 
-        /* "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
+        std::string state_comment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 18;
     }
@@ -2019,23 +2028,24 @@ protected:
             return 19;
         }
 
-        /* "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 19;
     }
@@ -2127,23 +2137,24 @@ protected:
             return 20;
         }
 
-        /* "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 20;
     }
@@ -2241,23 +2252,24 @@ protected:
             return 21;
         }
 
-        /* "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
+        std::string state_comment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
         std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 21;
     }
@@ -2283,23 +2295,24 @@ protected:
             return 22;
         }
 
-        /* "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0" */
+        std::string state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
         std::string expected_tokens = "#TagLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 22;
     }
@@ -2367,23 +2380,24 @@ protected:
             return 24;
         }
 
-        /* "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0" */
+        std::string state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 23;
     }
@@ -2453,23 +2467,24 @@ protected:
             return 24;
         }
 
-        /* "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 24;
     }
@@ -2532,23 +2547,24 @@ protected:
             return 25;
         }
 
-        /* "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 25;
     }
@@ -2615,23 +2631,24 @@ protected:
             return 27;
         }
 
-        /* "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0" */
+        std::string state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 26;
     }
@@ -2700,23 +2717,24 @@ protected:
             return 27;
         }
 
-        /* "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 27;
     }
@@ -2778,23 +2796,24 @@ protected:
             return 28;
         }
 
-        /* "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 28;
     }
@@ -2872,23 +2891,24 @@ protected:
             return 29;
         }
 
-        /* "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0" */
+        std::string state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 29;
     }
@@ -2966,23 +2986,24 @@ protected:
             return 30;
         }
 
-        /* "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+        std::string state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 30;
     }
@@ -3009,23 +3030,24 @@ protected:
             return 31;
         }
 
-        /* "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
+        std::string state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
         std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 31;
     }
@@ -3111,23 +3133,24 @@ protected:
             return 33;
         }
 
-        /* "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
+        std::string state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 32;
     }
@@ -3217,23 +3240,24 @@ protected:
             return 33;
         }
 
-        /* "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 33;
     }
@@ -3314,23 +3338,24 @@ protected:
             return 34;
         }
 
-        /* "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 34;
     }
@@ -3429,23 +3454,24 @@ protected:
             return 35;
         }
 
-        /* "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
+        std::string state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 35;
     }
@@ -3546,23 +3572,24 @@ protected:
             return 36;
         }
 
-        /* "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+        std::string state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 36;
     }
@@ -3589,23 +3616,24 @@ protected:
             return 37;
         }
 
-        /* "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
+        std::string state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
         std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 37;
     }
@@ -3705,23 +3733,24 @@ protected:
             return 39;
         }
 
-        /* "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
+        std::string state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
         std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 38;
     }
@@ -3825,23 +3854,24 @@ protected:
             return 39;
         }
 
-        /* "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
+        std::string state_comment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0";
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 39;
     }
@@ -3936,23 +3966,24 @@ protected:
             return 40;
         }
 
-        /* "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0" */
+        std::string state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0";
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 40;
     }
@@ -4053,23 +4084,24 @@ protected:
             return 41;
         }
 
-        /* "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
+        std::string state_comment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
         std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 41;
     }
@@ -4086,23 +4118,24 @@ protected:
             return 43;
         }
 
-        /* "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+        std::string state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 43;
     }
@@ -4199,23 +4232,24 @@ protected:
             return 44;
         }
 
-        /* "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+        std::string state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 44;
     }
@@ -4232,23 +4266,24 @@ protected:
             return 45;
         }
 
-        /* "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+        std::string state_comment = "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 45;
     }
@@ -4322,23 +4357,24 @@ protected:
             return 46;
         }
 
-        /* "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+        std::string state_comment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 46;
     }
@@ -4355,23 +4391,24 @@ protected:
             return 47;
         }
 
-        /* "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+        std::string state_comment = "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 47;
     }
@@ -4465,23 +4502,24 @@ protected:
             return 48;
         }
 
-        /* "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+        std::string state_comment = "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 48;
     }
@@ -4498,23 +4536,24 @@ protected:
             return 49;
         }
 
-        /* "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+        std::string state_comment = "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 49;
     }
@@ -4585,23 +4624,24 @@ protected:
             return 50;
         }
 
-        /* "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+        std::string state_comment = "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-        auto error =
-            (
-                token.is_eof()
-                ? "unexpected eof: "
-                : "unexpected token: "
+        auto ep =
+            token.is_eof()
+            ? new_parser_error<unexpected_eof>(
+                token, expected_tokens, state_comment
             )
-            + expected_tokens
+            : new_parser_error<unexpected_token>(
+                token, expected_tokens, state_comment
+            )
             ;
 
         if (context.stop_at_first_error) {
-            //throw parser_error(error + );
+            throw *ep;
         }
 
-        context.add_error(expected_tokens);
+        context.add_error(std::move(ep));
 
         return 50;
     }
@@ -4710,7 +4750,11 @@ protected:
         case 50:
             return match_token_at_50(token, context);
         default:
-            context.add_error("invalid operation: " + std::to_string(state));
+            throw
+                std::runtime_error(
+                    "invalid operation: " + std::to_string(state)
+                );
+
             return -1;
         }
     }

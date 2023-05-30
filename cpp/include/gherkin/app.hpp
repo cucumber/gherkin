@@ -28,6 +28,12 @@ public:
     void parse(const cms::source& s, const callbacks& cbs = {});
 
 private:
+    void send_parse_error(
+        const std::string& uri,
+        const parser_error& e,
+        const callbacks& cbs
+    ) const;
+
     id_generator_ptr idp_;
     parser p_;
     bool include_source_ = true;

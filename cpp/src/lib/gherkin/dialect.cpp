@@ -2,8 +2,8 @@
 
 namespace gherkin {
 
-const keywords_map&
-keywords(const std::string_view& language)
+const keywords_maps&
+all_keywords()
 {
     static const keywords_maps kwms = {
     {
@@ -1272,7 +1272,12 @@ keywords(const std::string_view& language)
     }
     };
 
-    return kwms.at(language);
+    return kwms;}
+
+const keywords_map&
+keywords(const std::string_view& language)
+{
+    return all_keywords().at(language);
 }
 
 }

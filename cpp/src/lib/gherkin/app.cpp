@@ -1,6 +1,7 @@
 #include <gherkin/app.hpp>
 #include <gherkin/utils.hpp>
 #include <gherkin/pickle_compiler.hpp>
+#include <gherkin/exceptions.hpp>
 
 namespace gherkin {
 
@@ -47,17 +48,41 @@ app::parse(const cms::envelope& e, const callbacks& cbs)
 void
 app::parse(const cms::source& s, const callbacks& cbs)
 {
-    auto ast = p_.parse(s.uri, s.data);
+    try {
+        auto ast = p_.parse(s.uri, s.data);
 
-    if (include_ast_ && cbs.ast) {
-        cbs.ast(ast);
+        if (include_ast_ && cbs.ast) {
+            cbs.ast(ast);
+        }
+
+        if (include_pickles_ && cbs.pickle) {
+            pickle_compiler pc(idp_);
+
+            pc.compile(ast, s.uri, cbs.pickle);
+        }
+    } catch (const composite_parser_error& e) {
+        for (const auto& ep : e.errors()) {
+            send_parse_error(s.uri, *ep, cbs);
+        }
+    } catch (const parser_error& e) {
+        send_parse_error(s.uri, e, cbs);
     }
+}
 
-    if (include_pickles_ && cbs.pickle) {
-        pickle_compiler pc(idp_);
+void
+app::send_parse_error(
+    const std::string& uri,
+    const parser_error& e,
+    const callbacks& cbs
+) const
+{
+    parse_error pe{
+        .uri = uri,
+        .location = e.location(),
+        .message = e.what()
+    };
 
-        pc.compile(ast, s.uri, cbs.pickle);
-    }
+    call_cb(cbs.error, pe);
 }
 
 }

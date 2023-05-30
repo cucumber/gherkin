@@ -1,4 +1,5 @@
 #include <gherkin/keywords.hpp>
+#include <gherkin/exceptions.hpp>
 
 namespace gherkin {
 

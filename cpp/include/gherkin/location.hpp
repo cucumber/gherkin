@@ -2,7 +2,11 @@
 
 #include <ostream>
 
+#include <nlohmann/json.hpp>
+
 namespace gherkin {
+
+using json = nlohmann::json;
 
 struct location
 {
@@ -10,6 +14,8 @@ struct location
     std::size_t column;
 
     std::string to_string() const;
+
+    json to_json() const;
 };
 
 inline

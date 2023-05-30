@@ -11,8 +11,17 @@ namespace gherkin {
 // parser error
 //
 ///////////////////////////////////////////////////////////////////////////////
-parser_error::parser_error(const std::string& message, location location)
-: std::runtime_error(make_message(message, location))
+parser_error::parser_error(
+    const std::string& message,
+    const gherkin::location& location
+)
+: std::runtime_error(make_message(message, location)),
+location_(location)
+{}
+
+parser_error::parser_error(const parser_error& other)
+: std::runtime_error(other.what()),
+location_(other.location_)
 {}
 
 parser_error::~parser_error()
@@ -21,7 +30,7 @@ parser_error::~parser_error()
 std::string
 parser_error::make_message(
     const std::string& message,
-    location location
+    const gherkin::location& location
 ) const
 {
     std::ostringstream oss;
@@ -31,6 +40,14 @@ parser_error::make_message(
     return oss.str();
 }
 
+bool
+parser_error::same_message(const parser_error& other) const
+{ return std::strcmp(what(), other.what()) == 0; }
+
+const gherkin::location&
+parser_error::location() const
+{ return location_; }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // no such language error
@@ -38,7 +55,8 @@ parser_error::make_message(
 ///////////////////////////////////////////////////////////////////////////////
 no_such_language_error::no_such_language_error(
     const std::string& language,
-    location location)
+    const gherkin::location& location
+)
 : parser_error("Language not supported: " + language, location)
 {}
 
@@ -142,5 +160,9 @@ composite_parser_error::make_message(const parser_error_ptrs& ptrs) const
 
     return oss.str();
 }
+
+const parser_error_ptrs&
+composite_parser_error::errors() const
+{ return ptrs_; }
 
 }

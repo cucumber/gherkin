@@ -12,16 +12,26 @@ namespace gherkin {
 class parser_error : public std::runtime_error
 {
 public:
-    parser_error(const std::string& message, location location);
+    parser_error(
+        const std::string& message,
+        const gherkin::location& location
+    );
+
+    parser_error(const parser_error& other);
+
     virtual ~parser_error();
 
     std::string make_message(
         const std::string& message,
-        location location
+        const gherkin::location& location
     ) const;
 
+    bool same_message(const parser_error& other) const;
+
+    const gherkin::location& location() const;
+
 private:
-    location location_;
+    gherkin::location location_;
 };
 
 using parser_error_ptr = std::shared_ptr<parser_error>;
@@ -37,7 +47,11 @@ using ast_builder_error = parser_error;
 class no_such_language_error : public parser_error
 {
 public:
-    no_such_language_error(const std::string& language, location location);
+    no_such_language_error(
+        const std::string& language,
+        const gherkin::location& location
+    );
+
     virtual ~no_such_language_error();
 };
 
@@ -89,6 +103,8 @@ public:
     virtual ~composite_parser_error();
 
     std::string make_message(const parser_error_ptrs& ptrs) const;
+
+    const parser_error_ptrs& errors() const;
 
 private:
     parser_error_ptrs ptrs_;
