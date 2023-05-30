@@ -236,7 +236,14 @@ pickle_compiler::compile_scenario_outline(
                     last_keyword_type = *step.keyword_type;
                 }
 
-                steps.push_back(make_pickle_step(step, last_keyword_type));
+                steps.push_back(
+                    make_pickle_step(
+                        step,
+                        variable_cells,
+                        std::addressof(values_row),
+                        last_keyword_type
+                    )
+                );
             }
 
             strings source_ids = { s.id, values_row.id };
@@ -394,7 +401,7 @@ pickle_compiler::interpolate(
         const auto& value_cell = value_cells[col++];
         header = "<" + variable_cell.value + ">";
 
-        subst(iname, header, value_cell.value);
+        replace(iname, header, value_cell.value);
     }
 
     return iname;

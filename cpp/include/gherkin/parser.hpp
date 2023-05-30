@@ -442,13 +442,16 @@ protected:
         std::string expected_tokens = "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -481,13 +484,16 @@ protected:
         std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -520,13 +526,16 @@ protected:
         std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -598,13 +607,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -678,13 +690,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -751,13 +766,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -828,13 +846,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -907,13 +928,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -979,13 +1003,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1067,13 +1094,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1155,13 +1185,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1195,13 +1228,16 @@ protected:
         std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1291,13 +1327,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1391,13 +1430,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1482,13 +1524,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1591,13 +1636,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1702,13 +1750,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1742,13 +1793,16 @@ protected:
         std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1852,13 +1906,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -1966,13 +2023,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2071,13 +2131,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2182,13 +2245,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2221,13 +2287,16 @@ protected:
         std::string expected_tokens = "#TagLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2302,13 +2371,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2385,13 +2457,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2461,13 +2536,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2541,13 +2619,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2623,13 +2704,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2698,13 +2782,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2789,13 +2876,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2880,13 +2970,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -2920,13 +3013,16 @@ protected:
         std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3019,13 +3115,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3122,13 +3221,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3216,13 +3318,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3328,13 +3433,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3442,13 +3550,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3482,13 +3593,16 @@ protected:
         std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3595,13 +3709,16 @@ protected:
         std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3712,13 +3829,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3820,13 +3940,16 @@ protected:
         std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3934,13 +4057,16 @@ protected:
         std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -3964,13 +4090,16 @@ protected:
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4074,13 +4203,16 @@ protected:
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4104,13 +4236,16 @@ protected:
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4191,13 +4326,16 @@ protected:
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4221,13 +4359,16 @@ protected:
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4328,13 +4469,16 @@ protected:
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4358,13 +4502,16 @@ protected:
         std::string expected_tokens = "#DocStringSeparator, #Other";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
@@ -4442,13 +4589,16 @@ protected:
         std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);

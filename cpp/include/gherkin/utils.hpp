@@ -148,6 +148,12 @@ codepoint_count(std::string_view s);
 std::string
 slurp(const std::string& path);
 
+void
+replace(std::string& s, std::string_view what, std::string_view with);
+
+std::string
+replace(const std::string& s, std::string_view what, std::string_view with);
+
 template <typename CharT>
 std::basic_string<CharT>
 strip(std::basic_string_view<CharT> what, const strip_pattern<CharT>& p)

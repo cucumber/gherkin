@@ -38,13 +38,16 @@ public static string NameOf(Rule rule)
         std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
         auto error =
-            token.is_eof()
-            ? "unexpected eof: "
-            : "unexpected token: "
+            (
+                token.is_eof()
+                ? "unexpected eof: "
+                : "unexpected token: "
+            )
+            + expected_tokens
             ;
 
         if (context.stop_at_first_error) {
-            throw std::runtime_error(error + expected_tokens);
+            //throw parser_error(error + );
         }
 
         context.add_error(expected_tokens);
