@@ -176,7 +176,7 @@ line::tags() const
             throw
                 parser_error(
                     "A tag may not contain whitespace",
-                    location{ .line = line_number_, .column = column }
+                    { .line = line_number_, .column = column }
                 );
         }
 

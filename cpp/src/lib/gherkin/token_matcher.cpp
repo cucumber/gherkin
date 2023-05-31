@@ -340,7 +340,7 @@ token_matcher::keyword_type(std::string_view keyword) const
 void
 token_matcher::change_dialect(
     const std::string& dialect_name,
-    const gherkin::location& location
+    const cms::location& location
 )
 {
     if (all_keywords().find(dialect_name) == all_keywords().end()) {

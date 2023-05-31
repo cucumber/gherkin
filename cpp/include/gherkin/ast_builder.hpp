@@ -64,6 +64,7 @@ private:
     ) const;
 
     table_rows get_table_rows(const ast_node& node);
+    void ensure_cell_count(const table_rows& rows) const;
     table_cells get_table_cells(const token& token);
     tags get_tags(const ast_node& node);
 

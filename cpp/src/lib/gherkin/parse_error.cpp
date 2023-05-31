@@ -8,7 +8,7 @@ parse_error::to_json() const
     json j;
 
     j["parseError"]["source"]["uri"] = uri;
-    j["parseError"]["source"]["location"] = location.to_json();
+    location.to_json(j["parseError"]["source"]["location"]);
     j["parseError"]["message"] = message;
 
     return j;

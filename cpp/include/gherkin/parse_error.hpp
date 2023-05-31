@@ -2,18 +2,19 @@
 
 #include <string>
 
-#include <gherkin/location.hpp>
-
 #include <nlohmann/json.hpp>
+
+#include <cucumber/messages/location.hpp>
 
 namespace gherkin {
 
 using json = nlohmann::json;
+namespace cms = cucumber::messages;
 
 struct parse_error
 {
     std::string uri;
-    gherkin::location location;
+    cms::location location;
     std::string message;
 
     json to_json() const;

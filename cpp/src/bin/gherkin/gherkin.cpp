@@ -51,6 +51,15 @@ parse_options(int ac, char** av)
     return opts;
 }
 
+void print_json_obj(std::string_view key, const auto& o)
+{
+    nlohmann::json j;
+
+    o.to_json(j[key]);
+
+    std::cout << j << std::endl;
+}
+
 int main(int ac, char** av)
 {
     auto opts = parse_options(ac, av);
@@ -61,26 +70,10 @@ int main(int ac, char** av)
 
     gherkin::app app;
     gherkin::app::callbacks cbs{
-        .source = [&](const auto& s) {
-            std::cout << s.to_json() << std::endl;
-        },
-        .ast = [&](const auto& a) {
-            nlohmann::json j;
-
-            a.to_json(j["gherkinDocument"]);
-
-            std::cout << j << std::endl;
-        },
-        .pickle = [&](const auto& p) {
-            nlohmann::json j;
-
-            p.to_json(j["pickle"]);
-
-            std::cout << j << std::endl;
-        },
-        .error = [&](const auto& e) {
-            std::cout << e.to_json() << std::endl;
-        }
+        .source = [&](const auto& m) { print_json_obj("source", m); },
+        .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
+        .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
+        .error = [&](const auto& m) { std::cout << m.to_json() << std::endl; }
     };
 
     app.include_source(opts.include_source);

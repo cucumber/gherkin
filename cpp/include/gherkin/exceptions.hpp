@@ -3,18 +3,21 @@
 #include <stdexcept>
 #include <memory>
 
+#include <cucumber/messages/location.hpp>
+
 #include <gherkin/types.hpp>
 #include <gherkin/token.hpp>
-#include <gherkin/location.hpp>
 
 namespace gherkin {
+
+namespace cms = cucumber::messages;
 
 class parser_error : public std::runtime_error
 {
 public:
     parser_error(
         const std::string& message,
-        const gherkin::location& location
+        const cms::location& location
     );
 
     parser_error(const parser_error& other);
@@ -23,15 +26,15 @@ public:
 
     std::string make_message(
         const std::string& message,
-        const gherkin::location& location
+        const cms::location& location
     ) const;
 
     bool same_message(const parser_error& other) const;
 
-    const gherkin::location& location() const;
+    const cms::location& location() const;
 
 private:
-    gherkin::location location_;
+    cms::location location_;
 };
 
 using parser_error_ptr = std::shared_ptr<parser_error>;
@@ -49,7 +52,7 @@ class no_such_language_error : public parser_error
 public:
     no_such_language_error(
         const std::string& language,
-        const gherkin::location& location
+        const cms::location& location
     );
 
     virtual ~no_such_language_error();
@@ -70,6 +73,8 @@ public:
         const token& received_token,
         const std::string& expected_tokens
     ) const;
+
+    cms::location make_location(const token& t) const;
 
 private:
     token received_token_;

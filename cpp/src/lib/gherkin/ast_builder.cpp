@@ -5,6 +5,7 @@
 #include <gherkin/ast_builder.hpp>
 #include <gherkin/join_utils.hpp>
 #include <gherkin/regex.hpp>
+#include <gherkin/exceptions.hpp>
 
 namespace gherkin {
 
@@ -393,7 +394,32 @@ ast_builder::get_table_rows(const ast_node& node)
         });
     }
 
+    ensure_cell_count(rows);
+
     return rows;
+}
+
+void
+ast_builder::ensure_cell_count(const table_rows& rows) const
+{
+    if (rows.empty()) {
+        return;
+    }
+
+    std::size_t cell_count = rows.front().cells.size();
+
+    for (const auto& row : rows) {
+        if (row.cells.size() != cell_count) {
+            throw
+                ast_builder_error(
+                    "inconsistent cell count within the table",
+                    {
+                        .line = row.location.line,
+                        .column = row.location.column.value_or(0)
+                    }
+                );
+        }
+    }
 }
 
 table_cells

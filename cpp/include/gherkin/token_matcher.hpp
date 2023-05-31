@@ -73,7 +73,7 @@ private:
 
     void change_dialect(
         const std::string& dialect_name,
-        const gherkin::location& location = { 1, 1 }
+        const cms::location& location = { 1, 1 }
     );
 
     std::string unescape_docstring(const std::string& text) const;

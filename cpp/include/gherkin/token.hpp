@@ -6,10 +6,10 @@
 #include <vector>
 #include <optional>
 
+#include <cucumber/messages/location.hpp>
 #include <cucumber/messages/step_keyword_type.hpp>
 
 #include <gherkin/line.hpp>
-#include <gherkin/location.hpp>
 #include <gherkin/items.hpp>
 #include <gherkin/rule_type.hpp>
 
@@ -28,7 +28,7 @@ struct token
     gherkin::items matched_items;
     std::string matched_text;
     std::string matched_gherkin_dialect;
-    gherkin::location location;
+    cms::location location;
 
     bool is_eof() const;
 

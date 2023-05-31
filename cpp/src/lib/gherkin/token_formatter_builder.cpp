@@ -44,7 +44,8 @@ token_formatter_builder::format_token(const token& token)
     std::ostringstream oss;
 
     oss
-        << "(" << token.location.line << ":" << token.location.column << ")"
+        << "(" << token.location.line
+        << ":" << token.location.column.value_or(0) << ")"
         << token.matched_type << ":"
         ;
 

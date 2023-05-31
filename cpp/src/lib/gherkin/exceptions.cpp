@@ -13,7 +13,7 @@ namespace gherkin {
 ///////////////////////////////////////////////////////////////////////////////
 parser_error::parser_error(
     const std::string& message,
-    const gherkin::location& location
+    const cms::location& location
 )
 : std::runtime_error(make_message(message, location)),
 location_(location)
@@ -30,12 +30,14 @@ parser_error::~parser_error()
 std::string
 parser_error::make_message(
     const std::string& message,
-    const gherkin::location& location
+    const cms::location& location
 ) const
 {
     std::ostringstream oss;
 
-    oss << location << ": " << message;
+    oss
+        << "(" << location.line << ":" << location.column.value_or(0) << ")"
+        << ": " << message;
 
     return oss.str();
 }
@@ -44,7 +46,7 @@ bool
 parser_error::same_message(const parser_error& other) const
 { return std::strcmp(what(), other.what()) == 0; }
 
-const gherkin::location&
+const cms::location&
 parser_error::location() const
 { return location_; }
 
@@ -55,7 +57,7 @@ parser_error::location() const
 ///////////////////////////////////////////////////////////////////////////////
 no_such_language_error::no_such_language_error(
     const std::string& language,
-    const gherkin::location& location
+    const cms::location& location
 )
 : parser_error("Language not supported: " + language, location)
 {}
@@ -75,7 +77,7 @@ unexpected_token::unexpected_token(
 )
 : parser_error(
     make_message(received_token, expected_tokens),
-    received_token.location
+    make_location(received_token)
 ),
 received_token_(received_token),
 expected_tokens_(expected_tokens),
@@ -99,6 +101,19 @@ unexpected_token::make_message(
         ;
 
     return oss.str();
+}
+
+cms::location
+unexpected_token::make_location(const token& t) const
+{
+    return
+        t.location.column.value_or(0) > 1
+        ? t.location
+        : cms::location{
+            .line = t.location.line,
+            .column = t.line.indent() + 1
+        }
+        ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
