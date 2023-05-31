@@ -27,6 +27,10 @@ void
 append(Vector& to, const Vector& from)
 { to.insert(to.end(), from.begin(), from.end()); }
 
+pickle_compiler::pickle_compiler()
+: pickle_compiler(new_id_generator())
+{}
+
 pickle_compiler::pickle_compiler(id_generator_ptr idp)
 : idp_(idp)
 {}

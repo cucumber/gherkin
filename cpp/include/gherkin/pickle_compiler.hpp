@@ -13,7 +13,9 @@ namespace gherkin {
 class pickle_compiler
 {
 public:
+    pickle_compiler();
     pickle_compiler(id_generator_ptr idp);
+
     virtual ~pickle_compiler();
 
     pickles compile(

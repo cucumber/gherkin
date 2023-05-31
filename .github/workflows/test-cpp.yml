@@ -1,0 +1,33 @@
+name: test-c
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test-cpp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install cmake and libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build cmake
+          sudo apt-get install nlohmann-json3-dev
+          ninja --version
+          cmake --version
+          gcc --version
+
+      - name: configure and build
+        run: |
+          make install-deps
+          make acceptance
+        working-directory: cpp

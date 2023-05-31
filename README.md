@@ -14,6 +14,7 @@ Gherkin is currently implemented for the following platforms (in order of birthd
 - [Objective-C](./objective-c)
 - [Perl](./perl)
 - [PHP](./php)
+- [C++](./cpp)
 
 
 ## Contributing Translations (i18n)
@@ -148,6 +149,27 @@ $path = '/path/to/my.feature';
 
 $parser = new GherkinParser();
 $pickles = $parser->parseString(uri: $path, data: file_get_contents($path));
+```
+
+```c++
+// C++
+#include <gherkin/parser.hpp>
+#include <gherkin/pickle_compiler.hpp>
+#include <gherkin/utils.hpp>
+
+int main(int ac, char** av)
+{
+    gherkin::parser<> p;
+    std::string feature_file{ av[1] };
+
+    auto ast = p.parse(feature_file, slurp(feature_file));
+
+    gherkin::pickle_compiler pc;
+
+    auto pickles = pc.compile(ast, feature_file);
+
+    return 0;
+}
 ```
 
 ### CLI
