@@ -162,7 +162,7 @@ int main(int ac, char** av)
     gherkin::parser<> p;
     std::string feature_file{ av[1] };
 
-    auto ast = p.parse(feature_file, slurp(feature_file));
+    auto ast = p.parse(feature_file, gherkin::slurp(feature_file));
 
     gherkin::pickle_compiler pc;
 
