@@ -27,6 +27,7 @@ target_link_libraries(
     gherkin-cpp
     PUBLIC
         cucumber::cucumber-messages
+        nlohmann_json::nlohmann_json
 )
 
 set_target_properties(
