@@ -63,7 +63,7 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 	    && touch $@
 	cmake --install build/gherkin
 
-.configured: $(CMAKELISTS)
+.configured: $(CMAKELISTS) include/gherkin/generated/rule_type.hpp include/gherkin/generated/parser.hpp src/lib/gherkin/generated/dialect.cpp
 	rm -rf build/gherkin && mkdir -p build/gherkin
 	cmake \
 	    -DCMAKE_PREFIX_PATH=$(CMAKE_BUILDROOT) \
