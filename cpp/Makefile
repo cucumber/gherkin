@@ -84,10 +84,12 @@ reconfigure: clean-configure .configured
 rebuild: reconfigure .built
 
 include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
+	ls -al include/gherkin *.razor
 	$(berp-generate-parser)
 	rm -f .configured
 
 include/gherkin/parser.hpp: gherkin-cpp.razor ../gherkin.berp
+	ls -al include/gherkin *.razor
 	$(berp-generate-parser)
 	rm -f .configured
 
