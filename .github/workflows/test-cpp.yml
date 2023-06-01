@@ -32,5 +32,5 @@ jobs:
         run: |
           echo $PATH
           make install-deps
-          make acceptance
+          make --trace acceptance
         working-directory: cpp
