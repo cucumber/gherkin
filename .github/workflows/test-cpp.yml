@@ -30,6 +30,8 @@ jobs:
         env:
           NPROCS: 1
         run: |
+          echo $PATH
+          ls -al ~/bin
           make install-deps
           make acceptance
         working-directory: cpp
