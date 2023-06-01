@@ -1,4 +1,4 @@
-name: test-c
+name: test-cpp
 
 on:
   push:
