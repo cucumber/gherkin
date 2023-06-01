@@ -81,6 +81,8 @@ reconfigure: clean-configure .configured
 rebuild: reconfigure .built
 
 include/gherkin/generated/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
+	ls -al include/gherkin/generated/rule_type.hpp
+	ls -al ../gherkin.berp
 	$(berp-generate-parser)
 	rm -f .configured
 
