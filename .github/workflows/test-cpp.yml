@@ -27,6 +27,7 @@ jobs:
           gcc --version
 
       - name: configure and build
+        timeout-minutes: 5
         run: |
           make install-deps
           make acceptance
