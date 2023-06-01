@@ -8,7 +8,7 @@
 #include <gherkin/dialect.hpp>
 #include <gherkin/token.hpp>
 #include <gherkin/types.hpp>
-#include <gherkin/generated/rule_type.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include <gherkin/generated/rule_type.hpp>
+#include <gherkin/rule_type.hpp>
 #include <gherkin/token.hpp>
 
 namespace gherkin {

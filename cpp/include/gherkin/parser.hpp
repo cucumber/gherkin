@@ -1,6 +1,6 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
 #include <gherkin/parser_base.hpp>
-#include <gherkin/generated/rule_type.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 

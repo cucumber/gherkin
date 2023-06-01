@@ -11,7 +11,7 @@
 
 #include <gherkin/line.hpp>
 #include <gherkin/items.hpp>
-#include <gherkin/generated/rule_type.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 

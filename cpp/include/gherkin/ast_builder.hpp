@@ -8,7 +8,7 @@
 #include <cucumber/messages/all.hpp>
 
 #include <gherkin/token.hpp>
-#include <gherkin/generated/rule_type.hpp>
+#include <gherkin/rule_type.hpp>
 #include <gherkin/ast_node.hpp>
 #include <gherkin/id_generator.hpp>
 

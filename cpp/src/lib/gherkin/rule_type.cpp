@@ -1,6 +1,6 @@
 #include <unordered_map>
 
-#include <gherkin/generated/rule_type.hpp>
+#include <gherkin/rule_type.hpp>
 
 namespace gherkin {
 
