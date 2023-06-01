@@ -62,7 +62,7 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 .built: $(SRC_FILES) .configured
 	cmake \
 	    --build build/gherkin \
-	    --parallel \
+	    --parallel $(NPROCS) \
 	    && touch $@
 	cmake --install build/gherkin
 

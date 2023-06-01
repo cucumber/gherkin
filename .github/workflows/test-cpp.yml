@@ -27,8 +27,8 @@ jobs:
           gcc --version
 
       - name: configure and build
-        timeout-minutes: 5
         run: |
+          export NPROCS=1
           make install-deps
           make acceptance
         working-directory: cpp
