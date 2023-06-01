@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string_view>
 
-#include <gherkin/parser.hpp>
+#include <gherkin/generated/parser.hpp>
 #include <gherkin/token_formatter_builder.hpp>
 #include <gherkin/join_utils.hpp>
 #include <gherkin/utils.hpp>

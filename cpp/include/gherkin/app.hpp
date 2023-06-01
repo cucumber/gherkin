@@ -3,7 +3,7 @@
 #include <cucumber/messages/envelope.hpp>
 
 #include <gherkin/file.hpp>
-#include <gherkin/parser.hpp>
+#include <gherkin/generated/parser.hpp>
 #include <gherkin/cb_types.hpp>
 #include <gherkin/id_generator.hpp>
 

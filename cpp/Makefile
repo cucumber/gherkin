@@ -2,9 +2,9 @@ SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_GENERATED = \
-	include/gherkin/rule_type.hpp \
-	include/gherkin/parser.hpp \
-	src/lib/gherkin/dialect.cpp
+	include/gherkin/generated/rule_type.hpp \
+	include/gherkin/generated/parser.hpp \
+	src/lib/gherkin/generated/dialect.cpp
 GHERKIN = stage/bin/gherkin
 GHERKIN_GENERATE_TOKENS = stage/bin/gherkin-generate-tokens
 
@@ -17,9 +17,7 @@ PICKLES      = $(patsubst ../testdata/%,acceptance/testdata/%.pickles.ndjson,$(G
 SOURCES      = $(patsubst ../testdata/%,acceptance/testdata/%.source.ndjson,$(GOOD_FEATURE_FILES))
 ERRORS       = $(patsubst ../testdata/%,acceptance/testdata/%.errors.ndjson,$(BAD_FEATURE_FILES))
 
-SRC_FILES = \
-	$(shell find include -name "*.[ch]*") \
-	$(shell find src -name "*.[ch]*")
+SRC_FILES = $(shell find src include -name "*.[ch]*" | grep -v "/generated/")
 
 HERE = $(shell pwd)
 CMAKE_BUILDROOT = $(HERE)/build/root
@@ -30,6 +28,9 @@ CMAKELISTS = $(shell find src -name CMakeLists.txt)
 define berp-generate-parser =
 berp -g ../gherkin.berp -t $< -o $@ --noBOM
 endef
+
+toto:
+	@echo $(SRC_FILES)
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
@@ -83,17 +84,15 @@ reconfigure: clean-configure .configured
 
 rebuild: reconfigure .built
 
-include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
-	ls -al include/gherkin *.razor
+include/gherkin/generated/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 	rm -f .configured
 
-include/gherkin/parser.hpp: gherkin-cpp.razor ../gherkin.berp
-	ls -al include/gherkin *.razor
+include/gherkin/generated/parser.hpp: gherkin-cpp.razor ../gherkin.berp
 	$(berp-generate-parser)
 	rm -f .configured
 
-src/lib/gherkin/dialect.cpp: $(GHERKIN_LANGUAGES_JSON) gherkin-dialect.cpp.jq
+src/lib/gherkin/generated/dialect.cpp: $(GHERKIN_LANGUAGES_JSON) gherkin-dialect.cpp.jq
 	jq -f gherkin-dialect.cpp.jq -r -c <$(GHERKIN_LANGUAGES_JSON) >$@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens

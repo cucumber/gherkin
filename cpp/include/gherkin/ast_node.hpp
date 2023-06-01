@@ -9,7 +9,7 @@
 #include <optional>
 #include <ranges>
 
-#include <gherkin/rule_type.hpp>
+#include <gherkin/generated/rule_type.hpp>
 #include <gherkin/token.hpp>
 #include <gherkin/type_traits.hpp>
 
