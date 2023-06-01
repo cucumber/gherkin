@@ -27,8 +27,9 @@ jobs:
           gcc --version
 
       - name: configure and build
+        env:
+          NPROCS: 1
         run: |
-          export NPROCS=1
           make install-deps
           make acceptance
         working-directory: cpp
