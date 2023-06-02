@@ -76,13 +76,19 @@ touch $@
 endef
 
 include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
+	echo $?
+	ls -a --full-time include/gherkin/rule_type.hpp gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 
 include/gherkin/parser.hpp: gherkin-cpp-parser.razor ../gherkin.berp
+	echo $?
+	ls -a --full-time include/gherkin/parser.hpp gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 
 src/lib/gherkin/dialect.cpp: ../gherkin-languages.json dialect.cpp.jq
-	cat $< | jq -f dialect.cpp.jq -r -c > $@
+	echo $?
+	ls -a --full-time src/lib/gherkin/dialect.cpp ../gherkin-languages.json dialect.cpp.jq
+	jq -f dialect.cpp.jq -r -c < $< > $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
