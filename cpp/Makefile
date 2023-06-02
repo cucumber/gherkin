@@ -66,6 +66,8 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 	touch $@
 
 define berp-generate-parser =
+ls -al $< || true
+ls -al $@ || true
 berp -g ../gherkin.berp -t $< -o $@ --noBOM
 touch $@
 endef

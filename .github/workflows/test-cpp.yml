@@ -30,6 +30,5 @@ jobs:
         env:
           NPROCS: 1
         run: |
-          make install-deps
-          make acceptance
+          make -d --no-builtin-rules acceptance
         working-directory: cpp
