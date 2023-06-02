@@ -9,7 +9,7 @@ ALL_GENERATED := $(GRAMMAR_GENERATED) $(LANGUAGE_GENERATED)
 ALL_SOURCE_FILES = $(shell find . -name "*.[ch]*")
 SOURCE_FILES := $(filter-out $(ALL_GENERATED),$(ALL_SOURCE_FILES))
 
-BERP := $(or $(shell which berp),"echo berp")
+BERP := $(or $(shell which berp),echo berp)
 
 HERE = $(shell pwd)
 CMAKE_BUILDROOT = $(HERE)/build/root
@@ -70,7 +70,7 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 
 define berp-generate-parser =
 ls -al include/gherkin/*.hpp || true
-ls -al $@ || true
+ls -al $< || true
 $(BERP) -g ../gherkin.berp -t $< -o $@ --noBOM
 touch $@
 endef
