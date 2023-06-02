@@ -9,6 +9,8 @@ ALL_GENERATED := $(GRAMMAR_GENERATED) $(LANGUAGE_GENERATED)
 ALL_SOURCE_FILES = $(shell find . -name "*.[ch]*")
 SOURCE_FILES := $(filter-out $(ALL_GENERATED),$(ALL_SOURCE_FILES))
 
+BERP := $(or $(shell which berp),"echo berp")
+
 HERE = $(shell pwd)
 CMAKE_BUILDROOT = $(HERE)/build/root
 CMAKELISTS = $(shell find src -name CMakeLists.txt)
@@ -58,6 +60,7 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 .configured: .deps-installed
 	rm -rf build/gherkin && mkdir -p build/gherkin
 	cmake \
+	    -G Ninja \
 	    -DCMAKE_PREFIX_PATH=$(CMAKE_BUILDROOT) \
 	    -DCMAKE_INSTALL_PREFIX=$(HERE)/stage \
 	    -S . \
@@ -66,9 +69,9 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 	touch $@
 
 define berp-generate-parser =
-ls -al $< || true
+ls -al include/gherkin/*.hpp || true
 ls -al $@ || true
-berp -g ../gherkin.berp -t $< -o $@ --noBOM
+$(BERP) -g ../gherkin.berp -t $< -o $@ --noBOM
 touch $@
 endef
 

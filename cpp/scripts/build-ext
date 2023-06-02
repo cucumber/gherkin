@@ -81,6 +81,7 @@ rm -rf $BUILDDIR && mkdir -p $BUILDDIR
 
 if [ -f $SRCDIR/CMakeLists.txt ]; then
     cmake \
+        -G Ninja \
         -DCMAKE_PREFIX_PATH=$BUILDROOT \
         -DCMAKE_INSTALL_PREFIX=$BUILDROOT \
         -DCMAKE_TOOLCHAIN_FILE=$MYDIR/cmake/toolchains/ext.cmake \
