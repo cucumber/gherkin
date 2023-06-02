@@ -6,10 +6,8 @@ GRAMMAR_GENERATED = \
 LANGUAGE_GENERATED = \
 	src/lib/gherkin/dialect.cpp
 ALL_GENERATED := $(GRAMMAR_GENERATED) $(LANGUAGE_GENERATED)
-ALL_SOURCE_FILES = $(shell find . -name "*.[ch]*")
+ALL_SOURCE_FILES = $(shell find include src -name "*.[ch]*")
 SOURCE_FILES := $(filter-out $(ALL_GENERATED),$(ALL_SOURCE_FILES))
-
-BERP := $(or $(shell which berp),echo berp)
 
 HERE = $(shell pwd)
 CMAKE_BUILDROOT = $(HERE)/build/root
@@ -69,25 +67,16 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 	touch $@
 
 define berp-generate-parser =
-ls -al include/gherkin/*.hpp || true
-ls -al $< || true
-$(BERP) -g ../gherkin.berp -t $< -o $@ --noBOM
-touch $@
+berp -g ../gherkin.berp -t $< -o $@ --noBOM
 endef
 
 include/gherkin/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
-	echo $?
-	ls -a --full-time include/gherkin/rule_type.hpp gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 
 include/gherkin/parser.hpp: gherkin-cpp-parser.razor ../gherkin.berp
-	echo $?
-	ls -a --full-time include/gherkin/parser.hpp gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 
 src/lib/gherkin/dialect.cpp: ../gherkin-languages.json dialect.cpp.jq
-	echo $?
-	ls -a --full-time src/lib/gherkin/dialect.cpp ../gherkin-languages.json dialect.cpp.jq
 	jq -f dialect.cpp.jq -r -c < $< > $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
