@@ -128,14 +128,8 @@ ast_builder::make_doc_string(ast_node& node)
 
     string_views svs;
 
-    auto toks =
-        node.get_tokens(rule_type::other)
-        | std::views::transform([](const auto& t) {
-            return std::string_view(t.matched_text);
-        });
-
-    for (const auto& t : toks) {
-        svs.emplace_back(t);
+    for (const auto& t : node.get_tokens(rule_type::other)) {
+        svs.emplace_back(t.matched_text);
     }
 
     auto content = join("\n", svs);

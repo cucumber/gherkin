@@ -323,10 +323,10 @@ pickle_compiler::make_pickle_table(
     cms::pickle_table t;
 
     for (const auto& row : dt.rows) {
-        pickle_table_cells cells;
+        cms::pickle_table_row r;
 
         for (const auto& cell : row.cells) {
-            cells.emplace_back(cms::pickle_table_cell{
+            r.cells.emplace_back(cms::pickle_table_cell{
                 .value = interpolate(
                     cell.value,
                     variable_cells,
@@ -335,7 +335,7 @@ pickle_compiler::make_pickle_table(
             });
         }
 
-        t.rows.emplace_back(std::move(cells));
+        t.rows.emplace_back(std::move(r));
     }
 
     return t;

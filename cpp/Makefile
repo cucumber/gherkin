@@ -32,6 +32,8 @@ help: ## Show this help
 
 generate: $(GRAMMAR_GENERATED) ## Generate gherkin parser files
 
+generate-all: $(ALL_GENERATED)
+
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
 	rm -f $(GRAMMAR_GENERATED)
 

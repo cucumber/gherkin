@@ -30,7 +30,7 @@ parse_options(int ac, char** av)
             opts.include_pickles = false;
         } else if (arg == "--predictable-ids") {
             opts.predicatable_ids = true;
-        } else if (arg.starts_with('-')) {
+        } else if (arg.find('-') == 0) {
             if (arg != "-h" && arg != "--help") {
                 std::cout << "Unknown option: " << arg << std::endl;
                 opts.exit_code = 1;
@@ -54,7 +54,8 @@ parse_options(int ac, char** av)
     return opts;
 }
 
-void print_json_obj(std::string_view key, const auto& o)
+template <typename Obj>
+void print_json_obj(std::string_view key, const Obj& o)
 {
     nlohmann::json j;
 

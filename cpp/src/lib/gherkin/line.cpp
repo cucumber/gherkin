@@ -118,11 +118,11 @@ line::is_empty() const
 
 bool
 line::startswith(std::string_view prefix) const
-{ return trimmed_line_text_.starts_with(prefix); }
+{ return trimmed_line_text_.find(prefix) == 0; }
 
 bool
 line::startswith_title_keyword(const std::string& keyword) const
-{ return trimmed_line_text_.starts_with(keyword + ":"); }
+{ return trimmed_line_text_.find(keyword + ":") == 0; }
 
 items
 line::table_cells() const

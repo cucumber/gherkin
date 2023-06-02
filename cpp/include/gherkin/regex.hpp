@@ -40,7 +40,7 @@ template <typename CharT, typename SubMatch, typename Arg = null_arg>
 auto
 extract_submatch(const SubMatch& sm, Arg&& a)
 {
-    using arg_type = std::remove_cvref_t<Arg>;
+    using arg_type = std::decay_t<Arg>;
     using sv_type = std::basic_string_view<CharT>;
 
     constexpr bool is_string =
@@ -55,7 +55,7 @@ extract_submatch(const SubMatch& sm, Arg&& a)
         std::is_floating_point_v<arg_type>
         ;
 
-    sv_type sv{sm.first, sm.second};
+    sv_type sv{sm.first, static_cast<std::size_t>(sm.length())};
 
     if constexpr (is_string) {
         a.assign(sv);

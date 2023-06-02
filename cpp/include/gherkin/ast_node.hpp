@@ -7,7 +7,6 @@
 #include <string>
 #include <unordered_map>
 #include <optional>
-#include <ranges>
 
 #include <gherkin/rule_type.hpp>
 #include <gherkin/token.hpp>
@@ -18,7 +17,7 @@ namespace gherkin {
 template <typename T>
 struct sub_node
 {
-    using type = std::remove_cvref_t<T>;
+    using type = std::decay_t<T>;
     using vector_type = std::vector<type>;
     using ptr_type = std::shared_ptr<vector_type>;
 
@@ -119,7 +118,7 @@ public:
     template <typename T, typename V = T>
     void set_value(rule_type rule_type, V& v) const
     {
-        using type = std::remove_cvref_t<T>;
+        using type = std::decay_t<T>;
 
         if constexpr (is_container_v<std::vector, type>) {
             using value_type = typename type::value_type;
@@ -146,7 +145,7 @@ public:
     template <typename T>
     void set(rule_type rule_type, T& v) const
     {
-        using type = std::remove_cvref_t<T>;
+        using type = std::decay_t<T>;
 
         if constexpr (is_container_v<std::optional, type>) {
             using value_type = typename type::value_type;

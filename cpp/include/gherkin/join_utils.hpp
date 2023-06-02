@@ -43,7 +43,7 @@ struct is_joinable_container
         std::false_type
     >;
 
-    static constexpr type::value_type value = type::value;
+    static constexpr typename type::value_type value = type::value;
 };
 
 template <typename T>
