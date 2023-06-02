@@ -14,7 +14,7 @@ MYPID=$$
 
 BUILDER=$MYDIR/scripts/build-ext
 
-EXTDIR=$MYDIR/ext
+EXTDIR=$MYDIR/build/ext
 DLFILE=$EXTDIR/.downloaded
 INSTFILE=$EXTDIR/.installed
 TMPDIR=$EXTDIR/tmp

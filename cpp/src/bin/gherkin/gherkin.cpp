@@ -11,6 +11,7 @@ struct options
     bool include_source = true;
     bool include_ast = true;
     bool include_pickles = true;
+    bool predicatable_ids = true;
 };
 
 options
@@ -27,6 +28,8 @@ parse_options(int ac, char** av)
             opts.include_ast = false;
         } else if (arg == "--no-pickles") {
             opts.include_pickles = false;
+        } else if (arg == "--predictable-ids") {
+            opts.predicatable_ids = true;
         } else if (arg.starts_with('-')) {
             if (arg != "-h" && arg != "--help") {
                 std::cout << "Unknown option: " << arg << std::endl;

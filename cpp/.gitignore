@@ -4,3 +4,4 @@ acceptance/
 stage/
 .built
 .configured
+.deps-installed

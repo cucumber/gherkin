@@ -31,5 +31,5 @@ jobs:
           NPROCS: 1
         run: |
           make install-deps
-          make -d acceptance
+          make acceptance
         working-directory: cpp
