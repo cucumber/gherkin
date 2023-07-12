@@ -1,6 +1,6 @@
 package gherkin
 
-import messages "github.com/cucumber/messages/go/v21"
+import messages "github.com/cucumber/messages/go/v22"
 
 type Dialect struct {
 	Language     string
