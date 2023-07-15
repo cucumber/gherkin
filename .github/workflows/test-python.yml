@@ -20,7 +20,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        python-version: [ '3.x', '2.x', 'pypy-3.8', 'pypy-2.7' ]
+        python-version: [ '3.x', 'pypy-3.8', 'pypy-2.7' ]
         # DISABLED: python-version: [ '3.x', '2.x' ]
         # include:
         #   - os: macos-latest
