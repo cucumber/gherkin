@@ -1,3 +1,5 @@
+// Code generated from dialects_builtin.go.jq (make dialects_builtin.go); DO NOT EDIT.
+
 package gherkin
 
 import messages "github.com/cucumber/messages/go/v21"
