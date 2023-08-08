@@ -3572,6 +3572,53 @@ static const Dialect zh_CN_dialect = {
         &zh_CN_then_keywords,
         &zh_CN_when_keywords };
 
+static const wchar_t* const ml_and_KEYWORDS[] = { L"* ", L"ഒപ്പം" };
+static const Keywords ml_and_keywords = { 2, ml_and_KEYWORDS };
+
+static const wchar_t* const ml_background_KEYWORDS[] = { L"പശ്ചാത്തലം" };
+static const Keywords ml_background_keywords = { 1, ml_background_KEYWORDS };
+
+static const wchar_t* const ml_but_KEYWORDS[] = { L"* ", L"പക്ഷേ" };
+static const Keywords ml_but_keywords = { 2, ml_but_KEYWORDS };
+
+static const wchar_t* const ml_examples_KEYWORDS[] = { L"ഉദാഹരണങ്ങൾ" };
+static const Keywords ml_examples_keywords = { 1, ml_examples_KEYWORDS };
+
+static const wchar_t* const ml_feature_KEYWORDS[] = { L"സവിശേഷത" };
+static const Keywords ml_feature_keywords = { 1, ml_feature_KEYWORDS };
+
+static const wchar_t* const ml_given_KEYWORDS[] = { L"* ", L"നൽകിയത്" };
+static const Keywords ml_given_keywords = { 2, ml_given_KEYWORDS };
+
+static const wchar_t* const ml_rule_KEYWORDS[] = { L"നിയമം" };
+static const Keywords ml_rule_keywords = { 1, ml_rule_KEYWORDS };
+
+static const wchar_t* const ml_scenario_KEYWORDS[] = { L"രംഗം" };
+static const Keywords ml_scenario_keywords = { 1, ml_scenario_KEYWORDS };
+
+static const wchar_t* const ml_scenarioOutline_KEYWORDS[] = { L"സാഹചര്യത്തിന്റെ രൂപരേഖ" };
+static const Keywords ml_scenarioOutline_keywords = { 1, ml_scenarioOutline_KEYWORDS };
+
+static const wchar_t* const ml_then_KEYWORDS[] = { L"* ", L"പിന്നെ" };
+static const Keywords ml_then_keywords = { 2, ml_then_KEYWORDS };
+
+static const wchar_t* const ml_when_KEYWORDS[] = { L"എപ്പോൾ" };
+static const Keywords ml_when_keywords = { 1, ml_when_KEYWORDS };
+
+static const Dialect ml_dialect = {
+        L"ml",
+        &ml_and_keywords,
+        &ml_background_keywords,
+        &ml_but_keywords,
+        &ml_examples_keywords,
+        &ml_feature_keywords,
+        &ml_given_keywords,
+        &ml_rule_keywords,
+        &ml_scenario_keywords,
+        &ml_scenarioOutline_keywords,
+        &ml_then_keywords,
+        &ml_when_keywords };
+
 static const wchar_t* const zh_TW_and_KEYWORDS[] = { L"* ", L"而且", L"並且", L"同時" };
 static const Keywords zh_TW_and_keywords = { 4, zh_TW_and_KEYWORDS };
 
@@ -3866,6 +3913,8 @@ const Dialect* Dialect_for(const wchar_t* language) {
         return &vi_dialect;
     if (wcscmp(zh_CN_dialect.language_name, language) == 0)
         return &zh_CN_dialect;
+    if (wcscmp(ml_dialect.language_name, language) == 0)
+        return &ml_dialect;
     if (wcscmp(zh_TW_dialect.language_name, language) == 0)
         return &zh_TW_dialect;
     if (wcscmp(mr_dialect.language_name, language) == 0)
