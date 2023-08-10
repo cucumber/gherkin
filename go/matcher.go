@@ -19,6 +19,11 @@ const (
 	DocstringAlternativeSeparator = "```"
 )
 
+var (
+	defaultLanguagePattern  = regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$")
+	commentDelimiterPattern = regexp.MustCompile(`\s+` + CommentPrefix)
+)
+
 type matcher struct {
 	gdp                      DialectProvider
 	defaultLang              string
@@ -35,7 +40,7 @@ func NewMatcher(gdp DialectProvider) Matcher {
 		defaultLang:     DefaultDialect,
 		lang:            DefaultDialect,
 		dialect:         gdp.GetDialect(DefaultDialect),
-		languagePattern: regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$"),
+		languagePattern: defaultLanguagePattern,
 	}
 }
 
@@ -45,7 +50,7 @@ func NewLanguageMatcher(gdp DialectProvider, language string) Matcher {
 		defaultLang:     language,
 		lang:            language,
 		dialect:         gdp.GetDialect(language),
-		languagePattern: regexp.MustCompile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$"),
+		languagePattern: defaultLanguagePattern,
 	}
 }
 
@@ -95,8 +100,7 @@ func (m *matcher) MatchTagLine(line *Line) (ok bool, token *Token, err error) {
 	if !line.StartsWith(TagPrefix) {
 		return
 	}
-	commentDelimiter := regexp.MustCompile(`\s+` + CommentPrefix)
-	uncommentedLine := commentDelimiter.Split(line.TrimmedLineText, 2)[0]
+	uncommentedLine := commentDelimiterPattern.Split(line.TrimmedLineText, 2)[0]
 	var tags []*LineSpan
 	var column = line.Indent() + 1
 
@@ -108,7 +112,7 @@ func (m *matcher) MatchTagLine(line *Line) (ok bool, token *Token, err error) {
 		if len(txt) == 0 {
 			continue
 		}
-		if !regexp.MustCompile(`^\S+$`).MatchString(txt) {
+		if strings.ContainsAny(txt, "\t\n\f\r ") {
 			location := &Location{line.LineNumber, column}
 			msg := "A tag may not contain whitespace"
 			err = &parseError{msg, location}
