@@ -88,7 +88,7 @@
   )
 | "// Code generated from dialects_builtin.go.jq (make dialects_builtin.go); DO NOT EDIT.\n\n" # Standard header defined at https://golang.org/s/generatedcode
 + "package gherkin\n\n"
-+ "import messages \"github.com/cucumber/messages/go/v21\"\n\n"
++ "import messages \"github.com/cucumber/messages/go/v22\"\n\n"
 + "// Builtin dialects for " + ([ $root | to_entries[] | .key+" ("+.value.name+")" ] | join(", ")) + "\n"
 + "func DialectsBuiltin() DialectProvider {\n"
 + "\treturn builtinDialects\n"
