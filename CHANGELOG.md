@@ -10,6 +10,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [Go] Upgraded messages to v22
 
+### Added
+- (i18n) Add Malayalam localization
+
 ## [26.2.0] - 2023-04-07
 ### Changed
 - Upgraded messages to v22

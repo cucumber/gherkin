@@ -32,9 +32,9 @@
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
     "@types/mocha": "10.0.1",
-    "@types/node": "18.16.19",
+    "@types/node": "18.17.4",
     "commander": "^11.0.0",
-    "core-js": "3.31.1",
+    "core-js": "3.32.0",
     "mocha": "10.2.0",
     "ts-node": "10.9.1",
     "typescript": "5.1.6"

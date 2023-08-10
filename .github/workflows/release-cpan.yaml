@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - uses: cucumber/action-publish-cpan@v1.0.0
+      - uses: cucumber/action-publish-cpan@v1.0.1
         with:
           cpan-user: ${{ secrets.CPAN_USER }}
           cpan-password: ${{ secrets.CPAN_PASSWORD }}
