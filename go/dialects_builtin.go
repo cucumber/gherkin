@@ -1,8 +1,10 @@
+// Code generated from dialects_builtin.go.jq (make dialects_builtin.go); DO NOT EDIT.
+
 package gherkin
 
-import messages "github.com/cucumber/messages/go/v21"
+import messages "github.com/cucumber/messages/go/v22"
 
-// Builtin dialects for af (Afrikaans), am (Armenian), an (Aragonese), ar (Arabic), ast (Asturian), az (Azerbaijani), be (Belarusian), bg (Bulgarian), bm (Malay), bs (Bosnian), ca (Catalan), cs (Czech), cy-GB (Welsh), da (Danish), de (German), el (Greek), em (Emoji), en (English), en-Scouse (Scouse), en-au (Australian), en-lol (LOLCAT), en-old (Old English), en-pirate (Pirate), en-tx (Texas), eo (Esperanto), es (Spanish), et (Estonian), fa (Persian), fi (Finnish), fr (French), ga (Irish), gj (Gujarati), gl (Galician), he (Hebrew), hi (Hindi), hr (Croatian), ht (Creole), hu (Hungarian), id (Indonesian), is (Icelandic), it (Italian), ja (Japanese), jv (Javanese), ka (Georgian), kn (Kannada), ko (Korean), lt (Lithuanian), lu (Luxemburgish), lv (Latvian), mk-Cyrl (Macedonian), mk-Latn (Macedonian (Latin)), mn (Mongolian), ne (Nepali), nl (Dutch), no (Norwegian), pa (Panjabi), pl (Polish), pt (Portuguese), ro (Romanian), ru (Russian), sk (Slovak), sl (Slovenian), sr-Cyrl (Serbian), sr-Latn (Serbian (Latin)), sv (Swedish), ta (Tamil), th (Thai), te (Telugu), tlh (Klingon), tr (Turkish), tt (Tatar), uk (Ukrainian), ur (Urdu), uz (Uzbek), vi (Vietnamese), zh-CN (Chinese simplified), zh-TW (Chinese traditional), mr (Marathi), amh (Amharic)
+// Builtin dialects for af (Afrikaans), am (Armenian), an (Aragonese), ar (Arabic), ast (Asturian), az (Azerbaijani), be (Belarusian), bg (Bulgarian), bm (Malay), bs (Bosnian), ca (Catalan), cs (Czech), cy-GB (Welsh), da (Danish), de (German), el (Greek), em (Emoji), en (English), en-Scouse (Scouse), en-au (Australian), en-lol (LOLCAT), en-old (Old English), en-pirate (Pirate), en-tx (Texas), eo (Esperanto), es (Spanish), et (Estonian), fa (Persian), fi (Finnish), fr (French), ga (Irish), gj (Gujarati), gl (Galician), he (Hebrew), hi (Hindi), hr (Croatian), ht (Creole), hu (Hungarian), id (Indonesian), is (Icelandic), it (Italian), ja (Japanese), jv (Javanese), ka (Georgian), kn (Kannada), ko (Korean), lt (Lithuanian), lu (Luxemburgish), lv (Latvian), mk-Cyrl (Macedonian), mk-Latn (Macedonian (Latin)), mn (Mongolian), ne (Nepali), nl (Dutch), no (Norwegian), pa (Panjabi), pl (Polish), pt (Portuguese), ro (Romanian), ru (Russian), sk (Slovak), sl (Slovenian), sr-Cyrl (Serbian), sr-Latn (Serbian (Latin)), sv (Swedish), ta (Tamil), th (Thai), te (Telugu), tlh (Klingon), tr (Turkish), tt (Tatar), uk (Ukrainian), ur (Urdu), uz (Uzbek), vi (Vietnamese), zh-CN (Chinese simplified), ml (Malayalam), zh-TW (Chinese traditional), mr (Marathi), amh (Amharic)
 func DialectsBuiltin() DialectProvider {
 	return builtinDialects
 }
@@ -5027,6 +5029,59 @@ var builtinDialects = gherkinDialectMap{
 			"同时": messages.StepKeywordType_CONJUNCTION,
 
 			"但是": messages.StepKeywordType_CONJUNCTION,
+
+			"* ": messages.StepKeywordType_UNKNOWN,
+		}},
+	"ml": &Dialect{
+		"ml", "Malayalam", "മലയാളം", map[string][]string{
+			feature: {
+				"സവിശേഷത",
+			},
+			rule: {
+				"നിയമം",
+			},
+			background: {
+				"പശ്ചാത്തലം",
+			},
+			scenario: {
+				"രംഗം",
+			},
+			scenarioOutline: {
+				"സാഹചര്യത്തിന്റെ രൂപരേഖ",
+			},
+			examples: {
+				"ഉദാഹരണങ്ങൾ",
+			},
+			given: {
+				"* ",
+				"നൽകിയത്",
+			},
+			when: {
+				"എപ്പോൾ",
+			},
+			then: {
+				"* ",
+				"പിന്നെ",
+			},
+			and: {
+				"* ",
+				"ഒപ്പം",
+			},
+			but: {
+				"* ",
+				"പക്ഷേ",
+			},
+		},
+		map[string]messages.StepKeywordType{
+			"നൽകിയത്": messages.StepKeywordType_CONTEXT,
+
+			"എപ്പോൾ": messages.StepKeywordType_ACTION,
+
+			"പിന്നെ": messages.StepKeywordType_OUTCOME,
+
+			"ഒപ്പം": messages.StepKeywordType_CONJUNCTION,
+
+			"പക്ഷേ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
