@@ -5,6 +5,7 @@ requires "Class::XSAccessor";
 requires "Cucumber::Messages", ">= 19.0.0, < 20.0.0";
 requires "Data::UUID";
 requires "Getopt::Long", "2.54";
+requires "List::Util", "1.33";
 
 on 'test' => sub {
     requires "Path::Class";
