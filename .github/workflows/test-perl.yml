@@ -13,14 +13,21 @@ on:
 jobs:
   test-perl:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+          - "5.14"
+          - "5.36"
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: install cpanm and multiple modules
-        uses: perl-actions/install-with-cpanm@v1
+      - name: Setup Perl environment
+        uses: shogo82148/actions-setup-perl@v1
         with:
-          cpanfile: "perl/cpanfile"
+          perl-version: ${{ matrix.perl }}
+          install-modules-with: cpanm
+          working-directory: perl
 
       - name: run tests
         run: |
