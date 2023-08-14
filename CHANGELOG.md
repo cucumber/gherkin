@@ -10,6 +10,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [Go] Upgraded messages to v22
 - [Go] Improve performance - don't compile regex on matcher create
+- [Perl] Fix release packaging
+- [Perl] Include CHANGELOG.md in tarball
+- [Perl] Upgrade messages to v22
 
 ### Added
 - (i18n) Add Malayalam localization
