@@ -65,7 +65,7 @@ final class AstNode
     /** needed for non-object return */
     public function getSingleUntyped(RuleType $ruleType, mixed $defaultValue = null): mixed
     {
-        $items =$this->subItems[$ruleType->name] ?? [];
+        $items = $this->subItems[$ruleType->name] ?? [];
 
         /**
          * Force the type because we trust the parser, could be validated instead
