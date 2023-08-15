@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Class::XSAccessor accessors =>
-  [ qw/line_text line_number indent _trimmed_line_text/, ];
+  [ qw/line_text line_number indent _trimmed_line_text _tag_error/, ];
 
 sub new {
     my ( $class, $options ) = @_;
@@ -137,11 +137,27 @@ sub tags {
     my @items = split( /@/, $items_line );
     shift(@items);    # Blank first item
 
-    for my $item (@items) {
-        my $original_item = $item;
+    for my $untrimmed (@items) {
+        my $item = $untrimmed;
         $item =~ s/^\s*//;
         $item =~ s/\s*$//;
+        next if length($item) == 0;
 
+        if ($item !~ /^\S+$/) {
+            # Cache the error we're throwing: this line may
+            # be evaluated for tokens again, in which case we
+            # need to throw the *same* error to prevent in from
+            # being reported twice... (yes, ugh!)
+            $self->{'_tag_error'} ||=
+                Gherkin::Exceptions::SingleParser->new(
+                    detailed_message => 'A tag may not contain whitespace',
+                    location => {
+                        line   => $self->line_number,
+                        column => $column,
+                    },
+                );
+            die $self->{'_tag_error'};
+        }
         push(
             @tags,
             {
@@ -150,7 +166,7 @@ sub tags {
             }
         );
 
-        $column += length($original_item) + 1;
+        $column += length($untrimmed) + 1;
     }
 
     return \@tags;
