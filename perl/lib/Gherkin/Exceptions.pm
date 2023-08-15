@@ -3,11 +3,7 @@ use warnings;
 
 package Gherkin::Exceptions;
 
-use overload
-    q{""}    => 'stringify',
-    fallback => 1;
-
-sub stringify { my $self  = shift; $self->message . "\n" }
+sub stringify { my $self  = shift; $self->message }
 sub throw     { my $class = shift; die $class->new(@_) }
 
 # Parent of single and composite exceptions
