@@ -1,4 +1,6 @@
 Feature: Whitespace in tags
 
   @a tag containing whitespace
-  Scenario: minimalistic
+  Rule: a rule
+  
+    Scenario: minimalistic
