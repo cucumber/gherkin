@@ -123,7 +123,7 @@ sub match_EOF {
 
 sub match_Empty {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -133,7 +133,7 @@ sub match_Empty {
 
 sub match_Comment {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -143,7 +143,7 @@ sub match_Comment {
 
 sub match_TagLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -153,7 +153,7 @@ sub match_TagLine {
 
 sub match_FeatureLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -163,7 +163,7 @@ sub match_FeatureLine {
 
 sub match_RuleLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -173,7 +173,7 @@ sub match_RuleLine {
 
 sub match_BackgroundLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -183,7 +183,7 @@ sub match_BackgroundLine {
 
 sub match_ScenarioLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -193,7 +193,7 @@ sub match_ScenarioLine {
 
 sub match_ExamplesLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -203,7 +203,7 @@ sub match_ExamplesLine {
 
 sub match_StepLine {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -213,7 +213,7 @@ sub match_StepLine {
 
 sub match_DocStringSeparator {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -223,7 +223,7 @@ sub match_DocStringSeparator {
 
 sub match_TableRow {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -233,7 +233,7 @@ sub match_TableRow {
 
 sub match_Language {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
@@ -243,7 +243,7 @@ sub match_Language {
 
 sub match_Other {
     my ($self, $context, $token) = @_;
-     return if $token->is_eof;
+    return if $token->is_eof;
     return $self->handle_external_error(
         $context,
         0, # Default return value
