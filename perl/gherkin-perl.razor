@@ -16,21 +16,12 @@
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>    $token->detach;
-
-    # Create the appropriate error
-    my $error_class = "Gherkin::Exceptions::" . (
-        $token->is_eof ? 'UnexpectedEOF' : 'UnexpectedToken' );
-
-    my @@args = (
+    my $err = $self->_construct_parser_error(
         $token,
-        ["@Raw(string.Join("\", \"", expectedTokens))"], #"
+        ["@Raw(string.Join("\", \"", expectedTokens))"],
         "State: @state.Id - @Raw(state.Comment)",
     );
-
-    $error_class->throw( @@args ) if $self->stop_at_first_error;
-
-    eval {$error_class->throw( @@args )};
-    $self->add_error( $context, $@@ );
+    $self->add_error( $context, $err );
 
     return @state.Id;
 </text>}
@@ -43,13 +34,6 @@ use strict;
 use warnings;
 
 use base 'Gherkin::ParserBase';
-
-our @@RULE_TYPES = [
-    'None',
-    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    '@rule.Name.Replace("#", "_")',  # @rule.ToString(true)
-</text>}
-];
 
 our %states_to_match_names = (
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState)) //..
@@ -102,19 +86,25 @@ sub match_token {
     $self->$method_name( $token, $context );
 }
 
+sub _construct_parser_error {
+    my ($self, $token, @@args) = @@_;
+    my $error_class = "Gherkin::Exceptions::" . (
+        $token->is_eof ? 'UnexpectedEOF' : 'UnexpectedToken' );
+
+    return $error_class->new( $token, @@args );
+}
+
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
 sub match_@(rule.Name.Replace("#", "")) {
     my ($self, $context, $token) = @@_;
     @if (rule.Name != "#EOF")
     {
-    @: return if $token->is_eof;
+    @:return if $token->is_eof;
     }
     return $self->handle_external_error(
         $context,
-        0, # Default return value
-        sub { $context->token_matcher->match_@rule.Name.Replace("#", "")
-        ( $token ) }
+        sub { $context->token_matcher->match_@(rule.Name.Replace("#", ""))( $token ) }
     );
 }
 </text>}
@@ -165,15 +155,16 @@ sub lookahead_@(lookAheadHint.Id) {
         $token->detach;
         push( @@queue, $token );
 
-        if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>$self->@MatchToken(tokenType) || </text>}0) {
-            $match = 1;
-            last;
+        @foreach(var tokenType in lookAheadHint.ExpectedTokens) {
+        @:$match = 1 if $self->@MatchToken(tokenType);
+        }
+        last if $match;
+
+        @foreach(var tokenType in lookAheadHint.Skip) {
+        @:next if $self->@MatchToken(tokenType);
         }
 
-        if (! (@foreach(var tokenType in lookAheadHint.Skip) {<text>$self->@MatchToken(tokenType) || </text>}0)) {
-            last;
-        }
-
+        last;
     }
 
     $context->add_tokens( @@queue );
