@@ -145,8 +145,7 @@ sub match_EOF {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_EOF
-        ( $token ) }
+        sub { $context->token_matcher->match_EOF( $token ) }
     );
 }
 
@@ -156,8 +155,7 @@ sub match_Empty {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_Empty
-        ( $token ) }
+        sub { $context->token_matcher->match_Empty( $token ) }
     );
 }
 
@@ -167,8 +165,7 @@ sub match_Comment {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_Comment
-        ( $token ) }
+        sub { $context->token_matcher->match_Comment( $token ) }
     );
 }
 
@@ -178,8 +175,7 @@ sub match_TagLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_TagLine
-        ( $token ) }
+        sub { $context->token_matcher->match_TagLine( $token ) }
     );
 }
 
@@ -189,8 +185,7 @@ sub match_FeatureLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_FeatureLine
-        ( $token ) }
+        sub { $context->token_matcher->match_FeatureLine( $token ) }
     );
 }
 
@@ -200,8 +195,7 @@ sub match_RuleLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_RuleLine
-        ( $token ) }
+        sub { $context->token_matcher->match_RuleLine( $token ) }
     );
 }
 
@@ -211,8 +205,7 @@ sub match_BackgroundLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_BackgroundLine
-        ( $token ) }
+        sub { $context->token_matcher->match_BackgroundLine( $token ) }
     );
 }
 
@@ -222,8 +215,7 @@ sub match_ScenarioLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_ScenarioLine
-        ( $token ) }
+        sub { $context->token_matcher->match_ScenarioLine( $token ) }
     );
 }
 
@@ -233,8 +225,7 @@ sub match_ExamplesLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_ExamplesLine
-        ( $token ) }
+        sub { $context->token_matcher->match_ExamplesLine( $token ) }
     );
 }
 
@@ -244,8 +235,7 @@ sub match_StepLine {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_StepLine
-        ( $token ) }
+        sub { $context->token_matcher->match_StepLine( $token ) }
     );
 }
 
@@ -255,8 +245,7 @@ sub match_DocStringSeparator {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_DocStringSeparator
-        ( $token ) }
+        sub { $context->token_matcher->match_DocStringSeparator( $token ) }
     );
 }
 
@@ -266,8 +255,7 @@ sub match_TableRow {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_TableRow
-        ( $token ) }
+        sub { $context->token_matcher->match_TableRow( $token ) }
     );
 }
 
@@ -277,8 +265,7 @@ sub match_Language {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_Language
-        ( $token ) }
+        sub { $context->token_matcher->match_Language( $token ) }
     );
 }
 
@@ -288,8 +275,7 @@ sub match_Other {
     return $self->handle_external_error(
         $context,
         0, # Default return value
-        sub { $context->token_matcher->match_Other
-        ( $token ) }
+        sub { $context->token_matcher->match_Other( $token ) }
     );
 }
 
