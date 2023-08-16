@@ -16,21 +16,12 @@
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>    $token->detach;
-
-    # Create the appropriate error
-    my $error_class = "Gherkin::Exceptions::" . (
-        $token->is_eof ? 'UnexpectedEOF' : 'UnexpectedToken' );
-
-    my @@args = (
+    my $err = $self->_construct_parser_error(
         $token,
-        ["@Raw(string.Join("\", \"", expectedTokens))"], #"
+        ["@Raw(string.Join("\", \"", expectedTokens))"],
         "State: @state.Id - @Raw(state.Comment)",
     );
-
-    $error_class->throw( @@args ) if $self->stop_at_first_error;
-
-    eval {$error_class->throw( @@args )};
-    $self->add_error( $context, $@@ );
+    $self->add_error( $context, $err );
 
     return @state.Id;
 </text>}
@@ -93,6 +84,14 @@ sub match_token {
     my $method_name = $states_to_match_names{ $state } ||
         die "Unknown state: $state";
     $self->$method_name( $token, $context );
+}
+
+sub _construct_parser_error {
+    my ($self, $token, @@args) = @@_;
+    my $error_class = "Gherkin::Exceptions::" . (
+        $token->is_eof ? 'UnexpectedEOF' : 'UnexpectedToken' );
+
+    return $error_class->new( $token, @@args );
 }
 
 @foreach(var rule in Model.RuleSet.TokenRules)

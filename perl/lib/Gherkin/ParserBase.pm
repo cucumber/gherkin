@@ -29,7 +29,12 @@ sub get_result { return $_[0]->ast_builder->get_result }
 sub add_error {
     my ( $self, $context, $error ) = @_;
 
-    $context->add_errors($error);
+    die $error if $self->stop_at_first_error;
+    if ( ref $error eq 'Gherkin::Exceptions::CompositeParser' ) {
+        $context->add_errors( @{ $error->errors } );
+    } else {
+        $context->add_errors( $error );
+    }
 
     my @errors = $context->errors;
     Gherkin::Exceptions::CompositeParser->throw(@errors)
@@ -70,13 +75,8 @@ sub handle_external_error {
     # Non-structured exceptions
     die $@ unless ref $@;
 
-    if ( ref $@ eq 'Gherkin::Exceptions::CompositeParser' ) {
-        $self->add_error( $context, $_ ) for @{ $@->errors };
-        return $default_value;
-    } else {
-        $self->add_error( $context, $@ );
-        return $default_value;
-    }
+    $self->add_error( $context, $@ );
+    return $default_value;
 }
 
 1;
