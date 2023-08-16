@@ -116,7 +116,6 @@ sub match_EOF {
     my ($self, $context, $token) = @_;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_EOF( $token ) }
     );
 }
@@ -126,7 +125,6 @@ sub match_Empty {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_Empty( $token ) }
     );
 }
@@ -136,7 +134,6 @@ sub match_Comment {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_Comment( $token ) }
     );
 }
@@ -146,7 +143,6 @@ sub match_TagLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_TagLine( $token ) }
     );
 }
@@ -156,7 +152,6 @@ sub match_FeatureLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_FeatureLine( $token ) }
     );
 }
@@ -166,7 +161,6 @@ sub match_RuleLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_RuleLine( $token ) }
     );
 }
@@ -176,7 +170,6 @@ sub match_BackgroundLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_BackgroundLine( $token ) }
     );
 }
@@ -186,7 +179,6 @@ sub match_ScenarioLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_ScenarioLine( $token ) }
     );
 }
@@ -196,7 +188,6 @@ sub match_ExamplesLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_ExamplesLine( $token ) }
     );
 }
@@ -206,7 +197,6 @@ sub match_StepLine {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_StepLine( $token ) }
     );
 }
@@ -216,7 +206,6 @@ sub match_DocStringSeparator {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_DocStringSeparator( $token ) }
     );
 }
@@ -226,7 +215,6 @@ sub match_TableRow {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_TableRow( $token ) }
     );
 }
@@ -236,7 +224,6 @@ sub match_Language {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_Language( $token ) }
     );
 }
@@ -246,7 +233,6 @@ sub match_Other {
     return if $token->is_eof;
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_Other( $token ) }
     );
 }

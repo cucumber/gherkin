@@ -104,7 +104,6 @@ sub match_@(rule.Name.Replace("#", "")) {
     }
     return $self->handle_external_error(
         $context,
-        0, # Default return value
         sub { $context->token_matcher->match_@(rule.Name.Replace("#", ""))( $token ) }
     );
 }
