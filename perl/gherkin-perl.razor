@@ -44,13 +44,6 @@ use warnings;
 
 use base 'Gherkin::ParserBase';
 
-our @@RULE_TYPES = [
-    'None',
-    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    '@rule.Name.Replace("#", "_")',  # @rule.ToString(true)
-</text>}
-];
-
 our %states_to_match_names = (
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState)) //..
     {
