@@ -6,6 +6,8 @@ use warnings;
 use Class::XSAccessor accessors =>
   [ qw/line_text line_number indent _trimmed_line_text _tag_error/, ];
 
+use Gherkin::Exceptions;
+
 sub new {
     my ( $class, $options ) = @_;
     my $self = bless $options, $class;
@@ -134,6 +136,7 @@ sub tags {
     $items_line =~ s/\s+(#.*)?$//;
 
     my @tags;
+    my @errors;
     my @items = split( /@/, $items_line );
     shift(@items);    # Blank first item
 
@@ -144,11 +147,7 @@ sub tags {
         next if length($item) == 0;
 
         if ($item !~ /^\S+$/) {
-            # Cache the error we're throwing: this line may
-            # be evaluated for tokens again, in which case we
-            # need to throw the *same* error to prevent in from
-            # being reported twice... (yes, ugh!)
-            $self->{'_tag_error'} ||=
+            push @errors,
                 Gherkin::Exceptions::SingleParser->new(
                     detailed_message => 'A tag may not contain whitespace',
                     location => {
@@ -156,20 +155,21 @@ sub tags {
                         column => $column,
                     },
                 );
-            die $self->{'_tag_error'};
         }
-        push(
-            @tags,
-            {
-                column => $column,
-                text   => '@' . $item,
-            }
-        );
+        push @tags, {
+            column => $column,
+            text   => '@' . $item,
+        };
 
         $column += length($untrimmed) + 1;
     }
 
-    return \@tags;
+    my $err;
+    if (@errors) {
+        $err = Gherkin::Exceptions::CompositeParser->new(@errors);
+    }
+
+    return (\@tags, $err);
 }
 
 1;

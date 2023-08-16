@@ -16,7 +16,7 @@
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>    $token->detach;
-    my $err = $self->_construct_parser_error(
+    $err = $self->_construct_parser_error(
         $token,
         ["@Raw(string.Join("\", \"", expectedTokens))"],
         "State: @state.Id - @Raw(state.Comment)",
@@ -102,10 +102,7 @@ sub match_@(rule.Name.Replace("#", "")) {
     {
     @:return if $token->is_eof;
     }
-    return $self->handle_external_error(
-        $context,
-        sub { $context->token_matcher->match_@(rule.Name.Replace("#", ""))( $token ) }
-    );
+    $context->token_matcher->match_@(rule.Name.Replace("#", ""))( $token );
 }
 </text>}
 
@@ -114,9 +111,12 @@ sub match_@(rule.Name.Replace("#", "")) {
 # @Raw(state.Comment)
 sub match_token_at_@(state.Id) {
     my ( $self, $token, $context ) = @@_;
+    my ( $ok, $err );
     @foreach(var transition in state.Transitions)
     {
-    @:if ($self->@MatchToken(transition.TokenType)) {
+    @:($ok, $err) = $self->@MatchToken(transition.TokenType);
+    @:if ($ok) {
+        @:$self->add_error( $context, $err ) if $err;
         if (transition.LookAheadHint != null)
         {
         @:if ($self->lookahead_@(transition.LookAheadHint.Id)($context, $token)) {
@@ -150,18 +150,19 @@ sub lookahead_@(lookAheadHint.Id) {
     my @@queue;
     my $match = 0;
 
+    my $ok;
     while (1) {
         $token = $context->read_token();
         $token->detach;
         push( @@queue, $token );
 
-        @foreach(var tokenType in lookAheadHint.ExpectedTokens) {
-        @:$match = 1 if $self->@MatchToken(tokenType);
-        }
-        last if $match;
+        @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>
+        ($match) = $self->@MatchToken(tokenType);
+        last if $match;</text>}
 
-        @foreach(var tokenType in lookAheadHint.Skip) {
-        @:next if $self->@MatchToken(tokenType);
+        @foreach(var tokenType in lookAheadHint.Skip) {<text>
+        ($ok) = $self->@MatchToken(tokenType);
+        next if $ok;</text>
         }
 
         last;

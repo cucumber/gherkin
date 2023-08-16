@@ -79,7 +79,7 @@ sub match_ScenarioLine {
         ScenarioLine => $self->dialect->Scenario )
         or $self->_match_title_line(
             $token,
-            ScenarioLine => $self->dialect->ScenarioOutline );;
+            ScenarioLine => $self->dialect->ScenarioOutline );
 }
 
 sub match_BackgroundLine {
@@ -99,9 +99,10 @@ sub match_Language {
     if ( $token->line->get_line_text =~ $LANGUAGE_RE ) {
         my $dialect_name = $1;
         $self->_set_token_matched( $token,
-            Language => { text => $dialect_name } );
-        $self->change_dialect( $dialect_name, $token->location );
-        return 1;
+                                   Language => { text => $dialect_name } );
+        local $@;
+        eval { $self->change_dialect( $dialect_name, $token->location ) };
+        return (1, $@);
     } else {
         return;
     }
@@ -110,9 +111,11 @@ sub match_Language {
 sub match_TagLine {
     my ( $self, $token ) = @_;
     return unless $token->line->startswith('@');
+
+    my ($tags, $err) = $token->line->tags;
     $self->_set_token_matched( $token,
-        TagLine => { items => $token->line->tags } );
-    return 1;
+                               TagLine => { items => $tags } );
+    return (1, $err);
 }
 
 sub _match_title_line {

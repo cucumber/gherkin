@@ -64,18 +64,4 @@ sub _build {
     }
 }
 
-sub handle_external_error {
-    my ( $self, $context, $action ) = @_;
-    return $action->() if $self->stop_at_first_error;
-
-    my $result = eval { $action->() };
-    return $result unless $@;
-
-    # Non-structured exceptions
-    die $@ unless ref $@;
-
-    $self->add_error( $context, $@ );
-    return 0; # failed
-}
-
 1;
