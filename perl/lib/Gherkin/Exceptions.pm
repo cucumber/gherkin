@@ -3,11 +3,7 @@ use warnings;
 
 package Gherkin::Exceptions;
 
-use overload
-    q{""}    => 'stringify',
-    fallback => 1;
-
-sub stringify { my $self  = shift; $self->message . "\n" }
+sub stringify { my $self  = shift; $self->message }
 sub throw     { my $class = shift; die $class->new(@_) }
 
 # Parent of single and composite exceptions
@@ -40,7 +36,12 @@ sub throw { my $class = shift; die $class->new(@_) }
 package Gherkin::Exceptions::SingleParser;
 
 use base 'Gherkin::Exceptions::Parser';
-use Class::XSAccessor accessors => [qw/location/];
+use Class::XSAccessor accessors => [qw/detailed_message location/];
+
+sub new {
+    my ( $class, %args ) = @_;
+    bless { %args }, $class;
+}
 
 sub message {
     my $self = shift;

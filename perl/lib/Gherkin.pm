@@ -3,6 +3,7 @@ package Gherkin;
 use strict;
 use warnings;
 use Encode qw(encode_utf8 find_encoding);
+use Scalar::Util qw( blessed );
 
 use Cucumber::Messages;
 
@@ -83,6 +84,22 @@ sub _parse_source_encoding_header {
     }
 }
 
+sub _parser_error_message {
+    my ( $error, $uri ) = @_;
+    return Cucumber::Messages::Envelope->new(
+        parse_error => Cucumber::Messages::ParseError->new(
+            source => Cucumber::Messages::SourceReference->new(
+                uri => $uri,
+                location => Cucumber::Messages::Location->new(
+                    line => $error->location->{line},
+                    column => $error->location->{column},
+                ),
+            ),
+            message => $error->stringify,
+        )
+    );
+}
+
 sub from_source {
     my ($self, $envelope, $id_generator, $sink) = @_;
 
@@ -97,11 +114,32 @@ sub from_source {
             Gherkin::AstBuilder->new($id_generator)
             );
         my $data = $source->data;
-        my $ast_msg = $parser->parse( \$data, $source->uri);
-        $sink->($ast_msg) if $self->include_ast;
 
-        if ($self->include_pickles) {
-            Gherkin::Pickles::Compiler->compile($ast_msg, $id_generator, $sink);
+        local $@;
+        my $ast_msg;
+        if (eval { $ast_msg = $parser->parse( \$data, $source->uri); 1 }) {
+            $sink->($ast_msg) if $self->include_ast;
+
+            if ($self->include_pickles) {
+                Gherkin::Pickles::Compiler->compile(
+                    $ast_msg,
+                    $id_generator,
+                    $sink);
+            }
+        }
+        else {
+            if ( blessed $@ ) {
+                if ( $@->isa( 'Gherkin::Exceptions::CompositeParser' ) ) {
+                    $sink->( _parser_error_message( $_, $source->uri ) )
+                        for ( @{ $@->errors } );
+                    return;
+                }
+                elsif ( $@->isa( 'Gherkin::Exceptions::SingleParser' ) ) {
+                    $sink->( _parser_error_message( $@, $source->uri ) );
+                    return;
+                }
+            }
+            die $@; # rethrow
         }
     }
 }

@@ -13,6 +13,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Perl] Fix release packaging
 - [Perl] Include CHANGELOG.md in tarball
 - [Perl] Upgrade messages to v22
+- [Perl] Harmonized error reporting with mainstream implementations;
+  errors are now converted to messages and reported in the message stream
+  ([#31](https://github.com/cucumber/gherkin/issues/31))
 
 ### Added
 - (i18n) Add Malayalam localization
