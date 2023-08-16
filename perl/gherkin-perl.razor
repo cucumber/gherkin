@@ -26,7 +26,7 @@
     return @state.Id;
 </text>}
 @helper MatchToken(TokenType tokenType)
-{<text>match_@(tokenType)($context, $token)</text>}
+{<text>$context->token_matcher->match_@(tokenType)($token)</text>}
 package Gherkin::Generated::@(Model.ParserClassName);
 
 # This file is generated. Do not edit! Edit gherkin-perl.razor instead.
@@ -94,18 +94,6 @@ sub _construct_parser_error {
     return $error_class->new( $token, @@args );
 }
 
-@foreach(var rule in Model.RuleSet.TokenRules)
-{<text>
-sub match_@(rule.Name.Replace("#", "")) {
-    my ($self, $context, $token) = @@_;
-    @if (rule.Name != "#EOF")
-    {
-    @:return if $token->is_eof;
-    }
-    $context->token_matcher->match_@(rule.Name.Replace("#", ""))( $token );
-}
-</text>}
-
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState)) //..
 {<text>
 # @Raw(state.Comment)
@@ -114,7 +102,7 @@ sub match_token_at_@(state.Id) {
     my ( $ok, $err );
     @foreach(var transition in state.Transitions)
     {
-    @:($ok, $err) = $self->@MatchToken(transition.TokenType);
+    @:($ok, $err) = @MatchToken(transition.TokenType);
     @:if ($ok) {
         @:$self->add_error( $context, $err ) if $err;
         if (transition.LookAheadHint != null)
@@ -157,11 +145,11 @@ sub lookahead_@(lookAheadHint.Id) {
         push( @@queue, $token );
 
         @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>
-        ($match) = $self->@MatchToken(tokenType);
+        ($match) = @MatchToken(tokenType);
         last if $match;</text>}
 
         @foreach(var tokenType in lookAheadHint.Skip) {<text>
-        ($ok) = $self->@MatchToken(tokenType);
+        ($ok) = @MatchToken(tokenType);
         next if $ok;</text>
         }
 

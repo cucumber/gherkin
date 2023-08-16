@@ -96,7 +96,7 @@ sub match_ExamplesLine {
 
 sub match_Language {
     my ( $self, $token ) = @_;
-    if ( $token->line->get_line_text =~ $LANGUAGE_RE ) {
+    if ( $token->line and $token->line->get_line_text =~ $LANGUAGE_RE ) {
         my $dialect_name = $1;
         $self->_set_token_matched( $token,
                                    Language => { text => $dialect_name } );
@@ -110,7 +110,7 @@ sub match_Language {
 
 sub match_TagLine {
     my ( $self, $token ) = @_;
-    return unless $token->line->startswith('@');
+    return unless $token->line and $token->line->startswith('@');
 
     my ($tags, $err) = $token->line->tags;
     $self->_set_token_matched( $token,
@@ -120,6 +120,7 @@ sub match_TagLine {
 
 sub _match_title_line {
     my ( $self, $token, $token_type, $keywords ) = @_;
+    return unless $token->line;
 
     for my $keyword (@$keywords) {
         if ( $token->line->startswith_title_keyword($keyword) ) {
@@ -171,14 +172,14 @@ sub match_EOF {
 
 sub match_Empty {
     my ( $self, $token ) = @_;
-    return unless $token->line->is_empty;
+    return unless $token->line and $token->line->is_empty;
     $self->_set_token_matched( $token, Empty => { indent => 0 } );
     return 1;
 }
 
 sub match_Comment {
     my ( $self, $token ) = @_;
-    return unless $token->line->startswith('#');
+    return unless $token->line and $token->line->startswith('#');
 
     my $comment_text = $token->line->line_text;
     $comment_text =~ s/\r\n$//;    # Why?
@@ -190,6 +191,7 @@ sub match_Comment {
 
 sub match_Other {
     my ( $self, $token ) = @_;
+    return unless $token->line;
 
     # take the entire line, except removing DocString indents
     my $text = $token->line->get_line_text( $self->_indent_to_remove );

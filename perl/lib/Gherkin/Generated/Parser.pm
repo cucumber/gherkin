@@ -112,101 +112,17 @@ sub _construct_parser_error {
 }
 
 
-sub match_EOF {
-    my ($self, $context, $token) = @_;
-    $context->token_matcher->match_EOF( $token );
-}
-
-sub match_Empty {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_Empty( $token );
-}
-
-sub match_Comment {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_Comment( $token );
-}
-
-sub match_TagLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_TagLine( $token );
-}
-
-sub match_FeatureLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_FeatureLine( $token );
-}
-
-sub match_RuleLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_RuleLine( $token );
-}
-
-sub match_BackgroundLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_BackgroundLine( $token );
-}
-
-sub match_ScenarioLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_ScenarioLine( $token );
-}
-
-sub match_ExamplesLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_ExamplesLine( $token );
-}
-
-sub match_StepLine {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_StepLine( $token );
-}
-
-sub match_DocStringSeparator {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_DocStringSeparator( $token );
-}
-
-sub match_TableRow {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_TableRow( $token );
-}
-
-sub match_Language {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_Language( $token );
-}
-
-sub match_Other {
-    my ($self, $context, $token) = @_;
-    return if $token->is_eof;
-    $context->token_matcher->match_Other( $token );
-}
-
-
 # Start
 sub match_token_at_0 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Language($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Language($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Feature');
@@ -214,7 +130,7 @@ sub match_token_at_0 {
         $self->_build($context, $token);
         return 1;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Feature');
@@ -223,7 +139,7 @@ sub match_token_at_0 {
         $self->_build($context, $token);
         return 2;
     }
-    ($ok, $err) = $self->match_FeatureLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_FeatureLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Feature');
@@ -231,13 +147,13 @@ sub match_token_at_0 {
         $self->_build($context, $token);
         return 3;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 0;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -259,26 +175,26 @@ sub match_token_at_0 {
 sub match_token_at_1 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
         return 2;
     }
-    ($ok, $err) = $self->match_FeatureLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_FeatureLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 3;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 1;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -300,26 +216,26 @@ sub match_token_at_1 {
 sub match_token_at_2 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 2;
     }
-    ($ok, $err) = $self->match_FeatureLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_FeatureLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
         $self->_build($context, $token);
         return 3;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 2;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -341,7 +257,7 @@ sub match_token_at_2 {
 sub match_token_at_3 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -349,19 +265,19 @@ sub match_token_at_3 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 3;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 5;
     }
-    ($ok, $err) = $self->match_BackgroundLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -369,7 +285,7 @@ sub match_token_at_3 {
         $self->_build($context, $token);
         return 6;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -380,7 +296,7 @@ sub match_token_at_3 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -390,7 +306,7 @@ sub match_token_at_3 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -399,7 +315,7 @@ sub match_token_at_3 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -408,7 +324,7 @@ sub match_token_at_3 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -431,7 +347,7 @@ sub match_token_at_3 {
 sub match_token_at_4 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -440,14 +356,14 @@ sub match_token_at_4 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 5;
     }
-    ($ok, $err) = $self->match_BackgroundLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -456,7 +372,7 @@ sub match_token_at_4 {
         $self->_build($context, $token);
         return 6;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -468,7 +384,7 @@ sub match_token_at_4 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -479,7 +395,7 @@ sub match_token_at_4 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -489,7 +405,7 @@ sub match_token_at_4 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -499,7 +415,7 @@ sub match_token_at_4 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -521,7 +437,7 @@ sub match_token_at_4 {
 sub match_token_at_5 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -529,13 +445,13 @@ sub match_token_at_5 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 5;
     }
-    ($ok, $err) = $self->match_BackgroundLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -543,7 +459,7 @@ sub match_token_at_5 {
         $self->_build($context, $token);
         return 6;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -554,7 +470,7 @@ sub match_token_at_5 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -564,7 +480,7 @@ sub match_token_at_5 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -573,7 +489,7 @@ sub match_token_at_5 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'FeatureHeader');
@@ -582,7 +498,7 @@ sub match_token_at_5 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -604,7 +520,7 @@ sub match_token_at_5 {
 sub match_token_at_6 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -612,26 +528,26 @@ sub match_token_at_6 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 6;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 8;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -642,7 +558,7 @@ sub match_token_at_6 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -652,7 +568,7 @@ sub match_token_at_6 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -661,7 +577,7 @@ sub match_token_at_6 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -670,7 +586,7 @@ sub match_token_at_6 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -693,7 +609,7 @@ sub match_token_at_6 {
 sub match_token_at_7 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -702,14 +618,14 @@ sub match_token_at_7 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 8;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -717,7 +633,7 @@ sub match_token_at_7 {
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -729,7 +645,7 @@ sub match_token_at_7 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -740,7 +656,7 @@ sub match_token_at_7 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -750,7 +666,7 @@ sub match_token_at_7 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -760,7 +676,7 @@ sub match_token_at_7 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -782,7 +698,7 @@ sub match_token_at_7 {
 sub match_token_at_8 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -790,20 +706,20 @@ sub match_token_at_8 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 8;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -814,7 +730,7 @@ sub match_token_at_8 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -824,7 +740,7 @@ sub match_token_at_8 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -833,7 +749,7 @@ sub match_token_at_8 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -842,7 +758,7 @@ sub match_token_at_8 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -864,7 +780,7 @@ sub match_token_at_8 {
 sub match_token_at_9 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -873,21 +789,21 @@ sub match_token_at_9 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DataTable');
         $self->_build($context, $token);
         return 10;
     }
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DocString');
         $self->_build($context, $token);
         return 49;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -895,7 +811,7 @@ sub match_token_at_9 {
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -907,7 +823,7 @@ sub match_token_at_9 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -918,7 +834,7 @@ sub match_token_at_9 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -928,7 +844,7 @@ sub match_token_at_9 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -938,13 +854,13 @@ sub match_token_at_9 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -966,7 +882,7 @@ sub match_token_at_9 {
 sub match_token_at_10 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -976,13 +892,13 @@ sub match_token_at_10 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 10;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -991,7 +907,7 @@ sub match_token_at_10 {
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1004,7 +920,7 @@ sub match_token_at_10 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1016,7 +932,7 @@ sub match_token_at_10 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1027,7 +943,7 @@ sub match_token_at_10 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1038,13 +954,13 @@ sub match_token_at_10 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 10;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1066,13 +982,13 @@ sub match_token_at_10 {
 sub match_token_at_11 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 11;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
@@ -1080,13 +996,13 @@ sub match_token_at_11 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 11;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1108,7 +1024,7 @@ sub match_token_at_11 {
 sub match_token_at_12 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1117,26 +1033,26 @@ sub match_token_at_12 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 14;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1146,7 +1062,7 @@ sub match_token_at_12 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1158,7 +1074,7 @@ sub match_token_at_12 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1169,7 +1085,7 @@ sub match_token_at_12 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesDefinition');
@@ -1177,7 +1093,7 @@ sub match_token_at_12 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1187,7 +1103,7 @@ sub match_token_at_12 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1197,7 +1113,7 @@ sub match_token_at_12 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -1220,7 +1136,7 @@ sub match_token_at_12 {
 sub match_token_at_13 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1230,14 +1146,14 @@ sub match_token_at_13 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 14;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1245,7 +1161,7 @@ sub match_token_at_13 {
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1256,7 +1172,7 @@ sub match_token_at_13 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1269,7 +1185,7 @@ sub match_token_at_13 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1281,7 +1197,7 @@ sub match_token_at_13 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1290,7 +1206,7 @@ sub match_token_at_13 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1301,7 +1217,7 @@ sub match_token_at_13 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1312,7 +1228,7 @@ sub match_token_at_13 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1334,7 +1250,7 @@ sub match_token_at_13 {
 sub match_token_at_14 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1343,20 +1259,20 @@ sub match_token_at_14 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 14;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1366,7 +1282,7 @@ sub match_token_at_14 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1378,7 +1294,7 @@ sub match_token_at_14 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1389,7 +1305,7 @@ sub match_token_at_14 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesDefinition');
@@ -1397,7 +1313,7 @@ sub match_token_at_14 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1407,7 +1323,7 @@ sub match_token_at_14 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -1417,7 +1333,7 @@ sub match_token_at_14 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1439,7 +1355,7 @@ sub match_token_at_14 {
 sub match_token_at_15 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -1449,21 +1365,21 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DataTable');
         $self->_build($context, $token);
         return 16;
     }
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DocString');
         $self->_build($context, $token);
         return 47;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -1471,7 +1387,7 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1482,7 +1398,7 @@ sub match_token_at_15 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1495,7 +1411,7 @@ sub match_token_at_15 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -1507,7 +1423,7 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -1516,7 +1432,7 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -1527,7 +1443,7 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -1538,13 +1454,13 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1566,7 +1482,7 @@ sub match_token_at_15 {
 sub match_token_at_16 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1577,13 +1493,13 @@ sub match_token_at_16 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 16;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1592,7 +1508,7 @@ sub match_token_at_16 {
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1604,7 +1520,7 @@ sub match_token_at_16 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1618,7 +1534,7 @@ sub match_token_at_16 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1631,7 +1547,7 @@ sub match_token_at_16 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1641,7 +1557,7 @@ sub match_token_at_16 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1653,7 +1569,7 @@ sub match_token_at_16 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -1665,13 +1581,13 @@ sub match_token_at_16 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 16;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1693,13 +1609,13 @@ sub match_token_at_16 {
 sub match_token_at_17 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 17;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
@@ -1707,13 +1623,13 @@ sub match_token_at_17 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 17;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1735,7 +1651,7 @@ sub match_token_at_17 {
 sub match_token_at_18 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -1746,26 +1662,26 @@ sub match_token_at_18 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 20;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesTable');
         $self->_build($context, $token);
         return 21;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1777,7 +1693,7 @@ sub match_token_at_18 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1791,7 +1707,7 @@ sub match_token_at_18 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -1804,7 +1720,7 @@ sub match_token_at_18 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -1814,7 +1730,7 @@ sub match_token_at_18 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -1826,7 +1742,7 @@ sub match_token_at_18 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -1838,7 +1754,7 @@ sub match_token_at_18 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -1861,7 +1777,7 @@ sub match_token_at_18 {
 sub match_token_at_19 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1873,14 +1789,14 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 20;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1888,7 +1804,7 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 21;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -1901,7 +1817,7 @@ sub match_token_at_19 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -1916,7 +1832,7 @@ sub match_token_at_19 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1930,7 +1846,7 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1941,7 +1857,7 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1954,7 +1870,7 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -1967,7 +1883,7 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1989,7 +1905,7 @@ sub match_token_at_19 {
 sub match_token_at_20 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -2000,20 +1916,20 @@ sub match_token_at_20 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 20;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesTable');
         $self->_build($context, $token);
         return 21;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -2025,7 +1941,7 @@ sub match_token_at_20 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2039,7 +1955,7 @@ sub match_token_at_20 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -2052,7 +1968,7 @@ sub match_token_at_20 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -2062,7 +1978,7 @@ sub match_token_at_20 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -2074,7 +1990,7 @@ sub match_token_at_20 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -2086,7 +2002,7 @@ sub match_token_at_20 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2108,7 +2024,7 @@ sub match_token_at_20 {
 sub match_token_at_21 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -2120,13 +2036,13 @@ sub match_token_at_21 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 21;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -2139,7 +2055,7 @@ sub match_token_at_21 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2154,7 +2070,7 @@ sub match_token_at_21 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -2168,7 +2084,7 @@ sub match_token_at_21 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -2179,7 +2095,7 @@ sub match_token_at_21 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -2192,7 +2108,7 @@ sub match_token_at_21 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -2205,13 +2121,13 @@ sub match_token_at_21 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 21;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2233,26 +2149,26 @@ sub match_token_at_21 {
 sub match_token_at_22 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2274,7 +2190,7 @@ sub match_token_at_22 {
 sub match_token_at_23 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2283,19 +2199,19 @@ sub match_token_at_23 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 25;
     }
-    ($ok, $err) = $self->match_BackgroundLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2303,7 +2219,7 @@ sub match_token_at_23 {
         $self->_build($context, $token);
         return 26;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2314,7 +2230,7 @@ sub match_token_at_23 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2325,7 +2241,7 @@ sub match_token_at_23 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2334,7 +2250,7 @@ sub match_token_at_23 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2344,7 +2260,7 @@ sub match_token_at_23 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -2367,7 +2283,7 @@ sub match_token_at_23 {
 sub match_token_at_24 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2377,14 +2293,14 @@ sub match_token_at_24 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 25;
     }
-    ($ok, $err) = $self->match_BackgroundLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2393,7 +2309,7 @@ sub match_token_at_24 {
         $self->_build($context, $token);
         return 26;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2405,7 +2321,7 @@ sub match_token_at_24 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2417,7 +2333,7 @@ sub match_token_at_24 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2427,7 +2343,7 @@ sub match_token_at_24 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2438,7 +2354,7 @@ sub match_token_at_24 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2460,7 +2376,7 @@ sub match_token_at_24 {
 sub match_token_at_25 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2469,13 +2385,13 @@ sub match_token_at_25 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 25;
     }
-    ($ok, $err) = $self->match_BackgroundLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2483,7 +2399,7 @@ sub match_token_at_25 {
         $self->_build($context, $token);
         return 26;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2494,7 +2410,7 @@ sub match_token_at_25 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2505,7 +2421,7 @@ sub match_token_at_25 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2514,7 +2430,7 @@ sub match_token_at_25 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'RuleHeader');
@@ -2524,7 +2440,7 @@ sub match_token_at_25 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2546,7 +2462,7 @@ sub match_token_at_25 {
 sub match_token_at_26 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2555,26 +2471,26 @@ sub match_token_at_26 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 26;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 28;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2585,7 +2501,7 @@ sub match_token_at_26 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2596,7 +2512,7 @@ sub match_token_at_26 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2605,7 +2521,7 @@ sub match_token_at_26 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2615,7 +2531,7 @@ sub match_token_at_26 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -2638,7 +2554,7 @@ sub match_token_at_26 {
 sub match_token_at_27 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2648,14 +2564,14 @@ sub match_token_at_27 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 28;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2663,7 +2579,7 @@ sub match_token_at_27 {
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2675,7 +2591,7 @@ sub match_token_at_27 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2687,7 +2603,7 @@ sub match_token_at_27 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2697,7 +2613,7 @@ sub match_token_at_27 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -2708,7 +2624,7 @@ sub match_token_at_27 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2730,7 +2646,7 @@ sub match_token_at_27 {
 sub match_token_at_28 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2739,20 +2655,20 @@ sub match_token_at_28 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 28;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2763,7 +2679,7 @@ sub match_token_at_28 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2774,7 +2690,7 @@ sub match_token_at_28 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2783,7 +2699,7 @@ sub match_token_at_28 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Background');
@@ -2793,7 +2709,7 @@ sub match_token_at_28 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2815,7 +2731,7 @@ sub match_token_at_28 {
 sub match_token_at_29 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -2825,21 +2741,21 @@ sub match_token_at_29 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DataTable');
         $self->_build($context, $token);
         return 30;
     }
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DocString');
         $self->_build($context, $token);
         return 45;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -2847,7 +2763,7 @@ sub match_token_at_29 {
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2859,7 +2775,7 @@ sub match_token_at_29 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -2871,7 +2787,7 @@ sub match_token_at_29 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -2881,7 +2797,7 @@ sub match_token_at_29 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -2892,13 +2808,13 @@ sub match_token_at_29 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -2920,7 +2836,7 @@ sub match_token_at_29 {
 sub match_token_at_30 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -2931,13 +2847,13 @@ sub match_token_at_30 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 30;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -2946,7 +2862,7 @@ sub match_token_at_30 {
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -2959,7 +2875,7 @@ sub match_token_at_30 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -2972,7 +2888,7 @@ sub match_token_at_30 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -2983,7 +2899,7 @@ sub match_token_at_30 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -2995,13 +2911,13 @@ sub match_token_at_30 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 30;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3023,13 +2939,13 @@ sub match_token_at_30 {
 sub match_token_at_31 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 31;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
@@ -3037,13 +2953,13 @@ sub match_token_at_31 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 31;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3065,7 +2981,7 @@ sub match_token_at_31 {
 sub match_token_at_32 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3075,26 +2991,26 @@ sub match_token_at_32 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 34;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3104,7 +3020,7 @@ sub match_token_at_32 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3116,7 +3032,7 @@ sub match_token_at_32 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3128,7 +3044,7 @@ sub match_token_at_32 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesDefinition');
@@ -3136,7 +3052,7 @@ sub match_token_at_32 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3146,7 +3062,7 @@ sub match_token_at_32 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3157,7 +3073,7 @@ sub match_token_at_32 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -3180,7 +3096,7 @@ sub match_token_at_32 {
 sub match_token_at_33 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3191,14 +3107,14 @@ sub match_token_at_33 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 34;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3206,7 +3122,7 @@ sub match_token_at_33 {
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3217,7 +3133,7 @@ sub match_token_at_33 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3230,7 +3146,7 @@ sub match_token_at_33 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3243,7 +3159,7 @@ sub match_token_at_33 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3252,7 +3168,7 @@ sub match_token_at_33 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3263,7 +3179,7 @@ sub match_token_at_33 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3275,7 +3191,7 @@ sub match_token_at_33 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3297,7 +3213,7 @@ sub match_token_at_33 {
 sub match_token_at_34 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3307,20 +3223,20 @@ sub match_token_at_34 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 34;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3330,7 +3246,7 @@ sub match_token_at_34 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3342,7 +3258,7 @@ sub match_token_at_34 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3354,7 +3270,7 @@ sub match_token_at_34 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesDefinition');
@@ -3362,7 +3278,7 @@ sub match_token_at_34 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3372,7 +3288,7 @@ sub match_token_at_34 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Scenario');
@@ -3383,7 +3299,7 @@ sub match_token_at_34 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3405,7 +3321,7 @@ sub match_token_at_34 {
 sub match_token_at_35 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -3416,21 +3332,21 @@ sub match_token_at_35 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DataTable');
         $self->_build($context, $token);
         return 36;
     }
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DocString');
         $self->_build($context, $token);
         return 43;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -3438,7 +3354,7 @@ sub match_token_at_35 {
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3449,7 +3365,7 @@ sub match_token_at_35 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3462,7 +3378,7 @@ sub match_token_at_35 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -3475,7 +3391,7 @@ sub match_token_at_35 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -3484,7 +3400,7 @@ sub match_token_at_35 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -3495,7 +3411,7 @@ sub match_token_at_35 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
@@ -3507,13 +3423,13 @@ sub match_token_at_35 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3535,7 +3451,7 @@ sub match_token_at_35 {
 sub match_token_at_36 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -3547,13 +3463,13 @@ sub match_token_at_36 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 36;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -3562,7 +3478,7 @@ sub match_token_at_36 {
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3574,7 +3490,7 @@ sub match_token_at_36 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3588,7 +3504,7 @@ sub match_token_at_36 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -3602,7 +3518,7 @@ sub match_token_at_36 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -3612,7 +3528,7 @@ sub match_token_at_36 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -3624,7 +3540,7 @@ sub match_token_at_36 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DataTable');
@@ -3637,13 +3553,13 @@ sub match_token_at_36 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 36;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3665,13 +3581,13 @@ sub match_token_at_36 {
 sub match_token_at_37 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 37;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
@@ -3679,13 +3595,13 @@ sub match_token_at_37 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 37;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3707,7 +3623,7 @@ sub match_token_at_37 {
 sub match_token_at_38 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -3719,26 +3635,26 @@ sub match_token_at_38 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 40;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesTable');
         $self->_build($context, $token);
         return 41;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3750,7 +3666,7 @@ sub match_token_at_38 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3764,7 +3680,7 @@ sub match_token_at_38 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -3778,7 +3694,7 @@ sub match_token_at_38 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -3788,7 +3704,7 @@ sub match_token_at_38 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -3800,7 +3716,7 @@ sub match_token_at_38 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -3813,7 +3729,7 @@ sub match_token_at_38 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'Description');
@@ -3836,7 +3752,7 @@ sub match_token_at_38 {
 sub match_token_at_39 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3849,14 +3765,14 @@ sub match_token_at_39 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
         $self->_build($context, $token);
         return 40;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3864,7 +3780,7 @@ sub match_token_at_39 {
         $self->_build($context, $token);
         return 41;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -3877,7 +3793,7 @@ sub match_token_at_39 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -3892,7 +3808,7 @@ sub match_token_at_39 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3907,7 +3823,7 @@ sub match_token_at_39 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3918,7 +3834,7 @@ sub match_token_at_39 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3931,7 +3847,7 @@ sub match_token_at_39 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
@@ -3945,7 +3861,7 @@ sub match_token_at_39 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3967,7 +3883,7 @@ sub match_token_at_39 {
 sub match_token_at_40 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -3979,20 +3895,20 @@ sub match_token_at_40 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 40;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'ExamplesTable');
         $self->_build($context, $token);
         return 41;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -4004,7 +3920,7 @@ sub match_token_at_40 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -4018,7 +3934,7 @@ sub match_token_at_40 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -4032,7 +3948,7 @@ sub match_token_at_40 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -4042,7 +3958,7 @@ sub match_token_at_40 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -4054,7 +3970,7 @@ sub match_token_at_40 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Examples');
@@ -4067,7 +3983,7 @@ sub match_token_at_40 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4089,7 +4005,7 @@ sub match_token_at_40 {
 sub match_token_at_41 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -4102,13 +4018,13 @@ sub match_token_at_41 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_TableRow($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 41;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -4121,7 +4037,7 @@ sub match_token_at_41 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -4136,7 +4052,7 @@ sub match_token_at_41 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -4151,7 +4067,7 @@ sub match_token_at_41 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -4162,7 +4078,7 @@ sub match_token_at_41 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -4175,7 +4091,7 @@ sub match_token_at_41 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'ExamplesTable');
@@ -4189,13 +4105,13 @@ sub match_token_at_41 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 41;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4217,13 +4133,13 @@ sub match_token_at_41 {
 sub match_token_at_43 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 44;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4245,7 +4161,7 @@ sub match_token_at_43 {
 sub match_token_at_44 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4257,7 +4173,7 @@ sub match_token_at_44 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4266,7 +4182,7 @@ sub match_token_at_44 {
         $self->_build($context, $token);
         return 35;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -4278,7 +4194,7 @@ sub match_token_at_44 {
         return 37;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -4292,7 +4208,7 @@ sub match_token_at_44 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4306,7 +4222,7 @@ sub match_token_at_44 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4316,7 +4232,7 @@ sub match_token_at_44 {
         $self->_build($context, $token);
         return 38;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4328,7 +4244,7 @@ sub match_token_at_44 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4341,13 +4257,13 @@ sub match_token_at_44 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 44;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4369,13 +4285,13 @@ sub match_token_at_44 {
 sub match_token_at_45 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 46;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4397,7 +4313,7 @@ sub match_token_at_45 {
 sub match_token_at_46 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4408,7 +4324,7 @@ sub match_token_at_46 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4417,7 +4333,7 @@ sub match_token_at_46 {
         $self->_build($context, $token);
         return 29;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -4430,7 +4346,7 @@ sub match_token_at_46 {
         return 31;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4443,7 +4359,7 @@ sub match_token_at_46 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4454,7 +4370,7 @@ sub match_token_at_46 {
         $self->_build($context, $token);
         return 32;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4466,13 +4382,13 @@ sub match_token_at_46 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 46;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4494,13 +4410,13 @@ sub match_token_at_46 {
 sub match_token_at_47 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 48;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4522,7 +4438,7 @@ sub match_token_at_47 {
 sub match_token_at_48 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4533,7 +4449,7 @@ sub match_token_at_48 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4542,7 +4458,7 @@ sub match_token_at_48 {
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
@@ -4554,7 +4470,7 @@ sub match_token_at_48 {
         return 17;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -4568,7 +4484,7 @@ sub match_token_at_48 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4581,7 +4497,7 @@ sub match_token_at_48 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ExamplesLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4591,7 +4507,7 @@ sub match_token_at_48 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4603,7 +4519,7 @@ sub match_token_at_48 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4615,13 +4531,13 @@ sub match_token_at_48 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 48;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4643,13 +4559,13 @@ sub match_token_at_48 {
 sub match_token_at_49 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_DocStringSeparator($context, $token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 50;
     }
-    ($ok, $err) = $self->match_Other($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4671,7 +4587,7 @@ sub match_token_at_49 {
 sub match_token_at_50 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $self->match_EOF($context, $token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4681,7 +4597,7 @@ sub match_token_at_50 {
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $self->match_StepLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4690,7 +4606,7 @@ sub match_token_at_50 {
         $self->_build($context, $token);
         return 9;
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
@@ -4703,7 +4619,7 @@ sub match_token_at_50 {
         return 11;
         }
     }
-    ($ok, $err) = $self->match_TagLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4715,7 +4631,7 @@ sub match_token_at_50 {
         $self->_build($context, $token);
         return 22;
     }
-    ($ok, $err) = $self->match_ScenarioLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4726,7 +4642,7 @@ sub match_token_at_50 {
         $self->_build($context, $token);
         return 12;
     }
-    ($ok, $err) = $self->match_RuleLine($context, $token);
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'DocString');
@@ -4737,13 +4653,13 @@ sub match_token_at_50 {
         $self->_build($context, $token);
         return 23;
     }
-    ($ok, $err) = $self->match_Comment($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 50;
     }
-    ($ok, $err) = $self->match_Empty($context, $token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -4778,14 +4694,14 @@ sub lookahead_0 {
         push( @queue, $token );
 
 
-        ($match) = $self->match_ScenarioLine($context, $token);
+        ($match) = $context->token_matcher->match_ScenarioLine($token);
         last if $match;
 
-        ($ok) = $self->match_Empty($context, $token);
+        ($ok) = $context->token_matcher->match_Empty($token);
         next if $ok;
-        ($ok) = $self->match_Comment($context, $token);
+        ($ok) = $context->token_matcher->match_Comment($token);
         next if $ok;
-        ($ok) = $self->match_TagLine($context, $token);
+        ($ok) = $context->token_matcher->match_TagLine($token);
         next if $ok;
         last;
     }
@@ -4809,14 +4725,14 @@ sub lookahead_1 {
         push( @queue, $token );
 
 
-        ($match) = $self->match_ExamplesLine($context, $token);
+        ($match) = $context->token_matcher->match_ExamplesLine($token);
         last if $match;
 
-        ($ok) = $self->match_Empty($context, $token);
+        ($ok) = $context->token_matcher->match_Empty($token);
         next if $ok;
-        ($ok) = $self->match_Comment($context, $token);
+        ($ok) = $context->token_matcher->match_Comment($token);
         next if $ok;
-        ($ok) = $self->match_TagLine($context, $token);
+        ($ok) = $context->token_matcher->match_TagLine($token);
         next if $ok;
         last;
     }
