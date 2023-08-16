@@ -3956,15 +3956,14 @@ sub lookahead_0 {
         $token->detach;
         push( @queue, $token );
 
-        if ($self->match_ScenarioLine($context, $token) || 0) {
-            $match = 1;
-            last;
-        }
+        $match = 1 if $self->match_ScenarioLine($context, $token);
+        last if $match;
 
-        if (! ($self->match_Empty($context, $token) || $self->match_Comment($context, $token) || $self->match_TagLine($context, $token) || 0)) {
-            last;
-        }
+        next if $self->match_Empty($context, $token);
+        next if $self->match_Comment($context, $token);
+        next if $self->match_TagLine($context, $token);
 
+        last;
     }
 
     $context->add_tokens( @queue );
@@ -3984,15 +3983,14 @@ sub lookahead_1 {
         $token->detach;
         push( @queue, $token );
 
-        if ($self->match_ExamplesLine($context, $token) || 0) {
-            $match = 1;
-            last;
-        }
+        $match = 1 if $self->match_ExamplesLine($context, $token);
+        last if $match;
 
-        if (! ($self->match_Empty($context, $token) || $self->match_Comment($context, $token) || $self->match_TagLine($context, $token) || 0)) {
-            last;
-        }
+        next if $self->match_Empty($context, $token);
+        next if $self->match_Comment($context, $token);
+        next if $self->match_TagLine($context, $token);
 
+        last;
     }
 
     $context->add_tokens( @queue );

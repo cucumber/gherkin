@@ -155,15 +155,16 @@ sub lookahead_@(lookAheadHint.Id) {
         $token->detach;
         push( @@queue, $token );
 
-        if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>$self->@MatchToken(tokenType) || </text>}0) {
-            $match = 1;
-            last;
+        @foreach(var tokenType in lookAheadHint.ExpectedTokens) {
+        @:$match = 1 if $self->@MatchToken(tokenType);
+        }
+        last if $match;
+
+        @foreach(var tokenType in lookAheadHint.Skip) {
+        @:next if $self->@MatchToken(tokenType);
         }
 
-        if (! (@foreach(var tokenType in lookAheadHint.Skip) {<text>$self->@MatchToken(tokenType) || </text>}0)) {
-            last;
-        }
-
+        last;
     }
 
     $context->add_tokens( @@queue );
