@@ -19,7 +19,7 @@ sub add_tokens { my $self = shift; push( @{ $self->token_queue }, @_ ); }
 sub errors     { my $self = shift; return @{ $self->_errors } }
 sub add_errors {
     my $self = shift;
-    $self->_errors( [ uniq( @{ $self->_errors }, @_ ) ] );
+    push @{ $self->{'_errors'} }, @_;
 }
 
 sub read_token {
