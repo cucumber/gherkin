@@ -1880,8 +1880,8 @@ static const Dialect is_dialect = {
         &is_then_keywords,
         &is_when_keywords };
 
-static const wchar_t* const it_and_KEYWORDS[] = { L"* ", L"E " };
-static const Keywords it_and_keywords = { 2, it_and_KEYWORDS };
+static const wchar_t* const it_and_KEYWORDS[] = { L"* ", L"E ", L"Ed " };
+static const Keywords it_and_keywords = { 3, it_and_KEYWORDS };
 
 static const wchar_t* const it_background_KEYWORDS[] = { L"Contesto" };
 static const Keywords it_background_keywords = { 1, it_background_KEYWORDS };
