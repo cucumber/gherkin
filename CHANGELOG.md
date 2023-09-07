@@ -8,11 +8,10 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-- [Go, Ruby] Upgraded messages to v22
+- [Go, Ruby, Perl] Upgraded messages to v22
 - [Go] Improve performance - don't compile regex on matcher create
 - [Perl] Fix release packaging
 - [Perl] Include CHANGELOG.md in tarball
-- [Perl] Upgrade messages to v22
 - [Perl] Harmonized error reporting with mainstream implementations;
   errors are now converted to messages and reported in the message stream
   ([#31](https://github.com/cucumber/gherkin/issues/31))
