@@ -5,9 +5,15 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - ruby/**
+      - testdata/**
   pull_request:
     branches:
       - main
+    paths:
+      - c/**
+      - testdata/**
   workflow_call:
 
 jobs:
