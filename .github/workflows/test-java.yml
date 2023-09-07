@@ -8,12 +8,14 @@ on:
     paths:
       - java/**
       - testdata/**
+      - gherkin-languages.json
   pull_request:
     branches:
       - main
     paths:
       - java/**
       - testdata/**
+      - gherkin-languages.json
   workflow_call:
 
 jobs:
