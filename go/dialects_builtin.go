@@ -2659,6 +2659,7 @@ var builtinDialects = gherkinDialectMap{
 			and: {
 				"* ",
 				"E ",
+				"Ed ",
 			},
 			but: {
 				"* ",
@@ -2679,6 +2680,8 @@ var builtinDialects = gherkinDialectMap{
 			"Allora ": messages.StepKeywordType_OUTCOME,
 
 			"E ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ed ": messages.StepKeywordType_CONJUNCTION,
 
 			"Ma ": messages.StepKeywordType_CONJUNCTION,
 
