@@ -8,9 +8,15 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - php/**
+      - testdata/**
   pull_request:
     branches:
       - main
+    paths:
+      - c/**
+      - testdata/**
   workflow_call:
 
 jobs:
