@@ -12,7 +12,7 @@ on:
     branches:
       - main
     paths:
-      - c/**
+      - go/**
       - testdata/**
   workflow_call:
 

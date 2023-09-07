@@ -12,7 +12,7 @@ on:
     branches:
       - main
     paths:
-      - c/**
+      - dotnet/**
       - testdata/**
   workflow_call:
 

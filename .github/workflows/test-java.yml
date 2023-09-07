@@ -12,7 +12,7 @@ on:
     branches:
       - main
     paths:
-      - c/**
+      - java/**
       - testdata/**
   workflow_call:
 

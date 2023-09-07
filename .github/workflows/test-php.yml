@@ -12,7 +12,7 @@ on:
     branches:
       - main
     paths:
-      - c/**
+      - php/**
       - testdata/**
   workflow_call:
 

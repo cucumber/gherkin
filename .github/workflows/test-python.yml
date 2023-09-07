@@ -9,13 +9,13 @@ on:
       - main
       - renovate/**
     paths:
-      - php/**
+      - python/**
       - testdata/**
   pull_request:
     branches:
       - main
     paths:
-      - c/**
+      - python/**
       - testdata/**
   workflow_call:
 
