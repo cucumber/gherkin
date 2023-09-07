@@ -854,7 +854,7 @@ var builtinDialects = gherkinDialectMap{
 				"Egenskab",
 			},
 			rule: {
-				"Rule",
+				"Regel",
 			},
 			background: {
 				"Baggrund",

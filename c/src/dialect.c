@@ -629,7 +629,7 @@ static const Keywords da_feature_keywords = { 1, da_feature_KEYWORDS };
 static const wchar_t* const da_given_KEYWORDS[] = { L"* ", L"Givet " };
 static const Keywords da_given_keywords = { 2, da_given_KEYWORDS };
 
-static const wchar_t* const da_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const da_rule_KEYWORDS[] = { L"Regel" };
 static const Keywords da_rule_keywords = { 1, da_rule_KEYWORDS };
 
 static const wchar_t* const da_scenario_KEYWORDS[] = { L"Eksempel", L"Scenarie" };
