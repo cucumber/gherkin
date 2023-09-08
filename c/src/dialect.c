@@ -2509,7 +2509,7 @@ static const Keywords nl_feature_keywords = { 1, nl_feature_KEYWORDS };
 static const wchar_t* const nl_given_KEYWORDS[] = { L"* ", L"Gegeven ", L"Stel " };
 static const Keywords nl_given_keywords = { 3, nl_given_KEYWORDS };
 
-static const wchar_t* const nl_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const nl_rule_KEYWORDS[] = { L"Regel" };
 static const Keywords nl_rule_keywords = { 1, nl_rule_KEYWORDS };
 
 static const wchar_t* const nl_scenario_KEYWORDS[] = { L"Voorbeeld", L"Scenario" };
