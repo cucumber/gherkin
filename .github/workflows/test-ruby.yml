@@ -12,7 +12,7 @@ on:
     branches:
       - main
     paths:
-      - c/**
+      - ruby/**
       - testdata/**
   workflow_call:
 
