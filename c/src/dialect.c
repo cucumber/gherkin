@@ -629,7 +629,7 @@ static const Keywords da_feature_keywords = { 1, da_feature_KEYWORDS };
 static const wchar_t* const da_given_KEYWORDS[] = { L"* ", L"Givet " };
 static const Keywords da_given_keywords = { 2, da_given_KEYWORDS };
 
-static const wchar_t* const da_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const da_rule_KEYWORDS[] = { L"Regel" };
 static const Keywords da_rule_keywords = { 1, da_rule_KEYWORDS };
 
 static const wchar_t* const da_scenario_KEYWORDS[] = { L"Eksempel", L"Scenarie" };
@@ -1146,7 +1146,7 @@ static const Keywords eo_feature_keywords = { 1, eo_feature_KEYWORDS };
 static const wchar_t* const eo_given_KEYWORDS[] = { L"* ", L"Donitaĵo ", L"Komence " };
 static const Keywords eo_given_keywords = { 3, eo_given_KEYWORDS };
 
-static const wchar_t* const eo_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const eo_rule_KEYWORDS[] = { L"Regulo" };
 static const Keywords eo_rule_keywords = { 1, eo_rule_KEYWORDS };
 
 static const wchar_t* const eo_scenario_KEYWORDS[] = { L"Ekzemplo", L"Scenaro", L"Kazo" };
@@ -1880,8 +1880,8 @@ static const Dialect is_dialect = {
         &is_then_keywords,
         &is_when_keywords };
 
-static const wchar_t* const it_and_KEYWORDS[] = { L"* ", L"E " };
-static const Keywords it_and_keywords = { 2, it_and_KEYWORDS };
+static const wchar_t* const it_and_KEYWORDS[] = { L"* ", L"E ", L"Ed " };
+static const Keywords it_and_keywords = { 3, it_and_KEYWORDS };
 
 static const wchar_t* const it_background_KEYWORDS[] = { L"Contesto" };
 static const Keywords it_background_keywords = { 1, it_background_KEYWORDS };
@@ -2509,7 +2509,7 @@ static const Keywords nl_feature_keywords = { 1, nl_feature_KEYWORDS };
 static const wchar_t* const nl_given_KEYWORDS[] = { L"* ", L"Gegeven ", L"Stel " };
 static const Keywords nl_given_keywords = { 3, nl_given_KEYWORDS };
 
-static const wchar_t* const nl_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const nl_rule_KEYWORDS[] = { L"Regel" };
 static const Keywords nl_rule_keywords = { 1, nl_rule_KEYWORDS };
 
 static const wchar_t* const nl_scenario_KEYWORDS[] = { L"Voorbeeld", L"Scenario" };

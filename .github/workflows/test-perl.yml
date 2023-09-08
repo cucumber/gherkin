@@ -5,9 +5,15 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - perl/**
+      - testdata/**
   pull_request:
     branches:
       - main
+    paths:
+      - perl/**
+      - testdata/**
   workflow_call:
 
 jobs:

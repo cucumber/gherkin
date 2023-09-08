@@ -5,9 +5,15 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - php/**
+      - testdata/**
   pull_request:
     branches:
       - main
+    paths:
+      - php/**
+      - testdata/**
   workflow_call:
 
 permissions:

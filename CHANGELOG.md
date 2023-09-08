@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [Go, Ruby, Perl] Upgraded messages to v22
+- [.NET] Bump sdk to .net 8. Added .net 8 to test platforms
 - [Go] Improve performance - don't compile regex on matcher create
 - [Perl] Fix release packaging
 - [Perl] Include CHANGELOG.md in tarball
@@ -18,7 +19,11 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Ruby] Update minimum ruby requirement from 2.3 to 2.5
 
 ### Added
-- (i18n) Add Malayalam localization
+- (i18n) Added Malayalam localization
+- (i18n) Added 'ed' to Italian ([#31](https://github.com/cucumber/gherkin/issues/160))
+- (i18n) Added Danish translation of "Rule"
+- (i18n) Added Dutch translation of "Rule"
+- (i18n) Added Esperanto translation of "Rule"
 
 ## [26.2.0] - 2023-04-07
 ### Changed

@@ -7,11 +7,14 @@ use Cucumber\Gherkin\GherkinParser;
 use Cucumber\Messages\Source;
 use Cucumber\Messages\Streams\NdJson\NdJsonStreamWriter;
 
+assert(is_array($argv), "Script must be run from the command line");
+
 $options = ['predictable-ids', 'no-source', 'no-ast', 'no-pickles'];
 
 $selectedOptions = getopt('', $options, $restIndex);
 
 $paths = array_slice($argv, $restIndex);
+
 // lazily-read list of Sources
 $sources = (
     /** @param list<string> $paths */

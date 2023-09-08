@@ -9,6 +9,8 @@ namespace Cucumber\Gherkin;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+assert(is_array($argv), "Script must be run from the command line");
+
 $parser = new Parser(new TokenFormatterBuilder());
 
 // first element is the script name

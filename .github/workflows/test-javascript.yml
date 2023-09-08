@@ -5,9 +5,15 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - javascript/**
+      - testdata/**
   pull_request:
     branches:
       - main
+    paths:
+      - javascript/**
+      - testdata/**
   workflow_call:
 
 jobs:

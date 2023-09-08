@@ -854,7 +854,7 @@ var builtinDialects = gherkinDialectMap{
 				"Egenskab",
 			},
 			rule: {
-				"Rule",
+				"Regel",
 			},
 			background: {
 				"Baggrund",
@@ -1525,7 +1525,7 @@ var builtinDialects = gherkinDialectMap{
 				"Trajto",
 			},
 			rule: {
-				"Rule",
+				"Regulo",
 			},
 			background: {
 				"Fono",
@@ -2659,6 +2659,7 @@ var builtinDialects = gherkinDialectMap{
 			and: {
 				"* ",
 				"E ",
+				"Ed ",
 			},
 			but: {
 				"* ",
@@ -2679,6 +2680,8 @@ var builtinDialects = gherkinDialectMap{
 			"Allora ": messages.StepKeywordType_OUTCOME,
 
 			"E ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ed ": messages.StepKeywordType_CONJUNCTION,
 
 			"Ma ": messages.StepKeywordType_CONJUNCTION,
 
@@ -3471,7 +3474,7 @@ var builtinDialects = gherkinDialectMap{
 				"Functionaliteit",
 			},
 			rule: {
-				"Rule",
+				"Regel",
 			},
 			background: {
 				"Achtergrond",

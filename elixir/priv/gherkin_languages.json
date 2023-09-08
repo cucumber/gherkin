@@ -630,7 +630,7 @@
     "name": "Danish",
     "native": "dansk",
     "rule": [
-      "Rule"
+      "Regel"
     ],
     "scenario": [
       "Eksempel",
@@ -1132,7 +1132,7 @@
     "name": "Esperanto",
     "native": "Esperanto",
     "rule": [
-      "Rule"
+      "Regulo"
     ],
     "scenario": [
       "Ekzemplo",
@@ -1886,7 +1886,8 @@
   "it": {
     "and": [
       "* ",
-      "E "
+      "E ",
+      "Ed "
     ],
     "background": [
       "Contesto"
@@ -2532,7 +2533,7 @@
     "name": "Dutch",
     "native": "Nederlands",
     "rule": [
-      "Rule"
+      "Regel"
     ],
     "scenario": [
       "Voorbeeld",
