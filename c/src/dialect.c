@@ -1146,7 +1146,7 @@ static const Keywords eo_feature_keywords = { 1, eo_feature_KEYWORDS };
 static const wchar_t* const eo_given_KEYWORDS[] = { L"* ", L"Donitaĵo ", L"Komence " };
 static const Keywords eo_given_keywords = { 3, eo_given_KEYWORDS };
 
-static const wchar_t* const eo_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const eo_rule_KEYWORDS[] = { L"Regulo" };
 static const Keywords eo_rule_keywords = { 1, eo_rule_KEYWORDS };
 
 static const wchar_t* const eo_scenario_KEYWORDS[] = { L"Ekzemplo", L"Scenaro", L"Kazo" };
