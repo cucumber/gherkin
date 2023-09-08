@@ -1525,7 +1525,7 @@ var builtinDialects = gherkinDialectMap{
 				"Trajto",
 			},
 			rule: {
-				"Rule",
+				"Regulo",
 			},
 			background: {
 				"Fono",
