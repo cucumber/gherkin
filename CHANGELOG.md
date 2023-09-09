@@ -8,7 +8,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-### Changed
 - [.NET] Bump sdk to .net 8. Added .net 8 to test platforms.
 - [Go] Upgraded messages to v22
 - [Go] Improve performance - don't compile regex on matcher create
