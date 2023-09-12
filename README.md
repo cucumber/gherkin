@@ -11,7 +11,7 @@ Gherkin is currently implemented for the following platforms (in order of birthd
 - [Go](./go) - Actively tested -> [workflow](./.github/workflows/test-go.yml)
 - [Python](./python) - Actively tested -> [workflow](./.github/workflows/test-python.yml)
 - [C](./c) - Actively tested -> [workflow](./.github/workflows/test-c.yml)
-- [Objective-C](./objective-c) - Not tested?
+- [Objective-C](./objective-c) - _Currently not actively tested, requires maintenance_
 - [Perl](./perl) - Actively tested -> [workflow](./.github/workflows/test-perl.yml)
 - [PHP](./php) - Actively tested -> [workflow](./.github/workflows/test-php.yml)
 - [Dart](./dart) - Actively tested -> [workflow](./.github/workflows/test-dart.yml)
