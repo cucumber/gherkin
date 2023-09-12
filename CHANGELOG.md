@@ -8,13 +8,13 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-- [.NET] Bump sdk to .net 8. Added .net 8 to test platforms.
-- [Go] Upgraded messages to v22
+- [.NET] Bump sdk to .net 8. Added .net 8 to test platforms
+- [Go, Perl, Ruby] Upgraded messages to v22
 - [Go] Improve performance - don't compile regex on matcher create
 - [Perl] Fix release packaging
 - [Perl] Include CHANGELOG.md in tarball
-- [Perl] Upgrade messages to v22
-- [Perl] Harmonized error reporting with mainstream implementations  errors are now converted to messages and reported in the message stream ([#31](https://github.com/cucumber/gherkin/issues/31))
+- [Perl] Harmonized error reporting with mainstream implementations - errors are now converted to messages and reported in the message stream ([#31](https://github.com/cucumber/gherkin/issues/31))
+- [Ruby] Update minimum ruby requirement from 2.3 to 2.5
 
 ### Added
 - (i18n) Added Malayalam localization

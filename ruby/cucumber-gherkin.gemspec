@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/cucumber/gherkin'
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 2.3'
+  s.required_ruby_version = '>= 2.5'
 
   s.metadata = {
     'bug_tracker_uri' => 'https://github.com/cucumber/gherkin/issues',
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/gherkin/blob/main/ruby'
   }
 
-  s.add_runtime_dependency 'cucumber-messages', '>= 19.1.4', '< 22.1'
+  s.add_runtime_dependency 'cucumber-messages', '>= 19.1.4', '< 23'
 
   s.add_development_dependency 'rake', '~> 13.0', '>= 13.0.6'
   s.add_development_dependency 'rspec', '~> 3.11', '>= 3.11.0'
