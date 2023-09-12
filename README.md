@@ -4,17 +4,17 @@ Gherkin is a parser and compiler for the Gherkin language.
 
 Gherkin is currently implemented for the following platforms (in order of birthday):
 
-- [.NET](./dotnet)
-- [Java](./java)
-- [JavaScript](./javascript)
-- [Ruby](./ruby)
-- [Go](./go)
-- [Python](./python)
+- [.NET](./dotnet) - Tested on .NET 6 -> 8
+- [Java](./java) - Tested on Java 11 LTS and 17 LTS
+- [JavaScript](./javascript) - Tested on Node 16 -> 18
+- [Ruby](./ruby) - Tested on Ruby 2.6 -> 3.2
+- [Go](./go) - Tested on Go 1.20 -> 1.21
+- [Python](./python) - Tested on Python 2.7 and 3.8
 - [C](./c)
 - [Objective-C](./objective-c)
-- [Perl](./perl)
-- [PHP](./php)
-
+- [Perl](./perl) - Tested on Perl 5.14 and 5.36
+- [PHP](./php) - Tested on PHP 8.1
+- [Dart](./dart) - Tested on Dart 1.4
 
 ## Contributing Translations (i18n)
 
