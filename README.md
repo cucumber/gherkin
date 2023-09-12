@@ -4,17 +4,22 @@ Gherkin is a parser and compiler for the Gherkin language.
 
 Gherkin is currently implemented for the following platforms (in order of birthday):
 
-- [.NET](./dotnet)
-- [Java](./java)
-- [JavaScript](./javascript)
-- [Ruby](./ruby)
-- [Go](./go)
-- [Python](./python)
-- [C](./c)
-- [Objective-C](./objective-c)
-- [Perl](./perl)
-- [PHP](./php)
+- [.NET](./dotnet) - Actively tested -> [workflow](./.github/workflows/test-dotnet.yml)
+- [Java](./java) - Actively tested -> [workflow](./.github/workflows/test-java.yml)
+- [JavaScript](./javascript) - Actively tested -> [workflow](./.github/workflows/test-javascript.yml)
+- [Ruby](./ruby) - Actively tested -> [workflow](./.github/workflows/test-ruby.yml)
+- [Go](./go) - Actively tested -> [workflow](./.github/workflows/test-go.yml)
+- [Python](./python) - Actively tested -> [workflow](./.github/workflows/test-python.yml)
+- [C](./c) - Actively tested -> [workflow](./.github/workflows/test-c.yml)
+- [Objective-C](./objective-c) - _Currently not actively tested, requires maintenance_
+- [Perl](./perl) - Actively tested -> [workflow](./.github/workflows/test-perl.yml)
+- [PHP](./php) - Actively tested -> [workflow](./.github/workflows/test-php.yml)
+- [Dart](./dart) - Actively tested -> [workflow](./.github/workflows/test-dart.yml)
 
+The CI will run using the linked workflow when that specific language implementation is changed
+
+The CI will also run for any/all linked workflows when any [test data](./testdata) is modified
+(For example modifying one of the good or bad features / ndjson outputs)
 
 ## Contributing Translations (i18n)
 
