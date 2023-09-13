@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+
+set -e
+
+ME=$(basename $0)
+MYDIR=$(cd $(dirname $0)/.. && pwd)
+
+###############################################################################
+#
+# Minimal checks
+#
+###############################################################################
+[ -z "$1" ] && echo "$ME: missing directory" && exit 1
+[ ! -d "$1" ] && echo "$ME: invalid directory: $1" && exit 1
+
+SRCDIR="$1"
+shift
+
+while ((${#1})); do
+    case "$1" in
+        --src-dir=*)
+        SUBDIR="${1##--src-dir=}"
+        SRCDIR="$SRCDIR/$SUBDIR"
+        shift
+        ;;
+        *)
+        break
+        ;;
+    esac
+done
+
+###############################################################################
+#
+# Compiler setup
+#
+###############################################################################
+BUILDROOT=$MYDIR/build/root
+CC=
+CFLAGS=
+CXX=
+CXXFLAGS=$CFLAGS
+CPATH=$BUILDROOT/include
+LIBRARY_PATH=$BUILDROOT/lib
+LD_LIBRARY_PATH=$BUILDROOT/lib
+PKG_CONFIG_PATH=$LIBRARY_PATH/pkgconfig
+
+#CCACHE=$(which ccache || true)
+
+# if [ -n "$CCACHE" ]; then
+#     CC="$CCACHE $CC"
+#     CXX="$CCACHE $CXX"
+# fi
+
+export CC CFLAGS CXX CXXFLAGS CPATH LIBRARY_PATH LD_LIBRARY_PATH
+
+###############################################################################
+#
+# Parallel compilation setup
+#
+###############################################################################
+MAKEARGS=
+CMAKEARGS=
+
+if [ -n "$NPROCS" ]; then
+    CMAKEARGS="--parallel $NPROCS"
+    MAKEARGS="-j$NPROCS"
+else
+    CMAKEARGS="--parallel"
+fi
+
+###############################################################################
+#
+# Project build
+#
+###############################################################################
+PROJECT=$(basename $SRCDIR)
+BUILDDIR=$MYDIR/build/$PROJECT
+
+mkdir -p $LIBRARY_PATH
+rm -rf $BUILDDIR && mkdir -p $BUILDDIR
+
+if [ -f $SRCDIR/CMakeLists.txt ]; then
+    cmake \
+        -G Ninja \
+        -DCMAKE_PREFIX_PATH=$BUILDROOT \
+        -DCMAKE_INSTALL_PREFIX=$BUILDROOT \
+        -DCMAKE_TOOLCHAIN_FILE=$MYDIR/cmake/toolchains/ext.cmake \
+        -S $SRCDIR -B $BUILDDIR \
+        "$@"
+    cmake --build $BUILDDIR $CMAKEARGS
+    cmake --install $BUILDDIR
+elif [ -f $SRCDIR/meson.build ]; then
+    cd $BUILDDIR
+    meson \
+        --prefix=$BUILDROOT \
+        --pkg-config-path=$BUILDROOT \
+        --cmake-prefix-path=$BUILDROOT \
+        "$@" \
+        . $SRCDIR
+    meson install
+elif [ -x $SRCDIR/configure ]; then
+    cd $BUILDDIR
+    $SRCDIR/configure \
+        --prefix=$BUILDROOT \
+        --enable-shared \
+        "$@"
+    make $MAKEARGS
+    make install
+elif [ -x $SRCDIR/config ]; then
+    cd $BUILDDIR
+    $SRCDIR/config --prefix=$BUILDROOT "$@"
+    make $MAKEARGS
+    make install
+elif [ -f $SRCDIR/Makefile ]; then
+    cd $SRCDIR
+    make $MAKEARGS
+    make prefix=$BUILDROOT install
+else
+    echo "$ME: don't know how to build $SRCDIR"
+    exit 1
+fi
+
+rm -rf $BUILDDIR

@@ -1,0 +1,7 @@
+ext/
+build/
+acceptance/
+stage/
+.built
+.configured
+.deps-installed
