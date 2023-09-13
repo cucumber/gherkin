@@ -15,6 +15,7 @@ Gherkin is currently implemented for the following platforms (in order of birthd
 - [Perl](./perl) - Actively tested -> [workflow](./.github/workflows/test-perl.yml)
 - [PHP](./php) - Actively tested -> [workflow](./.github/workflows/test-php.yml)
 - [Dart](./dart) - Actively tested -> [workflow](./.github/workflows/test-dart.yml)
+- [C++](./cpp) - Actively tested -> [workflow](./.github/workflows/test-cpp.yml)
 
 The CI will run using the linked workflow when that specific language implementation is changed
 

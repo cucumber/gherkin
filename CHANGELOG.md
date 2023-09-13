@@ -23,6 +23,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Added Dutch translation of "Rule"
 - (i18n) Added Esperanto translation of "Rule"
 - [Ruby] Added `Gherkin::Query#parent_locations` for determining a scenario's parents' line numbers ([#89](https://github.com/cucumber/gherkin/pull/89))
+- C++ implementation [#117](https://github.com/cucumber/gherkin/pull/117)
 
 ## [26.2.0] - 2023-04-07
 ### Changed
