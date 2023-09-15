@@ -1,6 +1,6 @@
 {
   "name": "@cucumber/gherkin",
-  "version": "26.2.0",
+  "version": "27.0.0",
   "description": "Gherkin parser",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",

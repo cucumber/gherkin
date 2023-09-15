@@ -7,15 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Changed
-- [.NET] Bump sdk to .net 8. Added .net 8 to test platforms
-- [Go, Perl, Ruby] Upgraded messages to v22
-- [Go] Improve performance - don't compile regex on matcher create
-- [Perl] Fix release packaging
-- [Perl] Include CHANGELOG.md in tarball
-- [Perl] Harmonized error reporting with mainstream implementations - errors are now converted to messages and reported in the message stream ([#31](https://github.com/cucumber/gherkin/issues/31))
-- [Ruby] Update minimum ruby requirement from 2.3 to 2.5
 
+## [27.0.0] - 2023-09-15
 ### Added
 - (i18n) Added Malayalam localization
 - (i18n) Added 'ed' to Italian ([#31](https://github.com/cucumber/gherkin/issues/160))
@@ -24,6 +17,15 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Added Esperanto translation of "Rule"
 - [Ruby] Added `Gherkin::Query#parent_locations` for determining a scenario's parents' line numbers ([#89](https://github.com/cucumber/gherkin/pull/89))
 - C++ implementation [#117](https://github.com/cucumber/gherkin/pull/117)
+
+### Changed
+- [.NET] Bump sdk to .net 8. Added .net 8 to test platforms
+- [Go, Perl, Ruby] Upgraded messages to v22
+- [Go] Improve performance - don't compile regex on matcher create
+- [Perl] Fix release packaging
+- [Perl] Include CHANGELOG.md in tarball
+- [Perl] Harmonized error reporting with mainstream implementations - errors are now converted to messages and reported in the message stream ([#31](https://github.com/cucumber/gherkin/issues/31))
+- [Ruby] Update minimum ruby requirement from 2.3 to 2.5
 
 ## [26.2.0] - 2023-04-07
 ### Changed
@@ -635,7 +637,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v26.2.0...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...main
+[27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...main
 [26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...main
 [26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...main
 [26.0.3]: https://github.com/cucumber/gherkin/compare/v26.0.2...main
