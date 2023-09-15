@@ -638,16 +638,16 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - First release
 
 [Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...main
-[27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...main
-[26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...main
-[26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...main
-[26.0.3]: https://github.com/cucumber/gherkin/compare/v26.0.2...main
-[26.0.2]: https://github.com/cucumber/gherkin/compare/v26.0.1...main
-[26.0.1]: https://github.com/cucumber/gherkin/compare/v26.0.0...main
-[26.0.0]: https://github.com/cucumber/gherkin/compare/v25.0.2...main
-[25.0.2]: https://github.com/cucumber/gherkin/compare/v25.0.1...main
-[25.0.1]: https://github.com/cucumber/gherkin/compare/v25.0.0...main
-[25.0.0]: https://github.com/cucumber/gherkin/compare/v24.1.0...main
+[27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...v27.0.0
+[26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...v26.2.0
+[26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...v26.1.0
+[26.0.3]: https://github.com/cucumber/gherkin/compare/v26.0.2...v26.0.3
+[26.0.2]: https://github.com/cucumber/gherkin/compare/v26.0.1...v26.0.2
+[26.0.1]: https://github.com/cucumber/gherkin/compare/v26.0.0...v26.0.1
+[26.0.0]: https://github.com/cucumber/gherkin/compare/v25.0.2...v26.0.0
+[25.0.2]: https://github.com/cucumber/gherkin/compare/v25.0.1...v25.0.2
+[25.0.1]: https://github.com/cucumber/gherkin/compare/v25.0.0...v25.0.1
+[25.0.0]: https://github.com/cucumber/gherkin/compare/v24.1.0...v25.0.0
 [24.1.0]: https://github.com/cucumber/gherkin/compare/v24.0.0...v24.1.0
 [24.0.0]: https://github.com/cucumber/gherkin/compare/v23.0.1...v24.0.0
 [23.0.1]: https://github.com/cucumber/gherkin/compare/v23.0.0...v23.0.1
