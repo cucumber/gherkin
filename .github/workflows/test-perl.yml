@@ -37,12 +37,13 @@ jobs:
           install-modules-with: cpanm
           working-directory: perl
 
+      # Run acceptance tests first! They build Languages.pm
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: perl
+
       - name: run tests
         run: |
           prove -l
           AUTHOR_TESTS=1 prove -l
-        working-directory: perl
-
-      - name: run acceptance tests
-        run: make acceptance
         working-directory: perl
