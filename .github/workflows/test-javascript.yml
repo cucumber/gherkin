@@ -35,7 +35,7 @@ jobs:
       - name: set git core.autocrlf to 'input'
         run: git config --global core.autocrlf input
 
-      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+      - uses: actions/checkout@v4
 
       - name: with Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
         uses: actions/setup-node@v3
