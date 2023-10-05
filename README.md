@@ -104,13 +104,22 @@ var pickles = Gherkin.compile(gherkinDocument, 'uri_of_the_feature.feature', uui
 
 ```go
 // Go
-// Download the package via: `go get github.com/cucumber/cucumber/gherkin/go`
+// Download the package via: `go get github.com/cucumber/cucumber/gherkin/go/v27`
 import (
   "strings"
-  gherkin "github.com/cucumber/cucumber/gherkin/go"
+  gherkin "github.com/cucumber/cucumber/gherkin/go/v27"
 )
-reader := strings.NewReader(`Feature: ...`)
-gherkinDocument, err := gherkin.ParseGherkinDocument(reader)
+
+func main() {
+  reader := strings.NewReader(`Feature: ...`)
+  gherkinDocument, err := gherkin.ParseGherkinDocument(reader, newID)
+}
+
+var counter int
+func newID() string {
+	counter += 1
+	return "UUID" + strconv.Itoa(counter)
+}
 ```
 
 ```python
