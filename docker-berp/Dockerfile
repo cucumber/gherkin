@@ -1,7 +1,7 @@
 # Builds a docker image used for building most projects in this repo. It's
 # used both by contributors and CI.
 #
-FROM ubuntu:22.04
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -32,25 +32,6 @@ RUN addgroup --gid "$GID" "$USER" \
     --uid "$UID" \
     --shell /bin/bash \
     "$USER"
-
-# Install .NET Core
-# https://github.com/dotnet/dotnet-docker/blob/5c25dd2ed863dfd73edb1a6381dd9635734d0e5f/2.2/sdk/bionic/amd64/Dockerfile
-ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
-## Install .NET CLI dependencies
-RUN apt-get update \
-    && apt-get install --assume-yes --no-install-recommends \
-    curl \
-    ca-certificates \
-    libicu-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-## Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 6.0
-
-COPY scripts/install-dotnet.sh .
-RUN ./install-dotnet.sh -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
-RUN rm install-dotnet.sh
 
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
 RUN dotnet --list-sdks
