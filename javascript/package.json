@@ -34,7 +34,7 @@
     "@types/mocha": "10.0.3",
     "@types/node": "18.18.7",
     "commander": "^11.0.0",
-    "core-js": "3.33.1",
+    "core-js": "3.33.2",
     "mocha": "10.2.0",
     "ts-node": "10.9.1",
     "typescript": "5.2.2"
