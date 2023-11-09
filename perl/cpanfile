@@ -4,7 +4,7 @@ requires "Cpanel::JSON::XS";
 requires "Class::XSAccessor";
 requires "Cucumber::Messages", ">= 22.0.0, < 23.0.0";
 requires "Data::UUID";
-requires "Getopt::Long", "2.54";
+requires "Getopt::Long", "2.55";
 requires "List::Util", "1.63";
 
 on 'test' => sub {
