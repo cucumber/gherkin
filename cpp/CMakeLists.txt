@@ -4,6 +4,9 @@ project(gherkin-cpp VERSION 1.0.0 LANGUAGES C CXX)
 
 include(GNUInstallDirs)
 
+message("CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
+
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -12,6 +15,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(cucumber-messages CONFIG REQUIRED)
 
+add_subdirectory(include)
 add_subdirectory(src/lib/gherkin)
 add_subdirectory(src/bin/gherkin)
 add_subdirectory(src/bin/gherkin-generate-tokens)
@@ -19,6 +23,7 @@ add_subdirectory(src/bin/gherkin-generate-tokens)
 install(
     TARGETS
         gherkin-cpp
+        gherkin-cpp-include
         gherkin-bin
         gherkin-generate-tokens-bin
     EXPORT gherkin-cpp-config
