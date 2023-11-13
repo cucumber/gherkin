@@ -120,7 +120,7 @@ public:
     {
         using type = std::decay_t<T>;
 
-        if constexpr (is_container_v<std::vector, type>) {
+        if constexpr (is_container_v<type>) {
             using value_type = typename type::value_type;
             using vector_type = std::vector<value_type>;
 
@@ -147,7 +147,7 @@ public:
     {
         using type = std::decay_t<T>;
 
-        if constexpr (is_container_v<std::optional, type>) {
+        if constexpr (is_optional_v<type>) {
             using value_type = typename type::value_type;
 
             set_value<value_type>(rule_type, v);

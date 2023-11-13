@@ -1,38 +1,48 @@
-#include <type_traits>
+#include <optional>
+#include <vector>
 
 namespace gherkin {
 
-namespace detail {
-
 template <
-    template <typename> class Container,
-    template <typename> class Other,
     typename T
 >
-std::is_same<Container<T>, Other<T>>
-test_is_container(Other<T>*);
+struct is_cont {
+  static const bool value = false;
+};
 
 template <
-    template <typename> class Container,
+    typename T,
+    typename Alloc
+>
+struct is_cont<std::vector<T,Alloc> > {
+  static const bool value = true;
+};
+
+
+template <
     typename T
 >
-std::false_type test_is_container(T*);
-
-} // namespace detail
+struct is_optional {
+  static const bool value = false;
+};
 
 template <
-    template <typename> class C,
     typename T
 >
-using is_container = decltype(
-    detail::test_is_container<C>(static_cast<T*>(nullptr))
-);
+struct is_optional<std::optional<T> > {
+  static const bool value = true;
+};
 
 template <
-    template <typename> class C,
     typename T
 >
 inline
-constexpr bool is_container_v = is_container<C, T>::value;
+constexpr bool is_container_v = is_cont<T>::value;
+
+template <
+    typename T
+>
+inline
+constexpr bool is_optional_v = is_optional<T>::value;
 
 }
