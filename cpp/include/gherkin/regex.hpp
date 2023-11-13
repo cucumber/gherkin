@@ -6,7 +6,6 @@
 #include <gherkin/utils.hpp>
 #include <gherkin/types.hpp>
 #include <gherkin/log.hpp>
-#include <gherkin/demangle.hpp>
 
 namespace gherkin {
 
