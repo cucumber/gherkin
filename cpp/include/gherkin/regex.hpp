@@ -135,7 +135,7 @@ full_match(
 {
     std::cmatch m;
 
-    bool match = std::regex_match(&*e.begin(), &*e.end(), m, re);
+    bool match = std::regex_match(e.data(), e.data() + e.size(), m, re);
 
     if (match) {
         detail::extract_submatches<CharT>(m, std::forward<Args>(args)...);
