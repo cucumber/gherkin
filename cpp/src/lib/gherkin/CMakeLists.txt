@@ -1,38 +1,41 @@
-add_library(gherkin-cpp)
-add_library(gherkin::gherkin-cpp ALIAS gherkin-cpp)
+add_library(cucumber_gherkin_lib)
+add_library(cucumber::gherkin ALIAS cucumber_gherkin_lib)
 
-set(INC_DIR "${CMAKE_SOURCE_DIR}/include")
+set(CUCUMBER_GHERKIN_LIB_INC_DIR "${PROJECT_SOURCE_DIR}/include/gherkin")
+file(GLOB_RECURSE CUCUMBER_GHERKIN_LIB_HEADERS ${CUCUMBER_GHERKIN_LIB_INC_DIR}/*.hpp)
+list(APPEND CUCUMBER_GHERKIN_LIB_ALL_SOURCES ${CUCUMBER_GHERKIN_LIB_HEADERS})
 
-# We prefer it that way...
-file(GLOB_RECURSE GHERKIN_CPP_HEADERS ${INC_DIR}/*.[ch]pp)
-file(GLOB_RECURSE GHERKIN_CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch]pp)
+set(CUCUMBER_GHERKIN_LIB_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+file(GLOB_RECURSE CUCUMBER_GHERKIN_LIB_SOURCES ${CUCUMBER_GHERKIN_LIB_SRC_DIR}/*.[ch]pp)
+list(APPEND CUCUMBER_GHERKIN_LIB_ALL_SOURCES ${CUCUMBER_GHERKIN_LIB_SOURCES})
 
 target_sources(
-    gherkin-cpp
+    cucumber_gherkin_lib
     PRIVATE
-        ${GHERKIN_CPP_HEADERS}
-        ${GHERKIN_CPP_SOURCES}
+        ${CUCUMBER_GHERKIN_LIB_ALL_SOURCES}
 )
 
 target_include_directories(
-    gherkin-cpp
+    cucumber_gherkin_lib
     PUBLIC
-        $<BUILD_INTERFACE:${INC_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/gherkin>
+        $<BUILD_INTERFACE:${CUCUMBER_GHERKIN_LIB_INC_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/cucumber>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(
-    gherkin-cpp
+    cucumber_gherkin_lib
     PUBLIC
-        cucumber::cucumber-messages
         nlohmann_json::nlohmann_json
+        cucumber::messages
 )
 
 set_target_properties(
-    gherkin-cpp
+    cucumber_gherkin_lib
     PROPERTIES
-    OUTPUT_NAME gherkin-cpp
+        VERSION 0.1.0
+        SOVERSION 0.1
+        EXPORT_NAME gherkin
+        OUTPUT_NAME cucumber_gherkin
 )
-

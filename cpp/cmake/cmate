@@ -1,0 +1,939 @@
+#!/usr/bin/env -S cmake -P
+# -*- CMake -*-
+
+set(CMATE "cmate")
+set(CMATE_VER "X.Y.Z")
+set(CMATE_CONF "cmate.json")
+cmake_policy(SET CMP0057 NEW)
+list(
+    APPEND
+    CMATE_CMDS
+    "configure"
+    "build"
+    "stage"
+    "clean"
+)
+list(
+    APPEND
+    CMATE_OPTIONS
+    "verbose"
+)
+list(
+    APPEND
+    CMATE_CONFIGURE_OPTIONS
+    "dry-run"
+    "dump"
+    "namespace"
+    "version"
+    "version-file"
+    "source-pat"
+    "header-pat"
+)
+##############################################################################
+#
+# Help messages
+#
+##############################################################################
+set(CMATE_HELP_HEADER "CMake Automatic TargEts v${CMATE_VER}")
+
+# Generic help
+set(
+    CMATE_HELP
+    "
+Usage: cmate [OPTIONS] COMMAND
+
+Options:
+  --verbose     Verbose operation
+
+Commands:
+  configure     Scans and configures targets
+  build
+  clean
+  stage
+  help          Display this information
+
+See 'cmate help <command>' to read about a specific subcommand."
+)
+
+# Configure help
+set(
+    CMATE_CONFIGURE_HELP
+    "
+Usage: cmate configure [OPTIONS]
+
+Configure local project
+
+Options:
+  --dry-run              Don't touch anything
+  --dump                 Dump generated CMakeLists.txt
+  --namespace=NS         CMake package namespace
+  --version=SEMVER       CMake package version
+  --version-file=FILE    CMake package version from FILE
+  --version-file=FILE    CMake package version from FILE
+  --source-pat=PATTERN   CMate targets source file glob pattern
+                         (default: \$CACHE{CMATE_SOURCE_PAT})
+  --header-pat=PATTERN   CMate targets header file glob pattern
+                         (default: \$CACHE{CMATE_HEADER_PAT})"
+)
+
+# Build help
+set(
+    CMATE_BUILD_HELP
+    "
+Usage: cmate build
+
+Build local project"
+)
+
+# Stage help
+set(
+    CMATE_STAGE_HELP
+    "
+Usage: cmate stage
+
+Stage local project"
+)
+
+# Clean help
+set(
+    CMATE_CLEAN_HELP
+    "
+Usage: cmate clean
+
+Clean local project"
+)
+##############################################################################
+#
+# Targets
+#
+##############################################################################
+set(CMATE_TARGETS "")
+
+##############################################################################
+#
+# Utility functions
+#
+##############################################################################
+function(cmate_show_help)
+    set(HVAR "CMATE")
+    if(CMATE_ARGC GREATER 0)
+        list(GET CMATE_ARGS 0 HCMD)
+
+        if(${HCMD} IN_LIST CMATE_CMDS)
+            string(TOUPPER "${HCMD}" HCMD)
+            string(APPEND HVAR "_${HCMD}")
+        else()
+            cmate_die("no such command: ${HCMD}")
+        endif()
+    endif()
+
+    string(APPEND HVAR "_HELP")
+    string(CONFIGURE ${${HVAR}} HELP)
+
+    message("${CMATE_HELP_HEADER}")
+    message(${HELP})
+endfunction()
+
+function(cmate_die MSG)
+    message(FATAL_ERROR "CMate: error: ${MSG}")
+endfunction()
+
+function(cmate_msg)
+    list(JOIN ARGV "" MSGS)
+    message("CMate: ${MSGS}")
+endfunction()
+
+function(cmate_warn MSG)
+    message(WARNING "CMate: ${MSG}")
+endfunction()
+
+function(cmate_info MSG)
+    if(CMATE_VERBOSE)
+        cmate_msg(${MSG})
+    endif()
+endfunction()
+
+function(cmate_setg VAR VAL)
+    set(${VAR} "${VAL}" CACHE INTERNAL "${VAR}")
+endfunction()
+
+function(cmate_state_file STATE VAR)
+    set(${VAR} "${CMATE_STATE_DIR}/.${STATE}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_clear_state STATE)
+    file(MAKE_DIRECTORY ${CMATE_STATE_DIR})
+    cmate_state_file(${STATE} FILE)
+    file(REMOVE ${FILE})
+endfunction()
+
+function(cmate_set_state STATE)
+    file(MAKE_DIRECTORY ${CMATE_STATE_DIR})
+    cmate_state_file(${STATE} FILE)
+    file(TOUCH ${FILE})
+endfunction()
+
+function(cmate_clear_states)
+    if (IS_DIRECTORY ${CMATE_STATE_DIR})
+        file(REMOVE_RECURSE ${CMATE_STATE_DIR})
+    endif()
+endfunction()
+
+function(cmate_load_version)
+    if(NOT "${CMATE_VERSION}" STREQUAL "")
+        return()
+    endif()
+
+    if("${CMATE_VERSION_FILE}" STREQUAL "")
+        cmate_setg(
+            CMATE_VERSION_FILE
+            "${CMATE_ROOT_DIR}/version.txt"
+        )
+    endif()
+
+    if(EXISTS ${CMATE_VERSION_FILE})
+        file(
+            STRINGS ${CMATE_VERSION_FILE} VER
+            REGEX "^[^\\.]+\\.[^\\.]+\\.[^\\.]+$"
+            LIMIT_COUNT 1
+        )
+
+        cmate_setg(CMATE_VERSION ${VER})
+    endif()
+endfunction()
+
+function(cmate_set_version)
+    cmate_load_version()
+
+    if("${CMATE_VERSION}" STREQUAL "")
+        cmate_warn("using default version: 0.1.0")
+        cmate_setg(CMATE_VERSION "0.1.0")
+    endif()
+
+    if("${CMATE_VERSION}" MATCHES "^([^\\.]+)\\.([^\\.]+)\\.([^\\.]+)$")
+        cmate_setg(CMATE_VERSION_MAJOR ${CMAKE_MATCH_1})
+        cmate_setg(CMATE_VERSION_MINOR ${CMAKE_MATCH_2})
+        cmate_setg(CMATE_VERSION_PATCH ${CMAKE_MATCH_3})
+    else()
+        cmate_die("unable to parse version: ${CMATE_VERSION}")
+    endif()
+endfunction()
+
+macro(cmate_setv VAR VAL)
+    if("${${VAR}}" STREQUAL "")
+        set(${VAR} ${VAL})
+    endif()
+endmacro()
+
+function(cmate_json_get_array JSON KEY VAR)
+    string(JSON ARRAY ERROR_VARIABLE ERR GET ${JSON} ${KEY})
+    set(ITEMS "")
+
+    if (NOT ERR)
+        string(JSON N LENGTH ${ARRAY})
+
+        if(${N} GREATER_EQUAL 1)
+            math(EXPR N "${N}-1")
+
+            foreach(I RANGE ${N})
+                string(JSON ITEM GET ${ARRAY} ${I})
+                list(APPEND ITEMS ${ITEM})
+            endforeach()
+        endif()
+    endif()
+
+    set(${VAR} ${ITEMS} PARENT_SCOPE)
+endfunction()
+
+function(cmate_load_cmake_package_deps JSON PREFIX)
+    cmate_json_get_array("${JSON}" "cmake" "PKGS")
+    set(PACKAGES "")
+
+    foreach(PKG ${PKGS})
+        set(PKGTYPE "STRING")
+
+        if("${PKG}" MATCHES "^[[{].*$")
+            string(JSON PKGTYPE TYPE ${PKG})
+        endif()
+
+        if(${PKGTYPE} STREQUAL "STRING")
+            # Simple module
+            list(APPEND PACKAGES ${PKG})
+        elseif(${PKGTYPE} STREQUAL "OBJECT")
+            # Module and components
+            string(JSON PKGNAME MEMBER ${PKG} 0)
+            list(APPEND PACKAGES ${PKGNAME})
+
+            cmate_json_get_array(${PKG} ${PKGNAME} "COMPS")
+
+            set("${PREFIX}_CMAKE_${PKGNAME}_COMPS" ${COMPS} PARENT_SCOPE)
+        endif()
+    endforeach()
+
+    set("${PREFIX}_CMAKE_PACKAGES" ${PACKAGES} PARENT_SCOPE)
+endfunction()
+
+function(cmate_load_pkgconfig_package_deps JSON PREFIX)
+    cmate_json_get_array("${JSON}" "pkgconfig" "PKGS")
+    set("${PREFIX}_PKGCONFIG_PACKAGES" ${PKGS} PARENT_SCOPE)
+endfunction()
+
+function(cmate_load_conf FILE)
+    set(PKGS "")
+
+    if(EXISTS ${FILE})
+        file(READ ${FILE} JSON)
+
+        string(JSON PROJECT GET ${JSON} "name")
+        cmate_setg(CMATE_PROJECT ${PROJECT})
+        string(JSON VERSION GET ${JSON} "version")
+        cmate_setg(CMATE_VERSION ${VERSION})
+        string(JSON NAMESPACE GET ${JSON} "namespace")
+        cmate_setg(CMATE_NAMESPACE ${NAMESPACE})
+
+        string(JSON PKGS GET ${JSON} "packages")
+    endif()
+
+    cmate_setg(CMATE_PACKAGES "${PKGS}")
+endfunction()
+
+function(cmate_load_link_deps FILE PREFIX)
+    set(PUBLIC_DEPS "")
+    set(PRIVATE_DEPS "")
+    set(LVAR "PUBLIC_DEPS")
+
+    if(EXISTS ${FILE})
+        file(READ ${FILE} JSON)
+        string(JSON LIBS GET ${JSON} "libs")
+
+        foreach(TYPE PUBLIC PRIVATE)
+            # TODO: add more checks for correct JSON structure
+            string(TOLOWER ${TYPE} KEY)
+            cmate_json_get_array(${LIBS} ${KEY} "${TYPE}_DEPS")
+        endforeach()
+    endif()
+
+    set(${PREFIX}_PUBLIC_DEPS ${PUBLIC_DEPS} PARENT_SCOPE)
+    list(LENGTH PUBLIC_DEPS PUBLIC_DEPS_COUNT)
+    set(${PREFIX}_PUBLIC_DEPS_COUNT ${PUBLIC_DEPS_COUNT} PARENT_SCOPE)
+
+    set(${PREFIX}_PRIVATE_DEPS ${PRIVATE_DEPS} PARENT_SCOPE)
+    list(LENGTH PRIVATE_DEPS PRIVATE_DEPS_COUNT)
+    set(${PREFIX}_PRIVATE_DEPS_COUNT ${PRIVATE_DEPS_COUNT} PARENT_SCOPE)
+
+    math(EXPR DEPS_COUNT "${PUBLIC_DEPS_COUNT} + ${PRIVATE_DEPS_COUNT}")
+    set(${PREFIX}_DEPS_COUNT ${DEPS_COUNT} PARENT_SCOPE)
+endfunction()
+
+##############################################################################
+#
+# Target common functions
+#
+##############################################################################
+function(cmate_target_link_deps NAME DEPS_FILE VAR)
+    cmate_load_link_deps(${DEPS_FILE} TGT)
+
+    if(${TGT_DEPS_COUNT} GREATER 0)
+        set(TDEPS "\ntarget_link_libraries(\n    ${NAME}")
+
+        foreach(TYPE PUBLIC PRIVATE)
+            if(${TGT_${TYPE}_DEPS_COUNT} GREATER 0)
+                string(APPEND TDEPS "\n    ${TYPE}")
+
+                foreach(DEP ${TGT_${TYPE}_DEPS})
+                    string(APPEND TDEPS "\n        ${DEP}")
+                endforeach()
+            endif()
+        endforeach()
+
+        string(APPEND TDEPS "\n)\n")
+        set(${VAR} ${TDEPS} PARENT_SCOPE)
+    endif()
+endfunction()
+
+function(cmate_target_name NAME TYPE VAR)
+    string(TOLOWER "${CMATE_NAMESPACE}_${NAME}_${TYPE}" TBASE)
+    string(REPLACE "-" "_" TBASE ${TBASE})
+    set(${VAR} ${TBASE} PARENT_SCOPE)
+endfunction()
+
+##############################################################################
+#
+# Library processing functions
+#
+##############################################################################
+function(cmate_configure_lib NAME TBASE INC_BASE SRC_BASE)
+    string(TOUPPER ${TBASE} VBASE)
+
+    if(${CMATE_DRY_RUN})
+        cmate_msg(
+            "found library ${NAME}"
+            " (I:${INC_BASE}/${NAME}"
+            ", S:${SRC_BASE}/${NAME})"
+        )
+        return()
+    endif()
+
+    list(APPEND CMATE_TARGETS ${TBASE})
+
+    set(HDIR "${CMATE_ROOT_DIR}/${INC_BASE}/${NAME}")
+    set(SDIR "${CMATE_ROOT_DIR}/${SRC_BASE}/${NAME}")
+    set(CM_FILE "${SDIR}/CMakeLists.txt")
+    set(DEPS_FILE "${SDIR}/cmate.json")
+    file(GLOB_RECURSE HEADERS "${HDIR}/${CMATE_HEADER_PAT}")
+    file(GLOB_RECURSE SOURCES "${SDIR}/${CMATE_SOURCE_PAT}")
+
+    string(APPEND CONTENT "add_library(${TBASE})\n")
+
+    if(CMATE_NAMESPACE)
+        string(
+            APPEND
+            CONTENT
+            "add_library(${CMATE_NAMESPACE}::${NAME} ALIAS ${TBASE})\n"
+        )
+    endif()
+
+    string(
+        APPEND
+        CONTENT
+        "
+set(${VBASE}_INC_DIR \"\${PROJECT_SOURCE_DIR}/${INC_BASE}/${NAME}\")
+file(GLOB_RECURSE ${VBASE}_HEADERS \${${VBASE}_INC_DIR}/${CMATE_HEADER_PAT})
+list(APPEND ${VBASE}_ALL_SOURCES \${${VBASE}_HEADERS})
+
+set(${VBASE}_SRC_DIR \"\${CMAKE_CURRENT_SOURCE_DIR}\")
+file(GLOB_RECURSE ${VBASE}_SOURCES \${${VBASE}_SRC_DIR}/${CMATE_SOURCE_PAT})
+list(APPEND ${VBASE}_ALL_SOURCES \${${VBASE}_SOURCES})
+
+target_sources(
+    ${TBASE}
+    PRIVATE
+        \${${VBASE}_ALL_SOURCES}
+)
+
+target_include_directories(
+    ${TBASE}
+    PUBLIC
+        $<BUILD_INTERFACE:\${${VBASE}_INC_DIR}>
+        $<INSTALL_INTERFACE:\${CMAKE_INSTALL_INCLUDEDIR}/${CMATE_NAMESPACE}>
+    PRIVATE
+        \${CMAKE_CURRENT_SOURCE_DIR}
+)
+"
+    )
+
+    cmate_target_link_deps(${TBASE} ${DEPS_FILE} DEPS)
+    string(APPEND CONTENT ${DEPS})
+
+    string(
+        APPEND
+        CONTENT
+        "
+set_target_properties(
+    ${TBASE}
+    PROPERTIES
+        VERSION ${CMATE_VERSION}
+        SOVERSION ${CMATE_VERSION_MAJOR}.${CMATE_VERSION_MINOR}
+        EXPORT_NAME ${NAME}
+        OUTPUT_NAME ${CMATE_NAMESPACE}_${NAME}
+)
+"
+    )
+
+    if(${CMATE_DUMP})
+        message(${CONTENT})
+    endif()
+
+    file(WRITE ${CM_FILE} ${CONTENT})
+endfunction()
+
+##############################################################################
+#
+# Binary processing functions
+#
+##############################################################################
+function(cmate_configure_prog TYPE NAME TBASE SRC_BASE)
+    string(TOUPPER ${TBASE} VBASE)
+
+    if(${CMATE_DRY_RUN})
+        cmate_msg("found ${TYPE} ${NAME} (${SRC_BASE}/${NAME})")
+        return()
+    endif()
+
+    set(SDIR "${CMATE_ROOT_DIR}/${SRC_BASE}/${NAME}")
+    set(CM_FILE "${SDIR}/CMakeLists.txt")
+    set(DEPS_FILE "${SDIR}/cmate.json")
+    file(GLOB_RECURSE SOURCES "${SDIR}/${CMATE_SOURCE_PAT}")
+
+    string(APPEND CONTENT "add_${TYPE}(${TBASE})\n")
+
+    string(
+        APPEND
+        CONTENT
+        "
+set(${VBASE}_SRC_DIR \"\${CMAKE_CURRENT_SOURCE_DIR}\")
+file(GLOB_RECURSE ${VBASE}_SOURCES \${${VBASE}_SRC_DIR}/${CMATE_SOURCE_PAT})
+list(APPEND ${VBASE}_ALL_SOURCES \${${VBASE}_SOURCES})
+
+target_sources(
+    ${TBASE}
+    PRIVATE
+        \${${VBASE}_ALL_SOURCES}
+)
+
+target_include_directories(
+    ${TBASE}
+    PRIVATE
+        \${CMAKE_CURRENT_SOURCE_DIR}
+)
+"
+    )
+
+    cmate_target_link_deps(${TBASE} ${DEPS_FILE} DEPS)
+    string(APPEND CONTENT ${DEPS})
+
+    string(
+        APPEND
+        CONTENT
+        "
+set_target_properties(
+    ${TBASE}
+    PROPERTIES
+        OUTPUT_NAME ${NAME}
+)
+"
+    )
+
+    if(${CMATE_DUMP})
+        message(${CONTENT})
+    endif()
+
+    file(WRITE ${CM_FILE} ${CONTENT})
+endfunction()
+
+function(cmate_configure_bin NAME TBASE SRC_BASE)
+    cmate_configure_prog("executable" ${NAME} ${TBASE} ${SRC_BASE})
+endfunction()
+
+function(cmate_configure_test NAME TBASE SRC_BASE)
+    cmate_configure_prog("test" ${NAME} ${TBASE} ${SRC_BASE})
+endfunction()
+
+function(cmate_configure_project_packages VAR)
+    # CMake style packages
+    cmate_load_cmake_package_deps("${CMATE_PACKAGES}" "PRJ")
+    set(CONTENT "")
+
+    if(PRJ_CMAKE_PACKAGES)
+        string(APPEND CONTENT "\n")
+    endif()
+
+    foreach(PKG ${PRJ_CMAKE_PACKAGES})
+        if(PRJ_CMAKE_${PKG}_COMPS)
+            string(
+                APPEND
+                CONTENT
+            "find_package(
+    ${PKG} CONFIG REQUIRED
+    COMPONENTS
+"
+            )
+
+            foreach(PC ${PRJ_CMAKE_${PKG}_COMPS})
+                string(APPEND CONTENT "        ${PC}\n")
+            endforeach()
+
+            string(APPEND CONTENT ")\n")
+        else()
+            string(APPEND CONTENT "find_package(${PKG} CONFIG REQUIRED)\n")
+        endif()
+    endforeach()
+
+    # PkgConfig style packages
+    cmate_load_pkgconfig_package_deps("${CMATE_PACKAGES}" "PRJ")
+
+    if(PRJ_PKGCONFIG_PACKAGES)
+        string(APPEND CONTENT "find_package(PkgConfig REQUIRED)\n")
+    endif()
+
+    foreach(PKG ${PRJ_PKGCONFIG_PACKAGES})
+        string(
+            APPEND
+            CONTENT
+            "pkg_check_modules(${PKG} REQUIRED IMPORTED_TARGET ${PKG})\n"
+        )
+    endforeach()
+
+    set(${VAR} ${CONTENT} PARENT_SCOPE)
+endfunction()
+
+function(cmate_configure_project TARGETS SUBDIRS)
+    if(${CMATE_DRY_RUN})
+        return()
+    endif()
+
+    set(CM_FILE "${CMATE_ROOT_DIR}/CMakeLists.txt")
+
+    string(
+        APPEND
+        CONTENT
+        "cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+
+project(${CMATE_PROJECT} VERSION 1.0.0 LANGUAGES C CXX)
+
+include(GNUInstallDirs)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+"
+    )
+
+    cmate_configure_project_packages(PKGS)
+
+    if(PKGS)
+        string(APPEND CONTENT "${PKGS}")
+    endif()
+
+    # Target subdirs
+    if(SUBDIRS)
+        string(APPEND CONTENT "\n")
+
+        foreach(SUBDIR ${SUBDIRS})
+            string(APPEND CONTENT "add_subdirectory(${SUBDIR})\n")
+        endforeach()
+    endif()
+
+    string(
+        APPEND
+        CONTENT
+        "
+install(
+    TARGETS"
+    )
+
+    foreach(TARGET ${TARGETS})
+        string(APPEND CONTENT "\n        ${TARGET}")
+    endforeach()
+
+    string(
+        APPEND
+        CONTENT
+        "
+    EXPORT ${CMATE_PROJECT}-config
+    RUNTIME DESTINATION \${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION \${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION \${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    EXPORT ${CMATE_PROJECT}-config
+    FILE ${CMATE_PROJECT}-config.cmake
+    NAMESPACE ${CMATE_NAMESPACE}::
+    DESTINATION \${CMAKE_INSTALL_LIBDIR}/cmake/${CMATE_PROJECT}
+)
+"
+    )
+
+    if (IS_DIRECTORY "${CMATE_ROOT_DIR}/include")
+        foreach(LIB ${CMATE_LIBS})
+            string(
+                APPEND
+                CONTENT
+                "
+install(
+    DIRECTORY \"\${PROJECT_SOURCE_DIR}/include/${LIB}/\"
+    DESTINATION \${CMAKE_INSTALL_INCLUDEDIR}/${CMATE_NAMESPACE}
+)
+"
+            )
+        endforeach()
+    endif()
+
+    file(WRITE ${CM_FILE} ${CONTENT})
+endfunction()
+
+##############################################################################
+#
+# Target processing functions
+#
+##############################################################################
+function(cmate_configure)
+    # Find libraries (libraries have headers)
+    file(GLOB LIB_INC_DIRS "${CMATE_ROOT_DIR}/include/*")
+    set(TARGETS "")
+    set(LIBS "")
+    set(SUBDIRS "")
+
+    foreach(LIB_INC_DIR ${LIB_INC_DIRS})
+        string(REPLACE "${CMATE_ROOT_DIR}/include/" "" NAME ${LIB_INC_DIR})
+        cmate_target_name(${NAME} "lib" "TNAME")
+        cmate_configure_lib(${NAME} ${TNAME} "include" "src/lib")
+        list(APPEND TARGETS ${TNAME})
+        list(APPEND LIBS ${NAME})
+        list(APPEND SUBDIRS "src/lib/${NAME}")
+    endforeach()
+
+    cmate_setg(CMATE_LIBS "${LIBS}")
+
+    # Binaries and tests
+    foreach(TYPE bin test)
+        file(GLOB SRC_DIRS "${CMATE_ROOT_DIR}/src/${TYPE}/*")
+
+        foreach(SRC_DIR ${SRC_DIRS})
+            string(REPLACE "${CMATE_ROOT_DIR}/src/${TYPE}/" "" NAME ${SRC_DIR})
+            cmate_target_name(${NAME} ${TYPE} "TNAME")
+            cmake_language(
+                CALL "cmate_configure_${TYPE}"
+                ${NAME} ${TNAME} "src/${TYPE}"
+            )
+
+            if(NOT "${TYPE}" STREQUAL "test")
+                list(APPEND TARGETS ${TNAME})
+            endif()
+
+            list(APPEND SUBDIRS "src/${TYPE}/${NAME}")
+        endforeach()
+    endforeach()
+
+    # Top-level project
+    cmate_configure_project("${TARGETS}" "${SUBDIRS}")
+
+    cmate_state_file("configured" CONFIGURED)
+
+    if(NOT EXISTS ${CONFIGURED})
+        set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
+        set(STAGE_DIR "${CMATE_ROOT_DIR}/stage")
+        file(MAKE_DIRECTORY ${BUILD_DIR})
+
+        set(ARGS "")
+
+        if (EXISTS "${CMATE_CMADE_ENV}")
+            list(APPEND ARGS "-DCMAKE_PREFIX_PATH=${CMATE_CMADE_ENV}")
+        endif()
+
+        list(APPEND ARGS "-DCMAKE_INSTALL_PREFIX=${STAGE_DIR}")
+        list(APPEND ARGS "-DCMAKE_BUILD_TYPE:STRING=Release")
+
+        find_program(CMATE_CCACHE ccache)
+
+        if(CMATE_CCACHE)
+            list(APPEND ARGS "-DCMAKE_C_COMPILER_LAUNCHER=${CMATE_CCACHE}")
+            list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
+        endif()
+
+        find_program(CMATE_NINJA ninja)
+
+        if(CMATE_NINJA)
+            list(APPEND ARGS "-G" "Ninja")
+        endif()
+
+        list(APPEND ARGS "-S" "${CMATE_ROOT_DIR}")
+        list(APPEND ARGS "-B" "${BUILD_DIR}")
+
+        execute_process(
+            COMMAND
+                ${CMAKE_COMMAND}
+                ${ARGS}
+            WORKING_DIRECTORY "${BUILD_DIR}"
+            RESULTS_VARIABLE RC
+        )
+
+        if(RC)
+            list(JOIN ARGS " " RUN_CMD)
+            cmate_die("command failed: ${RUN_CMD}")
+        endif()
+
+        cmate_set_state("configured")
+    endif()
+endfunction()
+
+function(cmate_build)
+    cmate_state_file("configured" CONFIGURED)
+
+    if(NOT EXISTS ${CONFIGURED})
+        cmate_die("please configure first")
+    endif()
+
+    set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
+    set(STAGE_DIR "${CMATE_ROOT_DIR}/stage")
+    set(ARGS "")
+
+    list(APPEND ARGS "--build" "${BUILD_DIR}")
+    list(APPEND ARGS "--parallel")
+
+    execute_process(
+        COMMAND
+            ${CMAKE_COMMAND}
+            ${ARGS}
+        RESULTS_VARIABLE RC
+    )
+
+    if(RC)
+        list(JOIN ARGS " " RUN_CMD)
+        cmate_die("command failed: ${RUN_CMD}")
+    endif()
+endfunction()
+
+function(cmate_stage)
+    set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
+    set(ARGS "")
+
+    list(APPEND ARGS "--install" "${BUILD_DIR}")
+
+    execute_process(
+        COMMAND
+            ${CMAKE_COMMAND}
+            ${ARGS}
+        RESULTS_VARIABLE RC
+    )
+
+    if(RC)
+        list(JOIN ARGS " " RUN_CMD)
+        cmate_die("command failed: ${RUN_CMD}")
+    endif()
+endfunction()
+
+function(cmate_clean)
+    set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
+    cmate_msg("cleaning: ${BUILD_DIR}")
+
+    if (IS_DIRECTORY ${BUILD_DIR})
+        file(REMOVE_RECURSE ${BUILD_DIR})
+    endif()
+
+    cmate_clear_states()
+endfunction()
+
+##############################################################################
+#
+# Configuration functions
+#
+##############################################################################
+function(cmate_check_option OPT OPTS LABEL)
+    list(FIND OPTS ${OPT} IDX)
+
+    if (IDX LESS 0)
+        cmate_die("unknown ${LABEL} option: ${OPT}")
+    endif()
+endfunction()
+
+function(cmate_set_defaults)
+    get_filename_component(DIR "." ABSOLUTE)
+    cmate_setg(CMATE_ROOT_DIR ${DIR})
+    cmake_path(GET DIR FILENAME PROJECT)
+
+    get_filename_component(DIR ".cmate" ABSOLUTE)
+    cmate_setg(CMATE_STATE_DIR ${DIR})
+
+    cmate_setg(CMATE_PROJECT ${PROJECT})
+    cmate_setg(CMATE_HEADER_PAT "*.hpp")
+    cmate_setg(CMATE_SOURCE_PAT "*.[ch]pp")
+
+    cmate_setg(CMATE_CMADE_ENV "${CMATE_ROOT_DIR}/.cmade/env")
+endfunction()
+
+##############################################################################
+#
+# Argument functions
+#
+##############################################################################
+function(cmate_locate_cmate_arguments)
+    set(FOUND OFF)
+
+    foreach(POS RANGE ${CMAKE_ARGC})
+        string(TOLOWER "${CMAKE_ARGV${POS}}" ARG)
+        math(EXPR POS "${POS}+1")
+
+        if (ARG MATCHES "${CMATE}$")
+            # Script args follow us, POS already incremented
+            set(FOUND ON)
+            cmate_setg(CMATE_POS ${POS})
+            break()
+        endif()
+    endforeach()
+
+    if(NOT FOUND)
+        # Should not happen if script has correct name (see CMATE at top)
+        cmate_die("parse_argument")
+    endif()
+endfunction()
+
+function(cmate_parse_arguments)
+    cmate_locate_cmate_arguments()
+    set(OPTS_LABEL "generic")
+    set(OPTS ${CMATE_OPTIONS})
+
+    while(CMATE_POS LESS ${CMAKE_ARGC})
+        if ("${CMAKE_ARGV${CMATE_POS}}" MATCHES "^--?([A-Za-z0-9_-]+)(=(.+))?$")
+            cmate_check_option(${CMAKE_MATCH_1} "${OPTS}" ${OPTS_LABEL})
+            set(OPT "CMATE")
+            string(APPEND OPT "_${CMAKE_MATCH_1}")
+            string(REPLACE "-" "_" OPT "${OPT}")
+            string(TOUPPER ${OPT} OPT)
+
+            if("${CMAKE_MATCH_3}" STREQUAL "")
+                cmate_setg(${OPT} 1)
+            else()
+                cmate_setg(${OPT} "${CMAKE_MATCH_3}")
+            endif()
+        elseif("${CMATE_CMD}" STREQUAL "")
+            set(CMATE_CMD "${CMAKE_ARGV${CMATE_POS}}")
+            set(OPTS_LABEL ${CMATE_CMD})
+            set(OPTS_VAR CMATE_${CMATE_CMD}_OPTIONS)
+            string(TOUPPER "${OPTS_VAR}" OPTS_VAR)
+            set(OPTS ${${OPTS_VAR}})
+        else()
+            list(APPEND CMATE_ARGS "${CMAKE_ARGV${CMATE_POS}}")
+        endif()
+
+        math(EXPR CMATE_POS "${CMATE_POS}+1")
+    endwhile()
+
+    list(LENGTH CMATE_ARGS CMATE_ARGC)
+
+    cmate_setg(CMATE_CMD "${CMATE_CMD}")
+    cmate_setg(CMATE_ARGS "${CMATE_ARGS}")
+    cmate_setg(CMATE_ARGC ${CMATE_ARGC})
+    get_filename_component(CMATE_ENV "${CMATE_ENV}" REALPATH)
+    cmate_setg(CMATE_ENV ${CMATE_ENV})
+endfunction()
+
+##############################################################################
+#
+# Command processing
+#
+##############################################################################
+function(cmate_process_cmd)
+    if (CMATE_CMD STREQUAL "version")
+        message(${CMATE_VERSION})
+    elseif (CMATE_CMD STREQUAL "configure")
+        cmate_set_version()
+        cmate_configure()
+    elseif (CMATE_CMD STREQUAL "build")
+        cmate_build()
+    elseif (CMATE_CMD STREQUAL "stage")
+        cmate_stage()
+    elseif (CMATE_CMD STREQUAL "clean")
+        cmate_clean()
+    elseif (CMATE_CMD STREQUAL "help")
+        cmate_show_help()
+    elseif(CMATE_CMD)
+        cmate_msg("unknown command: ${CMATE_CMD}")
+    elseif(NOT CMATE_CMD)
+        cmate_msg("no command")
+    endif()
+endfunction()
+
+##############################################################################
+#
+# Main part
+#
+##############################################################################
+if(CMAKE_SCRIPT_MODE_FILE AND NOT CMAKE_PARENT_LIST_FILE)
+    cmate_set_defaults()
+    cmate_parse_arguments()
+    cmate_load_conf("${CMATE_ROOT_DIR}/${CMATE_CONF}")
+    cmate_process_cmd()
+endif()

@@ -2,6 +2,8 @@ ext/
 build/
 acceptance/
 stage/
+.cmade/
+.cmate/
 .built
 .configured
 .deps-installed
