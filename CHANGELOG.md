@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
 
 ## [27.0.0] - 2023-09-15
 ### Added
