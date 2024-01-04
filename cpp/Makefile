@@ -107,7 +107,7 @@ install-deps: .deps-installed
 .PHONY: install-deps
 
 .deps-installed:
-	./cmake/cmade install
+	./cmake/cmate update
 	touch $@
 
 clean-deps:
