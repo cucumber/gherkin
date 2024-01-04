@@ -10,6 +10,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
 
+### Added
+- (i18n) Added Vietnamese translation of "Rule"
+
 ## [27.0.0] - 2023-09-15
 ### Added
 - (i18n) Added Malayalam localization

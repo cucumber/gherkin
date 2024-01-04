@@ -4913,7 +4913,7 @@ var builtinDialects = gherkinDialectMap{
 				"Tính năng",
 			},
 			rule: {
-				"Rule",
+				"Quy tắc",
 			},
 			background: {
 				"Bối cảnh",
