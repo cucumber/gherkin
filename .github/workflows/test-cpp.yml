@@ -4,19 +4,16 @@ on:
   push:
     branches:
       - main
-      - cpp*
       - renovate/**
     paths:
-      - cpp*
+      - cpp/**
       - testdata/**
-      - gherkin-languages.json
   pull_request:
     branches:
       - main
     paths:
-      - cpp*
+      - cpp/**
       - testdata/**
-      - gherkin-languages.json
   workflow_call:
 
 jobs:
