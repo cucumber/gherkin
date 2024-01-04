@@ -1,2 +1,2 @@
 https://github.com/nlohmann/json/archive/refs/tags/v3.11.2.zip -DJSON_BuildTests=OFF
-https://github.com/cucumber/messages/archive/refs/heads/main.zip --src-dir=cpp
+https://github.com/cucumber/messages/archive/refs/tags/v24.0.1.zip --src-dir=cpp
