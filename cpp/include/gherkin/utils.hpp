@@ -1,6 +1,7 @@
 #pragma once
 
 #include <codecvt>
+#include <locale>
 #include <string>
 #include <string_view>
 #include <regex>
