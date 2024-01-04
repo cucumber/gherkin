@@ -2,6 +2,8 @@ ext/
 build/
 acceptance/
 stage/
+.cenv/
+.cmate/
 .built
 .configured
 .deps-installed

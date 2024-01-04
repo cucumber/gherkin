@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <gherkin/app.hpp>
-#include <gherkin/file.hpp>
+#include <cucumber/gherkin/app.hpp>
+#include <cucumber/gherkin/file.hpp>
 
 struct options
 {
@@ -72,8 +72,8 @@ int main(int ac, char** av)
         return opts.exit_code;
     }
 
-    gherkin::app app;
-    gherkin::app::callbacks cbs{
+    cucumber::gherkin::app app;
+    cucumber::gherkin::app::callbacks cbs{
         .source = [&](const auto& m) { print_json_obj("source", m); },
         .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
         .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
@@ -85,7 +85,7 @@ int main(int ac, char** av)
     app.include_pickles(opts.include_pickles);
 
     for ( ; opts.last_arg < ac; ++opts.last_arg) {
-        app.parse(gherkin::file{ av[opts.last_arg] }, cbs);
+        app.parse(cucumber::gherkin::file{ av[opts.last_arg] }, cbs);
     }
 
     return 0;

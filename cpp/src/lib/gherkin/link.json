@@ -1,0 +1,8 @@
+{
+    "libs": {
+        "public": [
+            "nlohmann_json::nlohmann_json",
+            "cucumber::messages"
+        ]
+    }
+}

@@ -1,26 +1,29 @@
-add_executable(gherkin-generate-tokens-bin)
+add_executable(cucumber_gherkin_generate_tokens_bin)
+
+set(CUCUMBER_GHERKIN_GENERATE_TOKENS_BIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+file(GLOB_RECURSE CUCUMBER_GHERKIN_GENERATE_TOKENS_BIN_SOURCES ${CUCUMBER_GHERKIN_GENERATE_TOKENS_BIN_SRC_DIR}/*.[ch]pp)
+list(APPEND CUCUMBER_GHERKIN_GENERATE_TOKENS_BIN_ALL_SOURCES ${CUCUMBER_GHERKIN_GENERATE_TOKENS_BIN_SOURCES})
 
 target_sources(
-    gherkin-generate-tokens-bin
+    cucumber_gherkin_generate_tokens_bin
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/src/bin/gherkin-generate-tokens/gherkin-generate-tokens.cpp
+        ${CUCUMBER_GHERKIN_GENERATE_TOKENS_BIN_ALL_SOURCES}
 )
 
 target_include_directories(
-    gherkin-generate-tokens-bin
+    cucumber_gherkin_generate_tokens_bin
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/
-        ${CMAKE_SOURCE_DIR}/src/bin/gherkin-generate-tokens
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(
-    gherkin-generate-tokens-bin
+    cucumber_gherkin_generate_tokens_bin
     PUBLIC
-        gherkin-cpp
+        cucumber::gherkin
 )
 
 set_target_properties(
-    gherkin-generate-tokens-bin
+    cucumber_gherkin_generate_tokens_bin
     PROPERTIES
-    OUTPUT_NAME gherkin-generate-tokens
+        OUTPUT_NAME gherkin-generate-tokens
 )
