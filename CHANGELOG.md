@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
+- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
 
 ### Added
 - (i18n) Added Vietnamese translation of "Rule"
