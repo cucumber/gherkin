@@ -6,7 +6,7 @@ on:
       - main
       - renovate/**
     paths:
-      - cpp/**
+      - cpp*
       - testdata/**
       - gherkin-languages.json
   pull_request:
