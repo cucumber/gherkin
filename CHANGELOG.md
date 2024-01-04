@@ -642,7 +642,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...HEAD
 [27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...v27.0.0
 [26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...v26.2.0
 [26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...v26.1.0
