@@ -112,11 +112,15 @@ class TokenMatcher(object):
             # close
             return self._match_DocStringSeparator(token, self._active_doc_string_separator, False)
 
+    @staticmethod
+    def _default_docstring_content_type():
+        return None
+
     def _match_DocStringSeparator(self, token, separator, is_open):
         if not token.line.startswith(separator):
             return False
 
-        content_type = None
+        content_type = self._default_docstring_content_type()
         if is_open:
             content_type = token.line.get_rest_trimmed(len(separator))
             self._active_doc_string_separator = separator
