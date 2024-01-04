@@ -3496,7 +3496,7 @@ static const Keywords vi_feature_keywords = { 1, vi_feature_KEYWORDS };
 static const wchar_t* const vi_given_KEYWORDS[] = { L"* ", L"Biết ", L"Cho " };
 static const Keywords vi_given_keywords = { 3, vi_given_KEYWORDS };
 
-static const wchar_t* const vi_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const vi_rule_KEYWORDS[] = { L"Quy tắc" };
 static const Keywords vi_rule_keywords = { 1, vi_rule_KEYWORDS };
 
 static const wchar_t* const vi_scenario_KEYWORDS[] = { L"Tình huống", L"Kịch bản" };

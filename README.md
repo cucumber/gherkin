@@ -116,11 +116,11 @@ gherkinDocument, err := gherkin.ParseGherkinDocument(reader)
 ```python
 # Python
 from gherkin.parser import Parser
-from gherkin.pickles.compiler import compile
+from gherkin.pickles.compiler import Compiler
 
 parser = Parser()
 gherkin_document = parser.parse("Feature: ...")
-pickles = compile(gherkin_document)
+pickles = Compiler().compile(gherkin_document)
 ```
 
 ```Objective-C

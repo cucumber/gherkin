@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
+- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
+
+### Added
+- (i18n) Added Vietnamese translation of "Rule"
 
 ## [27.0.0] - 2023-09-15
 ### Added
@@ -637,7 +643,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...HEAD
 [27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...v27.0.0
 [26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...v26.2.0
 [26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...v26.1.0
