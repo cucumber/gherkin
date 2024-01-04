@@ -2,7 +2,7 @@ ext/
 build/
 acceptance/
 stage/
-.cmade/
+.cenv/
 .cmate/
 .built
 .configured
