@@ -25,7 +25,7 @@ inline
 std::wstring
 to_wide(const std::string& s)
 {
-    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> cv;
+    std::wstring_convert<std::codecvt_utf8<std::wstring::value_type>, std::wstring::value_type> cv;
 
     auto ws = cv.from_bytes(s);
 
@@ -36,9 +36,9 @@ inline
 std::string
 to_narrow(const std::wstring& ws)
 {
-    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> cv;
+    std::wstring_convert<std::codecvt_utf8<std::wstring::value_type>, std::wstring::value_type> cv;
 
-    std::u32string s{ws.begin(), ws.end()};
+    std::wstring s{ws.begin(), ws.end()};
 
     return cv.to_bytes(s);
 }
