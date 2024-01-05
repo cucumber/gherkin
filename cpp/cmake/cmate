@@ -1084,8 +1084,8 @@ function(cmate_update_cmake_dep)
         cmate_run_prog(
             CMD
                 ${CMAKE_COMMAND}
-                --config Release
                 --build ${CMATE_DEP_BUILD_DIR}
+                --config Release
                 --parallel
         )
         cmate_dep_set_state("built")
@@ -1094,8 +1094,8 @@ function(cmate_update_cmake_dep)
         cmate_run_prog(
             CMD
                 ${CMAKE_COMMAND}
-                --config Release
                 --install ${CMATE_DEP_BUILD_DIR}
+                --config Release
         )
         cmate_dep_set_state("installed")
     endif()
