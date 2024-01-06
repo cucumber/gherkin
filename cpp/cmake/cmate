@@ -926,7 +926,7 @@ function(cmate_build)
     cmate_state_file("configured" CONFIGURED)
 
     if(NOT EXISTS ${CONFIGURED})
-        cmate_die("please configure first")
+        cmate_configure()
     endif()
 
     set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
