@@ -917,9 +917,12 @@ set(CMATE_BUILD_SHORT_HELP "Build local project")
 set(
     CMATE_BUILD_HELP
     "
-Usage: cmate build
+Usage: cmate build [OPTIONS]
 
-${CMATE_BUILD_SHORT_HELP}"
+${CMATE_BUILD_SHORT_HELP}
+
+Options:
+  --release       Build in release mode"
 )
 
 function(cmate_build)
@@ -929,11 +932,18 @@ function(cmate_build)
         cmate_configure()
     endif()
 
+    set(CMATE_BUILD_TYPE "Debug")
+
+    if(${CMATE_BUILD_RELEASE})
+        set(CMATE_BUILD_TYPE "Release")
+    endif()
+
     set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
     set(STAGE_DIR "${CMATE_ROOT_DIR}/stage")
     set(ARGS "")
 
     list(APPEND ARGS "--build" "${BUILD_DIR}")
+    list(APPEND ARGS "--config" "${CMATE_BUILD_TYPE}")
     list(APPEND ARGS "--parallel")
 
     execute_process(
@@ -942,11 +952,6 @@ function(cmate_build)
             ${ARGS}
         RESULTS_VARIABLE RC
     )
-
-    if(RC)
-        list(JOIN ARGS " " RUN_CMD)
-        cmate_die("command failed: ${RUN_CMD}")
-    endif()
 endfunction()
 ###############################################################################
 #
