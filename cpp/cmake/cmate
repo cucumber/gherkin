@@ -795,6 +795,44 @@ install(
     file(WRITE ${CM_FILE} ${CONTENT})
 endfunction()
 
+function(cmate_configure_run_cmake TYPE)
+    string(TOLOWER ${TYPE} TDIR)
+    set(BUILD_DIR "${CMATE_ROOT_DIR}/build/${TDIR}")
+    set(STAGE_DIR "${CMATE_ROOT_DIR}/stage/${TDIR}")
+    file(MAKE_DIRECTORY ${BUILD_DIR})
+
+    set(ARGS "")
+
+    if (EXISTS "${CMATE_ENV_DIR}")
+        list(APPEND ARGS "-DCMAKE_PREFIX_PATH=${CMATE_ENV_DIR}")
+    endif()
+
+    list(APPEND ARGS "-DCMAKE_INSTALL_PREFIX=${STAGE_DIR}")
+    list(APPEND ARGS "-DCMAKE_BUILD_TYPE=${TYPE}")
+
+    find_program(CMATE_CCACHE ccache)
+
+    if(CMATE_CCACHE)
+        list(APPEND ARGS "-DCMAKE_C_COMPILER_LAUNCHER=${CMATE_CCACHE}")
+        list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
+    endif()
+
+    find_program(CMATE_NINJA ninja)
+
+    if(CMATE_NINJA)
+        list(APPEND ARGS "-G" "Ninja")
+    endif()
+
+    if(CMATE_TOOLCHAIN)
+        list(APPEND ARGS "--toolchain" "${CMATE_TOOLCHAIN}")
+    endif()
+
+    list(APPEND ARGS "-S" "${CMATE_ROOT_DIR}")
+    list(APPEND ARGS "-B" "${BUILD_DIR}")
+
+    cmate_run_prog(CMD ${CMAKE_COMMAND} ${ARGS})
+endfunction()
+
 function(cmate_configure)
     # Find libraries (libraries have headers)
     file(GLOB LIB_INC_DIRS "${CMATE_ROOT_DIR}/include/*")
@@ -839,52 +877,8 @@ function(cmate_configure)
     cmate_state_file("configured" CONFIGURED)
 
     if(NOT EXISTS ${CONFIGURED})
-        set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
-        set(STAGE_DIR "${CMATE_ROOT_DIR}/stage")
-        file(MAKE_DIRECTORY ${BUILD_DIR})
-
-        set(ARGS "")
-
-        if (EXISTS "${CMATE_ENV_DIR}")
-            list(APPEND ARGS "-DCMAKE_PREFIX_PATH=${CMATE_ENV_DIR}")
-        endif()
-
-        list(APPEND ARGS "-DCMAKE_INSTALL_PREFIX=${STAGE_DIR}")
-        list(APPEND ARGS "-DCMAKE_BUILD_TYPE:STRING=Release")
-
-        find_program(CMATE_CCACHE ccache)
-
-        if(CMATE_CCACHE)
-            list(APPEND ARGS "-DCMAKE_C_COMPILER_LAUNCHER=${CMATE_CCACHE}")
-            list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
-        endif()
-
-        find_program(CMATE_NINJA ninja)
-
-        if(CMATE_NINJA)
-            list(APPEND ARGS "-G" "Ninja")
-        endif()
-
-        if(CMATE_TOOLCHAIN)
-            list(APPEND ARGS "--toolchain" "${CMATE_TOOLCHAIN}")
-        endif()
-
-        list(APPEND ARGS "-S" "${CMATE_ROOT_DIR}")
-        list(APPEND ARGS "-B" "${BUILD_DIR}")
-
-        execute_process(
-            COMMAND
-                ${CMAKE_COMMAND}
-                ${ARGS}
-            WORKING_DIRECTORY "${BUILD_DIR}"
-            RESULTS_VARIABLE RC
-        )
-
-        if(RC)
-            list(JOIN ARGS " " RUN_CMD)
-            cmate_die("command failed: ${RUN_CMD}")
-        endif()
-
+        cmate_configure_run_cmake("Debug")
+        cmate_configure_run_cmake("Release")
         cmate_set_state("configured")
     endif()
 endfunction()
@@ -932,26 +926,21 @@ function(cmate_build)
         cmate_configure()
     endif()
 
-    set(CMATE_BUILD_TYPE "Debug")
+    set(TYPE "Debug")
 
     if(${CMATE_BUILD_RELEASE})
-        set(CMATE_BUILD_TYPE "Release")
+        set(TYPE "Release")
     endif()
 
-    set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
-    set(STAGE_DIR "${CMATE_ROOT_DIR}/stage")
+    string(TOLOWER ${TYPE} TDIR)
+
+    set(BUILD_DIR "${CMATE_ROOT_DIR}/build/${TDIR}")
     set(ARGS "")
 
     list(APPEND ARGS "--build" "${BUILD_DIR}")
-    list(APPEND ARGS "--config" "${CMATE_BUILD_TYPE}")
     list(APPEND ARGS "--parallel")
 
-    execute_process(
-        COMMAND
-            ${CMAKE_COMMAND}
-            ${ARGS}
-        RESULTS_VARIABLE RC
-    )
+    cmate_run_prog(CMD ${CMAKE_COMMAND} ${ARGS})
 endfunction()
 ###############################################################################
 #
@@ -1078,7 +1067,7 @@ function(cmate_update_cmake_dep)
                 ${CMAKE_COMMAND}
                 -DCMAKE_PREFIX_PATH=${CMATE_ENV_DIR}
                 -DCMAKE_INSTALL_PREFIX=${CMATE_ENV_DIR}
-                -DCMAKE_BUILD_TYPE:STRING=Release
+                -DCMAKE_BUILD_TYPE=Release
                 ${ARGS}
                 -S ${CMATE_DEP_SOURCE_DIR} -B ${CMATE_DEP_BUILD_DIR}
                 ${ARGV}
@@ -1361,10 +1350,10 @@ function(cmate_set_defaults)
 
     get_filename_component(DIR ".cenv" ABSOLUTE)
     cmate_setg(CMATE_ENV_DIR ${DIR})
+    cmate_setg(CMATE_DEPS_DIR "${CMATE_ENV_DIR}/deps")
 
     get_filename_component(DIR ".cmate" ABSOLUTE)
     cmate_setg(CMATE_HOME_DIR ${DIR})
-    cmate_setg(CMATE_DEPS_DIR "${CMATE_HOME_DIR}/deps")
     cmate_setg(CMATE_STATE_DIR "${CMATE_HOME_DIR}/state")
     cmate_setg(CMATE_TOOLCHAINS_DIR "${CMATE_HOME_DIR}/toolchains")
 
