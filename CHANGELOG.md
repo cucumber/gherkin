@@ -12,6 +12,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
 
 ### Added
+- [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
 - (i18n) Added Vietnamese translation of "Rule"
 
 ## [27.0.0] - 2023-09-15
