@@ -1,5 +1,5 @@
 # coding: utf-8
-from distutils.core import setup
+from setuptools import setup
 setup(name="gherkin-official",
       packages=["gherkin", "gherkin.pickles", "gherkin.stream"],
       version="27.0.0",
