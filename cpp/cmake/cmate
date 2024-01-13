@@ -42,28 +42,6 @@ function(cmate_setg VAR VAL)
     set(${VAR} "${VAL}" CACHE INTERNAL "${VAR}")
 endfunction()
 
-function(cmate_state_file STATE VAR)
-    set(${VAR} "${CMATE_STATE_DIR}/.${STATE}" PARENT_SCOPE)
-endfunction()
-
-function(cmate_clear_state STATE)
-    file(MAKE_DIRECTORY ${CMATE_STATE_DIR})
-    cmate_state_file(${STATE} FILE)
-    file(REMOVE ${FILE})
-endfunction()
-
-function(cmate_set_state STATE)
-    file(MAKE_DIRECTORY ${CMATE_STATE_DIR})
-    cmate_state_file(${STATE} FILE)
-    file(TOUCH ${FILE})
-endfunction()
-
-function(cmate_clear_states)
-    if (IS_DIRECTORY ${CMATE_STATE_DIR})
-        file(REMOVE_RECURSE ${CMATE_STATE_DIR})
-    endif()
-endfunction()
-
 function(cmate_load_version)
     if(NOT "${CMATE_VERSION}" STREQUAL "")
         return()
@@ -202,6 +180,21 @@ function(cmate_download URL FILE)
     if(RC)
         cmate_die("download of ${URL} failed: ${ST}")
     endif()
+endfunction()
+
+function(cmate_set_build_type RELEASE_FLAG_VAR)
+    if(CMATE_BUILD_DIR)
+        return()
+    endif()
+
+    if(${RELEASE_FLAG_VAR})
+        set(TYPE "Release")
+    else()
+        set(TYPE "Debug")
+    endif()
+
+    string(TOLOWER ${TYPE} TDIR)
+    cmate_setg(CMATE_BUILD_DIR "${CMATE_BUILD_BASE_DIR}/${TDIR}")
 endfunction()
 ###############################################################################
 #
@@ -451,7 +444,7 @@ function(cmate_dep_get_url URL)
     if(NOT EXISTS ${CFILE})
         cmate_info("downloading ${URL} in ${CDIR}")
         cmate_download(${URL} ${CFILE})
-        cmate_set_state("fetched")
+        cmate_dep_set_state("fetched")
     endif()
 
     if(NOT IS_DIRECTORY ${CMATE_DEP_SOURCE_DIR} OR NOT EXISTS ${EXTRACTED})
@@ -728,6 +721,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+if(WIN32)
+  add_definitions(-DUNICODE -D_UNICODE -DSTRICT -DNOMINMAX)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+endif()
 "
     )
 
@@ -799,6 +797,11 @@ function(cmate_configure_run_cmake TYPE)
     string(TOLOWER ${TYPE} TDIR)
     set(BUILD_DIR "${CMATE_ROOT_DIR}/build/${TDIR}")
     set(STAGE_DIR "${CMATE_ROOT_DIR}/stage/${TDIR}")
+
+    if (IS_DIRECTORY ${BUILD_DIR})
+        return()
+    endif()
+
     file(MAKE_DIRECTORY ${BUILD_DIR})
 
     set(ARGS "")
@@ -873,14 +876,8 @@ function(cmate_configure)
 
     # Top-level project
     cmate_configure_project("${TARGETS}" "${SUBDIRS}")
-
-    cmate_state_file("configured" CONFIGURED)
-
-    if(NOT EXISTS ${CONFIGURED})
-        cmate_configure_run_cmake("Debug")
-        cmate_configure_run_cmake("Release")
-        cmate_set_state("configured")
-    endif()
+    cmate_configure_run_cmake("Debug")
+    cmate_configure_run_cmake("Release")
 endfunction()
 ###############################################################################
 #
@@ -920,24 +917,11 @@ Options:
 )
 
 function(cmate_build)
-    cmate_state_file("configured" CONFIGURED)
+    cmate_set_build_type(CMATE_BUILD_RELEASE)
+    cmate_configure()
 
-    if(NOT EXISTS ${CONFIGURED})
-        cmate_configure()
-    endif()
-
-    set(TYPE "Debug")
-
-    if(${CMATE_BUILD_RELEASE})
-        set(TYPE "Release")
-    endif()
-
-    string(TOLOWER ${TYPE} TDIR)
-
-    set(BUILD_DIR "${CMATE_ROOT_DIR}/build/${TDIR}")
     set(ARGS "")
-
-    list(APPEND ARGS "--build" "${BUILD_DIR}")
+    list(APPEND ARGS "--build" "${CMATE_BUILD_DIR}")
     list(APPEND ARGS "--parallel")
 
     cmate_run_prog(CMD ${CMAKE_COMMAND} ${ARGS})
@@ -973,26 +957,21 @@ set(
     "
 Usage: cmate stage
 
-${CMATE_STAGE_SHORT_HELP}"
+${CMATE_STAGE_SHORT_HELP}
+
+Options:
+  --release       Stage release build"
 )
 
 function(cmate_stage)
-    set(BUILD_DIR "${CMATE_ROOT_DIR}/build")
+    cmate_set_build_type(CMATE_STAGE_RELEASE)
+    cmate_build()
+
     set(ARGS "")
 
-    list(APPEND ARGS "--install" "${BUILD_DIR}")
+    list(APPEND ARGS "--install" "${CMATE_BUILD_DIR}")
 
-    execute_process(
-        COMMAND
-            ${CMAKE_COMMAND}
-            ${ARGS}
-        RESULTS_VARIABLE RC
-    )
-
-    if(RC)
-        list(JOIN ARGS " " RUN_CMD)
-        cmate_die("command failed: ${RUN_CMD}")
-    endif()
+    cmate_run_prog(CMD ${CMAKE_COMMAND} ${ARGS})
 endfunction()
 ###############################################################################
 #
@@ -1357,7 +1336,7 @@ function(cmate_set_defaults)
     cmate_setg(CMATE_STATE_DIR "${CMATE_HOME_DIR}/state")
     cmate_setg(CMATE_TOOLCHAINS_DIR "${CMATE_HOME_DIR}/toolchains")
 
-    cmate_setg(CMATE_BUILD_DIR "${CMATE_ROOT_DIR}/build")
+    cmate_setg(CMATE_BUILD_BASE_DIR "${CMATE_ROOT_DIR}/build")
     cmate_setg(CMATE_STAGE_DIR "${CMATE_ROOT_DIR}/stage")
 
     cmate_setg(CMATE_HEADER_PAT "*.hpp")

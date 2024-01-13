@@ -1,2 +1,2 @@
 nlohmann/json@v3.11.3 -DJSON_BuildTests=OFF
-cucumber/messages --srcdir=cpp
+cucumber/messages@cpp-msvc-link --srcdir=cpp
