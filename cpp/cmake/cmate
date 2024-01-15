@@ -42,6 +42,11 @@ function(cmate_setg VAR VAL)
     set(${VAR} "${VAL}" CACHE INTERNAL "${VAR}")
 endfunction()
 
+function(cmate_setgdir VAR VAL)
+    cmate_setg(${VAR} "${VAL}")
+    file(MAKE_DIRECTORY ${${VAR}})
+endfunction()
+
 function(cmate_load_version)
     if(NOT "${CMATE_VERSION}" STREQUAL "")
         return()
@@ -195,6 +200,90 @@ function(cmate_set_build_type RELEASE_FLAG_VAR)
 
     string(TOLOWER ${TYPE} TDIR)
     cmate_setg(CMATE_BUILD_DIR "${CMATE_BUILD_BASE_DIR}/${TDIR}")
+endfunction()
+
+function(cmate_github_get_latest REPO VAR RE)
+    set(URL "https://api.github.com/repos/${REPO}/releases/latest")
+    set(TDIR "${CMATE_TMP_DIR}/${REPO}")
+    set(INFO "${TDIR}/info.json")
+
+    if (NOT EXISTS ${INFO})
+        file(MAKE_DIRECTORY ${TDIR})
+        cmate_download(${URL} ${INFO})
+    endif()
+
+    file(READ ${INFO} VINFO)
+    cmate_json_get_array(${VINFO} "assets" ASSETS)
+
+    foreach(ASSET ${ASSETS})
+        string(
+            JSON
+            BDURL
+            ERROR_VARIABLE ERR
+            GET "${ASSET}" "browser_download_url"
+        )
+
+        if(NOT ERR AND ${BDURL} MATCHES ${RE})
+            string(JSON FILE GET "${ASSET}" "name")
+            set(FILE "${CMATE_DL_DIR}/${FILE}")
+
+            if (NOT EXISTS ${FILE})
+                cmate_download(${BDURL} ${FILE})
+            endif()
+
+            set(${VAR} ${FILE} PARENT_SCOPE)
+            break()
+        endif()
+    endforeach()
+
+    file(REMOVE_RECURSE ${TDIR})
+endfunction()
+
+function(cmate_check_ninja VAR)
+    find_program(NINJA ninja)
+    set(TDIR "${CMATE_TMP_DIR}/ninja")
+
+    if(NOT NINJA)
+        set(NOS "")
+        set(NCMD "ninja")
+
+        if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+            set(NOS "linux")
+        elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+            set(NOS "win")
+            set(NCMD "ninja.exe")
+        elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+            set(NOS "mac")
+        else()
+            cmate_die("Please install ninja: ${CMAKE_SYSTEM_NAME}")
+        endif()
+
+        if(NOT EXISTS "${CMATE_ENV_BIN_DIR}/${NCMD}")
+            cmate_github_get_latest(
+                "ninja-build/ninja"
+                NZIP
+                "ninja-${NOS}.zip$"
+            )
+
+            file(REMOVE_RECURSE ${TDIR})
+            file(ARCHIVE_EXTRACT INPUT ${NZIP} DESTINATION ${TDIR})
+            file(COPY_FILE "${TDIR}/${NCMD}" "${CMATE_ENV_BIN_DIR}/${NCMD}")
+            file(REMOVE_RECURSE ${TDIR})
+        endif()
+
+        set(NINJA "${CMATE_ENV_BIN_DIR}/${NCMD}")
+    endif()
+
+    set(${VAR} ${NINJA} PARENT_SCOPE)
+endfunction()
+
+function(cmate_set_ninja)
+    if(NOT CMATE_NINJA)
+        cmate_check_ninja(NINJA)
+        cmate_setg(CMATE_NINJA ${NINJA})
+    endif()
+
+    cmate_setg(CMAKE_MAKE_PROGRAM ${CMATE_NINJA})
 endfunction()
 ###############################################################################
 #
@@ -373,7 +462,7 @@ endfunction()
 ###############################################################################
 function(cmate_dep_set_cache_dir NAME)
     string(REPLACE "/" "_" DIR ${NAME})
-    set(DIR "${CMATE_DEPS_DIR}/${DIR}")
+    set(DIR "${CMATE_DL_DIR}/${DIR}")
     cmate_setg(CMATE_DEP_CACHE_DIR ${DIR})
     cmate_setg(CMATE_DEP_SOURCE_DIR "${DIR}/sources")
     cmate_setg(CMATE_DEP_BUILD_DIR "${DIR}/build")
@@ -722,9 +811,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-if(WIN32)
-  add_definitions(-DUNICODE -D_UNICODE -DSTRICT -DNOMINMAX)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+if (CMAKE_CXX_COMPILER_ID STREQUAL \"MSVC\")
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS)
 endif()
 "
     )
@@ -820,16 +908,13 @@ function(cmate_configure_run_cmake TYPE)
         list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
     endif()
 
-    find_program(CMATE_NINJA ninja)
-
-    if(CMATE_NINJA)
-        list(APPEND ARGS "-G" "Ninja")
-    endif()
-
     if(CMATE_TOOLCHAIN)
         list(APPEND ARGS "--toolchain" "${CMATE_TOOLCHAIN}")
     endif()
 
+    cmate_set_ninja()
+
+    list(APPEND ARGS "-G" "Ninja")
     list(APPEND ARGS "-S" "${CMATE_ROOT_DIR}")
     list(APPEND ARGS "-B" "${BUILD_DIR}")
 
@@ -1009,20 +1094,20 @@ function(cmate_clean)
 endfunction()
 ###############################################################################
 #
-# Content of cmate/commands/update.cmake
+# Content of cmate/commands/install.cmake
 #
 ###############################################################################
-list(APPEND CMATE_CMDS "update")
-set(CMATE_UPDATE_SHORT_HELP "Update dependencies listed in deps.txt")
+list(APPEND CMATE_CMDS "install")
+set(CMATE_INSTALL_SHORT_HELP "Install dependencies listed in deps.txt")
 set(
-    CMATE_UPDATE_HELP
+    CMATE_INSTALL_HELP
     "
-Usage: cmate update
+Usage: cmate install
 
-${CMATE_UPDATE_SHORT_HELP}"
+${CMATE_INSTALL_SHORT_HELP}"
 )
 
-function(cmate_update_cmake_dep)
+function(cmate_install_cmake_dep)
     cmate_dep_state_file("configured" CONFIGURED)
     cmate_dep_state_file("built" BUILT)
     cmate_dep_state_file("installed" INSTALLED)
@@ -1039,7 +1124,7 @@ function(cmate_update_cmake_dep)
             list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
         endif()
 
-        find_program(CMATE_NINJA ninja)
+        cmate_set_ninja()
 
         cmate_run_prog(
             CMD
@@ -1047,6 +1132,7 @@ function(cmate_update_cmake_dep)
                 -DCMAKE_PREFIX_PATH=${CMATE_ENV_DIR}
                 -DCMAKE_INSTALL_PREFIX=${CMATE_ENV_DIR}
                 -DCMAKE_BUILD_TYPE=Release
+                -G Ninja
                 ${ARGS}
                 -S ${CMATE_DEP_SOURCE_DIR} -B ${CMATE_DEP_BUILD_DIR}
                 ${ARGV}
@@ -1074,7 +1160,7 @@ function(cmate_update_cmake_dep)
     endif()
 endfunction()
 
-function(cmate_update_meson_dep)
+function(cmate_install_meson_dep)
     cmate_dep_state_file("configured" CONFIGURED)
     cmate_dep_state_file("installed" INSTALLED)
     file(MAKE_DIRECTORY ${CMATE_DEP_BUILD_DIR})
@@ -1098,7 +1184,7 @@ function(cmate_update_meson_dep)
     endif()
 endfunction()
 
-function(cmate_update_autotools_dep)
+function(cmate_install_autotools_dep)
     cmate_dep_state_file("configured" CONFIGURED)
     cmate_dep_state_file("installed" INSTALLED)
     file(MAKE_DIRECTORY ${CMATE_DEP_BUILD_DIR})
@@ -1122,7 +1208,7 @@ function(cmate_update_autotools_dep)
     endif()
 endfunction()
 
-function(cmate_update_makefile_dep)
+function(cmate_install_makefile_dep)
     cmate_dep_state_file("built" BUILT)
     cmate_dep_state_file("installed" INSTALLED)
     file(MAKE_DIRECTORY ${CMATE_DEP_BUILD_DIR})
@@ -1143,7 +1229,7 @@ function(cmate_update_makefile_dep)
     endif()
 endfunction()
 
-function(cmate_update_dep ARGS)
+function(cmate_install_dep ARGS)
     set(OPT_PROC ON)
     string(REGEX MATCHALL "[^ \"']+|\"([^\"]*)\"|'([^']*)'" ARGS "${ARGS}")
 
@@ -1167,29 +1253,29 @@ function(cmate_update_dep ARGS)
     endif()
 
     if(EXISTS "${CMATE_DEP_SOURCE_DIR}/CMakeLists.txt")
-        cmate_update_cmake_dep(${CONF_ARGS})
+        cmate_install_cmake_dep(${CONF_ARGS})
     elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/meson.build")
-        cmate_update_meson_dep(${CONF_ARGS})
+        cmate_install_meson_dep(${CONF_ARGS})
     elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/configure")
-        cmate_update_autotools_dep(${CONF_ARGS})
+        cmate_install_autotools_dep(${CONF_ARGS})
     elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/Makefile")
-        cmate_update_makefile_dep(${CONF_ARGS})
+        cmate_install_makefile_dep(${CONF_ARGS})
     else()
         cmate_die("don't know how to build in ${CMATE_DEP_SOURCE_DIR}")
     endif()
 endfunction()
 
-function(cmate_update_repo HOST REPO TAG ARGS)
+function(cmate_install_repo HOST REPO TAG ARGS)
     cmate_dep_get_repo(${HOST} ${REPO} "${TAG}")
-    cmate_update_dep("${ARGS}")
+    cmate_install_dep("${ARGS}")
 endfunction()
 
-function(cmate_update_url URL ARGS)
+function(cmate_install_url URL ARGS)
     cmate_deps_get_url(${URL})
-    cmate_update_dep("${ARGS}")
+    cmate_install_dep("${ARGS}")
 endfunction()
 
-function(cmate_update)
+function(cmate_install)
     if(NOT EXISTS ${CMATE_DEPSFILE})
         cmate_msg("no dependencies")
         return()
@@ -1209,7 +1295,7 @@ function(cmate_update)
             set(URL ${CMAKE_MATCH_1})
             set(ARGS "${CMAKE_MATCH_3}")
             cmate_msg("checking ${URL}")
-            cmate_update_url(${URL} "${ARGS}")
+            cmate_install_url(${URL} "${ARGS}")
         elseif(SPEC MATCHES "^(([^: ]+):)?([^@ ]+)(@([^ ]+))?([ ](.+))?$")
             # GitHub/GitLab style project short ref
             if(CMAKE_MATCH_2)
@@ -1226,7 +1312,7 @@ function(cmate_update)
             set(TAG ${CMAKE_MATCH_5})
             set(ARGS "${CMAKE_MATCH_7}")
             cmate_msg("checking ${REPO}")
-            cmate_update_repo(${HOST} ${REPO} "${TAG}" "${ARGS}")
+            cmate_install_repo(${HOST} ${REPO} "${TAG}" "${ARGS}")
         else()
             cmate_die("invalid dependency line: ${SPEC}")
         endif()
@@ -1329,7 +1415,8 @@ function(cmate_set_defaults)
 
     get_filename_component(DIR ".cenv" ABSOLUTE)
     cmate_setg(CMATE_ENV_DIR ${DIR})
-    cmate_setg(CMATE_DEPS_DIR "${CMATE_ENV_DIR}/deps")
+    cmate_setgdir(CMATE_ENV_BIN_DIR "${DIR}/bin")
+    cmate_setgdir(CMATE_DL_DIR "${CMATE_ENV_DIR}/downloads")
 
     get_filename_component(DIR ".cmate" ABSOLUTE)
     cmate_setg(CMATE_HOME_DIR ${DIR})
@@ -1338,6 +1425,8 @@ function(cmate_set_defaults)
 
     cmate_setg(CMATE_BUILD_BASE_DIR "${CMATE_ROOT_DIR}/build")
     cmate_setg(CMATE_STAGE_DIR "${CMATE_ROOT_DIR}/stage")
+
+    cmate_setg(CMATE_TMP_DIR "${CMATE_HOME_DIR}/tmp")
 
     cmate_setg(CMATE_HEADER_PAT "*.hpp")
     cmate_setg(CMATE_SOURCE_PAT "*.[ch]pp")

@@ -32,10 +32,9 @@ jobs:
       - name: install dependencies
         working-directory: cpp
         run: |
-          cmake -P cmake/cmate update
+          cmake -P cmake/cmate install
 
       - name: configure and build
         working-directory: cpp
         run: |
-          cmake -P cmake/cmate configure
-          cmake -P cmake/cmate build
+          cmake -P cmake/cmate build --release
