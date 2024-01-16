@@ -15,5 +15,5 @@ on 'test' => sub {
 };
 
 on 'develop' => sub {
-   # there are no specific development dependencies...
+    requires "Dist::Zilla";
 };
