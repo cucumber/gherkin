@@ -220,7 +220,79 @@ design docs (which might be a little outdated, but mostly OK).
 
 The AST produced by the parser can be described with the following class diagram:
 
-![](https://github.com/cucumber/gherkin/blob/main/docs/ast.png)
+```mermaid
+classDiagram
+    ScenarioOutline --|> ScenarioDefinition
+    GherkinDocument "1" *-- "0..1" Comment: comment
+    GherkinDocument "1" *-- "0..1" Feature: feature
+    Feature "1" *-- "0..*" ScenarioDefinition: scenarioDefinitions
+    Feature "1" *-- "0..*" Rule: rules
+    Rule "1" *-- "0..*" ScenarioDefinition: scenarioDefinitions
+    Background "0..1" --* "1" Rule: background
+    Feature "1" *-- "0..1" Background: background
+    Scenario --|> ScenarioDefinition
+    Tag "0..*" --* "1" Feature: tags
+    Tag "0..*" --* "1" Scenario: tags
+    Tag "0..*" --* "1" ScenarioOutline: tags
+    Tag "0..*" --* "1" Examples: tags
+    Examples "0..*" --* "1" ScenarioOutline: examples
+    TableRow "1" --* "1" Examples: header
+    TableRow "0..*" --* "1" Examples: rows
+    Background "1" *-- "0..*" Step: steps
+    Step "0..*" --* "1" ScenarioDefinition: steps
+    StepArgument "0..1" --* "1" Step: stepArgument
+    DataTable --|> StepArgument
+    StepArgument <|-- DocString
+    TableRow "0..*" --* "1" DataTable: rows
+    TableRow "1" *-- "0..*" TableCell: cells
+    class ScenarioDefinition {
+        keyword
+        name
+        description
+    }
+    class Step {
+        keyword
+        text
+    }
+    class Examples {
+        keyword
+        name
+        description
+    }
+    class Feature {
+        language
+        keyword
+        name
+        description
+    }
+    class Background {
+        keyword
+        name
+        description
+    }
+    class Rule {
+        keyword
+        name
+        description
+    }
+    class DocString {
+        content
+        contentType
+    }
+    class Comment {
+        text
+    }
+    class TableCell {
+        value
+    }
+    class Tag {
+        name
+    }
+    class Location {
+        line: int
+        column: int
+    }
+```
 
 Every class represents a node in the AST. Every node has a `Location` that describes
 the line number and column number in the input file. These numbers are 1-indexed.
