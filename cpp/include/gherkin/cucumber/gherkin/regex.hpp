@@ -108,35 +108,45 @@ extract_submatches(MatchResult&& m, Args&&... args)
 }
 
 template <
-    typename CharT,
+    typename CharT, typename Traits,
     typename MatchResult
 >
 void
 extract_submatches(
     MatchResult&& m,
-    std::vector<std::basic_string_view<CharT>>& vs
+    std::vector<std::basic_string_view<CharT, Traits>>& vs
 )
 {
     auto mit = m.begin();
 
     while (++mit != m.end()) {
-        vs.push_back(std::string_view{mit->first, mit->second});
+        vs.push_back(
+            std::basic_string_view<CharT, Traits>{
+                mit->first,
+                mit->second
+            }
+        );
     }
 }
 
 } // namespace detail
 
-template <typename CharT, typename... Args>
+template <
+    typename CharT, typename Traits,
+    typename ReTraits,
+    typename... Args>
 bool
 full_match(
-    std::basic_string_view<CharT> e,
-    const std::basic_regex<CharT>& re,
+    std::basic_string_view<CharT, Traits> e,
+    const std::basic_regex<CharT, ReTraits>& re,
     Args&&... args
 )
 {
-    std::cmatch m;
+    std::match_results<const CharT*> m;
+    auto bit = e.data();
+    auto eit = e.data() + e.size();
 
-    bool match = std::regex_match(e.begin(), e.end(), m, re);
+    bool match = std::regex_match(bit, eit, m, re);
 
     if (match) {
         detail::extract_submatches<CharT>(m, std::forward<Args>(args)...);
@@ -145,11 +155,14 @@ full_match(
     return match;
 }
 
-template <typename CharT, typename... Args>
+template <
+    typename CharT, typename Traits,
+    typename... Args
+>
 bool
 full_match(
-    std::basic_string_view<CharT> e,
-    std::basic_string_view<CharT> pat,
+    std::basic_string_view<CharT, Traits> e,
+    std::basic_string_view<CharT, Traits> pat,
     Args&&... args
 )
 {
@@ -158,26 +171,35 @@ full_match(
     return full_match(e, re, std::forward<Args>(args)...);
 }
 
-template <typename CharT, typename... Args>
+template <
+    typename CharT, typename Traits, typename Allocator,
+    typename... Args
+>
 bool
-full_match(const std::basic_string<CharT>& e, Args&&... args)
+full_match(
+    const std::basic_string<CharT, Traits, Allocator>& e,
+    Args&&... args
+)
 {
     return
         full_match(
-            std::string_view{ e.data(), e.size() },
+            std::basic_string_view<CharT, Traits>{ e.data(), e.size() },
             std::forward<Args>(args)...
         );
 }
 
-template <typename CharT, typename... Args>
+template <
+    typename CharT, typename Traits,
+    typename... Args
+>
 bool
 partial_match(
-    std::basic_string_view<CharT> e,
-    std::basic_string_view<CharT> pat,
+    std::basic_string_view<CharT, Traits> e,
+    std::basic_string_view<CharT, Traits> pat,
     Args&&... args
 )
 {
-    std::cmatch m;
+    std::match_results<const CharT*> m;
     std::regex re(pat.data(), pat.size());
 
     bool match = std::regex_search(e.begin(), e.end(), m, re);

@@ -4,39 +4,36 @@ on:
   push:
     branches:
       - main
-      - renovate/**
-    paths:
       - cpp*
-      - testdata/**
-      - gherkin-languages.json
+      - renovate/**
   pull_request:
     branches:
       - main
-    paths:
-      - cpp*
-      - testdata/**
-      - gherkin-languages.json
   workflow_call:
 
 jobs:
   test-cpp:
     strategy:
       matrix:
-        os:
-          #- ubuntu-20.04
-          #- ubuntu-22.04
-          #- windows-2019
-          - windows-2022
-    runs-on: ${{ matrix.os }}
+        config:
+          - os: ubuntu-latest
+            cc: gcc
+          - os: ubuntu-latest
+            cc: clang
+          - os: macos-latest
+            cc: clang
+          - os: windows-latest
+            cc: cl
+    runs-on: ${{ matrix.config.os }}
     steps:
       - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
       - name: install dependencies
         working-directory: cpp
         run: |
-          cmake -P cmake/cmate update
+          cmake -P cmake/cmate --cc=${{ matrix.config.cc }} install
 
       - name: configure and build
         working-directory: cpp
         run: |
-          cmake -P cmake/cmate configure
-          cmake -P cmake/cmate build
+          cmake -P cmake/cmate --cc=${{ matrix.config.cc }} build --release

@@ -1,5 +1,12 @@
 #pragma once
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#pragma warning(disable : 4244)
+#endif
+
+#include <locale>
 #include <codecvt>
 #include <string>
 #include <string_view>
@@ -255,3 +262,7 @@ struct reverse
 };
 
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
