@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
 - [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
+- Update the AST diagram in the README to v6 using Mermaid ([#215](https://github.com/cucumber/gherkin/pull/215))
 
 ### Added
 - [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
