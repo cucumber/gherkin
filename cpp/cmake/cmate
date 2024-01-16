@@ -1330,6 +1330,7 @@ list(
     APPEND
     CMATE_OPTIONS
     "verbose"
+    "cc"
 )
 
 function(cmate_build_help VAR)
@@ -1339,7 +1340,9 @@ function(cmate_build_help VAR)
 Usage: cmate [OPTIONS] COMMAND
 
 Options:
-  --verbose     Verbose operation
+  --verbose    Verbose operation
+  --cc=ID      Compiler suite to use (overrides CMATE_CC)
+               (e.g.: gcc, clang, gcc-10, clang-16, cl)
 
 Commands:
 "
@@ -1432,6 +1435,30 @@ function(cmate_set_defaults)
     cmate_setg(CMATE_SOURCE_PAT "*.[ch]pp")
 endfunction()
 
+function(cmate_set_compilers)
+    set(CC "$ENV{CMATE_CC}")
+
+    if(CMATE_CC)
+        set(CC "${CMATE_CC}")
+    endif()
+
+    if(CC)
+        if(${CC} MATCHES "^gcc(.*)$")
+            set(CXX "g++${CMAKE_MATCH_1}")
+        elseif(${CC} MATCHES "^clang(.*)$")
+            set(CXX "clang++${CMAKE_MATCH_1}")
+        else()
+            set(CXX "${CC}")
+        endif()
+
+        cmate_msg("using compilers CC=${CC} CXX=${CXX}")
+        cmate_setg(CMAKE_C_COMPILER "${CC}")
+        cmate_setg(CMAKE_CXX_COMPILER "${CXX}")
+        set(ENV{CC} "${CC}")
+        set(ENV{CXX} "${CXX}")
+    endif()
+endfunction()
+
 ##############################################################################
 #
 # Command processing
@@ -1461,6 +1488,7 @@ endfunction()
 if(CMAKE_SCRIPT_MODE_FILE)
     cmate_set_defaults()
     cmate_parse_arguments()
+    cmate_set_compilers()
     cmate_load_conf("${CMATE_ROOT_DIR}/${CMATE_PRJFILE}")
     cmate_process_cmd()
 endif()
