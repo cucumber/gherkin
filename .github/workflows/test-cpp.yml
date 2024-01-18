@@ -6,9 +6,15 @@ on:
       - main
       - cpp*
       - renovate/**
+    paths:
+      - cpp/**
+      - testdata/**
   pull_request:
     branches:
       - main
+    paths:
+      - cpp/**
+      - testdata/**
   workflow_call:
 
 jobs:
