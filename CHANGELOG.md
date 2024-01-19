@@ -14,7 +14,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Added
 - [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
-- (i18n) Added Vietnamese translation of "Rule"
+- (i18n) Added Vietnamese translation of "Rule" ([#204](https://github.com/cucumber/gherkin/pull/204))
+- (i18n) Added Irish translation of "Rule" ([#216](https://github.com/cucumber/gherkin/pull/216))
 
 ## [27.0.0] - 2023-09-15
 ### Added

@@ -495,7 +495,7 @@ all_keywords()
             { "examples", { "Samplaí" } },
             { "feature", { "Gné" } },
             { "given", { "* ", "Cuir i gcás go", "Cuir i gcás nach", "Cuir i gcás gur", "Cuir i gcás nár" } },
-            { "rule", { "Rule" } },
+            { "rule", { "Riail" } },
             { "scenario", { "Sampla", "Cás" } },
             { "scenarioOutline", { "Cás Achomair" } },
             { "then", { "* ", "Ansin" } },
