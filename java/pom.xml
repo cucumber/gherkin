@@ -8,14 +8,14 @@
         <version>4.2.0</version>
     </parent>
     <artifactId>gherkin</artifactId>
-    <version>27.0.1-SNAPSHOT</version>
+    <version>28.0.0</version>
     <packaging>jar</packaging>
     <name>Gherkin</name>
     <description>Gherkin parser</description>
     <url>https://github.com/cucumber/gherkin</url>
 
     <properties>
-        <project.build.outputTimestamp>1694785446</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1708027234</project.build.outputTimestamp>
         <project.Automatic-Module-Name>io.cucumber.gherkin</project.Automatic-Module-Name>
     </properties>
 
@@ -23,7 +23,7 @@
         <connection>scm:git:git://github.com/cucumber/gherkin.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber/gherkin.git</developerConnection>
         <url>git://github.com/cucumber/gherkin.git</url>
-        <tag>HEAD</tag>
+        <tag>v28.0.0</tag>
     </scm>
 
     <dependencyManagement>
