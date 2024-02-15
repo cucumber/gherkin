@@ -11,6 +11,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Python] Reuse the action cucumber/action-publish-pypi in release ([#220](https://github.com/cucumber/gherkin/pull/220))
 - [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
 - [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
+- Upgraded messages to v22
 
 ### Added
 - [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
