@@ -22,7 +22,7 @@
         "vimeo/psalm": "^5.22.2",
         "friendsofphp/php-cs-fixer": "^3.5",
         "psalm/plugin-phpunit": "^0.18.0",
-        "nikic/php-parser": "^5.0.1"
+        "nikic/php-parser": "^4.16"
     },
     "repositories": [
         {
