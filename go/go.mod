@@ -2,7 +2,7 @@ module github.com/cucumber/gherkin/go/v28
 
 require (
 	github.com/cucumber/messages/go/v24 v24.0.1
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
