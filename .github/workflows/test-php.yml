@@ -60,7 +60,7 @@ jobs:
       - name: Run tests
         working-directory: php
         run: |
-          vendor/bin/php-cs-fixer --dry-run --diff fix
+          vendor/bin/php-cs-fixer --show-progress=none --dry-run --diff fix
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit
 
