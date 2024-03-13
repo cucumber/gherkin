@@ -128,6 +128,7 @@ from gherkin.pickles.compiler import Compiler
 
 parser = Parser()
 gherkin_document = parser.parse("Feature: ...")
+gherkin_document["uri"] = "uri_of_the_feature.feature"
 pickles = Compiler().compile(gherkin_document)
 ```
 
