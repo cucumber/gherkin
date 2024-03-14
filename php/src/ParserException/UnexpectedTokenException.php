@@ -8,6 +8,9 @@ use Cucumber\Gherkin\Location;
 use Cucumber\Gherkin\ParserException;
 use Cucumber\Gherkin\Token;
 
+/**
+ * @psalm-api
+ */
 final class UnexpectedTokenException extends ParserException
 {
     /**
