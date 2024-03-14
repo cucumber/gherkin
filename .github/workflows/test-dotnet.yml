@@ -8,12 +8,14 @@ on:
     paths:
       - dotnet/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - dotnet/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

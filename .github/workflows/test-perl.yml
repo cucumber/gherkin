@@ -8,12 +8,14 @@ on:
     paths:
       - perl/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - perl/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

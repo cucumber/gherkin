@@ -8,12 +8,14 @@ on:
     paths:
       - ruby/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - ruby/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

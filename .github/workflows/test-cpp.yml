@@ -9,12 +9,14 @@ on:
     paths:
       - cpp/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - cpp/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
