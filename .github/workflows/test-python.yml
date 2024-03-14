@@ -11,12 +11,14 @@ on:
     paths:
       - python/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - python/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

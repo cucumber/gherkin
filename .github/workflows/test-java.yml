@@ -9,6 +9,7 @@ on:
       - java/**
       - testdata/**
       - gherkin-languages.json
+      - .github/**
   pull_request:
     branches:
       - main
@@ -16,6 +17,7 @@ on:
       - java/**
       - testdata/**
       - gherkin-languages.json
+      - .github/**
   workflow_call:
 
 jobs:

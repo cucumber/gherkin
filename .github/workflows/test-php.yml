@@ -8,12 +8,14 @@ on:
     paths:
       - php/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - php/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 permissions:
