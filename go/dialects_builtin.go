@@ -1943,7 +1943,7 @@ var builtinDialects = gherkinDialectMap{
 				"Gné",
 			},
 			rule: {
-				"Rule",
+				"Riail",
 			},
 			background: {
 				"Cúlra",

@@ -8,12 +8,14 @@ on:
     paths:
       - javascript/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - javascript/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

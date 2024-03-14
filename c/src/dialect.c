@@ -1428,7 +1428,7 @@ static const Keywords ga_feature_keywords = { 1, ga_feature_KEYWORDS };
 static const wchar_t* const ga_given_KEYWORDS[] = { L"* ", L"Cuir i gcás go", L"Cuir i gcás nach", L"Cuir i gcás gur", L"Cuir i gcás nár" };
 static const Keywords ga_given_keywords = { 5, ga_given_KEYWORDS };
 
-static const wchar_t* const ga_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const ga_rule_KEYWORDS[] = { L"Riail" };
 static const Keywords ga_rule_keywords = { 1, ga_rule_KEYWORDS };
 
 static const wchar_t* const ga_scenario_KEYWORDS[] = { L"Sampla", L"Cás" };

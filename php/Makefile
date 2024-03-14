@@ -24,7 +24,7 @@ help: ## Show this help
 
 generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 
-clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
+clean-generate: ## Remove generated Gherkin parser files
 	rm -f $(GHERKIN_PARSER)
 
 copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files

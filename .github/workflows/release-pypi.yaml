@@ -26,19 +26,6 @@ jobs:
       - name: Show Python version
         run: python --version
 
-      - name: Install Python package dependencies
-        run: |
-          python -m pip install -U pip setuptools wheel twine
-          pip install -e .
-
-      - name: Build dist
-        run: python setup.py sdist bdist_wheel
-
-      - name: Check dist
-        run: twine check dist/*
-
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: cucumber/action-publish-pypi@v2.0.0
         with:
-          packages-dir: python/dist/
-          skip-existing: true
+          working-directory: "python"
