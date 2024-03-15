@@ -31,11 +31,11 @@ final class AstNode
     /**
      * @template T of object
      *
-     * @param class-string<T> $expectedType
+     * @param class-string<T> $_expectedType
      *
      * @psalm-return list<T>
      */
-    public function getItems(string $expectedType, RuleType $ruleType): array
+    public function getItems(string $_expectedType, RuleType $ruleType): array
     {
         $items = $this->subItems[$ruleType->name] ?? [];
 
