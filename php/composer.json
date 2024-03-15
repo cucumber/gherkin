@@ -21,7 +21,7 @@
         "phpunit/phpunit": "^10.5",
         "vimeo/psalm": "5.19.1",
         "friendsofphp/php-cs-fixer": "^3.51",
-        "psalm/plugin-phpunit": "^0.18.0",
+        "psalm/plugin-phpunit": "^0.19.0",
         "nikic/php-parser": "^4.14"
     },
     "repositories": [
