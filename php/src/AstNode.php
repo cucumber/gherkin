@@ -37,6 +37,7 @@ final class AstNode
      */
     public function getItems(string $expectedType, RuleType $ruleType): array
     {
+        $expectedType == 0; // Avoid error: Param #1 is never referenced in this method (see https://psalm.dev/135)
         $items = $this->subItems[$ruleType->name] ?? [];
 
         /**
