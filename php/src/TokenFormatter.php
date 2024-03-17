@@ -12,12 +12,13 @@ final class TokenFormatter
             return 'EOF';
         }
 
+        $keyword = $token->match?->keyword;
         return sprintf(
             "(%s:%s)%s:%s/%s/%s",
             $token->getLocation()->line,
             $token->getLocation()->column,
             $token->match?->tokenType->name ??  '',
-            $token->match?->keyword ? $this->formatKeyword($token) : '',
+            $keyword !== null && $keyword !== '' ? $this->formatKeyword($token) : '',
             $token->match?->text ?? '',
             $token->match === null ? ''
                 : join(',', array_map(fn ($linespan) => $linespan->column . ':' . $linespan->text, $token->match->items)),
