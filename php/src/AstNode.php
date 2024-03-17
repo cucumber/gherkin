@@ -31,12 +31,13 @@ final class AstNode
     /**
      * @template T of object
      *
-     * @param class-string<T> $_expectedType
+     * @param class-string<T> $expectedType
      *
      * @psalm-return list<T>
      */
-    public function getItems(string $_expectedType, RuleType $ruleType): array
+    public function getItems(string $expectedType, RuleType $ruleType): array
     {
+        $expectedType == 0; // Avoid error: Param #1 is never referenced in this method (see https://psalm.dev/135)
         $items = $this->subItems[$ruleType->name] ?? [];
 
         /**
