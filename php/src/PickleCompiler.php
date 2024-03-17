@@ -252,7 +252,7 @@ final class PickleCompiler
     private function pickleDocString(DocString $docstring, array $variableCells, array $valueCells): PickleDocString
     {
         return new PickleDocString(
-            mediaType: $docstring->mediaType ? $this->interpolate($docstring->mediaType, $variableCells, $valueCells) : null,
+            mediaType: $docstring->mediaType !== null ? $this->interpolate($docstring->mediaType, $variableCells, $valueCells) : null,
             content: $this->interpolate($docstring->content, $variableCells, $valueCells),
         );
     }
