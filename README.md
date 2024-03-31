@@ -58,21 +58,24 @@ that is easy to use. See the CLI implementations to get an idea of how to use it
 
 Alternatively, you can use the lower level parser and compiler. Some usage examples are below:
 
+#### Java
+
 ```java
-// Java
 Path path = Paths.get("../testdata/good/minimal.feature");
 GherkinParser parser = GherkinParser.builder().build();
 Stream<Envelope> pickles = parser.parse(envelope).filter(envelope -> envelope.getPickle().isPresent());
 ```
 
+#### C#
+
 ```csharp
-// C#
 var parser = new Parser();
 var gherkinDocument = parser.Parse(@"Drive:\PathToGherkinDocument\document.feature");
 ```
 
+#### Ruby
+
 ```ruby
-# Ruby
 require 'gherkin/parser'
 require 'gherkin/pickles/compiler'
 
@@ -88,22 +91,28 @@ id_generator = Cucumber::Messages::IdGenerator::UUID.new
 pickles = Gherkin::Pickles::Compiler.new(id_generator).compile(gherkin_document, source)
 ```
 
+#### JavaScript
+
 ```javascript
-// JavaScript
-var Gherkin = require('@cucumber/gherkin')
-var Messages = require('@cucumber/messages')
+var Gherkin = require("@cucumber/gherkin");
+var Messages = require("@cucumber/messages");
 
-var uuidFn = Messages.IdGenerator.uuid()
-var builder = new Gherkin.AstBuilder(uuidFn)
-var matcher = new Gherkin.GherkinClassicTokenMatcher() // or Gherkin.GherkinInMarkdownTokenMatcher()
+var uuidFn = Messages.IdGenerator.uuid();
+var builder = new Gherkin.AstBuilder(uuidFn);
+var matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInMarkdownTokenMatcher()
 
-var parser = new Gherkin.Parser(builder, matcher)
-var gherkinDocument = parser.parse('Feature: ...')
-var pickles = Gherkin.compile(gherkinDocument, 'uri_of_the_feature.feature', uuidFn)
+var parser = new Gherkin.Parser(builder, matcher);
+var gherkinDocument = parser.parse("Feature: ...");
+var pickles = Gherkin.compile(
+  gherkinDocument,
+  "uri_of_the_feature.feature",
+  uuidFn
+);
 ```
 
+#### Go
+
 ```go
-// Go
 // Download the package via: `go get github.com/cucumber/gherkin/go/v27`
 //   && go get "github.com/cucumber/messages/go/v22"
 import (
@@ -121,8 +130,9 @@ func main() {
 }
 ```
 
+#### Python
+
 ```python
-# Python
 from gherkin.parser import Parser
 from gherkin.pickles.compiler import Compiler
 
@@ -132,8 +142,9 @@ gherkin_document["uri"] = "uri_of_the_feature.feature"
 pickles = Compiler().compile(gherkin_document)
 ```
 
+#### Objective-C
+
 ```Objective-C
-// Objective-C
 #import "GHParser+Extensions.h"
 
 GHParser * parser = [[GHParser alloc] init];
@@ -145,8 +156,9 @@ if([content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewline
 GHGherkinDocument * result = [parser parseContent:content];
 ```
 
+#### Perl
+
 ```perl
-# Perl
 use Gherkin::Parser;
 use Gherkin::Pickles::Compiler;
 
@@ -155,8 +167,9 @@ my $gherkin_document = $parser->parse("Feature: ...");
 my $pickles = Gherkin::Pickles::Compiler->compile($gherkin_document);
 ```
 
+#### PHP
+
 ```php
-# PHP
 use Cucumber\Gherkin\GherkinParser;
 
 $path = '/path/to/my.feature';
@@ -225,6 +238,8 @@ graph TD
     C[gherkin-X.razor] --> B
     B --> D[Parser.x]
 ```
+
+<!-- TODO: Wiki is dead. -->
 
 Also see the [wiki](https://github.com/cucumber/gherkin/wiki) for some early
 design docs (which might be a little outdated, but mostly OK).
