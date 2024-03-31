@@ -92,11 +92,11 @@ def test_change_the_default_language():
 
 @pytest.mark.parametrize("trailing_text", ["\\", "\\ "])
 def test_inconsistent_cell_count_with_trailing_escape(trailing_text):
-    feature_text = f"""Feature:
+    feature_text = """Feature:
     Scenario:
       Given I have a table
         | Name | Value |
-        | A    | {trailing_text}"""
+        | A    | """ + trailing_text
     parser = Parser()
 
     with pytest.raises(
