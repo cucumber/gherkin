@@ -44,7 +44,7 @@ Gherkin can be used either through its command line interface (CLI) or as a
 library.
 
 It is designed to be used in conjunction with other tools such as Cucumber
-which consumes the output from the CLI or library as [Cucumber Messages](../messages).
+which consumes the output from the CLI or library as [Cucumber Messages](https://github.com/cucumber/messages).
 
 ### Library
 
@@ -181,12 +181,12 @@ $pickles = $parser->parseString(uri: $path, data: file_get_contents($path));
 ### CLI
 
 The Gherkin CLI `gherkin` reads Gherkin source files (`.feature` files) and outputs
-[ASTs](#ast) and [Pickles](#pickles).
+[ASTs](#abstract-syntax-tree-ast) and [Pickles](#pickles).
 
 The `gherkin` program takes any number of files as arguments and prints the results
-to `STDOUT` as [Newline Delimited JSON](http://ndjson.org/).
+to `STDOUT` as [Newline Delimited JSON](https://jsonlines.org).
 
-Each line is a JSON document that conforms to the [Cucumber Event Protocol](../messages).
+Each line is a JSON document that conforms to the [Cucumber Event Protocol](https://github.com/cucumber/messages).
 
 To try it out, just install Gherkin for your favourite language, and run it over the
 files in this repository:
@@ -238,11 +238,6 @@ graph TD
     C[gherkin-X.razor] --> B
     B --> D[Parser.x]
 ```
-
-<!-- TODO: Wiki is dead. -->
-
-Also see the [wiki](https://github.com/cucumber/gherkin/wiki) for some early
-design docs (which might be a little outdated, but mostly OK).
 
 ### Abstract Syntax Tree (AST)
 
