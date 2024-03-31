@@ -178,12 +178,16 @@ Each line is a JSON document that conforms to the [Cucumber Event Protocol](../m
 To try it out, just install Gherkin for your favourite language, and run it over the
 files in this repository:
 
-    gherkin testdata/**/*.feature
+```console
+gherkin testdata/**/*.feature
+```
 
 Ndjson is easy to read for programs, but hard for people. To pretty print each JSON
 document you can pipe it to the [jq](https://stedolan.github.io/jq/) program:
 
-    gherkin testdata/**/*.feature | jq
+```console
+gherkin testdata/**/*.feature | jq
+```
 
 ## Table cell escaping
 
@@ -195,9 +199,11 @@ finally, if you need a `\`, you can escape that with `\\`.
 
 The following diagram outlines the architecture:
 
-    ╔════════════╗   ┌───────┐   ╔══════╗   ┌──────┐   ╔═══╗
-    ║Feature file║──>│Scanner│──>║Tokens║──>│Parser│──>║AST║
-    ╚════════════╝   └───────┘   ╚══════╝   └──────┘   ╚═══╝
+```mermaid
+graph LR
+    A[Feature file] -->|Scanner| B[Tokens]
+    B -->|Parser| D[AST]
+```
 
 The _scanner_ reads a gherkin doc (typically read from a `.feature` file) and creates
 a _token_ for each line. The tokens are passed to the _parser_, which outputs an _AST_
@@ -213,14 +219,12 @@ parser generator as part of the build process.
 Berp takes a grammar file (`gherkin.berp`) and a template file (`gherkin-X.razor`) as input
 and outputs a parser in language _X_:
 
-    ╔════════════╗   ┌────────┐   ╔═══════════════╗
-    ║gherkin.berp║──>│berp.exe│<──║gherkin-X.razor║
-    ╚════════════╝   └────────┘   ╚═══════════════╝
-                          │
-                          V
-                     ╔════════╗
-                     ║Parser.x║
-                     ╚════════╝
+```mermaid
+graph TD
+    A[gherkin.berp] --> B[berp.exe]
+    C[gherkin-X.razor] --> B
+    B --> D[Parser.x]
+```
 
 Also see the [wiki](https://github.com/cucumber/gherkin/wiki) for some early
 design docs (which might be a little outdated, but mostly OK).
@@ -326,9 +330,10 @@ into a simpler form called _Pickles_.
 
 The compiler compiles the AST produced by the parser into pickles:
 
-    ╔═══╗   ┌────────┐   ╔═══════╗
-    ║AST║──>│Compiler│──>║Pickles║
-    ╚═══╝   └────────┘   ╚═══════╝
+```mermaid
+graph LR
+    A[AST] -->|Compiler| B[Pickles]
+```
 
 The rationale is to decouple Gherkin from Cucumber so that Cucumber is open to
 support alternative formats to Gherkin (for example Markdown).
@@ -373,7 +378,9 @@ Feature:
 
 Using the [CLI](#cli) we can compile this into several pickle objects:
 
-    gherkin testdata/good/readme_example.feature --no-source --no-ast | jq
+```console
+gherkin testdata/good/readme_example.feature --no-source --no-ast | jq
+```
 
 Output:
 
