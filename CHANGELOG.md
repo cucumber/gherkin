@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Python] Fix missing inconsistent cell count error with trailing escape ([#241](https://github.com/cucumber/gherkin/pull/241))
 
 ## [28.0.0] - 2024-02-15
 ### Added
