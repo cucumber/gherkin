@@ -4,18 +4,18 @@ Gherkin is a parser and compiler for the Gherkin language.
 
 Gherkin is currently implemented for the following platforms (in order of birthday):
 
-- [.NET](./dotnet) - Actively tested -> [workflow](./.github/workflows/test-dotnet.yml)
-- [Java](./java) - Actively tested -> [workflow](./.github/workflows/test-java.yml)
-- [JavaScript](./javascript) - Actively tested -> [workflow](./.github/workflows/test-javascript.yml)
-- [Ruby](./ruby) - Actively tested -> [workflow](./.github/workflows/test-ruby.yml)
-- [Go](./go) - Actively tested -> [workflow](./.github/workflows/test-go.yml)
-- [Python](./python) - Actively tested -> [workflow](./.github/workflows/test-python.yml)
-- [C](./c) - Actively tested -> [workflow](./.github/workflows/test-c.yml)
+- [.NET](./dotnet) - [![test dotnet workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dotnet.yml/badge.svg)](./.github/workflows/test-dotnet.yml)
+- [Java](./java) - [![test java workflow](https://github.com/cucumber/gherkin/actions/workflows/test-java.yml/badge.svg)](./.github/workflows/test-java.yml)
+- [JavaScript](./javascript) - [![test javascript workflow](https://github.com/cucumber/gherkin/actions/workflows/test-javascript.yml/badge.svg)](./.github/workflows/test-javascript.yml)
+- [Ruby](./ruby) - [![test ruby workflow](https://github.com/cucumber/gherkin/actions/workflows/test-ruby.yml/badge.svg)](./.github/workflows/test-ruby.yml)
+- [Go](./go) - [![test go workflow](https://github.com/cucumber/gherkin/actions/workflows/test-go.yml/badge.svg)](./.github/workflows/test-go.yml)
+- [Python](./python) - [![test python workflow](https://github.com/cucumber/gherkin/actions/workflows/test-python.yml/badge.svg)](./.github/workflows/test-python.yml)
+- [C](./c) - [![test c workflow](https://github.com/cucumber/gherkin/actions/workflows/test-c.yml/badge.svg)](./.github/workflows/test-c.yml)
 - [Objective-C](./objective-c) - _Currently not actively tested, requires maintenance_
-- [Perl](./perl) - Actively tested -> [workflow](./.github/workflows/test-perl.yml)
-- [PHP](./php) - Actively tested -> [workflow](./.github/workflows/test-php.yml)
-- [Dart](./dart) - Actively tested -> [workflow](./.github/workflows/test-dart.yml)
-- [C++](./cpp) - Actively tested -> [workflow](./.github/workflows/test-cpp.yml)
+- [Perl](./perl) - [![test perl workflow](https://github.com/cucumber/gherkin/actions/workflows/test-perl.yml/badge.svg)](./.github/workflows/test-perl.yml)
+- [PHP](./php) - [![test php workflow](https://github.com/cucumber/gherkin/actions/workflows/test-php.yml/badge.svg)](./.github/workflows/test-php.yml)
+- [Dart](./dart) - [![test dart workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dart.yml/badge.svg)](./.github/workflows/test-dart.yml)
+- [C++](./cpp) - [![test cpp workflow](https://github.com/cucumber/gherkin/actions/workflows/test-cpp.yml/badge.svg)](./.github/workflows/test-cpp.yml)
 
 The CI will run using the linked workflow when that specific language implementation is changed
 
