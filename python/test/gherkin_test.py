@@ -2,7 +2,7 @@
 from gherkin.token_scanner import TokenScanner
 from gherkin.token_matcher import TokenMatcher
 from gherkin.parser import Parser
-from gherkin.errors import ParserError
+from gherkin.errors import CompositeParserException, ParserError
 import pytest
 
 
@@ -89,3 +89,17 @@ def test_change_the_default_language():
     }
 
     assert expected == feature_file
+
+def test_inconsistent_cell_count_with_trailing_escape():
+    feature_text = r"""Feature:
+    Scenario:
+      Given I have a table
+        | Name | Value |
+        | A    | \ """
+    parser = Parser()
+
+    with pytest.raises(
+        CompositeParserException,
+        match="inconsistent cell count within the table",
+    ):
+        parser.parse(TokenScanner(feature_text))
