@@ -30,7 +30,7 @@ class GherkinLine(object):
     @property
     def table_cells(self):
         cells = []
-        for cell, col in self.split_table_cells(self._trimmed_line_text.lstrip()):
+        for cell, col in self.split_table_cells(self._trimmed_line_text.strip()):
             lstripped_cell = re.sub(r"^[^\S\n]*", "" , cell, flags=re.U)
             cell_indent = len(cell) - len(lstripped_cell)
             cells.append({'column': col + self.indent + cell_indent, 'text': re.sub(r"[^\S\n]*$", "", lstripped_cell, flags=re.U)})
@@ -59,7 +59,7 @@ class GherkinLine(object):
                 cell = ''
                 start_col = col + 1
             elif char == '\\':
-                char = next(row)
+                char = next(row, "")
                 col += 1
                 if char == 'n':
                     cell += '\n'

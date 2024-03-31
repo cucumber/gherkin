@@ -90,12 +90,13 @@ def test_change_the_default_language():
 
     assert expected == feature_file
 
-def test_inconsistent_cell_count_with_trailing_escape():
-    feature_text = r"""Feature:
+@pytest.mark.parametrize("trailing_text", ["\\", "\\ "])
+def test_inconsistent_cell_count_with_trailing_escape(trailing_text):
+    feature_text = f"""Feature:
     Scenario:
       Given I have a table
         | Name | Value |
-        | A    | \ """
+        | A    | {trailing_text}"""
     parser = Parser()
 
     with pytest.raises(
