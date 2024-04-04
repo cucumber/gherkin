@@ -37,7 +37,7 @@
     "core-js": "3.36.1",
     "mocha": "10.4.0",
     "ts-node": "10.9.2",
-    "typescript": "5.4.3"
+    "typescript": "5.4.4"
   },
   "dependencies": {
     "@cucumber/messages": ">=19.1.4 <=24"
