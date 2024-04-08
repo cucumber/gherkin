@@ -5,11 +5,6 @@ import (
 	"strings"
 )
 
-type mixedTableAndDocString struct {
-	dt        *messages.DataTable
-	docString *messages.DocString
-}
-
 type AstBuilder interface {
 	Builder
 	GetGherkinDocument() *messages.GherkinDocument
