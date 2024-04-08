@@ -4234,7 +4234,6 @@ func (ctxt *parseContext) matchAt48(line *Line) (newState int, err error) {
 		return 42, err
 	}
 	if ok, token, err := ctxt.matchStepLine(line); ok {
-
 		ctxt.endRule(RuleTypeDocString)
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeStep)
