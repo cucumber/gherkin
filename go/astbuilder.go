@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type mixedTableAndDocString struct {
+	dt        *messages.DataTable
+	docString *messages.DocString
+}
+
 type AstBuilder interface {
 	Builder
 	GetGherkinDocument() *messages.GherkinDocument
@@ -149,11 +154,11 @@ func (t *astBuilder) transformNode(node *astNode) (interface{}, error) {
 		dataTable := node.getSingle(RuleTypeDataTable, nil)
 		if dataTable != nil {
 			step.DataTable = dataTable.(*messages.DataTable)
-		} else {
-			docString := node.getSingle(RuleTypeDocString, nil)
-			if docString != nil {
-				step.DocString = docString.(*messages.DocString)
-			}
+		}
+
+		docString := node.getSingle(RuleTypeDocString, nil)
+		if docString != nil {
+			step.DocString = docString.(*messages.DocString)
 		}
 
 		return step, nil
