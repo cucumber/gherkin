@@ -1103,7 +1103,6 @@ func (ctxt *parseContext) matchAt9(line *Line) (newState int, err error) {
 func (ctxt *parseContext) matchAt10(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchEOF(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.endRule(RuleTypeFeature)
@@ -1116,7 +1115,6 @@ func (ctxt *parseContext) matchAt10(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchStepLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeStep)
 		ctxt.build(token)
@@ -1125,7 +1123,6 @@ func (ctxt *parseContext) matchAt10(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		if ctxt.lookahead0(line) {
 			ctxt.endRule(RuleTypeDataTable)
-
 			ctxt.endRule(RuleTypeStep)
 			ctxt.endRule(RuleTypeBackground)
 			ctxt.startRule(RuleTypeScenarioDefinition)
@@ -1136,7 +1133,6 @@ func (ctxt *parseContext) matchAt10(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.startRule(RuleTypeRule)
@@ -1147,7 +1143,6 @@ func (ctxt *parseContext) matchAt10(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchScenarioLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.startRule(RuleTypeScenarioDefinition)
@@ -1157,7 +1152,6 @@ func (ctxt *parseContext) matchAt10(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchRuleLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.startRule(RuleTypeRule)
@@ -1627,7 +1621,6 @@ func (ctxt *parseContext) matchAt15(line *Line) (newState int, err error) {
 func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchEOF(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
@@ -1647,7 +1640,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchStepLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeStep)
 		ctxt.build(token)
@@ -1656,7 +1648,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		if ctxt.lookahead1(line) {
 			ctxt.endRule(RuleTypeDataTable)
-
 			ctxt.endRule(RuleTypeStep)
 			ctxt.startRule(RuleTypeExamplesDefinition)
 			ctxt.startRule(RuleTypeTags)
@@ -1667,7 +1658,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		if ctxt.lookahead0(line) {
 			ctxt.endRule(RuleTypeDataTable)
-
 			ctxt.endRule(RuleTypeStep)
 			ctxt.endRule(RuleTypeScenario)
 			ctxt.endRule(RuleTypeScenarioDefinition)
@@ -1679,7 +1669,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
@@ -1691,7 +1680,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchExamplesLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeExamplesDefinition)
 		ctxt.startRule(RuleTypeExamples)
@@ -1700,7 +1688,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchScenarioLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
@@ -1711,7 +1698,6 @@ func (ctxt *parseContext) matchAt16(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchRuleLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
@@ -2825,7 +2811,6 @@ func (ctxt *parseContext) matchAt29(line *Line) (newState int, err error) {
 func (ctxt *parseContext) matchAt30(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchEOF(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.endRule(RuleTypeRule)
@@ -2839,7 +2824,6 @@ func (ctxt *parseContext) matchAt30(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchStepLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeStep)
 		ctxt.build(token)
@@ -2848,7 +2832,6 @@ func (ctxt *parseContext) matchAt30(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		if ctxt.lookahead0(line) {
 			ctxt.endRule(RuleTypeDataTable)
-
 			ctxt.endRule(RuleTypeStep)
 			ctxt.endRule(RuleTypeBackground)
 			ctxt.startRule(RuleTypeScenarioDefinition)
@@ -2859,7 +2842,6 @@ func (ctxt *parseContext) matchAt30(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.endRule(RuleTypeRule)
@@ -2871,7 +2853,6 @@ func (ctxt *parseContext) matchAt30(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchScenarioLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.startRule(RuleTypeScenarioDefinition)
@@ -2881,7 +2862,6 @@ func (ctxt *parseContext) matchAt30(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchRuleLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeBackground)
 		ctxt.endRule(RuleTypeRule)
@@ -3364,7 +3344,6 @@ func (ctxt *parseContext) matchAt35(line *Line) (newState int, err error) {
 func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchEOF(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
@@ -3379,7 +3358,6 @@ func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchStepLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeStep)
 		ctxt.build(token)
@@ -3388,7 +3366,6 @@ func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		if ctxt.lookahead1(line) {
 			ctxt.endRule(RuleTypeDataTable)
-
 			ctxt.endRule(RuleTypeStep)
 			ctxt.startRule(RuleTypeExamplesDefinition)
 			ctxt.startRule(RuleTypeTags)
@@ -3399,7 +3376,6 @@ func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		if ctxt.lookahead0(line) {
 			ctxt.endRule(RuleTypeDataTable)
-
 			ctxt.endRule(RuleTypeStep)
 			ctxt.endRule(RuleTypeScenario)
 			ctxt.endRule(RuleTypeScenarioDefinition)
@@ -3411,7 +3387,6 @@ func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchTagLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
@@ -3424,7 +3399,6 @@ func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchExamplesLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.startRule(RuleTypeExamplesDefinition)
 		ctxt.startRule(RuleTypeExamples)
@@ -3433,7 +3407,6 @@ func (ctxt *parseContext) matchAt36(line *Line) (newState int, err error) {
 	}
 	if ok, token, err := ctxt.matchScenarioLine(line); ok {
 		ctxt.endRule(RuleTypeDataTable)
-
 		ctxt.endRule(RuleTypeStep)
 		ctxt.endRule(RuleTypeScenario)
 		ctxt.endRule(RuleTypeScenarioDefinition)
