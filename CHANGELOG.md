@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- Provide trailing space in Irish keywords ([#243](https://github.com/cucumber/gherkin/pull/243))
+- Tamil "And" and "But" translations should have single trailing space ([#243](https://github.com/cucumber/gherkin/pull/243))
 
 ## [28.0.0] - 2024-02-15
 ### Added

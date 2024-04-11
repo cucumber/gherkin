@@ -1410,13 +1410,13 @@ static const Dialect fr_dialect = {
         &fr_then_keywords,
         &fr_when_keywords };
 
-static const wchar_t* const ga_and_KEYWORDS[] = { L"* ", L"Agus" };
+static const wchar_t* const ga_and_KEYWORDS[] = { L"* ", L"Agus " };
 static const Keywords ga_and_keywords = { 2, ga_and_KEYWORDS };
 
 static const wchar_t* const ga_background_KEYWORDS[] = { L"Cúlra" };
 static const Keywords ga_background_keywords = { 1, ga_background_KEYWORDS };
 
-static const wchar_t* const ga_but_KEYWORDS[] = { L"* ", L"Ach" };
+static const wchar_t* const ga_but_KEYWORDS[] = { L"* ", L"Ach " };
 static const Keywords ga_but_keywords = { 2, ga_but_KEYWORDS };
 
 static const wchar_t* const ga_examples_KEYWORDS[] = { L"Samplaí" };
@@ -1425,7 +1425,7 @@ static const Keywords ga_examples_keywords = { 1, ga_examples_KEYWORDS };
 static const wchar_t* const ga_feature_KEYWORDS[] = { L"Gné" };
 static const Keywords ga_feature_keywords = { 1, ga_feature_KEYWORDS };
 
-static const wchar_t* const ga_given_KEYWORDS[] = { L"* ", L"Cuir i gcás go", L"Cuir i gcás nach", L"Cuir i gcás gur", L"Cuir i gcás nár" };
+static const wchar_t* const ga_given_KEYWORDS[] = { L"* ", L"Cuir i gcás go ", L"Cuir i gcás nach ", L"Cuir i gcás gur ", L"Cuir i gcás nár " };
 static const Keywords ga_given_keywords = { 5, ga_given_KEYWORDS };
 
 static const wchar_t* const ga_rule_KEYWORDS[] = { L"Riail" };
@@ -1437,10 +1437,10 @@ static const Keywords ga_scenario_keywords = { 2, ga_scenario_KEYWORDS };
 static const wchar_t* const ga_scenarioOutline_KEYWORDS[] = { L"Cás Achomair" };
 static const Keywords ga_scenarioOutline_keywords = { 1, ga_scenarioOutline_KEYWORDS };
 
-static const wchar_t* const ga_then_KEYWORDS[] = { L"* ", L"Ansin" };
+static const wchar_t* const ga_then_KEYWORDS[] = { L"* ", L"Ansin " };
 static const Keywords ga_then_keywords = { 2, ga_then_KEYWORDS };
 
-static const wchar_t* const ga_when_KEYWORDS[] = { L"* ", L"Nuair a", L"Nuair nach", L"Nuair ba", L"Nuair nár" };
+static const wchar_t* const ga_when_KEYWORDS[] = { L"* ", L"Nuair a ", L"Nuair nach ", L"Nuair ba ", L"Nuair nár " };
 static const Keywords ga_when_keywords = { 5, ga_when_KEYWORDS };
 
 static const Dialect ga_dialect = {
@@ -3055,13 +3055,13 @@ static const Dialect sv_dialect = {
         &sv_then_keywords,
         &sv_when_keywords };
 
-static const wchar_t* const ta_and_KEYWORDS[] = { L"* ", L"மேலும்  ", L"மற்றும் " };
+static const wchar_t* const ta_and_KEYWORDS[] = { L"* ", L"மேலும் ", L"மற்றும் " };
 static const Keywords ta_and_keywords = { 3, ta_and_KEYWORDS };
 
 static const wchar_t* const ta_background_KEYWORDS[] = { L"பின்னணி" };
 static const Keywords ta_background_keywords = { 1, ta_background_KEYWORDS };
 
-static const wchar_t* const ta_but_KEYWORDS[] = { L"* ", L"ஆனால்  " };
+static const wchar_t* const ta_but_KEYWORDS[] = { L"* ", L"ஆனால் " };
 static const Keywords ta_but_keywords = { 2, ta_but_KEYWORDS };
 
 static const wchar_t* const ta_examples_KEYWORDS[] = { L"எடுத்துக்காட்டுகள்", L"காட்சிகள்", L"நிலைமைகளில்" };

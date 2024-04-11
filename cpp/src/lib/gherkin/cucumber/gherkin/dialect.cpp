@@ -223,7 +223,7 @@ all_keywords()
             { "examples", { "Eksempler" } },
             { "feature", { "Egenskab" } },
             { "given", { "* ", "Givet " } },
-            { "rule", { "Rule" } },
+            { "rule", { "Regel" } },
             { "scenario", { "Eksempel", "Scenarie" } },
             { "scenarioOutline", { "Abstrakt Scenario" } },
             { "then", { "* ", "Så " } },
@@ -399,7 +399,7 @@ all_keywords()
             { "examples", { "Ekzemploj" } },
             { "feature", { "Trajto" } },
             { "given", { "* ", "Donitaĵo ", "Komence " } },
-            { "rule", { "Rule" } },
+            { "rule", { "Regulo" } },
             { "scenario", { "Ekzemplo", "Scenaro", "Kazo" } },
             { "scenarioOutline", { "Konturo de la scenaro", "Skizo", "Kazo-skizo" } },
             { "then", { "* ", "Do " } },
@@ -489,17 +489,17 @@ all_keywords()
     {
         "ga",
         {
-            { "and", { "* ", "Agus" } },
+            { "and", { "* ", "Agus " } },
             { "background", { "Cúlra" } },
-            { "but", { "* ", "Ach" } },
+            { "but", { "* ", "Ach " } },
             { "examples", { "Samplaí" } },
             { "feature", { "Gné" } },
-            { "given", { "* ", "Cuir i gcás go", "Cuir i gcás nach", "Cuir i gcás gur", "Cuir i gcás nár" } },
+            { "given", { "* ", "Cuir i gcás go ", "Cuir i gcás nach ", "Cuir i gcás gur ", "Cuir i gcás nár " } },
             { "rule", { "Riail" } },
             { "scenario", { "Sampla", "Cás" } },
             { "scenarioOutline", { "Cás Achomair" } },
-            { "then", { "* ", "Ansin" } },
-            { "when", { "* ", "Nuair a", "Nuair nach", "Nuair ba", "Nuair nár" } }
+            { "then", { "* ", "Ansin " } },
+            { "when", { "* ", "Nuair a ", "Nuair nach ", "Nuair ba ", "Nuair nár " } }
         }
     },
     {
@@ -649,7 +649,7 @@ all_keywords()
     {
         "it",
         {
-            { "and", { "* ", "E " } },
+            { "and", { "* ", "E ", "Ed " } },
             { "background", { "Contesto" } },
             { "but", { "* ", "Ma " } },
             { "examples", { "Esempi" } },
@@ -863,7 +863,7 @@ all_keywords()
             { "examples", { "Voorbeelden" } },
             { "feature", { "Functionaliteit" } },
             { "given", { "* ", "Gegeven ", "Stel " } },
-            { "rule", { "Rule" } },
+            { "rule", { "Regel" } },
             { "scenario", { "Voorbeeld", "Scenario" } },
             { "scenarioOutline", { "Abstract Scenario" } },
             { "then", { "* ", "Dan " } },
@@ -1049,9 +1049,9 @@ all_keywords()
     {
         "ta",
         {
-            { "and", { "* ", "மேலும்  ", "மற்றும் " } },
+            { "and", { "* ", "மேலும் ", "மற்றும் " } },
             { "background", { "பின்னணி" } },
-            { "but", { "* ", "ஆனால்  " } },
+            { "but", { "* ", "ஆனால் " } },
             { "examples", { "எடுத்துக்காட்டுகள்", "காட்சிகள்", "நிலைமைகளில்" } },
             { "feature", { "அம்சம்", "வணிக தேவை", "திறன்" } },
             { "given", { "* ", "கொடுக்கப்பட்ட " } },
@@ -1199,7 +1199,7 @@ all_keywords()
             { "examples", { "Dữ liệu" } },
             { "feature", { "Tính năng" } },
             { "given", { "* ", "Biết ", "Cho " } },
-            { "rule", { "Rule" } },
+            { "rule", { "Quy tắc" } },
             { "scenario", { "Tình huống", "Kịch bản" } },
             { "scenarioOutline", { "Khung tình huống", "Khung kịch bản" } },
             { "then", { "* ", "Thì " } },
@@ -1220,6 +1220,22 @@ all_keywords()
             { "scenarioOutline", { "场景大纲", "剧本大纲" } },
             { "then", { "* ", "那么" } },
             { "when", { "* ", "当" } }
+        }
+    },
+    {
+        "ml",
+        {
+            { "and", { "* ", "ഒപ്പം" } },
+            { "background", { "പശ്ചാത്തലം" } },
+            { "but", { "* ", "പക്ഷേ" } },
+            { "examples", { "ഉദാഹരണങ്ങൾ" } },
+            { "feature", { "സവിശേഷത" } },
+            { "given", { "* ", "നൽകിയത്" } },
+            { "rule", { "നിയമം" } },
+            { "scenario", { "രംഗം" } },
+            { "scenarioOutline", { "സാഹചര്യത്തിന്റെ രൂപരേഖ" } },
+            { "then", { "* ", "പിന്നെ" } },
+            { "when", { "എപ്പോൾ" } }
         }
     },
     {

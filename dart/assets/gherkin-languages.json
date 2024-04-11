@@ -278,7 +278,7 @@
       "Nə vaxt ki "
     ]
   },
-    "be": {
+  "be": {
     "and": [
       "* ",
       "I ",
@@ -1401,14 +1401,14 @@
   "ga": {
     "and": [
       "* ",
-      "Agus"
+      "Agus "
     ],
     "background": [
       "Cúlra"
     ],
     "but": [
       "* ",
-      "Ach"
+      "Ach "
     ],
     "examples": [
       "Samplaí"
@@ -1418,10 +1418,10 @@
     ],
     "given": [
       "* ",
-      "Cuir i gcás go",
-      "Cuir i gcás nach",
-      "Cuir i gcás gur",
-      "Cuir i gcás nár"
+      "Cuir i gcás go ",
+      "Cuir i gcás nach ",
+      "Cuir i gcás gur ",
+      "Cuir i gcás nár "
     ],
     "name": "Irish",
     "native": "Gaeilge",
@@ -1437,14 +1437,14 @@
     ],
     "then": [
       "* ",
-      "Ansin"
+      "Ansin "
     ],
     "when": [
       "* ",
-      "Nuair a",
-      "Nuair nach",
-      "Nuair ba",
-      "Nuair nár"
+      "Nuair a ",
+      "Nuair nach ",
+      "Nuair ba ",
+      "Nuair nár "
     ]
   },
   "gj": {
@@ -3134,7 +3134,7 @@
   "ta": {
     "and": [
       "* ",
-      "மேலும்  ",
+      "மேலும் ",
       "மற்றும் "
     ],
     "background": [
@@ -3142,7 +3142,7 @@
     ],
     "but": [
       "* ",
-      "ஆனால்  "
+      "ஆனால் "
     ],
     "examples": [
       "எடுத்துக்காட்டுகள்",

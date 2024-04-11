@@ -1960,53 +1960,53 @@ var builtinDialects = gherkinDialectMap{
 			},
 			given: {
 				"* ",
-				"Cuir i gcás go",
-				"Cuir i gcás nach",
-				"Cuir i gcás gur",
-				"Cuir i gcás nár",
+				"Cuir i gcás go ",
+				"Cuir i gcás nach ",
+				"Cuir i gcás gur ",
+				"Cuir i gcás nár ",
 			},
 			when: {
 				"* ",
-				"Nuair a",
-				"Nuair nach",
-				"Nuair ba",
-				"Nuair nár",
+				"Nuair a ",
+				"Nuair nach ",
+				"Nuair ba ",
+				"Nuair nár ",
 			},
 			then: {
 				"* ",
-				"Ansin",
+				"Ansin ",
 			},
 			and: {
 				"* ",
-				"Agus",
+				"Agus ",
 			},
 			but: {
 				"* ",
-				"Ach",
+				"Ach ",
 			},
 		},
 		map[string]messages.StepKeywordType{
-			"Cuir i gcás go": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás go ": messages.StepKeywordType_CONTEXT,
 
-			"Cuir i gcás nach": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás nach ": messages.StepKeywordType_CONTEXT,
 
-			"Cuir i gcás gur": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás gur ": messages.StepKeywordType_CONTEXT,
 
-			"Cuir i gcás nár": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás nár ": messages.StepKeywordType_CONTEXT,
 
-			"Nuair a": messages.StepKeywordType_ACTION,
+			"Nuair a ": messages.StepKeywordType_ACTION,
 
-			"Nuair nach": messages.StepKeywordType_ACTION,
+			"Nuair nach ": messages.StepKeywordType_ACTION,
 
-			"Nuair ba": messages.StepKeywordType_ACTION,
+			"Nuair ba ": messages.StepKeywordType_ACTION,
 
-			"Nuair nár": messages.StepKeywordType_ACTION,
+			"Nuair nár ": messages.StepKeywordType_ACTION,
 
-			"Ansin": messages.StepKeywordType_OUTCOME,
+			"Ansin ": messages.StepKeywordType_OUTCOME,
 
-			"Agus": messages.StepKeywordType_CONJUNCTION,
+			"Agus ": messages.StepKeywordType_CONJUNCTION,
 
-			"Ach": messages.StepKeywordType_CONJUNCTION,
+			"Ach ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
@@ -4382,12 +4382,12 @@ var builtinDialects = gherkinDialectMap{
 			},
 			and: {
 				"* ",
-				"மேலும்  ",
+				"மேலும் ",
 				"மற்றும் ",
 			},
 			but: {
 				"* ",
-				"ஆனால்  ",
+				"ஆனால் ",
 			},
 		},
 		map[string]messages.StepKeywordType{
@@ -4397,11 +4397,11 @@ var builtinDialects = gherkinDialectMap{
 
 			"அப்பொழுது ": messages.StepKeywordType_OUTCOME,
 
-			"மேலும்  ": messages.StepKeywordType_CONJUNCTION,
+			"மேலும் ": messages.StepKeywordType_CONJUNCTION,
 
 			"மற்றும் ": messages.StepKeywordType_CONJUNCTION,
 
-			"ஆனால்  ": messages.StepKeywordType_CONJUNCTION,
+			"ஆனால் ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
