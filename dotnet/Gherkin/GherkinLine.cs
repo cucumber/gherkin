@@ -126,10 +126,8 @@ namespace Gherkin
                     startPos = pos;
                 } else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR) {
                     bool hasNext = rowEnum.MoveNext();
-                    pos++;
-                    if(!hasNext) {
-                        cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
-                    } else {
+                    if(hasNext) {
+                        pos++;
                         c = rowEnum.Current;
                         if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE) {
                             cell += "\n";
@@ -139,6 +137,8 @@ namespace Gherkin
                             }
                             cell += c;
                         }
+                    } else {
+                        cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
                     }
                 } else {
                     cell += c;
