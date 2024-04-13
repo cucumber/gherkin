@@ -1,0 +1,13 @@
+(1:1)FeatureLine:()Feature/Extra table content/
+(2:1)Other:/  Tables are delimited by pipes on both sides./
+(3:1)Other:/  Anything that isn't enclosed is not part of/
+(4:1)Other:/  the table./
+(5:1)Other://
+(6:1)Other:/  It is not recommended to use this feature, but/
+(7:1)Other:/  it is how the implementation currently works./
+(8:1)Other://
+(9:3)ScenarioLine:()Scenario/We're a bit extra/
+(10:5)StepLine:(Context)Given /a pirate crew/
+(11:7)TableRow://9:Luffy,17:Zorro
+(12:7)TableRow://9:Nami,17:Brook
+EOF
