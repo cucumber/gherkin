@@ -125,9 +125,9 @@ namespace Gherkin
                     cell = "";
                     startPos = pos;
                 } else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR) {
-                    rowEnum.MoveNext();
+                    bool hasNext = rowEnum.MoveNext();
                     pos++;
-                    c = rowEnum.Current;
+                    c = hasNext ? rowEnum.Current : '';
                     if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE) {
                         cell += "\n";
                     } else {
