@@ -59,7 +59,7 @@ class GherkinLine(object):
                 cell = ''
                 start_col = col + 1
             elif char == '\\':
-                char = next(row)
+                char = next(row, "")
                 col += 1
                 if char == 'n':
                     cell += '\n'
