@@ -127,7 +127,7 @@ namespace Gherkin
                 } else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR) {
                     bool hasNext = rowEnum.MoveNext();
                     pos++;
-                    c = hasNext ? rowEnum.Current : '';
+                    c = hasNext ? rowEnum.Current : "";
                     if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE) {
                         cell += "\n";
                     } else {
