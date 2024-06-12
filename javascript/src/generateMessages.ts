@@ -7,24 +7,28 @@ import IGherkinOptions from './IGherkinOptions'
 import makeSourceEnvelope from './makeSourceEnvelope'
 import ITokenMatcher from './ITokenMatcher'
 import GherkinInMarkdownTokenMatcher from './GherkinInMarkdownTokenMatcher'
+import CustomFlavorRegistry from "./flavors/CustomFlavorRegistry";
 
 export default function generateMessages(
   data: string,
   uri: string,
-  mediaType: messages.SourceMediaType,
+  mediaType: string,
   options: IGherkinOptions
 ): readonly messages.Envelope[] {
+
   let tokenMatcher: ITokenMatcher<TokenType>
-  switch (mediaType) {
-    case messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN:
-      tokenMatcher = new GherkinClassicTokenMatcher(options.defaultDialect)
-      break
-    case messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN:
-      tokenMatcher = new GherkinInMarkdownTokenMatcher(options.defaultDialect)
-      break
-    default:
+  const customFlavorsRegistry = CustomFlavorRegistry.getInstance();
+
+  if (mediaType === 'text/x.cucumber.gherkin+plain') {
+    tokenMatcher = new GherkinClassicTokenMatcher(options.defaultDialect)
+  } else if (mediaType === 'text/x.cucumber.gherkin+markdown') {
+    tokenMatcher = new GherkinInMarkdownTokenMatcher(options.defaultDialect)
+  } else {
+    tokenMatcher = customFlavorsRegistry.tokenMatcherFor(mediaType)
+    if(!tokenMatcher)
       throw new Error(`Unsupported media type: ${mediaType}`)
   }
+
 
   const result = []
 
