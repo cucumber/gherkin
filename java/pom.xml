@@ -49,7 +49,7 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>messages</artifactId>
-            <version>[19.1.4,25.0.0)</version>
+            <version>[19.1.4,25.0.2)</version>
         </dependency>
 
         <dependency>
