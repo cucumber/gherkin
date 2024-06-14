@@ -125,16 +125,19 @@ namespace Gherkin
                     cell = "";
                     startPos = pos;
                 } else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR) {
-                    rowEnum.MoveNext();
-                    pos++;
-                    c = rowEnum.Current;
-                    if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE) {
-                        cell += "\n";
-                    } else {
-                        if (c.ToString() != GherkinLanguageConstants.TABLE_CELL_SEPARATOR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR) {
-                            cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
+                    if(rowEnum.MoveNext()) {
+                        pos++;
+                        c = rowEnum.Current;
+                        if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE) {
+                            cell += "\n";
+                        } else {
+                            if (c.ToString() != GherkinLanguageConstants.TABLE_CELL_SEPARATOR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR) {
+                                cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
+                            }
+                            cell += c;
                         }
-                        cell += c;
+                    } else {
+                        cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
                     }
                 } else {
                     cell += c;
