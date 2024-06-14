@@ -66,7 +66,7 @@ module Gherkin
           cell = ''
           start_col = col + 1
         elsif char == '\\'
-          char = row[col]
+          char = row[col] || ''
           col += 1
           if char == 'n'
             cell += "\n"
