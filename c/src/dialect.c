@@ -2115,13 +2115,13 @@ static const Dialect kn_dialect = {
         &kn_then_keywords,
         &kn_when_keywords };
 
-static const wchar_t* const ko_and_KEYWORDS[] = { L"* ", L"그리고" };
+static const wchar_t* const ko_and_KEYWORDS[] = { L"* ", L"그리고 " };
 static const Keywords ko_and_keywords = { 2, ko_and_KEYWORDS };
 
 static const wchar_t* const ko_background_KEYWORDS[] = { L"배경" };
 static const Keywords ko_background_keywords = { 1, ko_background_KEYWORDS };
 
-static const wchar_t* const ko_but_KEYWORDS[] = { L"* ", L"하지만", L"단" };
+static const wchar_t* const ko_but_KEYWORDS[] = { L"* ", L"하지만 ", L"단 " };
 static const Keywords ko_but_keywords = { 3, ko_but_KEYWORDS };
 
 static const wchar_t* const ko_examples_KEYWORDS[] = { L"예" };
@@ -2130,7 +2130,7 @@ static const Keywords ko_examples_keywords = { 1, ko_examples_KEYWORDS };
 static const wchar_t* const ko_feature_KEYWORDS[] = { L"기능" };
 static const Keywords ko_feature_keywords = { 1, ko_feature_KEYWORDS };
 
-static const wchar_t* const ko_given_KEYWORDS[] = { L"* ", L"조건", L"먼저" };
+static const wchar_t* const ko_given_KEYWORDS[] = { L"* ", L"조건 ", L"먼저 " };
 static const Keywords ko_given_keywords = { 3, ko_given_KEYWORDS };
 
 static const wchar_t* const ko_rule_KEYWORDS[] = { L"Rule" };
@@ -2142,10 +2142,10 @@ static const Keywords ko_scenario_keywords = { 1, ko_scenario_KEYWORDS };
 static const wchar_t* const ko_scenarioOutline_KEYWORDS[] = { L"시나리오 개요" };
 static const Keywords ko_scenarioOutline_keywords = { 1, ko_scenarioOutline_KEYWORDS };
 
-static const wchar_t* const ko_then_KEYWORDS[] = { L"* ", L"그러면" };
+static const wchar_t* const ko_then_KEYWORDS[] = { L"* ", L"그러면 " };
 static const Keywords ko_then_keywords = { 2, ko_then_KEYWORDS };
 
-static const wchar_t* const ko_when_KEYWORDS[] = { L"* ", L"만일", L"만약" };
+static const wchar_t* const ko_when_KEYWORDS[] = { L"* ", L"만일 ", L"만약 " };
 static const Keywords ko_when_keywords = { 3, ko_when_KEYWORDS };
 
 static const Dialect ko_dialect = {
