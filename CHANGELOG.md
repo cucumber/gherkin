@@ -8,6 +8,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Fixed
+- [.NET] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
+- [Perl] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
 - [Ruby] Provide informative exception for trailing escapes in tables ([#244](https://github.com/cucumber/gherkin/pull/244))
 - [Python] Provide informative exception for trailing escapes in tables ([#241](https://github.com/cucumber/gherkin/pull/241))
 - (i18n) Provide trailing space in Irish step keywords ([#243](https://github.com/cucumber/gherkin/pull/243))
