@@ -32,5 +32,9 @@ describe Gherkin::GherkinLine do
     it 'does not drop white spaces inside a cell' do
       expect(cells_text("| foo()\n  bar\nbaz |")).to eq(["foo()\n  bar\nbaz"])
     end
+
+    it 'trailing escapes are ignored' do
+      expect(cells_text("| a |\\")).to eq(['a'])
+    end
   end
 end
