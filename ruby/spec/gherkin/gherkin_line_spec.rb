@@ -34,7 +34,7 @@ describe Gherkin::GherkinLine do
     end
 
     it 'trailing escapes are ignored' do
-      expect(cells_text("| a | b \\")).to eq(['a'])
+      expect(cells_text("| a |\\")).to eq(['a'])
     end
   end
 end
