@@ -2987,44 +2987,44 @@ var builtinDialects = gherkinDialectMap{
 			},
 			given: {
 				"* ",
-				"조건",
-				"먼저",
+				"조건 ",
+				"먼저 ",
 			},
 			when: {
 				"* ",
-				"만일",
-				"만약",
+				"만일 ",
+				"만약 ",
 			},
 			then: {
 				"* ",
-				"그러면",
+				"그러면 ",
 			},
 			and: {
 				"* ",
-				"그리고",
+				"그리고 ",
 			},
 			but: {
 				"* ",
-				"하지만",
-				"단",
+				"하지만 ",
+				"단 ",
 			},
 		},
 		map[string]messages.StepKeywordType{
-			"조건": messages.StepKeywordType_CONTEXT,
+			"조건 ": messages.StepKeywordType_CONTEXT,
 
-			"먼저": messages.StepKeywordType_CONTEXT,
+			"먼저 ": messages.StepKeywordType_CONTEXT,
 
-			"만일": messages.StepKeywordType_ACTION,
+			"만일 ": messages.StepKeywordType_ACTION,
 
-			"만약": messages.StepKeywordType_ACTION,
+			"만약 ": messages.StepKeywordType_ACTION,
 
-			"그러면": messages.StepKeywordType_OUTCOME,
+			"그러면 ": messages.StepKeywordType_OUTCOME,
 
-			"그리고": messages.StepKeywordType_CONJUNCTION,
+			"그리고 ": messages.StepKeywordType_CONJUNCTION,
 
-			"하지만": messages.StepKeywordType_CONJUNCTION,
+			"하지만 ": messages.StepKeywordType_CONJUNCTION,
 
-			"단": messages.StepKeywordType_CONJUNCTION,
+			"단 ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
