@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- (i18n) Added Gujarati translation for "Rule" ([#249](https://github.com/cucumber/gherkin/pull/249))
+
 ### Fixed
 - [.NET] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
 - [Perl] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))

@@ -1475,7 +1475,7 @@ static const Keywords gj_feature_keywords = { 3, gj_feature_KEYWORDS };
 static const wchar_t* const gj_given_KEYWORDS[] = { L"* ", L"આપેલ છે " };
 static const Keywords gj_given_keywords = { 2, gj_given_KEYWORDS };
 
-static const wchar_t* const gj_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const gj_rule_KEYWORDS[] = { L"નિયમ" };
 static const Keywords gj_rule_keywords = { 1, gj_rule_KEYWORDS };
 
 static const wchar_t* const gj_scenario_KEYWORDS[] = { L"ઉદાહરણ", L"સ્થિતિ" };

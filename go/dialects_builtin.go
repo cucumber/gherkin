@@ -2018,7 +2018,7 @@ var builtinDialects = gherkinDialectMap{
 				"ક્ષમતા",
 			},
 			rule: {
-				"Rule",
+				"નિયમ",
 			},
 			background: {
 				"બેકગ્રાઉન્ડ",
