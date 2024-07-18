@@ -20,10 +20,10 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/gherkin/blob/main/ruby'
   }
 
-  s.add_runtime_dependency 'cucumber-messages', '>= 19.1.4', '< 24'
+  s.add_runtime_dependency 'cucumber-messages', '>= 19.1.4', '< 26'
 
-  s.add_development_dependency 'rake', '~> 13.0', '>= 13.0.6'
-  s.add_development_dependency 'rspec', '~> 3.11', '>= 3.11.0'
+  s.add_development_dependency 'rake', '~> 13.1'
+  s.add_development_dependency 'rspec', '~> 3.13'
 
   s.executables      = %w[gherkin-ruby gherkin]
   s.rubygems_version = '>= 1.6.1', '~> 0.8'
