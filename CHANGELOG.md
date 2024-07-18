@@ -20,6 +20,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Tamil "And" and "But" translations should have single trailing space ([#243](https://github.com/cucumber/gherkin/pull/243))
 - Intermittent failure of cpp test jobs in CI ([#217](https://github.com/cucumber/gherkin/issues/217))
 
+### Changed
+- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v25
+
 ## [28.0.0] - 2024-02-15
 ### Added
 - [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
@@ -30,7 +33,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Python] Reuse the action cucumber/action-publish-pypi in release ([#220](https://github.com/cucumber/gherkin/pull/220))
 - [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
 - [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
-- Upgraded messages to v22
 
 ## [27.0.0] - 2023-09-15
 ### Added
