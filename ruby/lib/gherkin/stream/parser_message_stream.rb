@@ -11,7 +11,7 @@ module Gherkin
         @sources = sources
         @options = options
 
-        id_generator = options[:id_generator] || Cucumber::Messages::IdGenerator::UUID.new
+        id_generator = options[:id_generator] || Cucumber::Messages::Helpers::IdGenerator::UUID.new
         @parser = Parser.new(AstBuilder.new(id_generator))
         @compiler = Pickles::Compiler.new(id_generator)
       end
