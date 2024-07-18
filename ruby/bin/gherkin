@@ -15,17 +15,17 @@ options = {
 }
 
 OptionParser.new do |opts|
-  opts.on("--[no-]source", "Don't print source messages") do |v|
-    options[:include_source] = v
+  opts.on('--[no-]source', "Don't print source messages") do |value|
+    options[:include_source] = value
   end
-  opts.on("--[no-]ast", "Don't print ast messages") do |v|
-    options[:include_gherkin_document] = v
+  opts.on('--[no-]ast', "Don't print ast messages") do |value|
+    options[:include_gherkin_document] = value
   end
-  opts.on("--[no-]pickles", "Don't print pickle messages") do |v|
-    options[:include_pickles] = v
+  opts.on('--[no-]pickles', "Don't print pickle messages") do |value|
+    options[:include_pickles] = value
   end
-  opts.on("--predictable-ids", "Generate incrementing ids rather than UUIDs") do |v|
-    options[:id_generator] = Cucumber::Messages::IdGenerator::Incrementing.new if v
+  opts.on('--predictable-ids', 'Generate incrementing ids rather than UUIDs') do |value|
+    options[:id_generator] = Cucumber::Messages::Helpers::IdGenerator::Incrementing.new if value
   end
 end.parse!
 
@@ -38,7 +38,7 @@ end
 
 if ARGV.empty?
   # Read from STDIN
-  messages = Cucumber::Messages::NdjsonToMessageEnumerator.new(STDIN)
+  messages = Cucumber::Messages::Helpers::NdjsonToMessageEnumerator.new(STDIN)
 else
   messages = Gherkin.from_paths(ARGV, options)
 end
