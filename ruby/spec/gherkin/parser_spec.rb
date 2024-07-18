@@ -1,6 +1,3 @@
-require 'rspec'
-require 'gherkin'
-
 describe Gherkin::Parser do
   describe '#initialize' do
     it 'can be initialized with no arguments' do

@@ -1,7 +1,3 @@
-# coding: utf-8
-require 'rspec'
-require 'gherkin/dialect'
-
 module Gherkin
   describe Dialect do
     it 'provides an interface to the keywords of a dialect' do

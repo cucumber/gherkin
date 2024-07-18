@@ -1,6 +1,3 @@
-require 'rspec'
-require 'gherkin/stream/parser_message_stream'
-
 module Gherkin
   module Stream
     describe ParserMessageStream do

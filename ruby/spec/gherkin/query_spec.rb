@@ -1,5 +1,3 @@
-require 'rspec'
-require 'gherkin'
 require 'gherkin/query'
 
 describe Gherkin::Query do
