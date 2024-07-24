@@ -1,6 +1,3 @@
-require 'rspec'
-require 'gherkin/gherkin_line'
-
 describe Gherkin::GherkinLine do
   context '#tags' do
     def tags(line)

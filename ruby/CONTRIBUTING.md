@@ -8,8 +8,6 @@ to contribute.
 
 Just run `make` from this directory.
 
-Even if you prefer `make` - run `rake` occasionally, as it reports better warnings.
-
 ### Using rake
 
 Just run `rake` from this directory.
