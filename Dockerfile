@@ -1,7 +1,9 @@
-# Builds a docker image used for building most projects in this repo. It's
-# used both by contributors and CI.
+# Minimal utility needed to generate parsers and distribute the
+# gherking-language.json to all language implementations.
 #
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+# See CONTRIBUTING.md
+#
+FROM mcr.microsoft.com/dotnet/sdk:7.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 
