@@ -46,17 +46,3 @@ clean-gherkin-languages: $(patsubst %,clean-gherkin-languages-%,$(languages)) ##
 clean-gherkin-languages-%: %
 	cd $< && make clean-gherkin-languages
 .PHONY: clean-gherkin-languages-%
-
-docker-run: ## Start a docker container with all languages and tools installed
-	[ -d "${HOME}/.m2/repository" ] || mkdir -p "${HOME}/.m2/repository"
-	docker run \
-	  --publish "6006:6006" \
-	  --volume "${shell pwd}":/app \
-	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
-	  --user 1000 \
-	  --rm \
-	  --interactive \
-	  --tty \
-	  cucumber/cucumber-build:0.13.0 \
-	  bash
-.PHONY:
