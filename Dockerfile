@@ -8,7 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install --assume-yes \
     make \
-    golang
+    jq
+
 
 WORKDIR /app
 
