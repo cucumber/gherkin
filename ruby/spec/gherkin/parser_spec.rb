@@ -1,10 +1,7 @@
-require 'rspec'
-require 'gherkin'
-
 describe Gherkin::Parser do
-  context '.new' do
-    it 'can be invoked with no args' do
-      Gherkin::Parser.new
+  describe '#initialize' do
+    it 'can be initialized with no arguments' do
+      expect { described_class.new }.not_to raise_error
     end
   end
 end

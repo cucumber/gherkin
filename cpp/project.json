@@ -1,0 +1,11 @@
+{
+    "name": "cucumber_gherkin",
+    "version": "0.1.0",
+    "namespace": "cucumber",
+    "packages": {
+        "cmake": [
+            "nlohmann_json",
+            "cucumber_messages"
+        ]
+    }
+}

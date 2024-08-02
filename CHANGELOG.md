@@ -7,6 +7,34 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- (i18n) Added Gujarati translation for "Rule" ([#249](https://github.com/cucumber/gherkin/pull/249))
+- [Ruby] Skeleton to begin technical refactor of internals ([#259](https://github.com/cucumber/gherkin/pull/259))
+
+### Fixed
+- [.NET] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
+- [Perl] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
+- [Ruby] Provide informative exception for trailing escapes in tables ([#244](https://github.com/cucumber/gherkin/pull/244))
+- [Python] Provide informative exception for trailing escapes in tables ([#241](https://github.com/cucumber/gherkin/pull/241))
+- (i18n) Provide trailing space in Irish step keywords ([#243](https://github.com/cucumber/gherkin/pull/243))
+- (i18n) Provide trailing space in Korean step keywords ([#254](https://github.com/cucumber/gherkin/pull/254))
+- (i18n) Tamil "And" and "But" translations should have single trailing space ([#243](https://github.com/cucumber/gherkin/pull/243))
+- Intermittent failure of cpp test jobs in CI ([#217](https://github.com/cucumber/gherkin/issues/217))
+
+### Changed
+- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v25
+- [Ruby] Update minimum ruby requirement from 2.5 to 3.0 ([#259](https://github.com/cucumber/gherkin/pull/259))
+
+## [28.0.0] - 2024-02-15
+### Added
+- [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
+- (i18n) Added Vietnamese translation of "Rule" ([#204](https://github.com/cucumber/gherkin/pull/204))
+- (i18n) Added Irish translation of "Rule" ([#216](https://github.com/cucumber/gherkin/pull/216))
+
+### Changed
+- [Python] Reuse the action cucumber/action-publish-pypi in release ([#220](https://github.com/cucumber/gherkin/pull/220))
+- [Python] Removed duplicate code in markdown token matcher ([#205](https://github.com/cucumber/gherkin/pull/205))
+- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v24
 
 ## [27.0.0] - 2023-09-15
 ### Added
@@ -637,7 +665,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v27.0.0...main
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v28.0.0...HEAD
+[28.0.0]: https://github.com/cucumber/gherkin/compare/v27.0.0...v28.0.0
 [27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...v27.0.0
 [26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...v26.2.0
 [26.1.0]: https://github.com/cucumber/gherkin/compare/v26.0.3...v26.1.0

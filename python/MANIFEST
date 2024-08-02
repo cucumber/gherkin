@@ -18,6 +18,7 @@ gherkin/parser.py
 gherkin/token.py
 gherkin/token_formatter_builder.py
 gherkin/token_matcher.py
+gherkin/token_matcher_markdown.py
 gherkin/token_scanner.py
 gherkin/pickles/__init__.py
 gherkin/pickles/compiler.py

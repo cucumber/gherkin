@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
-      - uses: cucumber/action-publish-subrepo@v1.1.0
+      - uses: cucumber/action-publish-subrepo@v1.1.1
         with:
           working-directory: php
           github-token: ${{ secrets.CUKEBOT_GITHUB_TOKEN }}

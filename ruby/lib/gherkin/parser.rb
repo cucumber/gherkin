@@ -56,7 +56,7 @@ module Gherkin
   class Parser
     attr_accessor :stop_at_first_error
 
-    def initialize(ast_builder = AstBuilder.new(Cucumber::Messages::IdGenerator::UUID.new))
+    def initialize(ast_builder = AstBuilder.new(Cucumber::Messages::Helpers::IdGenerator::UUID.new))
       @ast_builder = ast_builder
     end
 

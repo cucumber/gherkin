@@ -2,7 +2,7 @@
 
 package gherkin
 
-import messages "github.com/cucumber/messages/go/v22"
+import messages "github.com/cucumber/messages/go/v24"
 
 // Builtin dialects for af (Afrikaans), am (Armenian), an (Aragonese), ar (Arabic), ast (Asturian), az (Azerbaijani), be (Belarusian), bg (Bulgarian), bm (Malay), bs (Bosnian), ca (Catalan), cs (Czech), cy-GB (Welsh), da (Danish), de (German), el (Greek), em (Emoji), en (English), en-Scouse (Scouse), en-au (Australian), en-lol (LOLCAT), en-old (Old English), en-pirate (Pirate), en-tx (Texas), eo (Esperanto), es (Spanish), et (Estonian), fa (Persian), fi (Finnish), fr (French), ga (Irish), gj (Gujarati), gl (Galician), he (Hebrew), hi (Hindi), hr (Croatian), ht (Creole), hu (Hungarian), id (Indonesian), is (Icelandic), it (Italian), ja (Japanese), jv (Javanese), ka (Georgian), kn (Kannada), ko (Korean), lt (Lithuanian), lu (Luxemburgish), lv (Latvian), mk-Cyrl (Macedonian), mk-Latn (Macedonian (Latin)), mn (Mongolian), ne (Nepali), nl (Dutch), no (Norwegian), pa (Panjabi), pl (Polish), pt (Portuguese), ro (Romanian), ru (Russian), sk (Slovak), sl (Slovenian), sr-Cyrl (Serbian), sr-Latn (Serbian (Latin)), sv (Swedish), ta (Tamil), th (Thai), te (Telugu), tlh (Klingon), tr (Turkish), tt (Tatar), uk (Ukrainian), ur (Urdu), uz (Uzbek), vi (Vietnamese), zh-CN (Chinese simplified), ml (Malayalam), zh-TW (Chinese traditional), mr (Marathi), amh (Amharic)
 func DialectsBuiltin() DialectProvider {
@@ -1943,7 +1943,7 @@ var builtinDialects = gherkinDialectMap{
 				"Gné",
 			},
 			rule: {
-				"Rule",
+				"Riail",
 			},
 			background: {
 				"Cúlra",
@@ -1960,53 +1960,53 @@ var builtinDialects = gherkinDialectMap{
 			},
 			given: {
 				"* ",
-				"Cuir i gcás go",
-				"Cuir i gcás nach",
-				"Cuir i gcás gur",
-				"Cuir i gcás nár",
+				"Cuir i gcás go ",
+				"Cuir i gcás nach ",
+				"Cuir i gcás gur ",
+				"Cuir i gcás nár ",
 			},
 			when: {
 				"* ",
-				"Nuair a",
-				"Nuair nach",
-				"Nuair ba",
-				"Nuair nár",
+				"Nuair a ",
+				"Nuair nach ",
+				"Nuair ba ",
+				"Nuair nár ",
 			},
 			then: {
 				"* ",
-				"Ansin",
+				"Ansin ",
 			},
 			and: {
 				"* ",
-				"Agus",
+				"Agus ",
 			},
 			but: {
 				"* ",
-				"Ach",
+				"Ach ",
 			},
 		},
 		map[string]messages.StepKeywordType{
-			"Cuir i gcás go": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás go ": messages.StepKeywordType_CONTEXT,
 
-			"Cuir i gcás nach": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás nach ": messages.StepKeywordType_CONTEXT,
 
-			"Cuir i gcás gur": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás gur ": messages.StepKeywordType_CONTEXT,
 
-			"Cuir i gcás nár": messages.StepKeywordType_CONTEXT,
+			"Cuir i gcás nár ": messages.StepKeywordType_CONTEXT,
 
-			"Nuair a": messages.StepKeywordType_ACTION,
+			"Nuair a ": messages.StepKeywordType_ACTION,
 
-			"Nuair nach": messages.StepKeywordType_ACTION,
+			"Nuair nach ": messages.StepKeywordType_ACTION,
 
-			"Nuair ba": messages.StepKeywordType_ACTION,
+			"Nuair ba ": messages.StepKeywordType_ACTION,
 
-			"Nuair nár": messages.StepKeywordType_ACTION,
+			"Nuair nár ": messages.StepKeywordType_ACTION,
 
-			"Ansin": messages.StepKeywordType_OUTCOME,
+			"Ansin ": messages.StepKeywordType_OUTCOME,
 
-			"Agus": messages.StepKeywordType_CONJUNCTION,
+			"Agus ": messages.StepKeywordType_CONJUNCTION,
 
-			"Ach": messages.StepKeywordType_CONJUNCTION,
+			"Ach ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
@@ -2018,7 +2018,7 @@ var builtinDialects = gherkinDialectMap{
 				"ક્ષમતા",
 			},
 			rule: {
-				"Rule",
+				"નિયમ",
 			},
 			background: {
 				"બેકગ્રાઉન્ડ",
@@ -2987,44 +2987,44 @@ var builtinDialects = gherkinDialectMap{
 			},
 			given: {
 				"* ",
-				"조건",
-				"먼저",
+				"조건 ",
+				"먼저 ",
 			},
 			when: {
 				"* ",
-				"만일",
-				"만약",
+				"만일 ",
+				"만약 ",
 			},
 			then: {
 				"* ",
-				"그러면",
+				"그러면 ",
 			},
 			and: {
 				"* ",
-				"그리고",
+				"그리고 ",
 			},
 			but: {
 				"* ",
-				"하지만",
-				"단",
+				"하지만 ",
+				"단 ",
 			},
 		},
 		map[string]messages.StepKeywordType{
-			"조건": messages.StepKeywordType_CONTEXT,
+			"조건 ": messages.StepKeywordType_CONTEXT,
 
-			"먼저": messages.StepKeywordType_CONTEXT,
+			"먼저 ": messages.StepKeywordType_CONTEXT,
 
-			"만일": messages.StepKeywordType_ACTION,
+			"만일 ": messages.StepKeywordType_ACTION,
 
-			"만약": messages.StepKeywordType_ACTION,
+			"만약 ": messages.StepKeywordType_ACTION,
 
-			"그러면": messages.StepKeywordType_OUTCOME,
+			"그러면 ": messages.StepKeywordType_OUTCOME,
 
-			"그리고": messages.StepKeywordType_CONJUNCTION,
+			"그리고 ": messages.StepKeywordType_CONJUNCTION,
 
-			"하지만": messages.StepKeywordType_CONJUNCTION,
+			"하지만 ": messages.StepKeywordType_CONJUNCTION,
 
-			"단": messages.StepKeywordType_CONJUNCTION,
+			"단 ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
@@ -4382,12 +4382,12 @@ var builtinDialects = gherkinDialectMap{
 			},
 			and: {
 				"* ",
-				"மேலும்  ",
+				"மேலும் ",
 				"மற்றும் ",
 			},
 			but: {
 				"* ",
-				"ஆனால்  ",
+				"ஆனால் ",
 			},
 		},
 		map[string]messages.StepKeywordType{
@@ -4397,11 +4397,11 @@ var builtinDialects = gherkinDialectMap{
 
 			"அப்பொழுது ": messages.StepKeywordType_OUTCOME,
 
-			"மேலும்  ": messages.StepKeywordType_CONJUNCTION,
+			"மேலும் ": messages.StepKeywordType_CONJUNCTION,
 
 			"மற்றும் ": messages.StepKeywordType_CONJUNCTION,
 
-			"ஆனால்  ": messages.StepKeywordType_CONJUNCTION,
+			"ஆனால் ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		}},
@@ -4913,7 +4913,7 @@ var builtinDialects = gherkinDialectMap{
 				"Tính năng",
 			},
 			rule: {
-				"Rule",
+				"Quy tắc",
 			},
 			background: {
 				"Bối cảnh",

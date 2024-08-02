@@ -8,12 +8,14 @@ on:
     paths:
       - c/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - c/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

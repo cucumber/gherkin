@@ -64,7 +64,7 @@ static wchar_t* create_multi_line_text_from_tokens(int text_length, int line_cou
 
 static const wchar_t* get_description(AstNode* ast_node);
 
-static const Comments* get_comments();
+static const Comments* get_comments(AstBuilder* ast_builder);
 
 static void ensure_cell_count(ErrorList* errors, const TableRows* rows, const TableRow* header, AstNode* ast_node);
 
