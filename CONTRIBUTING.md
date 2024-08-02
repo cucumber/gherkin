@@ -24,38 +24,46 @@ localisations and generating the parser is done separately from building each pr
 
 ## Generating parsers
 
-Prerequisites:
+*Either* start a docker container
+
+```shell
+docker build --tag berp-env . 
+docker run --rm --interactive --tty --volume ".:/app" berp-env
+```
+
+*Or* install on your system
 
 * .NET 5.0 (to run `berp` to generate parsers)
 * `berp` (install with `dotnet tool update Berp --version 1.3.0 --tool-path /usr/bin` )
 * `make`
-* `jq` (>= 1.4 for `--sort-keys` option)
 * `diff`
-* `git`
 
-With all this installed use Make:
+With either of these done run:
 
-```
-make generate
+```shell
 make clean-generate
+make generate
 ```
 
 ## Adding or updating an i18n language
 
-Prerequisites:
-
-* `make`
-* `jq` (>= 1.4 for `--sort-keys` option)
-* `git`
-
 1) Edit `gherkin-langauges.json`.
 
-2) Distribute the changes to the different parser implementations, this requires `make`, `jq`, `diff`, but no compiler/interpreters:
+2) Distribute the changes to the different parser implementations:
 
-```
-make clean-gherkin-languages
-make copy-gherkin-languages
-```
+    *Either* start a docker container. See [Generating Parsers](#generating-parsers)
+
+    *Or* install on your system
+
+   * `make`
+   * `jq` (>= 1.4 for `--sort-keys` option)
+
+    Then with either of these done run
+
+    ```shell
+    make clean-gherkin-languages
+    make copy-gherkin-languages
+    ```
 
 3) Make a pull request with the changed files.
 
