@@ -36,7 +36,6 @@ docker run --rm --interactive --tty --volume ".:/app" berp-env
 * .NET 5.0 (to run `berp` to generate parsers)
 * `berp` (install with `dotnet tool update Berp --version 1.3.0 --tool-path /usr/bin` )
 * `make`
-* `jq` (>= 1.4 for `--sort-keys` option)
 * `diff`
 
 With either of these done run:
