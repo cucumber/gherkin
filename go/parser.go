@@ -104,7 +104,6 @@ type RuleType int
 
 const (
 	RuleTypeNone RuleType = iota
-
 	RuleTypeEOF
 	RuleTypeEmpty
 	RuleTypeComment

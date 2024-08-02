@@ -55,7 +55,6 @@ dialects_builtin.go: ../gherkin-languages.json dialects_builtin.go.jq
 
 $(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
-	gofmt -w $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
