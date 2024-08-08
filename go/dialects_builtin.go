@@ -4159,7 +4159,6 @@ var builtinDialects = gherkinDialectMap{
 				"Позадина",
 			},
 			scenario: {
-				"Пример",
 				"Сценарио",
 				"Пример",
 			},

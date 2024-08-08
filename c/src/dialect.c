@@ -2935,8 +2935,8 @@ static const Keywords sr_Cyrl_given_keywords = { 4, sr_Cyrl_given_KEYWORDS };
 static const wchar_t* const sr_Cyrl_rule_KEYWORDS[] = { L"Правило" };
 static const Keywords sr_Cyrl_rule_keywords = { 1, sr_Cyrl_rule_KEYWORDS };
 
-static const wchar_t* const sr_Cyrl_scenario_KEYWORDS[] = { L"Пример", L"Сценарио", L"Пример" };
-static const Keywords sr_Cyrl_scenario_keywords = { 3, sr_Cyrl_scenario_KEYWORDS };
+static const wchar_t* const sr_Cyrl_scenario_KEYWORDS[] = { L"Сценарио", L"Пример" };
+static const Keywords sr_Cyrl_scenario_keywords = { 2, sr_Cyrl_scenario_KEYWORDS };
 
 static const wchar_t* const sr_Cyrl_scenarioOutline_KEYWORDS[] = { L"Структура сценарија", L"Скица", L"Концепт" };
 static const Keywords sr_Cyrl_scenarioOutline_keywords = { 3, sr_Cyrl_scenarioOutline_KEYWORDS };
