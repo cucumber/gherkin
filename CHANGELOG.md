@@ -19,6 +19,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Provide trailing space in Irish step keywords ([#243](https://github.com/cucumber/gherkin/pull/243))
 - (i18n) Provide trailing space in Korean step keywords ([#254](https://github.com/cucumber/gherkin/pull/254))
 - (i18n) Tamil "And" and "But" translations should have single trailing space ([#243](https://github.com/cucumber/gherkin/pull/243))
+- (i18n) Remove duplicate scenario keyword from "sr-Cyrl" ([#264](https://github.com/cucumber/gherkin/pull/264))
 - Intermittent failure of cpp test jobs in CI ([#217](https://github.com/cucumber/gherkin/issues/217))
 
 ### Changed
