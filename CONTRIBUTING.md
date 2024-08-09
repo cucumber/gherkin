@@ -142,7 +142,7 @@ pass!
 Then send us a pull-request :-)
 
 And if you're stuck - please shoot message to the #commiters channel in the 
-[CucumberBDD Slack](https://cucumberbdd-slack-invite.herokuapp.com/) <sup>[direct link](https://cucumberbdd.slack.com/)</sup>.
+[Cucumber Discord](https://cucumber.io/docs/community/get-in-touch/#discord).
 
 ## Make a release
 
