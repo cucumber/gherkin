@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Added
 - (i18n) Added Gujarati translation for "Rule" ([#249](https://github.com/cucumber/gherkin/pull/249))
 - [Ruby] Skeleton to begin technical refactor of internals ([#259](https://github.com/cucumber/gherkin/pull/259))
+- [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
 
 ### Fixed
 - [.NET] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
