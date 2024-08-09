@@ -25,6 +25,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v25
 - [Ruby] Update minimum ruby requirement from 2.5 to 3.0 ([#259](https://github.com/cucumber/gherkin/pull/259))
+- [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
 
 ## [28.0.0] - 2024-02-15
 ### Added
