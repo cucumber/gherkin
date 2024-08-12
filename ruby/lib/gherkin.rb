@@ -12,7 +12,7 @@ module Gherkin
         paths,
         [],
         options
-    ).messages
+      ).messages
   end
 
   def self.from_sources(sources, options={})
@@ -20,7 +20,7 @@ module Gherkin
         [],
         sources,
         options
-    ).messages
+      ).messages
   end
 
   def self.from_source(uri, data, options={})
