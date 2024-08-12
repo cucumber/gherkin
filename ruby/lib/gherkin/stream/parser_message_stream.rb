@@ -20,6 +20,7 @@ module Gherkin
         enumerated = false
         Enumerator.new do |y|
           raise DoubleIterationException, "Messages have already been enumerated" if enumerated
+
           enumerated = true
 
           sources.each do |source|

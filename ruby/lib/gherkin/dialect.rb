@@ -9,6 +9,7 @@ module Gherkin
     def self.for(name)
       spec = DIALECTS[name]
       return nil unless spec
+
       new(spec)
     end
 

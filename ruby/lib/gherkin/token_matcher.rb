@@ -48,6 +48,7 @@ module Gherkin
 
     def match_TableRow(token)
       return false unless token.line.start_with?('|')
+
       # TODO: indent
       set_token_matched(token, :TableRow, nil, nil, nil, nil,
                         token.line.table_cells)
@@ -56,12 +57,14 @@ module Gherkin
 
     def match_Empty(token)
       return false unless token.line.empty?
+
       set_token_matched(token, :Empty, nil, nil, 0)
       true
     end
 
     def match_Comment(token)
       return false unless token.line.start_with?('#')
+
       text = token.line.get_line_text(0) #take the entire line, including leading space
       set_token_matched(token, :Comment, text, nil, 0)
       true
@@ -108,6 +111,7 @@ module Gherkin
 
     def match_EOF(token)
       return false unless token.eof?
+
       set_token_matched(token, :EOF)
       true
     end

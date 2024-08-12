@@ -11,6 +11,7 @@ module Gherkin
         pickles = []
 
         return pickles unless gherkin_document.feature
+
         feature = gherkin_document.feature
         language = feature.language
         tags = feature.tags

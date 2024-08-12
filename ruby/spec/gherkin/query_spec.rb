@@ -6,6 +6,7 @@ describe Gherkin::Query do
   def filter_messages_by_attribute(messages, attribute)
     messages.map do |message|
       return unless message.respond_to?(attribute)
+
       message.send(attribute)
     end.compact
   end

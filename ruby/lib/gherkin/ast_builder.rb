@@ -81,6 +81,7 @@ module Gherkin
 
     def ensure_cell_count(rows)
       return if rows.empty?
+
       cell_count = rows[0].cells.length
       rows.each do |row|
         if row.cells.length != cell_count
@@ -201,9 +202,11 @@ module Gherkin
       when :Feature
         header = node.get_single(:FeatureHeader)
         return unless header
+
         tags = get_tags(header)
         feature_line = header.get_token(:FeatureLine)
         return unless feature_line
+
         children = []
         background = node.get_single(:Background)
         children.push(Cucumber::Messages::FeatureChild.new(background: background)) if background
@@ -228,8 +231,10 @@ module Gherkin
       when :Rule
         header = node.get_single(:RuleHeader)
         return unless header
+
         rule_line = header.get_token(:RuleLine)
         return unless rule_line
+
         tags = get_tags(header)
         children = []
         background = node.get_single(:Background)
