@@ -374,7 +374,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Language", "#TagLine", "#FeatureLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 0
@@ -403,7 +403,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 1
@@ -432,7 +432,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 2
@@ -500,7 +500,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 3
@@ -570,7 +570,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 4
@@ -633,7 +633,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 5
@@ -700,7 +700,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 6
@@ -769,7 +769,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 7
@@ -831,7 +831,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 8
@@ -909,7 +909,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 9
@@ -987,7 +987,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 10
@@ -1017,7 +1017,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 11
@@ -1103,7 +1103,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 12
@@ -1193,7 +1193,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 13
@@ -1274,7 +1274,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 14
@@ -1373,7 +1373,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 15
@@ -1474,7 +1474,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 16
@@ -1504,7 +1504,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 17
@@ -1604,7 +1604,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 18
@@ -1708,7 +1708,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 19
@@ -1803,7 +1803,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 20
@@ -1904,7 +1904,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 21
@@ -1933,7 +1933,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 22
@@ -2004,7 +2004,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 23
@@ -2077,7 +2077,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 24
@@ -2143,7 +2143,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 25
@@ -2213,7 +2213,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 26
@@ -2285,7 +2285,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 27
@@ -2350,7 +2350,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 28
@@ -2431,7 +2431,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 29
@@ -2512,7 +2512,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 30
@@ -2542,7 +2542,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 31
@@ -2631,7 +2631,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 32
@@ -2724,7 +2724,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 33
@@ -2808,7 +2808,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 34
@@ -2910,7 +2910,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 35
@@ -3014,7 +3014,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 36
@@ -3044,7 +3044,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 37
@@ -3147,7 +3147,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 38
@@ -3254,7 +3254,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 39
@@ -3352,7 +3352,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 40
@@ -3456,7 +3456,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 41
@@ -3476,7 +3476,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 43
@@ -3576,7 +3576,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 44
@@ -3596,7 +3596,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 45
@@ -3673,7 +3673,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 46
@@ -3693,7 +3693,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 47
@@ -3790,7 +3790,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 48
@@ -3810,7 +3810,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 49
@@ -3884,7 +3884,7 @@ module Gherkin
       token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
-      raise error if (stop_at_first_error)
+      raise error if stop_at_first_error
 
       add_error(context, error)
       return 50
@@ -3900,12 +3900,12 @@ module Gherkin
         token.detach
         queue.push(token)
 
-        if (false || match_ScenarioLine(context, token))
+        if false || match_ScenarioLine(context, token)
           match = true
           break
         end
 
-        break unless (false || match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token))
+        break unless false || match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token)
       end
 
       context.token_queue.concat(queue)
@@ -3923,12 +3923,12 @@ module Gherkin
         token.detach
         queue.push(token)
 
-        if (false || match_ExamplesLine(context, token))
+        if false || match_ExamplesLine(context, token)
           match = true
           break
         end
 
-        break unless (false || match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token))
+        break unless false || match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token)
       end
 
       context.token_queue.concat(queue)
