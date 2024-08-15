@@ -8,14 +8,14 @@
         <version>4.2.0</version>
     </parent>
     <artifactId>gherkin</artifactId>
-    <version>28.0.1-SNAPSHOT</version>
+    <version>29.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Gherkin</name>
     <description>Gherkin parser</description>
     <url>https://github.com/cucumber/gherkin</url>
 
     <properties>
-        <project.build.outputTimestamp>1708027237</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1723455193</project.build.outputTimestamp>
         <project.Automatic-Module-Name>io.cucumber.gherkin</project.Automatic-Module-Name>
     </properties>
 
@@ -38,7 +38,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.10.3</version>
+                <version>5.11.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

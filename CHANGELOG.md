@@ -7,9 +7,18 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Ruby] Upgraded messages support to permit up to v26
+- [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
+
+## [29.0.0] - 2024-08-12
 ### Added
 - (i18n) Added Gujarati translation for "Rule" ([#249](https://github.com/cucumber/gherkin/pull/249))
 - [Ruby] Skeleton to begin technical refactor of internals ([#259](https://github.com/cucumber/gherkin/pull/259))
+
+### Changed
+- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v25
+- [Ruby] Update minimum ruby requirement from 2.5 to 3.0 ([#259](https://github.com/cucumber/gherkin/pull/259))
 
 ### Fixed
 - [.NET] Provide informative exception for trailing escapes in tables ([#245](https://github.com/cucumber/gherkin/pull/245))
@@ -19,12 +28,12 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Provide trailing space in Irish step keywords ([#243](https://github.com/cucumber/gherkin/pull/243))
 - (i18n) Provide trailing space in Korean step keywords ([#254](https://github.com/cucumber/gherkin/pull/254))
 - (i18n) Tamil "And" and "But" translations should have single trailing space ([#243](https://github.com/cucumber/gherkin/pull/243))
+- (i18n) Remove duplicate scenario keyword from "sr-Cyrl" ([#264](https://github.com/cucumber/gherkin/pull/264))
 - Intermittent failure of cpp test jobs in CI ([#217](https://github.com/cucumber/gherkin/issues/217))
 
 ### Changed
 - [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v25
 - [Ruby] Update minimum ruby requirement from 2.5 to 3.0 ([#259](https://github.com/cucumber/gherkin/pull/259))
-- [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
 
 ## [28.0.0] - 2024-02-15
 ### Added
@@ -666,7 +675,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v28.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v29.0.0...HEAD
+[29.0.0]: https://github.com/cucumber/gherkin/compare/v28.0.0...v29.0.0
 [28.0.0]: https://github.com/cucumber/gherkin/compare/v27.0.0...v28.0.0
 [27.0.0]: https://github.com/cucumber/gherkin/compare/v26.2.0...v27.0.0
 [26.2.0]: https://github.com/cucumber/gherkin/compare/v26.1.0...v26.2.0
