@@ -39,10 +39,10 @@ module Gherkin
                   y.yield(Cucumber::Messages::Envelope.new(pickle: pickle))
                 end
               end
-            rescue CompositeParserException => err
-              yield_parse_errors(y, err.errors, source.uri)
-            rescue ParserException => err
-              yield_parse_errors(y, [err], source.uri)
+            rescue CompositeParserException => e
+              yield_parse_errors(y, e.errors, source.uri)
+            rescue ParserException => e
+              yield_parse_errors(y, [e], source.uri)
             end
           end
         end
