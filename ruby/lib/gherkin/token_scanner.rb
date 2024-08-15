@@ -35,6 +35,5 @@ module Gherkin
         Token.new(nil, location)
       end
     end
-
   end
 end
