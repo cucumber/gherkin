@@ -31,10 +31,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Remove duplicate scenario keyword from "sr-Cyrl" ([#264](https://github.com/cucumber/gherkin/pull/264))
 - Intermittent failure of cpp test jobs in CI ([#217](https://github.com/cucumber/gherkin/issues/217))
 
-### Changed
-- [Java, JavaScript, PHP, Go, Ruby] Upgraded messages to v25
-- [Ruby] Update minimum ruby requirement from 2.5 to 3.0 ([#259](https://github.com/cucumber/gherkin/pull/259))
-
 ## [28.0.0] - 2024-02-15
 ### Added
 - [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
