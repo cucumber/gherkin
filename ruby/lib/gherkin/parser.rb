@@ -5,7 +5,6 @@ require_relative 'token_scanner'
 require_relative 'errors'
 
 module Gherkin
-
   RULE_TYPE = [
     :None,
     :_EOF, # #EOF

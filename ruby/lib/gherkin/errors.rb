@@ -33,7 +33,7 @@ module Gherkin
     def initialize(received_token, expected_token_types, state_comment)
       message = "expected: #{expected_token_types.join(", ")}, got '#{received_token.token_value.strip}'"
       column = received_token.location[:column]
-      location =  (column.nil? || column.zero?) ? {line: received_token.location[:line], column: received_token.line.indent + 1} : received_token.location
+      location = (column.nil? || column.zero?) ? {line: received_token.location[:line], column: received_token.line.indent + 1} : received_token.location
       super(message, location)
     end
   end
