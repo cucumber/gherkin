@@ -14,7 +14,7 @@ module Gherkin
     end
 
     def start_with_title_keyword?(keyword)
-      start_with?(keyword+':') # The C# impl is more complicated. Find out why.
+      start_with?(keyword + ':') # The C# impl is more complicated. Find out why.
     end
 
     def get_rest_trimmed(length)

@@ -14,7 +14,7 @@ module Gherkin
     def initialize(source_or_io)
       @line_number = 0
 
-      case(source_or_io)
+      case source_or_io
       when String
         @io = StringIO.new(source_or_io)
       when StringIO, IO

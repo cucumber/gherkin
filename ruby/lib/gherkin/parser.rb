@@ -59,7 +59,7 @@ module Gherkin
       @ast_builder = ast_builder
     end
 
-    def parse(token_scanner, token_matcher=TokenMatcher.new)
+    def parse(token_scanner, token_matcher = TokenMatcher.new)
       token_scanner = token_scanner.is_a?(TokenScanner) ? token_scanner : TokenScanner.new(token_scanner)
 
       @ast_builder.reset
@@ -3905,7 +3905,7 @@ module Gherkin
           break
         end
 
-        break unless (false || match_Empty(context, token)|| match_Comment(context, token)|| match_TagLine(context, token))
+        break unless (false || match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token))
       end
 
       context.token_queue.concat(queue)
@@ -3928,7 +3928,7 @@ module Gherkin
           break
         end
 
-        break unless (false || match_Empty(context, token)|| match_Comment(context, token)|| match_TagLine(context, token))
+        break unless (false || match_Empty(context, token) || match_Comment(context, token) || match_TagLine(context, token))
       end
 
       context.token_queue.concat(queue)

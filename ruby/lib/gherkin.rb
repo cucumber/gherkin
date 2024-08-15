@@ -7,7 +7,7 @@ module Gherkin
     include_pickles: true
   }.freeze
 
-  def self.from_paths(paths, options={})
+  def self.from_paths(paths, options = {})
     Stream::ParserMessageStream.new(
         paths,
         [],
@@ -15,7 +15,7 @@ module Gherkin
       ).messages
   end
 
-  def self.from_sources(sources, options={})
+  def self.from_sources(sources, options = {})
     Stream::ParserMessageStream.new(
         [],
         sources,
@@ -23,7 +23,7 @@ module Gherkin
       ).messages
   end
 
-  def self.from_source(uri, data, options={})
+  def self.from_source(uri, data, options = {})
     from_sources([encode_source_message(uri, data)], options)
   end
 
