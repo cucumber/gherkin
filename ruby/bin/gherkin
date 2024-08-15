@@ -31,14 +31,14 @@ end.parse!
 
 def process_messages(messages, options)
   messages.each do |message|
-    STDOUT.write(message.to_json)
-    STDOUT.write("\n")
+    $stdout.write(message.to_json)
+    $stdout.write("\n")
   end
 end
 
 if ARGV.empty?
   # Read from STDIN
-  messages = Cucumber::Messages::Helpers::NdjsonToMessageEnumerator.new(STDIN)
+  messages = Cucumber::Messages::Helpers::NdjsonToMessageEnumerator.new($stdin)
 else
   messages = Gherkin.from_paths(ARGV, options)
 end
