@@ -136,7 +136,7 @@ module Gherkin
       title = token.line.get_rest_trimmed(keyword.length)
       keyword_types = @keyword_types[keyword]
       keyword_type = keyword_types[0]
-      if keyword_types.length() > 1
+      if keyword_types.length > 1
         keyword_type = Cucumber::Messages::StepKeywordType::UNKNOWN
       end
 
