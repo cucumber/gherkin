@@ -1,6 +1,7 @@
 module Gherkin
   class GherkinLine
     attr_reader :indent, :trimmed_line_text
+
     def initialize(line_text, line_number)
       @line_text = line_text
       @line_number = line_number
