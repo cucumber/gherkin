@@ -1,4 +1,4 @@
-﻿namespace Gherkin.Ast;
+namespace Gherkin.Ast;
 
 public class Tag : IHasLocation
 {

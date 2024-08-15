@@ -1,4 +1,4 @@
-﻿namespace Gherkin;
+namespace Gherkin;
 
 public enum StepKeywordType
 {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Gherkin.CucumberMessages.Types;
@@ -11,7 +11,7 @@ public class PickleTableRow
     public PickleTableRow()
     {
     }
-    
+
     public PickleTableRow(IEnumerable<PickleTableCell> cells)
     {
         Cells = cells;

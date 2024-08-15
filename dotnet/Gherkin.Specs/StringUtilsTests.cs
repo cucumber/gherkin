@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 
 namespace Gherkin.Specs;
@@ -11,8 +11,8 @@ public class StringUtilsTests
         var bookEmoji = "\ud83d\udcd5";
         var zzzzEmoji = "\ud83d\udca4";
 
-        Assert.True(StringUtils.StartsWith(bookEmoji+"abc", bookEmoji));
-        Assert.False(StringUtils.StartsWith(bookEmoji+"abc", zzzzEmoji));
+        Assert.True(StringUtils.StartsWith(bookEmoji + "abc", bookEmoji));
+        Assert.False(StringUtils.StartsWith(bookEmoji + "abc", zzzzEmoji));
     }
 
     [Fact]

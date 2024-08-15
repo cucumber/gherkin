@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gherkin.CucumberMessages.Types;
@@ -36,7 +36,7 @@ public class PickleCompiler
 
     protected virtual void BuildFeature(List<Pickle> pickles, string language, IEnumerable<Tag> tags,
         Func<IEnumerable<PickleStep>> backgroundStepsFactory, IEnumerable<FeatureChild> children,
-        string gherkinDocumentUri) 
+        string gherkinDocumentUri)
     {
         if (children == null)
             return;
@@ -61,7 +61,7 @@ public class PickleCompiler
 
     protected virtual void BuildRule(List<Pickle> pickles, string language, IEnumerable<Tag> tags,
         Func<IEnumerable<PickleStep>> backgroundStepsFactory, IEnumerable<RuleChild> children,
-        string gherkinDocumentUri) 
+        string gherkinDocumentUri)
     {
         if (children == null)
             return;
@@ -120,7 +120,7 @@ public class PickleCompiler
                 language,
                 steps,
                 PickleTags(scenarioTags),
-                new []{ scenario.Id }
+                new[] { scenario.Id }
         );
         pickles.Add(pickle);
     }
@@ -146,7 +146,7 @@ public class PickleCompiler
                 tags.AddRange(scenarioOutline.Tags);
                 tags.AddRange(examples.Tags);
 
-                foreach(var scenarioOutlineStep in scenarioOutline.Steps)
+                foreach (var scenarioOutlineStep in scenarioOutline.Steps)
                 {
                     string stepText = Interpolate(scenarioOutlineStep.Text, variableCells, valueCells);
 
@@ -163,7 +163,7 @@ public class PickleCompiler
                         _idGenerator.GetNewId(),
                         gherkinDocumentUri,
                         Interpolate(scenarioOutline.Name, variableCells, valueCells),
-                        language, 
+                        language,
                         steps,
                         PickleTags(tags),
                         new[] { scenarioOutline.Id, values.Id }
@@ -209,15 +209,16 @@ public class PickleCompiler
 
     protected virtual PickleStepArgument CreatePickleArgument(Step step, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
     {
-        if (step.DataTable != null) {
+        if (step.DataTable != null)
+        {
             var t = step.DataTable;
             var rows = t.Rows;
             var newRows = new List<PickleTableRow>(rows.Count());
-            foreach(var row in rows)
+            foreach (var row in rows)
             {
                 var cells = row.Cells;
                 var newCells = new List<PickleTableCell>();
-                foreach(var cell in cells)
+                foreach (var cell in cells)
                 {
                     newCells.Add(
                             new PickleTableCell(
@@ -228,12 +229,13 @@ public class PickleCompiler
                 newRows.Add(new PickleTableRow(newCells));
             }
             return new PickleStepArgument
-                {
-                    DataTable = new PickleTable(newRows)
-                };
+            {
+                DataTable = new PickleTable(newRows)
+            };
         }
 
-        if (step.DocString != null) {
+        if (step.DocString != null)
+        {
             var ds = step.DocString;
             return
                 new PickleStepArgument
@@ -242,15 +244,15 @@ public class PickleCompiler
                         Interpolate(ds.Content, variableCells, valueCells),
                         ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells))
                 };
-        } 
-        
+        }
+
         return null;
     }
 
     protected virtual PickleStep[] PickleSteps(IEnumerable<Step> steps)
     {
         var result = new List<PickleStep>();
-        foreach(var step in steps)
+        foreach (var step in steps)
         {
             result.Add(PickleStep(step));
         }
@@ -263,7 +265,7 @@ public class PickleCompiler
                 step,
                 step.Text,
                 CreatePickleArgument(step),
-                new []{ step.Id }
+                new[] { step.Id }
         );
     }
 
@@ -283,7 +285,7 @@ public class PickleCompiler
     protected virtual List<PickleTag> PickleTags(List<Tag> tags)
     {
         var result = new List<PickleTag>();
-        foreach(var tag in tags)
+        foreach (var tag in tags)
         {
             result.Add(PickleTag(tag));
         }

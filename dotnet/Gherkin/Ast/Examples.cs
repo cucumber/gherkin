@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Gherkin.Ast;
@@ -26,6 +26,6 @@ public class Examples : IHasLocation, IHasDescription, IHasRows, IHasTags
 
     IEnumerable<TableRow> IHasRows.Rows
     {
-        get { return new TableRow[] {TableHeader}.Concat(TableBody); }
+        get { return new TableRow[] { TableHeader }.Concat(TableBody); }
     }
 }

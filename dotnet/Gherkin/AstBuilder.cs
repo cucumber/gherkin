@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gherkin.Ast;
@@ -31,7 +31,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         }
         else
         {
-            CurrentNode.Add((RuleType) token.MatchedType, token);
+            CurrentNode.Add((RuleType)token.MatchedType, token);
         }
     }
 
@@ -57,118 +57,118 @@ public class AstBuilder<T> : IAstBuilder<T>
         switch (node.RuleType)
         {
             case RuleType.Step:
-            {
-                var stepLine = node.GetToken(TokenType.StepLine);
-                var stepArg = node.GetSingle<StepArgument>(RuleType.DataTable) ??
-                              node.GetSingle<StepArgument>(RuleType.DocString);
-                var keywordType = GetKeywordType(stepLine);
-                return CreateStep(GetLocation(stepLine), stepLine.MatchedKeyword, keywordType, stepLine.MatchedText, stepArg, node);
-            }
+                {
+                    var stepLine = node.GetToken(TokenType.StepLine);
+                    var stepArg = node.GetSingle<StepArgument>(RuleType.DataTable) ??
+                                  node.GetSingle<StepArgument>(RuleType.DocString);
+                    var keywordType = GetKeywordType(stepLine);
+                    return CreateStep(GetLocation(stepLine), stepLine.MatchedKeyword, keywordType, stepLine.MatchedText, stepArg, node);
+                }
             case RuleType.DocString:
-            {
-                var separatorToken = node.GetTokens(TokenType.DocStringSeparator).First();
-                var contentType = separatorToken.MatchedText.Length == 0 ? null : separatorToken.MatchedText;
-                var lineTokens = node.GetTokens(TokenType.Other);
-                var content = string.Join(Environment.NewLine, lineTokens.Select(lt => lt.MatchedText));
-                var delimiter = separatorToken.MatchedKeyword.Length == 0 ? null : separatorToken.MatchedKeyword;
+                {
+                    var separatorToken = node.GetTokens(TokenType.DocStringSeparator).First();
+                    var contentType = separatorToken.MatchedText.Length == 0 ? null : separatorToken.MatchedText;
+                    var lineTokens = node.GetTokens(TokenType.Other);
+                    var content = string.Join(Environment.NewLine, lineTokens.Select(lt => lt.MatchedText));
+                    var delimiter = separatorToken.MatchedKeyword.Length == 0 ? null : separatorToken.MatchedKeyword;
 
-                return CreateDocString(GetLocation(separatorToken), contentType, content, delimiter, node);
-            }
+                    return CreateDocString(GetLocation(separatorToken), contentType, content, delimiter, node);
+                }
             case RuleType.DataTable:
-            {
-                var rows = GetTableRows(node);
-                return CreateDataTable(rows, node);
-            }
+                {
+                    var rows = GetTableRows(node);
+                    return CreateDataTable(rows, node);
+                }
             case RuleType.Background:
-            {
-                var backgroundLine = node.GetToken(TokenType.BackgroundLine);
-                var description = GetDescription(node);
-                var steps = GetSteps(node);
-                return CreateBackground(GetLocation(backgroundLine), backgroundLine.MatchedKeyword, backgroundLine.MatchedText, description, steps, node);
-            }
+                {
+                    var backgroundLine = node.GetToken(TokenType.BackgroundLine);
+                    var description = GetDescription(node);
+                    var steps = GetSteps(node);
+                    return CreateBackground(GetLocation(backgroundLine), backgroundLine.MatchedKeyword, backgroundLine.MatchedText, description, steps, node);
+                }
             case RuleType.ScenarioDefinition:
-            {
-                var tags = GetTags(node);
+                {
+                    var tags = GetTags(node);
 
-                var scenarioNode = node.GetSingle<AstNode>(RuleType.Scenario);
-                var scenarioLine = scenarioNode.GetToken(TokenType.ScenarioLine);
+                    var scenarioNode = node.GetSingle<AstNode>(RuleType.Scenario);
+                    var scenarioLine = scenarioNode.GetToken(TokenType.ScenarioLine);
 
-                var description = GetDescription(scenarioNode);
-                var steps = GetSteps(scenarioNode);
-                var examples = scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition).ToArray();
-                return CreateScenario(tags, GetLocation(scenarioLine), scenarioLine.MatchedKeyword, scenarioLine.MatchedText, description, steps, examples, node);
-            }
+                    var description = GetDescription(scenarioNode);
+                    var steps = GetSteps(scenarioNode);
+                    var examples = scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition).ToArray();
+                    return CreateScenario(tags, GetLocation(scenarioLine), scenarioLine.MatchedKeyword, scenarioLine.MatchedText, description, steps, examples, node);
+                }
             case RuleType.ExamplesDefinition:
-            {
-                var tags = GetTags(node);
-                var examplesNode = node.GetSingle<AstNode>(RuleType.Examples);
-                var examplesLine = examplesNode.GetToken(TokenType.ExamplesLine);
-                var description = GetDescription(examplesNode);
+                {
+                    var tags = GetTags(node);
+                    var examplesNode = node.GetSingle<AstNode>(RuleType.Examples);
+                    var examplesLine = examplesNode.GetToken(TokenType.ExamplesLine);
+                    var description = GetDescription(examplesNode);
 
-                var allRows = examplesNode.GetSingle<TableRow[]>(RuleType.ExamplesTable);
-                var header = allRows != null ? allRows.First() : null;
-                var rows = allRows != null ? allRows.Skip(1).ToArray() : null;
-                return CreateExamples(tags, GetLocation(examplesLine), examplesLine.MatchedKeyword, examplesLine.MatchedText, description, header, rows, node);
-            }
+                    var allRows = examplesNode.GetSingle<TableRow[]>(RuleType.ExamplesTable);
+                    var header = allRows != null ? allRows.First() : null;
+                    var rows = allRows != null ? allRows.Skip(1).ToArray() : null;
+                    return CreateExamples(tags, GetLocation(examplesLine), examplesLine.MatchedKeyword, examplesLine.MatchedText, description, header, rows, node);
+                }
             case RuleType.ExamplesTable:
-            {
-                return GetTableRows(node);
-            }
+                {
+                    return GetTableRows(node);
+                }
             case RuleType.Description:
-            {
-                var lineTokens = node.GetTokens(TokenType.Other);
+                {
+                    var lineTokens = node.GetTokens(TokenType.Other);
 
-                // Trim trailing empty lines
-                lineTokens = lineTokens.Reverse().SkipWhile(t => string.IsNullOrWhiteSpace(t.MatchedText)).Reverse();
+                    // Trim trailing empty lines
+                    lineTokens = lineTokens.Reverse().SkipWhile(t => string.IsNullOrWhiteSpace(t.MatchedText)).Reverse();
 
-                return string.Join(Environment.NewLine, lineTokens.Select(lt => lt.MatchedText));
-            }
+                    return string.Join(Environment.NewLine, lineTokens.Select(lt => lt.MatchedText));
+                }
             case RuleType.Feature:
-            {
-                var header = node.GetSingle<AstNode>(RuleType.FeatureHeader);
-                if(header == null) return null;
-                var tags = GetTags(header);
-                var featureLine = header.GetToken(TokenType.FeatureLine);
-                if(featureLine == null) return null;
-                var children = new List<IHasLocation> ();
-                var background = node.GetSingle<Background>(RuleType.Background);
-                if (background != null) 
                 {
-                    children.Add (background);
-                }
-                var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
-                                                 .Concat(node.GetItems<IHasLocation>(RuleType.Rule));
-                var description = GetDescription(header);
-                if(featureLine.MatchedGherkinDialect == null) return null;
-                var language = featureLine.MatchedGherkinDialect.Language;
+                    var header = node.GetSingle<AstNode>(RuleType.FeatureHeader);
+                    if (header == null) return null;
+                    var tags = GetTags(header);
+                    var featureLine = header.GetToken(TokenType.FeatureLine);
+                    if (featureLine == null) return null;
+                    var children = new List<IHasLocation>();
+                    var background = node.GetSingle<Background>(RuleType.Background);
+                    if (background != null)
+                    {
+                        children.Add(background);
+                    }
+                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                                                     .Concat(node.GetItems<IHasLocation>(RuleType.Rule));
+                    var description = GetDescription(header);
+                    if (featureLine.MatchedGherkinDialect == null) return null;
+                    var language = featureLine.MatchedGherkinDialect.Language;
 
-                return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, childrenEnumerable.ToArray(), node);
-            }
+                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                }
             case RuleType.Rule:
-            {
-                var header = node.GetSingle<AstNode>(RuleType.RuleHeader);
-                if (header == null) return null;
-                var tags = GetTags(header);
-                var ruleLine = header.GetToken(TokenType.RuleLine);
-                if (ruleLine == null) return null;
-                var children = new List<IHasLocation>();
-                var background = node.GetSingle<Background>(RuleType.Background);
-                if (background != null)
                 {
-                    children.Add(background);
+                    var header = node.GetSingle<AstNode>(RuleType.RuleHeader);
+                    if (header == null) return null;
+                    var tags = GetTags(header);
+                    var ruleLine = header.GetToken(TokenType.RuleLine);
+                    if (ruleLine == null) return null;
+                    var children = new List<IHasLocation>();
+                    var background = node.GetSingle<Background>(RuleType.Background);
+                    if (background != null)
+                    {
+                        children.Add(background);
+                    }
+                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition));
+                    var description = GetDescription(header);
+                    if (ruleLine.MatchedGherkinDialect == null) return null;
+
+                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, childrenEnumerable.ToArray(), node);
                 }
-                var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition));
-                var description = GetDescription(header);
-                if (ruleLine.MatchedGherkinDialect == null) return null;
-
-                return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, childrenEnumerable.ToArray(), node);
-            }
             case RuleType.GherkinDocument:
-            {
-                var feature = node.GetSingle<Feature>(RuleType.Feature);
+                {
+                    var feature = node.GetSingle<Feature>(RuleType.Feature);
 
-                return CreateGherkinDocument(feature, _comments.ToArray(), node);
-            }
+                    return CreateGherkinDocument(feature, _comments.ToArray(), node);
+                }
         }
 
         return node;
@@ -217,7 +217,8 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Step(location, keyword, keywordType, text, argument);
     }
 
-    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, Comment[] gherkinDocumentComments, AstNode node) {
+    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, Comment[] gherkinDocumentComments, AstNode node)
+    {
         return new GherkinDocument(feature, gherkinDocumentComments);
     }
 

@@ -18,7 +18,7 @@ public class GuidIdGenerator : IIdGenerator
 public class IncrementingIdGenerator : IIdGenerator
 {
     private int _counter = 0;
-    
+
     public string GetNewId()
     {
         var nextId = _counter++;

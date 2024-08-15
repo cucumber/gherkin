@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Gherkin;
@@ -26,9 +26,9 @@ public class GherkinDialect
 
     public GherkinDialect(
         string language,
-        string[] featureKeywords, 
-        string[] ruleKeywords, 
-        string[] backgroundKeywords, 
+        string[] featureKeywords,
+        string[] ruleKeywords,
+        string[] backgroundKeywords,
         string[] scenarioKeywords,
         string[] scenarioOutlineKeywords,
         string[] examplesKeywords,
@@ -70,6 +70,6 @@ public class GherkinDialect
             .ToDictionary(item => item.Key, item => item.First());
     }
 
-    public StepKeywordType? GetStepKeywordType(string keyword) 
+    public StepKeywordType? GetStepKeywordType(string keyword)
         => StepKeywordTypes.TryGetValue(keyword, out var tokenType) ? tokenType : null;
 }

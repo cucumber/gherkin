@@ -1,4 +1,4 @@
-﻿namespace Gherkin.Specs.Helper;
+namespace Gherkin.Specs.Helper;
 
 public static class LineEndingHelper
 {

@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
 namespace Gherkin.CucumberMessages.Types;
 
@@ -10,7 +10,7 @@ public class PickleTableCell
     public PickleTableCell()
     {
     }
-    
+
     public PickleTableCell(string value)
     {
         Value = value;

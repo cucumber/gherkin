@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,10 +44,10 @@ public class GherkinDialectProvider : IGherkinDialectProvider
     protected virtual Dictionary<string, GherkinLanguageSetting> LoadLanguageSettings()
     {
         const string languageFileName = "gherkin-languages.json";
-        
-        var assembly = typeof(GherkinDialectProvider).Assembly;            
-        var resourceStream = assembly.GetManifestResourceStream("Gherkin." + languageFileName);            
-                                
+
+        var assembly = typeof(GherkinDialectProvider).Assembly;
+        var resourceStream = assembly.GetManifestResourceStream("Gherkin." + languageFileName);
+
         if (resourceStream == null)
             throw new InvalidOperationException("Gherkin language resource not found: " + languageFileName);
         var languagesFileContent = new StreamReader(resourceStream).ReadToEnd();
@@ -105,17 +105,17 @@ public class GherkinDialectProvider : IGherkinDialectProvider
     {
         return new GherkinDialect(
             "en",
-            new[] {"Feature"},
-            new[] {"Rule"},
-            new[] {"Background"},
-            new[] {"Scenario"},
-            new[] {"Scenario Outline", "Scenario Template"},
-            new[] {"Examples", "Scenarios"},
-            new[] {"* ", "Given "},
-            new[] {"* ", "When " },
-            new[] {"* ", "Then " },
-            new[] {"* ", "And " },
-            new[] {"* ", "But " });
+            new[] { "Feature" },
+            new[] { "Rule" },
+            new[] { "Background" },
+            new[] { "Scenario" },
+            new[] { "Scenario Outline", "Scenario Template" },
+            new[] { "Examples", "Scenarios" },
+            new[] { "* ", "Given " },
+            new[] { "* ", "When " },
+            new[] { "* ", "Then " },
+            new[] { "* ", "And " },
+            new[] { "* ", "But " });
     }
 }
 

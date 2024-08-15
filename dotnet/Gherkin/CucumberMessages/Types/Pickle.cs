@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Gherkin.CucumberMessages.Types;
@@ -29,7 +29,7 @@ public class Pickle
     public Pickle()
     {
     }
-    
+
     public Pickle(string id, string uri, string name, string language, IEnumerable<PickleStep> steps, IEnumerable<PickleTag> tags, IEnumerable<string> astNodeIds)
     {
         Id = id;

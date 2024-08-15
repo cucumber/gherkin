@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,7 +14,7 @@ namespace Gherkin.Specs;
 public class EventTestBase
 {
     protected readonly IncrementingIdGenerator idGenerator = new IncrementingIdGenerator();
-    
+
     protected void AssertEvents(string testFeatureFile, List<Envelope> actualGherkinDocumentEvent, List<Envelope> expectedGherkinDocumentEvent, TestFile testFile)
     {
         actualGherkinDocumentEvent.Should().BeEquivalentTo(expectedGherkinDocumentEvent,
@@ -62,7 +62,7 @@ public class EventTestBase
         var raisedEvents = new List<Envelope>();
 
         var sourceProvider = new SourceProvider();
-        var sources = sourceProvider.GetSources(new List<string> {fullPathToTestFeatureFile});
+        var sources = sourceProvider.GetSources(new List<string> { fullPathToTestFeatureFile });
         var gherkinEventsProvider = new GherkinEventsProvider(printSource, printAst, printPickles, idGenerator);
         foreach (var source in sources)
         {

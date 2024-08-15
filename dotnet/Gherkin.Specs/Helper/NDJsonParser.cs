@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Utf8Json;
 
@@ -8,7 +8,7 @@ public class NDJsonParser
 {
     public static List<T> Deserialize<T>(string ndjson)
     {
-        var lines = ndjson.Split(new char[]{ '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        var lines = ndjson.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
         var result = new List<T>();
 

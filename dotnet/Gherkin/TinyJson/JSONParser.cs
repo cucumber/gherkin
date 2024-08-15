@@ -1,4 +1,4 @@
-﻿// source: https://raw.githubusercontent.com/zanders3/json/master/src/JSONParser.cs
+// source: https://raw.githubusercontent.com/zanders3/json/master/src/JSONParser.cs
 // changes: class public -> internal
 using System;
 using System.Collections;

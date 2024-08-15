@@ -1,4 +1,4 @@
-﻿using Gherkin.Ast;
+using Gherkin.Ast;
 
 namespace Gherkin;
 

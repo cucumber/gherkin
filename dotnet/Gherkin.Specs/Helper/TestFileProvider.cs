@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -22,7 +22,7 @@ public class TestFileProvider
 
         return Directory.GetFiles(testFileFolder, "*.feature")
                         .Where(f => Path.GetFileName(f) != "escaped_pipes.feature") //currently failing, because of https://github.com/neuecc/Utf8Json/pull/96
-                        .Select(f => new object[]{Path.GetFileName(f)});
+                        .Select(f => new object[] { Path.GetFileName(f) });
     }
 
     public static string GetTestFileFolder(string category)

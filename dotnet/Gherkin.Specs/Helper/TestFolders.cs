@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -8,13 +8,13 @@ internal static class TestFolders
 {
     public static string InputFolder
     {
-        get 
-        { 
+        get
+        {
             var inputFolder = Path.GetDirectoryName(typeof(TestFolders).GetTypeInfo().Assembly.Location);
 
-            inputFolder = Path.Combine(inputFolder, "..");                
+            inputFolder = Path.Combine(inputFolder, "..");
 
-            return inputFolder; 
+            return inputFolder;
         }
     }
 }

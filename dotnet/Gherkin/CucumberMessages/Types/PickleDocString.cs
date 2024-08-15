@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
 namespace Gherkin.CucumberMessages.Types;
 
@@ -13,7 +13,7 @@ public class PickleDocString
     public PickleDocString()
     {
     }
-    
+
     public PickleDocString(string content, string mediaType = null)
     {
         Content = content;

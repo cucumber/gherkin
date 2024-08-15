@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Xunit;
 
 namespace Gherkin.Specs;
@@ -18,22 +18,22 @@ public class GherkinDialectTests
     public void ShouldThrowNoSuchLanguageExceptionForInvalidLanguage()
     {
         var x = new GherkinDialectProvider();
-        
-        Assert.Throws<NoSuchLanguageException>(() => x.GetDialect("nosuchlang", new Ast.Location(1, 2)));            
+
+        Assert.Throws<NoSuchLanguageException>(() => x.GetDialect("nosuchlang", new Ast.Location(1, 2)));
     }
 
     [Fact]
     public void ShouldThrowNoSuchLanguageExceptionForInvalidDefaultLanguage()
     {
         var x = new GherkinDialectProvider("nosuchlang");
-        
-        Assert.Throws<NoSuchLanguageException>(() => { var dialect =  x.DefaultDialect;});
+
+        Assert.Throws<NoSuchLanguageException>(() => { var dialect = x.DefaultDialect; });
     }
 
     [Fact]
     public void ShouldThrowNoSuchLanguageExceptionForInvalidLanguageWithoutLocation()
     {
         var x = new GherkinDialectProvider();
-        Assert.Throws<NoSuchLanguageException>(() => x.GetDialect("nosuchlang", null));            
+        Assert.Throws<NoSuchLanguageException>(() => x.GetDialect("nosuchlang", null));
     }
 }

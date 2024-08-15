@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Gherkin.Specs.Tokens;
@@ -9,7 +9,7 @@ public class TokensGenerator
     {
         var tokenFormatterBuilder = new TokenFormatterBuilder();
         var parser = new Parser<object>(tokenFormatterBuilder);
-        
+
         using (var stream = new FileStream(featureFilePath, FileMode.Open))
         {
             using (var reader = new StreamReader(stream))

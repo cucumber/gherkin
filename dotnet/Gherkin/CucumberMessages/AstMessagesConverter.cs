@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gherkin.Ast;
@@ -82,13 +82,13 @@ public class AstMessagesConverter
         var tuple = ConvertToChild(hasLocation);
         return new FeatureChild(tuple.Item3, tuple.Item1, tuple.Item2);
     }
-    
+
     private RuleChild ConvertToRuleChild(IHasLocation hasLocation)
     {
         var tuple = ConvertToChild(hasLocation);
         return new RuleChild(tuple.Item1, tuple.Item3);
     }
-    
+
     private Tuple<Background, Rule, Scenario> ConvertToChild(IHasLocation hasLocation)
     {
         switch (hasLocation)
@@ -96,43 +96,43 @@ public class AstMessagesConverter
             case Gherkin.Ast.Background background:
                 var backgroundSteps = background.Steps.Select(ConvertStep).ToList();
                 return new Tuple<Background, Rule, Scenario>(new Background
-                    {
-                        Id = _idGenerator.GetNewId(),
-                        Location = ConvertLocation(background.Location),
-                        Name = CucumberMessagesDefaults.UseDefault(background.Name, CucumberMessagesDefaults.DefaultName),
-                        Description = CucumberMessagesDefaults.UseDefault(background.Description, CucumberMessagesDefaults.DefaultDescription),
-                        Keyword = background.Keyword,
-                        Steps = backgroundSteps
-                    }, null, null);
+                {
+                    Id = _idGenerator.GetNewId(),
+                    Location = ConvertLocation(background.Location),
+                    Name = CucumberMessagesDefaults.UseDefault(background.Name, CucumberMessagesDefaults.DefaultName),
+                    Description = CucumberMessagesDefaults.UseDefault(background.Description, CucumberMessagesDefaults.DefaultDescription),
+                    Keyword = background.Keyword,
+                    Steps = backgroundSteps
+                }, null, null);
             case Ast.Scenario scenario:
                 var steps = scenario.Steps.Select(ConvertStep).ToList();
                 var examples = scenario.Examples.Select(ConvertExamples).ToReadOnlyCollection();
                 var tags = scenario.Tags.Select(ConvertTag).ToReadOnlyCollection();
                 return new Tuple<Background, Rule, Scenario>(null, null, new Scenario()
-                    {
-                        Id = _idGenerator.GetNewId(),
-                        Keyword = scenario.Keyword,
-                        Location = ConvertLocation(scenario.Location),
-                        Name = CucumberMessagesDefaults.UseDefault(scenario.Name, CucumberMessagesDefaults.DefaultName),
-                        Description = CucumberMessagesDefaults.UseDefault(scenario.Description, CucumberMessagesDefaults.DefaultDescription),
-                        Steps = steps,
-                        Examples = examples,
-                        Tags = tags
-                    });
+                {
+                    Id = _idGenerator.GetNewId(),
+                    Keyword = scenario.Keyword,
+                    Location = ConvertLocation(scenario.Location),
+                    Name = CucumberMessagesDefaults.UseDefault(scenario.Name, CucumberMessagesDefaults.DefaultName),
+                    Description = CucumberMessagesDefaults.UseDefault(scenario.Description, CucumberMessagesDefaults.DefaultDescription),
+                    Steps = steps,
+                    Examples = examples,
+                    Tags = tags
+                });
             case Ast.Rule rule:
                 {
                     var ruleChildren = rule.Children.Select(ConvertToRuleChild).ToReadOnlyCollection();
                     var ruleTags = rule.Tags.Select(ConvertTag).ToReadOnlyCollection();
                     return new Tuple<Background, Rule, Scenario>(null, new Rule
-                        {
-                            Id = _idGenerator.GetNewId(),
-                            Name = CucumberMessagesDefaults.UseDefault(rule.Name, CucumberMessagesDefaults.DefaultName),
-                            Description = CucumberMessagesDefaults.UseDefault(rule.Description, CucumberMessagesDefaults.DefaultDescription),
-                            Keyword = rule.Keyword,
-                            Children = ruleChildren,
-                            Location = ConvertLocation(rule.Location),
-                            Tags = ruleTags
-                        }, null);
+                    {
+                        Id = _idGenerator.GetNewId(),
+                        Name = CucumberMessagesDefaults.UseDefault(rule.Name, CucumberMessagesDefaults.DefaultName),
+                        Description = CucumberMessagesDefaults.UseDefault(rule.Description, CucumberMessagesDefaults.DefaultDescription),
+                        Keyword = rule.Keyword,
+                        Children = ruleChildren,
+                        Location = ConvertLocation(rule.Location),
+                        Tags = ruleTags
+                    }, null);
                 }
 
 
@@ -215,7 +215,7 @@ public class AstMessagesConverter
     private Step ConvertStep(Ast.Step step)
     {
         DataTable dataTable = null;
-        if (step.Argument is Gherkin.Ast.DataTable astDataTable) 
+        if (step.Argument is Gherkin.Ast.DataTable astDataTable)
         {
             var rows = ConvertToTableRow(astDataTable.Rows);
             dataTable = new DataTable
@@ -226,7 +226,7 @@ public class AstMessagesConverter
         }
 
         DocString docString = null;
-       if (step.Argument is Gherkin.Ast.DocString astDocString) 
+        if (step.Argument is Gherkin.Ast.DocString astDocString)
         {
             docString = new DocString
             {

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using Gherkin.CucumberMessages.Types;
 using Gherkin.Specs.Helper;

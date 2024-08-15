@@ -1,4 +1,4 @@
-﻿namespace Gherkin.CucumberMessages;
+namespace Gherkin.CucumberMessages;
 
 public static class CucumberMessagesDefaults
 {
