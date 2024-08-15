@@ -1,13 +1,12 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Gherkin.CucumberMessages.Types
-{
-    public class PickleStepArgument
-    {
-        [DataMember(Name = "docString")]
-        public PickleDocString DocString { get; set; }
+namespace Gherkin.CucumberMessages.Types;
 
-        [DataMember(Name = "dataTable")]
-        public PickleTable DataTable { get; set; }
-    }
+public class PickleStepArgument
+{
+    [DataMember(Name = "docString")]
+    public PickleDocString DocString { get; set; }
+
+    [DataMember(Name = "dataTable")]
+    public PickleTable DataTable { get; set; }
 }

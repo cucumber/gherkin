@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.IO;
 using Gherkin.CucumberMessages.Types;
 
-namespace Gherkin.Specs.EventStubs
+namespace Gherkin.Specs.EventStubs;
+
+public class SourceProvider
 {
-    public class SourceProvider
+    private const string GherkinMediaType = "text/x.cucumber.gherkin+plain";
+
+    public IEnumerable<Source> GetSources(IEnumerable<string> paths)
     {
-        private const string GherkinMediaType = "text/x.cucumber.gherkin+plain";
-
-        public IEnumerable<Source> GetSources(IEnumerable<string> paths)
+        foreach (var path in paths)
         {
-            foreach (var path in paths)
+            string data = File.ReadAllText(path);
+            yield return new Source
             {
-                string data = File.ReadAllText(path);
-                yield return new Source
-                {
-                    Data = data,
-                    Uri = path,
-                    MediaType = GherkinMediaType
-                };
-            }
+                Data = data,
+                Uri = path,
+                MediaType = GherkinMediaType
+            };
         }
-
     }
+
 }
