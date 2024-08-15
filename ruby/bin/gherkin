@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"../lib"))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '../lib'))
 
 require 'optparse'
 require 'json'
@@ -29,7 +29,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-def process_messages(messages, options)
+def process_messages(messages, _options)
   messages.each do |message|
     $stdout.write(message.to_json)
     $stdout.write("\n")
@@ -37,7 +37,7 @@ def process_messages(messages, options)
 end
 
 if ARGV.empty?
-  # Read from STDIN
+  # Read from $stdin
   messages = Cucumber::Messages::Helpers::NdjsonToMessageEnumerator.new($stdin)
 else
   messages = Gherkin.from_paths(ARGV, options)
