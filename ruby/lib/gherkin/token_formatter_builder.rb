@@ -32,7 +32,7 @@ module Gherkin
         token.matched_type,
         token.matched_keyword ? sprintf("(%s)%s", token.matched_keyword_type, token.matched_keyword) : "",
         token.matched_text,
-        Array(token.matched_items).map { |i| "#{i.column}:#{i.text}"}.join(',')
+        Array(token.matched_items).map { |i| "#{i.column}:#{i.text}" }.join(',')
       )
     end
   end

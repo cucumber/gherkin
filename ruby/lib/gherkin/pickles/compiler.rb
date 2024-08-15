@@ -188,7 +188,7 @@ module Gherkin
       end
 
       def pickle_tags(tags)
-        tags.map {|tag| pickle_tag(tag)}
+        tags.map { |tag| pickle_tag(tag) }
       end
 
       def pickle_tag(tag)
