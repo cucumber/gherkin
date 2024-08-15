@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Ruby] Upgraded messages support to permit up to v26
 
 ## [29.0.0] - 2024-08-12
 ### Added
