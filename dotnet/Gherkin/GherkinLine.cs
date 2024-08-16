@@ -12,14 +12,14 @@ public class GherkinLine : IGherkinLine
 
     private readonly string lineText;
     private readonly string trimmedLineText;
-    public int LineNumber { get; private set; }
+    public int LineNumber { get; }
 
     public GherkinLine(string line, int lineNumber)
     {
-        this.LineNumber = lineNumber;
+        LineNumber = lineNumber;
 
-        this.lineText = line;
-        this.trimmedLineText = this.lineText.TrimStart();
+        lineText = line;
+        trimmedLineText = lineText.TrimStart();
     }
 
     public void Detach()

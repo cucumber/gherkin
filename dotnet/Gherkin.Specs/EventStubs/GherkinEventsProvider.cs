@@ -1,30 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Gherkin.CucumberMessages;
 using Gherkin.CucumberMessages.Pickles;
 using Gherkin.CucumberMessages.Types;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Gherkin.Specs.EventStubs;
 
-public class GherkinEventsProvider
+public class GherkinEventsProvider(bool printSource, bool printAst, bool printPickles, IIdGenerator idGenerator)
 {
     private readonly Parser _parser = new Parser();
-    private readonly PickleCompiler _pickleCompiler;
-    private readonly AstMessagesConverter _astMessagesConverter;
-
-    readonly bool _printAst;
-    readonly bool _printPickles;
-    readonly bool _printSource;
-
-    public GherkinEventsProvider(bool printSource, bool printAst, bool printPickles, IIdGenerator idGenerator)
-    {
-        _printSource = printSource;
-        _astMessagesConverter = new AstMessagesConverter(idGenerator);
-        _pickleCompiler = new PickleCompiler(idGenerator);
-        _printAst = printAst;
-        _printPickles = printPickles;
-    }
+    private readonly PickleCompiler _pickleCompiler = new PickleCompiler(idGenerator);
+    private readonly AstMessagesConverter _astMessagesConverter = new AstMessagesConverter(idGenerator);
 
     public IEnumerable<Envelope> GetEvents(Source source)
     {
@@ -34,14 +21,14 @@ public class GherkinEventsProvider
         {
             var gherkinDocument = _parser.Parse(new StringReader(source.Data));
 
-            if (_printSource)
+            if (printSource)
             {
                 events.Add(new Envelope
                 {
                     Source = source
                 });
             }
-            if (_printAst)
+            if (printAst)
             {
                 events.Add(new Envelope
                 {
@@ -49,7 +36,7 @@ public class GherkinEventsProvider
                         _astMessagesConverter.ConvertGherkinDocumentToEventArgs(gherkinDocument, source.Uri)
                 });
             }
-            if (_printPickles)
+            if (printPickles)
             {
                 var pickles = _pickleCompiler.Compile(_astMessagesConverter.ConvertGherkinDocumentToEventArgs(gherkinDocument, source.Uri));
                 foreach (Pickle pickle in pickles)
