@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 
-namespace Gherkin.Ast
+namespace Gherkin.Ast;
+
+public class Location
 {
-    public class Location
-    {
-        public int Line { get; private set; }
-        public int Column { get; private set; }
+    public int Line { get; private set; }
+    public int Column { get; private set; }
 
-        public Location(int line = 0, int column = 0)
-        {
-            Line = line;
-            Column = column;
-        }
+    public Location(int line = 0, int column = 0)
+    {
+        Line = line;
+        Column = column;
     }
 }

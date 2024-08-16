@@ -1,23 +1,22 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
-namespace Gherkin.CucumberMessages.Types
+namespace Gherkin.CucumberMessages.Types;
+
+public class PickleTag
 {
-    public class PickleTag
+    [DataMember(Name = "name")]
+    public string Name { get; set; }
+
+    [DataMember(Name = "astNodeId")]
+    public string AstNodeId { get; set; }
+
+    public PickleTag()
     {
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
+    }
 
-        [DataMember(Name = "astNodeId")]
-        public string AstNodeId { get; set; }
-
-        public PickleTag()
-        {
-        }
-
-        public PickleTag(string name, string astNodeId)
-        {
-            AstNodeId = astNodeId;
-            Name = name;
-        }
+    public PickleTag(string name, string astNodeId)
+    {
+        AstNodeId = astNodeId;
+        Name = name;
     }
 }
