@@ -1,7 +1,7 @@
 add_executable(cucumber_gherkin_bin)
 
 set(CUCUMBER_GHERKIN_BIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-file(GLOB_RECURSE CUCUMBER_GHERKIN_BIN_SOURCES ${CUCUMBER_GHERKIN_BIN_SRC_DIR}/*.[ch]pp)
+file(GLOB_RECURSE CUCUMBER_GHERKIN_BIN_SOURCES "${CUCUMBER_GHERKIN_BIN_SRC_DIR}/*.[ch]pp")
 list(APPEND CUCUMBER_GHERKIN_BIN_ALL_SOURCES ${CUCUMBER_GHERKIN_BIN_SOURCES})
 
 target_sources(
@@ -16,14 +16,9 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(
-    cucumber_gherkin_bin
-    PUBLIC
-        cucumber::gherkin
-)
-
 set_target_properties(
     cucumber_gherkin_bin
     PROPERTIES
-        OUTPUT_NAME gherkin
+        CXX_STANDARD 17
+        OUTPUT_NAME cucumber_gherkin
 )
