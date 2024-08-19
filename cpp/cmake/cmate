@@ -51,6 +51,10 @@ function(cmate_setg VAR VAL)
     set(${VAR} "${VAL}" CACHE INTERNAL "${VAR}")
 endfunction()
 
+function(cmate_unsetg VAR)
+    unset(${VAR} CACHE)
+endfunction()
+
 function(cmate_appendg VAR VAL)
     if(${VAR})
         set(VAL "${${VAR}};${VAL}")
@@ -1756,6 +1760,7 @@ Options:
 
 function(cmate_build)
     cmate_configure()
+    cmate_unsetg(CMATE_BUILD_TYPES)
 
     cmate_set_build_types(
         CMATE_BUILD_DEBUG
