@@ -2,7 +2,7 @@
 name: cucumber_gherkin
 version: 0.1.0
 namespace: cucumber
-std: 17
+std: 20
 packages:
   cmake:
     - nlohmann_json
