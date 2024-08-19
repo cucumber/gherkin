@@ -16,6 +16,12 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+target_link_libraries(
+    cucumber_gherkin_generate_tokens_bin
+    PUBLIC
+        cucumber::gherkin
+)
+
 set_target_properties(
     cucumber_gherkin_generate_tokens_bin
     PROPERTIES

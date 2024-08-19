@@ -1343,7 +1343,6 @@ function(cmate_configure_make_dep DEP VAR)
         cmate_dep_parse(${SPEC} DEP)
         cmate_json_get_array(${DEP} "${SPEC};args" DEP.ARGS)
         cmate_json_get_array(${DEP} "${SPEC};srcdir" DEP.SRCDIR)
-        message("SPEC=${SPEC} A=${DEP.ARGS} S=${DEP.SRCDIR}")
     elseif(T STREQUAL "STRING")
         cmate_dep_parse(${DEP} DEP)
     else()
@@ -1882,7 +1881,7 @@ endfunction()
 #
 ###############################################################################
 list(APPEND CMATE_CMDS "install")
-set(CMATE_INSTALL_SHORT_HELP "Install dependencies listed in deps.txt")
+set(CMATE_INSTALL_SHORT_HELP "Install dependencies listed in project.yaml")
 set(
     CMATE_INSTALL_HELP
     "
@@ -1897,7 +1896,7 @@ function(cmate_install_cmake_dep)
     cmate_dep_state_file("installed" INSTALLED)
 
     if(NOT EXISTS ${CONFIGURED})
-        cmate_msg("building with: ${ARGV}")
+        cmate_msg("building with: ${DEP.ARGS}")
 
         set(ARGS "")
 
@@ -1920,7 +1919,7 @@ function(cmate_install_cmake_dep)
                 -G Ninja
                 ${ARGS}
                 -S ${CMATE_DEP_SOURCE_DIR} -B ${CMATE_DEP_BUILD_DIR}
-                ${ARGV}
+                ${DEP.ARGS}
         )
         cmate_dep_set_state("configured")
     endif()
@@ -1958,7 +1957,7 @@ function(cmate_install_meson_dep)
                 --prefix=${CMATE_ENV_DIR}
                 --pkg-config-path=${CMATE_ENV_DIR}
                 --cmake-prefix-path=${CMATE_ENV_DIR}
-                ${ARGV}
+                ${DEP.ARGS}
                 . ${SRCDIR}
         )
         cmate_dep_set_state("configured")
@@ -1980,7 +1979,7 @@ function(cmate_install_autotools_dep)
             CMD
                 ${CMATE_DEP_SOURCE_DIR}/configure
                 --prefix=${CMATE_ENV_DIR}
-                ${ARGV}
+                ${DEP.ARGS}
         )
         cmate_dep_set_state("configured")
     endif()
@@ -2014,93 +2013,65 @@ function(cmate_install_makefile_dep)
     endif()
 endfunction()
 
-function(cmate_install_dep ARGS)
-    set(OPT_PROC ON)
-    string(REGEX MATCHALL "[^ \"']+|\"([^\"]*)\"|'([^']*)'" ARGS "${ARGS}")
-
-    foreach(ARG ${ARGS})
-        if(OPT_PROC AND ARG MATCHES "^--")
-            if(ARG STREQUAL "--")
-                set(OPT_PROC OFF)
-            elseif(ARG MATCHES "^--srcdir=(.+)")
-                cmate_setg(
-                    CMATE_DEP_SOURCE_DIR
-                    "${CMATE_DEP_SOURCE_DIR}/${CMAKE_MATCH_1}"
-                )
-            endif()
-        else()
-            list(APPEND CONF_ARGS ${ARG})
-        endif()
-    endforeach()
+function(cmate_install_dep)
+    if(NOT "${DEP.SRCDIR}" STREQUAL "")
+        cmate_setg(
+            CMATE_DEP_SOURCE_DIR
+            "${CMATE_DEP_SOURCE_DIR}/${DEP.SRCDIR}"
+        )
+    endif()
 
     if(NOT IS_DIRECTORY "${CMATE_DEP_SOURCE_DIR}")
         cmate_die("invalid source directory: ${CMATE_DEP_SOURCE_DIR}")
     endif()
 
     if(EXISTS "${CMATE_DEP_SOURCE_DIR}/CMakeLists.txt")
-        cmate_install_cmake_dep(${CONF_ARGS})
+        cmate_install_cmake_dep()
     elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/meson.build")
-        cmate_install_meson_dep(${CONF_ARGS})
+        cmate_install_meson_dep()
     elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/configure")
-        cmate_install_autotools_dep(${CONF_ARGS})
+        cmate_install_autotools_dep()
     elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/Makefile")
-        cmate_install_makefile_dep(${CONF_ARGS})
+        cmate_install_makefile_dep()
     else()
         cmate_die("don't know how to build in ${CMATE_DEP_SOURCE_DIR}")
     endif()
 endfunction()
 
-function(cmate_install_repo HOST REPO TAG ARGS)
-    cmate_dep_get_repo(${HOST} ${REPO} "${TAG}")
-    cmate_install_dep("${ARGS}")
-endfunction()
-
-function(cmate_install_url URL ARGS)
-    cmate_deps_get_url(${URL})
-    cmate_install_dep("${ARGS}")
-endfunction()
-
 function(cmate_install)
-    if(NOT EXISTS ${CMATE_DEPSFILE})
-        cmate_msg("no dependencies")
-        return()
-    endif()
+    cmate_conf_get("deps" DEPS)
 
-    file(STRINGS ${CMATE_DEPSFILE} DEPS)
+    foreach(DEP ${DEPS})
+        string(JSON T ERROR_VARIABLE ERR TYPE ${DEP})
 
-    foreach(SPEC ${DEPS})
-        if(SPEC MATCHES "^#")
-            # Skip comments
-            continue()
-        elseif(SPEC MATCHES "^([A-Za-z0-9_-]+)=(.+)$")
-            # Variable assignment
-            cmate_setg("CMATE_${CMAKE_MATCH_1}" "${CMAKE_MATCH_2}")
-        elseif(SPEC MATCHES "^([a-z]+://[^ ]+)([ ](.+))?$")
-            # URL
-            set(URL ${CMAKE_MATCH_1})
-            set(ARGS "${CMAKE_MATCH_3}")
-            cmate_msg("checking ${URL}")
-            cmate_install_url(${URL} "${ARGS}")
-        elseif(SPEC MATCHES "^(([^: ]+):)?([^@ ]+)(@([^ ]+))?([ ](.+))?$")
-            # GitHub/GitLab style project short ref
-            if(CMAKE_MATCH_2)
-                if(CMATE_${CMAKE_MATCH_2})
-                    set(HOST ${CMATE_${CMAKE_MATCH_2}})
-                else()
-                    cmate_die("unknown id: ${CMAKE_MATCH_2}")
-                endif()
-            else()
-                set(HOST ${CMATE_${CMATE_GIT_HOST}})
+        if(T STREQUAL "OBJECT")
+            string(JSON DKEYS LENGTH ${DEP})
+
+            if(NOT DKEYS EQUAL 1)
+                cmate_die("invalid dependency: expected a single key, got ${NKEYS}: ${DEP}")
             endif()
 
-            set(REPO ${CMAKE_MATCH_3})
-            set(TAG ${CMAKE_MATCH_5})
-            set(ARGS "${CMAKE_MATCH_7}")
-            cmate_msg("checking ${REPO}")
-            cmate_install_repo(${HOST} ${REPO} "${TAG}" "${ARGS}")
+            string(JSON SPEC MEMBER ${DEP} 0)
+            cmate_dep_parse(${SPEC} DEP)
+            cmate_json_get_array(${DEP} "${SPEC};args" DEP.ARGS)
+            cmate_json_get_array(${DEP} "${SPEC};srcdir" DEP.SRCDIR)
+        elseif(T STREQUAL "STRING")
+            cmate_dep_parse(${DEP} DEP)
         else()
-            cmate_die("invalid dependency line: ${SPEC}")
+            cmate_die("invalid dependency: expected object or string, got ${DEP}")
         endif()
+
+        if(NOT "${DEP.REPO}" STREQUAL "")
+            cmate_msg("checking ${DEP.REPO}")
+            cmate_dep_get_repo(${DEP.HOST} ${DEP.REPO} "${DEP.TAG}")
+        elseif(NOT "${DEP.URL}" STREQUAL "")
+            cmate_msg("checking ${DEP.URL}")
+            cmate_dep_get_url(${DEP.URL})
+        else()
+            cmate_die("invalid dependency: ${DEP}")
+        endif()
+
+        cmate_install_dep()
     endforeach()
 endfunction()
 ###############################################################################
@@ -2372,7 +2343,7 @@ target_include_directories(
     @T.TNAME@
     PUBLIC
         $<BUILD_INTERFACE:${@T.UTNAME@_INC_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/@NS@>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/@P.NS@>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -2583,7 +2554,7 @@ install(
 % foreach(TARGET ${P.TARGETS.LIB})
 
 install(
-    DIRECTORY "${PROJECT_SOURCE_DIR}/include/%{ ${P.TARGETS.LIB.${TARGET}.NAME} }%"
+    DIRECTORY "${PROJECT_SOURCE_DIR}/include/%{ ${P.TARGETS.LIB.${TARGET}.NAME} }%/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/@P.NS@
 )
 % endforeach()

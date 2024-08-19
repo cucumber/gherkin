@@ -19,9 +19,16 @@ target_include_directories(
     cucumber_gherkin_lib
     PUBLIC
         $<BUILD_INTERFACE:${CUCUMBER_GHERKIN_LIB_INC_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/cucumber>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(
+    cucumber_gherkin_lib
+    PUBLIC
+        nlohmann_json::nlohmann_json
+        cucumber::messages
 )
 
 set_target_properties(

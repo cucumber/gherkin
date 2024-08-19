@@ -153,6 +153,6 @@ install(
 
 
 install(
-    DIRECTORY "${PROJECT_SOURCE_DIR}/include/gherkin"
+    DIRECTORY "${PROJECT_SOURCE_DIR}/include/gherkin/"
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cucumber
 )
