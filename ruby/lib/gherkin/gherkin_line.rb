@@ -90,9 +90,7 @@ module Gherkin
       tags = []
       items.each { |untrimmed|
         item = untrimmed.strip
-        if item.length == 0
-          next
-        end
+        next if item.length == 0
 
         unless item =~ /^\S+$/
           location = { line: @line_number, column: column }

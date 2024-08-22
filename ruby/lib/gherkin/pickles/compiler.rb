@@ -144,9 +144,7 @@ module Gherkin
           type: keyword_type,
           text: interpolate(step.text, variable_cells, value_cells),
         }
-        if values_row
-          props[:ast_node_ids].push(values_row.id)
-        end
+        props[:ast_node_ids].push(values_row.id) if values_row
 
         if step.data_table
           data_table = Cucumber::Messages::PickleStepArgument.new(
@@ -181,9 +179,7 @@ module Gherkin
         props = {
           content: interpolate(doc_string.content, variable_cells, value_cells)
         }
-        if doc_string.media_type
-          props[:media_type] = interpolate(doc_string.media_type, variable_cells, value_cells)
-        end
+        props[:media_type] = interpolate(doc_string.media_type, variable_cells, value_cells) if doc_string.media_type
         Cucumber::Messages::PickleDocString.new(**props)
       end
 
