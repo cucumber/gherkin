@@ -199,8 +199,8 @@ module Gherkin
         line_tokens = node.get_tokens(:Other)
         # Trim trailing empty lines
         last_non_empty = line_tokens.rindex { |token| !token.line.trimmed_line_text.empty? }
-        description = line_tokens[0..last_non_empty].map { |token| token.matched_text }.join("\n")
-        return description
+        line_tokens[0..last_non_empty].map { |token| token.matched_text }.join("\n")
+
       when :Feature
         header = node.get_single(:FeatureHeader)
         return unless header
@@ -262,7 +262,7 @@ module Gherkin
           feature: feature
         )
       else
-        return node
+        node
       end
     end
   end

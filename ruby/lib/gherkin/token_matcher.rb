@@ -138,7 +138,7 @@ module Gherkin
 
       set_token_matched(token,
                         :StepLine, title, keyword, nil, keyword_type)
-      return true
+      true
     end
 
     private
