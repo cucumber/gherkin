@@ -65,7 +65,7 @@ module Gherkin
     def match_Comment(token)
       return false unless token.line.start_with?('#')
 
-      text = token.line.get_line_text(0) #take the entire line, including leading space
+      text = token.line.get_line_text(0) # take the entire line, including leading space
       set_token_matched(token, :Comment, text, nil, 0)
       true
     end
