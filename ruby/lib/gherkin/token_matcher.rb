@@ -147,7 +147,7 @@ module Gherkin
 
     def add_keyword_type_mappings(keywords, type)
       keywords.each do |keyword|
-        @keyword_types[keyword] = [] if not @keyword_types.has_key?(keyword)
+        @keyword_types[keyword] = [] unless @keyword_types.has_key?(keyword)
         @keyword_types[keyword] += [type]
       end
     end
