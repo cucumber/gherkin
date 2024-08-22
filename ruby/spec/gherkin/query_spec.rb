@@ -81,7 +81,7 @@ describe Gherkin::Query do
           .to eq(
             [
               gherkin_document.feature.location,
-              background.location,
+              background.location
             ]
           )
       end
@@ -99,7 +99,7 @@ describe Gherkin::Query do
               gherkin_document.feature.location,
               background.location,
               rule.location,
-              rule_background.location,
+              rule_background.location
             ]
           )
       end
@@ -113,7 +113,7 @@ describe Gherkin::Query do
           .to eq(
             [
               gherkin_document.feature.location,
-              background.location,
+              background.location
             ]
           )
       end
