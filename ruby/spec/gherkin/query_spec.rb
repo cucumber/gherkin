@@ -26,7 +26,7 @@ describe Gherkin::Query do
   end
 
   let(:feature_content) do
-    """
+    ''"
     @feature-tag
     Feature: my feature
 
@@ -54,7 +54,7 @@ describe Gherkin::Query do
         @ruled-scenario-tag
         Scenario: a ruled scenario
           Given a step in the ruled scenario
-    """
+    "''
   end
 
   describe '#update' do
@@ -120,7 +120,7 @@ describe Gherkin::Query do
     end
 
     it 'raises an exception if called with an invalid id' do
-      expect { query.scenario_parent_locations("BAD") }.to raise_error(Gherkin::AstNodeNotLocatedException)
+      expect { query.scenario_parent_locations('BAD') }.to raise_error(Gherkin::AstNodeNotLocatedException)
     end
   end
 
@@ -135,7 +135,7 @@ describe Gherkin::Query do
     let(:scenario) { scenarios.first }
 
     it 'raises an exception when the AST node ID is unknown' do
-      expect { query.location("this-id-may-not-exist-for-real") }.to raise_exception(Gherkin::AstNodeNotLocatedException)
+      expect { query.location('this-id-may-not-exist-for-real') }.to raise_exception(Gherkin::AstNodeNotLocatedException)
     end
 
     it 'provides the location of a scenario' do

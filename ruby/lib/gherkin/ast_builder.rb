@@ -88,7 +88,7 @@ module Gherkin
 
       cell_count = rows[0].cells.length
       rows.each do |row|
-        raise AstBuilderException.new("inconsistent cell count within the table", row.location.to_h) if row.cells.length != cell_count
+        raise AstBuilderException.new('inconsistent cell count within the table', row.location.to_h) if row.cells.length != cell_count
       end
     end
 
