@@ -27,8 +27,6 @@ module Gherkin
     from_sources([encode_source_message(uri, data)], options)
   end
 
-  private
-
   def self.encode_source_message(uri, data)
     Cucumber::Messages::Source.new(
       uri: uri,
