@@ -9,18 +9,18 @@ module Gherkin
 
   def self.from_paths(paths, options = {})
     Stream::ParserMessageStream.new(
-        paths,
-        [],
-        options
-      ).messages
+      paths,
+      [],
+      options
+    ).messages
   end
 
   def self.from_sources(sources, options = {})
     Stream::ParserMessageStream.new(
-        [],
-        sources,
-        options
-      ).messages
+      [],
+      sources,
+      options
+    ).messages
   end
 
   def self.from_source(uri, data, options = {})

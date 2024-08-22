@@ -24,10 +24,12 @@ module Gherkin
 
     def build(token)
       if token.matched_type == :Comment
-        @comments.push(Cucumber::Messages::Comment.new(
-          location: get_location(token, 0),
-          text: token.matched_text
-        ))
+        @comments.push(
+          Cucumber::Messages::Comment.new(
+            location: get_location(token, 0),
+            text: token.matched_text
+          )
+        )
       else
         current_node.add(token.matched_type, token)
       end
@@ -56,11 +58,13 @@ module Gherkin
 
       tags_node.get_tokens(:TagLine).each do |token|
         token.matched_items.each do |tag_item|
-          tags.push(Cucumber::Messages::Tag.new(
-            location: get_location(token, tag_item.column),
-            name: tag_item.text,
-            id: @id_generator.new_id
-          ))
+          tags.push(
+            Cucumber::Messages::Tag.new(
+              location: get_location(token, tag_item.column),
+              name: tag_item.text,
+              id: @id_generator.new_id
+            )
+          )
         end
       end
 

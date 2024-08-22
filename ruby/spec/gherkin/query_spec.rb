@@ -77,10 +77,13 @@ describe Gherkin::Query do
       let(:scenario) { scenarios.first }
 
       it 'provides the feature and background locations of a given scenario node id' do
-        expect(query.scenario_parent_locations(scenario.id)).to eq([
-          gherkin_document.feature.location,
-          background.location,
-        ])
+        expect(query.scenario_parent_locations(scenario.id))
+          .to eq(
+            [
+              gherkin_document.feature.location,
+              background.location,
+            ]
+          )
       end
     end
 
@@ -90,12 +93,15 @@ describe Gherkin::Query do
       let(:scenario) { find_message_by_attribute(rule.children, :scenario) }
 
       it 'provides the feature, background, rule, and rule background locations of a given scenario node id' do
-        expect(query.scenario_parent_locations(scenario.id)).to eq([
-          gherkin_document.feature.location,
-          background.location,
-          rule.location,
-          rule_background.location,
-        ])
+        expect(query.scenario_parent_locations(scenario.id))
+          .to eq(
+            [
+              gherkin_document.feature.location,
+              background.location,
+              rule.location,
+              rule_background.location,
+            ]
+          )
       end
     end
 
@@ -103,10 +109,13 @@ describe Gherkin::Query do
       let(:scenario) { scenarios.last }
 
       it 'provides the feature and background locations of a given scenario outline node id' do
-        expect(query.scenario_parent_locations(scenario.id)).to eq([
-          gherkin_document.feature.location,
-          background.location,
-        ])
+        expect(query.scenario_parent_locations(scenario.id))
+          .to eq(
+            [
+              gherkin_document.feature.location,
+              background.location,
+            ]
+          )
       end
     end
 
