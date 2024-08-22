@@ -49,9 +49,7 @@ module Gherkin
     def match_TableRow(token)
       return false unless token.line.start_with?('|')
 
-      # TODO: indent
-      set_token_matched(token, :TableRow, nil, nil, nil, nil,
-                        token.line.table_cells)
+      set_token_matched(token, :TableRow, nil, nil, nil, nil, token.line.table_cells)
       true
     end
 
@@ -73,7 +71,7 @@ module Gherkin
     def match_Language(token)
       return false unless token.line.trimmed_line_text =~ LANGUAGE_PATTERN
 
-      dialect_name = $1
+      dialect_name = Regexp.last_match(1)
       set_token_matched(token, :Language, dialect_name)
 
       change_dialect(dialect_name, token.location)
