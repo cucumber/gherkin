@@ -36,11 +36,12 @@ def process_messages(messages, _options)
   end
 end
 
-if ARGV.empty?
-  # Read from $stdin
-  messages = Cucumber::Messages::Helpers::NdjsonToMessageEnumerator.new($stdin)
-else
-  messages = Gherkin.from_paths(ARGV, options)
-end
+messages =
+  if ARGV.empty?
+    # Read from $stdin
+    Cucumber::Messages::Helpers::NdjsonToMessageEnumerator.new($stdin)
+  else
+    Gherkin.from_paths(ARGV, options)
+  end
 
 process_messages(messages, options)
