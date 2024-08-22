@@ -18,31 +18,31 @@ module Gherkin
 
       def messages
         enumerated = false
-        Enumerator.new do |y|
+        Enumerator.new do |yielder|
           raise DoubleIterationException, "Messages have already been enumerated" if enumerated
 
           enumerated = true
 
           sources.each do |source|
-            y.yield(Cucumber::Messages::Envelope.new(source: source)) if @options[:include_source]
+            yielder.yield(Cucumber::Messages::Envelope.new(source: source)) if @options[:include_source]
             begin
               gherkin_document = nil
 
               if @options[:include_gherkin_document]
                 gherkin_document = build_gherkin_document(source)
-                y.yield(Cucumber::Messages::Envelope.new(gherkin_document: gherkin_document))
+                yielder.yield(Cucumber::Messages::Envelope.new(gherkin_document: gherkin_document))
               end
               if @options[:include_pickles]
                 gherkin_document ||= build_gherkin_document(source)
                 pickles = @compiler.compile(gherkin_document, source)
                 pickles.each do |pickle|
-                  y.yield(Cucumber::Messages::Envelope.new(pickle: pickle))
+                  yielder.yield(Cucumber::Messages::Envelope.new(pickle: pickle))
                 end
               end
             rescue CompositeParserException => e
-              yield_parse_errors(y, e.errors, source.uri)
+              yield_parse_errors(yielder, e.errors, source.uri)
             rescue ParserException => e
-              yield_parse_errors(y, [e], source.uri)
+              yield_parse_errors(yielder, [e], source.uri)
             end
           end
         end
@@ -50,7 +50,7 @@ module Gherkin
 
       private
 
-      def yield_parse_errors(y, errors, uri)
+      def yield_parse_errors(yielder, errors, uri)
         errors.each do |err|
           parse_error = Cucumber::Messages::ParseError.new(
             source: Cucumber::Messages::SourceReference.new(
@@ -62,22 +62,22 @@ module Gherkin
             ),
             message: err.message
           )
-          y.yield(Cucumber::Messages::Envelope.new(parse_error: parse_error))
+          yielder.yield(Cucumber::Messages::Envelope.new(parse_error: parse_error))
         end
       end
 
       def sources
-        Enumerator.new do |y|
+        Enumerator.new do |yielder|
           @paths.each do |path|
             source = Cucumber::Messages::Source.new(
               uri: path,
               data: File.open(path, 'r:UTF-8', &:read),
               media_type: 'text/x.cucumber.gherkin+plain'
             )
-            y.yield(source)
+            yielder.yield(source)
           end
           @sources.each do |source|
-            y.yield(source)
+            yielder.yield(source)
           end
         end
       end
