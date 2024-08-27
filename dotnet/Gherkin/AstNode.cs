@@ -3,15 +3,11 @@ using System.Linq;
 
 namespace Gherkin;
 
-public class AstNode
+public class AstNode(RuleType ruleType)
 {
     private readonly Dictionary<RuleType, IList<object>> subItems = new Dictionary<RuleType, IList<object>>();
-    public RuleType RuleType { get; private set; }
 
-    public AstNode(RuleType ruleType)
-    {
-        this.RuleType = ruleType;
-    }
+    public RuleType RuleType { get; } = ruleType;
 
     public Token GetToken(TokenType tokenType)
     {

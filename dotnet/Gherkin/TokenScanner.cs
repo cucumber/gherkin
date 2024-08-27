@@ -13,15 +13,10 @@ namespace Gherkin;
 /// for  Gherkin keywords for the associated language. The keywords are defined in 
 /// gherkin-languages.json.
 /// </summary>
-public class TokenScanner : ITokenScanner
+public class TokenScanner(TextReader reader) : ITokenScanner
 {
     protected int lineNumber = 0;
-    protected readonly TextReader reader;
-
-    public TokenScanner(TextReader reader)
-    {
-        this.reader = reader;
-    }
+    protected readonly TextReader reader = reader;
 
     public virtual Token Read()
     {

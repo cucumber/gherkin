@@ -1,34 +1,27 @@
+using Gherkin.Ast;
+using Gherkin.CucumberMessages.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gherkin.Ast;
-using Gherkin.CucumberMessages.Types;
 using Background = Gherkin.CucumberMessages.Types.Background;
 using Comment = Gherkin.CucumberMessages.Types.Comment;
-using Examples = Gherkin.CucumberMessages.Types.Examples;
-using Feature = Gherkin.CucumberMessages.Types.Feature;
-using Location = Gherkin.CucumberMessages.Types.Location;
-using Rule = Gherkin.CucumberMessages.Types.Rule;
-using Step = Gherkin.CucumberMessages.Types.Step;
 using DataTable = Gherkin.CucumberMessages.Types.DataTable;
 using DocString = Gherkin.CucumberMessages.Types.DocString;
+using Examples = Gherkin.CucumberMessages.Types.Examples;
+using Feature = Gherkin.CucumberMessages.Types.Feature;
 using GherkinDocument = Gherkin.CucumberMessages.Types.GherkinDocument;
+using Location = Gherkin.CucumberMessages.Types.Location;
+using Rule = Gherkin.CucumberMessages.Types.Rule;
 using Scenario = Gherkin.CucumberMessages.Types.Scenario;
+using Step = Gherkin.CucumberMessages.Types.Step;
 using TableCell = Gherkin.CucumberMessages.Types.TableCell;
 using TableRow = Gherkin.CucumberMessages.Types.TableRow;
 using Tag = Gherkin.CucumberMessages.Types.Tag;
 
 namespace Gherkin.CucumberMessages;
 
-public class AstMessagesConverter
+public class AstMessagesConverter(IIdGenerator idGenerator)
 {
-    private readonly IIdGenerator _idGenerator;
-
-    public AstMessagesConverter(IIdGenerator idGenerator)
-    {
-        _idGenerator = idGenerator;
-    }
-
     public GherkinDocument ConvertGherkinDocumentToEventArgs(Ast.GherkinDocument gherkinDocument, string sourceEventUri)
     {
         return new GherkinDocument()
@@ -97,7 +90,7 @@ public class AstMessagesConverter
                 var backgroundSteps = background.Steps.Select(ConvertStep).ToList();
                 return new Tuple<Background, Rule, Scenario>(new Background
                 {
-                    Id = _idGenerator.GetNewId(),
+                    Id = idGenerator.GetNewId(),
                     Location = ConvertLocation(background.Location),
                     Name = CucumberMessagesDefaults.UseDefault(background.Name, CucumberMessagesDefaults.DefaultName),
                     Description = CucumberMessagesDefaults.UseDefault(background.Description, CucumberMessagesDefaults.DefaultDescription),
@@ -110,7 +103,7 @@ public class AstMessagesConverter
                 var tags = scenario.Tags.Select(ConvertTag).ToReadOnlyCollection();
                 return new Tuple<Background, Rule, Scenario>(null, null, new Scenario()
                 {
-                    Id = _idGenerator.GetNewId(),
+                    Id = idGenerator.GetNewId(),
                     Keyword = scenario.Keyword,
                     Location = ConvertLocation(scenario.Location),
                     Name = CucumberMessagesDefaults.UseDefault(scenario.Name, CucumberMessagesDefaults.DefaultName),
@@ -125,7 +118,7 @@ public class AstMessagesConverter
                     var ruleTags = rule.Tags.Select(ConvertTag).ToReadOnlyCollection();
                     return new Tuple<Background, Rule, Scenario>(null, new Rule
                     {
-                        Id = _idGenerator.GetNewId(),
+                        Id = idGenerator.GetNewId(),
                         Name = CucumberMessagesDefaults.UseDefault(rule.Name, CucumberMessagesDefaults.DefaultName),
                         Description = CucumberMessagesDefaults.UseDefault(rule.Description, CucumberMessagesDefaults.DefaultDescription),
                         Keyword = rule.Keyword,
@@ -150,7 +143,7 @@ public class AstMessagesConverter
         var tags = examples.Tags.Select(ConvertTag).ToReadOnlyCollection();
         return new Examples()
         {
-            Id = _idGenerator.GetNewId(),
+            Id = idGenerator.GetNewId(),
             Name = CucumberMessagesDefaults.UseDefault(examples.Name, CucumberMessagesDefaults.DefaultName),
             Keyword = examples.Keyword,
             Description = CucumberMessagesDefaults.UseDefault(examples.Description, CucumberMessagesDefaults.DefaultDescription),
@@ -174,7 +167,7 @@ public class AstMessagesConverter
         return rows.Select(b =>
             new TableRow
             {
-                Id = _idGenerator.GetNewId(),
+                Id = idGenerator.GetNewId(),
                 Location = ConvertLocation(b.Location),
                 Cells = b.Cells.Select(ConvertCell).ToReadOnlyCollection()
             }).ToReadOnlyCollection();
@@ -187,7 +180,7 @@ public class AstMessagesConverter
 
         return new TableRow
         {
-            Id = _idGenerator.GetNewId(),
+            Id = idGenerator.GetNewId(),
             Location = ConvertLocation(examples.TableHeader.Location),
             Cells = examples.TableHeader.Cells.Select(ConvertCell).ToReadOnlyCollection()
         };
@@ -197,7 +190,7 @@ public class AstMessagesConverter
     {
         return new Tag
         {
-            Id = _idGenerator.GetNewId(),
+            Id = idGenerator.GetNewId(),
             Location = ConvertLocation(tag.Location),
             Name = tag.Name
         };
@@ -239,7 +232,7 @@ public class AstMessagesConverter
 
         return new Step()
         {
-            Id = _idGenerator.GetNewId(),
+            Id = idGenerator.GetNewId(),
             Keyword = step.Keyword,
             KeywordType = step.KeywordType,
             Text = step.Text,

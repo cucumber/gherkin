@@ -1,14 +1,13 @@
 using System;
-using System.Text.RegularExpressions;
 using System.Linq;
-using Gherkin.Ast;
+using System.Text.RegularExpressions;
 
 namespace Gherkin;
 
-public class TokenMatcher : ITokenMatcher
+public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITokenMatcher
 {
     private readonly Regex LANGUAGE_PATTERN = new Regex("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
-    private readonly IGherkinDialectProvider dialectProvider;
+    private readonly IGherkinDialectProvider dialectProvider = dialectProvider ?? new GherkinDialectProvider();
     private GherkinDialect currentDialect;
     private string activeDocStringSeparator = null;
     private int indentToRemove = 0;
@@ -21,11 +20,6 @@ public class TokenMatcher : ITokenMatcher
                 currentDialect = dialectProvider.DefaultDialect;
             return currentDialect;
         }
-    }
-
-    public TokenMatcher(IGherkinDialectProvider dialectProvider = null)
-    {
-        this.dialectProvider = dialectProvider ?? new GherkinDialectProvider();
     }
 
     public TokenMatcher(string defaultLanguage) : this(new GherkinDialectProvider(defaultLanguage))

@@ -1,9 +1,7 @@
+using Gherkin.Ast;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Gherkin.Ast;
-using System.Reflection;
 using TinyJson;
 
 namespace Gherkin;
@@ -11,7 +9,7 @@ namespace Gherkin;
 public interface IGherkinDialectProvider
 {
     GherkinDialect DefaultDialect { get; }
-    GherkinDialect GetDialect(string language, Ast.Location location);
+    GherkinDialect GetDialect(string language, Location location);
 }
 
 public class GherkinDialectProvider : IGherkinDialectProvider
@@ -28,13 +26,13 @@ public class GherkinDialectProvider : IGherkinDialectProvider
         defaultDialect = new Lazy<GherkinDialect>(() => GetDialect(defaultLanguage, null));
     }
 
-    protected virtual bool TryGetDialect(string language, Ast.Location location, out GherkinDialect dialect)
+    protected virtual bool TryGetDialect(string language, Location location, out GherkinDialect dialect)
     {
         var gherkinLanguageSettings = LoadLanguageSettings();
         return TryGetDialect(language, gherkinLanguageSettings, location, out dialect);
     }
 
-    public virtual GherkinDialect GetDialect(string language, Ast.Location location)
+    public virtual GherkinDialect GetDialect(string language, Location location)
     {
         if (!TryGetDialect(language, location, out var dialect))
             throw new NoSuchLanguageException(language, location);
@@ -61,7 +59,7 @@ public class GherkinDialectProvider : IGherkinDialectProvider
         return JSONParser.FromJson<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent);
     }
 
-    protected virtual bool TryGetDialect(string language, Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings, Ast.Location location, out GherkinDialect dialect)
+    protected virtual bool TryGetDialect(string language, Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings, Location location, out GherkinDialect dialect)
     {
         if (!gherkinLanguageSettings.TryGetValue(language, out var languageSettings))
         {

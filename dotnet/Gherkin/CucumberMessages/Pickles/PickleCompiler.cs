@@ -1,21 +1,15 @@
+using Gherkin.CucumberMessages.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gherkin.CucumberMessages.Types;
 
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace Gherkin.CucumberMessages.Pickles;
 
-public class PickleCompiler
+public class PickleCompiler(IIdGenerator idGenerator)
 {
-    private readonly IIdGenerator _idGenerator;
     protected StepKeywordType CurrentStepKeywordType { get; set; }
-
-    public PickleCompiler(IIdGenerator idGenerator)
-    {
-        _idGenerator = idGenerator;
-    }
 
     public List<Pickle> Compile(GherkinDocument gherkinDocument)
     {
@@ -114,7 +108,7 @@ public class PickleCompiler
         steps.AddRange(PickleSteps(scenario.Steps));
 
         Pickle pickle = new Pickle(
-                _idGenerator.GetNewId(),
+                idGenerator.GetNewId(),
                 gherkinDocumentUri,
                 scenario.Name,
                 language,
@@ -160,7 +154,7 @@ public class PickleCompiler
                 }
 
                 Pickle pickle = new Pickle(
-                        _idGenerator.GetNewId(),
+                        idGenerator.GetNewId(),
                         gherkinDocumentUri,
                         Interpolate(scenarioOutline.Name, variableCells, valueCells),
                         language,
@@ -177,7 +171,7 @@ public class PickleCompiler
     protected virtual PickleStep CreatePickleStep(Step step, string text, PickleStepArgument argument, IEnumerable<string> astNodeIds)
     {
         CurrentStepKeywordType = GetKeywordType(step, CurrentStepKeywordType);
-        return new PickleStep(argument, astNodeIds, _idGenerator.GetNewId(), text, CurrentStepKeywordType);
+        return new PickleStep(argument, astNodeIds, idGenerator.GetNewId(), text, CurrentStepKeywordType);
     }
 
     protected virtual StepKeywordType GetKeywordType(Step step, StepKeywordType lastStepKeywordType)
