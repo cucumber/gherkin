@@ -7,12 +7,14 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Changed
+### Added
 - [PHP] update dependency messages up to v26 ([#268](https://github.com/cucumber/gherkin/pull/268))
 - [JavaScript] update dependency messages up to v26 ([#268](https://github.com/cucumber/gherkin/pull/268))
-- [JavaScript] update dependency messages up to at least v19.1.4 ([#268](https://github.com/cucumber/gherkin/pull/268)) 
+- [JavaScript] update dependency messages up to at least v19.1.4 ([#268](https://github.com/cucumber/gherkin/pull/268))
 - [Java] update dependency messages up to v26 ([#269](https://github.com/cucumber/gherkin/pull/269))
 - [Ruby] update dependency messages up to v26 ([#267](https://github.com/cucumber/gherkin/pull/267))
+
+### Changed
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0 ([#265](https://github.com/cucumber/gherkin/pull/265))
 - [.NET] Adopt File Scoped Namespaces c# feature ([#271](https://github.com/cucumber/gherkin/pull/271))
 - [.NET] Adopt c# 12 primary constructors ([#272](https://github.com/cucumber/gherkin/pull/272))
