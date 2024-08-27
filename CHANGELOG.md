@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
+- [Java] Upgraded messages support to permit up to v26 ([#267](https://github.com/cucumber/gherkin/pull/269))
 - [Ruby] Upgraded messages support to permit up to v26 ([#267](https://github.com/cucumber/gherkin/pull/267))
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0 ([#265](https://github.com/cucumber/gherkin/pull/265))
 - [.NET] Adopt File Scoped Namespaces c# feature ([#271](https://github.com/cucumber/gherkin/pull/271))
