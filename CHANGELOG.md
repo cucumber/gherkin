@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-- [Ruby] Upgraded messages support to permit up to v26
+- [Ruby, Java] Upgraded messages support to permit up to v26
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
 - [.NET] Adopt File Scoped Namespaces c# feature
 - [.NET] Adopt c# 12 primary constructors
