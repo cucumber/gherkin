@@ -5,7 +5,7 @@ namespace Gherkin;
 
 public class GherkinLine : IGherkinLine
 {
-    private static char[] inlineWhitespaceChars = new char[] { ' ', '\t', '\u00A0' };
+    private static char[] inlineWhitespaceChars = [' ', '\t', '\u00A0'];
 
     private readonly string lineText;
     private readonly string trimmedLineText;

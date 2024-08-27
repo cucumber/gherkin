@@ -99,17 +99,17 @@ public class GherkinDialectProvider : IGherkinDialectProvider
     {
         return new GherkinDialect(
             "en",
-            new[] { "Feature" },
-            new[] { "Rule" },
-            new[] { "Background" },
-            new[] { "Scenario" },
-            new[] { "Scenario Outline", "Scenario Template" },
-            new[] { "Examples", "Scenarios" },
-            new[] { "* ", "Given " },
-            new[] { "* ", "When " },
-            new[] { "* ", "Then " },
-            new[] { "* ", "And " },
-            new[] { "* ", "But " });
+            ["Feature"],
+            ["Rule"],
+            ["Background"],
+            ["Scenario"],
+            ["Scenario Outline", "Scenario Template"],
+            ["Examples", "Scenarios"],
+            ["* ", "Given "],
+            ["* ", "When "],
+            ["* ", "Then "],
+            ["* ", "And "],
+            ["* ", "But "]);
     }
 }
 
