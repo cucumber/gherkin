@@ -3,6 +3,7 @@
   <PropertyGroup>
     <LangVersion>12</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>

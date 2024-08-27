@@ -1,4 +1,6 @@
-using Utf8Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Gherkin.Specs.Helper;
 
@@ -12,7 +14,13 @@ public class NDJsonParser
 
         foreach (var line in lines)
         {
-            var deserializedObject = JsonSerializer.Deserialize<T>(line);
+            var deserializedObject = JsonSerializer.Deserialize<T>(line, new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                Converters =
+                {
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+                }
+            });
             result.Add(deserializedObject);
         }
 
