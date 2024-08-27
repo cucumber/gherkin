@@ -1,5 +1,3 @@
-using System;
-
 namespace Gherkin.CucumberMessages;
 
 public interface IIdGenerator

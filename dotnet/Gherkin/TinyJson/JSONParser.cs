@@ -1,8 +1,6 @@
 // source: https://raw.githubusercontent.com/zanders3/json/master/src/JSONParser.cs
 // changes: class public -> internal
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Gherkin.Ast;
 
 public abstract class StepsContainer(Location location, string keyword, string name, string description, Step[] steps)

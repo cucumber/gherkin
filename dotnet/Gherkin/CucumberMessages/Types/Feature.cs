@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Gherkin.CucumberMessages.Types;

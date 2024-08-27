@@ -18,6 +18,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0 ([#265](https://github.com/cucumber/gherkin/pull/265))
 - [.NET] Adopt File Scoped Namespaces c# feature ([#271](https://github.com/cucumber/gherkin/pull/271))
 - [.NET] Adopt c# 12 primary constructors ([#272](https://github.com/cucumber/gherkin/pull/272))
+- [.NET] Adopt c# 10 ImplicitUsings
 
 ## [29.0.0] - 2024-08-12
 ### Added

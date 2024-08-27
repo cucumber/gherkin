@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Gherkin.CucumberMessages;
 using Gherkin.Specs.EventStubs;
 using Gherkin.Specs.Tokens;

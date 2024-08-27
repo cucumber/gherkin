@@ -1,7 +1,4 @@
 using Gherkin.Ast;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Gherkin;
 

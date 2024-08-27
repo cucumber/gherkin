@@ -1,4 +1,3 @@
-using System.IO;
 using Gherkin.Specs.Helper;
 using Xunit;
 

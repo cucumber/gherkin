@@ -1,9 +1,6 @@
 using Gherkin.CucumberMessages;
 using Gherkin.CucumberMessages.Pickles;
 using Gherkin.CucumberMessages.Types;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Gherkin.Specs.EventStubs;
 

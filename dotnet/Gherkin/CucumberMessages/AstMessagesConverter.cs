@@ -1,8 +1,5 @@
 using Gherkin.Ast;
 using Gherkin.CucumberMessages.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Background = Gherkin.CucumberMessages.Types.Background;
 using Comment = Gherkin.CucumberMessages.Types.Comment;
 using DataTable = Gherkin.CucumberMessages.Types.DataTable;

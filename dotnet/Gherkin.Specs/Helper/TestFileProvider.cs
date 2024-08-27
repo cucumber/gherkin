@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 namespace Gherkin.Specs.Helper;
 
 public class TestFileProvider
