@@ -74,6 +74,9 @@ public class AstMessagesConverter
 
     private static Location ConvertLocation(Ast.Location location)
     {
+        // In Reqnroll and SpecFlow, plugins may provide dynamically created Example data rows that don't have source locations. Hard-coding these to (0, 0).
+        if (location == null)
+            return new Location(0, 0);
         return new Location(location.Column, location.Line);
     }
 

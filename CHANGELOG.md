@@ -11,6 +11,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Ruby] Upgraded messages support to permit up to v26
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
 - [.NET] Adopt File Scoped Namespaces c# feature
+- [.NET] Modified the AstConverter to return a Location(0,0) when the AST does not contain a Location for dynamically generated Examples tables
 
 ## [29.0.0] - 2024-08-12
 ### Added
