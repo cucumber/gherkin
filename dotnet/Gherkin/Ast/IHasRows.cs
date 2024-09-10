@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+namespace Gherkin.Ast;
 
-namespace Gherkin.Ast
+public interface IHasRows
 {
-    public interface IHasRows
-    {
-        IEnumerable<TableRow> Rows { get; }
-    }
+    IEnumerable<TableRow> Rows { get; }
 }

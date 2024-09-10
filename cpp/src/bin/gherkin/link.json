@@ -1,7 +1,0 @@
-{
-    "libs": {
-        "public": [
-            "cucumber::gherkin"
-        ]
-    }
-}

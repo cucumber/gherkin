@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard2.0;net462</TargetFrameworks>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn>
     <Deterministic Condition="'$(Configuration)' == 'Release'">false</Deterministic>
@@ -18,7 +19,7 @@
     <Product>Gherkin Parser</Product>
     <PackageId>Gherkin</PackageId>
     <Authors>Cucumber Ltd, Gaspar Nagy</Authors>
-    <Copyright>Copyright &#xA9; Cucumber Ltd, Gaspar Nagy</Copyright>
+    <Copyright>Copyright © Cucumber Ltd, Gaspar Nagy</Copyright>
     <Description>Cross-platform parser for the Gherkin language, used by Cucumber, SpecFlow and other Cucumber-based tools to parse feature files.</Description>
     <PackageTags>specflow gherkin cucumber</PackageTags>
     <PackageProjectUrl>https://github.com/cucumber/gherkin</PackageProjectUrl>
@@ -31,8 +32,12 @@
     <PackageOutputPath>bin/$(Configuration)/NuGet</PackageOutputPath>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Text.Json" Version="6.0.0" />
+  </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="gherkin-languages.json"/>
+    <EmbeddedResource Include="gherkin-languages.json" />
   </ItemGroup>
 
   <ItemGroup>

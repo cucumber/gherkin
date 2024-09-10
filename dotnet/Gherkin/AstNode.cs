@@ -1,65 +1,57 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+namespace Gherkin;
 
-namespace Gherkin
+public class AstNode(RuleType ruleType)
 {
-    public class AstNode
+    private readonly Dictionary<RuleType, IList<object>> subItems = new Dictionary<RuleType, IList<object>>();
+
+    public RuleType RuleType { get; } = ruleType;
+
+    public Token GetToken(TokenType tokenType)
     {
-        private readonly Dictionary<RuleType, IList<object>> subItems = new Dictionary<RuleType, IList<object>>();
-        public RuleType RuleType { get; private set; }
+        return GetSingle<Token>((RuleType)tokenType);
+    }
 
-        public AstNode(RuleType ruleType)
-        {
-            this.RuleType = ruleType;
-        }
+    public IEnumerable<Token> GetTokens(TokenType tokenType)
+    {
+        return GetItems<Token>((RuleType)tokenType);
+    }
 
-        public Token GetToken(TokenType tokenType)
-        {
-            return GetSingle<Token>((RuleType)tokenType);
-        }
+    public T GetSingle<T>(RuleType ruleType)
+    {
+        return GetItems<T>(ruleType).SingleOrDefault();
+    }
 
-        public IEnumerable<Token> GetTokens(TokenType tokenType)
+    public IEnumerable<T> GetItems<T>(RuleType ruleType)
+    {
+        IList<object> items;
+        if (!subItems.TryGetValue(ruleType, out items))
         {
-            return GetItems<Token>((RuleType)tokenType);
+            return Enumerable.Empty<T>();
         }
+        return items.Cast<T>();
+    }
 
-        public T GetSingle<T>(RuleType ruleType)
-        {
-            return GetItems<T>(ruleType).SingleOrDefault();
-        }
+    public void SetSingle<T>(RuleType ruleType, T value)
+    {
+        subItems[ruleType] = new object[] { value };
+    }
 
-        public IEnumerable<T> GetItems<T>(RuleType ruleType)
+    public void AddRange<T>(RuleType ruleType, IEnumerable<T> values)
+    {
+        foreach (var value in values)
         {
-            IList<object> items;
-            if (!subItems.TryGetValue(ruleType, out items))
-            {
-                return Enumerable.Empty<T>();
-            }
-            return items.Cast<T>();
+            Add(ruleType, value);
         }
+    }
 
-        public void SetSingle<T>(RuleType ruleType, T value)
+    public void Add<T>(RuleType ruleType, T obj)
+    {
+        IList<object> items;
+        if (!subItems.TryGetValue(ruleType, out items))
         {
-            subItems[ruleType] = new object[] { value };
+            items = new List<object>();
+            subItems.Add(ruleType, items);
         }
-
-        public void AddRange<T>(RuleType ruleType, IEnumerable<T> values)
-        {
-            foreach (var value in values)
-            {
-                Add(ruleType, value);
-            }
-        }
-
-        public void Add<T>(RuleType ruleType, T obj)
-        {
-            IList<object> items;
-            if (!subItems.TryGetValue(ruleType, out items))
-            {
-                items = new List<object>();
-                subItems.Add(ruleType, items);
-            }
-            items.Add(obj);
-        }
+        items.Add(obj);
     }
 }

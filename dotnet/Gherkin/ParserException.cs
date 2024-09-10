@@ -1,135 +1,118 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Gherkin.Ast;
 
-namespace Gherkin
+namespace Gherkin;
+
+public abstract class ParserException(string message, Location location = null) : Exception(GetMessage(message, location))
 {
-    public abstract class ParserException : Exception
+    public Location Location { get; } = location;
+
+    private static string GetMessage(string message, Location location)
     {
-        public Ast.Location Location { get; private set; }
+        if (location == null)
+            return message;
 
-        protected ParserException(string message, Ast.Location location = null) : base(GetMessage(message, location))
-        {
-            Location = location;
-        }
-
-        private static string GetMessage(string message, Ast.Location location)
-        {
-            if (location == null)
-                return message;
-
-            return string.Format("({0}:{1}): {2}", location.Line, location.Column, message);
-        }
-
+        return string.Format("({0}:{1}): {2}", location.Line, location.Column, message);
     }
 
-    public class AstBuilderException : ParserException
-    {
-        public AstBuilderException(string message, Ast.Location location) : base(message, location)
-        {
-        }
+}
 
+public class AstBuilderException(string message, Location location) : ParserException(message, location)
+{
+}
+
+public class NoSuchLanguageException : ParserException
+{
+    public NoSuchLanguageException(string language, Location location = null) :
+        base("Language not supported: " + language, location)
+    {
+        if (language == null) throw new ArgumentNullException("language");
     }
 
-    public class NoSuchLanguageException : ParserException
-    {
-        public NoSuchLanguageException(string language, Ast.Location location = null) :
-            base("Language not supported: " + language, location)
-        {
-            if (language == null) throw new ArgumentNullException("language");
-        }
+}
 
+public class InvalidTagException(string message, Location location = null) : ParserException(message, location)
+{
+}
+
+public abstract class TokenParserException : ParserException
+{
+    protected TokenParserException(string message, Token receivedToken)
+        : base(message, GetLocation(receivedToken))
+    {
+        if (receivedToken == null) throw new ArgumentNullException("receivedToken");
     }
 
-    public class InvalidTagException : ParserException
+    private static Location GetLocation(Token receivedToken)
     {
-        public InvalidTagException(string message, Ast.Location location = null) :
-            base(message, location)
-        {
-        }
+        return receivedToken.IsEOF || receivedToken.Location.Column > 1
+            ? receivedToken.Location
+            : new Location(receivedToken.Location.Line, receivedToken.Line.Indent + 1);
     }
 
-    public abstract class TokenParserException : ParserException
+}
+
+public class UnexpectedTokenException : TokenParserException
+{
+    public string StateComment { get; set; }
+
+    public Token ReceivedToken { get; set; }
+    public string[] ExpectedTokenTypes { get; set; }
+
+    public UnexpectedTokenException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
+        : base(GetMessage(receivedToken, expectedTokenTypes), receivedToken)
     {
-        protected TokenParserException(string message, Token receivedToken)
-            : base(message, GetLocation(receivedToken))
-        {
-            if (receivedToken == null) throw new ArgumentNullException("receivedToken");
-        }
+        if (receivedToken == null) throw new ArgumentNullException("receivedToken");
+        if (expectedTokenTypes == null) throw new ArgumentNullException("expectedTokenTypes");
 
-        private static Ast.Location GetLocation(Token receivedToken)
-        {
-            return receivedToken.IsEOF || receivedToken.Location.Column > 1
-                ? receivedToken.Location
-                : new Ast.Location(receivedToken.Location.Line, receivedToken.Line.Indent + 1);
-        }
-
+        ReceivedToken = receivedToken;
+        ExpectedTokenTypes = expectedTokenTypes;
+        StateComment = stateComment;
     }
 
-    public class UnexpectedTokenException : TokenParserException
+    private static string GetMessage(Token receivedToken, string[] expectedTokenTypes)
     {
-        public string StateComment { get; private set; }
-
-        public Token ReceivedToken { get; private set; }
-        public string[] ExpectedTokenTypes { get; private set; }
-
-        public UnexpectedTokenException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
-            : base(GetMessage(receivedToken, expectedTokenTypes), receivedToken)
-        {
-            if (receivedToken == null) throw new ArgumentNullException("receivedToken");
-            if (expectedTokenTypes == null) throw new ArgumentNullException("expectedTokenTypes");
-
-            ReceivedToken = receivedToken;
-            ExpectedTokenTypes = expectedTokenTypes;
-            StateComment = stateComment;
-        }
-
-        private static string GetMessage(Token receivedToken, string[] expectedTokenTypes)
-        {
-            return string.Format("expected: {0}, got '{1}'",
-                string.Join(", ", expectedTokenTypes),
-                receivedToken.GetTokenValue().Trim());
-        }
-
+        return string.Format("expected: {0}, got '{1}'",
+            string.Join(", ", expectedTokenTypes),
+            receivedToken.GetTokenValue().Trim());
     }
 
-    public class UnexpectedEOFException : TokenParserException
+}
+
+public class UnexpectedEOFException : TokenParserException
+{
+    public string StateComment { get; }
+    public string[] ExpectedTokenTypes { get; }
+    public UnexpectedEOFException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
+        : base(GetMessage(expectedTokenTypes), receivedToken)
     {
-        public string StateComment { get; private set; }
-        public string[] ExpectedTokenTypes { get; private set; }
-        public UnexpectedEOFException(Token receivedToken, string[] expectedTokenTypes, string stateComment)
-            : base(GetMessage(expectedTokenTypes), receivedToken)
-        {
-            if (receivedToken == null) throw new ArgumentNullException("receivedToken");
-            if (expectedTokenTypes == null) throw new ArgumentNullException("expectedTokenTypes");
+        if (receivedToken == null) throw new ArgumentNullException("receivedToken");
+        if (expectedTokenTypes == null) throw new ArgumentNullException("expectedTokenTypes");
 
-            ExpectedTokenTypes = expectedTokenTypes;
-            StateComment = stateComment;
-        }
-
-        private static string GetMessage(string[] expectedTokenTypes)
-        {
-            return string.Format("unexpected end of file, expected: {0}",
-                string.Join(", ", expectedTokenTypes));
-        }
+        ExpectedTokenTypes = expectedTokenTypes;
+        StateComment = stateComment;
     }
 
-    public class CompositeParserException : ParserException
+    private static string GetMessage(string[] expectedTokenTypes)
     {
-        public IEnumerable<ParserException> Errors { get; private set; }
+        return string.Format("unexpected end of file, expected: {0}",
+            string.Join(", ", expectedTokenTypes));
+    }
+}
 
-        public CompositeParserException(ParserException[] errors)
-            : base(GetMessage(errors))
-        {
-            if (errors == null) throw new ArgumentNullException("errors");
+public class CompositeParserException : ParserException
+{
+    public IEnumerable<ParserException> Errors { get; }
 
-            Errors = errors;
-        }
+    public CompositeParserException(ParserException[] errors)
+        : base(GetMessage(errors))
+    {
+        if (errors == null) throw new ArgumentNullException("errors");
 
-        private static string GetMessage(ParserException[] errors)
-        {
-            return "Parser errors:" + Environment.NewLine + string.Join(Environment.NewLine, errors.Select(e => e.Message));
-        }
+        Errors = errors;
+    }
+
+    private static string GetMessage(ParserException[] errors)
+    {
+        return "Parser errors:" + Environment.NewLine + string.Join(Environment.NewLine, errors.Select(e => e.Message));
     }
 }

@@ -32,15 +32,15 @@
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
     "@types/mocha": "10.0.7",
-    "@types/node": "20.14.15",
+    "@types/node": "20.16.5",
     "commander": "^12.0.0",
-    "core-js": "3.38.0",
+    "core-js": "3.38.1",
     "mocha": "10.7.3",
     "ts-node": "10.9.2",
-    "typescript": "5.5.4"
+    "typescript": "5.6.2"
   },
   "dependencies": {
-    "@cucumber/messages": "<=25"
+    "@cucumber/messages": ">=19.1.4 <=26"
   },
   "directories": {
     "test": "test"

@@ -1,15 +1,14 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
-namespace Gherkin.CucumberMessages.Types
+namespace Gherkin.CucumberMessages.Types;
+
+public class SourceReference
 {
-    public class SourceReference
-    {
-        [DataMember(Name = "location")]
-        public Location Location { get; set; }
+    [DataMember(Name = "location")]
+    public Location Location { get; set; }
 
-        [DataMember(Name = "uri")]
-        public string Uri { get; set; }
+    [DataMember(Name = "uri")]
+    public string Uri { get; set; }
 
-        //TODO: javaMethod, javaStackTraceElement
-    }
+    //TODO: javaMethod, javaStackTraceElement
 }

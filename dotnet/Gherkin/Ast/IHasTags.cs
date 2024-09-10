@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+namespace Gherkin.Ast;
 
-namespace Gherkin.Ast
+public interface IHasTags
 {
-    public interface IHasTags
-    {
-        IEnumerable<Tag> Tags { get; }
-    }
+    IEnumerable<Tag> Tags { get; }
 }

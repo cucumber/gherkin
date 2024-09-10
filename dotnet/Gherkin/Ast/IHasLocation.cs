@@ -1,7 +1,6 @@
-﻿namespace Gherkin.Ast
+namespace Gherkin.Ast;
+
+public interface IHasLocation
 {
-    public interface IHasLocation
-    {
-        Location Location { get; }
-    }
+    Location Location { get; }
 }

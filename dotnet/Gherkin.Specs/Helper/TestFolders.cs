@@ -1,21 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+namespace Gherkin.Specs.Helper;
 
-namespace Gherkin.Specs.Helper
+internal static class TestFolders
 {
-    internal static class TestFolders
+    public static string InputFolder
     {
-        public static string InputFolder
+        get
         {
-            get 
-            { 
-                var inputFolder = Path.GetDirectoryName(typeof(TestFolders).GetTypeInfo().Assembly.Location);
+            var inputFolder = Environment.CurrentDirectory;
 
-                inputFolder = Path.Combine(inputFolder, "..");                
+            inputFolder = Path.Combine(inputFolder, "..");
 
-                return inputFolder; 
-            }
+            return inputFolder;
         }
     }
 }

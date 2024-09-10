@@ -1,22 +1,11 @@
-﻿using System.Collections.Generic;
+namespace Gherkin.Ast;
 
-namespace Gherkin.Ast
+public abstract class StepsContainer(Location location, string keyword, string name, string description, Step[] steps)
+    : IHasLocation, IHasDescription, IHasSteps
 {
-    public abstract class StepsContainer : IHasLocation, IHasDescription, IHasSteps
-    {
-        public Location Location { get; private set; }
-        public string Keyword { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public IEnumerable<Step> Steps { get; private set; }
-
-        protected StepsContainer(Location location, string keyword, string name, string description, Step[] steps)
-        {
-            Location = location;
-            Keyword = keyword;
-            Name = name;
-            Description = description;
-            Steps = steps;
-        }
-    }
+    public Location Location { get; } = location;
+    public string Keyword { get; } = keyword;
+    public string Name { get; } = name;
+    public string Description { get; } = description;
+    public IEnumerable<Step> Steps { get; } = steps;
 }
