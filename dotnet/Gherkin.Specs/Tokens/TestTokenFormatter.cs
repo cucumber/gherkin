@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-
 namespace Gherkin.Specs.Tokens;
 
 class TestTokenFormatter

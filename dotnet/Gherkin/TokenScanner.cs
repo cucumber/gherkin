@@ -1,6 +1,3 @@
-using System.IO;
-using Gherkin.Ast;
-
 namespace Gherkin;
 
 /// <summary>

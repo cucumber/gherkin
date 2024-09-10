@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Gherkin.Ast;
 
 namespace Gherkin;
@@ -261,7 +258,7 @@ public class AstBuilder<T> : IAstBuilder<T>
     {
         var tagsNode = node.GetSingle<AstNode>(RuleType.Tags);
         if (tagsNode == null)
-            return new Tag[0];
+            return [];
 
         return tagsNode.GetTokens(TokenType.TagLine)
             .SelectMany(t => t.MatchedItems, (t, tagItem) =>

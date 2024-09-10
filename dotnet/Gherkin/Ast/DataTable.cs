@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Gherkin.Ast;
 
 public class DataTable : StepArgument, IHasRows, IHasLocation

@@ -1,8 +1,5 @@
 using Gherkin.Ast;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using TinyJson;
+using System.Text.Json;
 
 namespace Gherkin;
 
@@ -55,8 +52,7 @@ public class GherkinDialectProvider : IGherkinDialectProvider
 
     protected virtual Dictionary<string, GherkinLanguageSetting> ParseJsonContent(string languagesFileContent)
     {
-        // ReSharper disable once InvokeAsExtensionMethod
-        return JSONParser.FromJson<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent);
+        return JsonSerializer.Deserialize<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
     }
 
     protected virtual bool TryGetDialect(string language, Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings, Location location, out GherkinDialect dialect)
@@ -75,17 +71,17 @@ public class GherkinDialectProvider : IGherkinDialectProvider
     {
         return new GherkinDialect(
             language,
-            ParseTitleKeywords(languageSettings.feature),
-            ParseTitleKeywords(languageSettings.rule),
-            ParseTitleKeywords(languageSettings.background),
-            ParseTitleKeywords(languageSettings.scenario),
-            ParseTitleKeywords(languageSettings.scenarioOutline),
-            ParseTitleKeywords(languageSettings.examples),
-            ParseStepKeywords(languageSettings.given),
-            ParseStepKeywords(languageSettings.when),
-            ParseStepKeywords(languageSettings.then),
-            ParseStepKeywords(languageSettings.and),
-            ParseStepKeywords(languageSettings.but)
+            ParseTitleKeywords(languageSettings.Feature),
+            ParseTitleKeywords(languageSettings.Rule),
+            ParseTitleKeywords(languageSettings.Background),
+            ParseTitleKeywords(languageSettings.Scenario),
+            ParseTitleKeywords(languageSettings.ScenarioOutline),
+            ParseTitleKeywords(languageSettings.Examples),
+            ParseStepKeywords(languageSettings.Given),
+            ParseStepKeywords(languageSettings.When),
+            ParseStepKeywords(languageSettings.Then),
+            ParseStepKeywords(languageSettings.And),
+            ParseStepKeywords(languageSettings.But)
         );
     }
 
@@ -103,35 +99,33 @@ public class GherkinDialectProvider : IGherkinDialectProvider
     {
         return new GherkinDialect(
             "en",
-            new[] { "Feature" },
-            new[] { "Rule" },
-            new[] { "Background" },
-            new[] { "Scenario" },
-            new[] { "Scenario Outline", "Scenario Template" },
-            new[] { "Examples", "Scenarios" },
-            new[] { "* ", "Given " },
-            new[] { "* ", "When " },
-            new[] { "* ", "Then " },
-            new[] { "* ", "And " },
-            new[] { "* ", "But " });
+            ["Feature"],
+            ["Rule"],
+            ["Background"],
+            ["Scenario"],
+            ["Scenario Outline", "Scenario Template"],
+            ["Examples", "Scenarios"],
+            ["* ", "Given "],
+            ["* ", "When "],
+            ["* ", "Then "],
+            ["* ", "And "],
+            ["* ", "But "]);
     }
 }
 
 public class GherkinLanguageSetting
 {
-    // ReSharper disable InconsistentNaming
-    public string name;
-    public string native;
-    public string[] feature;
-    public string[] rule;
-    public string[] background;
-    public string[] scenario;
-    public string[] scenarioOutline;
-    public string[] examples;
-    public string[] given;
-    public string[] when;
-    public string[] then;
-    public string[] and;
-    public string[] but;
-    // ReSharper restore InconsistentNaming
+    public string Name { get; set; }
+    public string Native { get; set; }
+    public string[] Feature { get; set; }
+    public string[] Rule { get; set; }
+    public string[] Background { get; set; }
+    public string[] Scenario { get; set; }
+    public string[] ScenarioOutline { get; set; }
+    public string[] Examples { get; set; }
+    public string[] Given { get; set; }
+    public string[] When { get; set; }
+    public string[] Then { get; set; }
+    public string[] And { get; set; }
+    public string[] But { get; set; }
 }

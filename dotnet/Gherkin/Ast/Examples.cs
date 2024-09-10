@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Gherkin.Ast;
 
 public class Examples(Tag[] tags, Location location, string keyword, string name, string description, TableRow header, TableRow[] body)

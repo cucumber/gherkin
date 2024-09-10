@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Reflection;
-
 namespace Gherkin.Specs.Helper;
 
 internal static class TestFolders
@@ -10,7 +6,7 @@ internal static class TestFolders
     {
         get
         {
-            var inputFolder = Path.GetDirectoryName(typeof(TestFolders).GetTypeInfo().Assembly.Location);
+            var inputFolder = Environment.CurrentDirectory;
 
             inputFolder = Path.Combine(inputFolder, "..");
 

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Gherkin.Ast;
 
 public class Feature(Tag[] tags, Location location, string language, string keyword, string name, string description, IHasLocation[] children)

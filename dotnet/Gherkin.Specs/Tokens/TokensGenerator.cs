@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace Gherkin.Specs.Tokens;
 
 public class TokensGenerator

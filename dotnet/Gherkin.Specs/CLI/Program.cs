@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Gherkin.CucumberMessages;
 using Gherkin.Specs.EventStubs;
 using Gherkin.Specs.Tokens;
-using Utf8Json.Resolvers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Gherkin.Specs.CLI;
 
@@ -102,7 +100,11 @@ class Program
         {
             foreach (var evt in gherkinEventsProvider.GetEvents(sourceEventEvent))
             {
-                var jsonString = Utf8Json.JsonSerializer.ToJsonString((object)evt, StandardResolver.ExcludeNullCamelCase);
+                var jsonString = JsonSerializer.Serialize(evt, new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                {
+                    Converters = { new JsonStringEnumConverter() },
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                });
                 Console.WriteLine(jsonString);
             }
         }

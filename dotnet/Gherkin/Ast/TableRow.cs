@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Gherkin.Ast;
 
 public class TableRow(Location location, TableCell[] cells) : IHasLocation

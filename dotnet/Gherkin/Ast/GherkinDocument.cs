@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Gherkin.Ast;
 
 public class GherkinDocument(Feature feature, Comment[] comments)
