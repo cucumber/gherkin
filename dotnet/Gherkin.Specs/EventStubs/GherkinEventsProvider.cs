@@ -69,7 +69,7 @@ public class GherkinEventsProvider(bool printSource, bool printAst, bool printPi
                 Message = e.Message,
                 Source = new SourceReference()
                 {
-                    Location = new Location(e.Location.Column, e.Location.Line),
+                    Location = new Location(e.Location!.Column, e.Location.Line),
                     Uri = uri
                 }
             }

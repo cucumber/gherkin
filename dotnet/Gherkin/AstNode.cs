@@ -6,7 +6,7 @@ public class AstNode(RuleType ruleType)
 
     public RuleType RuleType { get; } = ruleType;
 
-    public Token GetToken(TokenType tokenType)
+    public Token? GetToken(TokenType tokenType)
     {
         return GetSingle<Token>((RuleType)tokenType);
     }
@@ -16,27 +16,26 @@ public class AstNode(RuleType ruleType)
         return GetItems<Token>((RuleType)tokenType);
     }
 
-    public T GetSingle<T>(RuleType ruleType)
+    public T? GetSingle<T>(RuleType ruleType) where T : notnull
     {
         return GetItems<T>(ruleType).SingleOrDefault();
     }
 
     public IEnumerable<T> GetItems<T>(RuleType ruleType)
     {
-        IList<object> items;
-        if (!subItems.TryGetValue(ruleType, out items))
+        if (!subItems.TryGetValue(ruleType, out var items))
         {
             return Enumerable.Empty<T>();
         }
         return items.Cast<T>();
     }
 
-    public void SetSingle<T>(RuleType ruleType, T value)
+    public void SetSingle<T>(RuleType ruleType, T value) where T : notnull
     {
-        subItems[ruleType] = new object[] { value };
+        subItems[ruleType] = [value];
     }
 
-    public void AddRange<T>(RuleType ruleType, IEnumerable<T> values)
+    public void AddRange<T>(RuleType ruleType, IEnumerable<T> values) where T : notnull
     {
         foreach (var value in values)
         {
@@ -44,10 +43,9 @@ public class AstNode(RuleType ruleType)
         }
     }
 
-    public void Add<T>(RuleType ruleType, T obj)
+    public void Add<T>(RuleType ruleType, T obj) where T : notnull
     {
-        IList<object> items;
-        if (!subItems.TryGetValue(ruleType, out items))
+        if (!subItems.TryGetValue(ruleType, out var items))
         {
             items = new List<object>();
             subItems.Add(ruleType, items);

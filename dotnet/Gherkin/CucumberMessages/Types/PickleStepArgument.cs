@@ -5,8 +5,8 @@ namespace Gherkin.CucumberMessages.Types;
 public class PickleStepArgument
 {
     [DataMember(Name = "docString")]
-    public PickleDocString DocString { get; set; }
+    public PickleDocString? DocString { get; set; }
 
     [DataMember(Name = "dataTable")]
-    public PickleTable DataTable { get; set; }
+    public PickleTable? DataTable { get; set; }
 }

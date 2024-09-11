@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using System.Text;
 using FluentAssertions;
 using Gherkin.CucumberMessages;
 using Gherkin.CucumberMessages.Types;
 using Gherkin.Specs.EventStubs;
 using Gherkin.Specs.Helper;
+using System.Diagnostics;
+using System.Text;
 
 namespace Gherkin.Specs;
 
@@ -29,15 +29,15 @@ public class EventTestBase
            $"{testFeatureFile} is not generating the same content as {testFile.ExpectedFileFullPath}");
     }
 
-    private string NormalizeNewLines(string value)
+    private string? NormalizeNewLines(string value)
     {
         return value?.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
     }
 
     protected class TestFile
     {
-        public string FullPath { get; set; }
-        public string ExpectedFileFullPath { get; set; }
+        public required string FullPath { get; set; }
+        public required string ExpectedFileFullPath { get; set; }
     }
 
     protected TestFile GetFullPathToTestFeatureFile(string testFeatureFile, string category, string filePostfix)

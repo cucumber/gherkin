@@ -165,7 +165,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
         }
     }
 
-    protected virtual PickleStep CreatePickleStep(Step step, string text, PickleStepArgument argument, IEnumerable<string> astNodeIds)
+    protected virtual PickleStep CreatePickleStep(Step step, string text, PickleStepArgument? argument, IEnumerable<string> astNodeIds)
     {
         CurrentStepKeywordType = GetKeywordType(step, CurrentStepKeywordType);
         return new PickleStep(argument, astNodeIds, idGenerator.GetNewId(), text, CurrentStepKeywordType);
@@ -192,13 +192,13 @@ public class PickleCompiler(IIdGenerator idGenerator)
     }
 
 
-    protected virtual PickleStepArgument CreatePickleArgument(Step argument)
+    protected virtual PickleStepArgument? CreatePickleArgument(Step argument)
     {
         var noCells = Enumerable.Empty<TableCell>();
         return CreatePickleArgument(argument, noCells, noCells);
     }
 
-    protected virtual PickleStepArgument CreatePickleArgument(Step step, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
+    protected virtual PickleStepArgument? CreatePickleArgument(Step step, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
     {
         if (step.DataTable != null)
         {

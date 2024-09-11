@@ -5,8 +5,8 @@ namespace Gherkin.CucumberMessages.Types;
 public class Comment
 {
     [DataMember(Name = "location")]
-    public Location Location { get; set; }
+    public required Location Location { get; set; }
 
     [DataMember(Name = "text")]
-    public string Text { get; set; }
+    public required string Text { get; set; }
 }

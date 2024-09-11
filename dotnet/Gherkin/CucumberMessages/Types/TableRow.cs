@@ -5,11 +5,11 @@ namespace Gherkin.CucumberMessages.Types;
 public class TableRow
 {
     [DataMember(Name = "location")]
-    public Location Location { get; set; }
+    public required Location Location { get; set; }
 
     [DataMember(Name = "cells")]
-    public IReadOnlyCollection<TableCell> Cells { get; set; }
+    public required IReadOnlyCollection<TableCell> Cells { get; set; }
 
     [DataMember(Name = "id")]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 }

@@ -39,7 +39,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
             }).ToReadOnlyCollection();
     }
 
-    private Feature ConvertFeature(Ast.GherkinDocument gherkinDocument)
+    private Feature? ConvertFeature(Ast.GherkinDocument gherkinDocument)
     {
         var feature = gherkinDocument.Feature;
         if (feature == null)
@@ -79,13 +79,13 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
         return new RuleChild(tuple.Item1, tuple.Item3);
     }
 
-    private Tuple<Background, Rule, Scenario> ConvertToChild(IHasLocation hasLocation)
+    private Tuple<Background?, Rule?, Scenario?> ConvertToChild(IHasLocation hasLocation)
     {
         switch (hasLocation)
         {
-            case Gherkin.Ast.Background background:
+            case Ast.Background background:
                 var backgroundSteps = background.Steps.Select(ConvertStep).ToList();
-                return new Tuple<Background, Rule, Scenario>(new Background
+                return new Tuple<Background?, Rule?, Scenario?>(new Background
                 {
                     Id = idGenerator.GetNewId(),
                     Location = ConvertLocation(background.Location),
@@ -98,7 +98,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
                 var steps = scenario.Steps.Select(ConvertStep).ToList();
                 var examples = scenario.Examples.Select(ConvertExamples).ToReadOnlyCollection();
                 var tags = scenario.Tags.Select(ConvertTag).ToReadOnlyCollection();
-                return new Tuple<Background, Rule, Scenario>(null, null, new Scenario()
+                return new Tuple<Background?, Rule?, Scenario?>(null, null, new Scenario()
                 {
                     Id = idGenerator.GetNewId(),
                     Keyword = scenario.Keyword,
@@ -113,7 +113,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
                 {
                     var ruleChildren = rule.Children.Select(ConvertToRuleChild).ToReadOnlyCollection();
                     var ruleTags = rule.Tags.Select(ConvertTag).ToReadOnlyCollection();
-                    return new Tuple<Background, Rule, Scenario>(null, new Rule
+                    return new Tuple<Background?, Rule?, Scenario?>(null, new Rule
                     {
                         Id = idGenerator.GetNewId(),
                         Name = CucumberMessagesDefaults.UseDefault(rule.Name, CucumberMessagesDefaults.DefaultName),
@@ -159,7 +159,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
         return ConvertToTableRow(examples.TableBody);
     }
 
-    private IReadOnlyCollection<TableRow> ConvertToTableRow(IEnumerable<Gherkin.Ast.TableRow> rows)
+    private IReadOnlyCollection<TableRow> ConvertToTableRow(IEnumerable<Ast.TableRow> rows)
     {
         return rows.Select(b =>
             new TableRow
@@ -170,7 +170,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
             }).ToReadOnlyCollection();
     }
 
-    private TableRow ConvertTableHeader(Ast.Examples examples)
+    private TableRow? ConvertTableHeader(Ast.Examples examples)
     {
         if (examples.TableHeader == null)
             return null;
@@ -204,8 +204,8 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
 
     private Step ConvertStep(Ast.Step step)
     {
-        DataTable dataTable = null;
-        if (step.Argument is Gherkin.Ast.DataTable astDataTable)
+        DataTable? dataTable = null;
+        if (step.Argument is Ast.DataTable astDataTable)
         {
             var rows = ConvertToTableRow(astDataTable.Rows);
             dataTable = new DataTable
@@ -215,8 +215,8 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
             };
         }
 
-        DocString docString = null;
-        if (step.Argument is Gherkin.Ast.DocString astDocString)
+        DocString? docString = null;
+        if (step.Argument is Ast.DocString astDocString)
         {
             docString = new DocString
             {

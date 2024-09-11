@@ -2,6 +2,8 @@ using Gherkin.Ast;
 
 namespace Gherkin;
 
+#nullable disable
+
 public class Token(IGherkinLine line, Location location)
 {
     public bool IsEOF { get { return Line == null; } }

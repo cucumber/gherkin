@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace Gherkin.CucumberMessages.Types;
@@ -5,24 +6,26 @@ namespace Gherkin.CucumberMessages.Types;
 public class PickleStep
 {
     [DataMember(Name = "argument")]
-    public PickleStepArgument Argument { get; set; }
+    public PickleStepArgument? Argument { get; set; }
 
     [DataMember(Name = "astNodeIds")]
-    public IReadOnlyCollection<string> AstNodeIds { get; set; }
+    public required IReadOnlyCollection<string> AstNodeIds { get; set; }
 
     [DataMember(Name = "id")]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 
     [DataMember(Name = "text")]
-    public string Text { get; set; }
+    public required string Text { get; set; }
 
     [DataMember(Name = "type")]
-    public StepKeywordType Type { get; set; }
+    public required StepKeywordType Type { get; set; }
 
     public PickleStep()
     {
     }
-    public PickleStep(PickleStepArgument argument, IEnumerable<string> astNodeIds, string id, string text, StepKeywordType type)
+
+    [SetsRequiredMembers]
+    public PickleStep(PickleStepArgument? argument, IEnumerable<string> astNodeIds, string id, string text, StepKeywordType type)
     {
         Id = id;
         Text = text;

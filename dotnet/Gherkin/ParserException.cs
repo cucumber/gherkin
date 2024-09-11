@@ -2,11 +2,11 @@ using Gherkin.Ast;
 
 namespace Gherkin;
 
-public abstract class ParserException(string message, Location location = null) : Exception(GetMessage(message, location))
+public abstract class ParserException(string message, Location? location = null) : Exception(GetMessage(message, location))
 {
-    public Location Location { get; } = location;
+    public Location? Location { get; } = location;
 
-    private static string GetMessage(string message, Location location)
+    private static string GetMessage(string message, Location? location)
     {
         if (location == null)
             return message;
@@ -22,7 +22,7 @@ public class AstBuilderException(string message, Location location) : ParserExce
 
 public class NoSuchLanguageException : ParserException
 {
-    public NoSuchLanguageException(string language, Location location = null) :
+    public NoSuchLanguageException(string language, Location? location = null) :
         base("Language not supported: " + language, location)
     {
         if (language == null) throw new ArgumentNullException("language");
@@ -30,7 +30,7 @@ public class NoSuchLanguageException : ParserException
 
 }
 
-public class InvalidTagException(string message, Location location = null) : ParserException(message, location)
+public class InvalidTagException(string message, Location? location = null) : ParserException(message, location)
 {
 }
 

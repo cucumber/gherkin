@@ -2,12 +2,12 @@ using System.Text.RegularExpressions;
 
 namespace Gherkin;
 
-public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITokenMatcher
+public class TokenMatcher(IGherkinDialectProvider? dialectProvider = null) : ITokenMatcher
 {
     private readonly Regex LANGUAGE_PATTERN = new Regex("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private readonly IGherkinDialectProvider dialectProvider = dialectProvider ?? new GherkinDialectProvider();
-    private GherkinDialect currentDialect;
-    private string activeDocStringSeparator = null;
+    private GherkinDialect? currentDialect;
+    private string? activeDocStringSeparator = null;
     private int indentToRemove = 0;
 
     public GherkinDialect CurrentDialect
@@ -32,7 +32,7 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
             currentDialect = dialectProvider.DefaultDialect;
     }
 
-    protected virtual void SetTokenMatched(Token token, TokenType matchedType, string text = null, string keyword = null, int? indent = null, GherkinLineSpan[] items = null)
+    protected virtual void SetTokenMatched(Token token, TokenType matchedType, string? text = null, string? keyword = null, int? indent = null, GherkinLineSpan[]? items = null)
     {
         token.MatchedType = matchedType;
         token.MatchedKeyword = keyword;
@@ -173,7 +173,7 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
     {
         if (token.Line.StartsWith(separator))
         {
-            string contentType = null;
+            string? contentType = null;
             if (isOpen)
             {
                 contentType = token.Line.GetRestTrimmed(separator.Length);

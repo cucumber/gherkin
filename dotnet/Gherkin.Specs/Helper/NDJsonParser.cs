@@ -21,7 +21,7 @@ public class NDJsonParser
                     new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
                 }
             });
-            result.Add(deserializedObject);
+            result.Add(deserializedObject!);
         }
 
         return result;

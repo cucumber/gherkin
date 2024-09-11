@@ -5,23 +5,23 @@ namespace Gherkin.CucumberMessages.Types;
 public class Rule
 {
     [DataMember(Name = "location")]
-    public Location Location { get; set; }
+    public required Location Location { get; set; }
 
     [DataMember(Name = "tags")]
-    public IReadOnlyCollection<Tag> Tags { get; set; }
+    public required IReadOnlyCollection<Tag> Tags { get; set; }
 
     [DataMember(Name = "keyword")]
-    public string Keyword { get; set; }
+    public required string Keyword { get; set; }
 
     [DataMember(Name = "name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [DataMember(Name = "description")]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     [DataMember(Name = "children")]
-    public IReadOnlyCollection<RuleChild> Children { get; set; }
+    public required IReadOnlyCollection<RuleChild> Children { get; set; }
 
     [DataMember(Name = "id")]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 }

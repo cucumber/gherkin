@@ -1,4 +1,5 @@
 using Gherkin.Ast;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace Gherkin;
@@ -23,13 +24,13 @@ public class GherkinDialectProvider : IGherkinDialectProvider
         defaultDialect = new Lazy<GherkinDialect>(() => GetDialect(defaultLanguage, null));
     }
 
-    protected virtual bool TryGetDialect(string language, Location location, out GherkinDialect dialect)
+    protected virtual bool TryGetDialect(string language, Location? location, [NotNullWhen(true)] out GherkinDialect? dialect)
     {
         var gherkinLanguageSettings = LoadLanguageSettings();
         return TryGetDialect(language, gherkinLanguageSettings, location, out dialect);
     }
 
-    public virtual GherkinDialect GetDialect(string language, Location location)
+    public virtual GherkinDialect GetDialect(string language, Location? location)
     {
         if (!TryGetDialect(language, location, out var dialect))
             throw new NoSuchLanguageException(language, location);
@@ -52,10 +53,18 @@ public class GherkinDialectProvider : IGherkinDialectProvider
 
     protected virtual Dictionary<string, GherkinLanguageSetting> ParseJsonContent(string languagesFileContent)
     {
-        return JsonSerializer.Deserialize<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var gherkinLanguageSettings = JsonSerializer.Deserialize<Dictionary<string, GherkinLanguageSetting>>(
+            languagesFileContent,
+            new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+        return gherkinLanguageSettings ?? throw new Exception($"Unable to parse languages from {languagesFileContent}");
     }
 
-    protected virtual bool TryGetDialect(string language, Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings, Location location, out GherkinDialect dialect)
+    protected virtual bool TryGetDialect(
+        string language,
+        Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings,
+        Location? location,
+        [NotNullWhen(true)] out GherkinDialect? dialect)
     {
         if (!gherkinLanguageSettings.TryGetValue(language, out var languageSettings))
         {
@@ -115,17 +124,17 @@ public class GherkinDialectProvider : IGherkinDialectProvider
 
 public class GherkinLanguageSetting
 {
-    public string Name { get; set; }
-    public string Native { get; set; }
-    public string[] Feature { get; set; }
-    public string[] Rule { get; set; }
-    public string[] Background { get; set; }
-    public string[] Scenario { get; set; }
-    public string[] ScenarioOutline { get; set; }
-    public string[] Examples { get; set; }
-    public string[] Given { get; set; }
-    public string[] When { get; set; }
-    public string[] Then { get; set; }
-    public string[] And { get; set; }
-    public string[] But { get; set; }
+    public required string Name { get; set; }
+    public required string Native { get; set; }
+    public required string[] Feature { get; set; }
+    public required string[] Rule { get; set; }
+    public required string[] Background { get; set; }
+    public required string[] Scenario { get; set; }
+    public required string[] ScenarioOutline { get; set; }
+    public required string[] Examples { get; set; }
+    public required string[] Given { get; set; }
+    public required string[] When { get; set; }
+    public required string[] Then { get; set; }
+    public required string[] And { get; set; }
+    public required string[] But { get; set; }
 }

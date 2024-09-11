@@ -2,6 +2,8 @@ using Gherkin.Ast;
 
 namespace Gherkin;
 
+#nullable disable
+
 public class AstBuilder<T> : IAstBuilder<T>
 {
     private readonly Stack<AstNode> _stack = new();

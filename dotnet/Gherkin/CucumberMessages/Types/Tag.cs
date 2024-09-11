@@ -5,11 +5,11 @@ namespace Gherkin.CucumberMessages.Types;
 public class Tag
 {
     [DataMember(Name = "location")]
-    public Location Location { get; set; }
+    public required Location Location { get; set; }
 
     [DataMember(Name = "name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [DataMember(Name = "id")]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 }

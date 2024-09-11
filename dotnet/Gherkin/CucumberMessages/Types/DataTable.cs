@@ -5,8 +5,8 @@ namespace Gherkin.CucumberMessages.Types;
 public class DataTable
 {
     [DataMember(Name = "location")]
-    public Location Location { get; set; }
+    public required Location Location { get; set; }
 
     [DataMember(Name = "rows")]
-    public IReadOnlyCollection<TableRow> Rows { get; set; }
+    public required IReadOnlyCollection<TableRow> Rows { get; set; }
 }
