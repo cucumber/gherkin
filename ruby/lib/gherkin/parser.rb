@@ -5,7 +5,6 @@ require_relative 'token_scanner'
 require_relative 'errors'
 
 module Gherkin
-
   RULE_TYPE = [
     :None,
     :_EOF, # #EOF
@@ -328,34 +327,34 @@ module Gherkin
     def match_token_at_0(token, context)
       if match_EOF(context, token)
         build(context, token);
-        return 42
+          return 42
       end
       if match_Language(context, token)
         start_rule(context, :Feature);
         start_rule(context, :FeatureHeader);
         build(context, token);
-        return 1
+          return 1
       end
       if match_TagLine(context, token)
         start_rule(context, :Feature);
         start_rule(context, :FeatureHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 2
+          return 2
       end
       if match_FeatureLine(context, token)
         start_rule(context, :Feature);
         start_rule(context, :FeatureHeader);
         build(context, token);
-        return 3
+          return 3
       end
       if match_Comment(context, token)
         build(context, token);
-        return 0
+          return 0
       end
       if match_Empty(context, token)
         build(context, token);
-        return 0
+          return 0
       end
 
       state_comment = "State: 0 - Start"
@@ -371,19 +370,19 @@ module Gherkin
       if match_TagLine(context, token)
         start_rule(context, :Tags);
         build(context, token);
-        return 2
+          return 2
       end
       if match_FeatureLine(context, token)
         build(context, token);
-        return 3
+          return 3
       end
       if match_Comment(context, token)
         build(context, token);
-        return 1
+          return 1
       end
       if match_Empty(context, token)
         build(context, token);
-        return 1
+          return 1
       end
 
       state_comment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0"
@@ -398,20 +397,20 @@ module Gherkin
     def match_token_at_2(token, context)
       if match_TagLine(context, token)
         build(context, token);
-        return 2
+          return 2
       end
       if match_FeatureLine(context, token)
         end_rule(context, :Tags);
         build(context, token);
-        return 3
+          return 3
       end
       if match_Comment(context, token)
         build(context, token);
-        return 2
+          return 2
       end
       if match_Empty(context, token)
         build(context, token);
-        return 2
+          return 2
       end
 
       state_comment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0"
@@ -428,28 +427,28 @@ module Gherkin
         end_rule(context, :FeatureHeader);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 3
+          return 3
       end
       if match_Comment(context, token)
         build(context, token);
-        return 5
+          return 5
       end
       if match_BackgroundLine(context, token)
         end_rule(context, :FeatureHeader);
         start_rule(context, :Background);
         build(context, token);
-        return 6
+          return 6
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :FeatureHeader);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :FeatureHeader);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -459,26 +458,26 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :FeatureHeader);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :FeatureHeader);
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 4
+          return 4
       end
 
       state_comment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0"
@@ -496,27 +495,27 @@ module Gherkin
         end_rule(context, :FeatureHeader);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 5
+          return 5
       end
       if match_BackgroundLine(context, token)
         end_rule(context, :Description);
         end_rule(context, :FeatureHeader);
         start_rule(context, :Background);
         build(context, token);
-        return 6
+          return 6
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :FeatureHeader);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :FeatureHeader);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -527,7 +526,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -535,7 +534,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -543,11 +542,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 4
+          return 4
       end
 
       state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0"
@@ -564,24 +563,24 @@ module Gherkin
         end_rule(context, :FeatureHeader);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 5
+          return 5
       end
       if match_BackgroundLine(context, token)
         end_rule(context, :FeatureHeader);
         start_rule(context, :Background);
         build(context, token);
-        return 6
+          return 6
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :FeatureHeader);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :FeatureHeader);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -591,25 +590,25 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :FeatureHeader);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :FeatureHeader);
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 5
+          return 5
       end
 
       state_comment = "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0"
@@ -626,27 +625,27 @@ module Gherkin
         end_rule(context, :Background);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 6
+          return 6
       end
       if match_Comment(context, token)
         build(context, token);
-        return 8
+          return 8
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 9
+          return 9
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -656,26 +655,26 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Background);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Background);
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 7
+          return 7
       end
 
       state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0"
@@ -693,26 +692,26 @@ module Gherkin
         end_rule(context, :Background);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 8
+          return 8
       end
       if match_StepLine(context, token)
         end_rule(context, :Description);
         start_rule(context, :Step);
         build(context, token);
-        return 9
+          return 9
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -723,7 +722,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -731,7 +730,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -739,11 +738,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 7
+          return 7
       end
 
       state_comment = "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0"
@@ -760,23 +759,23 @@ module Gherkin
         end_rule(context, :Background);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 8
+          return 8
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 9
+          return 9
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -786,25 +785,25 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Background);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Background);
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 8
+          return 8
       end
 
       state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0"
@@ -822,31 +821,31 @@ module Gherkin
         end_rule(context, :Background);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         start_rule(context, :DataTable);
         build(context, token);
-        return 10
+          return 10
       end
       if match_DocStringSeparator(context, token)
         start_rule(context, :DocString);
         build(context, token);
-        return 49
+          return 49
       end
       if match_StepLine(context, token)
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 9
+          return 9
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Step);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Step);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -857,7 +856,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Step);
@@ -865,7 +864,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Step);
@@ -873,15 +872,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 9
+          return 9
       end
       if match_Empty(context, token)
         build(context, token);
-        return 9
+          return 9
       end
 
       state_comment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0"
@@ -900,27 +899,27 @@ module Gherkin
         end_rule(context, :Background);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         build(context, token);
-        return 10
+          return 10
       end
       if match_StepLine(context, token)
         end_rule(context, :DataTable);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 9
+          return 9
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DataTable);
-          end_rule(context, :Step);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DataTable);
+        end_rule(context, :Step);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -932,7 +931,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DataTable);
@@ -941,7 +940,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :DataTable);
@@ -950,15 +949,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 10
+          return 10
       end
       if match_Empty(context, token)
         build(context, token);
-        return 10
+          return 10
       end
 
       state_comment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
@@ -973,21 +972,21 @@ module Gherkin
     def match_token_at_11(token, context)
       if match_TagLine(context, token)
         build(context, token);
-        return 11
+          return 11
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Tags);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_Comment(context, token)
         build(context, token);
-        return 11
+          return 11
       end
       if match_Empty(context, token)
         build(context, token);
-        return 11
+          return 11
       end
 
       state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0"
@@ -1005,36 +1004,36 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 12
+          return 12
       end
       if match_Comment(context, token)
         build(context, token);
-        return 14
+          return 14
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 15
+          return 15
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1045,13 +1044,13 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Scenario);
@@ -1059,7 +1058,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Scenario);
@@ -1067,12 +1066,12 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 13
+          return 13
       end
 
       state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"
@@ -1091,36 +1090,36 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 14
+          return 14
       end
       if match_StepLine(context, token)
         end_rule(context, :Description);
         start_rule(context, :Step);
         build(context, token);
-        return 15
+          return 15
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Description);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1132,14 +1131,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Description);
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -1148,7 +1147,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -1157,11 +1156,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 13
+          return 13
       end
 
       state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0"
@@ -1179,32 +1178,32 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 14
+          return 14
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 15
+          return 15
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1215,13 +1214,13 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Scenario);
@@ -1229,7 +1228,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Scenario);
@@ -1237,11 +1236,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 14
+          return 14
       end
 
       state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0"
@@ -1260,41 +1259,41 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         start_rule(context, :DataTable);
         build(context, token);
-        return 16
+          return 16
       end
       if match_DocStringSeparator(context, token)
         start_rule(context, :DocString);
         build(context, token);
-        return 47
+          return 47
       end
       if match_StepLine(context, token)
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 15
+          return 15
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Step);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Step);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Step);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Step);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1306,14 +1305,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Step);
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Step);
@@ -1322,7 +1321,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Step);
@@ -1331,15 +1330,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 15
+          return 15
       end
       if match_Empty(context, token)
         build(context, token);
-        return 15
+          return 15
       end
 
       state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"
@@ -1359,38 +1358,38 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         build(context, token);
-        return 16
+          return 16
       end
       if match_StepLine(context, token)
         end_rule(context, :DataTable);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 15
+          return 15
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :DataTable);
-          end_rule(context, :Step);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DataTable);
+        end_rule(context, :Step);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DataTable);
-          end_rule(context, :Step);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DataTable);
+        end_rule(context, :Step);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1403,7 +1402,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :DataTable);
@@ -1411,7 +1410,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DataTable);
@@ -1421,7 +1420,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :DataTable);
@@ -1431,15 +1430,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 16
+          return 16
       end
       if match_Empty(context, token)
         build(context, token);
-        return 16
+          return 16
       end
 
       state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
@@ -1454,21 +1453,21 @@ module Gherkin
     def match_token_at_17(token, context)
       if match_TagLine(context, token)
         build(context, token);
-        return 17
+          return 17
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Tags);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_Comment(context, token)
         build(context, token);
-        return 17
+          return 17
       end
       if match_Empty(context, token)
         build(context, token);
-        return 17
+          return 17
       end
 
       state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"
@@ -1488,40 +1487,40 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 18
+          return 18
       end
       if match_Comment(context, token)
         build(context, token);
-        return 20
+          return 20
       end
       if match_TableRow(context, token)
         start_rule(context, :ExamplesTable);
         build(context, token);
-        return 21
+          return 21
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1534,7 +1533,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Examples);
@@ -1542,7 +1541,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Examples);
@@ -1552,7 +1551,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Examples);
@@ -1562,12 +1561,12 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 19
+          return 19
       end
 
       state_comment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"
@@ -1588,40 +1587,40 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 20
+          return 20
       end
       if match_TableRow(context, token)
         end_rule(context, :Description);
         start_rule(context, :ExamplesTable);
         build(context, token);
-        return 21
+          return 21
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1635,7 +1634,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Description);
@@ -1644,7 +1643,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -1655,7 +1654,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -1666,11 +1665,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 19
+          return 19
       end
 
       state_comment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0"
@@ -1690,36 +1689,36 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 20
+          return 20
       end
       if match_TableRow(context, token)
         start_rule(context, :ExamplesTable);
         build(context, token);
-        return 21
+          return 21
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1732,7 +1731,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Examples);
@@ -1740,7 +1739,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Examples);
@@ -1750,7 +1749,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :Examples);
@@ -1760,11 +1759,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 20
+          return 20
       end
 
       state_comment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0"
@@ -1785,33 +1784,33 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         build(context, token);
-        return 21
+          return 21
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :ExamplesTable);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :ExamplesTable);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :ExamplesTable);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :ExamplesTable);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -1825,7 +1824,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :ExamplesTable);
@@ -1834,7 +1833,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :ExamplesTable);
@@ -1845,7 +1844,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :ExamplesTable);
@@ -1856,15 +1855,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 21
+          return 21
       end
       if match_Empty(context, token)
         build(context, token);
-        return 21
+          return 21
       end
 
       state_comment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"
@@ -1879,20 +1878,20 @@ module Gherkin
     def match_token_at_22(token, context)
       if match_TagLine(context, token)
         build(context, token);
-        return 22
+          return 22
       end
       if match_RuleLine(context, token)
         end_rule(context, :Tags);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 22
+          return 22
       end
       if match_Empty(context, token)
         build(context, token);
-        return 22
+          return 22
       end
 
       state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0"
@@ -1910,28 +1909,28 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 25
+          return 25
       end
       if match_BackgroundLine(context, token)
         end_rule(context, :RuleHeader);
         start_rule(context, :Background);
         build(context, token);
-        return 26
+          return 26
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :RuleHeader);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :RuleHeader);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -1942,14 +1941,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :RuleHeader);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :RuleHeader);
@@ -1957,12 +1956,12 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 24
+          return 24
       end
 
       state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0"
@@ -1981,27 +1980,27 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 25
+          return 25
       end
       if match_BackgroundLine(context, token)
         end_rule(context, :Description);
         end_rule(context, :RuleHeader);
         start_rule(context, :Background);
         build(context, token);
-        return 26
+          return 26
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :RuleHeader);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :RuleHeader);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2013,7 +2012,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -2021,7 +2020,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -2030,11 +2029,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 24
+          return 24
       end
 
       state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0"
@@ -2052,24 +2051,24 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 25
+          return 25
       end
       if match_BackgroundLine(context, token)
         end_rule(context, :RuleHeader);
         start_rule(context, :Background);
         build(context, token);
-        return 26
+          return 26
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :RuleHeader);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :RuleHeader);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2080,14 +2079,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :RuleHeader);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :RuleHeader);
@@ -2095,11 +2094,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 25
+          return 25
       end
 
       state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0"
@@ -2117,27 +2116,27 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 26
+          return 26
       end
       if match_Comment(context, token)
         build(context, token);
-        return 28
+          return 28
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 29
+          return 29
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2148,14 +2147,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Background);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Background);
@@ -2163,12 +2162,12 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 27
+          return 27
       end
 
       state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0"
@@ -2187,26 +2186,26 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 28
+          return 28
       end
       if match_StepLine(context, token)
         end_rule(context, :Description);
         start_rule(context, :Step);
         build(context, token);
-        return 29
+          return 29
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2218,7 +2217,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -2226,7 +2225,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -2235,11 +2234,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 27
+          return 27
       end
 
       state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0"
@@ -2257,23 +2256,23 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 28
+          return 28
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 29
+          return 29
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2284,14 +2283,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Background);
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Background);
@@ -2299,11 +2298,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 28
+          return 28
       end
 
       state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0"
@@ -2322,31 +2321,31 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         start_rule(context, :DataTable);
         build(context, token);
-        return 30
+          return 30
       end
       if match_DocStringSeparator(context, token)
         start_rule(context, :DocString);
         build(context, token);
-        return 45
+          return 45
       end
       if match_StepLine(context, token)
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 29
+          return 29
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Step);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Step);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2358,7 +2357,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Step);
@@ -2366,7 +2365,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Step);
@@ -2375,15 +2374,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 29
+          return 29
       end
       if match_Empty(context, token)
         build(context, token);
-        return 29
+          return 29
       end
 
       state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0"
@@ -2403,27 +2402,27 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         build(context, token);
-        return 30
+          return 30
       end
       if match_StepLine(context, token)
         end_rule(context, :DataTable);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 29
+          return 29
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DataTable);
-          end_rule(context, :Step);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DataTable);
+        end_rule(context, :Step);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2436,7 +2435,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DataTable);
@@ -2445,7 +2444,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :DataTable);
@@ -2455,15 +2454,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 30
+          return 30
       end
       if match_Empty(context, token)
         build(context, token);
-        return 30
+          return 30
       end
 
       state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
@@ -2478,21 +2477,21 @@ module Gherkin
     def match_token_at_31(token, context)
       if match_TagLine(context, token)
         build(context, token);
-        return 31
+          return 31
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Tags);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_Comment(context, token)
         build(context, token);
-        return 31
+          return 31
       end
       if match_Empty(context, token)
         build(context, token);
-        return 31
+          return 31
       end
 
       state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0"
@@ -2511,36 +2510,36 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 32
+          return 32
       end
       if match_Comment(context, token)
         build(context, token);
-        return 34
+          return 34
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 35
+          return 35
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2552,13 +2551,13 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Scenario);
@@ -2566,7 +2565,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Scenario);
@@ -2575,12 +2574,12 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 33
+          return 33
       end
 
       state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"
@@ -2600,36 +2599,36 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 34
+          return 34
       end
       if match_StepLine(context, token)
         end_rule(context, :Description);
         start_rule(context, :Step);
         build(context, token);
-        return 35
+          return 35
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Description);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2642,14 +2641,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Description);
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -2658,7 +2657,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -2668,11 +2667,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 33
+          return 33
       end
 
       state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0"
@@ -2691,32 +2690,32 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 34
+          return 34
       end
       if match_StepLine(context, token)
         start_rule(context, :Step);
         build(context, token);
-        return 35
+          return 35
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2728,13 +2727,13 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Scenario);
@@ -2742,7 +2741,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Scenario);
@@ -2751,11 +2750,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 34
+          return 34
       end
 
       state_comment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0"
@@ -2775,41 +2774,41 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         start_rule(context, :DataTable);
         build(context, token);
-        return 36
+          return 36
       end
       if match_DocStringSeparator(context, token)
         start_rule(context, :DocString);
         build(context, token);
-        return 43
+          return 43
       end
       if match_StepLine(context, token)
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 35
+          return 35
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Step);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Step);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Step);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Step);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2822,14 +2821,14 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Step);
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Step);
@@ -2838,7 +2837,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Step);
@@ -2848,15 +2847,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 35
+          return 35
       end
       if match_Empty(context, token)
         build(context, token);
-        return 35
+          return 35
       end
 
       state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"
@@ -2877,38 +2876,38 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         build(context, token);
-        return 36
+          return 36
       end
       if match_StepLine(context, token)
         end_rule(context, :DataTable);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 35
+          return 35
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :DataTable);
-          end_rule(context, :Step);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DataTable);
+        end_rule(context, :Step);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DataTable);
-          end_rule(context, :Step);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DataTable);
+        end_rule(context, :Step);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -2922,7 +2921,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :DataTable);
@@ -2930,7 +2929,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DataTable);
@@ -2940,7 +2939,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :DataTable);
@@ -2951,15 +2950,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 36
+          return 36
       end
       if match_Empty(context, token)
         build(context, token);
-        return 36
+          return 36
       end
 
       state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
@@ -2974,21 +2973,21 @@ module Gherkin
     def match_token_at_37(token, context)
       if match_TagLine(context, token)
         build(context, token);
-        return 37
+          return 37
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Tags);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_Comment(context, token)
         build(context, token);
-        return 37
+          return 37
       end
       if match_Empty(context, token)
         build(context, token);
-        return 37
+          return 37
       end
 
       state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"
@@ -3009,40 +3008,40 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Empty(context, token)
         build(context, token);
-        return 38
+          return 38
       end
       if match_Comment(context, token)
         build(context, token);
-        return 40
+          return 40
       end
       if match_TableRow(context, token)
         start_rule(context, :ExamplesTable);
         build(context, token);
-        return 41
+          return 41
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -3056,7 +3055,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Examples);
@@ -3064,7 +3063,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Examples);
@@ -3074,7 +3073,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Examples);
@@ -3085,12 +3084,12 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         start_rule(context, :Description);
         build(context, token);
-        return 39
+          return 39
       end
 
       state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"
@@ -3112,40 +3111,40 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         end_rule(context, :Description);
         build(context, token);
-        return 40
+          return 40
       end
       if match_TableRow(context, token)
         end_rule(context, :Description);
         start_rule(context, :ExamplesTable);
         build(context, token);
-        return 41
+          return 41
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Description);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Description);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -3160,7 +3159,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Description);
@@ -3169,7 +3168,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Description);
@@ -3180,7 +3179,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Description);
@@ -3192,11 +3191,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Other(context, token)
         build(context, token);
-        return 39
+          return 39
       end
 
       state_comment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0"
@@ -3217,36 +3216,36 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_Comment(context, token)
         build(context, token);
-        return 40
+          return 40
       end
       if match_TableRow(context, token)
         start_rule(context, :ExamplesTable);
         build(context, token);
-        return 41
+          return 41
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -3260,7 +3259,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :Examples);
@@ -3268,7 +3267,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :Examples);
@@ -3278,7 +3277,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :Examples);
@@ -3289,11 +3288,11 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Empty(context, token)
         build(context, token);
-        return 40
+          return 40
       end
 
       state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0"
@@ -3315,33 +3314,33 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_TableRow(context, token)
         build(context, token);
-        return 41
+          return 41
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :ExamplesTable);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :ExamplesTable);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :ExamplesTable);
-          end_rule(context, :Examples);
-          end_rule(context, :ExamplesDefinition);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :ExamplesTable);
+        end_rule(context, :Examples);
+        end_rule(context, :ExamplesDefinition);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -3356,7 +3355,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :ExamplesTable);
@@ -3365,7 +3364,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :ExamplesTable);
@@ -3376,7 +3375,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :ExamplesTable);
@@ -3388,15 +3387,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 41
+          return 41
       end
       if match_Empty(context, token)
         build(context, token);
-        return 41
+          return 41
       end
 
       state_comment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"
@@ -3411,11 +3410,11 @@ module Gherkin
     def match_token_at_43(token, context)
       if match_DocStringSeparator(context, token)
         build(context, token);
-        return 44
+          return 44
       end
       if match_Other(context, token)
         build(context, token);
-        return 43
+          return 43
       end
 
       state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
@@ -3436,34 +3435,34 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_StepLine(context, token)
         end_rule(context, :DocString);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 35
+          return 35
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :DocString);
-          end_rule(context, :Step);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DocString);
+        end_rule(context, :Step);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 37
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DocString);
-          end_rule(context, :Step);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DocString);
+        end_rule(context, :Step);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -3477,7 +3476,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :DocString);
@@ -3485,7 +3484,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 38
+          return 38
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DocString);
@@ -3495,7 +3494,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :DocString);
@@ -3506,15 +3505,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 44
+          return 44
       end
       if match_Empty(context, token)
         build(context, token);
-        return 44
+          return 44
       end
 
       state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
@@ -3529,11 +3528,11 @@ module Gherkin
     def match_token_at_45(token, context)
       if match_DocStringSeparator(context, token)
         build(context, token);
-        return 46
+          return 46
       end
       if match_Other(context, token)
         build(context, token);
-        return 45
+          return 45
       end
 
       state_comment = "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
@@ -3553,23 +3552,23 @@ module Gherkin
         end_rule(context, :Rule);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_StepLine(context, token)
         end_rule(context, :DocString);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 29
+          return 29
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DocString);
-          end_rule(context, :Step);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DocString);
+        end_rule(context, :Step);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 31
         end
       end
@@ -3582,7 +3581,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DocString);
@@ -3591,7 +3590,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 32
+          return 32
       end
       if match_RuleLine(context, token)
         end_rule(context, :DocString);
@@ -3601,15 +3600,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 46
+          return 46
       end
       if match_Empty(context, token)
         build(context, token);
-        return 46
+          return 46
       end
 
       state_comment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
@@ -3624,11 +3623,11 @@ module Gherkin
     def match_token_at_47(token, context)
       if match_DocStringSeparator(context, token)
         build(context, token);
-        return 48
+          return 48
       end
       if match_Other(context, token)
         build(context, token);
-        return 47
+          return 47
       end
 
       state_comment = "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
@@ -3648,34 +3647,34 @@ module Gherkin
         end_rule(context, :ScenarioDefinition);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_StepLine(context, token)
         end_rule(context, :DocString);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 15
+          return 15
       end
       if match_TagLine(context, token)
         if lookahead_1(context, token)
-          end_rule(context, :DocString);
-          end_rule(context, :Step);
-          start_rule(context, :ExamplesDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DocString);
+        end_rule(context, :Step);
+        start_rule(context, :ExamplesDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 17
         end
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DocString);
-          end_rule(context, :Step);
-          end_rule(context, :Scenario);
-          end_rule(context, :ScenarioDefinition);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DocString);
+        end_rule(context, :Step);
+        end_rule(context, :Scenario);
+        end_rule(context, :ScenarioDefinition);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -3688,7 +3687,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ExamplesLine(context, token)
         end_rule(context, :DocString);
@@ -3696,7 +3695,7 @@ module Gherkin
         start_rule(context, :ExamplesDefinition);
         start_rule(context, :Examples);
         build(context, token);
-        return 18
+          return 18
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DocString);
@@ -3706,7 +3705,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :DocString);
@@ -3716,15 +3715,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 48
+          return 48
       end
       if match_Empty(context, token)
         build(context, token);
-        return 48
+          return 48
       end
 
       state_comment = "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
@@ -3739,11 +3738,11 @@ module Gherkin
     def match_token_at_49(token, context)
       if match_DocStringSeparator(context, token)
         build(context, token);
-        return 50
+          return 50
       end
       if match_Other(context, token)
         build(context, token);
-        return 49
+          return 49
       end
 
       state_comment = "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
@@ -3762,23 +3761,23 @@ module Gherkin
         end_rule(context, :Background);
         end_rule(context, :Feature);
         build(context, token);
-        return 42
+          return 42
       end
       if match_StepLine(context, token)
         end_rule(context, :DocString);
         end_rule(context, :Step);
         start_rule(context, :Step);
         build(context, token);
-        return 9
+          return 9
       end
       if match_TagLine(context, token)
         if lookahead_0(context, token)
-          end_rule(context, :DocString);
-          end_rule(context, :Step);
-          end_rule(context, :Background);
-          start_rule(context, :ScenarioDefinition);
-          start_rule(context, :Tags);
-          build(context, token);
+        end_rule(context, :DocString);
+        end_rule(context, :Step);
+        end_rule(context, :Background);
+        start_rule(context, :ScenarioDefinition);
+        start_rule(context, :Tags);
+        build(context, token);
           return 11
         end
       end
@@ -3790,7 +3789,7 @@ module Gherkin
         start_rule(context, :RuleHeader);
         start_rule(context, :Tags);
         build(context, token);
-        return 22
+          return 22
       end
       if match_ScenarioLine(context, token)
         end_rule(context, :DocString);
@@ -3799,7 +3798,7 @@ module Gherkin
         start_rule(context, :ScenarioDefinition);
         start_rule(context, :Scenario);
         build(context, token);
-        return 12
+          return 12
       end
       if match_RuleLine(context, token)
         end_rule(context, :DocString);
@@ -3808,15 +3807,15 @@ module Gherkin
         start_rule(context, :Rule);
         start_rule(context, :RuleHeader);
         build(context, token);
-        return 23
+          return 23
       end
       if match_Comment(context, token)
         build(context, token);
-        return 50
+          return 50
       end
       if match_Empty(context, token)
         build(context, token);
-        return 50
+          return 50
       end
 
       state_comment = "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
@@ -3850,7 +3849,7 @@ module Gherkin
 
       return match
     end
-
+    
     def lookahead_1(context, currentToken)
       currentToken.detach
       token = nil
@@ -3873,7 +3872,7 @@ module Gherkin
 
       return match
     end
-
+    
     private
 
     def handle_ast_error(context, &action)
