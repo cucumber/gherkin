@@ -1,16 +1,16 @@
 ﻿@using Berp;
-@helper CallProduction(ProductionRule production)
+@helper CallProduction(ProductionRule production, string extraIndent)
 {
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:  start_rule(context, :@production.RuleName);
+      @:@(extraIndent)  start_rule(context, :@production.RuleName);
       break;
     case ProductionRuleType.End:
-      @:  end_rule(context, :@production.RuleName);
+      @:@(extraIndent)  end_rule(context, :@production.RuleName);
       break;
     case ProductionRuleType.Process:
-      @:  build(context, token);
+      @:@(extraIndent)  build(context, token);
       break;
   }
 }
@@ -149,15 +149,17 @@ module Gherkin
       @foreach(var transition in state.Transitions)
       {
       @:if @MatchToken(transition.TokenType)
+        var extraIndent = "";
         if (transition.LookAheadHint != null)
         {
+          extraIndent = "  ";
         @:@("if lookahead_")@(transition.LookAheadHint.Id)(context, token)
         }
         foreach(var production in transition.Productions)
         {
-          @CallProduction(production)
+          @CallProduction(production, extraIndent)
         }
-        @:return @transition.TargetState
+        @:@(extraIndent)return @transition.TargetState
         if (transition.LookAheadHint != null)
         {
         @:end
