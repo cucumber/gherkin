@@ -32,6 +32,7 @@ require_relative 'token_scanner'
 require_relative 'errors'
 
 module Gherkin
+
   RULE_TYPE = [
     :None,
     @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
@@ -151,20 +152,15 @@ module Gherkin
         if (transition.LookAheadHint != null)
         {
         @:@("if lookahead_")@(transition.LookAheadHint.Id)(context, token)
-          foreach(var production in transition.Productions)
-          {
-            @CallProduction(production)
-          }
-          @:return @transition.TargetState
-        @:end
         }
-        else
+        foreach(var production in transition.Productions)
         {
-          foreach(var production in transition.Productions)
-          {
-            @CallProduction(production)
-          }
-          @:return @transition.TargetState
+          @CallProduction(production)
+        }
+        @:return @transition.TargetState
+        if (transition.LookAheadHint != null)
+        {
+        @:end
         }
       @:end
       }
