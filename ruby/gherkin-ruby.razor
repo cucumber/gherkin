@@ -173,7 +173,7 @@ module Gherkin
 
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
-    <text>
+<text>
     def lookahead_@(lookAheadHint.Id)(context, currentToken)
       currentToken.detach
       token = nil
@@ -196,7 +196,7 @@ module Gherkin
 
       return match
     end
-    </text>
+</text>
 }
 
     private
