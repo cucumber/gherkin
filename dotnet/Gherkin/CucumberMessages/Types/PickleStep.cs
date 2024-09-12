@@ -18,7 +18,7 @@ public class PickleStep
     public required string Text { get; set; }
 
     [DataMember(Name = "type")]
-    public required StepKeywordType Type { get; set; }
+    public StepKeywordType Type { get; set; }
 
     public PickleStep()
     {
