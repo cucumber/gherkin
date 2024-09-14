@@ -174,21 +174,18 @@ public class PickleCompiler(IIdGenerator idGenerator)
     protected virtual StepKeywordType GetKeywordType(Step step, StepKeywordType lastStepKeywordType)
     {
         var stepKeywordType = step.KeywordType;
-        switch (stepKeywordType)
+
+        return step.KeywordType switch
         {
-            case StepKeywordType.Context:
-            case StepKeywordType.Action:
-            case StepKeywordType.Outcome:
-            case StepKeywordType.Unknown:
-                return stepKeywordType;
-            case StepKeywordType.Conjunction:
-                return lastStepKeywordType == StepKeywordType.Unspecified ||
-                       lastStepKeywordType == StepKeywordType.Unknown
-                    ? StepKeywordType.Context
-                    : lastStepKeywordType;
-            default:
-                return StepKeywordType.Unspecified;
-        }
+            StepKeywordType.Context => StepKeywordType.Context,
+            StepKeywordType.Action => StepKeywordType.Action,
+            StepKeywordType.Outcome => StepKeywordType.Outcome,
+            StepKeywordType.Unknown => StepKeywordType.Unknown,
+            StepKeywordType.Conjunction => lastStepKeywordType is StepKeywordType.Unspecified or StepKeywordType.Unknown
+                ? StepKeywordType.Context
+                : lastStepKeywordType,
+            _ => StepKeywordType.Unspecified
+        };
     }
 
 

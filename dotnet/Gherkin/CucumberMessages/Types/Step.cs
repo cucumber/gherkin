@@ -11,7 +11,7 @@ public class Step
     public required string Keyword { get; set; }
 
     [DataMember(Name = "keywordType")]
-    public required StepKeywordType KeywordType { get; set; }
+    public StepKeywordType? KeywordType { get; set; }
 
     [DataMember(Name = "text")]
     public required string Text { get; set; }
