@@ -6,6 +6,8 @@ from collections.abc import Generator
 from typing import TypedDict
 
 from .errors import ParserException
+from .parser_types import Location
+
 
 class Cell(TypedDict):
     column: int
@@ -96,7 +98,7 @@ class GherkinLine:
         for item in items[1:]:
             tag_value = '@' + item.strip()
             if re.search(r"[^\S+]", tag_value) is not None:
-                location = {'line': self._line_number, 'column': column}
+                location: Location = {'line': self._line_number, 'column': column}
                 raise ParserException('A tag may not contain whitespace', location)
 
             tags.append({'column': column, 'text': tag_value})
