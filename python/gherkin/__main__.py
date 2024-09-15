@@ -1,8 +1,6 @@
 import os
 from optparse import OptionParser
 import sys
-# TODO: replace `string_type` with `str`
-string_type = str
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import json
