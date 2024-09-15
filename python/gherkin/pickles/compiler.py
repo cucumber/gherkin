@@ -1,6 +1,4 @@
 import re
-
-from ..count_symbols import count_symbols
 from ..stream.id_generator import IdGenerator
 
 
