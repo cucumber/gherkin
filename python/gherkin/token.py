@@ -1,11 +1,6 @@
-from typing import TypedDict
-from typing_extensions import NotRequired
+from .gherkin_line import GherkinLine
+from .parser_types import Location
 
-from gherkin.gherkin_line import GherkinLine
-
-class Location(TypedDict):
-    line: int
-    column: NotRequired[int]
 
 class Token:
     def __init__(self, gherkin_line: GherkinLine, location: Location):

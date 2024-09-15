@@ -1,27 +1,45 @@
+from __future__ import annotations
+
+from typing import TypedDict, cast, TypeVar
+
 from .ast_node import AstNode
 from .errors import AstBuilderException
+from .parser_types import GherkinDocument, Tag, TableRow, Cell, Step, DocString, Scenario, Background, DataTable, \
+    Examples, Rule, Feature
 from .stream.id_generator import IdGenerator
+from .token import Location, Token
+
+T = TypeVar("T")
+
+class Comment(TypedDict):
+    location: Location
+    text: str
 
 class AstBuilder:
-    def __init__(self, id_generator=None):
+    id_generator: IdGenerator
+    stack: list[AstNode]
+    comments: list[Comment]
+    id_counter: int
+
+    def __init__(self, id_generator: IdGenerator | None = None) -> None:
+        if id_generator is None:
+            id_generator = IdGenerator()
         self.id_generator = id_generator
-        if self.id_generator is None:
-            self.id_generator = IdGenerator()
         self.reset()
 
-    def reset(self):
+    def reset(self) -> None:
         self.stack = [AstNode('None')]
         self.comments = []
         self.id_counter = 0
 
-    def start_rule(self, rule_type):
+    def start_rule(self, rule_type: str) -> None:
         self.stack.append(AstNode(rule_type))
 
-    def end_rule(self, rule_type):
+    def end_rule(self, rule_type: str) -> None:
         node = self.stack.pop()
         self.current_node.add(node.rule_type, self.transform_node(node))
 
-    def build(self, token):
+    def build(self, token: Token) -> None:
         if token.matched_type == 'Comment':
             self.comments.append({
                 'location': self.get_location(token),
@@ -30,38 +48,44 @@ class AstBuilder:
         else:
             self.current_node.add(token.matched_type, token)
 
-    def get_result(self):
-        return self.current_node.get_single('GherkinDocument')
+    def get_result(self) -> GherkinDocument:
+        return cast(GherkinDocument, self.current_node.get_single('GherkinDocument'))
 
     @property
-    def current_node(self):
+    def current_node(self) -> AstNode:
         return self.stack[-1]
 
-    def get_location(self, token, column=None):
+    def get_location(self, token: Token, column: int | None = None) -> Location:
         return (token.location if not column else
                 {'line': token.location['line'], 'column': column})
 
-    def get_tags(self, node):
-        tags = []
-        tags_node = node.get_single('Tags')
+    def get_tags(self, node: AstNode) -> list[Tag]:
+        tags: list[Tag] = []
+        tags_node = cast(AstNode, node.get_single('Tags'))
         if not tags_node:
             return tags
 
         for token in tags_node.get_tokens('TagLine'):
+            breakpoint()
             tags += [{'id': self.id_generator.get_next_id(),
                       'location': self.get_location(token, tag_item['column']),
                       'name': tag_item['text']} for tag_item in token.matched_items]
 
         return tags
 
-    def get_table_rows(self, node):
-        rows = [{'id': self.id_generator.get_next_id(),
-                 'location': self.get_location(token),
-                 'cells': self.get_cells(token)} for token in node.get_tokens('TableRow')]
+    def get_table_rows(self, node: AstNode) -> list[TableRow]:
+        rows: list[TableRow] = [
+            {
+                'id': self.id_generator.get_next_id(),
+                'location': self.get_location(token),
+                'cells': self.get_cells(token),
+            }
+            for token in node.get_tokens('TableRow')
+        ]
         self.ensure_cell_count(rows)
         return rows
 
-    def ensure_cell_count(self, rows):
+    def ensure_cell_count(self, rows: list[TableRow]) -> None:
         if not rows:
             return
 
@@ -71,18 +95,40 @@ class AstBuilder:
                 raise AstBuilderException("inconsistent cell count within the table",
                                           row['location'])
 
-    def get_cells(self, table_row_token):
-        return [self.reject_nones(
-            {'location': self.get_location(table_row_token, cell_item['column']),
-             'value': cell_item['text']}) for cell_item in table_row_token.matched_items]
+    def get_cells(self, table_row_token: Token) -> list[Cell]:
+        return [
+            cast(Cell, self.reject_nones(
+                {
+                    'location': self.get_location(table_row_token, cell_item['column']),
+                    'value': cell_item['text'],
+                }
+            ))
+            for cell_item in table_row_token.matched_items
+        ]
 
-    def get_description(self, node):
-        return node.get_single('Description', '')
+    def get_description(self, node: AstNode) -> str:
+        return cast(str, node.get_single('Description', ''))
 
-    def get_steps(self, node):
-        return node.get_items('Step')
+    def get_steps(self, node: AstNode) -> list[Step]:
+        return cast(list[Step], node.get_items('Step'))
 
-    def transform_node(self, node):
+    def transform_node(
+        self, node: AstNode
+    ) -> (
+        Step
+        | DocString
+        | DataTable
+        | Background
+        | Scenario
+        | Examples
+        | list[TableRow]
+        | str
+        | None
+        | Rule
+        | Feature
+        | GherkinDocument
+        | AstNode
+    ):
         if node.rule_type == 'Step':
             step_line = node.get_token('StepLine')
             step_argument_type = 'dummy_type'
@@ -94,14 +140,19 @@ class AstBuilder:
                 step_argument_type = 'docString'
                 step_argument = node.get_single('DocString')
 
-            return self.reject_nones({
-                'id': self.id_generator.get_next_id(),
-                'location': self.get_location(step_line),
-                'keyword': step_line.matched_keyword,
-                'keywordType': step_line.matched_keyword_type,
-                'text': step_line.matched_text,
-                step_argument_type: step_argument
-            })
+            return cast(
+                Step,
+                self.reject_nones(
+                    {
+                        'id': self.id_generator.get_next_id(),
+                        'location': self.get_location(step_line),
+                        'keyword': step_line.matched_keyword,
+                        'keywordType': step_line.matched_keyword_type,
+                        'text': step_line.matched_text,
+                        step_argument_type: step_argument
+                    }
+                )
+            )
         elif node.rule_type == 'DocString':
             separator_token = node.get_tokens('DocStringSeparator')[0]
             media_type = (separator_token.matched_text if len(separator_token.matched_text) > 0
@@ -246,5 +297,5 @@ class AstBuilder:
         else:
             return node
 
-    def reject_nones(self, values):
+    def reject_nones(self, values: dict[str, T | None]) -> dict[str, T]:
         return {k: v for k, v in values.items() if v is not None}
