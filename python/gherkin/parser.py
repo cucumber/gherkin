@@ -1,9 +1,6 @@
 # This file is generated. Do not edit! Edit gherkin-python.razor instead.
-import sys
 
 from collections import deque
-from typing_extensions import TypeAlias
-from typing import Any
 
 from .ast_builder import AstBuilder
 from .token_matcher import TokenMatcher
