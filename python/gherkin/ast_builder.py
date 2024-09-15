@@ -48,8 +48,8 @@ class AstBuilder:
         else:
             self.current_node.add(token.matched_type, token)
 
-    def get_result(self) -> GherkinDocument:
-        return cast(GherkinDocument, self.current_node.get_single('GherkinDocument'))
+    def get_result(self) -> object:
+        return self.current_node.get_single('GherkinDocument')
 
     @property
     def current_node(self) -> AstNode:
