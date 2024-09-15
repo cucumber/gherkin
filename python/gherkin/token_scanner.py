@@ -21,13 +21,7 @@ class TokenScanner(object):
         if os.path.exists(path_or_str):
             self.io = io.open(path_or_str, 'r', encoding='utf8')
         else:
-            if sys.version_info < (3, 0):
-                if isinstance(path_or_str, str):
-                    self.io = io.StringIO(unicode(path_or_str, encoding='utf8'))
-                else:
-                    self.io = io.StringIO(path_or_str)
-            else:
-                self.io = io.StringIO(path_or_str)
+            self.io = io.StringIO(path_or_str)
         self.line_number = 0
 
     def read(self):
