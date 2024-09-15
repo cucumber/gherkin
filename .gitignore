@@ -5,3 +5,4 @@
 dotnet/.vs/*
 dotnet/output
 *.iml
+/python/.venv/
