@@ -70,12 +70,12 @@ class ScenarioContainer(Container):
 
 class Feature(TypedDict):
     location: Location
-    tags: list[object]
+    tags: list[Tag]
     language: str
     keyword: str
     name: str
     description: str
-    children: list[object]
+    children: list[Container]
 
 class GherkinDocument(TypedDict):
     feature: Feature
