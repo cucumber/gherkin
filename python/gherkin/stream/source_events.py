@@ -10,7 +10,7 @@ class Event(TypedDict):
     source: Source
 
 def source_event(path: str) -> Event:
-    event = {
+    event: Event = {
         'source': {
             'uri': path,
             'data': open(path, encoding='utf8', newline='').read(),
@@ -20,7 +20,7 @@ def source_event(path: str) -> Event:
     return event
 
 class SourceEvents:
-    def __init__(self, paths):
+    def __init__(self, paths: list[str]) -> None:
         self.paths = paths
 
     def enum(self) -> Iterable[Event]:

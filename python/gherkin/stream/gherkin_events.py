@@ -5,8 +5,8 @@ from dataclasses import dataclass
 from typing import TypedDict
 
 from gherkin.ast_builder import AstBuilder
-from gherkin.parser import Parser, GherkinDocument
-from gherkin.pickles.compiler import Compiler, Pickle
+from gherkin.parser import Parser
+from gherkin.pickles.compiler import Compiler, Pickle, GherkinDocumentWithURI
 from gherkin.errors import ParserError, CompositeParserException, ParserException
 from gherkin.stream.id_generator import IdGenerator
 from gherkin.stream.source_events import Event
@@ -37,7 +37,7 @@ def create_errors(errors: Iterable[ParserException], uri: str) -> Generator[Erro
         }
 
 class GherkinDocumentContainer(TypedDict):
-    gherkinDocument: GherkinDocument
+    gherkinDocument: GherkinDocumentWithURI
 
 class PickleContainer(TypedDict):
     pickle: Pickle
@@ -65,18 +65,21 @@ class GherkinEvents:
 
         try:
             gherkin_document = self.parser.parse(source)
-            gherkin_document['uri'] = uri
+            gherkin_document_with_uri: GherkinDocumentWithURI = {
+                **gherkin_document,
+                "uri": uri,
+            }
 
             if self.options.print_source:
                 yield source_event
 
             if self.options.print_ast:
                 yield {
-                    'gherkinDocument': gherkin_document
+                    'gherkinDocument': gherkin_document_with_uri
                 }
 
             if self.options.print_pickles:
-                pickles = self.compiler.compile(gherkin_document)
+                pickles = self.compiler.compile(gherkin_document_with_uri)
                 for pickle in pickles:
                     yield {
                         'pickle': pickle
