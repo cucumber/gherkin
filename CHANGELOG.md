@@ -21,6 +21,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Adopt c# 10 ImplicitUsings
 - [.NET] Replace TinyJson to System.Text.Json
 - [.NET] Enable warnings as errors
+
+### Removed
 - [Python] Drop compatibility for python 2. Supported python versions are 3.8, 3.9, 3.10, 3.12
 
 ## [29.0.0] - 2024-08-12
