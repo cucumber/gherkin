@@ -8,6 +8,7 @@ from typing import Any
 from .ast_builder import AstBuilder
 from .token_matcher import TokenMatcher
 from .token_scanner import TokenScanner
+from .parser_types import GherkinDocument
 from .errors import UnexpectedEOFException, UnexpectedTokenException, ParserException, CompositeParserException
 
 RULE_TYPE = [
@@ -46,17 +47,6 @@ RULE_TYPE = [
     'Description',  # Description! := #Other+
 ]
 
-
-class Location(TypedDict):
-    column: int
-    line: int
-
-class Tag(TypedDict):
-    id: str
-    location: Location
-    name: str
-
-GherkinDocument: TypeAlias = dict[str, Any]
 
 class ParserContext(object):
     def __init__(self, token_scanner, token_matcher, token_queue, errors):
