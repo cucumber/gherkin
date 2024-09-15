@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 
 if typing.TYPE_CHECKING:
-    from gherkin.token import Location
+    from gherkin.token import Location, Token
 
 
 class ParserError(Exception):
@@ -19,7 +19,7 @@ class ParserException(ParserError):
 
 
 class NoSuchLanguageException(ParserException):
-    def __init__(self, language, location):
+    def __init__(self, language: str, location: Location) -> None:
         super().__init__('Language not supported: ' + language,
                                                       location)
 
@@ -29,13 +29,23 @@ class AstBuilderException(ParserException):
 
 
 class UnexpectedEOFException(ParserException):
-    def __init__(self, received_token, expected_token_types, state_comment):
+    def __init__(
+        self,
+        received_token: Token,
+        expected_token_types: list[str],
+        state_comment: str,
+    ) -> None:
         message = 'unexpected end of file, expected: ' + ', '.join(expected_token_types)
         super().__init__(message, received_token.location)
 
 
 class UnexpectedTokenException(ParserException):
-    def __init__(self, received_token, expected_token_types, state_comment):
+    def __init__(
+        self,
+        received_token: Token,
+        expected_token_types: list[str],
+        state_comment: str,
+    ) -> None:
         message = ("expected: " + ', '.join(expected_token_types) + ", got '" +
                    received_token.token_value().strip() + "'")
         column = received_token.location['column'] if 'column' in received_token.location else None
@@ -46,7 +56,7 @@ class UnexpectedTokenException(ParserException):
 
 
 class CompositeParserException(ParserError):
-    def __init__(self, errors):
+    def __init__(self, errors: list[ParserException]) -> None:
         self.errors = errors
         super().__init__("Parser errors:\n" +
                                                        '\n'.join([error.args[0] for error in
