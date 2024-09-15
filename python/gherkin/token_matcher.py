@@ -15,7 +15,7 @@ else:
     def indent(text, amount, ch=' '):
         return textwrap.indent(text, amount * ch)
 
-class TokenMatcher(object):
+class TokenMatcher:
     LANGUAGE_RE = re.compile(r"^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$")
 
     def __init__(self, dialect_name='en'):

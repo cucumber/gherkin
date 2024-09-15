@@ -46,8 +46,6 @@ class GherkinEvents:
                         'pickle': pickle
                     }
         except CompositeParserException as e:
-            for event in create_errors(e.errors, uri):
-                yield event
+            yield from create_errors(e.errors, uri)
         except ParserError as e:
-            for event in create_errors([e], uri):
-                yield event
+            yield from create_errors([e], uri)

@@ -7,10 +7,10 @@ KEYWORD_PREFIX_HEADER = '^(#{1,6}\\s)'
 class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
     def __init__(self, dialect_name='en'):
-        super(GherkinInMarkdownTokenMatcher, self).__init__(dialect_name)
+        super().__init__(dialect_name)
 
     def reset(self):
-        super(GherkinInMarkdownTokenMatcher, self).reset()
+        super().reset()
         self.matched_feature_line=False
 
     def match_FeatureLine(self, token):
@@ -142,7 +142,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
     def _match_title_line(self, prefix, keywords, keywordSuffix, token, token_type):
         
         keywords_or_list="|".join(map(lambda x: re.escape(x), keywords))
-        match = re.search(u'{}({}){}(.*)'.format(prefix, keywords_or_list, keywordSuffix), token.line.get_line_text())
+        match = re.search(f'{prefix}({keywords_or_list}){keywordSuffix}(.*)', token.line.get_line_text())
         indent = token.line.indent
         
         if(match):

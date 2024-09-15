@@ -1,4 +1,4 @@
-class IdGenerator(object):
+class IdGenerator:
     def __init__(self):
         self._id_counter = 0
 

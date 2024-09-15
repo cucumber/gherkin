@@ -4,7 +4,7 @@ def source_event(path):
     event = {
         'source': {
             'uri': path,
-            'data': io.open(path, 'r', encoding='utf8', newline='').read(),
+            'data': open(path, encoding='utf8', newline='').read(),
             'mediaType': 'text/x.cucumber.gherkin+plain'
         }
     }
