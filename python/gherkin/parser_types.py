@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from typing import TypedDict
+from typing_extensions import NotRequired
 
 
 class Location(TypedDict):
@@ -14,21 +17,6 @@ class Tag(TypedDict):
     location: Location
     name: str
 
-class Step(TypedDict):
-    id: str
-    location: Location
-    keyword: str
-    text: str
-    keywordType: str
-
-class Background(TypedDict):
-    id: str
-    location: Location
-    keyword: str
-    name: str
-    description: str
-    steps: list[Step]
-
 class Cell(TypedDict):
     location: Location
     value: str
@@ -38,8 +26,34 @@ class TableRow(TypedDict):
     location: Location
     cells: list[Cell]
 
+class DataTable(TypedDict):
+    location: Location
+    rows: list[TableRow]
 
-class Example(TypedDict):
+class DocString(TypedDict):
+    location: Location
+    content: str
+    delimiter: str
+    mediaType: NotRequired[str]
+
+class Step(TypedDict):
+    id: str
+    location: Location
+    keyword: str
+    text: str
+    keywordType: str
+    dataTable: NotRequired[DataTable]
+    docString: NotRequired[DocString]
+
+class Background(TypedDict):
+    id: str
+    location: Location
+    keyword: str
+    name: str
+    description: str
+    steps: list[Step]
+
+class Examples(TypedDict):
     id: str
     location: Location
     tags: list[Tag]
@@ -57,16 +71,28 @@ class Scenario(TypedDict):
     name: str
     description: str
     steps: list[Step]
-    examples: list[Example]
+    examples: list[Examples]
 
 class Container(TypedDict):
     pass
+
+class Rule(TypedDict):
+    id: str
+    location: Location
+    tags: list[Tag]
+    keyword: str
+    name: str
+    description: str
+    children: list[Container]
 
 class BackgroundContainer(Container):
     background: Background
 
 class ScenarioContainer(Container):
     scenario: Scenario
+
+class RuleContainer(Container):
+    rule: Rule
 
 class Feature(TypedDict):
     location: Location
