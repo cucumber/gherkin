@@ -15,7 +15,13 @@ parser.add_option("--no-pickles", action="store_false", dest="print_pickles", de
 (options, args) = parser.parse_args()
 
 source_events = SourceEvents(args)
-gherkin_events = GherkinEvents(options)
+gherkin_events = GherkinEvents(
+    GherkinEvents.Options(
+        print_source=options.print_source,
+        print_ast=options.print_ast,
+        print_pickles=options.print_pickles,
+    )
+)
 
 for source_event in source_events.enum():
     for event in gherkin_events.enum(source_event):

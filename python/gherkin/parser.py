@@ -1,6 +1,10 @@
 # This file is generated. Do not edit! Edit gherkin-python.razor instead.
 import sys
+
 from collections import deque
+from typing_extensions import TypeAlias
+from typing import Any
+
 from .ast_builder import AstBuilder
 from .token_matcher import TokenMatcher
 from .token_scanner import TokenScanner
@@ -43,7 +47,18 @@ RULE_TYPE = [
 ]
 
 
-class ParserContext:
+class Location(TypedDict):
+    column: int
+    line: int
+
+class Tag(TypedDict):
+    id: str
+    location: Location
+    name: str
+
+GherkinDocument: TypeAlias = dict[str, Any]
+
+class ParserContext(object):
     def __init__(self, token_scanner, token_matcher, token_queue, errors):
         self.token_scanner = token_scanner
         self.token_matcher = token_matcher
@@ -51,12 +66,12 @@ class ParserContext:
         self.errors = errors
 
 
-class Parser:
+class Parser(object):
     def __init__(self, ast_builder=None):
         self.ast_builder = ast_builder if ast_builder is not None else AstBuilder()
         self.stop_at_first_error = False
 
-    def parse(self, token_scanner_or_str, token_matcher=None):
+    def parse(self, token_scanner_or_str, token_matcher=None) -> GherkinDocument:
         token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
         self.ast_builder.reset()
         if token_matcher is None:

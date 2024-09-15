@@ -1,9 +1,17 @@
+from __future__ import annotations
+
+import typing
+
+if typing.TYPE_CHECKING:
+    from gherkin.token import Location
+
+
 class ParserError(Exception):
     pass
 
 
 class ParserException(ParserError):
-    def __init__(self, message, location):
+    def __init__(self, message: str, location: Location) -> None:
         self.location = location
         super().__init__('(' + str(location['line']) + ':' +
                                               str(location['column'] if 'column' in

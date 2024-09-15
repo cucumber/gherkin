@@ -1,4 +1,15 @@
-def source_event(path):
+from collections.abc import Iterable
+from typing import TypedDict
+
+class Source(TypedDict):
+    uri: str
+    data: str
+    mediaType: str
+
+class Event(TypedDict):
+    source: Source
+
+def source_event(path: str) -> Event:
     event = {
         'source': {
             'uri': path,
@@ -12,5 +23,5 @@ class SourceEvents:
     def __init__(self, paths):
         self.paths = paths
 
-    def enum(self):
+    def enum(self) -> Iterable[Event]:
         return map(source_event, self.paths)
