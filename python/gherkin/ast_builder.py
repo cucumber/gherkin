@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TypedDict, cast, TypeVar
+from typing import TypedDict, cast, TypeVar, Union
 
 from .ast_node import AstNode
 from .errors import AstBuilderException
@@ -130,7 +130,7 @@ class AstBuilder:
         | AstNode
     ):
         if node.rule_type == 'Step':
-            step_line = node.get_token('StepLine')
+            step_line = cast(Token, node.get_token('StepLine'))
             step_argument_type = 'dummy_type'
             step_argument = None
             if node.get_single('DataTable'):
@@ -140,18 +140,15 @@ class AstBuilder:
                 step_argument_type = 'docString'
                 step_argument = node.get_single('DocString')
 
-            return cast(
-                Step,
-                self.reject_nones(
-                    {
-                        'id': self.id_generator.get_next_id(),
-                        'location': self.get_location(step_line),
-                        'keyword': step_line.matched_keyword,
-                        'keywordType': step_line.matched_keyword_type,
-                        'text': step_line.matched_text,
-                        step_argument_type: step_argument
-                    }
-                )
+            return self.reject_nones(
+                {
+                    'id': self.id_generator.get_next_id(),
+                    'location': self.get_location(step_line),
+                    'keyword': step_line.matched_keyword,
+                    'keywordType': step_line.matched_keyword_type,
+                    'text': step_line.matched_text,
+                    step_argument_type: step_argument
+                }
             )
         elif node.rule_type == 'DocString':
             separator_token = node.get_tokens('DocStringSeparator')[0]
@@ -187,7 +184,7 @@ class AstBuilder:
             })
         elif node.rule_type == 'ScenarioDefinition':
             tags = self.get_tags(node)
-            scenario_node = node.get_single('Scenario')
+            scenario_node = cast(AstNode, node.get_single('Scenario'))
             scenario_line = scenario_node.get_token('ScenarioLine')
             description = self.get_description(scenario_node)
             steps = self.get_steps(scenario_node)
@@ -205,10 +202,10 @@ class AstBuilder:
             })
         elif node.rule_type == 'ExamplesDefinition':
             tags = self.get_tags(node)
-            examples_node = node.get_single('Examples')
+            examples_node = cast(AstNode, node.get_single('Examples'))
             examples_line = examples_node.get_token('ExamplesLine')
             description = self.get_description(examples_node)
-            examples_table_rows = examples_node.get_single('ExamplesTable')
+            examples_table_rows = cast(list[TableRow], examples_node.get_single('ExamplesTable'))
             table_header = examples_table_rows[0] if examples_table_rows else None
             table_body = examples_table_rows[1:] if examples_table_rows else []
 
@@ -234,14 +231,13 @@ class AstBuilder:
 
             return description
         elif node.rule_type == 'Rule':
-            header = node.get_single('RuleHeader')
+            header = cast(Union[AstNode, None], node.get_single('RuleHeader'))
             if not header:
-                return
-
+                return None
             tags = self.get_tags(header)
             rule_line = header.get_token('RuleLine')
             if not rule_line:
-                return
+                return None
 
             children = []
             background = node.get_single('Background')
@@ -260,18 +256,18 @@ class AstBuilder:
                 'children': children
             })
         elif node.rule_type == 'Feature':
-            header = node.get_single('FeatureHeader')
+            header = cast(Union[AstNode, None], node.get_single('FeatureHeader'))
             if not header:
-                return
+                return None
 
             tags = self.get_tags(header)
             feature_line = header.get_token('FeatureLine')
             if not feature_line:
-                return
+                return None
 
             children = []
             background = node.get_single('Background')
-            if (background):
+            if background:
                 children.append({'background': background})
             children = children + [{'scenario': i} for i in node.get_items('ScenarioDefinition')]
             children = children + [{'rule': i} for i in node.get_items('Rule')]

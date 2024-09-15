@@ -22,7 +22,7 @@ class AstNode:
     def get_items(self, rule_type: str) -> list[object]:
         return self._sub_items[rule_type]
 
-    def get_token(self, token_type: str) -> str | None:
+    def get_token(self, token_type: str) -> Token:
         return self.get_single(token_type)
 
     def get_tokens(self, token_type: str) -> list[Token]:
