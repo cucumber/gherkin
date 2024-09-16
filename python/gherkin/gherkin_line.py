@@ -2,7 +2,7 @@ import re
 from .errors import ParserException
 
 
-class GherkinLine(object):
+class GherkinLine:
     def __init__(self, line_text, line_number):
         self._line_text = line_text
         self._line_number = line_number
@@ -76,7 +76,7 @@ class GherkinLine(object):
     @property
     def tags(self):
         column = self.indent + 1
-        uncommented_line = re.split(r"\s#", self._trimmed_line_text.strip(), 2)[0]
+        uncommented_line = re.split(r"\s#", self._trimmed_line_text.strip(), maxsplit=2)[0]
         items = uncommented_line.strip().split('@')
         tags = []
         for item in items[1:]:

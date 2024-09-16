@@ -3,19 +3,8 @@ from collections import defaultdict
 from .dialect import Dialect
 from .errors import NoSuchLanguageException
 
-# Source: https://stackoverflow.com/a/8348914
-try:
-    import textwrap
-    textwrap.indent
-except AttributeError:  # undefined function (wasn't added until Python 3.3)
-    def indent(text, amount, ch=' '):
-        padding = amount * ch
-        return ''.join(padding+line for line in text.splitlines(True))
-else:
-    def indent(text, amount, ch=' '):
-        return textwrap.indent(text, amount * ch)
 
-class TokenMatcher(object):
+class TokenMatcher:
     LANGUAGE_RE = re.compile(r"^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$")
 
     def __init__(self, dialect_name='en'):

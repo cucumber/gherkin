@@ -1,11 +1,10 @@
-from __future__ import print_function
 import json
 from .parser import Parser
 from .token_scanner import TokenScanner
 from .pickles.compiler import compile
 from .errors import ParserException, CompositeParserException
 
-class Inout(object):
+class Inout:
     def __init__(self, print_source, print_ast, print_pickles):
         self.print_source = print_source
         self.print_ast = print_ast

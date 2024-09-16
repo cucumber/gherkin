@@ -43,7 +43,7 @@ RULE_TYPE = [
 ]
 
 
-class ParserContext(object):
+class ParserContext:
     def __init__(self, token_scanner, token_matcher, token_queue, errors):
         self.token_scanner = token_scanner
         self.token_matcher = token_matcher
@@ -51,16 +51,13 @@ class ParserContext(object):
         self.errors = errors
 
 
-class Parser(object):
+class Parser:
     def __init__(self, ast_builder=None):
         self.ast_builder = ast_builder if ast_builder is not None else AstBuilder()
         self.stop_at_first_error = False
 
     def parse(self, token_scanner_or_str, token_matcher=None):
-        if sys.version_info < (3, 0):
-            token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, basestring) else token_scanner_or_str
-        else:
-            token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
+        token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
         self.ast_builder.reset()
         if token_matcher is None:
             token_matcher = TokenMatcher()

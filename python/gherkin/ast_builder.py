@@ -2,7 +2,7 @@ from .ast_node import AstNode
 from .errors import AstBuilderException
 from .stream.id_generator import IdGenerator
 
-class AstBuilder(object):
+class AstBuilder:
     def __init__(self, id_generator=None):
         self.id_generator = id_generator
         if self.id_generator is None:

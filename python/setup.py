@@ -1,4 +1,3 @@
-# coding: utf-8
 from setuptools import setup
 setup(name="gherkin-official",
       packages=["gherkin", "gherkin.pickles", "gherkin.stream"],
@@ -13,9 +12,14 @@ setup(name="gherkin-official",
       keywords=["gherkin", "cucumber", "bdd"],
       scripts=["bin/gherkin"],
       classifiers=["Programming Language :: Python",
-                   "Programming Language :: Python :: 2",
                    "Programming Language :: Python :: 3",
+                   "Programming Language :: Python :: 3.8",
+                   "Programming Language :: Python :: 3.9",
+                   "Programming Language :: Python :: 3.10",
+                   "Programming Language :: Python :: 3.11",
+                   "Programming Language :: Python :: 3.12",
                    ],
       platforms = ['any'],
       package_data={"gherkin": ["gherkin-languages.json"]},
+      python_requires=">=3.8",
       )

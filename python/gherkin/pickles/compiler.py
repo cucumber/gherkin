@@ -1,10 +1,8 @@
 import re
-
-from ..count_symbols import count_symbols
 from ..stream.id_generator import IdGenerator
 
 
-class Compiler(object):
+class Compiler:
     def __init__(self, id_generator=None):
         self.id_generator = id_generator
         if self.id_generator is None:
@@ -158,7 +156,7 @@ class Compiler(object):
             # For the case of trailing backslash, re-escaping backslashes are needed
             reescaped_value = re.sub(r'\\', r'\\\\', value_cell['value'])
             name = re.sub(
-                u'<{0[value]}>'.format(variable_cell),
+                '<{0[value]}>'.format(variable_cell),
                 reescaped_value,
                 name
             )

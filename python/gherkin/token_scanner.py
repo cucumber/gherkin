@@ -1,11 +1,10 @@
 import io
 import os
-import sys
 from .token import Token
 from .gherkin_line import GherkinLine
 
 
-class TokenScanner(object):
+class TokenScanner:
     """
     The scanner reads a gherkin doc (typically read from a `.feature` file) and creates a token for
     each line.
@@ -19,15 +18,9 @@ class TokenScanner(object):
 
     def __init__(self, path_or_str):
         if os.path.exists(path_or_str):
-            self.io = io.open(path_or_str, 'r', encoding='utf8')
+            self.io = open(path_or_str, encoding='utf8')
         else:
-            if sys.version_info < (3, 0):
-                if isinstance(path_or_str, str):
-                    self.io = io.StringIO(unicode(path_or_str, encoding='utf8'))
-                else:
-                    self.io = io.StringIO(path_or_str)
-            else:
-                self.io = io.StringIO(path_or_str)
+            self.io = io.StringIO(path_or_str)
         self.line_number = 0
 
     def read(self):
