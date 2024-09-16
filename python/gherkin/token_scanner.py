@@ -1,6 +1,5 @@
 import io
 import os
-import sys
 from .token import Token
 from .gherkin_line import GherkinLine
 

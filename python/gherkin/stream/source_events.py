@@ -1,5 +1,3 @@
-import io
-
 def source_event(path):
     event = {
         'source': {
