@@ -11,3 +11,7 @@ AllCops:
   # Display cop name / style guide references
   DisplayCopNames: true
   DisplayStyleGuide: true
+
+# TODO: [LH] - Investigate this in terms of it not being fixed in rubocop?
+Naming/MethodName:
+  Enabled: false

@@ -12,11 +12,13 @@ module Gherkin
 
     def scenario_parent_locations(scenario_node_id)
       return @scenario_parent_locations[scenario_node_id] if @scenario_parent_locations.has_key?(scenario_node_id)
+
       raise AstNodeNotLocatedException, "No scenario parent locations found for #{scenario_node_id} }. Known: #{@scenario_parent_locations.keys}"
     end
 
     def location(ast_node_id)
       return @ast_node_locations[ast_node_id] if @ast_node_locations.has_key?(ast_node_id)
+
       raise AstNodeNotLocatedException, "No location found for #{ast_node_id} }. Known: #{@ast_node_locations.keys}"
     end
 
@@ -24,6 +26,7 @@ module Gherkin
 
     def update_feature(feature)
       return if feature.nil?
+
       store_nodes_location(feature.tags)
 
       feature.children.each do |child|
@@ -35,6 +38,7 @@ module Gherkin
 
     def update_rule(feature, rule)
       return if rule.nil?
+
       store_nodes_location(rule.tags)
       rule.children.each do |child|
         update_background(rule, child.background) if child.background

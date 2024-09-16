@@ -8,11 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Added
-- [PHP] update dependency messages up to v26 ([#268](https://github.com/cucumber/gherkin/pull/268))
-- [JavaScript] update dependency messages up to v26 ([#268](https://github.com/cucumber/gherkin/pull/268))
-- [JavaScript] update dependency messages up to at least v19.1.4 ([#268](https://github.com/cucumber/gherkin/pull/268))
-- [Java] update dependency messages up to v26 ([#269](https://github.com/cucumber/gherkin/pull/269))
-- [Ruby] update dependency messages up to v26 ([#267](https://github.com/cucumber/gherkin/pull/267))
+- [PHP, Java, Ruby, JavaScript] update dependency messages up to v26
 
 ### Changed
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Standard 2.0 ([#265](https://github.com/cucumber/gherkin/pull/265))
@@ -21,6 +17,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Adopt c# 10 ImplicitUsings
 - [.NET] Replace TinyJson to System.Text.Json
 - [.NET] Enable warnings as errors
+- [Ruby] Initial rubocop autofixes (Mainly to style) ([#266](https://github.com/cucumber/gherkin/pull/266))
 
 ## [29.0.0] - 2024-08-12
 ### Added

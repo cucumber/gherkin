@@ -17,7 +17,7 @@ module Gherkin
 
       let(:options) {
         {
-          include_gherkin_document: true,
+          include_gherkin_document: true
         }
       }
 

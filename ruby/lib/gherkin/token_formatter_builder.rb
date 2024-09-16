@@ -5,35 +5,35 @@ module Gherkin
     end
 
     def reset
-      @tokens_text = ""
+      @tokens_text = ''
     end
 
     def build(token)
       @tokens_text << "#{format_token(token)}\n"
     end
 
-    def start_rule(rule_type)
-    end
+    def start_rule(_rule_type); end
 
-    def end_rule(rule_type)
-    end
+    def end_rule(_rule_type); end
 
     def get_result
       @tokens_text
     end
 
     private
-    def format_token(token)
-      return "EOF" if token.eof?
 
-      sprintf "(%s:%s)%s:%s/%s/%s",
+    def format_token(token)
+      return 'EOF' if token.eof?
+
+      sprintf(
+        "(%s:%s)%s:%s/%s/%s",
         token.location[:line],
         token.location[:column],
         token.matched_type,
         token.matched_keyword ? sprintf("(%s)%s", token.matched_keyword_type, token.matched_keyword) : "",
         token.matched_text,
-        Array(token.matched_items).map { |i| "#{i.column}:#{i.text}"}.join(',')
+        Array(token.matched_items).map { |i| "#{i.column}:#{i.text}" }.join(',')
+      )
     end
-
   end
 end
