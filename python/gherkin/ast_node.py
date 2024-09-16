@@ -13,7 +13,7 @@ class AstNode:
         self.rule_type = rule_type
         self._sub_items: defaultdict[str, list[object]] = defaultdict(list)
 
-    def add(self, rule_type: str, obj: object) -> None:
+    def add(self, rule_type: str | None, obj: object) -> None:
         self._sub_items[rule_type].append(obj)
 
     def get_single(self, rule_type: str, default_value: object = None) -> object:

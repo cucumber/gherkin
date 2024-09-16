@@ -167,13 +167,13 @@ class TokenMatcher:
     def _set_token_matched(
         self,
         token: Token,
-        matched_type: str,
+        matched_type: str | None,
         text: str | None = None,
         keyword: str | None = None,
         keyword_type: str | None = None,
         indent: int | None = None,
-        items: list[MatchedItems] | None = None)\
-    -> None:
+        items: list[MatchedItems] | None = None
+    ) -> None:
         if items is None:
             items = []
         token.matched_type = matched_type
