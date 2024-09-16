@@ -6,7 +6,7 @@ from typing_extensions import NotRequired
 
 class Location(TypedDict):
     line: int
-    column: int
+    column: NotRequired[int]
 
 class Comment(TypedDict):
     location: Location
