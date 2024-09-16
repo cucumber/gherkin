@@ -76,7 +76,7 @@ class GherkinLine:
     @property
     def tags(self):
         column = self.indent + 1
-        uncommented_line = re.split(r"\s#", self._trimmed_line_text.strip(), 2)[0]
+        uncommented_line = re.split(r"\s#", self._trimmed_line_text.strip(), maxsplit=2)[0]
         items = uncommented_line.strip().split('@')
         tags = []
         for item in items[1:]:
