@@ -15,18 +15,18 @@ class Inout:
     def process(self, input, output):
         line = input.readline().rstrip()
         event = json.loads(line)
-        if (event['type'] == 'source'):
+        if event['type'] == 'source':
             uri = event['uri']
             source = event['data']
             token_scanner = TokenScanner(source)
 
             try:
                 gherkin_document = self.parser.parse(token_scanner)
-                if (self.print_source):
+                if self.print_source:
                     print(line, file=output)
-                if (self.print_ast):
+                if self.print_ast:
                     print(json.dumps(gherkin_document), file=output)
-                if (self.print_pickles):
+                if self.print_pickles:
                     pickles = compile(gherkin_document, uri)
                     for pickle in pickles:
                         print(json.dumps(pickle), file=output)
@@ -35,7 +35,8 @@ class Inout:
             except ParserException as e:
                 self.print_errors(output, [e], uri)
 
-    def print_errors(self, output, errors, uri):
+    @staticmethod
+    def print_errors(output, errors, uri):
         for error in errors:
             attachment = {
                 'type': "attachment",

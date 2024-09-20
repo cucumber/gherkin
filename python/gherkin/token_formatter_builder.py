@@ -3,6 +3,7 @@ from .ast_builder import AstBuilder
 
 class TokenFormatterBuilder(AstBuilder):
     def __init__(self):
+        self._tokens = []
         self.reset()
 
     def reset(self):
@@ -20,7 +21,8 @@ class TokenFormatterBuilder(AstBuilder):
     def get_result(self):
         return '\n'.join([self._format_token(token) for token in self._tokens])
 
-    def _format_token(self, token):
+    @staticmethod
+    def _format_token(token):
         if token.eof():
             return "EOF"
 

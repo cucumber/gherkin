@@ -1,12 +1,9 @@
 # coding=utf-8
-from __future__ import print_function
 import json
 import textwrap
 
 from gherkin.ast_builder import AstBuilder
 from gherkin.parser import Parser
-from gherkin.parser import Parser
-from gherkin.errors import ParserError
 from gherkin.pickles.compiler import Compiler
 from gherkin.stream.id_generator import IdGenerator
 

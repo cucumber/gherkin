@@ -147,7 +147,8 @@ class Compiler:
         else:
             return None
 
-    def _interpolate(self, name, variable_cells, value_cells):
+    @staticmethod
+    def _interpolate(name, variable_cells, value_cells):
         if name is None:
             return name
 
@@ -182,7 +183,8 @@ class Compiler:
         return [self._pickle_tag(tag) for tag in tags]
 
 
-    def _pickle_tag(self, tag):
+    @staticmethod
+    def _pickle_tag(tag):
         return {
             'astNodeId': tag['id'],
             'name': tag['name']

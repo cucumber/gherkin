@@ -1,5 +1,7 @@
+import contextlib
 import io
 import os
+
 from .token import Token
 from .gherkin_line import GherkinLine
 
@@ -31,7 +33,5 @@ class TokenScanner:
 
     def __del__(self):
         # close file descriptor if it's still open
-        try:
+        with contextlib.suppress(AttributeError):
             self.io.close()
-        except AttributeError:
-            pass

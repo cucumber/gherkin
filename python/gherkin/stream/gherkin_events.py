@@ -31,15 +31,15 @@ class GherkinEvents:
             gherkin_document = self.parser.parse(source)
             gherkin_document['uri'] = uri
 
-            if (self.options.print_source):
+            if self.options.print_source:
                 yield source_event
 
-            if (self.options.print_ast):
+            if self.options.print_ast:
                 yield {
                     'gherkinDocument': gherkin_document
                 }
 
-            if (self.options.print_pickles):
+            if self.options.print_pickles:
                 pickles = self.compiler.compile(gherkin_document)
                 for pickle in pickles:
                     yield {

@@ -36,7 +36,8 @@ class GherkinLine:
             cells.append({'column': col + self.indent + cell_indent, 'text': re.sub(r"[^\S\n]*$", "", lstripped_cell, flags=re.U)})
         return cells
 
-    def split_table_cells(self, row):
+    @staticmethod
+    def split_table_cells(row):
         """
         An iterator returning all the table cells in a row with their positions,
         accounting for escaping.
@@ -55,7 +56,7 @@ class GherkinLine:
                     # First cell (content before the first |) is skipped
                     first_cell = False
                 else:
-                    yield (cell, start_col)
+                    yield cell, start_col
                 cell = ''
                 start_col = col + 1
             elif char == '\\':

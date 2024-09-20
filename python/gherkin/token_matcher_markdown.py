@@ -15,7 +15,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
     def match_FeatureLine(self, token):
 
-        if(self.matched_feature_line):
+        if self.matched_feature_line:
             self._set_token_matched(token,None)
 
         # We first try to match "# Feature: blah"
@@ -48,7 +48,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
         if re.match('^\\s\\s\\s?\\s?\\s?\\|',token.line.get_line_text(0)):
             table_cells = token.line.table_cells
-            if(self._is_gfm_table_separator(table_cells)):
+            if self._is_gfm_table_separator(table_cells):
                 return False
         
             self._set_token_matched(token, 'TableRow', keyword='|',items=token.line.table_cells)
@@ -56,24 +56,25 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
             return True
         return False
 
-    def _is_gfm_table_separator(self, table_cells):
+    @staticmethod
+    def _is_gfm_table_separator(table_cells):
         text_of_table_cells = map(lambda x: x['text'], table_cells)
         separator_values = list(filter(lambda x: re.match('^:?-+:?$',x),text_of_table_cells))
         return len(separator_values) > 0
 
 
     def match_StepLine(self, token):
-        nonStarStepKeywords = (self.dialect.given_keywords +
+        non_star_step_keywords = (self.dialect.given_keywords +
                     self.dialect.when_keywords +
                     self.dialect.then_keywords +
                     self.dialect.and_keywords +
                     self.dialect.but_keywords)
-        return self._match_title_line(KEYWORD_PREFIX_BULLET, nonStarStepKeywords, '', token, 'StepLine')
+        return self._match_title_line(KEYWORD_PREFIX_BULLET, non_star_step_keywords, '', token, 'StepLine')
         
     def match_Comment(self, token):
-        if(token.line.startswith('|')):
+        if token.line.startswith('|'):
             table_cells = token.line.table_cells
-            if(self._is_gfm_table_separator(table_cells)):
+            if self._is_gfm_table_separator(table_cells):
                 return True
         return self._set_token_matched(token,None,False)
 
@@ -98,7 +99,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
             # neutered
             result = True
 
-        if(result):
+        if result:
             self._set_token_matched(token, 'Empty', indent=0)
             return result
         return False
@@ -120,7 +121,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                 'text': match.group(1)
             })
 
-        if(len(tags) == 0):
+        if len(tags) == 0:
             return False
 
         self._set_token_matched(token, 'TagLine', items=tags)
@@ -139,15 +140,15 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
     def _default_docstring_content_type():
         return ''
 
-    def _match_title_line(self, prefix, keywords, keywordSuffix, token, token_type):
+    def _match_title_line(self, prefix, keywords, keyword_suffix, token, token_type):
         
         keywords_or_list="|".join(map(lambda x: re.escape(x), keywords))
-        match = re.search(f'{prefix}({keywords_or_list}){keywordSuffix}(.*)', token.line.get_line_text())
+        match = re.search(f'{prefix}({keywords_or_list}){keyword_suffix}(.*)', token.line.get_line_text())
         indent = token.line.indent
         
-        if(match):
-            matchedKeyword = match.group(2)
+        if match :
+            matched_keyword = match.group(2)
             indent += len(match.group(1))
-            self._set_token_matched(token, token_type, match.group(3).strip(), matchedKeyword, indent=indent)
+            self._set_token_matched(token, token_type, match.group(3).strip(), matched_keyword, indent=indent)
             return True
         return False

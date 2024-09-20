@@ -19,14 +19,13 @@
         token.detach
         expected_tokens = ["@Raw(string.Join("\", \"", expectedTokens))"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return @state.Id</text>}
 @helper MatchToken(TokenType tokenType)
 {<text>match_@(tokenType)(context, token)</text>}
 # This file is generated. Do not edit! Edit gherkin-python.razor instead.
-import sys
 from collections import deque
 from .ast_builder import AstBuilder
 from .token_matcher import TokenMatcher

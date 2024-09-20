@@ -8,6 +8,8 @@ class TokenMatcher:
     LANGUAGE_RE = re.compile(r"^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$")
 
     def __init__(self, dialect_name='en'):
+        self._active_doc_string_separator = None
+        self._indent_to_remove = 0
         self._default_dialect_name = dialect_name
         self._change_dialect(dialect_name)
         self.reset()

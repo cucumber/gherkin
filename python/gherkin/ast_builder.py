@@ -37,7 +37,8 @@ class AstBuilder:
     def current_node(self):
         return self.stack[-1]
 
-    def get_location(self, token, column=None):
+    @staticmethod
+    def get_location(token, column=None):
         return (token.location if not column else
                 {'line': token.location['line'], 'column': column})
 
@@ -61,7 +62,8 @@ class AstBuilder:
         self.ensure_cell_count(rows)
         return rows
 
-    def ensure_cell_count(self, rows):
+    @staticmethod
+    def ensure_cell_count(rows):
         if not rows:
             return
 
@@ -76,10 +78,12 @@ class AstBuilder:
             {'location': self.get_location(table_row_token, cell_item['column']),
              'value': cell_item['text']}) for cell_item in table_row_token.matched_items]
 
-    def get_description(self, node):
+    @staticmethod
+    def get_description(node):
         return node.get_single('Description', '')
 
-    def get_steps(self, node):
+    @staticmethod
+    def get_steps(node):
         return node.get_items('Step')
 
     def transform_node(self, node):
@@ -194,7 +198,7 @@ class AstBuilder:
 
             children = []
             background = node.get_single('Background')
-            if (background):
+            if background:
                 children.append({'background': background})
             children = children + [{'scenario': i} for i in node.get_items('ScenarioDefinition')]
             description = self.get_description(header)
@@ -220,7 +224,7 @@ class AstBuilder:
 
             children = []
             background = node.get_single('Background')
-            if (background):
+            if background:
                 children.append({'background': background})
             children = children + [{'scenario': i} for i in node.get_items('ScenarioDefinition')]
             children = children + [{'rule': i} for i in node.get_items('Rule')]
@@ -246,5 +250,6 @@ class AstBuilder:
         else:
             return node
 
-    def reject_nones(self, values):
+    @staticmethod
+    def reject_nones(values):
         return {k: v for k, v in values.items() if v is not None}
