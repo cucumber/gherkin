@@ -7,16 +7,13 @@ import json
 from gherkin.stream.gherkin_events import GherkinEvents
 from gherkin.stream.source_events import SourceEvents
 
-# Ensure UTF-8 encoding for stdout (needed on Windows where the default may not be UTF-8)
-sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf-8', buffering=1)
-
 
 parser = OptionParser()
 parser.add_option("--no-source",  action="store_false", dest="print_source",  default=True, help="don't print source events")
 parser.add_option("--no-ast",     action="store_false", dest="print_ast",     default=True, help="don't print ast events")
 parser.add_option("--no-pickles", action="store_false", dest="print_pickles", default=True, help="don't print pickle events")
 
-(options, args) = parser.parse_args()
+options, args = parser.parse_args()
 
 source_events = SourceEvents(args)
 gherkin_events = GherkinEvents(options)
