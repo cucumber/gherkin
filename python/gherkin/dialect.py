@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import json
-from typing import TypedDict
+from typing import TypedDict, List
 
 from typing_extensions import Self
 
@@ -14,17 +14,17 @@ DIALECT_FILE_PATH = os.path.join(
 DialectSpec = TypedDict(
     'DialectSpec',
     {
-        'and': list[str],
-        'background': list[str],
-        'but': list[str],
-        'examples': list[str],
-        'feature': list[str],
-        'given': list[str],
-        'rule': list[str],
-        'scenario': list[str],
-        'scenarioOutline': list[str],
-        'then': list[str],
-        'when': list[str],
+        'and': List[str],
+        'background': List[str],
+        'but': List[str],
+        'examples': List[str],
+        'feature': List[str],
+        'given': List[str],
+        'rule': List[str],
+        'scenario': List[str],
+        'scenarioOutline': List[str],
+        'then': List[str],
+        'when': List[str],
     }
 )
 
