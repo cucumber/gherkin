@@ -66,7 +66,6 @@ class AstBuilder:
             return tags
 
         for token in tags_node.get_tokens('TagLine'):
-            breakpoint()
             tags += [{'id': self.id_generator.get_next_id(),
                       'location': self.get_location(token, tag_item['column']),
                       'name': tag_item['text']} for tag_item in token.matched_items]
