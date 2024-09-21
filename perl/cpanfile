@@ -1,5 +1,5 @@
 
-requires "perl", "5.14.4";
+requires "perl", "5.41.4";
 requires "Cpanel::JSON::XS";
 requires "Class::XSAccessor";
 requires "Cucumber::Messages", ">= 22.0.0, < 23.0.0";
