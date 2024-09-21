@@ -8,7 +8,7 @@ location = { 'line': 1, 'column': 1 }
 
 def test_it_matches_FeatureLine():
     tm = GherkinInMarkdownTokenMatcher('en')
-    line = GherkinLine('''## Feature: hello\n\n## Feature: hello''',location['line'])
+    line = GherkinLine('''## Feature: hello''',location['line'])
     token = Token(gherkin_line=line, location=location)
     assert tm.match_FeatureLine(token)
     assert token.matched_type == 'FeatureLine'
