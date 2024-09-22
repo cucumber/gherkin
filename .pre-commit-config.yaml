@@ -7,4 +7,3 @@ repos:
     hooks:
       - id: black
         files: "^python/"
-

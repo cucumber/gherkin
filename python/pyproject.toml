@@ -1,0 +1,7 @@
+[tool.black]
+# Using `(python/)?` to match both `gherkin/parser.py` and `python/gherkin/parser.py`.
+# This is needed to be able to run `black` as a pre-commit hook, and also to run it manually.
+force-exclude = """(
+    (python/)?gherkin/parser.py
+)"""
+target-version = ["py38", "py39", "py310", "py311", "py312", "py313"]
