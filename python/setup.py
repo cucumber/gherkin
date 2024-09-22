@@ -21,5 +21,8 @@ setup(name="gherkin-official",
                    ],
       platforms = ['any'],
       package_data={"gherkin": ["gherkin-languages.json"]},
+      install_requires=[
+          "typing_extensions>=4",
+      ],
       python_requires=">=3.8",
       )
