@@ -20,14 +20,14 @@ class TokenScanner:
 
     def __init__(self, path_or_str: str) -> None:
         if os.path.exists(path_or_str):
-            self.io = open(path_or_str, encoding='utf8')
+            self.io = open(path_or_str, encoding="utf8")
         else:
             self.io = io.StringIO(path_or_str)
         self.line_number = 0
 
     def read(self) -> Token:
         self.line_number += 1
-        location: Location = {'line': self.line_number}
+        location: Location = {"line": self.line_number}
         line = self.io.readline()
         return Token((GherkinLine(line, self.line_number) if line else line), location)
 

@@ -7,6 +7,7 @@ from .token import Token
 
 T = TypeVar("T")
 
+
 class AstNode:
 
     def __init__(self, rule_type: str) -> None:
@@ -17,7 +18,11 @@ class AstNode:
         self._sub_items[rule_type].append(obj)
 
     def get_single(self, rule_type: str, default_value: object = None) -> object:
-        return self._sub_items[rule_type][0] if self._sub_items[rule_type] else default_value
+        return (
+            self._sub_items[rule_type][0]
+            if self._sub_items[rule_type]
+            else default_value
+        )
 
     def get_items(self, rule_type: str) -> list[object]:
         return self._sub_items[rule_type]

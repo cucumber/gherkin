@@ -2,16 +2,12 @@ Please read [CONTRIBUTING](https://github.com/cucumber/gherkin/blob/master/CONTR
 You should clone the [cucumber/gherkin](https://github.com/cucumber/gherkin) repo if you want
 to contribute.
 
-## Basic style guide
+# pre-commit hooks
+Make sure to install `pre-commit` and the hooks by running:
 
-Use [pep8](https://pypi.python.org/pypi/pep8) check the Python code style.
-Use the command:
-
-    pep8 --max-line-length=99
-
-The exception is [parser.py](https://github.com/cucumber/gherkin/blob/master/python/gherkin/parser.py), as it is generated longer lines are allowed there, so to check it use:
-
-    pep8 --ignore=E501
+```shell
+pre-commit install
+```
 
 ## Run tests
 

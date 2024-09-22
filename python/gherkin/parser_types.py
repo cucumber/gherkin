@@ -8,33 +8,40 @@ class Location(TypedDict):
     line: int
     column: NotRequired[int]
 
+
 class Comment(TypedDict):
     location: Location
     text: str
+
 
 class Tag(TypedDict):
     id: str
     location: Location
     name: str
 
+
 class Cell(TypedDict):
     location: Location
     value: str
+
 
 class TableRow(TypedDict):
     id: str
     location: Location
     cells: list[Cell]
 
+
 class DataTable(TypedDict):
     location: Location
     rows: list[TableRow]
+
 
 class DocString(TypedDict):
     location: Location
     content: str
     delimiter: str
     mediaType: NotRequired[str]
+
 
 class Step(TypedDict):
     id: str
@@ -45,6 +52,7 @@ class Step(TypedDict):
     dataTable: NotRequired[DataTable]
     docString: NotRequired[DocString]
 
+
 class Background(TypedDict):
     id: str
     location: Location
@@ -52,6 +60,7 @@ class Background(TypedDict):
     name: str
     description: str
     steps: list[Step]
+
 
 class Examples(TypedDict):
     id: str
@@ -63,6 +72,7 @@ class Examples(TypedDict):
     tableHeader: TableRow
     tableBody: list[TableRow]
 
+
 class Scenario(TypedDict):
     id: str
     location: Location
@@ -73,8 +83,10 @@ class Scenario(TypedDict):
     steps: list[Step]
     examples: list[Examples]
 
+
 class Envelope(TypedDict):
     pass
+
 
 class Rule(TypedDict):
     id: str
@@ -85,14 +97,18 @@ class Rule(TypedDict):
     description: str
     children: list[Envelope]
 
+
 class BackgroundEnvelope(Envelope):
     background: Background
+
 
 class ScenarioEnvelope(Envelope):
     scenario: Scenario
 
+
 class RuleEnvelope(Envelope):
     rule: Rule
+
 
 class Feature(TypedDict):
     location: Location
@@ -102,6 +118,7 @@ class Feature(TypedDict):
     name: str
     description: str
     children: list[Envelope]
+
 
 class GherkinDocument(TypedDict):
     feature: Feature

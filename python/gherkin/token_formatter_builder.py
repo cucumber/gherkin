@@ -23,26 +23,45 @@ class TokenFormatterBuilder(AstBuilder):
         pass
 
     def get_result(self) -> str:
-        return '\n'.join([self._format_token(token) for token in self._tokens])
+        return "\n".join([self._format_token(token) for token in self._tokens])
 
     def _format_token(self, token: Token) -> str:
         if token.eof():
             return "EOF"
 
-        return ''.join([
-            '(',
-            str(token.location['line']), ':', str(token.location['column']),
-            ')',
-            token.matched_type,
-            ':',
-            ''.join([
-                '(',
-                token.matched_keyword_type if token.matched_keyword_type else '',
-                ')',
-                token.matched_keyword
-            ]) if token.matched_keyword else '',
-            '/',
-            (token.matched_text if token.matched_text else ""),
-            '/',
-            ','.join([str(item['column']) + ':' + item['text'] for item in token.matched_items])
-        ])
+        return "".join(
+            [
+                "(",
+                str(token.location["line"]),
+                ":",
+                str(token.location["column"]),
+                ")",
+                token.matched_type,
+                ":",
+                (
+                    "".join(
+                        [
+                            "(",
+                            (
+                                token.matched_keyword_type
+                                if token.matched_keyword_type
+                                else ""
+                            ),
+                            ")",
+                            token.matched_keyword,
+                        ]
+                    )
+                    if token.matched_keyword
+                    else ""
+                ),
+                "/",
+                (token.matched_text if token.matched_text else ""),
+                "/",
+                ",".join(
+                    [
+                        str(item["column"]) + ":" + item["text"]
+                        for item in token.matched_items
+                    ]
+                ),
+            ]
+        )
