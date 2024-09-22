@@ -129,7 +129,7 @@ class AstBuilder:
         | AstNode
     ):
         if node.rule_type == 'Step':
-            step_line = cast(Token, node.get_token('StepLine'))
+            step_line = node.get_token('StepLine')
             step_argument_type = 'dummy_type'
             step_argument = None
             if node.get_single('DataTable'):
