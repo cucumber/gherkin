@@ -73,7 +73,7 @@ class Scenario(TypedDict):
     steps: list[Step]
     examples: list[Examples]
 
-class Container(TypedDict):
+class Envelope(TypedDict):
     pass
 
 class Rule(TypedDict):
@@ -83,15 +83,15 @@ class Rule(TypedDict):
     keyword: str
     name: str
     description: str
-    children: list[Container]
+    children: list[Envelope]
 
-class BackgroundContainer(Container):
+class BackgroundEnvelope(Envelope):
     background: Background
 
-class ScenarioContainer(Container):
+class ScenarioEnvelope(Envelope):
     scenario: Scenario
 
-class RuleContainer(Container):
+class RuleEnvelope(Envelope):
     rule: Rule
 
 class Feature(TypedDict):
@@ -101,7 +101,7 @@ class Feature(TypedDict):
     keyword: str
     name: str
     description: str
-    children: list[Container]
+    children: list[Envelope]
 
 class GherkinDocument(TypedDict):
     feature: Feature

@@ -7,11 +7,11 @@ from typing_extensions import TypeIs, NotRequired
 
 from ..parser_types import (
     GherkinDocument,
-    Container,
-    BackgroundContainer,
-    RuleContainer,
+    Envelope,
+    BackgroundEnvelope,
+    RuleEnvelope,
     Scenario,
-    ScenarioContainer,
+    ScenarioEnvelope,
     Tag,
     Rule,
     Step, Cell,
@@ -25,7 +25,7 @@ class PickleTag(TypedDict):
     astNodeId: str
     name: str
 
-class PickleArgumentContainer(TypedDict):
+class PickleArgumentEnvelope(TypedDict):
     pass
 
 class PickleArgumentDataTableCell(TypedDict):
@@ -37,14 +37,14 @@ class PickleArgumentDataTableRow(TypedDict):
 class PickleArgumentDataTable(TypedDict):
     rows: list[PickleArgumentDataTableRow]
 
-class PickleArgumentDataTableContainer(PickleArgumentContainer):
+class PickleArgumentDataTableEnvelope(PickleArgumentEnvelope):
     dataTable: PickleArgumentDataTable
 
 class PickleArgumentDocString(TypedDict):
     content: str | None
     mediaType: NotRequired[str | None]
 
-class PickleArgumentDocStringContainer(PickleArgumentContainer):
+class PickleArgumentDocStringEnvelope(PickleArgumentEnvelope):
     docString: PickleArgumentDocString
 
 class PickleStep(TypedDict):
@@ -52,7 +52,7 @@ class PickleStep(TypedDict):
     id: str
     type: str
     text: str
-    argument: NotRequired[PickleArgumentContainer]
+    argument: NotRequired[PickleArgumentEnvelope]
 
 class Pickle(TypedDict):
     astNodeIds: list[str]
@@ -64,15 +64,15 @@ class Pickle(TypedDict):
     uri: str
 
 
-def is_background_container(container: Container) -> TypeIs[BackgroundContainer]:
+def is_background_container(container: Envelope) -> TypeIs[BackgroundEnvelope]:
     return 'background' in container
 
 
-def is_rule_container(container: Container) -> TypeIs[RuleContainer]:
+def is_rule_container(container: Envelope) -> TypeIs[RuleEnvelope]:
     return 'rule' in container
 
 
-def is_scenario_container(container: Container) -> TypeIs[ScenarioContainer]:
+def is_scenario_container(container: Envelope) -> TypeIs[ScenarioEnvelope]:
     return 'scenario' in container
 
 
@@ -234,7 +234,7 @@ class Compiler:
         step: Step,
         variables: Sequence[Cell],
         values: Sequence[Cell],
-    ) -> PickleArgumentContainer | None:
+    ) -> PickleArgumentEnvelope | None:
         if 'dataTable' in step:
             table: PickleArgumentDataTable = {'rows': []}
             for row in step['dataTable']['rows']:
@@ -244,7 +244,7 @@ class Compiler:
                     } for cell in row['cells']
                 ]
                 table['rows'].append({'cells': cells})
-            return PickleArgumentDataTableContainer(dataTable=table)
+            return PickleArgumentDataTableEnvelope(dataTable=table)
         elif 'docString' in step:
             argument = step['docString']
             docstring: PickleArgumentDocString = {
@@ -252,7 +252,7 @@ class Compiler:
             }
             if 'mediaType' in argument:
                 docstring['mediaType'] = self._interpolate(argument['mediaType'], variables, values)
-            return PickleArgumentDocStringContainer(docString=docstring)
+            return PickleArgumentDocStringEnvelope(docString=docstring)
         else:
             return None
 

@@ -36,10 +36,10 @@ def create_errors(errors: Iterable[ParserException], uri: str) -> Generator[Erro
             },
         }
 
-class GherkinDocumentContainer(TypedDict):
+class GherkinDocumentEnvelope(TypedDict):
     gherkinDocument: GherkinDocumentWithURI
 
-class PickleContainer(TypedDict):
+class PickleEnvelope(TypedDict):
     pickle: Pickle
 
 class GherkinEvents:
@@ -56,7 +56,7 @@ class GherkinEvents:
         self.compiler = Compiler(self.id_generator)
 
     def enum(self, source_event: Event) -> Generator[
-            Event | Error | GherkinDocumentContainer | PickleContainer,
+        Event | Error | GherkinDocumentEnvelope | PickleEnvelope,
             None,
             None,
     ]:
