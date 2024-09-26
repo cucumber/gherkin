@@ -17,30 +17,35 @@ class Source(TypedDict):
     uri: str
     location: Location
 
+
 class ParseError(TypedDict):
     source: Source
     message: str
 
+
 class Error(TypedDict):
     parseError: ParseError
 
-def create_errors(errors: Iterable[ParserException], uri: str) -> Generator[Error, None, None]:
+
+def create_errors(
+    errors: Iterable[ParserException], uri: str
+) -> Generator[Error, None, None]:
     for error in errors:
         yield {
-            'parseError': {
-                'source': {
-                    'uri': uri,
-                    'location': error.location
-                },
-                'message': str(error),
+            "parseError": {
+                "source": {"uri": uri, "location": error.location},
+                "message": str(error),
             },
         }
+
 
 class GherkinDocumentEnvelope(TypedDict):
     gherkinDocument: GherkinDocumentWithURI
 
+
 class PickleEnvelope(TypedDict):
     pickle: Pickle
+
 
 class GherkinEvents:
     @dataclass
@@ -57,11 +62,11 @@ class GherkinEvents:
 
     def enum(self, source_event: Event) -> Generator[
         Event | Error | GherkinDocumentEnvelope | PickleEnvelope,
-            None,
-            None,
+        None,
+        None,
     ]:
-        uri = source_event['source']['uri']
-        source = source_event['source']['data']
+        uri = source_event["source"]["uri"]
+        source = source_event["source"]["data"]
 
         try:
             gherkin_document = self.parser.parse(source)
@@ -74,16 +79,12 @@ class GherkinEvents:
                 yield source_event
 
             if self.options.print_ast:
-                yield {
-                    'gherkinDocument': gherkin_document_with_uri
-                }
+                yield {"gherkinDocument": gherkin_document_with_uri}
 
             if self.options.print_pickles:
                 pickles = self.compiler.compile(gherkin_document_with_uri)
                 for pickle in pickles:
-                    yield {
-                        'pickle': pickle
-                    }
+                    yield {"pickle": pickle}
         except CompositeParserException as e:
             yield from create_errors(e.errors, uri)
         except ParserError as e:
