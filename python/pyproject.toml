@@ -11,7 +11,6 @@ requires-python = ">=3.8"
 authors = [
     { name = "Cucumber Ltd and Björn Rasmusson", email = "cukes@googlegroups.com" }
 ]
-scripts = { gherkin = "gherkin" }
 
 dependencies = [
   "typing_extensions>=4",
