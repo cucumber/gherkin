@@ -1,3 +1,4 @@
+import sys
 from optparse import OptionParser
 import json
 
@@ -31,7 +32,7 @@ def create_arg_parser() -> OptionParser:
     return parser
 
 
-def main() -> int:
+def main() -> None:
     arg_parser = create_arg_parser()
 
     options, args = arg_parser.parse_args()
@@ -49,8 +50,6 @@ def main() -> int:
         for event in gherkin_events.enum(source_event):
             print(json.dumps(event))
 
-    return 0
-
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
