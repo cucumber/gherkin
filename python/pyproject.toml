@@ -35,8 +35,7 @@ Issues = "https://github.com/cucumber/gherkin/issues"
 Changelog = "https://github.com/cucumber/gherkin/releases"
 
 [tool.setuptools.packages.find]
-include = ["gherkin", "gherkin.pickles", "gherkin.stream"]
-
+include = ["gherkin", "gherkin.*"]
 
 [tool.mypy]
 disallow_untyped_defs = true
