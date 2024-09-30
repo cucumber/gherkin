@@ -5,8 +5,8 @@ GHERKIN_PARSER = gherkin/parser.py
 GHERKIN_RAZOR = gherkin-python.razor
 SOURCE_FILES = $(shell find . -name "*.py" | grep -v $(GHERKIN_PARSER))
 
-GHERKIN = python -m gherkin.scripts.gherkin
-GHERKIN_GENERATE_TOKENS = python -m gherkin.scripts.generate_tokens
+GHERKIN = python -m scripts.gherkin
+GHERKIN_GENERATE_TOKENS = python -m scripts.generate_tokens
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
