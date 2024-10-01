@@ -5,7 +5,7 @@ GHERKIN_PARSER = gherkin/parser.py
 GHERKIN_RAZOR = gherkin-python.razor
 SOURCE_FILES = $(shell find . -name "*.py" | grep -v $(GHERKIN_PARSER))
 
-GHERKIN = python -m scripts.gherkin
+GHERKIN_GENERATE_EVENTS = python -m scripts.generate_events
 GHERKIN_GENERATE_TOKENS = python -m scripts.generate_tokens
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
@@ -56,20 +56,20 @@ acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 
 acceptance/testdata/%.ast.ndjson: ../testdata/% ../testdata/%.ast.ndjson
 	mkdir -p $(@D)
-	$(GHERKIN) --no-source --no-pickles $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN_GENERATE_EVENTS) --no-source --no-pickles $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.ast.ndjson) <(jq "." $@)
 
 acceptance/testdata/%.pickles.ndjson: ../testdata/% ../testdata/%.pickles.ndjson
 	mkdir -p $(@D)
-	$(GHERKIN) --no-source --no-ast $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN_GENERATE_EVENTS) --no-source --no-ast $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.pickles.ndjson) <(jq "." $@)
 
 acceptance/testdata/%.source.ndjson: ../testdata/% ../testdata/%.source.ndjson
 	mkdir -p $(@D)
-	$(GHERKIN) --no-ast --no-pickles $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN_GENERATE_EVENTS) --no-ast --no-pickles $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.source.ndjson) <(jq "." $@)
 
 acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 	mkdir -p $(@D)
-	$(GHERKIN) --no-source $< | jq --sort-keys --compact-output "." > $@
+	$(GHERKIN_GENERATE_EVENTS) --no-source $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
