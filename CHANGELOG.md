@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Added
 - [PHP, Java, Ruby, JavaScript] update dependency messages up to v26
 - [Python] Added type annotations ([#283](https://github.com/cucumber/gherkin/pull/283))
+- [Python] Switch to pyproject.toml ([#290](https://github.com/cucumber/gherkin/pull/290))
 
 ### Changed
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Standard 2.0 ([#265](https://github.com/cucumber/gherkin/pull/265))
@@ -22,6 +23,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Removed
 - [Python] Drop compatibility for python 2. Supported python versions are 3.8, 3.9, 3.10, 3.12
+- [Python] Removed installation of `gherkin` script. It was used for internal acceptance tests only.
 
 ## [29.0.0] - 2024-08-12
 ### Added
