@@ -5,7 +5,7 @@ describe Gherkin::GherkinLine do
     end
 
     it 'allows any non-space characters in a tag' do
-      expect(tags("   @foo:bar  @zap🥒yo")).to eq(['@foo:bar', '@zap🥒yo'])
+      expect(tags('   @foo:bar  @zap🥒yo')).to eq(['@foo:bar', '@zap🥒yo'])
     end
   end
 
@@ -19,7 +19,7 @@ describe Gherkin::GherkinLine do
     end
 
     it 'trims white spaces after cell content' do
-      expect(cells_text("|spaces after   |")).to eq(['spaces after'])
+      expect(cells_text('|spaces after   |')).to eq(['spaces after'])
     end
 
     it 'trims white spaces around cell content' do
@@ -31,7 +31,7 @@ describe Gherkin::GherkinLine do
     end
 
     it 'trailing escapes are ignored' do
-      expect(cells_text("| a |\\")).to eq(['a'])
+      expect(cells_text('| a |\\')).to eq(['a'])
     end
   end
 end

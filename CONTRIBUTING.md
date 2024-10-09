@@ -34,7 +34,7 @@ docker run --rm --interactive --tty --volume ".:/app" berp-env
 *Or* install on your system
 
 * .NET 5.0 (to run `berp` to generate parsers)
-* `berp` (install with `dotnet tool update Berp --version 1.3.0 --tool-path /usr/bin` )
+* `berp` (install with `dotnet tool update Berp --version 1.4.0 --tool-path /usr/bin` )
 * `make`
 * `diff`
 
@@ -47,7 +47,7 @@ make generate
 
 ## Adding or updating an i18n language
 
-1) Edit `gherkin-langauges.json`.
+1) Edit `gherkin-languages.json`.
 
 2) Distribute the changes to the different parser implementations:
 

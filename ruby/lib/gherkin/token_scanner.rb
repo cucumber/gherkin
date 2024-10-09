@@ -14,7 +14,7 @@ module Gherkin
     def initialize(source_or_io)
       @line_number = 0
 
-      case(source_or_io)
+      case source_or_io
       when String
         @io = StringIO.new(source_or_io)
       when StringIO, IO
@@ -25,7 +25,7 @@ module Gherkin
     end
 
     def read
-      location = {line: @line_number += 1}
+      location = { line: @line_number += 1 }
       if @io.nil? || line = @io.gets
         gherkin_line = line ? GherkinLine.new(line, location[:line]) : nil
         Token.new(gherkin_line, location)
@@ -35,6 +35,5 @@ module Gherkin
         Token.new(nil, location)
       end
     end
-
   end
 end

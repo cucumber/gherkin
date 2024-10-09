@@ -29,11 +29,15 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        python-version: [ '3.x', 'pypy-3.8', 'pypy-2.7' ]
-        # DISABLED: python-version: [ '3.x', '2.x' ]
-        # include:
-        #   - os: macos-latest
-        #     python-version: '3.x'
+          # - windows-latest
+          - macos-13
+        python-version:
+          - '3.12'
+          - '3.11'
+          - '3.10'
+          - '3.9'
+          - '3.8'
+          - 'pypy-3.8'
 
     steps:
       - uses: actions/checkout@v4

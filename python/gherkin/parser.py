@@ -1,10 +1,20 @@
 # This file is generated. Do not edit! Edit gherkin-python.razor instead.
-import sys
+from __future__ import annotations
+
 from collections import deque
+from collections.abc import Callable
+from typing import cast, TypeVar
+
 from .ast_builder import AstBuilder
+from .token import Token
 from .token_matcher import TokenMatcher
 from .token_scanner import TokenScanner
+from .parser_types import GherkinDocument
 from .errors import UnexpectedEOFException, UnexpectedTokenException, ParserException, CompositeParserException
+
+_T = TypeVar('_T')
+_U = TypeVar('_U')
+_V = TypeVar('_V')
 
 RULE_TYPE = [
     'None',
@@ -43,24 +53,31 @@ RULE_TYPE = [
 ]
 
 
-class ParserContext(object):
-    def __init__(self, token_scanner, token_matcher, token_queue, errors):
+class ParserContext:
+    def __init__(
+        self,
+        token_scanner: TokenScanner,
+        token_matcher: TokenMatcher,
+        token_queue: deque[Token],
+        errors: list[ParserException],
+    ) -> None:
         self.token_scanner = token_scanner
         self.token_matcher = token_matcher
         self.token_queue = token_queue
         self.errors = errors
 
 
-class Parser(object):
-    def __init__(self, ast_builder=None):
+class Parser:
+    def __init__(self, ast_builder: AstBuilder | None = None) -> None:
         self.ast_builder = ast_builder if ast_builder is not None else AstBuilder()
         self.stop_at_first_error = False
 
-    def parse(self, token_scanner_or_str, token_matcher=None):
-        if sys.version_info < (3, 0):
-            token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, basestring) else token_scanner_or_str
-        else:
-            token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
+    def parse(
+        self,
+        token_scanner_or_str: TokenScanner | str,
+        token_matcher: TokenMatcher | None = None,
+    ) -> GherkinDocument:
+        token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
         self.ast_builder.reset()
         if token_matcher is None:
             token_matcher = TokenMatcher()
@@ -85,88 +102,88 @@ class Parser(object):
         if context.errors:
             raise CompositeParserException(context.errors)
 
-        return self.get_result()
+        return cast(GherkinDocument, self.get_result())
 
-    def build(self, context, token):
+    def build(self, context: ParserContext, token: Token) -> None:
         self.handle_ast_error(context, token, self.ast_builder.build)
 
-    def add_error(self, context, error):
+    def add_error(self, context: ParserContext, error: ParserException) -> None:
         if str(error) not in (str(e) for e in context.errors):
             context.errors.append(error)
             if len(context.errors) > 10:
                 raise CompositeParserException(context.errors)
 
-    def start_rule(self, context, rule_type):
+    def start_rule(self, context: ParserContext, rule_type: str) -> None:
         self.handle_ast_error(context, rule_type, self.ast_builder.start_rule)
 
-    def end_rule(self, context, rule_type):
+    def end_rule(self, context: ParserContext, rule_type: str) -> None:
         self.handle_ast_error(context, rule_type, self.ast_builder.end_rule)
 
-    def get_result(self):
+    def get_result(self) -> object:
         return self.ast_builder.get_result()
 
-    def read_token(self, context):
+    def read_token(self, context: ParserContext) -> Token:
         if context.token_queue:
             return context.token_queue.popleft()
         else:
             return context.token_scanner.read()
 
-    def match_EOF(self, context, token):
+    def match_EOF(self, context: ParserContext, token: Token) -> bool:
         return self.handle_external_error(context, False, token, context.token_matcher.match_EOF)
-    def match_Empty(self, context, token):
+    def match_Empty(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_Empty)
-    def match_Comment(self, context, token):
+    def match_Comment(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_Comment)
-    def match_TagLine(self, context, token):
+    def match_TagLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_TagLine)
-    def match_FeatureLine(self, context, token):
+    def match_FeatureLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_FeatureLine)
-    def match_RuleLine(self, context, token):
+    def match_RuleLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_RuleLine)
-    def match_BackgroundLine(self, context, token):
+    def match_BackgroundLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_BackgroundLine)
-    def match_ScenarioLine(self, context, token):
+    def match_ScenarioLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_ScenarioLine)
-    def match_ExamplesLine(self, context, token):
+    def match_ExamplesLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_ExamplesLine)
-    def match_StepLine(self, context, token):
+    def match_StepLine(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_StepLine)
-    def match_DocStringSeparator(self, context, token):
+    def match_DocStringSeparator(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_DocStringSeparator)
-    def match_TableRow(self, context, token):
+    def match_TableRow(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_TableRow)
-    def match_Language(self, context, token):
+    def match_Language(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_Language)
-    def match_Other(self, context, token):
+    def match_Other(self, context: ParserContext, token: Token) -> bool:
         if token.eof():
             return False
         return self.handle_external_error(context, False, token, context.token_matcher.match_Other)
-    def match_token(self, state, token, context):
-        state_map = {
+    def match_token(self, state: int, token: Token, context: ParserContext) -> int:
+        state_map: dict[int, Callable[[Token, ParserContext], int]]= {
             0: self.match_token_at_0,
             1: self.match_token_at_1,
             2: self.match_token_at_2,
@@ -224,7 +241,7 @@ class Parser(object):
             raise RuntimeError("Unknown state: " + str(state))
 
     # Start
-    def match_token_at_0(self, token, context):
+    def match_token_at_0(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.build(context, token)
                 return 42
@@ -260,7 +277,7 @@ class Parser(object):
         self.add_error(context, error)
         return 0
     # GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
-    def match_token_at_1(self, token, context):
+    def match_token_at_1(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.start_rule(context, 'Tags')
                 self.build(context, token)
@@ -284,7 +301,7 @@ class Parser(object):
         self.add_error(context, error)
         return 1
     # GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
-    def match_token_at_2(self, token, context):
+    def match_token_at_2(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.build(context, token)
                 return 2
@@ -308,7 +325,7 @@ class Parser(object):
         self.add_error(context, error)
         return 2
     # GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
-    def match_token_at_3(self, token, context):
+    def match_token_at_3(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'FeatureHeader')
                 self.end_rule(context, 'Feature')
@@ -365,7 +382,7 @@ class Parser(object):
         self.add_error(context, error)
         return 3
     # GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_4(self, token, context):
+    def match_token_at_4(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'FeatureHeader')
@@ -425,7 +442,7 @@ class Parser(object):
         self.add_error(context, error)
         return 4
     # GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0
-    def match_token_at_5(self, token, context):
+    def match_token_at_5(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'FeatureHeader')
                 self.end_rule(context, 'Feature')
@@ -478,7 +495,7 @@ class Parser(object):
         self.add_error(context, error)
         return 5
     # GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
-    def match_token_at_6(self, token, context):
+    def match_token_at_6(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Background')
                 self.end_rule(context, 'Feature')
@@ -534,7 +551,7 @@ class Parser(object):
         self.add_error(context, error)
         return 6
     # GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_7(self, token, context):
+    def match_token_at_7(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'Background')
@@ -593,7 +610,7 @@ class Parser(object):
         self.add_error(context, error)
         return 7
     # GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0
-    def match_token_at_8(self, token, context):
+    def match_token_at_8(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Background')
                 self.end_rule(context, 'Feature')
@@ -645,7 +662,7 @@ class Parser(object):
         self.add_error(context, error)
         return 8
     # GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
-    def match_token_at_9(self, token, context):
+    def match_token_at_9(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Step')
                 self.end_rule(context, 'Background')
@@ -711,7 +728,7 @@ class Parser(object):
         self.add_error(context, error)
         return 9
     # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-    def match_token_at_10(self, token, context):
+    def match_token_at_10(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DataTable')
                 self.end_rule(context, 'Step')
@@ -778,7 +795,7 @@ class Parser(object):
         self.add_error(context, error)
         return 10
     # GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-    def match_token_at_11(self, token, context):
+    def match_token_at_11(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.build(context, token)
                 return 11
@@ -803,7 +820,7 @@ class Parser(object):
         self.add_error(context, error)
         return 11
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-    def match_token_at_12(self, token, context):
+    def match_token_at_12(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Scenario')
                 self.end_rule(context, 'ScenarioDefinition')
@@ -875,7 +892,7 @@ class Parser(object):
         self.add_error(context, error)
         return 12
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_13(self, token, context):
+    def match_token_at_13(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'Scenario')
@@ -952,7 +969,7 @@ class Parser(object):
         self.add_error(context, error)
         return 13
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
-    def match_token_at_14(self, token, context):
+    def match_token_at_14(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Scenario')
                 self.end_rule(context, 'ScenarioDefinition')
@@ -1020,7 +1037,7 @@ class Parser(object):
         self.add_error(context, error)
         return 14
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-    def match_token_at_15(self, token, context):
+    def match_token_at_15(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Step')
                 self.end_rule(context, 'Scenario')
@@ -1104,7 +1121,7 @@ class Parser(object):
         self.add_error(context, error)
         return 15
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-    def match_token_at_16(self, token, context):
+    def match_token_at_16(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DataTable')
                 self.end_rule(context, 'Step')
@@ -1191,7 +1208,7 @@ class Parser(object):
         self.add_error(context, error)
         return 16
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-    def match_token_at_17(self, token, context):
+    def match_token_at_17(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.build(context, token)
                 return 17
@@ -1216,7 +1233,7 @@ class Parser(object):
         self.add_error(context, error)
         return 17
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-    def match_token_at_18(self, token, context):
+    def match_token_at_18(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Examples')
                 self.end_rule(context, 'ExamplesDefinition')
@@ -1302,7 +1319,7 @@ class Parser(object):
         self.add_error(context, error)
         return 18
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_19(self, token, context):
+    def match_token_at_19(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'Examples')
@@ -1393,7 +1410,7 @@ class Parser(object):
         self.add_error(context, error)
         return 19
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
-    def match_token_at_20(self, token, context):
+    def match_token_at_20(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Examples')
                 self.end_rule(context, 'ExamplesDefinition')
@@ -1475,7 +1492,7 @@ class Parser(object):
         self.add_error(context, error)
         return 20
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-    def match_token_at_21(self, token, context):
+    def match_token_at_21(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'ExamplesTable')
                 self.end_rule(context, 'Examples')
@@ -1563,7 +1580,7 @@ class Parser(object):
         self.add_error(context, error)
         return 21
     # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
-    def match_token_at_22(self, token, context):
+    def match_token_at_22(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.build(context, token)
                 return 22
@@ -1587,7 +1604,7 @@ class Parser(object):
         self.add_error(context, error)
         return 22
     # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
-    def match_token_at_23(self, token, context):
+    def match_token_at_23(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'RuleHeader')
                 self.end_rule(context, 'Rule')
@@ -1647,7 +1664,7 @@ class Parser(object):
         self.add_error(context, error)
         return 23
     # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_24(self, token, context):
+    def match_token_at_24(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'RuleHeader')
@@ -1710,7 +1727,7 @@ class Parser(object):
         self.add_error(context, error)
         return 24
     # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0
-    def match_token_at_25(self, token, context):
+    def match_token_at_25(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'RuleHeader')
                 self.end_rule(context, 'Rule')
@@ -1766,7 +1783,7 @@ class Parser(object):
         self.add_error(context, error)
         return 25
     # GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-    def match_token_at_26(self, token, context):
+    def match_token_at_26(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Background')
                 self.end_rule(context, 'Rule')
@@ -1825,7 +1842,7 @@ class Parser(object):
         self.add_error(context, error)
         return 26
     # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_27(self, token, context):
+    def match_token_at_27(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'Background')
@@ -1887,7 +1904,7 @@ class Parser(object):
         self.add_error(context, error)
         return 27
     # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0
-    def match_token_at_28(self, token, context):
+    def match_token_at_28(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Background')
                 self.end_rule(context, 'Rule')
@@ -1942,7 +1959,7 @@ class Parser(object):
         self.add_error(context, error)
         return 28
     # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-    def match_token_at_29(self, token, context):
+    def match_token_at_29(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Step')
                 self.end_rule(context, 'Background')
@@ -2011,7 +2028,7 @@ class Parser(object):
         self.add_error(context, error)
         return 29
     # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-    def match_token_at_30(self, token, context):
+    def match_token_at_30(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DataTable')
                 self.end_rule(context, 'Step')
@@ -2081,7 +2098,7 @@ class Parser(object):
         self.add_error(context, error)
         return 30
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-    def match_token_at_31(self, token, context):
+    def match_token_at_31(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.build(context, token)
                 return 31
@@ -2106,7 +2123,7 @@ class Parser(object):
         self.add_error(context, error)
         return 31
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-    def match_token_at_32(self, token, context):
+    def match_token_at_32(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Scenario')
                 self.end_rule(context, 'ScenarioDefinition')
@@ -2181,7 +2198,7 @@ class Parser(object):
         self.add_error(context, error)
         return 32
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_33(self, token, context):
+    def match_token_at_33(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'Scenario')
@@ -2261,7 +2278,7 @@ class Parser(object):
         self.add_error(context, error)
         return 33
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
-    def match_token_at_34(self, token, context):
+    def match_token_at_34(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Scenario')
                 self.end_rule(context, 'ScenarioDefinition')
@@ -2332,7 +2349,7 @@ class Parser(object):
         self.add_error(context, error)
         return 34
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-    def match_token_at_35(self, token, context):
+    def match_token_at_35(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Step')
                 self.end_rule(context, 'Scenario')
@@ -2419,7 +2436,7 @@ class Parser(object):
         self.add_error(context, error)
         return 35
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-    def match_token_at_36(self, token, context):
+    def match_token_at_36(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DataTable')
                 self.end_rule(context, 'Step')
@@ -2509,7 +2526,7 @@ class Parser(object):
         self.add_error(context, error)
         return 36
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-    def match_token_at_37(self, token, context):
+    def match_token_at_37(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
                 self.build(context, token)
                 return 37
@@ -2534,7 +2551,7 @@ class Parser(object):
         self.add_error(context, error)
         return 37
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-    def match_token_at_38(self, token, context):
+    def match_token_at_38(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Examples')
                 self.end_rule(context, 'ExamplesDefinition')
@@ -2623,7 +2640,7 @@ class Parser(object):
         self.add_error(context, error)
         return 38
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
-    def match_token_at_39(self, token, context):
+    def match_token_at_39(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
                 self.end_rule(context, 'Examples')
@@ -2717,7 +2734,7 @@ class Parser(object):
         self.add_error(context, error)
         return 39
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
-    def match_token_at_40(self, token, context):
+    def match_token_at_40(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Examples')
                 self.end_rule(context, 'ExamplesDefinition')
@@ -2802,7 +2819,7 @@ class Parser(object):
         self.add_error(context, error)
         return 40
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-    def match_token_at_41(self, token, context):
+    def match_token_at_41(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'ExamplesTable')
                 self.end_rule(context, 'Examples')
@@ -2893,7 +2910,7 @@ class Parser(object):
         self.add_error(context, error)
         return 41
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_43(self, token, context):
+    def match_token_at_43(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
                 self.build(context, token)
                 return 44
@@ -2910,7 +2927,7 @@ class Parser(object):
         self.add_error(context, error)
         return 43
     # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_44(self, token, context):
+    def match_token_at_44(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DocString')
                 self.end_rule(context, 'Step')
@@ -2997,7 +3014,7 @@ class Parser(object):
         self.add_error(context, error)
         return 44
     # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_45(self, token, context):
+    def match_token_at_45(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
                 self.build(context, token)
                 return 46
@@ -3014,7 +3031,7 @@ class Parser(object):
         self.add_error(context, error)
         return 45
     # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_46(self, token, context):
+    def match_token_at_46(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DocString')
                 self.end_rule(context, 'Step')
@@ -3081,7 +3098,7 @@ class Parser(object):
         self.add_error(context, error)
         return 46
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_47(self, token, context):
+    def match_token_at_47(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
                 self.build(context, token)
                 return 48
@@ -3098,7 +3115,7 @@ class Parser(object):
         self.add_error(context, error)
         return 47
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_48(self, token, context):
+    def match_token_at_48(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DocString')
                 self.end_rule(context, 'Step')
@@ -3182,7 +3199,7 @@ class Parser(object):
         self.add_error(context, error)
         return 48
     # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_49(self, token, context):
+    def match_token_at_49(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
                 self.build(context, token)
                 return 50
@@ -3199,7 +3216,7 @@ class Parser(object):
         self.add_error(context, error)
         return 49
     # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_50(self, token, context):
+    def match_token_at_50(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'DocString')
                 self.end_rule(context, 'Step')
@@ -3262,7 +3279,7 @@ class Parser(object):
             raise error
         self.add_error(context, error)
         return 50
-    def lookahead_0(self, context, currentToken):
+    def lookahead_0(self, context: ParserContext, currentToken: Token) -> bool:
         currentToken.detach
         token = None
         queue = []
@@ -3282,7 +3299,7 @@ class Parser(object):
         context.token_queue.extend(queue)
 
         return match
-    def lookahead_1(self, context, currentToken):
+    def lookahead_1(self, context: ParserContext, currentToken: Token) -> bool:
         currentToken.detach
         token = None
         queue = []
@@ -3304,10 +3321,21 @@ class Parser(object):
         return match
     # private
 
-    def handle_ast_error(self, context, argument, action):
+    def handle_ast_error(
+        self,
+        context: ParserContext,
+        argument: _T,
+        action: Callable[[_T], object],
+    ) -> None:
         self.handle_external_error(context, True, argument, action)
 
-    def handle_external_error(self, context, default_value, argument, action):
+    def handle_external_error(
+        self,
+        context: ParserContext,
+        default_value: _U,
+        argument: _T,
+        action: Callable[[_T], _V],
+    ) -> _V | _U:
         if self.stop_at_first_error:
             return action(argument)
 

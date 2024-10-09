@@ -24,10 +24,12 @@ module Gherkin
 
     def build(token)
       if token.matched_type == :Comment
-        @comments.push(Cucumber::Messages::Comment.new(
-          location: get_location(token, 0),
-          text: token.matched_text
-        ))
+        @comments.push(
+          Cucumber::Messages::Comment.new(
+            location: get_location(token, 0),
+            text: token.matched_text
+          )
+        )
       else
         current_node.add(token.matched_type, token)
       end
@@ -56,11 +58,13 @@ module Gherkin
 
       tags_node.get_tokens(:TagLine).each do |token|
         token.matched_items.each do |tag_item|
-          tags.push(Cucumber::Messages::Tag.new(
-            location: get_location(token, tag_item.column),
-            name: tag_item.text,
-            id: @id_generator.new_id
-          ))
+          tags.push(
+            Cucumber::Messages::Tag.new(
+              location: get_location(token, tag_item.column),
+              name: tag_item.text,
+              id: @id_generator.new_id
+            )
+          )
         end
       end
 
@@ -81,11 +85,10 @@ module Gherkin
 
     def ensure_cell_count(rows)
       return if rows.empty?
+
       cell_count = rows[0].cells.length
       rows.each do |row|
-        if row.cells.length != cell_count
-          raise AstBuilderException.new("inconsistent cell count within the table", row.location.to_h)
-        end
+        raise AstBuilderException.new('inconsistent cell count within the table', row.location.to_h) if row.cells.length != cell_count
       end
     end
 
@@ -196,14 +199,16 @@ module Gherkin
         line_tokens = node.get_tokens(:Other)
         # Trim trailing empty lines
         last_non_empty = line_tokens.rindex { |token| !token.line.trimmed_line_text.empty? }
-        description = line_tokens[0..last_non_empty].map { |token| token.matched_text }.join("\n")
-        return description
+        line_tokens[0..last_non_empty].map { |token| token.matched_text }.join("\n")
+
       when :Feature
         header = node.get_single(:FeatureHeader)
         return unless header
+
         tags = get_tags(header)
         feature_line = header.get_token(:FeatureLine)
         return unless feature_line
+
         children = []
         background = node.get_single(:Background)
         children.push(Cucumber::Messages::FeatureChild.new(background: background)) if background
@@ -228,8 +233,10 @@ module Gherkin
       when :Rule
         header = node.get_single(:RuleHeader)
         return unless header
+
         rule_line = header.get_token(:RuleLine)
         return unless rule_line
+
         tags = get_tags(header)
         children = []
         background = node.get_single(:Background)
@@ -255,7 +262,7 @@ module Gherkin
           feature: feature
         )
       else
-        return node
+        node
       end
     end
   end

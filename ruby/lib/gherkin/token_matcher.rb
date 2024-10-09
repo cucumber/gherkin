@@ -48,21 +48,22 @@ module Gherkin
 
     def match_TableRow(token)
       return false unless token.line.start_with?('|')
-      # TODO: indent
-      set_token_matched(token, :TableRow, nil, nil, nil, nil,
-                        token.line.table_cells)
+
+      set_token_matched(token, :TableRow, nil, nil, nil, nil, token.line.table_cells)
       true
     end
 
     def match_Empty(token)
       return false unless token.line.empty?
+
       set_token_matched(token, :Empty, nil, nil, 0)
       true
     end
 
     def match_Comment(token)
       return false unless token.line.start_with?('#')
-      text = token.line.get_line_text(0) #take the entire line, including leading space
+
+      text = token.line.get_line_text(0) # take the entire line, including leading space
       set_token_matched(token, :Comment, text, nil, 0)
       true
     end
@@ -70,7 +71,7 @@ module Gherkin
     def match_Language(token)
       return false unless token.line.trimmed_line_text =~ LANGUAGE_PATTERN
 
-      dialect_name = $1
+      dialect_name = Regexp.last_match(1)
       set_token_matched(token, :Language, dialect_name)
 
       change_dialect(dialect_name, token.location)
@@ -108,6 +109,7 @@ module Gherkin
 
     def match_EOF(token)
       return false unless token.eof?
+
       set_token_matched(token, :EOF)
       true
     end
@@ -132,22 +134,18 @@ module Gherkin
       title = token.line.get_rest_trimmed(keyword.length)
       keyword_types = @keyword_types[keyword]
       keyword_type = keyword_types[0]
-      if keyword_types.length() > 1
-        keyword_type = Cucumber::Messages::StepKeywordType::UNKNOWN
-      end
+      keyword_type = Cucumber::Messages::StepKeywordType::UNKNOWN if keyword_types.length > 1
 
       set_token_matched(token,
                         :StepLine, title, keyword, nil, keyword_type)
-      return true
+      true
     end
 
     private
 
     def add_keyword_type_mappings(keywords, type)
       keywords.each do |keyword|
-        if not @keyword_types.has_key?(keyword)
-          @keyword_types[keyword] = []
-        end
+        @keyword_types[keyword] = [] unless @keyword_types.has_key?(keyword)
         @keyword_types[keyword] += [type]
       end
     end

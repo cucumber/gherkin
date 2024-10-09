@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gherkin-official"
+version = "29.0.0"
+description = "Gherkin parser (official, by Cucumber team)"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "Cucumber Ltd and Björn Rasmusson", email = "cukes@googlegroups.com" }
+]
+
+dependencies = [
+  "typing_extensions>=4",
+]
+keywords = ["gherkin", "cucumber", "bdd"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+
+[project.urls]
+Homepage = "https://github.com/cucumber/gherkin"
+Repository = "https://github.com/cucumber/gherkin.git"
+Download = "https://pypi.python.org/pypi/gherkin-official"
+Issues = "https://github.com/cucumber/gherkin/issues"
+Changelog = "https://github.com/cucumber/gherkin/releases"
+
+[tool.setuptools.packages.find]
+include = ["gherkin", "gherkin.*"]
+
+[tool.mypy]
+disallow_untyped_defs = true
+packages = ["gherkin"]
+
+
+[tool.black]
+# Using `(python/)?` to match both `gherkin/parser.py` and `python/gherkin/parser.py`.
+# This is needed to be able to run `black` as a pre-commit hook, and also to run it manually.
+force-exclude = """(
+    (python/)?gherkin/parser.py
+)"""
+target-version = ["py38", "py39", "py310", "py311", "py312", "py313"]
