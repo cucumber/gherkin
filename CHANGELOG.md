@@ -21,6 +21,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Adopt c# 10 ImplicitUsings
 - [.NET] Replace TinyJson to System.Text.Json
 - [.NET] Enable warnings as errors
+- [.NET] Update System.Text.Json to 6.0.10
 
 ## [29.0.0] - 2024-08-12
 ### Added
