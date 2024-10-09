@@ -15,7 +15,7 @@ public sealed class DependencyValidationTests
 
         var version = typeof(JsonSerializer).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
-        Assert.Equal("6.0.21.52210", version); // System.Text.Json Version 6.0.0
+        Assert.Equal("6.0.3524.45918", version); // System.Text.Json Version 6.0.10
     }
 }
 #endif

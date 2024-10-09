@@ -20,10 +20,12 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Replace TinyJson to System.Text.Json
 - [.NET] Enable warnings as errors
 - [Ruby] Initial rubocop autofixes (Mainly to style) ([#266](https://github.com/cucumber/gherkin/pull/266))
+- [.NET] Update System.Text.Json to 6.0.10
 
 ### Removed
 - [Python] Drop compatibility for python 2. Supported python versions are 3.8, 3.9, 3.10, 3.12
 - [Python] Removed installation of `gherkin` script. It was used for internal acceptance tests only.
+
 
 ## [29.0.0] - 2024-08-12
 ### Added
