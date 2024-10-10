@@ -1,5 +1,3 @@
-# coding=utf-8
-
 from gherkin.token import Token
 from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
 from gherkin.gherkin_line import GherkinLine
