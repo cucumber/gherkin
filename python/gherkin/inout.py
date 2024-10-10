@@ -1,7 +1,6 @@
 import json
 from .parser import Parser
 from .token_scanner import TokenScanner
-from .pickles.compiler import compile
 from .errors import ParserException, CompositeParserException
 
 
@@ -36,7 +35,8 @@ class Inout:
             except ParserException as e:
                 self.print_errors(output, [e], uri)
 
-    def print_errors(self, output, errors, uri):
+    @staticmethod
+    def print_errors(output, errors, uri):
         for error in errors:
             attachment = {
                 "type": "attachment",

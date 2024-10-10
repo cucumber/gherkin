@@ -68,7 +68,8 @@ class AstBuilder:
     def current_node(self) -> AstNode:
         return self.stack[-1]
 
-    def get_location(self, token: Token, column: int | None = None) -> Location:
+    @staticmethod
+    def get_location(token: Token, column: int | None = None) -> Location:
         return (
             token.location
             if not column
@@ -105,7 +106,8 @@ class AstBuilder:
         self.ensure_cell_count(rows)
         return rows
 
-    def ensure_cell_count(self, rows: list[TableRow]) -> None:
+    @staticmethod
+    def ensure_cell_count(rows: list[TableRow]) -> None:
         if not rows:
             return
 
@@ -132,10 +134,12 @@ class AstBuilder:
             for cell_item in table_row_token.matched_items
         ]
 
-    def get_description(self, node: AstNode) -> str:
+    @staticmethod
+    def get_description(node: AstNode) -> str:
         return cast(str, node.get_single("Description", ""))
 
-    def get_steps(self, node: AstNode) -> list[Step]:
+    @staticmethod
+    def get_steps(node: AstNode) -> list[Step]:
         return cast(List[Step], node.get_items("Step"))
 
     def transform_node(
@@ -341,5 +345,6 @@ class AstBuilder:
         else:
             return node
 
-    def reject_nones(self, values: dict[str, T | None]) -> dict[str, T]:
+    @staticmethod
+    def reject_nones(values: dict[str, T | None]) -> dict[str, T]:
         return {k: v for k, v in values.items() if v is not None}

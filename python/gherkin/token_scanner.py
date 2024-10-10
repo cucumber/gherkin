@@ -1,3 +1,4 @@
+import contextlib
 import io
 import os
 
@@ -33,7 +34,5 @@ class TokenScanner:
 
     def __del__(self) -> None:
         # close file descriptor if it's still open
-        try:
+        with contextlib.suppress(AttributeError):
             self.io.close()
-        except AttributeError:
-            pass
