@@ -272,7 +272,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Language", "#TagLine", "#FeatureLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 0
@@ -296,7 +296,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 1
@@ -320,7 +320,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 2
@@ -377,7 +377,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 3
@@ -437,7 +437,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 4
@@ -490,7 +490,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 5
@@ -546,7 +546,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 6
@@ -605,7 +605,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 7
@@ -657,7 +657,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 8
@@ -723,7 +723,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 9
@@ -790,7 +790,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 10
@@ -815,7 +815,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 11
@@ -887,7 +887,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 12
@@ -964,7 +964,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 13
@@ -1032,7 +1032,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 14
@@ -1116,7 +1116,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 15
@@ -1203,7 +1203,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 16
@@ -1228,7 +1228,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 17
@@ -1314,7 +1314,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 18
@@ -1405,7 +1405,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 19
@@ -1487,7 +1487,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 20
@@ -1575,7 +1575,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 21
@@ -1599,7 +1599,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 22
@@ -1659,7 +1659,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 23
@@ -1722,7 +1722,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 24
@@ -1778,7 +1778,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 25
@@ -1837,7 +1837,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 26
@@ -1899,7 +1899,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 27
@@ -1954,7 +1954,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 28
@@ -2023,7 +2023,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 29
@@ -2093,7 +2093,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 30
@@ -2118,7 +2118,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 31
@@ -2193,7 +2193,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 32
@@ -2273,7 +2273,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 33
@@ -2344,7 +2344,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 34
@@ -2431,7 +2431,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 35
@@ -2521,7 +2521,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 36
@@ -2546,7 +2546,7 @@ class Parser:
         token.detach
         expected_tokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 37
@@ -2635,7 +2635,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 38
@@ -2729,7 +2729,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 39
@@ -2814,7 +2814,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 40
@@ -2905,7 +2905,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 41
@@ -2922,7 +2922,7 @@ class Parser:
         token.detach
         expected_tokens = ["#DocStringSeparator", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 43
@@ -3009,7 +3009,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 44
@@ -3026,7 +3026,7 @@ class Parser:
         token.detach
         expected_tokens = ["#DocStringSeparator", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 45
@@ -3093,7 +3093,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 46
@@ -3110,7 +3110,7 @@ class Parser:
         token.detach
         expected_tokens = ["#DocStringSeparator", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 47
@@ -3194,7 +3194,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 48
@@ -3211,7 +3211,7 @@ class Parser:
         token.detach
         expected_tokens = ["#DocStringSeparator", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 49
@@ -3275,7 +3275,7 @@ class Parser:
         token.detach
         expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return 50

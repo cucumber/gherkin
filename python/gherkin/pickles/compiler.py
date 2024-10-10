@@ -342,5 +342,6 @@ class Compiler:
     def _pickle_tags(self, tags: Iterable[Tag]) -> list[PickleTag]:
         return [self._pickle_tag(tag) for tag in tags]
 
-    def _pickle_tag(self, tag: Tag) -> PickleTag:
+    @staticmethod
+    def _pickle_tag(tag: Tag) -> PickleTag:
         return {"astNodeId": tag["id"], "name": tag["name"]}
