@@ -1,6 +1,3 @@
-# coding=utf-8
-
-
 def test_count_length_of_astral_point_symbols_correctly():
     string = "\U0001f63b"
     assert 1 == len(string)

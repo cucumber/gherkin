@@ -14,17 +14,17 @@ DIALECT_FILE_PATH = os.path.join(
 DialectSpec = TypedDict(
     "DialectSpec",
     {
-        "and": List[str],
-        "background": List[str],
-        "but": List[str],
-        "examples": List[str],
-        "feature": List[str],
-        "given": List[str],
-        "rule": List[str],
-        "scenario": List[str],
-        "scenarioOutline": List[str],
-        "then": List[str],
-        "when": List[str],
+        "and": list[str],
+        "background": list[str],
+        "but": list[str],
+        "examples": list[str],
+        "feature": list[str],
+        "given": list[str],
+        "rule": list[str],
+        "scenario": list[str],
+        "scenarioOutline": list[str],
+        "then": list[str],
+        "when": list[str],
     },
 )
 
