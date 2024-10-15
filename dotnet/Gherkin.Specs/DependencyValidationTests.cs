@@ -1,6 +1,6 @@
 #if NETFRAMEWORK
 using System.Reflection;
-using System.Text.Json;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Gherkin.Specs;
@@ -15,7 +15,7 @@ public sealed class DependencyValidationTests
 
         var version = typeof(JsonSerializer).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
-        Assert.Equal("6.0.3524.45918", version); // System.Text.Json Version 6.0.10
+        Assert.Equal("13.0.3.27908", version); // System.Text.Json Version 6.0.10
     }
 }
 #endif
