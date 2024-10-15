@@ -1,6 +1,5 @@
 using Gherkin.Ast;
-using System.Text.Json;
-
+using Newtonsoft.Json;
 namespace Gherkin;
 
 public interface IGherkinDialectProvider
@@ -52,7 +51,7 @@ public class GherkinDialectProvider : IGherkinDialectProvider
 
     protected virtual Dictionary<string, GherkinLanguageSetting> ParseJsonContent(string languagesFileContent)
     {
-        return JsonSerializer.Deserialize<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        return JsonConvert.DeserializeObject<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent);
     }
 
     protected virtual bool TryGetDialect(string language, Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings, Location location, out GherkinDialect dialect)
