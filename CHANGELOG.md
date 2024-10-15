@@ -11,6 +11,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [PHP, Java, Ruby, JavaScript] update dependency messages up to v26
 - [Python] Added type annotations ([#283](https://github.com/cucumber/gherkin/pull/283))
 - [Python] Switch to pyproject.toml ([#290](https://github.com/cucumber/gherkin/pull/290))
+- [.NET] Add Support for .NET Framework 4.7.2 [#300](https://github.com/cucumber/gherkin/pull/300)
 
 ### Changed
 - [.NET] Drop unsupported frameworks. Now supported target frameworks are .NET 8, .NET Standard 2.0 ([#265](https://github.com/cucumber/gherkin/pull/265))
