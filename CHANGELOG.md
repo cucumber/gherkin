@@ -23,7 +23,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Update System.Text.Json to 6.0.10
 
 ### Removed
-- [Python] Drop compatibility for python 2. Supported python versions are 3.8, 3.9, 3.10, 3.12
+- [Python] Drop compatibility for python 2 and python 3.8. Supported python versions: 3.9, 3.10, 3.11, 3.12, 3.13
 - [Python] Removed installation of `gherkin` script. It was used for internal acceptance tests only.
 
 

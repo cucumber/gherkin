@@ -1,4 +1,3 @@
-# coding=utf-8
 from gherkin.token_scanner import TokenScanner
 from gherkin.token_matcher import TokenMatcher
 from gherkin.parser import Parser

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TypedDict, cast, TypeVar, Union, List
+from typing import TypedDict, cast, TypeVar, Union
 
 from .ast_node import AstNode
 from .errors import AstBuilderException
@@ -140,7 +140,7 @@ class AstBuilder:
 
     @staticmethod
     def get_steps(node: AstNode) -> list[Step]:
-        return cast(List[Step], node.get_items("Step"))
+        return cast(list[Step], node.get_items("Step"))
 
     def transform_node(
         self, node: AstNode
@@ -247,7 +247,7 @@ class AstBuilder:
             examples_line = examples_node.get_token("ExamplesLine")
             description = self.get_description(examples_node)
             examples_table_rows = cast(
-                List[TableRow], examples_node.get_single("ExamplesTable")
+                list[TableRow], examples_node.get_single("ExamplesTable")
             )
             table_header = examples_table_rows[0] if examples_table_rows else None
             table_body = examples_table_rows[1:] if examples_table_rows else []
