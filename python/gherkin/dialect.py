@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import json
-from typing import TypedDict, List
+from typing import TypedDict
 
 from typing_extensions import Self
 
