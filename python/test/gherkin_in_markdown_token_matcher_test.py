@@ -107,7 +107,7 @@ def test_it_matches_4_ticks_doctring_separator():
     )
     assert tm.match_Other(t2)
     assert t2.matched_type == "Other"
-    assert t2.matched_keyword == None
+    assert t2.matched_keyword is None
     assert t2.matched_text == "```"
 
     t3 = Token(
