@@ -27,9 +27,7 @@ class Error(TypedDict):
     parseError: ParseError
 
 
-def create_errors(
-    errors: Iterable[ParserException], uri: str
-) -> Generator[Error, None, None]:
+def create_errors(errors: Iterable[ParserException], uri: str) -> Generator[Error]:
     for error in errors:
         yield {
             "parseError": {
@@ -60,11 +58,9 @@ class GherkinEvents:
         self.parser = Parser(ast_builder=AstBuilder(self.id_generator))
         self.compiler = Compiler(self.id_generator)
 
-    def enum(self, source_event: Event) -> Generator[
-        Event | Error | GherkinDocumentEnvelope | PickleEnvelope,
-        None,
-        None,
-    ]:
+    def enum(
+        self, source_event: Event
+    ) -> Generator[Event | Error | GherkinDocumentEnvelope | PickleEnvelope,]:
         uri = source_event["source"]["uri"]
         source = source_event["source"]["data"]
 
