@@ -10,6 +10,7 @@ import compile from './pickles/compile'
 import DIALECTS from './gherkin-languages.json'
 import GherkinClassicTokenMatcher from './GherkinClassicTokenMatcher'
 import GherkinInMarkdownTokenMatcher from './GherkinInMarkdownTokenMatcher'
+import CustomFlavorRegistry from './flavors/CustomFlavorRegistry'
 
 const dialects = DIALECTS as Readonly<{ [key: string]: Dialect }>
 
@@ -25,5 +26,6 @@ export {
   Errors,
   GherkinClassicTokenMatcher,
   GherkinInMarkdownTokenMatcher,
+  CustomFlavorRegistry,
   compile,
 }
