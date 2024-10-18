@@ -3,7 +3,7 @@
 #
 # See CONTRIBUTING.md
 #
-FROM mcr.microsoft.com/dotnet/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:9.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 
