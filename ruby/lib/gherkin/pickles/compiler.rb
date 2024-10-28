@@ -123,7 +123,6 @@ module Gherkin
               ]
             )
             pickles.push(pickle)
-
           end
         end
       end
