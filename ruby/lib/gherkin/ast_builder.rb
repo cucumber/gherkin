@@ -116,7 +116,7 @@ module Gherkin
         data_table = node.get_single(:DataTable)
         doc_string = node.get_single(:DocString)
 
-        step = Cucumber::Messages::Step.new(
+        Cucumber::Messages::Step.new(
           location: get_location(step_line, 0),
           keyword: step_line.matched_keyword,
           keyword_type: step_line.matched_keyword_type,
