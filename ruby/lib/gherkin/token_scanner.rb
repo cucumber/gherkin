@@ -28,7 +28,7 @@ module Gherkin
       location = { line: @line_number += 1 }
       if @io.nil?
         Token.new(nil, location)
-      elsif line = @io.gets
+      elsif (line = @io.gets)
         gherkin_line = GherkinLine.new(line, location[:line])
         Token.new(gherkin_line, location)
       else

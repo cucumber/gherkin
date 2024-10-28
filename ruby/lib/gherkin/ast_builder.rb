@@ -17,7 +17,7 @@ module Gherkin
       @stack.push AstNode.new(rule_type)
     end
 
-    def end_rule(rule_type)
+    def end_rule(_rule_type)
       node = @stack.pop
       current_node.add(node.rule_type, transform_node(node))
     end
