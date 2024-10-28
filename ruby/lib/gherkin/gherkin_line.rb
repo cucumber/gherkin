@@ -88,7 +88,7 @@ module Gherkin
       items = uncommented_line.split('@')
 
       tags = []
-      items.each { |untrimmed|
+      items.each do |untrimmed|
         item = untrimmed.strip
         next if item.length == 0
 
@@ -99,7 +99,7 @@ module Gherkin
 
         tags << Span.new(column, '@' + item)
         column += untrimmed.length + 1
-      }
+      end
       tags
     end
 
