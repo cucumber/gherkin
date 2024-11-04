@@ -8,6 +8,10 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+
+- [Python, JavaScript] Remove executable permissions from `.razor` files ([#310](https://github.com/cucumber/gherkin/pull/310))
+
 ## [30.0.0] - 2024-10-24
 ### Added
 - [PHP, Java, Ruby, JavaScript] update dependency messages up to v26
