@@ -135,7 +135,7 @@ module Gherkin
       @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
       {
       @:when @state.Id
-        @:match_token_at_@(state.Id)(token, context)
+        @:match_token_at_state@(state.Id)(token, context)
       }
       else
         raise InvalidOperationException, "Unknown state: #{state}"
@@ -145,7 +145,7 @@ module Gherkin
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
     # @Raw(state.Comment)
-    def match_token_at_@(state.Id)(token, context)
+    def match_token_at_state@(state.Id)(token, context)
       @foreach(var transition in state.Transitions)
       {
       @:if @MatchToken(transition.TokenType)
