@@ -68,8 +68,11 @@ module Gherkin
         unless scenario.steps.empty?
           [].concat(background_steps).concat(scenario.steps).each do |step|
             last_keyword_type =
-              step.keyword_type == Cucumber::Messages::StepKeywordType::CONJUNCTION ?
-                last_keyword_type : step.keyword_type
+              if step.keyword_type == Cucumber::Messages::StepKeywordType::CONJUNCTION
+                last_keyword_type
+              else
+                step.keyword_type
+              end
             steps.push(Cucumber::Messages::PickleStep.new(**pickle_step_props(step, [], nil, last_keyword_type)))
           end
         end
@@ -98,15 +101,21 @@ module Gherkin
             unless scenario.steps.empty?
               background_steps.each do |step|
                 last_keyword_type =
-                  step.keyword_type == Cucumber::Messages::StepKeywordType::CONJUNCTION ?
-                    last_keyword_type : step.keyword_type
+                  if step.keyword_type == Cucumber::Messages::StepKeywordType::CONJUNCTION
+                    last_keyword_type
+                  else
+                    step.keyword_type
+                  end
                 step_props = pickle_step_props(step, [], nil, last_keyword_type)
                 steps.push(Cucumber::Messages::PickleStep.new(**step_props))
               end
               scenario.steps.each do |step|
                 last_keyword_type =
-                  step.keyword_type == Cucumber::Messages::StepKeywordType::CONJUNCTION ?
-                    last_keyword_type : step.keyword_type
+                  if step.keyword_type == Cucumber::Messages::StepKeywordType::CONJUNCTION
+                    last_keyword_type
+                  else
+                    step.keyword_type
+                  end
                 step_props = pickle_step_props(step, variable_cells, values_row, last_keyword_type)
                 steps.push(Cucumber::Messages::PickleStep.new(**step_props))
               end

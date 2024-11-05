@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is generated. Do not edit! Edit gherkin-ruby.razor instead.
 require_relative 'ast_builder'
 require_relative 'token_matcher'
