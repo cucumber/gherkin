@@ -153,7 +153,7 @@ module Gherkin
         if (transition.LookAheadHint != null)
         {
           extraIndent = "  ";
-        @:@("if lookahead_")@(transition.LookAheadHint.Id)(context, token)
+        @:@("if lookahead")@(transition.LookAheadHint.Id)(context, token)
         }
         foreach(var production in transition.Productions)
         {
@@ -174,8 +174,8 @@ module Gherkin
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-    def lookahead_@(lookAheadHint.Id)(context, currentToken)
-      currentToken.detach
+    def lookahead@(lookAheadHint.Id)(context, current_token)
+      current_token.detach
       token = nil
       queue = []
       match = false
