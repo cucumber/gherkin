@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Gherkin do
   it 'can process feature file paths' do
     messages = Gherkin.from_paths(

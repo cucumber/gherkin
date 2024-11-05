@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'gherkin/query'
 
 describe Gherkin::Query do
@@ -26,7 +28,7 @@ describe Gherkin::Query do
   end
 
   let(:feature_content) do
-    ''"
+    "
     @feature-tag
     Feature: my feature
 
@@ -54,7 +56,7 @@ describe Gherkin::Query do
         @ruled-scenario-tag
         Scenario: a ruled scenario
           Given a step in the ruled scenario
-    "''
+    "
   end
 
   describe '#update' do

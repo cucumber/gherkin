@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'gherkin/stream/parser_message_stream'
 
 module Gherkin

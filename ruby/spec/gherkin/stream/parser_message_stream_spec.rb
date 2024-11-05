@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Gherkin
   module Stream
     describe ParserMessageStream do
       let(:feature_content) do
         "Feature: my feature\n" \
-        "  Scenario: a scenario\n" \
-        "    Given some context"
+          "  Scenario: a scenario\n" \
+          "    Given some context"
       end
 
       let(:source_feature) do

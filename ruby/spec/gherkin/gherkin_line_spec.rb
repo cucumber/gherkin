@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Gherkin::GherkinLine do
   context '#tags' do
     def tags(line)

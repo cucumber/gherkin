@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cucumber/messages'
 require_relative 'dialect'
 require_relative 'errors'

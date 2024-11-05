@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Gherkin
   class ParserError < StandardError; end
   class AstNodeNotLocatedException < StandardError; end

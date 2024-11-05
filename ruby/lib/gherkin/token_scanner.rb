@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'stringio'
 require_relative 'token'
 require_relative 'gherkin_line'

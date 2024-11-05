@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Gherkin
   class GherkinLine
     attr_reader :indent, :trimmed_line_text
