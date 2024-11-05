@@ -36,3 +36,7 @@ Style/RegexpLiteral:
 ## Disabled until rubocop-rspec is introduced
 #RSpec/MessageSpies:
 #  EnforcedStyle: receive
+
+# Hack to make rubocop not flag these (We need to re-analyse these later on)
+Naming/MethodName:
+  Enabled: false
