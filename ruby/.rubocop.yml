@@ -4,10 +4,35 @@ inherit_mode:
   merge:
     - Exclude
 
+#require:
+#  - rubocop-packaging
+#  - rubocop-performance
+#  - rubocop-rails
+#  - rubocop-rake
+#  - rubocop-rspec
+
 AllCops:
-  NewCops: disable
-  # Keep this inline with the lowest ruby version in the gemspec
   TargetRubyVersion: 3.0
-  # Display cop name / style guide references
-  DisplayCopNames: true
-  DisplayStyleGuide: true
+  NewCops: enable
+
+# Disabled on our repo's to enable polyglot-release
+Gemspec/RequireMFA:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 200
+
+# This allows us to read the chmod action in a more reproducible way
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
+
+Style/Documentation:
+  Enabled: false
+
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
+## Disabled until rubocop-rspec is introduced
+#RSpec/MessageSpies:
+#  EnforcedStyle: receive
