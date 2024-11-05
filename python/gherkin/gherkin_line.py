@@ -54,7 +54,7 @@ class GherkinLine:
         return cells
 
     @staticmethod
-    def split_table_cells(row: str) -> Generator[tuple[str, int], None, None]:
+    def split_table_cells(row: str) -> Generator[tuple[str, int]]:
         """
         An iterator returning all the table cells in a row with their positions,
         accounting for escaping.

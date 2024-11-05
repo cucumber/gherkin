@@ -26,6 +26,6 @@ jobs:
       - name: Show Python version
         run: python --version
 
-      - uses: cucumber/action-publish-pypi@v2.0.0
+      - uses: cucumber/action-publish-pypi@v3.0.0
         with:
           working-directory: "python"

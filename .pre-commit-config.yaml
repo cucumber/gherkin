@@ -7,3 +7,19 @@ repos:
     hooks:
       - id: black
         files: "^python/"
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.18.0
+    hooks:
+      - id: pyupgrade
+        files: "^python/"
+        args: [ "--py39-plus" ]
+  - repo: https://github.com/pycqa/flake8
+    rev: "7.1.1"
+    hooks:
+      - id: flake8
+        files: "^python/"
+        args: [ "--toml-config=python/pyproject.toml" ]
+        additional_dependencies: [
+            "flake8-pyproject",
+            "flake8-bugbear",
+        ]
