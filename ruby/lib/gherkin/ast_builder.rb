@@ -81,8 +81,7 @@ module Gherkin
           cells: get_cells(token)
         )
       end
-      ensure_cell_count(rows)
-      rows
+      rows.tap { ensure_cell_count(rows) }
     end
 
     def ensure_cell_count(rows)
