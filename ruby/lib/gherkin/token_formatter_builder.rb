@@ -11,7 +11,7 @@ module Gherkin
     end
 
     def build(token)
-      tokens << "#{format_token(token)}\n"
+      tokens << token
     end
 
     def start_rule(_rule_type); end
@@ -19,7 +19,7 @@ module Gherkin
     def end_rule(_rule_type); end
 
     def get_result
-      tokens.join
+      tokens.map { |token| "#{format_token(token)}\n" }.join
     end
 
     private
