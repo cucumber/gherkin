@@ -11,7 +11,7 @@ module Gherkin
     end
 
     def build(token)
-      @tokens_text << "#{format_token(token)}\n"
+      @tokens_text += "#{format_token(token)}\n"
     end
 
     def start_rule(_rule_type); end
