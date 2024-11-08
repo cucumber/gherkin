@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [Ruby] Fixed up some style autofix cops ([#311](https://github.com/cucumber/gherkin/pull/311))
+- [Ruby] Internal rewrites to razor template variables and `TokenFormatterBuilder`) ([#311](https://github.com/cucumber/gherkin/pull/311))
 
 ### Fixed
 - [Python] Release process didn't release to pypi correctly
