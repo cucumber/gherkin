@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cucumber/messages'
 require_relative 'dialect'
 require_relative 'errors'
@@ -35,7 +37,7 @@ module Gherkin
 
     def match_ScenarioLine(token)
       match_title_line(token, :ScenarioLine, @dialect.scenario_keywords) ||
-          match_title_line(token, :ScenarioLine, @dialect.scenario_outline_keywords)
+        match_title_line(token, :ScenarioLine, @dialect.scenario_outline_keywords)
     end
 
     def match_BackgroundLine(token)
@@ -83,7 +85,7 @@ module Gherkin
       if @active_doc_string_separator.nil?
         # open
         _match_DocStringSeparator(token, '"""', true) ||
-            _match_DocStringSeparator(token, '```', true)
+          _match_DocStringSeparator(token, '```', true)
       else
         # close
         _match_DocStringSeparator(token, @active_doc_string_separator, false)
@@ -121,11 +123,12 @@ module Gherkin
     end
 
     def match_StepLine(token)
-      keywords = @dialect.given_keywords +
-          @dialect.when_keywords +
-          @dialect.then_keywords +
-          @dialect.and_keywords +
-          @dialect.but_keywords
+      keywords =
+        @dialect.given_keywords +
+        @dialect.when_keywords +
+        @dialect.then_keywords +
+        @dialect.and_keywords +
+        @dialect.but_keywords
 
       keyword = keywords.detect { |k| token.line.start_with?(k) }
 

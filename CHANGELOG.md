@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Ruby] Fixed up some style autofix cops ([#311](https://github.com/cucumber/gherkin/pull/311))
+- [Ruby] Internal rewrites to razor template variables and `TokenFormatterBuilder`) ([#311](https://github.com/cucumber/gherkin/pull/311))
+
+### Fixed
+- [Python] Release process didn't release to pypi correctly
 
 ### Fixed
 

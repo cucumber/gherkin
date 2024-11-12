@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Gherkin
   class TokenFormatterBuilder
     def initialize
@@ -5,11 +7,11 @@ module Gherkin
     end
 
     def reset
-      @tokens_text = ''
+      @tokens = []
     end
 
     def build(token)
-      @tokens_text << "#{format_token(token)}\n"
+      tokens << token
     end
 
     def start_rule(_rule_type); end
@@ -17,10 +19,14 @@ module Gherkin
     def end_rule(_rule_type); end
 
     def get_result
-      @tokens_text
+      tokens.map { |token| "#{format_token(token)}\n" }.join
     end
 
     private
+
+    def tokens
+      @tokens ||= []
+    end
 
     def format_token(token)
       return 'EOF' if token.eof?

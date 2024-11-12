@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cucumber/messages'
 require_relative 'ast_node'
 
@@ -17,7 +19,7 @@ module Gherkin
       @stack.push AstNode.new(rule_type)
     end
 
-    def end_rule(rule_type)
+    def end_rule(_rule_type)
       node = @stack.pop
       current_node.add(node.rule_type, transform_node(node))
     end
@@ -79,8 +81,7 @@ module Gherkin
           cells: get_cells(token)
         )
       end
-      ensure_cell_count(rows)
-      rows
+      rows.tap { ensure_cell_count(rows) }
     end
 
     def ensure_cell_count(rows)
@@ -116,7 +117,7 @@ module Gherkin
         data_table = node.get_single(:DataTable)
         doc_string = node.get_single(:DocString)
 
-        step = Cucumber::Messages::Step.new(
+        Cucumber::Messages::Step.new(
           location: get_location(step_line, 0),
           keyword: step_line.matched_keyword,
           keyword_type: step_line.matched_keyword_type,

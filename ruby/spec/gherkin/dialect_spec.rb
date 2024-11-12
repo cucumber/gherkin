@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Gherkin
   describe Dialect do
     it 'provides an interface to the keywords of a dialect' do

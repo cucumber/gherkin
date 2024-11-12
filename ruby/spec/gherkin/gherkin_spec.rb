@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Gherkin do
   it 'can process feature file paths' do
     messages = Gherkin.from_paths(
@@ -26,7 +28,6 @@ describe Gherkin do
 
   it 'can set the default dialect for the feature file content' do
     data = File.open('../testdata/good/i18n_no.feature', 'r:UTF-8', &:read)
-    data_without_language_header = data.split("\n")[1..-1].join("\n")
 
     messages = Gherkin.from_source(
       'uri',

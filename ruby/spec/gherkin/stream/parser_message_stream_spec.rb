@@ -1,29 +1,31 @@
+# frozen_string_literal: true
+
 module Gherkin
   module Stream
     describe ParserMessageStream do
-      let(:feature_content) {
+      let(:feature_content) do
         "Feature: my feature\n" \
-        "  Scenario: a scenario\n" \
-        "    Given some context"
-      }
+          "  Scenario: a scenario\n" \
+          "    Given some context"
+      end
 
-      let(:source_feature) {
+      let(:source_feature) do
         Cucumber::Messages::Source.new(
           uri: '//whatever/uri',
           data: feature_content,
           media_type: 'text/x.cucumber.gherkin+plain'
         )
-      }
+      end
 
-      let(:options) {
+      let(:options) do
         {
           include_gherkin_document: true
         }
-      }
+      end
 
-      let(:gherkin_document) {
+      let(:gherkin_document) do
         ParserMessageStream.new([], [source_feature], options).messages.first.gherkin_document
-      }
+      end
 
       let(:scenario_id) { gherkin_document.feature.children.first.scenario.id }
 
@@ -46,12 +48,12 @@ module Gherkin
 
         context 'when set' do
           let(:id_generator) { double }
-          let(:options) {
+          let(:options) do
             {
               include_gherkin_document: true,
               id_generator: id_generator
             }
-          }
+          end
 
           it 'uses the generator instance to produce the IDs' do
             allow(id_generator).to receive(:new_id).and_return('some-random-id')

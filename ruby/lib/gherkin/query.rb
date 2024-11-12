@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Gherkin
   class Query
     def initialize
