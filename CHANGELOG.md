@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [30.0.1] - 2024-11-12
 ### Changed
 - [Ruby] Fixed up some style autofix cops ([#311](https://github.com/cucumber/gherkin/pull/311))
 - [Ruby] Internal rewrites to razor template variables and `TokenFormatterBuilder`) ([#311](https://github.com/cucumber/gherkin/pull/311))
@@ -696,7 +698,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.1...HEAD
+[30.0.1]: https://github.com/cucumber/gherkin/compare/v30.0.0...v30.0.1
 [30.0.0]: https://github.com/cucumber/gherkin/compare/v29.0.0...v30.0.0
 [29.0.0]: https://github.com/cucumber/gherkin/compare/v28.0.0...v29.0.0
 [28.0.0]: https://github.com/cucumber/gherkin/compare/v27.0.0...v28.0.0
