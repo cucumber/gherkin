@@ -13,9 +13,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Fixed
 - [Python] Release process didn't release to pypi correctly
-
-### Fixed
-
 - [Python, JavaScript] Remove executable permissions from `.razor` files ([#310](https://github.com/cucumber/gherkin/pull/310))
 
 ## [30.0.0] - 2024-10-24
