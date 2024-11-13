@@ -1,0 +1,42 @@
+name: test-elixir
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - otp: '26.0'
+            elixir: '1.15'
+          - otp: '27.1'
+            elixir: '1.17'
+    env:
+      MIX_ENV: test
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: erlef/setup-beam@v1
+        with:
+         otp-version: ${{ matrix.otp }}
+         elixir-version: ${{ matrix.elixir }}
+         
+      - run: mix deps.get
+        working-directory: elixir
+
+      - run: mix test
+        working-directory: elixir
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: elixir
