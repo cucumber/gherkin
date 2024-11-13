@@ -1,5 +1,5 @@
-PROJECT(gherkin C)
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
+project(gherkin C)
 enable_testing()
 
 # Install library & headers in your directory
