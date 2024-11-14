@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [30.0.3] - 2024-11-14
 ### Fixed
 - [Python] Release process (still) didn't release to pypi correctly
 
@@ -704,7 +706,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.2...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.3...HEAD
+[30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
 [30.0.2]: https://github.com/cucumber/gherkin/compare/v30.0.1...v30.0.2
 [30.0.1]: https://github.com/cucumber/gherkin/compare/v30.0.0...v30.0.1
 [30.0.0]: https://github.com/cucumber/gherkin/compare/v29.0.0...v30.0.0
