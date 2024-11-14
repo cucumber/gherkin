@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Python] Release process (again) didn't release to pypi correctly
 
 ## [30.0.1] - 2024-11-12
 ### Changed
