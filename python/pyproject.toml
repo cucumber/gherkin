@@ -37,6 +37,9 @@ Changelog = "https://github.com/cucumber/gherkin/releases"
 [tool.setuptools.packages.find]
 include = ["gherkin", "gherkin.*"]
 
+[tool.setuptools.package-data]
+gherkin = ["*.json"]
+
 [tool.mypy]
 disallow_untyped_defs = true
 packages = ["gherkin"]
