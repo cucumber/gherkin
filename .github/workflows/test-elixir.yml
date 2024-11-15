@@ -5,9 +5,17 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - elixir/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - elixir/**
+      - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
