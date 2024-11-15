@@ -102,7 +102,7 @@ add_custom_command(
     TARGET gherkinexe
     COMMENT "Run tests"
     POST_BUILD
-    COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION>
+    COMMAND ${CMAKE_CTEST_COMMAND}
 )
 ############ Installation section ############
 set(include_install_dir "include")
