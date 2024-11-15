@@ -15,6 +15,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [30.0.2] - 2024-11-14
 ### Fixed
 - [Python] Release process (again) didn't release to pypi correctly
+- [Elixir] Restored test and release process
 
 ## [30.0.1] - 2024-11-12
 ### Changed
