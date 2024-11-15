@@ -4,6 +4,7 @@ github.com/cucumber/messages/go/v24 v24.1.0 h1:JMpspvV3IoGwcbEUbsKuxr0tRkFP7aqcQ
 github.com/cucumber/messages/go/v24 v24.1.0/go.mod h1:PR0+ygYqqyT1/C4EmioDdvgR8YG9+SZEkxEKw2jfd8g=
 github.com/cucumber/messages/go/v27 v27.0.0/go.mod h1:n0kwSvSgQZrvTq6a14uBQADo2/n80YeAybRaSR+LKek=
 github.com/cucumber/messages/go/v27 v27.0.1/go.mod h1:n0kwSvSgQZrvTq6a14uBQADo2/n80YeAybRaSR+LKek=
+github.com/cucumber/messages/go/v27 v27.0.2/go.mod h1:n0kwSvSgQZrvTq6a14uBQADo2/n80YeAybRaSR+LKek=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gofrs/uuid v4.3.1+incompatible h1:0/KbAdpx3UXAx1kEOWHJeOkpbgRFGHVgv+CFIY7dBJI=
