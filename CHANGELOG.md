@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [30.0.4] - 2024-11-15
 ### Fixed
 - [Python] File gherkin-languages.json was not included as package data
 
@@ -709,7 +711,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.3...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.4...HEAD
+[30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
 [30.0.2]: https://github.com/cucumber/gherkin/compare/v30.0.1...v30.0.2
 [30.0.1]: https://github.com/cucumber/gherkin/compare/v30.0.0...v30.0.1
