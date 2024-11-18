@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- [Elixir] Updates dependencies, bumps messages to 27.0.2
 
 ## [30.0.4] - 2024-11-15
 ### Fixed
