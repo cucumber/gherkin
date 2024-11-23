@@ -3,7 +3,7 @@ module github.com/cucumber/gherkin/go/v30
 require (
 	github.com/cucumber/messages/go/v24 v24.1.0
 	github.com/cucumber/messages/go/v27 v27.0.2
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 )
 
 require (
