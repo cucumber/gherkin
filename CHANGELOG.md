@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [Python] Added support for Python 3.13
+
+### Removed
+- [Python] Dropped support for Python 3.8
 
 ## [30.0.4] - 2024-11-15
 ### Fixed
