@@ -57,7 +57,7 @@ jobs:
         run: pytest
       - name: Run Acceptance Tests
         run: make acceptance
-      - name: Check build
+      - name: Build package
         run: |
           python -m pip install build twine
           python -m build
