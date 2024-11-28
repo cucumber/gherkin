@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
 
 public final class GherkinDialect {
     private final String language;
@@ -28,20 +30,20 @@ public final class GherkinDialect {
     private final Map<String, List<StepKeywordType>> stepKeywordsTypes;
 
     GherkinDialect(String language, String name, String nativeName, List<String> featureKeywords, List<String> ruleKeywords, List<String> scenarioKeywords, List<String> scenarioOutlineKeywords, List<String> backgroundKeywords, List<String> examplesKeywords, List<String> givenKeywords, List<String> whenKeywords, List<String> thenKeywords, List<String> andKeywords, List<String> butKeywords) {
-        this.language = language;
-        this.name = name;
-        this.nativeName = nativeName;
-        this.featureKeywords = featureKeywords;
-        this.ruleKeywords = ruleKeywords;
-        this.scenarioKeywords = scenarioKeywords;
-        this.scenarioOutlineKeywords = scenarioOutlineKeywords;
-        this.backgroundKeywords = backgroundKeywords;
-        this.examplesKeywords = examplesKeywords;
-        this.givenKeywords = givenKeywords;
-        this.whenKeywords = whenKeywords;
-        this.thenKeywords = thenKeywords;
-        this.andKeywords = andKeywords;
-        this.butKeywords = butKeywords;
+        this.language = requireNonNull(language);
+        this.name = requireNonNull(name);
+        this.nativeName = requireNonNull(nativeName);
+        this.featureKeywords = requireNonNull(featureKeywords);
+        this.ruleKeywords = requireNonNull(ruleKeywords);
+        this.scenarioKeywords = requireNonNull(scenarioKeywords);
+        this.scenarioOutlineKeywords = requireNonNull(scenarioOutlineKeywords);
+        this.backgroundKeywords = requireNonNull(backgroundKeywords);
+        this.examplesKeywords = requireNonNull(examplesKeywords);
+        this.givenKeywords = requireNonNull(givenKeywords);
+        this.whenKeywords = requireNonNull(whenKeywords);
+        this.thenKeywords = requireNonNull(thenKeywords);
+        this.andKeywords = requireNonNull(andKeywords);
+        this.butKeywords = requireNonNull(butKeywords);
 
         List<String> stepKeywords = new ArrayList<>();
         stepKeywords.addAll(givenKeywords);
