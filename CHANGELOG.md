@@ -12,6 +12,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Changed
 - [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
+- [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
 
 ## [30.0.4] - 2024-11-15
 ### Fixed

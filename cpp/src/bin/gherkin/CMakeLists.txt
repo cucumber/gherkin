@@ -25,6 +25,6 @@ target_link_libraries(
 set_target_properties(
     cucumber_gherkin_bin
     PROPERTIES
-        CXX_STANDARD 17
-        OUTPUT_NAME cucumber_gherkin
+        CXX_STANDARD 20
+        OUTPUT_NAME gherkin
 )
