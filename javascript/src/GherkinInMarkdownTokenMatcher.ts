@@ -1,13 +1,15 @@
 import ITokenMatcher from './ITokenMatcher'
 import Dialect from './Dialect'
-import { Token, TokenType } from './Parser'
+import {Token, TokenType} from './Parser'
 import DIALECTS from './gherkin-languages.json'
-import { Item } from './IToken'
+import {Item} from './IToken'
 import * as messages from '@cucumber/messages'
-import { NoSuchLanguageException } from './Errors'
+import {NoSuchLanguageException} from './Errors'
+import {KeywordPrefixes} from "./flavors/KeywordPrefixes";
 
-const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
-const DEFAULT_DOC_STRING_SEPARATOR = /^(```[`]*)(.*)/
+
+export const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
+export const DEFAULT_DOC_STRING_SEPARATOR = /^(```[`]*)(.*)/
 
 function addKeywordTypeMappings(h: { [key: string]: messages.StepKeywordType[] }, keywords: readonly string[], keywordType: messages.StepKeywordType) {
   for (const k of keywords) {
@@ -19,17 +21,27 @@ function addKeywordTypeMappings(h: { [key: string]: messages.StepKeywordType[] }
 }
 
 export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<TokenType> {
-  private dialect: Dialect
-  private dialectName: string
-  private readonly nonStarStepKeywords: string[]
+  dialect: Dialect
+  dialectName: string
+  readonly nonStarStepKeywords: string[]
   private readonly stepRegexp: RegExp
   private readonly headerRegexp: RegExp
   private activeDocStringSeparator: RegExp
   private indentToRemove: number
-  private matchedFeatureLine: boolean
+  matchedFeatureLine: boolean
+  private prefixes: KeywordPrefixes = {
+      // https://spec.commonmark.org/0.29/#bullet-list-marker
+    BULLET: '^(\\s*[*+-]\\s*)',
+    HEADER: '^(#{1,6}\\s)',
+  }
+  private readonly docStringSeparator = DEFAULT_DOC_STRING_SEPARATOR;
+
   private keywordTypesMap: { [key: string]: messages.StepKeywordType[] }
 
-  constructor(private readonly defaultDialectName: string = 'en') {
+  constructor(private readonly defaultDialectName: string = 'en', prefixes?: KeywordPrefixes, docStringSeparator?: RegExp) {
+    prefixes ? this.prefixes = prefixes : null;
+    docStringSeparator ? this.docStringSeparator = docStringSeparator : this.docStringSeparator = DEFAULT_DOC_STRING_SEPARATOR;
+
     this.dialect = DIALECT_DICT[defaultDialectName]
     this.nonStarStepKeywords = []
       .concat(this.dialect.given)
@@ -41,7 +53,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     this.initializeKeywordTypes()
 
     this.stepRegexp = new RegExp(
-      `${KeywordPrefix.BULLET}(${this.nonStarStepKeywords.map(escapeRegExp).join('|')})`
+      `${this.prefixes.BULLET}(${this.nonStarStepKeywords.map(escapeRegExp).join('|')})`
     )
 
     const headerKeywords = []
@@ -54,7 +66,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
       .filter((value, index, self) => self.indexOf(value) === index)
 
     this.headerRegexp = new RegExp(
-      `${KeywordPrefix.HEADER}(${headerKeywords.map(escapeRegExp).join('|')})`
+      `${this.prefixes.HEADER}(${headerKeywords.map(escapeRegExp).join('|')})`
     )
 
     this.reset()
@@ -140,11 +152,11 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     const [, newSeparator, mediaType] = match || []
     let result = false
     if (newSeparator) {
-      if (this.activeDocStringSeparator === DEFAULT_DOC_STRING_SEPARATOR) {
+      if (this.activeDocStringSeparator === this.docStringSeparator) {
         this.activeDocStringSeparator = new RegExp(`^(${newSeparator})$`)
         this.indentToRemove = token.line.indent
       } else {
-        this.activeDocStringSeparator = DEFAULT_DOC_STRING_SEPARATOR
+        this.activeDocStringSeparator = this.docStringSeparator
       }
 
       token.matchedKeyword = newSeparator
@@ -171,7 +183,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     }
     // We first try to match "# Feature: blah"
     let result = this.matchTitleLine(
-      KeywordPrefix.HEADER,
+      this.prefixes.HEADER,
       this.dialect.feature,
       ':',
       token,
@@ -191,7 +203,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
 
   match_BackgroundLine(token: Token): boolean {
     return this.matchTitleLine(
-      KeywordPrefix.HEADER,
+      this.prefixes.HEADER,
       this.dialect.background,
       ':',
       token,
@@ -201,7 +213,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
 
   match_RuleLine(token: Token): boolean {
     return this.matchTitleLine(
-      KeywordPrefix.HEADER,
+      this.prefixes.HEADER,
       this.dialect.rule,
       ':',
       token,
@@ -212,14 +224,14 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
   match_ScenarioLine(token: Token): boolean {
     return (
       this.matchTitleLine(
-        KeywordPrefix.HEADER,
+        this.prefixes.HEADER,
         this.dialect.scenario,
         ':',
         token,
         TokenType.ScenarioLine
       ) ||
       this.matchTitleLine(
-        KeywordPrefix.HEADER,
+        this.prefixes.HEADER,
         this.dialect.scenarioOutline,
         ':',
         token,
@@ -230,7 +242,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
 
   match_ExamplesLine(token: Token): boolean {
     return this.matchTitleLine(
-      KeywordPrefix.HEADER,
+      this.prefixes.HEADER,
       this.dialect.examples,
       ':',
       token,
@@ -240,7 +252,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
 
   match_StepLine(token: Token): boolean {
     return this.matchTitleLine(
-      KeywordPrefix.BULLET,
+      this.prefixes.BULLET,
       this.nonStarStepKeywords,
       '',
       token,
@@ -249,7 +261,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
   }
 
   matchTitleLine(
-    prefix: KeywordPrefix,
+    prefix: string,
     keywords: readonly string[],
     keywordSuffix: ':' | '',
     token: Token,
@@ -333,14 +345,8 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     if (this.dialectName !== this.defaultDialectName) {
       this.changeDialect(this.defaultDialectName)
     }
-    this.activeDocStringSeparator = DEFAULT_DOC_STRING_SEPARATOR
+    this.activeDocStringSeparator = this.docStringSeparator;
   }
-}
-
-enum KeywordPrefix {
-  // https://spec.commonmark.org/0.29/#bullet-list-marker
-  BULLET = '^(\\s*[*+-]\\s*)',
-  HEADER = '^(#{1,6}\\s)',
 }
 
 // https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
