@@ -131,7 +131,7 @@ namespace Gherkin
             return GetResult(context);
         }
 
-        private void AddError(ParserContext context, ParserException error)
+        protected virtual void AddError(ParserContext context, ParserException error)
         {
             if (context.Errors.Any(e => e.Message == error.Message))
                 return;
