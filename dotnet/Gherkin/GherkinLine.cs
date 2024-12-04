@@ -118,7 +118,7 @@ public class GherkinLine : IGherkinLine
         {
             pos++;
             char c = rowEnum.Current;
-            if (c.ToString() == GherkinLanguageConstants.TABLE_CELL_SEPARATOR)
+            if (c == GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR)
             {
                 yield return Tuple.Create(cell, startPos);
                 cell = "";
@@ -136,7 +136,7 @@ public class GherkinLine : IGherkinLine
                     }
                     else
                     {
-                        if (c.ToString() != GherkinLanguageConstants.TABLE_CELL_SEPARATOR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
+                        if (c != GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
                         {
                             cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
                         }
