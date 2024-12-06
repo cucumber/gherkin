@@ -279,8 +279,9 @@ public class AstBuilder<T> : IAstBuilder<T>
             return;
 
         int cellCount = rows[0].Cells.Count();
-        foreach (var row in rows)
+        for (int i = 1; i < rows.Length; i++)
         {
+            var row = rows[i];
             if (row.Cells.Count() != cellCount)
             {
                 HandleAstError("inconsistent cell count within the table", row.Location);
@@ -295,9 +296,13 @@ public class AstBuilder<T> : IAstBuilder<T>
 
     private TableCell[] GetCells(Token tableRowToken)
     {
-        return tableRowToken.MatchedItems
-            .Select(cellItem => CreateTableCell(GetLocation(tableRowToken, cellItem.Column), cellItem.Text))
-            .ToArray();
+        var cells = new TableCell[tableRowToken.MatchedItems.Length];
+        for (int i = 0; i < cells.Length; i++)
+        {
+            var cellItem = tableRowToken.MatchedItems[i];
+            cells[i] = CreateTableCell(GetLocation(tableRowToken, cellItem.Column), cellItem.Text);
+        }
+        return cells;
     }
 
     private static Step[] GetSteps(AstNode scenarioDefinitionNode)
