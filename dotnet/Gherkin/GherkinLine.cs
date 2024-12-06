@@ -36,7 +36,7 @@ public class GherkinLine : IGherkinLine
 
     public bool StartsWith(string text)
     {
-        return trimmedLineText.StartsWith(text);
+        return trimmedLineText.StartsWith(text, StringComparison.Ordinal);
     }
 
     public bool StartsWithTitleKeyword(string text)
