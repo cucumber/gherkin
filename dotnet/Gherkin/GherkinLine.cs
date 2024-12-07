@@ -1,5 +1,4 @@
 using Gherkin.Ast;
-using System.Text.RegularExpressions;
 
 namespace Gherkin;
 
@@ -65,7 +64,19 @@ public class GherkinLine : IGherkinLine
 
     public IEnumerable<GherkinLineSpan> GetTags()
     {
-        var uncommentedLine = Regex.Split(trimmedLineText, @"\s" + GherkinLanguageConstants.COMMENT_PREFIX)[0];
+        string uncommentedLine = trimmedLineText;
+        var commentIndex = trimmedLineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0]);
+        while (commentIndex >= 0)
+        {
+            if (commentIndex == 0)
+                yield break;
+            if (Array.IndexOf(inlineWhitespaceChars, trimmedLineText[commentIndex - 1]) == 0)
+            {
+                uncommentedLine = uncommentedLine.Substring(0, commentIndex);
+                break;
+            }
+            commentIndex = trimmedLineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], commentIndex + 1);
+        }
         int position = Indent;
         foreach (string item in uncommentedLine.Split(GherkinLanguageConstants.TAG_PREFIX[0]))
         {
