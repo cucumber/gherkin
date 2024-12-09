@@ -615,7 +615,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 5;
+            return 3;
         }
         if (match_BackgroundLine(context, token))
         {
@@ -690,9 +690,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 5;
+            return 4;
         }
         if (match_BackgroundLine(context, token))
         {
@@ -850,7 +849,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 8;
+            return 6;
         }
         if (match_StepLine(context, token))
         {
@@ -924,9 +923,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 8;
+            return 7;
         }
         if (match_StepLine(context, token))
         {
@@ -1300,7 +1298,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 14;
+            return 12;
         }
         if (match_StepLine(context, token))
         {
@@ -1396,9 +1394,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 14;
+            return 13;
         }
         if (match_StepLine(context, token))
         {
@@ -1869,7 +1866,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 20;
+            return 18;
         }
         if (match_TableRow(context, token))
         {
@@ -1979,9 +1976,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 20;
+            return 19;
         }
         if (match_TableRow(context, token))
         {
@@ -2359,7 +2355,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 25;
+            return 23;
         }
         if (match_BackgroundLine(context, token))
         {
@@ -2437,9 +2433,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 25;
+            return 24;
         }
         if (match_BackgroundLine(context, token))
         {
@@ -2603,7 +2598,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 28;
+            return 26;
         }
         if (match_StepLine(context, token))
         {
@@ -2682,7 +2677,7 @@ class Parser<T> {
         {
                 endRule(context, RuleType.Description);
                 build(context, token);
-            return 28;
+            return 27;
         }
         if (match_StepLine(context, token))
         {
@@ -3068,7 +3063,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 34;
+            return 32;
         }
         if (match_StepLine(context, token))
         {
@@ -3167,9 +3162,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 34;
+            return 33;
         }
         if (match_StepLine(context, token))
         {
@@ -3652,7 +3646,7 @@ class Parser<T> {
         if (match_Comment(context, token))
         {
                 build(context, token);
-            return 40;
+            return 38;
         }
         if (match_TableRow(context, token))
         {
@@ -3765,9 +3759,8 @@ class Parser<T> {
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
-            return 40;
+            return 39;
         }
         if (match_TableRow(context, token))
         {
