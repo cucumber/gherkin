@@ -68,8 +68,8 @@ class Parser<T> {
         DataTable, // DataTable! := #TableRow+
         DocString, // DocString! := #DocStringSeparator #Other* #DocStringSeparator
         Tags, // Tags! := #TagLine+
-        DescriptionHelper, // DescriptionHelper := #Empty* Description? #Comment*
-        Description, // Description! := #Other+
+        DescriptionHelper, // DescriptionHelper := Description?
+        Description, // Description! := (#Empty | #Comment | #Other)+
         ;
 
         static RuleType cast(TokenType tokenType) {
@@ -422,9 +422,6 @@ class Parser<T> {
             case 33:
                 newState = matchTokenAt_33(token, context);
                 break;
-            case 34:
-                newState = matchTokenAt_34(token, context);
-                break;
             case 35:
                 newState = matchTokenAt_35(token, context);
                 break;
@@ -446,29 +443,8 @@ class Parser<T> {
             case 41:
                 newState = matchTokenAt_41(token, context);
                 break;
-            case 43:
-                newState = matchTokenAt_43(token, context);
-                break;
-            case 44:
-                newState = matchTokenAt_44(token, context);
-                break;
-            case 45:
-                newState = matchTokenAt_45(token, context);
-                break;
-            case 46:
-                newState = matchTokenAt_46(token, context);
-                break;
-            case 47:
-                newState = matchTokenAt_47(token, context);
-                break;
-            case 48:
-                newState = matchTokenAt_48(token, context);
-                break;
-            case 49:
-                newState = matchTokenAt_49(token, context);
-                break;
-            case 50:
-                newState = matchTokenAt_50(token, context);
+            case 42:
+                newState = matchTokenAt_42(token, context);
                 break;
             default:
                 throw new IllegalStateException("Unknown state: " + state);
@@ -482,7 +458,7 @@ class Parser<T> {
         if (match_EOF(context, token))
         {
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_Language(context, token))
         {
@@ -605,24 +581,26 @@ class Parser<T> {
                 endRule(context, RuleType.FeatureHeader);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_Empty(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 3;
+            return 4;
         }
         if (match_Comment(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 3;
+            return 4;
         }
         if (match_BackgroundLine(context, token))
         {
                 endRule(context, RuleType.FeatureHeader);
                 startRule(context, RuleType.Background);
                 build(context, token);
-            return 6;
+            return 5;
         }
         if (match_TagLine(context, token))
         {
@@ -632,7 +610,7 @@ class Parser<T> {
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
@@ -642,7 +620,7 @@ class Parser<T> {
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ScenarioLine(context, token))
         {
@@ -650,7 +628,7 @@ class Parser<T> {
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
@@ -658,7 +636,7 @@ class Parser<T> {
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
@@ -678,7 +656,7 @@ class Parser<T> {
         return 3;
     }
 
-    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_4(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -686,7 +664,12 @@ class Parser<T> {
                 endRule(context, RuleType.FeatureHeader);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
+        }
+        if (match_Empty(context, token))
+        {
+                build(context, token);
+            return 4;
         }
         if (match_Comment(context, token))
         {
@@ -699,7 +682,7 @@ class Parser<T> {
                 endRule(context, RuleType.FeatureHeader);
                 startRule(context, RuleType.Background);
                 build(context, token);
-            return 6;
+            return 5;
         }
         if (match_TagLine(context, token))
         {
@@ -710,7 +693,7 @@ class Parser<T> {
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
@@ -721,7 +704,7 @@ class Parser<T> {
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ScenarioLine(context, token))
         {
@@ -730,7 +713,7 @@ class Parser<T> {
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
@@ -739,7 +722,7 @@ class Parser<T> {
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
@@ -747,9 +730,9 @@ class Parser<T> {
             return 4;
         }
 
-        final String stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -758,72 +741,79 @@ class Parser<T> {
         return 4;
     }
 
-    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
     private int matchTokenAt_5(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.FeatureHeader);
+                endRule(context, RuleType.Background);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
+        }
+        if (match_Empty(context, token))
+        {
+                startRule(context, RuleType.Description);
+                build(context, token);
+            return 6;
         }
         if (match_Comment(context, token))
         {
-                build(context, token);
-            return 5;
-        }
-        if (match_BackgroundLine(context, token))
-        {
-                endRule(context, RuleType.FeatureHeader);
-                startRule(context, RuleType.Background);
+                startRule(context, RuleType.Description);
                 build(context, token);
             return 6;
+        }
+        if (match_StepLine(context, token))
+        {
+                startRule(context, RuleType.Step);
+                build(context, token);
+            return 7;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.FeatureHeader);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.FeatureHeader);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.FeatureHeader);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.FeatureHeader);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Empty(context, token))
+        if (match_Other(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 5;
+            return 6;
         }
 
-        final String stateComment = "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -832,14 +822,15 @@ class Parser<T> {
         return 5;
     }
 
-    // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
+    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_6(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
+                endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_Empty(context, token))
         {
@@ -853,54 +844,58 @@ class Parser<T> {
         }
         if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.Description);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 9;
+            return 7;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
+                endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
+                endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ScenarioLine(context, token))
         {
+                endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
+                endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 7;
+            return 6;
         }
 
-        final String stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
+        final String stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
         List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
@@ -911,77 +906,89 @@ class Parser<T> {
         return 6;
     }
 
-    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
     private int matchTokenAt_7(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
+        }
+        if (match_TableRow(context, token))
+        {
+                startRule(context, RuleType.DataTable);
+                build(context, token);
+            return 8;
+        }
+        if (match_DocStringSeparator(context, token))
+        {
+                startRule(context, RuleType.DocString);
+                build(context, token);
+            return 41;
+        }
+        if (match_StepLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.Step);
+                build(context, token);
+            return 7;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 9;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 10;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 7;
         }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 9;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Other(context, token))
+        if (match_Empty(context, token))
         {
                 build(context, token);
             return 7;
         }
 
-        final String stateComment = "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -990,61 +997,78 @@ class Parser<T> {
         return 7;
     }
 
-    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private int matchTokenAt_8(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Comment(context, token))
+        if (match_TableRow(context, token))
         {
                 build(context, token);
             return 8;
         }
         if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 9;
+            return 7;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ScenarioLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
+        }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 8;
         }
         if (match_Empty(context, token))
         {
@@ -1052,9 +1076,9 @@ class Parser<T> {
             return 8;
         }
 
-        final String stateComment = "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1063,74 +1087,19 @@ class Parser<T> {
         return 8;
     }
 
-    // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
     private int matchTokenAt_9(Token token, ParserContext context) {
-        if (match_EOF(context, token))
+        if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_TableRow(context, token))
-        {
-                startRule(context, RuleType.DataTable);
-                build(context, token);
-            return 10;
-        }
-        if (match_DocStringSeparator(context, token))
-        {
-                startRule(context, RuleType.DocString);
-                build(context, token);
-            return 49;
-        }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
                 build(context, token);
             return 9;
         }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Tags);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
+            return 10;
         }
         if (match_Comment(context, token))
         {
@@ -1143,9 +1112,9 @@ class Parser<T> {
             return 9;
         }
 
-        final String stateComment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
+        final String stateComment = "State: 9 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#TagLine", "#ScenarioLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1154,88 +1123,101 @@ class Parser<T> {
         return 9;
     }
 
-    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
     private int matchTokenAt_10(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_TableRow(context, token))
+        if (match_Empty(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 10;
+            return 11;
+        }
+        if (match_Comment(context, token))
+        {
+                startRule(context, RuleType.Description);
+                build(context, token);
+            return 11;
         }
         if (match_StepLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 9;
+            return 12;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 14;
+            }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 15;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Comment(context, token))
+        if (match_Other(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 10;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 10;
+            return 11;
         }
 
-        final String stateComment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        final String stateComment = "State: 10 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1244,34 +1226,106 @@ class Parser<T> {
         return 10;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_11(Token token, ParserContext context) {
-        if (match_TagLine(context, token))
+        if (match_EOF(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Feature);
                 build(context, token);
-            return 11;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Tags);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 11;
+            return 34;
         }
         if (match_Empty(context, token))
         {
                 build(context, token);
             return 11;
         }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 11;
+        }
+        if (match_StepLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.Step);
+                build(context, token);
+            return 12;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 14;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 9;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 15;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 10;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
+        }
+        if (match_Other(context, token))
+        {
+                build(context, token);
+            return 11;
+        }
 
-        final String stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
+        final String stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#TagLine", "#ScenarioLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1280,99 +1334,113 @@ class Parser<T> {
         return 11;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
     private int matchTokenAt_12(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Empty(context, token))
+        if (match_TableRow(context, token))
         {
+                startRule(context, RuleType.DataTable);
                 build(context, token);
-            return 12;
+            return 13;
         }
-        if (match_Comment(context, token))
+        if (match_DocStringSeparator(context, token))
         {
+                startRule(context, RuleType.DocString);
                 build(context, token);
-            return 12;
+            return 39;
         }
         if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 15;
+            return 12;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 17;
+            return 14;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 18;
+            return 15;
         }
         if (match_ScenarioLine(context, token))
         {
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Other(context, token))
+        if (match_Comment(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 13;
+            return 12;
+        }
+        if (match_Empty(context, token))
+        {
+                build(context, token);
+            return 12;
         }
 
-        final String stateComment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
+        final String stateComment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1381,101 +1449,114 @@ class Parser<T> {
         return 12;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private int matchTokenAt_13(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Comment(context, token))
+        if (match_TableRow(context, token))
         {
                 build(context, token);
             return 13;
         }
         if (match_StepLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 15;
+            return 12;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 17;
+            return 14;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 18;
+            return 15;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Other(context, token))
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 13;
+        }
+        if (match_Empty(context, token))
         {
                 build(context, token);
             return 13;
         }
 
-        final String stateComment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1484,83 +1565,24 @@ class Parser<T> {
         return 13;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
     private int matchTokenAt_14(Token token, ParserContext context) {
-        if (match_EOF(context, token))
+        if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 14;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.Tags);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 15;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 14;
-        }
-        if (match_StepLine(context, token))
-        {
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 15;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 17;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 18;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
         }
         if (match_Empty(context, token))
         {
@@ -1568,9 +1590,9 @@ class Parser<T> {
             return 14;
         }
 
-        final String stateComment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#TagLine", "#ExamplesLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1579,113 +1601,115 @@ class Parser<T> {
         return 14;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
     private int matchTokenAt_15(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_TableRow(context, token))
+        if (match_Empty(context, token))
         {
-                startRule(context, RuleType.DataTable);
+                startRule(context, RuleType.Description);
                 build(context, token);
             return 16;
         }
-        if (match_DocStringSeparator(context, token))
+        if (match_Comment(context, token))
         {
-                startRule(context, RuleType.DocString);
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 47;
+            return 16;
         }
-        if (match_StepLine(context, token))
+        if (match_TableRow(context, token))
         {
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
+                startRule(context, RuleType.ExamplesTable);
                 build(context, token);
-            return 15;
+            return 17;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 17;
+            return 14;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 18;
+            return 15;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Comment(context, token))
+        if (match_Other(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 15;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 15;
+            return 16;
         }
 
-        final String stateComment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
+        final String stateComment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1694,114 +1718,120 @@ class Parser<T> {
         return 15;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_16(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
-        }
-        if (match_TableRow(context, token))
-        {
-                build(context, token);
-            return 16;
-        }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 15;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 17;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 18;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 16;
+            return 34;
         }
         if (match_Empty(context, token))
         {
                 build(context, token);
             return 16;
         }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 16;
+        }
+        if (match_TableRow(context, token))
+        {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.ExamplesTable);
+                build(context, token);
+            return 17;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 14;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 9;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 15;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 10;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
+        }
+        if (match_Other(context, token))
+        {
+                build(context, token);
+            return 16;
+        }
 
-        final String stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        final String stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1810,19 +1840,98 @@ class Parser<T> {
         return 16;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
     private int matchTokenAt_17(Token token, ParserContext context) {
-        if (match_TagLine(context, token))
+        if (match_EOF(context, token))
+        {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Feature);
+                build(context, token);
+            return 34;
+        }
+        if (match_TableRow(context, token))
         {
                 build(context, token);
             return 17;
         }
-        if (match_ExamplesLine(context, token))
+        if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Tags);
-                startRule(context, RuleType.Examples);
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 14;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 9;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
                 build(context, token);
             return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 15;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 10;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
         }
         if (match_Comment(context, token))
         {
@@ -1835,9 +1944,9 @@ class Parser<T> {
             return 17;
         }
 
-        final String stateComment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
+        final String stateComment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
         token.detach();
-        List<String> expectedTokens = asList("#TagLine", "#ExamplesLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1846,113 +1955,33 @@ class Parser<T> {
         return 17;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
     private int matchTokenAt_18(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_Empty(context, token))
+        if (match_TagLine(context, token))
         {
                 build(context, token);
             return 18;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Tags);
+                build(context, token);
+            return 19;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 18;
         }
-        if (match_TableRow(context, token))
+        if (match_Empty(context, token))
         {
-                startRule(context, RuleType.ExamplesTable);
-                build(context, token);
-            return 21;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 17;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
                 build(context, token);
             return 18;
         }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Other(context, token))
-        {
-                startRule(context, RuleType.Description);
-                build(context, token);
-            return 19;
-        }
 
-        final String stateComment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
+        final String stateComment = "State: 18 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#TagLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1961,115 +1990,83 @@ class Parser<T> {
         return 18;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
     private int matchTokenAt_19(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
+        }
+        if (match_Empty(context, token))
+        {
+                startRule(context, RuleType.Description);
+                build(context, token);
+            return 20;
         }
         if (match_Comment(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 19;
+            return 20;
         }
-        if (match_TableRow(context, token))
+        if (match_BackgroundLine(context, token))
         {
-                endRule(context, RuleType.Description);
-                startRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Background);
                 build(context, token);
             return 21;
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 17;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
                 build(context, token);
             return 18;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 19;
+            return 20;
         }
 
-        final String stateComment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 19 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2078,107 +2075,86 @@ class Parser<T> {
         return 19;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_20(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 20;
-        }
-        if (match_TableRow(context, token))
-        {
-                startRule(context, RuleType.ExamplesTable);
-                build(context, token);
-            return 21;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 17;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 18;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
+            return 34;
         }
         if (match_Empty(context, token))
         {
                 build(context, token);
             return 20;
         }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 20;
+        }
+        if (match_BackgroundLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Background);
+                build(context, token);
+            return 21;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 25;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 26;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
+        }
+        if (match_Other(context, token))
+        {
+                build(context, token);
+            return 20;
+        }
 
-        final String stateComment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2187,113 +2163,82 @@ class Parser<T> {
         return 20;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
     private int matchTokenAt_21(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_TableRow(context, token))
+        if (match_Empty(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 21;
+            return 22;
         }
-        if (match_TagLine(context, token))
+        if (match_Comment(context, token))
         {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 17;
-            }
+            return 22;
+        }
+        if (match_StepLine(context, token))
+        {
+                startRule(context, RuleType.Step);
+                build(context, token);
+            return 23;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 11;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
                 build(context, token);
             return 18;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Comment(context, token))
+        if (match_Other(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 21;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 21;
+            return 22;
         }
 
-        final String stateComment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
+        final String stateComment = "State: 21 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2302,33 +2247,85 @@ class Parser<T> {
         return 21;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_22(Token token, ParserContext context) {
-        if (match_TagLine(context, token))
+        if (match_EOF(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                endRule(context, RuleType.Feature);
                 build(context, token);
-            return 22;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Tags);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 22;
+            return 34;
         }
         if (match_Empty(context, token))
         {
                 build(context, token);
             return 22;
         }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 22;
+        }
+        if (match_StepLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.Step);
+                build(context, token);
+            return 23;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 25;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 26;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
+        }
+        if (match_Other(context, token))
+        {
+                build(context, token);
+            return 22;
+        }
 
-        final String stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
+        final String stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#TagLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2337,81 +2334,92 @@ class Parser<T> {
         return 22;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
     private int matchTokenAt_23(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Empty(context, token))
+        if (match_TableRow(context, token))
         {
+                startRule(context, RuleType.DataTable);
+                build(context, token);
+            return 24;
+        }
+        if (match_DocStringSeparator(context, token))
+        {
+                startRule(context, RuleType.DocString);
+                build(context, token);
+            return 37;
+        }
+        if (match_StepLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.Step);
                 build(context, token);
             return 23;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 25;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 26;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 23;
         }
-        if (match_BackgroundLine(context, token))
+        if (match_Empty(context, token))
         {
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Background);
-                build(context, token);
-            return 26;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
                 build(context, token);
             return 23;
         }
-        if (match_Other(context, token))
-        {
-                startRule(context, RuleType.Description);
-                build(context, token);
-            return 24;
-        }
 
-        final String stateComment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
+        final String stateComment = "State: 23 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2420,81 +2428,91 @@ class Parser<T> {
         return 23;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private int matchTokenAt_24(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.RuleHeader);
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
+        }
+        if (match_TableRow(context, token))
+        {
+                build(context, token);
+            return 24;
+        }
+        if (match_StepLine(context, token))
+        {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.Step);
+                build(context, token);
+            return 23;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 25;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 26;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 24;
         }
-        if (match_BackgroundLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Background);
-                build(context, token);
-            return 26;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Other(context, token))
+        if (match_Empty(context, token))
         {
                 build(context, token);
             return 24;
         }
 
-        final String stateComment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 24 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2503,65 +2521,24 @@ class Parser<T> {
         return 24;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
     private int matchTokenAt_25(Token token, ParserContext context) {
-        if (match_EOF(context, token))
+        if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 25;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.Tags);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 26;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 25;
-        }
-        if (match_BackgroundLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Background);
-                build(context, token);
-            return 26;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.RuleHeader);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
         }
         if (match_Empty(context, token))
         {
@@ -2569,9 +2546,9 @@ class Parser<T> {
             return 25;
         }
 
-        final String stateComment = "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 25 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#TagLine", "#ScenarioLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2580,69 +2557,93 @@ class Parser<T> {
         return 25;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
     private int matchTokenAt_26(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_Empty(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 26;
+            return 27;
         }
         if (match_Comment(context, token))
         {
+                startRule(context, RuleType.Description);
                 build(context, token);
-            return 26;
+            return 27;
         }
         if (match_StepLine(context, token))
         {
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 29;
+            return 28;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 30;
+            }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
@@ -2651,9 +2652,9 @@ class Parser<T> {
             return 27;
         }
 
-        final String stateComment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
+        final String stateComment = "State: 26 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2662,20 +2663,25 @@ class Parser<T> {
         return 26;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_27(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
+        }
+        if (match_Empty(context, token))
+        {
+                build(context, token);
+            return 27;
         }
         if (match_Comment(context, token))
         {
-                endRule(context, RuleType.Description);
                 build(context, token);
             return 27;
         }
@@ -2684,49 +2690,72 @@ class Parser<T> {
                 endRule(context, RuleType.Description);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 29;
+            return 28;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 30;
+            }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
                 endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
                 endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
                 endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
                 endRule(context, RuleType.Description);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
@@ -2734,9 +2763,9 @@ class Parser<T> {
             return 27;
         }
 
-        final String stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2745,64 +2774,106 @@ class Parser<T> {
         return 27;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
     private int matchTokenAt_28(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Comment(context, token))
+        if (match_TableRow(context, token))
         {
+                startRule(context, RuleType.DataTable);
                 build(context, token);
-            return 28;
+            return 29;
+        }
+        if (match_DocStringSeparator(context, token))
+        {
+                startRule(context, RuleType.DocString);
+                build(context, token);
+            return 35;
         }
         if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 29;
+            return 28;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 30;
+            }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
+        }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 28;
         }
         if (match_Empty(context, token))
         {
@@ -2810,9 +2881,9 @@ class Parser<T> {
             return 28;
         }
 
-        final String stateComment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 28 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2821,77 +2892,102 @@ class Parser<T> {
         return 28;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private int matchTokenAt_29(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
+                endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_TableRow(context, token))
         {
-                startRule(context, RuleType.DataTable);
                 build(context, token);
-            return 30;
-        }
-        if (match_DocStringSeparator(context, token))
-        {
-                startRule(context, RuleType.DocString);
-                build(context, token);
-            return 45;
+            return 29;
         }
         if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 29;
+            return 28;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 30;
+            }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
+                endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
+                build(context, token);
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
+                endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Comment(context, token))
         {
@@ -2904,9 +3000,9 @@ class Parser<T> {
             return 29;
         }
 
-        final String stateComment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
+        final String stateComment = "State: 29 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2915,76 +3011,19 @@ class Parser<T> {
         return 29;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
     private int matchTokenAt_30(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_TableRow(context, token))
+        if (match_TagLine(context, token))
         {
                 build(context, token);
             return 30;
         }
-        if (match_StepLine(context, token))
+        if (match_ExamplesLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 29;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
+                endRule(context, RuleType.Tags);
+                startRule(context, RuleType.Examples);
                 build(context, token);
             return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.DataTable);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
         }
         if (match_Comment(context, token))
         {
@@ -2997,9 +3036,9 @@ class Parser<T> {
             return 30;
         }
 
-        final String stateComment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        final String stateComment = "State: 30 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#TagLine", "#ExamplesLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3008,34 +3047,118 @@ class Parser<T> {
         return 30;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
     private int matchTokenAt_31(Token token, ParserContext context) {
-        if (match_TagLine(context, token))
+        if (match_EOF(context, token))
         {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Rule);
+                endRule(context, RuleType.Feature);
                 build(context, token);
-            return 31;
+            return 34;
         }
-        if (match_ScenarioLine(context, token))
+        if (match_Empty(context, token))
         {
-                endRule(context, RuleType.Tags);
-                startRule(context, RuleType.Scenario);
+                startRule(context, RuleType.Description);
                 build(context, token);
             return 32;
         }
         if (match_Comment(context, token))
         {
+                startRule(context, RuleType.Description);
+                build(context, token);
+            return 32;
+        }
+        if (match_TableRow(context, token))
+        {
+                startRule(context, RuleType.ExamplesTable);
+                build(context, token);
+            return 33;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_1(context, token))
+            {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 30;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 25;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ExamplesLine(context, token))
+        {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.ExamplesDefinition);
+                startRule(context, RuleType.Examples);
                 build(context, token);
             return 31;
         }
-        if (match_Empty(context, token))
+        if (match_ScenarioLine(context, token))
         {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 31;
+            return 26;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.Scenario);
+                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
+        }
+        if (match_Other(context, token))
+        {
+                startRule(context, RuleType.Description);
+                build(context, token);
+            return 32;
         }
 
-        final String stateComment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
+        final String stateComment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
         token.detach();
-        List<String> expectedTokens = asList("#TagLine", "#ScenarioLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3044,16 +3167,19 @@ class Parser<T> {
         return 31;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
     private int matchTokenAt_32(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_Empty(context, token))
         {
@@ -3065,36 +3191,46 @@ class Parser<T> {
                 build(context, token);
             return 32;
         }
-        if (match_StepLine(context, token))
+        if (match_TableRow(context, token))
         {
-                startRule(context, RuleType.Step);
+                endRule(context, RuleType.Description);
+                startRule(context, RuleType.ExamplesTable);
                 build(context, token);
-            return 35;
+            return 33;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 37;
+            return 30;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
@@ -3102,44 +3238,52 @@ class Parser<T> {
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 38;
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
+                endRule(context, RuleType.Description);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Other(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 33;
+            return 32;
         }
 
-        final String stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
+        final String stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3148,57 +3292,58 @@ class Parser<T> {
         return 32;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
     private int matchTokenAt_33(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Comment(context, token))
+        if (match_TableRow(context, token))
         {
                 build(context, token);
             return 33;
-        }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 35;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 37;
+            return 30;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
@@ -3206,46 +3351,57 @@ class Parser<T> {
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 38;
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Description);
+                endRule(context, RuleType.ExamplesTable);
+                endRule(context, RuleType.Examples);
+                endRule(context, RuleType.ExamplesDefinition);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
-        if (match_Other(context, token))
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 33;
+        }
+        if (match_Empty(context, token))
         {
                 build(context, token);
             return 33;
         }
 
-        final String stateComment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3254,214 +3410,22 @@ class Parser<T> {
         return 33;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
-    private int matchTokenAt_34(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 34;
-        }
-        if (match_StepLine(context, token))
-        {
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 35;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 37;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 38;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 34;
-        }
-
-        final String stateComment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0";
-        token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 34;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private int matchTokenAt_35(Token token, ParserContext context) {
-        if (match_EOF(context, token))
+        if (match_DocStringSeparator(context, token))
         {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_TableRow(context, token))
-        {
-                startRule(context, RuleType.DataTable);
                 build(context, token);
             return 36;
         }
-        if (match_DocStringSeparator(context, token))
-        {
-                startRule(context, RuleType.DocString);
-                build(context, token);
-            return 43;
-        }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 35;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 37;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 38;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 35;
-        }
-        if (match_Empty(context, token))
+        if (match_Other(context, token))
         {
                 build(context, token);
             return 35;
         }
 
-        final String stateComment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
+        final String stateComment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3470,61 +3434,56 @@ class Parser<T> {
         return 35;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
     private int matchTokenAt_36(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
-        }
-        if (match_TableRow(context, token))
-        {
-                build(context, token);
-            return 36;
+            return 34;
         }
         if (match_StepLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 35;
+            return 28;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 37;
+            return 30;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 25;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
@@ -3533,31 +3492,31 @@ class Parser<T> {
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 38;
+            return 31;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 26;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.DataTable);
+                endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
@@ -3565,7 +3524,7 @@ class Parser<T> {
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Comment(context, token))
         {
@@ -3578,9 +3537,9 @@ class Parser<T> {
             return 36;
         }
 
-        final String stateComment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        final String stateComment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3589,34 +3548,22 @@ class Parser<T> {
         return 36;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private int matchTokenAt_37(Token token, ParserContext context) {
-        if (match_TagLine(context, token))
+        if (match_DocStringSeparator(context, token))
         {
-                build(context, token);
-            return 37;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Tags);
-                startRule(context, RuleType.Examples);
                 build(context, token);
             return 38;
         }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 37;
-        }
-        if (match_Empty(context, token))
+        if (match_Other(context, token))
         {
                 build(context, token);
             return 37;
         }
 
-        final String stateComment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
+        final String stateComment = "State: 37 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#TagLine", "#ExamplesLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3625,116 +3572,86 @@ class Parser<T> {
         return 37;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
     private int matchTokenAt_38(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
                 endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Empty(context, token))
+        if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.Step);
                 build(context, token);
-            return 38;
+            return 23;
+        }
+        if (match_TagLine(context, token))
+        {
+            if (lookahead_0(context, token))
+            {
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 25;
+            }
+        }
+        if (match_TagLine(context, token))
+        {
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                startRule(context, RuleType.Tags);
+                build(context, token);
+            return 18;
+        }
+        if (match_ScenarioLine(context, token))
+        {
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                startRule(context, RuleType.ScenarioDefinition);
+                startRule(context, RuleType.Scenario);
+                build(context, token);
+            return 26;
+        }
+        if (match_RuleLine(context, token))
+        {
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                endRule(context, RuleType.Background);
+                endRule(context, RuleType.Rule);
+                startRule(context, RuleType.Rule);
+                startRule(context, RuleType.RuleHeader);
+                build(context, token);
+            return 19;
         }
         if (match_Comment(context, token))
         {
                 build(context, token);
             return 38;
         }
-        if (match_TableRow(context, token))
+        if (match_Empty(context, token))
         {
-                startRule(context, RuleType.ExamplesTable);
-                build(context, token);
-            return 41;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 37;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
                 build(context, token);
             return 38;
         }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Other(context, token))
-        {
-                startRule(context, RuleType.Description);
-                build(context, token);
-            return 39;
-        }
 
-        final String stateComment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
+        final String stateComment = "State: 38 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3743,108 +3660,12 @@ class Parser<T> {
         return 38;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private int matchTokenAt_39(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_Comment(context, token))
+        if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
-            return 39;
-        }
-        if (match_TableRow(context, token))
-        {
-                endRule(context, RuleType.Description);
-                startRule(context, RuleType.ExamplesTable);
-                build(context, token);
-            return 41;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 37;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 38;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.Description);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
+            return 40;
         }
         if (match_Other(context, token))
         {
@@ -3852,9 +3673,9 @@ class Parser<T> {
             return 39;
         }
 
-        final String stateComment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0";
+        final String stateComment = "State: 39 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3863,100 +3684,99 @@ class Parser<T> {
         return 39;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
     private int matchTokenAt_40(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
-        if (match_Comment(context, token))
+        if (match_StepLine(context, token))
         {
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
+                startRule(context, RuleType.Step);
                 build(context, token);
-            return 40;
-        }
-        if (match_TableRow(context, token))
-        {
-                startRule(context, RuleType.ExamplesTable);
-                build(context, token);
-            return 41;
+            return 12;
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_1(context, token))
             {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 37;
+            return 14;
             }
         }
         if (match_TagLine(context, token))
         {
             if (lookahead_0(context, token))
             {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 22;
+            return 18;
         }
         if (match_ExamplesLine(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Examples);
                 build(context, token);
-            return 38;
+            return 15;
         }
         if (match_ScenarioLine(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 32;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
+                endRule(context, RuleType.DocString);
+                endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
+        }
+        if (match_Comment(context, token))
+        {
+                build(context, token);
+            return 40;
         }
         if (match_Empty(context, token))
         {
@@ -3964,9 +3784,9 @@ class Parser<T> {
             return 40;
         }
 
-        final String stateComment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0";
+        final String stateComment = "State: 40 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty");
+        List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3975,116 +3795,22 @@ class Parser<T> {
         return 40;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private int matchTokenAt_41(Token token, ParserContext context) {
-        if (match_EOF(context, token))
+        if (match_DocStringSeparator(context, token))
         {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
                 build(context, token);
             return 42;
         }
-        if (match_TableRow(context, token))
-        {
-                build(context, token);
-            return 41;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 37;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 38;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.ExamplesTable);
-                endRule(context, RuleType.Examples);
-                endRule(context, RuleType.ExamplesDefinition);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 41;
-        }
-        if (match_Empty(context, token))
+        if (match_Other(context, token))
         {
                 build(context, token);
             return 41;
         }
 
-        final String stateComment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
+        final String stateComment = "State: 41 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
+        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -4093,179 +3819,16 @@ class Parser<T> {
         return 41;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_43(Token token, ParserContext context) {
-        if (match_DocStringSeparator(context, token))
-        {
-                build(context, token);
-            return 44;
-        }
-        if (match_Other(context, token))
-        {
-                build(context, token);
-            return 43;
-        }
-
-        final String stateComment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 43;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_44(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 35;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 37;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 31;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
-                build(context, token);
-            return 38;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 44;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 44;
-        }
-
-        final String stateComment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 44;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_45(Token token, ParserContext context) {
-        if (match_DocStringSeparator(context, token))
-        {
-                build(context, token);
-            return 46;
-        }
-        if (match_Other(context, token))
-        {
-                build(context, token);
-            return 45;
-        }
-
-        final String stateComment = "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 45;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_46(Token token, ParserContext context) {
+    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+    private int matchTokenAt_42(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
-                endRule(context, RuleType.Rule);
                 endRule(context, RuleType.Feature);
                 build(context, token);
-            return 42;
+            return 34;
         }
         if (match_StepLine(context, token))
         {
@@ -4273,7 +3836,7 @@ class Parser<T> {
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.Step);
                 build(context, token);
-            return 29;
+            return 7;
         }
         if (match_TagLine(context, token))
         {
@@ -4285,7 +3848,7 @@ class Parser<T> {
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Tags);
                 build(context, token);
-            return 31;
+            return 9;
             }
         }
         if (match_TagLine(context, token))
@@ -4293,144 +3856,9 @@ class Parser<T> {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
-                endRule(context, RuleType.Rule);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 32;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                endRule(context, RuleType.Rule);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 46;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 46;
-        }
-
-        final String stateComment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 46;
-    }
-
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_47(Token token, ParserContext context) {
-        if (match_DocStringSeparator(context, token))
-        {
-                build(context, token);
-            return 48;
-        }
-        if (match_Other(context, token))
-        {
-                build(context, token);
-            return 47;
-        }
-
-        final String stateComment = "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 47;
-    }
-
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_48(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                endRule(context, RuleType.Feature);
-                build(context, token);
-            return 42;
-        }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 15;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_1(context, token))
-            {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 17;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ExamplesLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.ExamplesDefinition);
-                startRule(context, RuleType.Examples);
                 build(context, token);
             return 18;
         }
@@ -4438,145 +3866,34 @@ class Parser<T> {
         {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
                 startRule(context, RuleType.Scenario);
                 build(context, token);
-            return 12;
+            return 10;
         }
         if (match_RuleLine(context, token))
         {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
-                endRule(context, RuleType.Scenario);
-                endRule(context, RuleType.ScenarioDefinition);
+                endRule(context, RuleType.Background);
                 startRule(context, RuleType.Rule);
                 startRule(context, RuleType.RuleHeader);
                 build(context, token);
-            return 23;
+            return 19;
         }
         if (match_Comment(context, token))
         {
-                build(context, token);
-            return 48;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 48;
-        }
-
-        final String stateComment = "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 48;
-    }
-
-    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_49(Token token, ParserContext context) {
-        if (match_DocStringSeparator(context, token))
-        {
-                build(context, token);
-            return 50;
-        }
-        if (match_Other(context, token))
-        {
-                build(context, token);
-            return 49;
-        }
-
-        final String stateComment = "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        token.detach();
-        List<String> expectedTokens = asList("#DocStringSeparator", "#Other");
-        ParserException error = token.isEOF()
-                ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
-                : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
-
-        addError(context, error);
-        return 49;
-    }
-
-    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_50(Token token, ParserContext context) {
-        if (match_EOF(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                endRule(context, RuleType.Feature);
                 build(context, token);
             return 42;
         }
-        if (match_StepLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                startRule(context, RuleType.Step);
-                build(context, token);
-            return 9;
-        }
-        if (match_TagLine(context, token))
-        {
-            if (lookahead_0(context, token))
-            {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 11;
-            }
-        }
-        if (match_TagLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                startRule(context, RuleType.Tags);
-                build(context, token);
-            return 22;
-        }
-        if (match_ScenarioLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.ScenarioDefinition);
-                startRule(context, RuleType.Scenario);
-                build(context, token);
-            return 12;
-        }
-        if (match_RuleLine(context, token))
-        {
-                endRule(context, RuleType.DocString);
-                endRule(context, RuleType.Step);
-                endRule(context, RuleType.Background);
-                startRule(context, RuleType.Rule);
-                startRule(context, RuleType.RuleHeader);
-                build(context, token);
-            return 23;
-        }
-        if (match_Comment(context, token))
-        {
-                build(context, token);
-            return 50;
-        }
         if (match_Empty(context, token))
         {
                 build(context, token);
-            return 50;
+            return 42;
         }
 
-        final String stateComment = "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
+        final String stateComment = "State: 42 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         token.detach();
         List<String> expectedTokens = asList("#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty");
         ParserException error = token.isEOF()
@@ -4584,7 +3901,7 @@ class Parser<T> {
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
 
         addError(context, error);
-        return 50;
+        return 42;
     }
 
 

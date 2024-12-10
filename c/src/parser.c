@@ -293,7 +293,7 @@ static bool lookahead_1(ParserContext* context) {
 static int match_token_at_0(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         build(context, token);
-        return 42;
+        return 50;
     }
     if (match_Language(context, token)) {
         start_rule(context, Rule_Feature);
@@ -393,7 +393,7 @@ static int match_token_at_3(Token* token, ParserContext* context) {
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
+        return 50;
     }
     if (match_Empty(context, token)) {
         build(context, token);
@@ -401,13 +401,13 @@ static int match_token_at_3(Token* token, ParserContext* context) {
     }
     if (match_Comment(context, token)) {
         build(context, token);
-        return 5;
+        return 3;
     }
     if (match_BackgroundLine(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 6;
+        return 7;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_0(context)) {
@@ -415,7 +415,7 @@ static int match_token_at_3(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
@@ -424,21 +424,21 @@ static int match_token_at_3(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ScenarioLine(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
+        return 27;
     }
     if (match_Other(context, token)) {
         start_rule(context, Rule_Description);
@@ -461,10 +461,13 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         end_rule(context, Rule_FeatureHeader);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 5;
     }
     if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
         build(context, token);
         return 5;
     }
@@ -473,7 +476,7 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 6;
+        return 7;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_0(context)) {
@@ -482,7 +485,7 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
@@ -492,7 +495,7 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ScenarioLine(context, token)) {
         end_rule(context, Rule_Description);
@@ -500,7 +503,7 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
         end_rule(context, Rule_Description);
@@ -508,7 +511,7 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
+        return 27;
     }
     if (match_Other(context, token)) {
         build(context, token);
@@ -516,1484 +519,1253 @@ static int match_token_at_4(Token* token, ParserContext* context) {
     }
 
     /* "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 4;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_5(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_FeatureHeader);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 5;
-    }
-    if (match_BackgroundLine(context, token)) {
-        end_rule(context, Rule_FeatureHeader);
-        start_rule(context, Rule_Background);
-        build(context, token);
-        return 6;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_FeatureHeader);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_FeatureHeader);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_FeatureHeader);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_FeatureHeader);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 5;
-    }
-
-    /* "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 5;}
-/* GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0 */
-static int match_token_at_6(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 6;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 8;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
-        build(context, token);
-        return 7;
-    }
-
-    /* "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 6;}
-/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_7(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
-        build(context, token);
-        return 8;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 7;
-    }
-
-    /* "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 7;}
-/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_8(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 8;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 8;
-    }
-
-    /* "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 8;}
-/* GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0 */
-static int match_token_at_9(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_DataTable);
-        build(context, token);
-        return 10;
-    }
-    if (match_DocStringSeparator(context, token)) {
-        start_rule(context, Rule_DocString);
-        build(context, token);
-        return 49;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 9;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 9;
-    }
-
-    /* "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 9;}
-/* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_10(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        build(context, token);
-        return 10;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 9;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 10;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 10;
-    }
-
-    /* "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 10;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_11(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
-        build(context, token);
-        return 11;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Tags);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 11;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 11;
-    }
-
-    /* "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
-    const wchar_t* const expected_tokens = L"#TagLine, #ScenarioLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 11;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0 */
-static int match_token_at_12(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 12;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 14;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
-        build(context, token);
-        return 13;
-    }
-
-    /* "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 12;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_13(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
-        build(context, token);
-        return 14;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 13;
-    }
-
-    /* "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 13;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_14(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 14;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 14;
-    }
-
-    /* "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 14;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0 */
-static int match_token_at_15(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_DataTable);
-        build(context, token);
-        return 16;
-    }
-    if (match_DocStringSeparator(context, token)) {
-        start_rule(context, Rule_DocString);
-        build(context, token);
-        return 47;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 15;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 15;
-    }
-
-    /* "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 15;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_16(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        build(context, token);
-        return 16;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 15;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 16;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 16;
-    }
-
-    /* "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 16;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_17(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
-        build(context, token);
-        return 17;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Tags);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 17;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 17;
-    }
-
-    /* "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
-    const wchar_t* const expected_tokens = L"#TagLine, #ExamplesLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 17;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0 */
-static int match_token_at_18(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 18;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 20;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_ExamplesTable);
-        build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
-        build(context, token);
-        return 19;
-    }
-
-    /* "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 18;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_19(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
-        build(context, token);
-        return 20;
-    }
-    if (match_TableRow(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_ExamplesTable);
-        build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 19;
-    }
-
-    /* "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 19;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_20(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 20;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_ExamplesTable);
-        build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 20;
-    }
-
-    /* "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 20;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0 */
-static int match_token_at_21(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        build(context, token);
-        return 21;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 17;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 11;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 18;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 12;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 21;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 21;
-    }
-
-    /* "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 21;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0 */
-static int match_token_at_22(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
-        build(context, token);
-        return 22;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Tags);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 22;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 22;
-    }
-
-    /* "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0" */
-    const wchar_t* const expected_tokens = L"#TagLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 22;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0 */
-static int match_token_at_23(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 25;
-    }
-    if (match_BackgroundLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Background);
-        build(context, token);
-        return 26;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
-        build(context, token);
-        return 24;
-    }
-
-    /* "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0" */
     const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 23;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_24(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
+    return 4;}
+/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_5(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
         build(context, token);
-        return 42;
+        return 5;
     }
     if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
         build(context, token);
-        return 25;
+        return 5;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 6;
+    }
+
+    /* "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 5;}
+/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_6(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_FeatureHeader);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 5;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 5;
     }
     if (match_BackgroundLine(context, token)) {
         end_rule(context, Rule_Description);
-        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Background);
         build(context, token);
-        return 26;
+        return 7;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_0(context)) {
         end_rule(context, Rule_Description);
-        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
         end_rule(context, Rule_Description);
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ScenarioLine(context, token)) {
         end_rule(context, Rule_Description);
-        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
         end_rule(context, Rule_Description);
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_FeatureHeader);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 6;
+    }
+
+    /* "State: 6 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 6;}
+/* GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0 */
+static int match_token_at_7(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 7;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 7;
+    }
+    if (match_StepLine(context, token)) {
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 11;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 8;
+    }
+
+    /* "State: 7 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 7;}
+/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_8(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 9;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 9;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 11;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 8;
+    }
+
+    /* "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 8;}
+/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_9(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 9;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 9;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 10;
+    }
+
+    /* "State: 9 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 9;}
+/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_10(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 9;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 9;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 11;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 10;
+    }
+
+    /* "State: 10 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 10;}
+/* GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0 */
+static int match_token_at_11(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        start_rule(context, Rule_DataTable);
+        build(context, token);
+        return 12;
+    }
+    if (match_DocStringSeparator(context, token)) {
+        start_rule(context, Rule_DocString);
+        build(context, token);
+        return 57;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 11;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 11;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 11;
+    }
+
+    /* "State: 11 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 11;}
+/* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
+static int match_token_at_12(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        build(context, token);
+        return 12;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 11;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 12;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 12;
+    }
+
+    /* "State: 12 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 12;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0 */
+static int match_token_at_13(Token* token, ParserContext* context) {
+    if (match_TagLine(context, token)) {
+        build(context, token);
+        return 13;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Tags);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 13;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 13;
+    }
+
+    /* "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
+    const wchar_t* const expected_tokens = L"#TagLine, #ScenarioLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 13;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0 */
+static int match_token_at_14(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 14;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 14;
+    }
+    if (match_StepLine(context, token)) {
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 18;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 15;
+    }
+
+    /* "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 14;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_15(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 16;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 16;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 18;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 15;
+    }
+
+    /* "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 15;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_16(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 16;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 16;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 17;
+    }
+
+    /* "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 16;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_17(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 16;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 16;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 18;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 17;
+    }
+
+    /* "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 17;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0 */
+static int match_token_at_18(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        start_rule(context, Rule_DataTable);
+        build(context, token);
+        return 19;
+    }
+    if (match_DocStringSeparator(context, token)) {
+        start_rule(context, Rule_DocString);
+        build(context, token);
+        return 55;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 18;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 18;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 18;
+    }
+
+    /* "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 18;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
+static int match_token_at_19(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        build(context, token);
+        return 19;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 18;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 19;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 19;
+    }
+
+    /* "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 19;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0 */
+static int match_token_at_20(Token* token, ParserContext* context) {
+    if (match_TagLine(context, token)) {
+        build(context, token);
+        return 20;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Tags);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 20;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 20;
+    }
+
+    /* "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
+    const wchar_t* const expected_tokens = L"#TagLine, #ExamplesLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 20;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0 */
+static int match_token_at_21(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 21;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 21;
+    }
+    if (match_TableRow(context, token)) {
+        start_rule(context, Rule_ExamplesTable);
+        build(context, token);
+        return 25;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 22;
+    }
+
+    /* "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 21;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_22(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 23;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 23;
+    }
+    if (match_TableRow(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesTable);
+        build(context, token);
+        return 25;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 20;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 13;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 21;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 14;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 22;
+    }
+
+    /* "State: 22 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 22;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_23(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 23;
+    }
+    if (match_Comment(context, token)) {
         build(context, token);
         return 23;
     }
@@ -2002,1005 +1774,54 @@ static int match_token_at_24(Token* token, ParserContext* context) {
         return 24;
     }
 
-    /* "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 23 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 24;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_25(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 25;
-    }
-    if (match_BackgroundLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Background);
-        build(context, token);
-        return 26;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_RuleHeader);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 25;
-    }
-
-    /* "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 25;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0 */
-static int match_token_at_26(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 26;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 28;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
-        build(context, token);
-        return 27;
-    }
-
-    /* "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 26;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_27(Token* token, ParserContext* context) {
+    return 23;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_24(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
-        build(context, token);
-        return 28;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 27;
-    }
-
-    /* "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 27;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_28(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 28;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 28;
-    }
-
-    /* "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 28;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0 */
-static int match_token_at_29(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_DataTable);
-        build(context, token);
-        return 30;
-    }
-    if (match_DocStringSeparator(context, token)) {
-        start_rule(context, Rule_DocString);
-        build(context, token);
-        return 45;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 29;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 29;
-    }
-
-    /* "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 29;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_30(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        build(context, token);
-        return 30;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 30;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 30;
-    }
-
-    /* "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 30;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_31(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
-        build(context, token);
-        return 31;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Tags);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 31;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 31;
-    }
-
-    /* "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
-    const wchar_t* const expected_tokens = L"#TagLine, #ScenarioLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 31;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0 */
-static int match_token_at_32(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 32;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 34;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
-        build(context, token);
-        return 33;
-    }
-
-    /* "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 32;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_33(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
-        build(context, token);
-        return 34;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Description);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 33;
-    }
-
-    /* "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 33;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_34(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 34;
-    }
-    if (match_StepLine(context, token)) {
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 34;
-    }
-
-    /* "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 34;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0 */
-static int match_token_at_35(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_DataTable);
-        build(context, token);
-        return 36;
-    }
-    if (match_DocStringSeparator(context, token)) {
-        start_rule(context, Rule_DocString);
-        build(context, token);
-        return 43;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 35;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 35;
-    }
-
-    /* "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 35;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
-static int match_token_at_36(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        build(context, token);
-        return 36;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 35;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_DataTable);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 36;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 36;
-    }
-
-    /* "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 36;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0 */
-static int match_token_at_37(Token* token, ParserContext* context) {
-    if (match_TagLine(context, token)) {
-        build(context, token);
-        return 37;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Tags);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 37;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 37;
-    }
-
-    /* "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
-    const wchar_t* const expected_tokens = L"#TagLine, #ExamplesLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 37;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0 */
-static int match_token_at_38(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
+        return 50;
     }
     if (match_Empty(context, token)) {
         build(context, token);
-        return 38;
+        return 23;
     }
     if (match_Comment(context, token)) {
         build(context, token);
-        return 40;
+        return 23;
     }
     if (match_TableRow(context, token)) {
+        end_rule(context, Rule_Description);
         start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 41;
+        return 25;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
+        return 20;
       }
     }
     if (match_TagLine(context, token)) {
       if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3008,30 +1829,32 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
+        return 21;
     }
     if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3039,71 +1862,62 @@ static int match_token_at_38(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
+        return 27;
     }
     if (match_Other(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 39;
+        return 24;
     }
 
-    /* "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
+    /* "State: 24 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
     const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 38;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0 */
-static int match_token_at_39(Token* token, ParserContext* context) {
+    return 24;}
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0 */
+static int match_token_at_25(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
-    }
-    if (match_Comment(context, token)) {
-        end_rule(context, Rule_Description);
-        build(context, token);
-        return 40;
+        return 50;
     }
     if (match_TableRow(context, token)) {
-        end_rule(context, Rule_Description);
-        start_rule(context, Rule_ExamplesTable);
         build(context, token);
-        return 41;
+        return 25;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_1(context)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 37;
+        return 20;
       }
     }
     if (match_TagLine(context, token)) {
       if (lookahead_0(context)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3111,33 +1925,32 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 31;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 38;
+        return 21;
     }
     if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
@@ -3145,254 +1958,1737 @@ static int match_token_at_39(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 32;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Description);
+        end_rule(context, Rule_ExamplesTable);
         end_rule(context, Rule_Examples);
         end_rule(context, Rule_ExamplesDefinition);
         end_rule(context, Rule_Scenario);
         end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 39;
-    }
-
-    /* "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 39;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0 */
-static int match_token_at_40(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
+        return 27;
     }
     if (match_Comment(context, token)) {
         build(context, token);
-        return 40;
-    }
-    if (match_TableRow(context, token)) {
-        start_rule(context, Rule_ExamplesTable);
-        build(context, token);
-        return 41;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
+        return 25;
     }
     if (match_Empty(context, token)) {
         build(context, token);
-        return 40;
+        return 25;
     }
 
-    /* "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 40;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0 */
-static int match_token_at_41(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_TableRow(context, token)) {
-        build(context, token);
-        return 41;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 37;
-      }
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ExamplesLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
-        build(context, token);
-        return 38;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_ExamplesTable);
-        end_rule(context, Rule_Examples);
-        end_rule(context, Rule_ExamplesDefinition);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 41;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 41;
-    }
-
-    /* "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
+    /* "State: 25 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
     const wchar_t* const expected_tokens = L"#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 41;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_43(Token* token, ParserContext* context) {
-    if (match_DocStringSeparator(context, token)) {
+    return 25;}
+/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0 */
+static int match_token_at_26(Token* token, ParserContext* context) {
+    if (match_TagLine(context, token)) {
         build(context, token);
-        return 44;
+        return 26;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Tags);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 26;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 26;
+    }
+
+    /* "State: 26 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0" */
+    const wchar_t* const expected_tokens = L"#TagLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 26;}
+/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0 */
+static int match_token_at_27(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 27;
+    }
+    if (match_BackgroundLine(context, token)) {
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Background);
+        build(context, token);
+        return 31;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
     }
     if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 28;
+    }
+
+    /* "State: 27 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 27;}
+/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_28(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 29;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 29;
+    }
+    if (match_BackgroundLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Background);
+        build(context, token);
+        return 31;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 28;
+    }
+
+    /* "State: 28 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 28;}
+/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_29(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 29;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 29;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 30;
+    }
+
+    /* "State: 29 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 29;}
+/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_30(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 29;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 29;
+    }
+    if (match_BackgroundLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Background);
+        build(context, token);
+        return 31;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_RuleHeader);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 30;
+    }
+
+    /* "State: 30 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 30;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0 */
+static int match_token_at_31(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 31;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 31;
+    }
+    if (match_StepLine(context, token)) {
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 35;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 32;
+    }
+
+    /* "State: 31 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 31;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_32(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 33;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 33;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 35;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 32;
+    }
+
+    /* "State: 32 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 32;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_33(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 33;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 33;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 34;
+    }
+
+    /* "State: 33 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 33;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_34(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 33;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 33;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 35;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 34;
+    }
+
+    /* "State: 34 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 34;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0 */
+static int match_token_at_35(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        start_rule(context, Rule_DataTable);
+        build(context, token);
+        return 36;
+    }
+    if (match_DocStringSeparator(context, token)) {
+        start_rule(context, Rule_DocString);
+        build(context, token);
+        return 53;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 35;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 35;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 35;
+    }
+
+    /* "State: 35 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 35;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
+static int match_token_at_36(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        build(context, token);
+        return 36;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 35;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 36;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 36;
+    }
+
+    /* "State: 36 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 36;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0 */
+static int match_token_at_37(Token* token, ParserContext* context) {
+    if (match_TagLine(context, token)) {
+        build(context, token);
+        return 37;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Tags);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 37;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 37;
+    }
+
+    /* "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0" */
+    const wchar_t* const expected_tokens = L"#TagLine, #ScenarioLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 37;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0 */
+static int match_token_at_38(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 38;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 38;
+    }
+    if (match_StepLine(context, token)) {
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 42;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 39;
+    }
+
+    /* "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 38;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_39(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 40;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 40;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 42;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 39;
+    }
+
+    /* "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 39;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_40(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 40;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 40;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 41;
+    }
+
+    /* "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 40;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_41(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 40;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 40;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 42;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 41;
+    }
+
+    /* "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 41;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0 */
+static int match_token_at_42(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        start_rule(context, Rule_DataTable);
+        build(context, token);
+        return 43;
+    }
+    if (match_DocStringSeparator(context, token)) {
+        start_rule(context, Rule_DocString);
+        build(context, token);
+        return 51;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 42;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 42;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 42;
+    }
+
+    /* "State: 42 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 42;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0 */
+static int match_token_at_43(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        build(context, token);
+        return 43;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
+        return 42;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_DataTable);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 43;
+    }
+    if (match_Empty(context, token)) {
         build(context, token);
         return 43;
     }
 
-    /* "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
-    const wchar_t* const expected_tokens = L"#DocStringSeparator, #Other";
+    /* "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 43;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0 */
 static int match_token_at_44(Token* token, ParserContext* context) {
+    if (match_TagLine(context, token)) {
+        build(context, token);
+        return 44;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Tags);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 44;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 44;
+    }
+
+    /* "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0" */
+    const wchar_t* const expected_tokens = L"#TagLine, #ExamplesLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 44;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0 */
+static int match_token_at_45(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 45;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 45;
+    }
+    if (match_TableRow(context, token)) {
+        start_rule(context, Rule_ExamplesTable);
+        build(context, token);
+        return 49;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        start_rule(context, Rule_Description);
+        build(context, token);
+        return 46;
+    }
+
+    /* "State: 45 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 45;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0 */
+static int match_token_at_46(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 47;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 47;
+    }
+    if (match_TableRow(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesTable);
+        build(context, token);
+        return 49;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 46;
+    }
+
+    /* "State: 46 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 46;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0 */
+static int match_token_at_47(Token* token, ParserContext* context) {
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 47;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 47;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 48;
+    }
+
+    /* "State: 47 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:0>__alt2:0>#Empty:0" */
+    const wchar_t* const expected_tokens = L"#Empty, #Comment, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 47;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0 */
+static int match_token_at_48(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 47;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 47;
+    }
+    if (match_TableRow(context, token)) {
+        end_rule(context, Rule_Description);
+        start_rule(context, Rule_ExamplesTable);
+        build(context, token);
+        return 49;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_Description);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 48;
+    }
+
+    /* "State: 48 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:2>__grp3:2>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 48;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0 */
+static int match_token_at_49(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
+    }
+    if (match_TableRow(context, token)) {
+        build(context, token);
+        return 49;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_ExamplesTable);
+        end_rule(context, Rule_Examples);
+        end_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 49;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 49;
+    }
+
+    /* "State: 49 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 49;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
+static int match_token_at_51(Token* token, ParserContext* context) {
+    if (match_DocStringSeparator(context, token)) {
+        build(context, token);
+        return 52;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 51;
+    }
+
+    /* "State: 51 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+    const wchar_t* const expected_tokens = L"#DocStringSeparator, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 51;}
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
+static int match_token_at_52(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
@@ -3401,7 +3697,124 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         end_rule(context, Rule_Rule);
         end_rule(context, Rule_Feature);
         build(context, token);
+        return 50;
+    }
+    if (match_StepLine(context, token)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_Step);
+        build(context, token);
         return 42;
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_1(context)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 44;
+      }
+    }
+    if (match_TagLine(context, token)) {
+      if (lookahead_0(context)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 37;
+      }
+    }
+    if (match_TagLine(context, token)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        start_rule(context, Rule_Tags);
+        build(context, token);
+        return 26;
+    }
+    if (match_ExamplesLine(context, token)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        start_rule(context, Rule_ExamplesDefinition);
+        start_rule(context, Rule_Examples);
+        build(context, token);
+        return 45;
+    }
+    if (match_ScenarioLine(context, token)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
+        build(context, token);
+        return 38;
+    }
+    if (match_RuleLine(context, token)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Scenario);
+        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Rule);
+        start_rule(context, Rule_Rule);
+        start_rule(context, Rule_RuleHeader);
+        build(context, token);
+        return 27;
+    }
+    if (match_Comment(context, token)) {
+        build(context, token);
+        return 52;
+    }
+    if (match_Empty(context, token)) {
+        build(context, token);
+        return 52;
+    }
+
+    /* "State: 52 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 52;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
+static int match_token_at_53(Token* token, ParserContext* context) {
+    if (match_DocStringSeparator(context, token)) {
+        build(context, token);
+        return 54;
+    }
+    if (match_Other(context, token)) {
+        build(context, token);
+        return 53;
+    }
+
+    /* "State: 53 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+    const wchar_t* const expected_tokens = L"#DocStringSeparator, #Other";
+    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
+    Token_delete(token);
+    if (context->stop_at_first_error) {
+        ErrorList_jump_to_global_rescue_env(context->errors);
+    }
+    return 53;}
+/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
+static int match_token_at_54(Token* token, ParserContext* context) {
+    if (match_EOF(context, token)) {
+        end_rule(context, Rule_DocString);
+        end_rule(context, Rule_Step);
+        end_rule(context, Rule_Background);
+        end_rule(context, Rule_Rule);
+        end_rule(context, Rule_Feature);
+        build(context, token);
+        return 50;
     }
     if (match_StepLine(context, token)) {
         end_rule(context, Rule_DocString);
@@ -3411,153 +3824,36 @@ static int match_token_at_44(Token* token, ParserContext* context) {
         return 35;
     }
     if (match_TagLine(context, token)) {
-      if (lookahead_1(context)) {
+      if (lookahead_0(context)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
         return 37;
       }
     }
     if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
+        end_rule(context, Rule_Background);
         end_rule(context, Rule_Rule);
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
-    if (match_ExamplesLine(context, token)) {
+    if (match_ScenarioLine(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
-        start_rule(context, Rule_ExamplesDefinition);
-        start_rule(context, Rule_Examples);
+        end_rule(context, Rule_Background);
+        start_rule(context, Rule_ScenarioDefinition);
+        start_rule(context, Rule_Scenario);
         build(context, token);
         return 38;
     }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
-    if (match_RuleLine(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Scenario);
-        end_rule(context, Rule_ScenarioDefinition);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        build(context, token);
-        return 23;
-    }
-    if (match_Comment(context, token)) {
-        build(context, token);
-        return 44;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 44;
-    }
-
-    /* "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 44;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_45(Token* token, ParserContext* context) {
-    if (match_DocStringSeparator(context, token)) {
-        build(context, token);
-        return 46;
-    }
-    if (match_Other(context, token)) {
-        build(context, token);
-        return 45;
-    }
-
-    /* "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
-    const wchar_t* const expected_tokens = L"#DocStringSeparator, #Other";
-    Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
-    Token_delete(token);
-    if (context->stop_at_first_error) {
-        ErrorList_jump_to_global_rescue_env(context->errors);
-    }
-    return 45;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_46(Token* token, ParserContext* context) {
-    if (match_EOF(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        end_rule(context, Rule_Feature);
-        build(context, token);
-        return 42;
-    }
-    if (match_StepLine(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        start_rule(context, Rule_Step);
-        build(context, token);
-        return 29;
-    }
-    if (match_TagLine(context, token)) {
-      if (lookahead_0(context)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 31;
-      }
-    }
-    if (match_TagLine(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        end_rule(context, Rule_Rule);
-        start_rule(context, Rule_Rule);
-        start_rule(context, Rule_RuleHeader);
-        start_rule(context, Rule_Tags);
-        build(context, token);
-        return 22;
-    }
-    if (match_ScenarioLine(context, token)) {
-        end_rule(context, Rule_DocString);
-        end_rule(context, Rule_Step);
-        end_rule(context, Rule_Background);
-        start_rule(context, Rule_ScenarioDefinition);
-        start_rule(context, Rule_Scenario);
-        build(context, token);
-        return 32;
-    }
     if (match_RuleLine(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
@@ -3566,46 +3862,46 @@ static int match_token_at_46(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
+        return 27;
     }
     if (match_Comment(context, token)) {
         build(context, token);
-        return 46;
+        return 54;
     }
     if (match_Empty(context, token)) {
         build(context, token);
-        return 46;
+        return 54;
     }
 
-    /* "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+    /* "State: 54 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     const wchar_t* const expected_tokens = L"#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 46;}
+    return 54;}
 /* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_47(Token* token, ParserContext* context) {
+static int match_token_at_55(Token* token, ParserContext* context) {
     if (match_DocStringSeparator(context, token)) {
         build(context, token);
-        return 48;
+        return 56;
     }
     if (match_Other(context, token)) {
         build(context, token);
-        return 47;
+        return 55;
     }
 
-    /* "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+    /* "State: 55 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
     const wchar_t* const expected_tokens = L"#DocStringSeparator, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 47;}
+    return 55;}
 /* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_48(Token* token, ParserContext* context) {
+static int match_token_at_56(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
@@ -3613,14 +3909,14 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         end_rule(context, Rule_ScenarioDefinition);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
+        return 50;
     }
     if (match_StepLine(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 15;
+        return 18;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_1(context)) {
@@ -3629,7 +3925,7 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 17;
+        return 20;
       }
     }
     if (match_TagLine(context, token)) {
@@ -3641,7 +3937,7 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
@@ -3653,7 +3949,7 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ExamplesLine(context, token)) {
         end_rule(context, Rule_DocString);
@@ -3661,7 +3957,7 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_ExamplesDefinition);
         start_rule(context, Rule_Examples);
         build(context, token);
-        return 18;
+        return 21;
     }
     if (match_ScenarioLine(context, token)) {
         end_rule(context, Rule_DocString);
@@ -3671,7 +3967,7 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
         end_rule(context, Rule_DocString);
@@ -3681,60 +3977,60 @@ static int match_token_at_48(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
+        return 27;
     }
     if (match_Comment(context, token)) {
         build(context, token);
-        return 48;
+        return 56;
     }
     if (match_Empty(context, token)) {
         build(context, token);
-        return 48;
+        return 56;
     }
 
-    /* "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+    /* "State: 56 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     const wchar_t* const expected_tokens = L"#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 48;}
+    return 56;}
 /* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0 */
-static int match_token_at_49(Token* token, ParserContext* context) {
+static int match_token_at_57(Token* token, ParserContext* context) {
     if (match_DocStringSeparator(context, token)) {
         build(context, token);
-        return 50;
+        return 58;
     }
     if (match_Other(context, token)) {
         build(context, token);
-        return 49;
+        return 57;
     }
 
-    /* "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
+    /* "State: 57 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0" */
     const wchar_t* const expected_tokens = L"#DocStringSeparator, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 49;}
+    return 57;}
 /* GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0 */
-static int match_token_at_50(Token* token, ParserContext* context) {
+static int match_token_at_58(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         end_rule(context, Rule_Background);
         end_rule(context, Rule_Feature);
         build(context, token);
-        return 42;
+        return 50;
     }
     if (match_StepLine(context, token)) {
         end_rule(context, Rule_DocString);
         end_rule(context, Rule_Step);
         start_rule(context, Rule_Step);
         build(context, token);
-        return 9;
+        return 11;
     }
     if (match_TagLine(context, token)) {
       if (lookahead_0(context)) {
@@ -3744,7 +4040,7 @@ static int match_token_at_50(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 11;
+        return 13;
       }
     }
     if (match_TagLine(context, token)) {
@@ -3755,7 +4051,7 @@ static int match_token_at_50(Token* token, ParserContext* context) {
         start_rule(context, Rule_RuleHeader);
         start_rule(context, Rule_Tags);
         build(context, token);
-        return 22;
+        return 26;
     }
     if (match_ScenarioLine(context, token)) {
         end_rule(context, Rule_DocString);
@@ -3764,7 +4060,7 @@ static int match_token_at_50(Token* token, ParserContext* context) {
         start_rule(context, Rule_ScenarioDefinition);
         start_rule(context, Rule_Scenario);
         build(context, token);
-        return 12;
+        return 14;
     }
     if (match_RuleLine(context, token)) {
         end_rule(context, Rule_DocString);
@@ -3773,25 +4069,25 @@ static int match_token_at_50(Token* token, ParserContext* context) {
         start_rule(context, Rule_Rule);
         start_rule(context, Rule_RuleHeader);
         build(context, token);
-        return 23;
+        return 27;
     }
     if (match_Comment(context, token)) {
         build(context, token);
-        return 50;
+        return 58;
     }
     if (match_Empty(context, token)) {
         build(context, token);
-        return 50;
+        return 58;
     }
 
-    /* "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
+    /* "State: 58 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0" */
     const wchar_t* const expected_tokens = L"#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
-    return 50;}
+    return 58;}
 static int match_token(int state, Token* token, ParserContext* context) {
     switch (state) {
     case 0:
@@ -3878,6 +4174,8 @@ static int match_token(int state, Token* token, ParserContext* context) {
         return match_token_at_40(token, context);
     case 41:
         return match_token_at_41(token, context);
+    case 42:
+        return match_token_at_42(token, context);
     case 43:
         return match_token_at_43(token, context);
     case 44:
@@ -3892,8 +4190,22 @@ static int match_token(int state, Token* token, ParserContext* context) {
         return match_token_at_48(token, context);
     case 49:
         return match_token_at_49(token, context);
-    case 50:
-        return match_token_at_50(token, context);
+    case 51:
+        return match_token_at_51(token, context);
+    case 52:
+        return match_token_at_52(token, context);
+    case 53:
+        return match_token_at_53(token, context);
+    case 54:
+        return match_token_at_54(token, context);
+    case 55:
+        return match_token_at_55(token, context);
+    case 56:
+        return match_token_at_56(token, context);
+    case 57:
+        return match_token_at_57(token, context);
+    case 58:
+        return match_token_at_58(token, context);
     default:
         ErrorList_add_invalid_operation_error(context->errors, state);
         ErrorList_jump_to_global_rescue_env(context->errors);
