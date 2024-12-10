@@ -34,8 +34,8 @@ typedef enum RuleType {
     Rule_DataTable, /* DataTable! := #TableRow+ */
     Rule_DocString, /* DocString! := #DocStringSeparator #Other* #DocStringSeparator */
     Rule_Tags, /* Tags! := #TagLine+ */
-    Rule_DescriptionHelper, /* DescriptionHelper := (#Empty | #Comment)* Description? */
-    Rule_Description, /* Description! := #Other+ ((#Empty | #Comment)+ #Other+)* */
+    Rule_DescriptionHelper, /* DescriptionHelper := Description? */
+    Rule_Description, /* Description! := (#Empty | #Comment | #Other)+ */
     Rule_Count
 } RuleType;
 
