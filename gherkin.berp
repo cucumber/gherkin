@@ -32,7 +32,7 @@ DocString! := #DocStringSeparator #Other* #DocStringSeparator
 
 Tags! := #TagLine+
 
-// descriptions should be allowed to be interspersed with comments and empty lines
-// if only comments and empty lines are encountered, the description text will be empty
+// descriptions should be allowed to be interspersed with comments
+// if only comments are encountered, the description text will be empty
 DescriptionHelper := #Empty* Description?
-Description! := (#Other| #Comment)+
+Description! := (#Other | #Comment)+
