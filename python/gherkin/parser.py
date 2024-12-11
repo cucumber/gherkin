@@ -48,8 +48,8 @@ RULE_TYPE = [
     'DataTable',  # DataTable! := #TableRow+
     'DocString',  # DocString! := #DocStringSeparator #Other* #DocStringSeparator
     'Tags',  # Tags! := #TagLine+
-    'DescriptionHelper',  # DescriptionHelper := Description?
-    'Description',  # Description! := (#Empty | #Comment | #Other)+
+    'DescriptionHelper',  # DescriptionHelper := #Empty* Description?
+    'Description',  # Description! := (#Other | #Comment)+
 ]
 
 
@@ -324,9 +324,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 4
+                return 3
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -375,7 +374,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 3
-    # GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_4(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -383,9 +382,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 4
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 4
@@ -429,9 +425,9 @@ class Parser:
                 self.build(context, token)
                 return 4
 
-        state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -445,9 +441,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 6
+                return 5
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -495,7 +490,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 5
-    # GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_6(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -503,9 +498,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 6
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 6
@@ -548,9 +540,9 @@ class Parser:
                 self.build(context, token)
                 return 6
 
-        state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -723,9 +715,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 11
+                return 10
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -788,7 +779,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 10
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_11(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -797,9 +788,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 11
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 11
@@ -859,9 +847,9 @@ class Parser:
                 self.build(context, token)
                 return 11
 
-        state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -1074,9 +1062,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 16
+                return 15
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -1151,7 +1138,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 15
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_16(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -1162,9 +1149,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 16
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 16
@@ -1236,9 +1220,9 @@ class Parser:
                 self.build(context, token)
                 return 16
 
-        state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -1365,9 +1349,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 20
+                return 19
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -1418,7 +1401,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 19
-    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_20(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -1427,9 +1410,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 20
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 20
@@ -1475,9 +1455,9 @@ class Parser:
                 self.build(context, token)
                 return 20
 
-        state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -1492,9 +1472,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 22
+                return 21
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -1544,7 +1523,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 21
-    # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_22(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -1553,9 +1532,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 22
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 22
@@ -1600,9 +1576,9 @@ class Parser:
                 self.build(context, token)
                 return 22
 
-        state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -1782,9 +1758,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 27
+                return 26
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -1849,7 +1824,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 26
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_27(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -1859,9 +1834,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 27
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 27
@@ -1923,9 +1895,9 @@ class Parser:
                 self.build(context, token)
                 return 27
 
-        state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error
@@ -2145,9 +2117,8 @@ class Parser:
                 self.build(context, token)
                 return 34
         if self.match_Empty(context, token):
-                self.start_rule(context, 'Description')
                 self.build(context, token)
-                return 32
+                return 31
         if self.match_Comment(context, token):
                 self.start_rule(context, 'Description')
                 self.build(context, token)
@@ -2224,7 +2195,7 @@ class Parser:
             raise error
         self.add_error(context, error)
         return 31
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_32(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
                 self.end_rule(context, 'Description')
@@ -2236,9 +2207,6 @@ class Parser:
                 self.end_rule(context, 'Feature')
                 self.build(context, token)
                 return 34
-        if self.match_Empty(context, token):
-                self.build(context, token)
-                return 32
         if self.match_Comment(context, token):
                 self.build(context, token)
                 return 32
@@ -2312,9 +2280,9 @@ class Parser:
                 self.build(context, token)
                 return 32
 
-        state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+        state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
         token.detach
-        expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+        expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
         if self.stop_at_first_error:
             raise error

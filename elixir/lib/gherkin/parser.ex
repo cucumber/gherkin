@@ -201,10 +201,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(4)
+          update_next_state(3)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -276,11 +275,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(4)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -339,8 +333,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(4)
                 true -> 
-    state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -356,10 +350,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(6)
+          update_next_state(5)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -430,11 +423,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(6)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -492,8 +480,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(6)
                 true -> 
-    state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -710,10 +698,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(11)
+          update_next_state(10)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -805,11 +792,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(11)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -889,8 +871,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(11)
                 true -> 
-    state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -1157,10 +1139,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(16)
+          update_next_state(15)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -1266,11 +1247,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(16)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -1362,8 +1338,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(16)
                 true -> 
-    state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -1518,10 +1494,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(20)
+          update_next_state(19)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -1596,11 +1571,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(20)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -1661,8 +1631,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(20)
                 true -> 
-    state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -1679,10 +1649,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(22)
+          update_next_state(21)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -1756,11 +1725,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(22)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -1820,8 +1784,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(22)
                 true -> 
-    state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -2045,10 +2009,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(27)
+          update_next_state(26)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -2143,11 +2106,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(27)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -2229,8 +2187,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(27)
                 true -> 
-    state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end
@@ -2504,10 +2462,9 @@ TokenMatcher.match?(EOF , line, context) ->
           update_next_state(34)
           TokenMatcher.match?(Empty , line, context) -> 
               TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.start_rule(Description) |>
-                AstBuilder.build() |>
+                          AstBuilder.build() |>
 
-          update_next_state(32)
+          update_next_state(31)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.start_rule(Description) |>
@@ -2616,11 +2573,6 @@ TokenMatcher.match?(EOF , line, context) ->
                 AstBuilder.build() |>
 
           update_next_state(34)
-          TokenMatcher.match?(Empty , line, context) -> 
-              TokenMatcher.parse(Empty , line, context) |>
-                          AstBuilder.build() |>
-
-          update_next_state(32)
           TokenMatcher.match?(Comment , line, context) -> 
               TokenMatcher.parse(Comment , line, context) |>
                           AstBuilder.build() |>
@@ -2714,8 +2666,8 @@ TokenMatcher.match?(EOF , line, context) ->
 
           update_next_state(32)
                 true -> 
-    state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
-    expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+    state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
+    expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
     handle_error(context, line, expected_tokens, state_comment)
       end
   end

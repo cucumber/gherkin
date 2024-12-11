@@ -38,8 +38,8 @@ module Gherkin
     :DataTable, # DataTable! := #TableRow+
     :DocString, # DocString! := #DocStringSeparator #Other* #DocStringSeparator
     :Tags, # Tags! := #TagLine+
-    :DescriptionHelper, # DescriptionHelper := Description?
-    :Description, # Description! := (#Empty | #Comment | #Other)+
+    :DescriptionHelper, # DescriptionHelper := #Empty* Description?
+    :Description, # Description! := (#Other | #Comment)+
   ]
 
   class ParserContext
@@ -415,9 +415,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 4
+        return 3
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -475,7 +474,7 @@ module Gherkin
       add_error(context, error)
       return 3
     end
-    # GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state4(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -483,10 +482,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 4
       end
       if match_Comment(context, token)
         build(context, token);
@@ -539,9 +534,9 @@ module Gherkin
         return 4
       end
 
-      state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -556,9 +551,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 6
+        return 5
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -615,7 +609,7 @@ module Gherkin
       add_error(context, error)
       return 5
     end
-    # GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state6(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -623,10 +617,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 6
       end
       if match_Comment(context, token)
         build(context, token);
@@ -678,9 +668,9 @@ module Gherkin
         return 6
       end
 
-      state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -879,9 +869,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 11
+        return 10
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -956,7 +945,7 @@ module Gherkin
       add_error(context, error)
       return 10
     end
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state11(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -965,10 +954,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 11
       end
       if match_Comment(context, token)
         build(context, token);
@@ -1040,9 +1025,9 @@ module Gherkin
         return 11
       end
 
-      state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -1287,9 +1272,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 16
+        return 15
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -1376,7 +1360,7 @@ module Gherkin
       add_error(context, error)
       return 15
     end
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state16(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -1387,10 +1371,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 16
       end
       if match_Comment(context, token)
         build(context, token);
@@ -1474,9 +1454,9 @@ module Gherkin
         return 16
       end
 
-      state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -1620,9 +1600,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 20
+        return 19
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -1682,7 +1661,7 @@ module Gherkin
       add_error(context, error)
       return 19
     end
-    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state20(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -1691,10 +1670,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 20
       end
       if match_Comment(context, token)
         build(context, token);
@@ -1749,9 +1724,9 @@ module Gherkin
         return 20
       end
 
-      state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -1767,9 +1742,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 22
+        return 21
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -1828,7 +1802,7 @@ module Gherkin
       add_error(context, error)
       return 21
     end
-    # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state22(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -1837,10 +1811,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 22
       end
       if match_Comment(context, token)
         build(context, token);
@@ -1894,9 +1864,9 @@ module Gherkin
         return 22
       end
 
-      state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -2102,9 +2072,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 27
+        return 26
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -2181,7 +2150,7 @@ module Gherkin
       add_error(context, error)
       return 26
     end
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state27(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -2191,10 +2160,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 27
       end
       if match_Comment(context, token)
         build(context, token);
@@ -2268,9 +2233,9 @@ module Gherkin
         return 27
       end
 
-      state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
@@ -2522,9 +2487,8 @@ module Gherkin
         return 34
       end
       if match_Empty(context, token)
-        start_rule(context, :Description);
         build(context, token);
-        return 32
+        return 31
       end
       if match_Comment(context, token)
         start_rule(context, :Description);
@@ -2613,7 +2577,7 @@ module Gherkin
       add_error(context, error)
       return 31
     end
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_state32(token, context)
       if match_EOF(context, token)
         end_rule(context, :Description);
@@ -2625,10 +2589,6 @@ module Gherkin
         end_rule(context, :Feature);
         build(context, token);
         return 34
-      end
-      if match_Empty(context, token)
-        build(context, token);
-        return 32
       end
       if match_Comment(context, token)
         build(context, token);
@@ -2714,9 +2674,9 @@ module Gherkin
         return 32
       end
 
-      state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0"
+      state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
       token.detach
-      expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
+      expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
       add_error(context, error)
