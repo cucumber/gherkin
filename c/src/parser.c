@@ -396,9 +396,8 @@ static int match_token_at_3(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 4;
+        return 3;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -456,7 +455,7 @@ static int match_token_at_3(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 3;}
-/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_4(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -464,10 +463,6 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 4;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -520,8 +515,8 @@ static int match_token_at_4(Token* token, ParserContext* context) {
         return 4;
     }
 
-    /* "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -537,9 +532,8 @@ static int match_token_at_5(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 6;
+        return 5;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -596,7 +590,7 @@ static int match_token_at_5(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 5;}
-/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_6(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -604,10 +598,6 @@ static int match_token_at_6(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 6;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -659,8 +649,8 @@ static int match_token_at_6(Token* token, ParserContext* context) {
         return 6;
     }
 
-    /* "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -860,9 +850,8 @@ static int match_token_at_10(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 11;
+        return 10;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -937,7 +926,7 @@ static int match_token_at_10(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 10;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_11(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -946,10 +935,6 @@ static int match_token_at_11(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 11;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -1021,8 +1006,8 @@ static int match_token_at_11(Token* token, ParserContext* context) {
         return 11;
     }
 
-    /* "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -1268,9 +1253,8 @@ static int match_token_at_15(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 16;
+        return 15;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -1357,7 +1341,7 @@ static int match_token_at_15(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 15;}
-/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_16(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -1368,10 +1352,6 @@ static int match_token_at_16(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 16;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -1455,8 +1435,8 @@ static int match_token_at_16(Token* token, ParserContext* context) {
         return 16;
     }
 
-    /* "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -1601,9 +1581,8 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 20;
+        return 19;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -1663,7 +1642,7 @@ static int match_token_at_19(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 19;}
-/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_20(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -1672,10 +1651,6 @@ static int match_token_at_20(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 20;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -1730,8 +1705,8 @@ static int match_token_at_20(Token* token, ParserContext* context) {
         return 20;
     }
 
-    /* "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -1748,9 +1723,8 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 22;
+        return 21;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -1809,7 +1783,7 @@ static int match_token_at_21(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 21;}
-/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_22(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -1818,10 +1792,6 @@ static int match_token_at_22(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 22;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -1875,8 +1845,8 @@ static int match_token_at_22(Token* token, ParserContext* context) {
         return 22;
     }
 
-    /* "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -2083,9 +2053,8 @@ static int match_token_at_26(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 27;
+        return 26;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -2162,7 +2131,7 @@ static int match_token_at_26(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 26;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_27(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -2172,10 +2141,6 @@ static int match_token_at_27(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 27;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -2249,8 +2214,8 @@ static int match_token_at_27(Token* token, ParserContext* context) {
         return 27;
     }
 
-    /* "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {
@@ -2503,9 +2468,8 @@ static int match_token_at_31(Token* token, ParserContext* context) {
         return 34;
     }
     if (match_Empty(context, token)) {
-        start_rule(context, Rule_Description);
         build(context, token);
-        return 32;
+        return 31;
     }
     if (match_Comment(context, token)) {
         start_rule(context, Rule_Description);
@@ -2594,7 +2558,7 @@ static int match_token_at_31(Token* token, ParserContext* context) {
         ErrorList_jump_to_global_rescue_env(context->errors);
     }
     return 31;}
-/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0 */
+/* GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0 */
 static int match_token_at_32(Token* token, ParserContext* context) {
     if (match_EOF(context, token)) {
         end_rule(context, Rule_Description);
@@ -2606,10 +2570,6 @@ static int match_token_at_32(Token* token, ParserContext* context) {
         end_rule(context, Rule_Feature);
         build(context, token);
         return 34;
-    }
-    if (match_Empty(context, token)) {
-        build(context, token);
-        return 32;
     }
     if (match_Comment(context, token)) {
         build(context, token);
@@ -2695,8 +2655,8 @@ static int match_token_at_32(Token* token, ParserContext* context) {
         return 32;
     }
 
-    /* "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0" */
-    const wchar_t* const expected_tokens = L"#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+    /* "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0" */
+    const wchar_t* const expected_tokens = L"#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
     Token_is_eof(token) ? ErrorList_add_unexpected_eof_error(context->errors, token, expected_tokens) : ErrorList_add_unexpected_token_error(context->errors, token, expected_tokens);
     Token_delete(token);
     if (context->stop_at_first_error) {

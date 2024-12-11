@@ -260,9 +260,8 @@ sub match_token_at_3 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 4;
+        return 3;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -337,7 +336,7 @@ sub match_token_at_3 {
     return 3;
 }
 
-# GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_4 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -349,12 +348,6 @@ sub match_token_at_4 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 4;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -424,8 +417,8 @@ sub match_token_at_4 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -447,9 +440,8 @@ sub match_token_at_5 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 6;
+        return 5;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -523,7 +515,7 @@ sub match_token_at_5 {
     return 5;
 }
 
-# GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_6 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -535,12 +527,6 @@ sub match_token_at_6 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 6;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -609,8 +595,8 @@ sub match_token_at_6 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -877,9 +863,8 @@ sub match_token_at_10 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 11;
+        return 10;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -975,7 +960,7 @@ sub match_token_at_10 {
     return 10;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_11 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -988,12 +973,6 @@ sub match_token_at_11 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 11;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -1086,8 +1065,8 @@ sub match_token_at_11 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -1408,9 +1387,8 @@ sub match_token_at_15 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 16;
+        return 15;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -1518,7 +1496,7 @@ sub match_token_at_15 {
     return 15;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_16 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -1533,12 +1511,6 @@ sub match_token_at_16 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 16;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -1643,8 +1615,8 @@ sub match_token_at_16 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -1833,9 +1805,8 @@ sub match_token_at_19 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 20;
+        return 19;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -1912,7 +1883,7 @@ sub match_token_at_19 {
     return 19;
 }
 
-# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_20 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -1925,12 +1896,6 @@ sub match_token_at_20 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 20;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -2002,8 +1967,8 @@ sub match_token_at_20 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -2026,9 +1991,8 @@ sub match_token_at_21 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 22;
+        return 21;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -2104,7 +2068,7 @@ sub match_token_at_21 {
     return 21;
 }
 
-# GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_22 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -2117,12 +2081,6 @@ sub match_token_at_22 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -2193,8 +2151,8 @@ sub match_token_at_22 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -2468,9 +2426,8 @@ sub match_token_at_26 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 27;
+        return 26;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -2568,7 +2525,7 @@ sub match_token_at_26 {
     return 26;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_27 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -2582,12 +2539,6 @@ sub match_token_at_27 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 27;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -2682,8 +2633,8 @@ sub match_token_at_27 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
@@ -3011,9 +2962,8 @@ sub match_token_at_31 {
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 32;
+        return 31;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -3123,7 +3073,7 @@ sub match_token_at_31 {
     return 31;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_32 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -3139,12 +3089,6 @@ sub match_token_at_32 {
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -3251,8 +3195,8 @@ sub match_token_at_32 {
     $token->detach;
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0",
+        ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 

@@ -65,8 +65,8 @@ namespace Gherkin
         DataTable, // DataTable! := #TableRow+
         DocString, // DocString! := #DocStringSeparator #Other* #DocStringSeparator
         Tags, // Tags! := #TagLine+
-        DescriptionHelper, // DescriptionHelper := Description?
-        Description, // Description! := (#Empty | #Comment | #Other)+
+        DescriptionHelper, // DescriptionHelper := #Empty* Description?
+        Description, // Description! := (#Other | #Comment)+
     }
 
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -540,9 +540,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 4;
+                return 3;
             }
             if (Match_Comment(context, token))
             {
@@ -612,7 +611,7 @@ namespace Gherkin
             return 3;
         }
         
-        // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_4(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -622,11 +621,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 4;
             }
             if (Match_Comment(context, token))
             {
@@ -687,9 +681,9 @@ namespace Gherkin
                 return 4;
             }
 
-            const string stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -711,9 +705,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 6;
+                return 5;
             }
             if (Match_Comment(context, token))
             {
@@ -782,7 +775,7 @@ namespace Gherkin
             return 5;
         }
         
-        // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_6(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -792,11 +785,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 6;
             }
             if (Match_Comment(context, token))
             {
@@ -856,9 +844,9 @@ namespace Gherkin
                 return 6;
             }
 
-            const string stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -1104,9 +1092,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 11;
+                return 10;
             }
             if (Match_Comment(context, token))
             {
@@ -1196,7 +1183,7 @@ namespace Gherkin
             return 10;
         }
         
-        // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_11(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -1207,11 +1194,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 11;
             }
             if (Match_Comment(context, token))
             {
@@ -1294,9 +1276,9 @@ namespace Gherkin
                 return 11;
             }
 
-            const string stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -1594,9 +1576,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 16;
+                return 15;
             }
             if (Match_Comment(context, token))
             {
@@ -1698,7 +1679,7 @@ namespace Gherkin
             return 15;
         }
         
-        // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_16(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -1711,11 +1692,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 16;
             }
             if (Match_Comment(context, token))
             {
@@ -1810,9 +1786,9 @@ namespace Gherkin
                 return 16;
             }
 
-            const string stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -1989,9 +1965,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 20;
+                return 19;
             }
             if (Match_Comment(context, token))
             {
@@ -2063,7 +2038,7 @@ namespace Gherkin
             return 19;
         }
         
-        // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_20(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -2074,11 +2049,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 20;
             }
             if (Match_Comment(context, token))
             {
@@ -2141,9 +2111,9 @@ namespace Gherkin
                 return 20;
             }
 
-            const string stateComment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -2166,9 +2136,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 22;
+                return 21;
             }
             if (Match_Comment(context, token))
             {
@@ -2239,7 +2208,7 @@ namespace Gherkin
             return 21;
         }
         
-        // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_22(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -2250,11 +2219,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 22;
             }
             if (Match_Comment(context, token))
             {
@@ -2316,9 +2280,9 @@ namespace Gherkin
                 return 22;
             }
 
-            const string stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -2571,9 +2535,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 27;
+                return 26;
             }
             if (Match_Comment(context, token))
             {
@@ -2665,7 +2628,7 @@ namespace Gherkin
             return 26;
         }
         
-        // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_27(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -2677,11 +2640,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 27;
             }
             if (Match_Comment(context, token))
             {
@@ -2766,9 +2724,9 @@ namespace Gherkin
                 return 27;
             }
 
-            const string stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)
@@ -3073,9 +3031,8 @@ namespace Gherkin
             }
             if (Match_Empty(context, token))
             {
-                StartRule(context, RuleType.Description);
                 Build(context, token);
-                return 32;
+                return 31;
             }
             if (Match_Comment(context, token))
             {
@@ -3179,7 +3136,7 @@ namespace Gherkin
             return 31;
         }
         
-        // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+        // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
         int MatchTokenAt_32(Token token, ParserContext context)
         {
             if (Match_EOF(context, token))
@@ -3193,11 +3150,6 @@ namespace Gherkin
                 EndRule(context, RuleType.Feature);
                 Build(context, token);
                 return 34;
-            }
-            if (Match_Empty(context, token))
-            {
-                Build(context, token);
-                return 32;
             }
             if (Match_Comment(context, token))
             {
@@ -3294,9 +3246,9 @@ namespace Gherkin
                 return 32;
             }
 
-            const string stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+            const string stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             token.Detach();
-            var expectedTokens = new string[] {"#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
+            var expectedTokens = new string[] {"#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
             if (StopAtFirstError)

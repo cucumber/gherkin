@@ -68,8 +68,8 @@ class Parser<T> {
         DataTable, // DataTable! := #TableRow+
         DocString, // DocString! := #DocStringSeparator #Other* #DocStringSeparator
         Tags, // Tags! := #TagLine+
-        DescriptionHelper, // DescriptionHelper := Description?
-        Description, // Description! := (#Empty | #Comment | #Other)+
+        DescriptionHelper, // DescriptionHelper := #Empty* Description?
+        Description, // Description! := (#Other | #Comment)+
         ;
 
         static RuleType cast(TokenType tokenType) {
@@ -585,9 +585,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 4;
+            return 3;
         }
         if (match_Comment(context, token))
         {
@@ -656,7 +655,7 @@ class Parser<T> {
         return 3;
     }
 
-    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_4(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -665,11 +664,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 4;
         }
         if (match_Comment(context, token))
         {
@@ -730,9 +724,9 @@ class Parser<T> {
             return 4;
         }
 
-        final String stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -752,9 +746,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 6;
+            return 5;
         }
         if (match_Comment(context, token))
         {
@@ -822,7 +815,7 @@ class Parser<T> {
         return 5;
     }
 
-    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_6(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -831,11 +824,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 6;
         }
         if (match_Comment(context, token))
         {
@@ -895,9 +883,9 @@ class Parser<T> {
             return 6;
         }
 
-        final String stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1135,9 +1123,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 11;
+            return 10;
         }
         if (match_Comment(context, token))
         {
@@ -1226,7 +1213,7 @@ class Parser<T> {
         return 10;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_11(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -1236,11 +1223,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 11;
         }
         if (match_Comment(context, token))
         {
@@ -1323,9 +1305,9 @@ class Parser<T> {
             return 11;
         }
 
-        final String stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -1615,9 +1597,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 16;
+            return 15;
         }
         if (match_Comment(context, token))
         {
@@ -1718,7 +1699,7 @@ class Parser<T> {
         return 15;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_16(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -1730,11 +1711,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 16;
         }
         if (match_Comment(context, token))
         {
@@ -1829,9 +1805,9 @@ class Parser<T> {
             return 16;
         }
 
-        final String stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2002,9 +1978,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 20;
+            return 19;
         }
         if (match_Comment(context, token))
         {
@@ -2075,7 +2050,7 @@ class Parser<T> {
         return 19;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_20(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -2085,11 +2060,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 20;
         }
         if (match_Comment(context, token))
         {
@@ -2152,9 +2122,9 @@ class Parser<T> {
             return 20;
         }
 
-        final String stateComment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2175,9 +2145,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 22;
+            return 21;
         }
         if (match_Comment(context, token))
         {
@@ -2247,7 +2216,7 @@ class Parser<T> {
         return 21;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_22(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -2257,11 +2226,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 22;
         }
         if (match_Comment(context, token))
         {
@@ -2323,9 +2287,9 @@ class Parser<T> {
             return 22;
         }
 
-        final String stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -2570,9 +2534,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 27;
+            return 26;
         }
         if (match_Comment(context, token))
         {
@@ -2663,7 +2626,7 @@ class Parser<T> {
         return 26;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_27(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -2674,11 +2637,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 27;
         }
         if (match_Comment(context, token))
         {
@@ -2763,9 +2721,9 @@ class Parser<T> {
             return 27;
         }
 
-        final String stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -3062,9 +3020,8 @@ class Parser<T> {
         }
         if (match_Empty(context, token))
         {
-                startRule(context, RuleType.Description);
                 build(context, token);
-            return 32;
+            return 31;
         }
         if (match_Comment(context, token))
         {
@@ -3167,7 +3124,7 @@ class Parser<T> {
         return 31;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private int matchTokenAt_32(Token token, ParserContext context) {
         if (match_EOF(context, token))
         {
@@ -3180,11 +3137,6 @@ class Parser<T> {
                 endRule(context, RuleType.Feature);
                 build(context, token);
             return 34;
-        }
-        if (match_Empty(context, token))
-        {
-                build(context, token);
-            return 32;
         }
         if (match_Comment(context, token))
         {
@@ -3281,9 +3233,9 @@ class Parser<T> {
             return 32;
         }
 
-        final String stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:0>Description:0>__alt1:0>#Empty:0";
+        final String stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         token.detach();
-        List<String> expectedTokens = asList("#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
+        List<String> expectedTokens = asList("#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
                 : new ParserException.UnexpectedTokenException(token, expectedTokens, stateComment);
