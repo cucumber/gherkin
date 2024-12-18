@@ -1,5 +1,6 @@
 using Gherkin.Ast;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Gherkin;
 
@@ -52,7 +53,7 @@ public class GherkinDialectProvider : IGherkinDialectProvider
 
     protected virtual Dictionary<string, GherkinLanguageSetting> ParseJsonContent(string languagesFileContent)
     {
-        return JsonSerializer.Deserialize<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        return JsonSerializer.Deserialize<Dictionary<string, GherkinLanguageSetting>>(languagesFileContent, new JsonSerializerOptions(JsonSerializerDefaults.Web) { TypeInfoResolver = SourceGenerationContext.Default });
     }
 
     protected virtual bool TryGetDialect(string language, Dictionary<string, GherkinLanguageSetting> gherkinLanguageSettings, Location location, out GherkinDialect dialect)
@@ -111,6 +112,12 @@ public class GherkinDialectProvider : IGherkinDialectProvider
             ["* ", "And "],
             ["* ", "But "]);
     }
+}
+
+[JsonSourceGenerationOptions]
+[JsonSerializable(typeof(Dictionary<string, GherkinLanguageSetting>))]
+internal partial class SourceGenerationContext : JsonSerializerContext
+{
 }
 
 public class GherkinLanguageSetting

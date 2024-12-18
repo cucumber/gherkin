@@ -12,6 +12,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Fixed
 - [c] slight update to existing CMakeFiles.txt to propagate VERSION. Close #320 ([#328](https://github.com/cucumber/gherkin/pull/328))
+- [.NET] Improved parsing time
+- [.NET] Use string-ordinal comparison consistently and remove old Mono workaround
 
 ### Changed
 - [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
