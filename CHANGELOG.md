@@ -14,10 +14,12 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [c] slight update to existing CMakeFiles.txt to propagate VERSION. Close #320 ([#328](https://github.com/cucumber/gherkin/pull/328))
 - [.NET] Improved parsing time
 - [.NET] Use string-ordinal comparison consistently and remove old Mono workaround
+- [.NET] Improved startup time
 
 ### Changed
 - [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
 - [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
+- [.NET] Removed dependency on System.Text.Json and related logic in GherkinDialectProvider
 
 ## [30.0.4] - 2024-11-15
 ### Fixed
