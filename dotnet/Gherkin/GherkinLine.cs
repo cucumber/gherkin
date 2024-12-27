@@ -1,4 +1,5 @@
 using Gherkin.Ast;
+using System.Collections.Generic;
 
 namespace Gherkin;
 
@@ -7,10 +8,10 @@ namespace Gherkin;
 /// </summary>
 public readonly struct GherkinLine
 {
-    private static char[] inlineWhitespaceChars = [' ', '\t', '\u00A0'];
+    private static readonly char[] inlineWhitespaceChars = [' ', '\t', '\u00A0'];
 
     private readonly string lineText;
-    private readonly string trimmedLineText;
+    private readonly int trimmedStartIndex;
 
     /// <summary>
     /// One-based line number
@@ -22,7 +23,13 @@ public readonly struct GherkinLine
         LineNumber = lineNumber;
 
         lineText = line;
-        trimmedLineText = lineText.TrimStart();
+        int start;
+        for (start = 0; start < lineText.Length; start++)
+        {
+            if (!char.IsWhiteSpace(lineText[start]))
+                break;
+        }
+        trimmedStartIndex = start;
     }
 
     /// <summary>
@@ -30,7 +37,7 @@ public readonly struct GherkinLine
     /// </summary>
     public int Indent
     {
-        get { return lineText.Length - trimmedLineText.Length; }
+        get { return trimmedStartIndex; }
     }
 
     /// <summary>
@@ -39,7 +46,7 @@ public readonly struct GherkinLine
     /// <returns>true, if empty or contains whitespaces only; otherwise, false.</returns>
     public bool IsEmpty()
     {
-        return trimmedLineText.Length == 0;
+        return lineText.Length == trimmedStartIndex;
     }
 
     /// <summary>
@@ -49,7 +56,7 @@ public readonly struct GherkinLine
     /// <returns>true if text matches the beginning of this line; otherwise, false.</returns>
     public bool StartsWith(string text)
     {
-        return trimmedLineText.StartsWith(text, StringComparison.Ordinal);
+        return string.CompareOrdinal(lineText, trimmedStartIndex, text, 0, text.Length) == 0;
     }
 
     /// <summary>
@@ -59,8 +66,8 @@ public readonly struct GherkinLine
     /// <returns>true if keyword matches the beginning of this line and followed by a ':' character; otherwise, false.</returns>
     public bool StartsWithTitleKeyword(string text)
     {
-        return StringUtils.StartsWith(trimmedLineText, text) &&
-            StartsWithFrom(trimmedLineText, text.Length, GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR);
+        return StartsWith(text) &&
+            StartsWithFrom(lineText, trimmedStartIndex + text.Length, GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR);
     }
 
     private static bool StartsWithFrom(string text, int textIndex, string value)
@@ -76,7 +83,7 @@ public readonly struct GherkinLine
     public string GetLineText(int indentToRemove = 0)
     {
         if (indentToRemove < 0 || indentToRemove > Indent)
-            return trimmedLineText;
+            return lineText.Substring(trimmedStartIndex);
 
         return lineText.Substring(indentToRemove);
     }
@@ -88,7 +95,7 @@ public readonly struct GherkinLine
     /// <returns></returns>
     public string GetRestTrimmed(int length)
     {
-        return trimmedLineText.Substring(length).Trim();
+        return lineText.Substring(trimmedStartIndex + length).Trim();
     }
 
     /// <summary>
@@ -97,35 +104,47 @@ public readonly struct GherkinLine
     /// <returns>(position,text) pairs, position is 0-based index</returns>
     public IEnumerable<GherkinLineSpan> GetTags()
     {
-        string uncommentedLine = trimmedLineText;
-        var commentIndex = trimmedLineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0]);
+        string uncommentedLine = lineText;
+        var commentIndex = lineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], trimmedStartIndex);
         while (commentIndex >= 0)
         {
             if (commentIndex == 0)
                 yield break;
-            if (Array.IndexOf(inlineWhitespaceChars, trimmedLineText[commentIndex - 1]) == 0)
+            if (Array.IndexOf(inlineWhitespaceChars, lineText[commentIndex - 1]) != -1)
             {
                 uncommentedLine = uncommentedLine.Substring(0, commentIndex);
                 break;
             }
-            commentIndex = trimmedLineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], commentIndex + 1);
+            commentIndex = lineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], commentIndex + 1);
         }
-        int position = Indent;
-        foreach (string item in uncommentedLine.Split(GherkinLanguageConstants.TAG_PREFIX[0]))
-        {
-            if (item.Length > 0)
+        int position = uncommentedLine.IndexOf(GherkinLanguageConstants.TAG_PREFIX[0], trimmedStartIndex);
+        while (position >= 0)
+        { 
+            int nextPos = uncommentedLine.IndexOf(GherkinLanguageConstants.TAG_PREFIX[0], position + 1);
+            int endPos;
+            if (nextPos > 0)
+                endPos = nextPos - 1;
+            else
+                endPos = uncommentedLine.Length - 1;
+
+            while (endPos > position && Array.IndexOf(inlineWhitespaceChars, lineText[endPos]) != -1) // TrimEnd
+                endPos -= 1;
+
+            int length = endPos - position + 1;
+            if (length <= 1)
             {
-                var tagName = GherkinLanguageConstants.TAG_PREFIX + item.TrimEnd(inlineWhitespaceChars);
-                if (tagName.Length == 1)
-                    continue;
-
-                if (tagName.IndexOfAny(inlineWhitespaceChars) >= 0)
-                    throw new InvalidTagException("A tag may not contain whitespace", new Location(LineNumber, position));
-
-                yield return new GherkinLineSpan(position, tagName);
-                position += item.Length;
+                position = nextPos;
+                continue;
             }
-            position++; // separator
+
+            var tagName = lineText.Substring(position, length);
+
+            if (tagName.IndexOfAny(inlineWhitespaceChars) >= 0)
+                throw new InvalidTagException("A tag may not contain whitespace", new Location(LineNumber, position + 1));
+
+            yield return new GherkinLineSpan(position + 1, tagName);
+
+            position = nextPos;
         }
     }
 
@@ -135,12 +154,14 @@ public readonly struct GherkinLine
     /// <returns>(position,text) pairs, position is 0-based index</returns>
     public IEnumerable<GherkinLineSpan> GetTableCells()
     {
-        var rowEnum = trimmedLineText.GetEnumerator();
+        var rowEnum = lineText.GetEnumerator();
+        for (int i = 0; i < trimmedStartIndex; i++)
+            rowEnum.MoveNext();
         bool isFirstRow = true;
 
         string cell = null;
-        int pos = 0;
-        int startPos = 0;
+        int startPos = trimmedStartIndex;
+        int pos = startPos;
 
         static void EnsureCellText(ref string cell, string trimmedLineText, ref int startPos, int pos)
         {
@@ -163,17 +184,17 @@ public readonly struct GherkinLine
                     isFirstRow = false;
                 else
                 {
-                    EnsureCellText(ref cell, trimmedLineText, ref startPos, pos);
+                    EnsureCellText(ref cell, lineText, ref startPos, pos);
                     var cellText = cell.TrimEnd(inlineWhitespaceChars);
 
-                    yield return new GherkinLineSpan(Indent + startPos + 1, cellText);
+                    yield return new GherkinLineSpan(startPos + 1, cellText);
                 }
                 cell = null;
                 startPos = pos;
             }
             else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
             {
-                EnsureCellText(ref cell, trimmedLineText, ref startPos, pos);
+                EnsureCellText(ref cell, lineText, ref startPos, pos);
                 if (rowEnum.MoveNext())
                 {
                     pos++;
