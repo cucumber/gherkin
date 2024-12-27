@@ -20,6 +20,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
 - [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
 - [.NET] Removed dependency on System.Text.Json and related logic in GherkinDialectProvider
+- [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
 
 ## [30.0.4] - 2024-11-15
 ### Fixed

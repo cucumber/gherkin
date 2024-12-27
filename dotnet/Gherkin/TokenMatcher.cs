@@ -39,7 +39,7 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
         token.MatchedText = text;
         token.MatchedItems = items;
         token.MatchedGherkinDialect = CurrentDialect;
-        token.MatchedIndent = indent ?? (token.Line == null ? 0 : token.Line.Indent);
+        token.MatchedIndent = indent ?? (token.IsEOF ? 0 : token.Line.Indent);
         token.Location = new Ast.Location(token.Location.Line, token.MatchedIndent + 1);
     }
 
