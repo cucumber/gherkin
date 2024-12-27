@@ -1,5 +1,4 @@
 using Gherkin.Ast;
-using System.Collections.Generic;
 
 namespace Gherkin;
 
@@ -154,51 +153,55 @@ public readonly struct GherkinLine
     /// <returns>(position,text) pairs, position is 0-based index</returns>
     public IEnumerable<GherkinLineSpan> GetTableCells()
     {
-        var rowEnum = lineText.GetEnumerator();
-        for (int i = 0; i < trimmedStartIndex; i++)
-            rowEnum.MoveNext();
         bool isFirstRow = true;
 
         string cell = null;
         int startPos = trimmedStartIndex;
         int pos = startPos;
 
-        static void EnsureCellText(ref string cell, string trimmedLineText, ref int startPos, int pos)
+        static void EnsureCellText(ref string cell, string lineText, ref int startPos, int pos, bool trim)
         {
             if (cell is not null)
+            {
+                if (trim)
+                    cell = cell.TrimEnd(inlineWhitespaceChars);
                 return;
+            }
 
-            while (startPos < pos && Array.IndexOf(inlineWhitespaceChars, trimmedLineText[startPos]) != -1)
+            while (startPos < pos && Array.IndexOf(inlineWhitespaceChars, lineText[startPos]) != -1)
                 startPos++;
 
-            cell = trimmedLineText.Substring(startPos, pos - startPos - 1);
+            int trimedPos = pos - 2;
+            while (trimedPos >= startPos && Array.IndexOf(inlineWhitespaceChars, lineText[trimedPos]) != -1)
+                trimedPos--;
+
+            cell = lineText.Substring(startPos, trimedPos - startPos + 1);
         }
 
-        while (rowEnum.MoveNext())
+        while (pos < lineText.Length)
         {
+            char c = lineText[pos];
             pos++;
-            char c = rowEnum.Current;
             if (c == GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR)
             {
                 if (isFirstRow)
                     isFirstRow = false;
                 else
                 {
-                    EnsureCellText(ref cell, lineText, ref startPos, pos);
-                    var cellText = cell.TrimEnd(inlineWhitespaceChars);
+                    EnsureCellText(ref cell, lineText, ref startPos, pos, true);
 
-                    yield return new GherkinLineSpan(startPos + 1, cellText);
+                    yield return new GherkinLineSpan(startPos + 1, cell);
                 }
                 cell = null;
                 startPos = pos;
             }
             else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
             {
-                EnsureCellText(ref cell, lineText, ref startPos, pos);
-                if (rowEnum.MoveNext())
+                EnsureCellText(ref cell, lineText, ref startPos, pos, false);
+                if ((pos + 1) < lineText.Length)
                 {
+                    c = lineText[pos];
                     pos++;
-                    c = rowEnum.Current;
                     if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE)
                     {
                         cell += "\n";
