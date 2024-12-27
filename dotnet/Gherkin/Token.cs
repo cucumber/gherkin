@@ -2,22 +2,31 @@ using Gherkin.Ast;
 
 namespace Gherkin;
 
-public class Token(IGherkinLine line, Location location)
+public class Token
 {
-    public bool IsEOF { get { return Line == null; } }
-    public IGherkinLine Line { get; set; } = line;
+    public Token(GherkinLine line, Location location)
+    {
+        Line = line;
+        Location = location;
+    }
+    public Token(Location location)
+    {
+        Location = location;
+        IsEOF = true;
+    }
+
+    public bool IsEOF { get; }
+    public GherkinLine Line { get; set; }
     public TokenType MatchedType { get; set; }
     public string MatchedKeyword { get; set; }
     public string MatchedText { get; set; }
     public GherkinLineSpan[] MatchedItems { get; set; }
     public int MatchedIndent { get; set; }
     public GherkinDialect MatchedGherkinDialect { get; set; }
-    public Location Location { get; set; } = location;
+    public Location Location { get; set; }
 
     public void Detach()
     {
-        if (Line != null)
-            Line.Detach();
     }
 
     public string GetTokenValue()

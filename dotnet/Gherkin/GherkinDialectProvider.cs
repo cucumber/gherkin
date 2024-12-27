@@ -5,7 +5,7 @@ namespace Gherkin;
 public interface IGherkinDialectProvider
 {
     GherkinDialect DefaultDialect { get; }
-    GherkinDialect GetDialect(string language, Location location);
+    GherkinDialect GetDialect(string language, Location? location);
 }
 
 [LanguageDialectGenerated]
@@ -23,13 +23,13 @@ public partial class GherkinDialectProvider : IGherkinDialectProvider
         defaultDialect = new Lazy<GherkinDialect>(() => GetDialect(defaultLanguage, null));
     }
 
-    protected virtual bool TryGetDialect(string language, Location location, out GherkinDialect dialect)
+    protected virtual bool TryGetDialect(string language, Location? location, out GherkinDialect dialect)
     {
         dialect = TryCreateGherkinDialect(language);
         return dialect is not null;
     }
 
-    public virtual GherkinDialect GetDialect(string language, Location location)
+    public virtual GherkinDialect GetDialect(string language, Location? location)
     {
         if (!TryGetDialect(language, location, out var dialect))
             throw new NoSuchLanguageException(language, location);

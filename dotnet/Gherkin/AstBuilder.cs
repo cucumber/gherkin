@@ -234,7 +234,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Tag(location, name);
     }
 
-    protected virtual Location CreateLocation(int line, int column)
+    protected Location CreateLocation(int line, int column)
     {
         return new Location(line, column);
     }
@@ -244,7 +244,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new TableRow(location, cells);
     }
 
-    protected virtual TableCell CreateTableCell(Location location, string value)
+    protected TableCell CreateTableCell(Location location, string value)
     {
         return new TableCell(location, value);
     }
