@@ -51,7 +51,7 @@ jobs:
       - name: Install Python package dependencies
         run: |
           pip install --requirement requirements.txt
-          pip install --editable .
+          pip install .
       - name: Run tests
         run: pytest
       - name: Run Acceptance Tests
