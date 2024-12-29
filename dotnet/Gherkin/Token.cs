@@ -20,7 +20,7 @@ public class Token
     public TokenType MatchedType { get; set; }
     public string MatchedKeyword { get; set; }
     public string MatchedText { get; set; }
-    public GherkinLineSpan[] MatchedItems { get; set; }
+    public IEnumerable<GherkinLineSpan> MatchedItems { get; set; }
     public int MatchedIndent { get; set; }
     public GherkinDialect MatchedGherkinDialect { get; set; }
     public Location Location { get; set; }
