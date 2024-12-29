@@ -113,7 +113,7 @@ public class AstBuilder<T> : IAstBuilder<T>
                 }
             case RuleType.Description:
                 {
-                    var lineTokens = node.GetTokens(TokenType.Other);
+                    IEnumerable<Token> lineTokens = node.GetTokens(TokenType.Other);
 
                     // Trim trailing empty lines
                     lineTokens = lineTokens.Reverse().SkipWhile(t => string.IsNullOrWhiteSpace(t.MatchedText)).Reverse();
@@ -130,16 +130,16 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var children = new List<IHasLocation>();
                     var background = node.GetSingle<Background>(RuleType.Background);
                     if (background != null)
-                    {
                         children.Add(background);
-                    }
-                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
-                                                     .Concat(node.GetItems<IHasLocation>(RuleType.Rule));
+                    foreach (var scenarioDefinition in node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                        children.Add(scenarioDefinition);
+                    foreach (var rule in node.GetItems<IHasLocation>(RuleType.Rule))
+                        children.Add(rule);
                     var description = GetDescription(header);
                     if (featureLine.MatchedGherkinDialect == null) return null;
                     var language = featureLine.MatchedGherkinDialect.Language;
 
-                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, children.ToArray(), node);
                 }
             case RuleType.Rule:
                 {
@@ -151,14 +151,13 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var children = new List<IHasLocation>();
                     var background = node.GetSingle<Background>(RuleType.Background);
                     if (background != null)
-                    {
                         children.Add(background);
-                    }
-                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition));
+                    foreach (var scenarioDefinition in node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                        children.Add(scenarioDefinition);
                     var description = GetDescription(header);
                     if (ruleLine.MatchedGherkinDialect == null) return null;
 
-                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, children.ToArray(), node);
                 }
             case RuleType.GherkinDocument:
                 {
@@ -260,49 +259,43 @@ public class AstBuilder<T> : IAstBuilder<T>
         if (tagsNode == null)
             return [];
 
-        return tagsNode.GetTokens(TokenType.TagLine)
-            .SelectMany(t => t.MatchedItems, (t, tagItem) =>
-                CreateTag(GetLocation(t, tagItem.Column), tagItem.Text, tagsNode))
-            .ToArray();
+        var tags = new List<Tag>();
+        foreach (var line in tagsNode.GetTokens(TokenType.TagLine))
+        {
+            foreach (var matchedItem in line.MatchedItems)
+                tags.Add(CreateTag(GetLocation(line, matchedItem.Column), matchedItem.Text, tagsNode));
+        }
+        return tags.ToArray();
     }
 
     private TableRow[] GetTableRows(AstNode node)
     {
-        var rows = node.GetTokens(TokenType.TableRow).Select(token => CreateTableRow(GetLocation(token), GetCells(token), node)).ToArray();
-        CheckCellCountConsistency(rows);
-        return rows;
-    }
-
-    protected virtual void CheckCellCountConsistency(TableRow[] rows)
-    {
-        if (rows.Length == 0)
-            return;
-
-        int cellCount = rows[0].Cells.Count();
-        for (int i = 1; i < rows.Length; i++)
+        var rows = new List<TableRow>();
+        int cellCount = 0;
+        bool firstRow = true;
+        foreach (var rowToken in node.GetTokens(TokenType.TableRow))
         {
-            var row = rows[i];
-            if (row.Cells.Count() != cellCount)
+            var rowLocation = GetLocation(rowToken);
+            var cells = new List<TableCell>();
+            foreach (var cellItem in rowToken.MatchedItems)
+                cells.Add(CreateTableCell(GetLocation(rowToken, cellItem.Column), cellItem.Text));
+            if (firstRow)
             {
-                HandleAstError("inconsistent cell count within the table", row.Location);
+                cellCount = cells.Count;
+                firstRow = false;
             }
+            else if (cells.Count != cellCount)
+            {
+                HandleAstError("inconsistent cell count within the table", rowLocation);
+            }
+            rows.Add(CreateTableRow(rowLocation, cells, node));
         }
+        return rows.ToArray();
     }
 
     protected virtual void HandleAstError(string message, Location location)
     {
         throw new AstBuilderException(message, location);
-    }
-
-    private TableCell[] GetCells(Token tableRowToken)
-    {
-        var cells = new TableCell[tableRowToken.MatchedItems.Length];
-        for (int i = 0; i < cells.Length; i++)
-        {
-            var cellItem = tableRowToken.MatchedItems[i];
-            cells[i] = CreateTableCell(GetLocation(tableRowToken, cellItem.Column), cellItem.Text);
-        }
-        return cells;
     }
 
     private static Step[] GetSteps(AstNode scenarioDefinitionNode)
