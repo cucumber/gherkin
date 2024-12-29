@@ -1,6 +1,6 @@
 namespace Gherkin.Ast;
 
-public class Feature(Tag[] tags, Location location, string language, string keyword, string name, string description, IHasLocation[] children)
+public class Feature(IEnumerable<Tag> tags, Location location, string language, string keyword, string name, string description, IEnumerable<IHasLocation> children)
     : IHasLocation, IHasDescription, IHasTags, IHasChildren
 {
     public IEnumerable<Tag> Tags { get; } = tags;

@@ -92,7 +92,7 @@ public class AstBuilder<T> : IAstBuilder<T>
 
                     var description = GetDescription(scenarioNode);
                     var steps = GetSteps(scenarioNode);
-                    var examples = scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition).ToArray();
+                    List<Examples> examples = [.. scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition)];
                     return CreateScenario(tags, GetLocation(scenarioLine), scenarioLine.MatchedKeyword, scenarioLine.MatchedText, description, steps, examples, node);
                 }
             case RuleType.ExamplesDefinition:
@@ -102,9 +102,9 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var examplesLine = examplesNode.GetToken(TokenType.ExamplesLine);
                     var description = GetDescription(examplesNode);
 
-                    var allRows = examplesNode.GetSingle<TableRow[]>(RuleType.ExamplesTable);
-                    var header = allRows != null ? allRows.First() : null;
-                    var rows = allRows != null ? allRows.Skip(1).ToArray() : null;
+                    var allRows = examplesNode.GetSingle<List<TableRow>>(RuleType.ExamplesTable);
+                    var header = allRows != null ? allRows[0] : null;
+                    var rows = allRows != null ? allRows.Skip(1).ToList() : null;
                     return CreateExamples(tags, GetLocation(examplesLine), examplesLine.MatchedKeyword, examplesLine.MatchedText, description, header, rows, node);
                 }
             case RuleType.ExamplesTable:
@@ -139,7 +139,7 @@ public class AstBuilder<T> : IAstBuilder<T>
                     if (featureLine.MatchedGherkinDialect == null) return null;
                     var language = featureLine.MatchedGherkinDialect.Language;
 
-                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, children.ToArray(), node);
+                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, children, node);
                 }
             case RuleType.Rule:
                 {
@@ -157,7 +157,7 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var description = GetDescription(header);
                     if (ruleLine.MatchedGherkinDialect == null) return null;
 
-                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, children.ToArray(), node);
+                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, children, node);
                 }
             case RuleType.GherkinDocument:
                 {
@@ -178,12 +178,12 @@ public class AstBuilder<T> : IAstBuilder<T>
         return stepKeywordType.Value;
     }
 
-    protected virtual Background CreateBackground(Location location, string keyword, string name, string description, Step[] steps, AstNode node)
+    protected virtual Background CreateBackground(Location location, string keyword, string name, string description, IEnumerable<Step> steps, AstNode node)
     {
         return new Background(location, keyword, name, description, steps);
     }
 
-    protected virtual DataTable CreateDataTable(TableRow[] rows, AstNode node)
+    protected virtual DataTable CreateDataTable(List<TableRow> rows, AstNode node)
     {
         return new DataTable(rows);
     }
@@ -193,12 +193,12 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Comment(location, text);
     }
 
-    protected virtual Examples CreateExamples(Tag[] tags, Location location, string keyword, string name, string description, TableRow header, TableRow[] body, AstNode node)
+    protected virtual Examples CreateExamples(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, TableRow header, IEnumerable<TableRow> body, AstNode node)
     {
         return new Examples(tags, location, keyword, name, description, header, body);
     }
 
-    protected virtual Scenario CreateScenario(Tag[] tags, Location location, string keyword, string name, string description, Step[] steps, Examples[] examples, AstNode node)
+    protected virtual Scenario CreateScenario(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<Step> steps, IEnumerable<Examples> examples, AstNode node)
     {
         return new Scenario(tags, location, keyword, name, description, steps, examples);
     }
@@ -213,17 +213,17 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Step(location, keyword, keywordType, text, argument);
     }
 
-    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, Comment[] gherkinDocumentComments, AstNode node)
+    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, IEnumerable<Comment> gherkinDocumentComments, AstNode node)
     {
         return new GherkinDocument(feature, gherkinDocumentComments);
     }
 
-    protected virtual Feature CreateFeature(Tag[] tags, Location location, string language, string keyword, string name, string description, IHasLocation[] children, AstNode node)
+    protected virtual Feature CreateFeature(IEnumerable<Tag> tags, Location location, string language, string keyword, string name, string description, IEnumerable<IHasLocation> children, AstNode node)
     {
         return new Feature(tags, location, language, keyword, name, description, children);
     }
 
-    protected virtual Rule CreateRule(Tag[] tags, Location location, string keyword, string name, string description, IHasLocation[] children, AstNode node)
+    protected virtual Rule CreateRule(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<IHasLocation> children, AstNode node)
     {
         return new Rule(tags, location, keyword, name, description, children);
     }
@@ -238,7 +238,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Location(line, column);
     }
 
-    protected virtual TableRow CreateTableRow(Location location, TableCell[] cells, AstNode node)
+    protected virtual TableRow CreateTableRow(Location location, IEnumerable<TableCell> cells, AstNode node)
     {
         return new TableRow(location, cells);
     }
@@ -253,7 +253,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         return column == 0 ? token.Location : CreateLocation(token.Location.Line, column);
     }
 
-    private Tag[] GetTags(AstNode node)
+    private IEnumerable<Tag> GetTags(AstNode node)
     {
         var tagsNode = node.GetSingle<AstNode>(RuleType.Tags);
         if (tagsNode == null)
@@ -265,10 +265,10 @@ public class AstBuilder<T> : IAstBuilder<T>
             foreach (var matchedItem in line.MatchedItems)
                 tags.Add(CreateTag(GetLocation(line, matchedItem.Column), matchedItem.Text, tagsNode));
         }
-        return tags.ToArray();
+        return tags;
     }
 
-    private TableRow[] GetTableRows(AstNode node)
+    private List<TableRow> GetTableRows(AstNode node)
     {
         var rows = new List<TableRow>();
         int cellCount = 0;
@@ -290,7 +290,7 @@ public class AstBuilder<T> : IAstBuilder<T>
             }
             rows.Add(CreateTableRow(rowLocation, cells, node));
         }
-        return rows.ToArray();
+        return rows;
     }
 
     protected virtual void HandleAstError(string message, Location location)
@@ -298,9 +298,9 @@ public class AstBuilder<T> : IAstBuilder<T>
         throw new AstBuilderException(message, location);
     }
 
-    private static Step[] GetSteps(AstNode scenarioDefinitionNode)
+    private static List<Step> GetSteps(AstNode scenarioDefinitionNode)
     {
-        return scenarioDefinitionNode.GetItems<Step>(RuleType.Step).ToArray();
+        return [..scenarioDefinitionNode.GetItems<Step>(RuleType.Step)];
     }
 
     private static string GetDescription(AstNode scenarioDefinitionNode)
