@@ -1,8 +1,12 @@
+using System.Collections;
+using System.Diagnostics;
+
 namespace Gherkin;
 
+[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class AstNode(RuleType ruleType)
 {
-    private readonly Dictionary<RuleType, object> subItems = new Dictionary<RuleType, object>();
+    private readonly List<(RuleType RuleType, object Item)> subItems = new(4);
 
     public RuleType RuleType { get; } = ruleType;
 
@@ -11,86 +15,90 @@ public class AstNode(RuleType ruleType)
         return GetSingle<Token>((RuleType)tokenType);
     }
 
-    public IEnumerable<Token> GetTokens(TokenType tokenType)
+    public ItemsEnumerable<Token> GetTokens(TokenType tokenType)
     {
         return GetItems<Token>((RuleType)tokenType);
     }
 
     public T GetSingle<T>(RuleType ruleType)
     {
-        if (!subItems.TryGetValue(ruleType, out var items))
-            return default;
-        if (items is List<object> list)
+        bool foundOne = false;
+        T ret = default;
+        foreach ((var itemType, var item) in subItems)
         {
-            T ret = default;
-            bool foundOne = false;
-            foreach (var item in list)
-            {
-                if (item is T tItem)
-                {
-                    if (foundOne)
-                        throw new InvalidOperationException();
-                    ret = tItem;
-                    foundOne = true;
-                }
-            }
+            if (itemType != ruleType)
+                continue;
+            if (item is not T tItem)
+                continue;
             if (foundOne)
-                return ret;
-            else
                 throw new InvalidOperationException();
+            ret = tItem;
+            foundOne = true;
         }
-        else if (items is T tItem)
-        {
-            return tItem;
-        }
-        return default;
+        return ret;
     }
 
-    public IEnumerable<T> GetItems<T>(RuleType ruleType)
+    public readonly struct ItemsEnumerable<T> : IEnumerable<T>
     {
-        if (!subItems.TryGetValue(ruleType, out var items))
-            yield break;
-        if (items is List<object> list)
+        readonly List<(RuleType RuleType, object Item)> subItems;
+        readonly RuleType ruleType;
+
+        internal ItemsEnumerable(List<(RuleType RuleType, object Item)> subItems, RuleType ruleType)
         {
-            foreach (var item in list)
+            this.subItems = subItems;
+            this.ruleType = ruleType;
+        }
+
+        public ItemsEnumerator<T> GetEnumerator() => new ItemsEnumerator<T>(subItems.GetEnumerator(), ruleType);
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    public struct ItemsEnumerator<T> : IEnumerator<T>
+    {
+        private List<(RuleType RuleType, object Item)>.Enumerator enumerator;
+        readonly RuleType ruleType;
+
+        internal ItemsEnumerator(List<(RuleType RuleType, object Item)>.Enumerator enumerator, RuleType ruleType)
+        {
+            this.enumerator = enumerator;
+            this.ruleType = ruleType;
+        }
+
+        public T Current { readonly get; private set; }
+        readonly object IEnumerator.Current => Current;
+
+        public readonly void Dispose()
+        {
+            // nothing to do
+        }
+
+        public bool MoveNext()
+        {
+            while (enumerator.MoveNext())
             {
-                if (item is T tItem)
-                    yield return tItem;
+                (var itemType, var item) = enumerator.Current;
+                if (itemType != ruleType)
+                    continue;
+                if (item is not T tItem)
+                    continue;
+                Current = tItem;
+                return true;
             }
+            Current = default;
+            return false;
         }
-        else if (items is T tItem)
-        {
-            yield return tItem;
-        }
+
+        public void Reset() => throw new NotImplementedException();
     }
 
-    public void SetSingle<T>(RuleType ruleType, T value)
-    {
-        subItems[ruleType] = new object[] { value };
-    }
-
-    public void AddRange<T>(RuleType ruleType, IEnumerable<T> values)
-    {
-        foreach (var value in values)
-        {
-            Add(ruleType, value);
-        }
-    }
+    public ItemsEnumerable<T> GetItems<T>(RuleType ruleType) => new ItemsEnumerable<T>(subItems, ruleType);
 
     public void Add<T>(RuleType ruleType, T obj)
     {
-        if (!subItems.TryGetValue(ruleType, out var items))
-        {
-            subItems.Add(ruleType, obj);
-        }
-        else if (items is List<object> list)
-        {
-            list.Add(obj);
-        }
-        else
-        {
-            list = [items, obj];
-            subItems[ruleType] = list;
-        }
+        subItems.Add((ruleType, obj));
     }
+
+    string GetDebuggerDisplay() => $"RuleType: {RuleType} with item count: {(subItems.Count == 0 ? "<none>" : string.Join(", ", subItems.GroupBy(x => x.RuleType).Select(x => $"{x.Key}:{x.Count()}")))}";
 }
