@@ -1,4 +1,5 @@
 using Gherkin.Ast;
+using System.Collections;
 
 namespace Gherkin;
 
@@ -97,69 +98,131 @@ public readonly struct GherkinLine
         return lineText.Substring(trimmedStartIndex + length).Trim();
     }
 
+    public readonly struct TagsEnumerable : IEnumerable<GherkinLineSpan>
+    {
+        readonly int lineNumber;
+        readonly string uncommentedLine;
+        readonly int position;
+        public TagsEnumerable(int lineNumber, string lineText, int trimmedStartIndex)
+        {
+            this.lineNumber = lineNumber;
+            uncommentedLine = lineText;
+            var commentIndex = lineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], trimmedStartIndex);
+            while (commentIndex >= 0)
+            {
+                if (commentIndex == 0)
+                {
+                    position = -1;
+                    return;
+                }
+                if (Array.IndexOf(inlineWhitespaceChars, lineText[commentIndex - 1]) != -1)
+                {
+                    uncommentedLine = uncommentedLine.Substring(0, commentIndex);
+                    break;
+                }
+                commentIndex = lineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], commentIndex + 1);
+            }
+            position = uncommentedLine.IndexOf(GherkinLanguageConstants.TAG_PREFIX[0], trimmedStartIndex);
+        }
+
+        public TagsEnumerator GetEnumerator() => new TagsEnumerator(lineNumber, uncommentedLine, position);
+
+        IEnumerator<GherkinLineSpan> IEnumerable<GherkinLineSpan>.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    public struct TagsEnumerator : IEnumerator<GherkinLineSpan>
+    {
+        readonly int lineNumber;
+        readonly string uncommentedLine;
+        int position;
+
+        public TagsEnumerator(int lineNumber, string uncommentedLine, int position) : this()
+        {
+            this.lineNumber = lineNumber;
+            this.uncommentedLine = uncommentedLine;
+            this.position = position;
+        }
+
+        public GherkinLineSpan Current { readonly get; private set; }
+        readonly object IEnumerator.Current => Current;
+
+        public bool MoveNext()
+        {
+            while (position >= 0)
+            {
+                int nextPos = uncommentedLine.IndexOf(GherkinLanguageConstants.TAG_PREFIX[0], position + 1);
+                int endPos;
+                if (nextPos > 0)
+                    endPos = nextPos - 1;
+                else
+                    endPos = uncommentedLine.Length - 1;
+
+                while (endPos > position && Array.IndexOf(inlineWhitespaceChars, uncommentedLine[endPos]) != -1) // TrimEnd
+                    endPos -= 1;
+
+                int length = endPos - position + 1;
+                if (length <= 1)
+                {
+                    position = nextPos;
+                    continue;
+                }
+
+                var tagName = uncommentedLine.Substring(position, length);
+
+                if (tagName.IndexOfAny(inlineWhitespaceChars) >= 0)
+                    throw new InvalidTagException("A tag may not contain whitespace", new Location(lineNumber, position + 1));
+
+                Current = new GherkinLineSpan(position + 1, tagName);
+                position = nextPos;
+                return true;
+            }
+
+            Current = default;
+            return false;
+        }
+
+        readonly void IDisposable.Dispose()
+        {
+            // nothing to do
+        }
+
+        void IEnumerator.Reset() => throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Tries parsing the line as a tag list, and returns the tags wihtout the leading '@' characters.
     /// </summary>
     /// <returns>(position,text) pairs, position is 0-based index</returns>
-    public IEnumerable<GherkinLineSpan> GetTags()
+    public TagsEnumerable GetTags() => new TagsEnumerable(LineNumber, lineText, trimmedStartIndex);
+
+    public readonly struct TableCellsEnumerable(string lineText, int startPos) : IEnumerable<GherkinLineSpan>
     {
-        string uncommentedLine = lineText;
-        var commentIndex = lineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], trimmedStartIndex);
-        while (commentIndex >= 0)
-        {
-            if (commentIndex == 0)
-                yield break;
-            if (Array.IndexOf(inlineWhitespaceChars, lineText[commentIndex - 1]) != -1)
-            {
-                uncommentedLine = uncommentedLine.Substring(0, commentIndex);
-                break;
-            }
-            commentIndex = lineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], commentIndex + 1);
-        }
-        int position = uncommentedLine.IndexOf(GherkinLanguageConstants.TAG_PREFIX[0], trimmedStartIndex);
-        while (position >= 0)
-        { 
-            int nextPos = uncommentedLine.IndexOf(GherkinLanguageConstants.TAG_PREFIX[0], position + 1);
-            int endPos;
-            if (nextPos > 0)
-                endPos = nextPos - 1;
-            else
-                endPos = uncommentedLine.Length - 1;
+        public TableCellsEnumerator GetEnumerator() => new TableCellsEnumerator(lineText, startPos);
 
-            while (endPos > position && Array.IndexOf(inlineWhitespaceChars, lineText[endPos]) != -1) // TrimEnd
-                endPos -= 1;
-
-            int length = endPos - position + 1;
-            if (length <= 1)
-            {
-                position = nextPos;
-                continue;
-            }
-
-            var tagName = lineText.Substring(position, length);
-
-            if (tagName.IndexOfAny(inlineWhitespaceChars) >= 0)
-                throw new InvalidTagException("A tag may not contain whitespace", new Location(LineNumber, position + 1));
-
-            yield return new GherkinLineSpan(position + 1, tagName);
-
-            position = nextPos;
-        }
+        IEnumerator<GherkinLineSpan> IEnumerable<GherkinLineSpan>.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    /// <summary>
-    /// Tries parsing the line as table row and returns the trimmed cell values.
-    /// </summary>
-    /// <returns>(position,text) pairs, position is 0-based index</returns>
-    public IEnumerable<GherkinLineSpan> GetTableCells()
+    public struct TableCellsEnumerator : IEnumerator<GherkinLineSpan>
     {
-        bool isFirstRow = true;
+        readonly string lineText;
+        int startPos;
+        int pos;
+        bool isFirstRow;
 
-        string cell = null;
-        int startPos = trimmedStartIndex;
-        int pos = startPos;
+        public TableCellsEnumerator(string lineText, int startPos)
+        {
+            this.lineText = lineText;
+            this.startPos = startPos;
+            this.pos = startPos;
+            this.isFirstRow = true;
+        }
 
-        static void EnsureCellText(ref string cell, string lineText, ref int startPos, int pos, bool trim)
+        public GherkinLineSpan Current { readonly get; private set; }
+        readonly object IEnumerator.Current => Current;
+
+        void EnsureCellText(ref string cell, bool trim)
         {
             if (cell is not null)
             {
@@ -178,53 +241,76 @@ public readonly struct GherkinLine
             cell = lineText.Substring(startPos, trimedPos - startPos + 1);
         }
 
-        while (pos < lineText.Length)
+        public bool MoveNext()
         {
-            char c = lineText[pos];
-            pos++;
-            if (c == GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR)
-            {
-                if (isFirstRow)
-                    isFirstRow = false;
-                else
-                {
-                    EnsureCellText(ref cell, lineText, ref startPos, pos, true);
+            string cell = null;
 
-                    yield return new GherkinLineSpan(startPos + 1, cell);
-                }
-                cell = null;
-                startPos = pos;
-            }
-            else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
+            while (pos < lineText.Length)
             {
-                EnsureCellText(ref cell, lineText, ref startPos, pos, false);
-                if ((pos + 1) < lineText.Length)
+                char c = lineText[pos];
+                pos++;
+                if (c == GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR)
                 {
-                    c = lineText[pos];
-                    pos++;
-                    if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE)
+                    if (isFirstRow)
                     {
-                        cell += "\n";
+                        isFirstRow = false;
+                        startPos = pos;
                     }
                     else
                     {
-                        if (c != GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
+                        EnsureCellText(ref cell, true);
+
+                        Current = new GherkinLineSpan(startPos + 1, cell);
+                        startPos = pos;
+                        return true;
+                    }
+                }
+                else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
+                {
+                    EnsureCellText(ref cell, false);
+                    if ((pos + 1) < lineText.Length)
+                    {
+                        c = lineText[pos];
+                        pos++;
+                        if (c == GherkinLanguageConstants.TABLE_CELL_NEWLINE_ESCAPE)
                         {
-                            cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
+                            cell += "\n";
                         }
-                        cell += c;
+                        else
+                        {
+                            if (c != GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
+                            {
+                                cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
+                            }
+                            cell += c;
+                        }
+                    }
+                    else
+                    {
+                        cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
                     }
                 }
                 else
                 {
-                    cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
+                    if (cell is not null)
+                        cell += c;
                 }
             }
-            else
-            {
-                if (cell is not null)
-                    cell += c;
-            }
+
+            return false;
         }
+
+        readonly void IDisposable.Dispose()
+        {
+            // nothing to do
+        }
+
+        void IEnumerator.Reset() => throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Tries parsing the line as table row and returns the trimmed cell values.
+    /// </summary>
+    /// <returns>(position,text) pairs, position is 0-based index</returns>
+    public TableCellsEnumerable GetTableCells() => new TableCellsEnumerable(lineText, trimmedStartIndex);
 }

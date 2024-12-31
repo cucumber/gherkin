@@ -262,7 +262,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         var tags = new List<Tag>();
         foreach (var line in tagsNode.GetTokens(TokenType.TagLine))
         {
-            foreach (var matchedItem in line.MatchedItems)
+            foreach (var matchedItem in line.Line.GetTags())
                 tags.Add(CreateTag(GetLocation(line, matchedItem.Column), matchedItem.Text, tagsNode));
         }
         return tags;
@@ -277,7 +277,7 @@ public class AstBuilder<T> : IAstBuilder<T>
         {
             var rowLocation = GetLocation(rowToken);
             var cells = new List<TableCell>();
-            foreach (var cellItem in rowToken.MatchedItems)
+            foreach (var cellItem in rowToken.Line.GetTableCells())
                 cells.Add(CreateTableCell(GetLocation(rowToken, cellItem.Column), cellItem.Text));
             if (firstRow)
             {
