@@ -32,12 +32,11 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
             currentDialect = dialectProvider.DefaultDialect;
     }
 
-    protected virtual void SetTokenMatched(Token token, TokenType matchedType, string text = null, string keyword = null, int? indent = null, IEnumerable<GherkinLineSpan> items = null)
+    protected virtual void SetTokenMatched(Token token, TokenType matchedType, string text = null, string keyword = null, int? indent = null)
     {
         token.MatchedType = matchedType;
         token.MatchedKeyword = keyword;
         token.MatchedText = text;
-        token.MatchedItems = items;
         token.MatchedGherkinDialect = CurrentDialect;
         token.MatchedIndent = indent ?? (token.IsEOF ? 0 : token.Line.Indent);
         token.Location = new Ast.Location(token.Location.Line, token.MatchedIndent + 1);
@@ -113,7 +112,7 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
     {
         if (token.Line.StartsWith(GherkinLanguageConstants.TAG_PREFIX))
         {
-            SetTokenMatched(token, TokenType.TagLine, items: token.Line.GetTags());
+            SetTokenMatched(token, TokenType.TagLine);
             return true;
         }
         return false;
@@ -212,7 +211,7 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
     {
         if (token.Line.StartsWith(GherkinLanguageConstants.TABLE_CELL_SEPARATOR))
         {
-            SetTokenMatched(token, TokenType.TableRow, items: token.Line.GetTableCells());
+            SetTokenMatched(token, TokenType.TableRow);
             return true;
         }
         return false;
