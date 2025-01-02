@@ -255,6 +255,7 @@ classDiagram
     Feature "1" *-- "0..1" Background: background
     Scenario --|> ScenarioDefinition
     Tag "0..*" --* "1" Feature: tags
+    Tag "0..*" --* "1" Rule: tags
     Tag "0..*" --* "1" Scenario: tags
     Tag "0..*" --* "1" ScenarioOutline: tags
     Tag "0..*" --* "1" Examples: tags
