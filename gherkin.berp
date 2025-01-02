@@ -32,7 +32,7 @@ DocString! := #DocStringSeparator #Other* #DocStringSeparator
 
 Tags! := #TagLine+
 
-// we need to explicitly mention comment, to avoid merging it into the description line's #Other token
-// we also eat the leading empty lines, the tailing lines are not removed by the parser to avoid lookahead, this has to be done by the AST builder
-DescriptionHelper := #Empty* Description? #Comment*
-Description! := #Other+
+// descriptions should be allowed to be interspersed with comments
+// if only comments are encountered, the description text will be empty
+DescriptionHelper := #Empty* Description?
+Description! := (#Other | #Comment)+
