@@ -154,7 +154,7 @@ install(
 
 install(
   DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-  DESTINATION ${include_install_dir}
+  DESTINATION ${include_install_dir}/cucumber/gherkin
   FILES_MATCHING PATTERN "*.*h")
 
 install(
