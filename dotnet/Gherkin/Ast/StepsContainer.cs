@@ -1,6 +1,6 @@
 namespace Gherkin.Ast;
 
-public abstract class StepsContainer(Location location, string keyword, string name, string description, Step[] steps)
+public abstract class StepsContainer(Location location, string keyword, string name, string description, IEnumerable<Step> steps)
     : IHasLocation, IHasDescription, IHasSteps
 {
     public Location Location { get; } = location;
