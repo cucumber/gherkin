@@ -12,7 +12,8 @@ on:
 
 jobs:
   test-codegen:
-    runs-on: ubuntu-latest
+    # Failing on `ubuntu-24.04` (https://github.com/cucumber/gherkin/issues/349)
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
