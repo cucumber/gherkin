@@ -4,21 +4,31 @@
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:          self.start_rule(context, '@production.RuleName')
+      @:  self.start_rule(context, "@production.RuleName")
       break;
     case ProductionRuleType.End:
-      @:          self.end_rule(context, '@production.RuleName')
+      @:  self.end_rule(context, "@production.RuleName")
       break;
     case ProductionRuleType.Process:
-      @:          self.build(context, token)
+      @:  self.build(context, token)
       break;
   }
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
-{<text>        state_comment = "State: @state.Id - @Raw(state.Comment)"
+{<text>        state_comment = "State: @state.Id - @Raw(state.Comment)"  # fmt: skip
         token.detach
-        expected_tokens = ["@Raw(string.Join("\", \"", expectedTokens))"]
-        error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
+        expected_tokens = [
+    </text>
+@foreach (var token in expectedTokens)
+        {<text>        "@token",
+    </text>
+    }
+<text>    ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
@@ -30,23 +40,28 @@ from __future__ import annotations
 
 from collections import deque
 from collections.abc import Callable
-from typing import cast, TypeVar
+from typing import TypeVar, cast
 
 from .ast_builder import AstBuilder
+from .errors import (
+    CompositeParserException,
+    ParserException,
+    UnexpectedEOFException,
+    UnexpectedTokenException,
+)
+from .parser_types import GherkinDocument
 from .token import Token
 from .token_matcher import TokenMatcher
 from .token_scanner import TokenScanner
-from .parser_types import GherkinDocument
-from .errors import UnexpectedEOFException, UnexpectedTokenException, ParserException, CompositeParserException
 
-_T = TypeVar('_T')
-_U = TypeVar('_U')
-_V = TypeVar('_V')
+_T = TypeVar("_T")
+_U = TypeVar("_U")
+_V = TypeVar("_V")
 
 RULE_TYPE = [
-    'None',
+    "None",
     @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    '@rule.Name.Replace("#", "_")',  # @rule.ToString(true)
+    {<text>    "@rule.Name.Replace('#', '_')",  # @rule.ToString(true)
 </text>}
 ]
 
@@ -75,18 +90,18 @@ class @(Model.ParserClassName):
         token_scanner_or_str: TokenScanner | str,
         token_matcher: TokenMatcher | None = None,
     ) -> GherkinDocument:
-        token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
+        token_scanner = (
+            TokenScanner(token_scanner_or_str)
+            if isinstance(token_scanner_or_str, str)
+            else token_scanner_or_str
+        )
         self.ast_builder.reset()
         if token_matcher is None:
             token_matcher = TokenMatcher()
         token_matcher.reset()
-        context = ParserContext(
-            token_scanner,
-            token_matcher,
-            deque(),
-            [])
+        context = ParserContext(token_scanner, token_matcher, deque(), [])
 
-        self.start_rule(context, '@Model.RuleSet.StartRule.Name')
+        self.start_rule(context, "@Model.RuleSet.StartRule.Name")
         state = 0
         token = None
         while True:
@@ -95,7 +110,7 @@ class @(Model.ParserClassName):
             if token.eof():
                 break
 
-        self.end_rule(context, '@Model.RuleSet.StartRule.Name')
+        self.end_rule(context, "@Model.RuleSet.StartRule.Name")
 
         if context.errors:
             raise CompositeParserException(context.errors)
@@ -123,8 +138,7 @@ class @(Model.ParserClassName):
     def read_token(self, context: ParserContext) -> Token:
         if context.token_queue:
             return context.token_queue.popleft()
-        else:
-            return context.token_scanner.read()
+        return context.token_scanner.read()
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
     def match_@(rule.Name.Replace("#", ""))(self, context: ParserContext, token: Token) -> bool:
@@ -133,20 +147,24 @@ class @(Model.ParserClassName):
         @:if token.eof():
         @:    return False
         }
-        return self.handle_external_error(context, False, token, context.token_matcher.match_@(rule.Name.Replace("#", "")))</text>
+        return self.handle_external_error(
+            context, False, token, context.token_matcher.match_@(rule.Name.Replace("#", ""))
+        )
+</text>
 }
 
     def match_token(self, state: int, token: Token, context: ParserContext) -> int:
-        state_map: dict[int, Callable[[Token, ParserContext], int]]= {
+        state_map: dict[int, Callable[[Token, ParserContext], int]] = {
         @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
         {
         @:    @state.Id: self.match_token_at_@(state.Id),
         }
         }
-        if state in state_map:
-            return state_map[state](token, context)
-        else:
+
+        if state not in state_map:
             raise RuntimeError("Unknown state: " + str(state))
+
+        return state_map[state](token, context)
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
     # @Raw(state.Comment)
@@ -157,15 +175,24 @@ class @(Model.ParserClassName):
             if (transition.LookAheadHint != null)
             {
             @:if self.lookahead_@(transition.LookAheadHint.Id)(context, token):
-            }
                 foreach(var production in transition.Productions)
                 {
-                    @CallProduction(production)
+                    <text>        </text>@CallProduction(production)
                 }
                 @:return @transition.TargetState
+            } else
+            {
+                foreach(var production in transition.Productions)
+                {
+                    <text>    </text>@CallProduction(production)
+                }
+            @:return @transition.TargetState
+            }
         }
 
-        @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)</text>
+        @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)
+
+</text>
 }
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
@@ -180,16 +207,24 @@ class @(Model.ParserClassName):
             token.detach
             queue.append(token)
 
-            if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>self.@MatchToken(tokenType) or </text>}False):
+            if @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>self.@MatchToken(tokenType)</text>}:
                 match = True
                 break
 
-            if not (@foreach(var tokenType in lookAheadHint.Skip) {<text>self.@MatchToken(tokenType) or </text>}False):
+            if not any(
+                (@foreach(var tokenType in lookAheadHint.Skip) {
+                        <text>
+                    self.@MatchToken(tokenType),</text>}
+
+                )
+            ):
                 break
 
         context.token_queue.extend(queue)
 
-        return match</text>
+        return match
+</text>
+
 }
 
     # private
