@@ -16,7 +16,7 @@
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>        state_comment = "State: @state.Id - @Raw(state.Comment)"  # fmt: skip
-        token.detach
+        token.detach()
         expected_tokens = [
     </text>
 @foreach (var token in expectedTokens)
@@ -198,13 +198,13 @@ class @(Model.ParserClassName):
 {
 <text>
     def lookahead_@(lookAheadHint.Id)(self, context: ParserContext, currentToken: Token) -> bool:
-        currentToken.detach
+        currentToken.detach()
         token = None
         queue = []
         match = False
         while True:
             token = self.read_token(context)
-            token.detach
+            token.detach()
             queue.append(token)
 
             if @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>self.@MatchToken(tokenType)</text>}:
