@@ -9,7 +9,6 @@ T = TypeVar("T")
 
 
 class AstNode:
-
     def __init__(self, rule_type: str) -> None:
         self.rule_type = rule_type
         self._sub_items: defaultdict[str, list[object]] = defaultdict(list)
