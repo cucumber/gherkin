@@ -1,42 +1,46 @@
-# Gherkin
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/cucumber/cucumber-js/46a5a78107be27e99c6e044c69b6e8f885ce456c/docs/images/logo.svg" alt="Cucumber logo" width="75">
+  <br>
+  Gherkin
+</h1>
+<p align="center">
+  <b>Parser and compiler for the Gherkin language</b>
+</p>
+<div align="center">
+  <span><b><a href="https://cucumber.io/docs/gherkin/reference/">Syntax</a></b></span>
+  <span><b>·</b></span>
+  <span><b><a href="https://cucumber.io/docs/gherkin/languages">Localisation</a></b></span>
+  <span><b>·</b></span>
+  <span><b><a href="https://github.com/cucumber/gherkin/issues">Issues</a></b></span>
+  <span><b>·</b></span>
+  <span><b><a href="./CONTRIBUTING.md">Contributing</a></b></span>
+</div>
+<br>
 
-Gherkin is a parser and compiler for the Gherkin language.
+Gherkin is a language for writing behavioural specifications using your spoken language. As they are written in plain language, they can be easily understood. These specifications can be executed as automated tests using tools such as [Cucumber](https://cucumber.io/).
 
-Gherkin is currently implemented for the following platforms (in order of birthday):
+Gherkin has been translated to over [70 spoken languages](https://cucumber.io/docs/gherkin/languages) and has parser implementations available for common programming languages.
 
-- [.NET](./dotnet) - [![test dotnet workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dotnet.yml/badge.svg)](./.github/workflows/test-dotnet.yml)
-- [Java](./java) - [![test java workflow](https://github.com/cucumber/gherkin/actions/workflows/test-java.yml/badge.svg)](./.github/workflows/test-java.yml)
-- [JavaScript](./javascript) - [![test javascript workflow](https://github.com/cucumber/gherkin/actions/workflows/test-javascript.yml/badge.svg)](./.github/workflows/test-javascript.yml)
-- [Ruby](./ruby) - [![test ruby workflow](https://github.com/cucumber/gherkin/actions/workflows/test-ruby.yml/badge.svg)](./.github/workflows/test-ruby.yml)
-- [Go](./go) - [![test go workflow](https://github.com/cucumber/gherkin/actions/workflows/test-go.yml/badge.svg)](./.github/workflows/test-go.yml)
-- [Python](./python) - [![test python workflow](https://github.com/cucumber/gherkin/actions/workflows/test-python.yml/badge.svg)](./.github/workflows/test-python.yml)
-- [C](./c) - [![test c workflow](https://github.com/cucumber/gherkin/actions/workflows/test-c.yml/badge.svg)](./.github/workflows/test-c.yml)
-- [Objective-C](./objective-c) - _Currently not actively tested, requires maintenance_
-- [Perl](./perl) - [![test perl workflow](https://github.com/cucumber/gherkin/actions/workflows/test-perl.yml/badge.svg)](./.github/workflows/test-perl.yml)
-- [PHP](./php) - [![test php workflow](https://github.com/cucumber/gherkin/actions/workflows/test-php.yml/badge.svg)](./.github/workflows/test-php.yml)
-- [Dart](./dart) - [![test dart workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dart.yml/badge.svg)](./.github/workflows/test-dart.yml)
-- [C++](./cpp) - [![test cpp workflow](https://github.com/cucumber/gherkin/actions/workflows/test-cpp.yml/badge.svg)](./.github/workflows/test-cpp.yml)
+<div align="center">
 
-The CI will run using the linked workflow when that specific language implementation is changed
+| Language | Workflow | Release |
+|----------|----------|---------|
+| 🥅 [.NET](./dotnet) | [![test dotnet workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dotnet.yml/badge.svg)](./.github/workflows/test-dotnet.yml) | [![NuGet](https://img.shields.io/nuget/v/gherkin.svg?label=Nuget&color=dark-green)](https://www.nuget.org/packages/gherkin/) |
+| ©️ [C](./c) | [![test c workflow](https://github.com/cucumber/gherkin/actions/workflows/test-c.yml/badge.svg)](./.github/workflows/test-c.yml) | [![GitHub release](https://img.shields.io/github/v/release/cucumber/gherkin?label=GitHub&color=dark-green)](https://github.com/cucumber/gherkin/releases) |
+| ➕ [C++](./cpp) | [![test cpp workflow](https://github.com/cucumber/gherkin/actions/workflows/test-cpp.yml/badge.svg)](./.github/workflows/test-cpp.yml) | [![GitHub release](https://img.shields.io/github/v/release/cucumber/gherkin?label=GitHub&color=dark-green)](https://github.com/cucumber/gherkin/releases) |
+| 🎯 [Dart](./dart) | [![test dart workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dart.yml/badge.svg)](./.github/workflows/test-dart.yml) | [![GitHub release](https://img.shields.io/github/v/release/cucumber/gherkin?label=GitHub&color=dark-green)](https://github.com/cucumber/gherkin/releases) |
+| 🐹 [Go](./go) | [![test go workflow](https://github.com/cucumber/gherkin/actions/workflows/test-go.yml/badge.svg)](./.github/workflows/test-go.yml) | [![GitHub release](https://img.shields.io/github/v/release/cucumber/gherkin?label=GitHub&color=dark-green)](https://github.com/cucumber/gherkin/releases) |
+| ☕ [Java](./java) | [![test java workflow](https://github.com/cucumber/gherkin/actions/workflows/test-java.yml/badge.svg)](./.github/workflows/test-java.yml) | [![Maven Version](https://img.shields.io/maven-central/v/io.cucumber/gherkin.svg?label=Maven%20Central&color=dark-green)](https://central.sonatype.com/artifact/io.cucumber/gherkin) |
+| 📃 [JavaScript](./javascript) | [![test javascript workflow](https://github.com/cucumber/gherkin/actions/workflows/test-javascript.yml/badge.svg)](./.github/workflows/test-javascript.yml) | [![npm version](https://img.shields.io/npm/v/@cucumber/gherkin.svg?label=Npm&color=dark-green)](https://www.npmjs.com/package/@cucumber/gherkin) |
+| 🍏 [Objective-C](./objective-c) | _Without active testing_ | [![GitHub release](https://img.shields.io/github/v/release/cucumber/gherkin?label=GitHub&color=dark-green)](https://github.com/cucumber/gherkin/releases) |
+| 🦪 [Perl](./perl) | [![test perl workflow](https://github.com/cucumber/gherkin/actions/workflows/test-perl.yml/badge.svg)](./.github/workflows/test-perl.yml) | [![CPAN version](https://img.shields.io/cpan/v/Gherkin?label=Cpan&color=dark-green)](https://metacpan.org/release/Gherkin) |
+| 🐘 [PHP](./php) | [![test php workflow](https://github.com/cucumber/gherkin/actions/workflows/test-php.yml/badge.svg)](./.github/workflows/test-php.yml) | [![Packagist Version](https://img.shields.io/packagist/v/cucumber/gherkin.svg?label=Packagist&color=dark-green)](https://packagist.org/packages/cucumber/gherkin) |
+| 🐍 [Python](./python) | [![test python workflow](https://github.com/cucumber/gherkin/actions/workflows/test-python.yml/badge.svg)](./.github/workflows/test-python.yml) | [![PyPI](https://img.shields.io/pypi/v/gherkin-official?label=PyPI&color=dark-green)](https://pypi.org/project/gherkin-official/) |
+| ♦️ [Ruby](./ruby) | [![test ruby workflow](https://github.com/cucumber/gherkin/actions/workflows/test-ruby.yml/badge.svg)](./.github/workflows/test-ruby.yml) | [![Gem Version](https://img.shields.io/gem/v/cucumber-gherkin?label=Gem&color=dark-green)](https://rubygems.org/gems/cucumber-gherkin) |
 
-The CI will also run for any/all linked workflows when any [test data](./testdata) is modified
-(For example modifying one of the good or bad features / ndjson outputs)
+</div>
 
-## Contributing Translations (i18n)
-
-In order to allow Gherkin to be written in a number of languages, the keywords
-have been translated into multiple languages. To improve readability and flow,
-some languages may have more than one translation for any given keyword.
-
-If you are looking to add, update or improve these translations please see
-[`CONTRIBUTING.md`](CONTRIBUTING.md#adding-or-updating-an-i18n-language).
-
-## Contributing a Parser Implementation
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser
-for a new programming language. Our wish-list is (in no particular order):
-
-- Rust
+Contributions are welcome, whether you would like to contribute [translations](./CONTRIBUTING.md#contributing-translations-i18n) or [parser implementations](./CONTRIBUTING.md#contributing-a-parser-implementation) - either by raising [issues](https://github.com/cucumber/gherkin/issues) or [pull requests](https://github.com/cucumber/gherkin/pulls). See our [contributing guidelines](./CONTRIBUTING.md) or use our [discussion board](https://github.com/orgs/cucumber/discussions) for questions and guidance.
 
 ## Usage
 
@@ -178,7 +182,7 @@ $parser = new GherkinParser();
 $pickles = $parser->parseString(uri: $path, data: file_get_contents($path));
 ```
 
-### CLI
+### Command Line
 
 The Gherkin CLI `gherkin` reads Gherkin source files (`.feature` files) and outputs
 [ASTs](#abstract-syntax-tree-ast) and [Pickles](#pickles).
@@ -537,3 +541,4 @@ See [Markdown with Gherkin](./MARKDOWN_WITH_GHERKIN.md).
 - [cucumber-ruby](https://github.com/cucumber/cucumber-ruby)
 - [cucumber-js](https://github.com/cucumber/cucumber-js)
 - [godog](https://github.com/cucumber/godog)
+- [pytest-bdd](https://github.com/pytest-dev/pytest-bdd)

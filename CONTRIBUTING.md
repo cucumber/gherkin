@@ -3,6 +3,11 @@
 Gherkin is implemented in several languages. Each implementation is
 in a separate subdirectory in this repository.
 
+The CI will run using the linked workflow when that specific language implementation is changed
+
+The CI will also run for any/all linked workflows when any [test data](./testdata) is modified
+(For example modifying one of the good or bad features / ndjson outputs)
+
 ## Project organisation
 
 Each subdirectory is a stand-alone project using the preferred tools for
@@ -27,7 +32,7 @@ localisations and generating the parser is done separately from building each pr
 *Either* start a docker container
 
 ```shell
-docker build --tag berp-env . 
+docker build --tag berp-env .
 docker run --rm --interactive --tty --volume ".:/app" berp-env
 ```
 
@@ -45,7 +50,14 @@ make clean-generate
 make generate
 ```
 
-## Adding or updating an i18n language
+## Contributing Translations (i18n)
+
+Gherkin keywords have more than 70 translations available to allow use of spoken language.
+To improve readability and flow, some languages may have more than one translation
+for any given keyword.
+
+If you are looking to add, update or improve these translations please either
+raise an [issue](https://github.com/cucumber/gherkin/issues); and/or a [pull request](https://github.com/cucumber/gherkin/pull) following the below steps.
 
 1) Edit `gherkin-languages.json`.
 
@@ -111,7 +123,12 @@ implementations. Don't refactor the code to follow some nice design pattern if
 it makes the code so different from the other implementations that it can no longer
 be maintained by someone who doesn't know the language.
 
-## Implementing a parser for a new language
+## Contributing a Parser Implementation
+
+This section describes how you can contribute a parser implementation for a new
+programming language. Our wish-list is (in no particular order):
+
+- Rust
 
 First off, fork the repository and create a branch for the new language.
 
