@@ -16,3 +16,4 @@ storybook-static
 *-go
 *.iml
 .vscode-test
+README.md

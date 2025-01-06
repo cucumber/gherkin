@@ -17,7 +17,7 @@
 </div>
 <br>
 
-Gherkin is a language for writing behavioural specifications using your spoken language. As they are written in plain language, they can be easily understood. These specifications can be executed as automated tests using tools such as [Cucumber](https://cucumber.io/).
+Gherkin is a language for writing behavioural specifications through your spoken language. As they are written in plain language, they can be easily understood. These specifications can be executed as automated tests using tools such as [Cucumber](https://cucumber.io/).
 
 Gherkin has been translated to over [70 spoken languages](https://cucumber.io/docs/gherkin/languages) and has parser implementations available for common programming languages.
 

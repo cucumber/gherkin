@@ -8,7 +8,7 @@
     "build:cjs": "tsc --build tsconfig.build-cjs.json",
     "build:esm": "tsc --build tsconfig.build-esm.json",
     "build:legacy": "tsc --build tsconfig.build.json",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:legacy",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:legacy && cp ../README.md ./",
     "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
     "clean-tsc": "rm -rf dist",
     "test": "mocha",
