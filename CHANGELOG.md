@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Added
 - [.NET] Enabled overriding of parser's error-handling
+- [Python] Expose Python public API as package imports ([#352](https://github.com/cucumber/gherkin/pull/352))
 
 ### Fixed
 - [c] slight update to existing CMakeFiles.txt to propagate VERSION. Close #320 ([#328](https://github.com/cucumber/gherkin/pull/328))
