@@ -3,7 +3,7 @@
 #
 # See CONTRIBUTING.md
 #
-FROM mcr.microsoft.com/dotnet/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,7 +19,7 @@ WORKDIR /app
 RUN dotnet --list-sdks
 
 # Install Berp (dotnet tool installs are user-global; not system global)
-RUN dotnet tool install --global Berp --version 1.4.0 \
+RUN dotnet tool install --global Berp --version 1.5.0 \
       && echo 'export PATH="$PATH:/root/.dotnet/tools"' >> ~/.bashrc
 
 WORKDIR /app
