@@ -58,10 +58,10 @@ public static string NameOf(Rule rule)
 @helper MatchToken(TokenType tokenType)
 {<text>match_@(ToSnakeCase(tokenType.Name))(context, token)</text>}
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
-#include <gherkin/parser_base.hpp>
-#include <gherkin/rule_type.hpp>
+#include <cucumber/gherkin/parser_base.hpp>
+#include <cucumber/gherkin/rule_type.hpp>
 
-namespace gherkin {
+namespace cucumber::gherkin {
 
 template <
     typename Builder = ast_builder,

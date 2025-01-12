@@ -4,12 +4,9 @@ namespace Gherkin;
 
 public class StringUtils
 {
-    // string.StartsWith(string) is broken on Mono for strings outside
-    // the Basic Multilingual Plane (BMP). We have to roll our own so
-    // it works with Emoji characters.
     public static bool StartsWith(string a, string b)
     {
-        return StartsWith(a.ToCharArray(), b.ToCharArray());
+        return a.StartsWith(b, StringComparison.Ordinal);
     }
 
     private static bool StartsWith(char[] a, char[] b)

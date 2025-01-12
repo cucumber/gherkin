@@ -2,7 +2,7 @@ namespace Gherkin;
 
 public class AstNode(RuleType ruleType)
 {
-    private readonly Dictionary<RuleType, IList<object>> subItems = new Dictionary<RuleType, IList<object>>();
+    private readonly Dictionary<RuleType, object> subItems = new Dictionary<RuleType, object>();
 
     public RuleType RuleType { get; } = ruleType;
 
@@ -18,17 +18,50 @@ public class AstNode(RuleType ruleType)
 
     public T GetSingle<T>(RuleType ruleType)
     {
-        return GetItems<T>(ruleType).SingleOrDefault();
+        if (!subItems.TryGetValue(ruleType, out var items))
+            return default;
+        if (items is List<object> list)
+        {
+            T ret = default;
+            bool foundOne = false;
+            foreach (var item in list)
+            {
+                if (item is T tItem)
+                {
+                    if (foundOne)
+                        throw new InvalidOperationException();
+                    ret = tItem;
+                    foundOne = true;
+                }
+            }
+            if (foundOne)
+                return ret;
+            else
+                throw new InvalidOperationException();
+        }
+        else if (items is T tItem)
+        {
+            return tItem;
+        }
+        return default;
     }
 
     public IEnumerable<T> GetItems<T>(RuleType ruleType)
     {
-        IList<object> items;
-        if (!subItems.TryGetValue(ruleType, out items))
+        if (!subItems.TryGetValue(ruleType, out var items))
+            yield break;
+        if (items is List<object> list)
         {
-            return Enumerable.Empty<T>();
+            foreach (var item in list)
+            {
+                if (item is T tItem)
+                    yield return tItem;
+            }
         }
-        return items.Cast<T>();
+        else if (items is T tItem)
+        {
+            yield return tItem;
+        }
     }
 
     public void SetSingle<T>(RuleType ruleType, T value)
@@ -46,12 +79,18 @@ public class AstNode(RuleType ruleType)
 
     public void Add<T>(RuleType ruleType, T obj)
     {
-        IList<object> items;
-        if (!subItems.TryGetValue(ruleType, out items))
+        if (!subItems.TryGetValue(ruleType, out var items))
         {
-            items = new List<object>();
-            subItems.Add(ruleType, items);
+            subItems.Add(ruleType, obj);
         }
-        items.Add(obj);
+        else if (items is List<object> list)
+        {
+            list.Add(obj);
+        }
+        else
+        {
+            list = [items, obj];
+            subItems[ruleType] = list;
+        }
     }
 }

@@ -1,5 +1,4 @@
 using Gherkin.Ast;
-using System.Text.RegularExpressions;
 
 namespace Gherkin;
 
@@ -36,7 +35,7 @@ public class GherkinLine : IGherkinLine
 
     public bool StartsWith(string text)
     {
-        return trimmedLineText.StartsWith(text);
+        return trimmedLineText.StartsWith(text, StringComparison.Ordinal);
     }
 
     public bool StartsWithTitleKeyword(string text)
@@ -65,7 +64,19 @@ public class GherkinLine : IGherkinLine
 
     public IEnumerable<GherkinLineSpan> GetTags()
     {
-        var uncommentedLine = Regex.Split(trimmedLineText, @"\s" + GherkinLanguageConstants.COMMENT_PREFIX)[0];
+        string uncommentedLine = trimmedLineText;
+        var commentIndex = trimmedLineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0]);
+        while (commentIndex >= 0)
+        {
+            if (commentIndex == 0)
+                yield break;
+            if (Array.IndexOf(inlineWhitespaceChars, trimmedLineText[commentIndex - 1]) == 0)
+            {
+                uncommentedLine = uncommentedLine.Substring(0, commentIndex);
+                break;
+            }
+            commentIndex = trimmedLineText.IndexOf(GherkinLanguageConstants.COMMENT_PREFIX[0], commentIndex + 1);
+        }
         int position = Indent;
         foreach (string item in uncommentedLine.Split(GherkinLanguageConstants.TAG_PREFIX[0]))
         {
@@ -87,45 +98,45 @@ public class GherkinLine : IGherkinLine
 
     public IEnumerable<GherkinLineSpan> GetTableCells()
     {
-        var items = SplitCells(trimmedLineText).ToList();
-        bool isBeforeFirst = true;
-        foreach (var item in items.Take(items.Count - 1)) // skipping the one after last
-        {
-            if (!isBeforeFirst)
-            {
-                int trimmedStart;
-                var cellText = Trim(item.Item1, out trimmedStart);
-                var cellPosition = item.Item2 + trimmedStart;
+        var rowEnum = trimmedLineText.GetEnumerator();
+        bool isFirstRow = true;
 
-                if (cellText.Length == 0)
-                    cellPosition = item.Item2;
-
-                yield return new GherkinLineSpan(Indent + cellPosition + 1, cellText);
-            }
-
-            isBeforeFirst = false;
-        }
-    }
-
-    private IEnumerable<Tuple<string, int>> SplitCells(string row)
-    {
-        var rowEnum = row.GetEnumerator();
-
-        string cell = "";
+        string cell = null;
         int pos = 0;
         int startPos = 0;
+
+        static void EnsureCellText(ref string cell, string trimmedLineText, ref int startPos, int pos)
+        {
+            if (cell is not null)
+                return;
+
+            while (startPos < pos && Array.IndexOf(inlineWhitespaceChars, trimmedLineText[startPos]) != -1)
+                startPos++;
+
+            cell = trimmedLineText.Substring(startPos, pos - startPos - 1);
+        }
+
         while (rowEnum.MoveNext())
         {
             pos++;
             char c = rowEnum.Current;
-            if (c.ToString() == GherkinLanguageConstants.TABLE_CELL_SEPARATOR)
+            if (c == GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR)
             {
-                yield return Tuple.Create(cell, startPos);
-                cell = "";
+                if (isFirstRow)
+                    isFirstRow = false;
+                else
+                {
+                    EnsureCellText(ref cell, trimmedLineText, ref startPos, pos);
+                    var cellText = cell.TrimEnd(inlineWhitespaceChars);
+
+                    yield return new GherkinLineSpan(Indent + startPos + 1, cellText);
+                }
+                cell = null;
                 startPos = pos;
             }
             else if (c == GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
             {
+                EnsureCellText(ref cell, trimmedLineText, ref startPos, pos);
                 if (rowEnum.MoveNext())
                 {
                     pos++;
@@ -136,7 +147,7 @@ public class GherkinLine : IGherkinLine
                     }
                     else
                     {
-                        if (c.ToString() != GherkinLanguageConstants.TABLE_CELL_SEPARATOR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
+                        if (c != GherkinLanguageConstants.TABLE_CELL_SEPARATOR_CHAR && c != GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR)
                         {
                             cell += GherkinLanguageConstants.TABLE_CELL_ESCAPE_CHAR;
                         }
@@ -150,18 +161,9 @@ public class GherkinLine : IGherkinLine
             }
             else
             {
-                cell += c;
+                if (cell is not null)
+                    cell += c;
             }
         }
-        yield return Tuple.Create(cell, startPos);
-    }
-
-    private string Trim(string s, out int trimmedStart)
-    {
-        trimmedStart = 0;
-        while (trimmedStart < s.Length && inlineWhitespaceChars.Contains(s[trimmedStart]))
-            trimmedStart++;
-
-        return s.Trim(inlineWhitespaceChars);
     }
 }

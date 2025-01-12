@@ -133,11 +133,9 @@ func main() {
 #### Python
 
 ```python
-from gherkin.parser import Parser
-from gherkin.pickles.compiler import Compiler
+from gherkin import Compiler, Parser
 
-parser = Parser()
-gherkin_document = parser.parse("Feature: ...")
+gherkin_document = Parser().parse("Feature: ...")
 gherkin_document["uri"] = "uri_of_the_feature.feature"
 pickles = Compiler().compile(gherkin_document)
 ```
@@ -255,6 +253,7 @@ classDiagram
     Feature "1" *-- "0..1" Background: background
     Scenario --|> ScenarioDefinition
     Tag "0..*" --* "1" Feature: tags
+    Tag "0..*" --* "1" Rule: tags
     Tag "0..*" --* "1" Scenario: tags
     Tag "0..*" --* "1" ScenarioOutline: tags
     Tag "0..*" --* "1" Examples: tags

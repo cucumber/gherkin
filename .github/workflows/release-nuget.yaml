@@ -8,7 +8,8 @@ on:
 jobs:
   publish-nuget:
     name: Publish package to NuGet.org
-    runs-on: ubuntu-latest
+    # Failing on `ubuntu-24.04` (https://github.com/cucumber/gherkin/issues/349)
+    runs-on: ubuntu-22.04
     environment: Release
     steps:
       - uses: actions/checkout@v4

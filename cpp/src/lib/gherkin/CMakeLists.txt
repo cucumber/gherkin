@@ -34,9 +34,9 @@ target_link_libraries(
 set_target_properties(
     cucumber_gherkin_lib
     PROPERTIES
-        CXX_STANDARD 17
-        VERSION 0.1.0
-        SOVERSION 0.1
+        CXX_STANDARD 20
+        VERSION 30.0.4
+        SOVERSION 30
         EXPORT_NAME gherkin
         OUTPUT_NAME cucumber_gherkin
 )
