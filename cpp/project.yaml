@@ -1,6 +1,6 @@
 ---
 name: cucumber_gherkin
-version: 0.1.0
+version_file: VERSION
 namespace: cucumber
 std: 20
 packages:

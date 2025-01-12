@@ -131,7 +131,7 @@ namespace Gherkin
             return GetResult(context);
         }
 
-        private void AddError(ParserContext context, ParserException error)
+        protected virtual void AddError(ParserContext context, ParserException error)
         {
             if (context.Errors.Any(e => e.Message == error.Message))
                 return;
@@ -140,47 +140,60 @@ namespace Gherkin
                 throw new CompositeParserException(context.Errors.ToArray());
         }
 
-        private void HandleAstError(ParserContext context, Action action)
-        {
-            HandleExternalError(context, () => { action(); return true; });
-        }
-
-        private T HandleExternalError<T>(ParserContext context, Func<T> action, T defaultValue = default(T))
+        private bool TryHandleExternalError(ParserContext context, Exception exception)
         {
             if (StopAtFirstError)
-            {
-                return action();
-            }
+                return false;
 
-            try
-            {
-                return action();
-            }
-            catch (CompositeParserException compositeParserException)
+            if (exception is CompositeParserException compositeParserException)
             {
                 foreach (var error in compositeParserException.Errors)
                     AddError(context, error);
             }
-            catch (ParserException error)
+            else if (exception is ParserException error)
             {
                 AddError(context, error);
             }
-            return defaultValue;
+            return true;
         }
 
         void Build(ParserContext context, Token token)
         {
-            HandleAstError(context, () => this.astBuilder.Build(token));
+            try
+            {
+                this.astBuilder.Build(token);
+            }
+            catch (Exception ex)
+            {
+                if (!TryHandleExternalError(context, ex))
+                    throw;
+            }
         }
 
         void StartRule(ParserContext context, RuleType ruleType)
         {
-            HandleAstError(context, () => this.astBuilder.StartRule(ruleType));
+            try
+            {
+                this.astBuilder.StartRule(ruleType);
+            }
+            catch (Exception ex)
+            {
+                if (!TryHandleExternalError(context, ex))
+                    throw;
+            }
         }
 
         void EndRule(ParserContext context, RuleType ruleType)
         {
-            HandleAstError(context, () => this.astBuilder.EndRule(ruleType));
+            try
+            {
+                this.astBuilder.EndRule(ruleType);
+            }
+            catch (Exception ex)
+            {
+                if (!TryHandleExternalError(context, ex))
+                    throw;
+            }
         }
 
         T GetResult(ParserContext context)
@@ -196,72 +209,198 @@ namespace Gherkin
 
         bool Match_EOF(ParserContext context, Token token)
         {
-            return HandleExternalError(context, () => context.TokenMatcher.Match_EOF(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_EOF(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_Empty(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_Empty(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_Empty(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_Comment(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_Comment(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_Comment(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_TagLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_TagLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_TagLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_FeatureLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_FeatureLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_FeatureLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_RuleLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_RuleLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_RuleLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_BackgroundLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_BackgroundLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_BackgroundLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_ScenarioLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_ScenarioLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_ScenarioLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_ExamplesLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_ExamplesLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_ExamplesLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_StepLine(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_StepLine(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_StepLine(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_DocStringSeparator(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_DocStringSeparator(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_DocStringSeparator(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_TableRow(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_TableRow(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_TableRow(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_Language(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_Language(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_Language(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         bool Match_Other(ParserContext context, Token token)
         {
             if (token.IsEOF) return false;
-            return HandleExternalError(context, () => context.TokenMatcher.Match_Other(token), false); 
+            try
+            {
+                return context.TokenMatcher.Match_Other(token);
+            }
+            catch (Exception exception)
+            {
+                if (TryHandleExternalError(context, exception))
+                    return false;
+                throw;
+            }
         }
         protected virtual int MatchToken(int state, Token token, ParserContext context)
         {

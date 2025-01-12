@@ -2,7 +2,7 @@
 # -*- CMake -*-
 
 set(CMATE "cmate")
-set(CMATE_VER "X.Y.Z")
+set(CMATE_VER "0.0.0")
 set(CMATE_CMDS "")
 set(CMATE_DEPSFILE "deps.txt")
 set(CMATE_PRJFILE "project.yaml")
@@ -13,6 +13,7 @@ set(CMATE_GL "https://gitlab.com")
 set(CMATE_BB "https://bitbucket.org")
 
 cmake_policy(SET CMP0057 NEW)
+cmake_policy(SET CMP0054 NEW)
 cmake_policy(SET CMP0007 NEW)
 
 ###############################################################################
@@ -22,7 +23,14 @@ cmake_policy(SET CMP0007 NEW)
 ###############################################################################
 function(cmate_die)
     list(JOIN ARGV " " MSGS)
-    message(FATAL_ERROR "CMate: error: ${MSGS}")
+    set(MSG "CMate: error: ${MSGS}")
+
+    if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.29)
+        message("${MSG}")
+        cmake_language(EXIT 1)
+    else()
+        message(FATAL_ERROR "${MSG}")
+    endif()
 endfunction()
 
 function(cmate_msg)
@@ -94,15 +102,23 @@ macro(cmate_setv VAR VAL)
 endmacro()
 
 macro(cmate_setprop VAR PROP VAL)
-    set("${VAR}.${PROP}" "${VAL}")
+    set(SINGLE "")
+    set(MULTI "")
+    cmake_parse_arguments(ARGS "PARENT_SCOPE" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    if(ARGS_PARENT_SCOPE)
+        set("${VAR}.${PROP}" "${VAL}" PARENT_SCOPE)
+    else()
+        set("${VAR}.${PROP}" "${VAL}")
+    endif()
 endmacro()
 
 macro(cmate_setprops PVAR VAR PROPS)
     set(SINGLE "")
     set(MULTI "")
-    cmake_parse_arguments(PROP "PARENT_SCOPE" "${SINGLE}" "${MULTI}" ${ARGN})
+    cmake_parse_arguments(ARGS "PARENT_SCOPE" "${SINGLE}" "${MULTI}" ${ARGN})
 
-    if(PROP_PARENT_SCOPE)
+    if(ARGS_PARENT_SCOPE)
         foreach(PROP ${PROPS})
             set("${PVAR}.${PROP}" "${${VAR}.${PROP}}" PARENT_SCOPE)
         endforeach()
@@ -169,6 +185,16 @@ function(cmate_json_get_str JSON KEY VAR DEF)
     set(${VAR} ${STR} PARENT_SCOPE)
 endfunction()
 
+function(cmate_json_set_val JVAR KEY VAL)
+    string(JSON JSON SET ${${JVAR}} ${KEY} "${VAL}")
+    set(${JVAR} ${JSON} PARENT_SCOPE)
+endfunction()
+
+function(cmate_json_set_str JVAR KEY VAL)
+    cmate_json_set_val(${JVAR} ${KEY} "\"${VAL}\"")
+    set(${JVAR} ${${JVAR}} PARENT_SCOPE)
+endfunction()
+
 function(cmate_split STR SEP VAR)
     set(VALUES "")
 
@@ -222,17 +248,47 @@ function(cmate_conf_get PATH VAR)
     set(${VAR} "${VALUE}" PARENT_SCOPE)
 endfunction()
 
+function(cmate_conf_set_str PATH VAL)
+    cmate_split_conf_path(${PATH} KEYS)
+    cmate_json_set_str(CMATE_CONF "${KEYS}" "${VAL}")
+    cmate_setg(CMATE_CONF "${CMATE_CONF}")
+endfunction()
+
+function(cmate_conf_load_version)
+    set(VER "")
+
+    cmate_conf_get("version_file" VFILE)
+
+    if(VFILE AND EXISTS ${VFILE})
+        # Allow file to be optional
+        file(STRINGS ${VFILE} LINES)
+        list(GET LINES 0 VER)
+    else()
+        cmate_conf_get("version" VER)
+    endif()
+
+    if("${VER}" STREQUAL "")
+        cmate_die("project variable \"version\" or \"version_file\" no set")
+    endif()
+
+    cmate_setg(CMATE_PROJECT.version "${VER}")
+endfunction()
+
 function(cmate_load_conf FILE)
     set(PKGS "")
 
     if(NOT EXISTS ${FILE})
-        cmate_die("configuration not found: ${FILE}")
+        if("${CMATE_${CMATE_UCMD}_ALLOW_NO_CONF}")
+            return()
+        else()
+            cmate_die("configuration not found: ${FILE}")
+        endif()
     endif()
 
     cmate_yaml_load(${FILE} CMATE_CONF)
     cmate_setg(CMATE_CONF "${CMATE_CONF}")
 
-    foreach(VNAME "name" "version" "namespace" "std")
+    foreach(VNAME "name" "namespace" "std")
         cmate_conf_get(${VNAME} VAL)
 
         if("${VAL}" STREQUAL "")
@@ -242,7 +298,16 @@ function(cmate_load_conf FILE)
         endif()
     endforeach()
 
+    cmate_conf_load_version()
     cmate_set_version()
+endfunction()
+
+function(cmate_save_conf FILE)
+    if(EXISTS ${FILE})
+        cmate_die("${FILE} already exists")
+    endif()
+
+    cmate_yaml_save(${FILE} "${CMATE_CONF}")
 endfunction()
 
 function(cmate_project_varname NAME VAR)
@@ -275,19 +340,37 @@ function(cmate_unquote STR VAR)
 endfunction()
 
 function(cmate_run_prog)
-    cmake_parse_arguments(RUN "" "DIR" "CMD" ${ARGN})
+    set(OPTS QUIET)
+    set(SINGLE DIR MSG ERR)
+    set(MULTI CMD)
+    cmake_parse_arguments(RUN "${OPTS}" "${SINGLE}" "${MULTI}" ${ARGN})
 
     cmate_unescape_list(RUN_CMD)
+
+    if(RUN_MSG)
+        cmate_msg(${RUN_MSG})
+    endif()
+
+    if(RUN_QUIET)
+        list(APPEND EXEC_ARGS OUTPUT_QUIET)
+    endif()
 
     execute_process(
         COMMAND ${RUN_CMD}
         WORKING_DIRECTORY "${RUN_DIR}"
         RESULTS_VARIABLE RC
+        ${EXEC_ARGS}
     )
 
     if(RC)
-        list(JOIN ARGV " " RUN_CMD)
-        cmate_die("command failed: ${RUN_CMD}")
+        if(RUN_ERR)
+            set(ERR "${RUN_ERR}")
+        else()
+            list(JOIN ARGV " " ERR)
+            string(PREPEND ERR "command failed: ")
+        endif()
+
+        cmate_die("${ERR}")
     endif()
 endfunction()
 
@@ -690,6 +773,173 @@ function(cmate_yaml_parse_doc LINES VAR)
     set(${VAR} "${SUB_JSON}" PARENT_SCOPE)
 endfunction()
 
+function(cmate_yaml_dump_scalar)
+    set(OPTS IS_KEY)
+    set(SINGLE STR TO_VAR)
+    set(MULTI "")
+    cmake_parse_arguments(SCALAR "${OPTS}" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    string(JSON T ERROR_VARIABLE ERR TYPE "${SCALAR_STR}")
+
+    if(T STREQUAL "NULL")
+        set(CONTENT "~")
+    elseif("${SCALAR_STR}" STREQUAL "")
+        set(CONTENT "''")
+    elseif(T STREQUAL "NUMBER")
+        if(SCALAR_IS_KEY)
+            set(CONTENT "'${SCALAR_STR}'")
+        else()
+            set(CONTENT "${SCALAR_STR}")
+        endif()
+    elseif("${SCALAR_STR}" MATCHES "^[~!@#%&*|>?:,'\"`{} ]|^-+$|:$]")
+        set(CONTENT "'${SCALAR_STR}'")
+    else()
+        set(CONTENT "${SCALAR_STR}")
+    endif()
+
+    set("${SCALAR_TO_VAR}" "${CONTENT}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_yaml_dump_seq)
+    set(OPTS "")
+    set(SINGLE JSON TO_VAR INDENT)
+    set(MULTI "")
+    cmake_parse_arguments(SEQ "${OPTS}" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    string(REPEAT "  " ${SEQ_INDENT} INDENT)
+    set(CONTENT "")
+
+    cmate_json_array_to_list("${SEQ_JSON}" ITEMS)
+
+    foreach(ITEM ${ITEMS})
+        set(LINE "${INDENT}-")
+        cmate_yaml_get_type(JSON "${ITEM}" VAR T)
+
+        if(T STREQUAL "SCALAR")
+            cmate_yaml_dump_scalar(STR "${ITEM}" TO_VAR SCALAR)
+            string(APPEND LINE " ${SCALAR}")
+            string(APPEND CONTENT "${LINE}\n")
+        elseif(T STREQUAL "ARRAY")
+            string(JSON N LENGTH ${ITEM})
+
+            if(${N} GREATER 0)
+                string(APPEND CONTENT "${LINE}\n")
+                math(EXPR SINDENT "${INDENT}+1")
+                cmate_yaml_dump_seq(JSON "${ITEM}" TO_VAR ARRAY INDENT ${SINDENT})
+                string(APPEND CONTENT "${ARRAY}\n")
+            else()
+                string(APPEND CONTENT "[]\n")
+            endif()
+        elseif(T STREQUAL "OBJECT")
+            string(JSON N LENGTH ${ITEM})
+
+            if(${N} GREATER 0)
+                string(APPEND CONTENT "${LINE}\n")
+                math(EXPR SINDENT "${INDENT}+1")
+                cmate_yaml_dump_seq(JSON "${ITEM}" TO_VAR HASH INDENT ${SINDENT})
+                string(APPEND CONTENT "${HASH}\n")
+            else()
+                string(APPEND CONTENT "{}\n")
+            endif()
+        endif()
+    endforeach()
+
+    set(${SEQ_TO_VAR} "${CONTENT}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_yaml_dump_map)
+    set(OPTS "")
+    set(SINGLE JSON TO_VAR INDENT)
+    set(MULTI "")
+    cmake_parse_arguments(MAP "${OPTS}" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    string(REPEAT "  " ${MAP_INDENT} INDENT)
+    set(CONTENT "")
+
+    string(JSON N LENGTH ${MAP_JSON})
+
+    if(N EQUAL 0)
+        return()
+    else()
+        math(EXPR COUNT "${N}-1")
+    endif()
+
+    foreach(I RANGE ${COUNT})
+        string(JSON KEY MEMBER ${MAP_JSON} ${I})
+        string(JSON ITEM GET ${MAP_JSON} "${KEY}")
+        cmate_yaml_dump_scalar(STR "${KEY}" TO_VAR NAME IS_KEY 1)
+        set(LINE "${INDENT}${KEY}:")
+
+        cmate_yaml_get_type(JSON ${MAP_JSON} KEY "${KEY}" VAR T)
+
+        if(T STREQUAL "SCALAR")
+            cmate_yaml_dump_scalar(STR "${ITEM}" TO_VAR SCALAR)
+            string(APPEND LINE " ${SCALAR}")
+            string(APPEND CONTENT "${LINE}\n")
+        elseif(T STREQUAL "ARRAY")
+            string(JSON N LENGTH ${ITEM})
+
+            if(${N} GREATER 0)
+                string(APPEND CONTENT "${LINE}\n")
+                math(EXPR SINDENT "${INDENT}+1")
+                cmate_yaml_dump_seq(JSON "${ITEM}" TO_VAR ARRAY INDENT ${SINDENT})
+                string(APPEND CONTENT "${ARRAY}\n")
+            else()
+                string(APPEND CONTENT "[]\n")
+            endif()
+        elseif(T STREQUAL "OBJECT")
+            string(JSON N LENGTH ${ITEM})
+
+            if(${N} GREATER 0)
+                string(APPEND CONTENT "${LINE}\n")
+                math(EXPR SINDENT "${INDENT}+1")
+                cmate_yaml_dump_seq(JSON "${ITEM}" TO_VAR HASH INDENT ${SINDENT})
+                string(APPEND CONTENT "${HASH}\n")
+            else()
+                string(APPEND CONTENT "{}\n")
+            endif()
+        endif()
+    endforeach()
+
+    set(${MAP_TO_VAR} "${CONTENT}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_yaml_get_type)
+    set(OPTS "")
+    set(SINGLE JSON KEY VAR)
+    set(MULTI "")
+    cmake_parse_arguments(GT "${OPTS}" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    string(JSON T ERROR_VARIABLE ERR TYPE ${GT_JSON} ${GT_KEY})
+
+    if(T STREQUAL "NULL" OR T STREQUAL "NUMBER" OR T STREQUAL "STRING" OR T STREQUAL "BOOLEAN")
+        set(T "SCALAR")
+    endif()
+
+    set(${GT_VAR} ${T} PARENT_SCOPE)
+endfunction()
+
+function(cmate_yaml_dump JSON VAR)
+    cmate_yaml_get_type(JSON "${JSON}" VAR T)
+    set(DOC "---")
+
+    set(INDENT 0)
+
+    if(T STREQUAL "SCALAR")
+        cmate_yaml_dump_scalar(STR "${JSON}" TO_VAR CONTENT)
+    elseif(T STREQUAL "ARRAY")
+        cmate_yaml_dump_seq(JSON "${JSON}" TO_VAR CONTENT INDENT ${INDENT})
+    elseif(T STREQUAL "OBJECT")
+        cmate_yaml_dump_map(JSON "${JSON}" TO_VAR CONTENT INDENT ${INDENT})
+    endif()
+
+    if(CONTENT)
+        string(APPEND DOC "\n${CONTENT}")
+    endif()
+
+    set(${VAR} "${DOC}" PARENT_SCOPE)
+endfunction()
+
 function(cmate_yaml_load FILE VAR)
     set(LINES "")
 
@@ -700,6 +950,11 @@ function(cmate_yaml_load FILE VAR)
     cmate_yaml_parse_doc("${LINES}" JSON)
 
     set("${VAR}" "${JSON}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_yaml_save FILE JSON)
+    cmate_yaml_dump("${JSON}" YAML)
+    file(WRITE ${FILE} ${YAML})
 endfunction()
 ###############################################################################
 #
@@ -774,6 +1029,8 @@ function(cmate_parse_arguments)
     list(LENGTH CMATE_ARGS CMATE_ARGC)
 
     cmate_setg(CMATE_CMD "${CMATE_CMD}")
+    string(TOUPPER "${CMATE_CMD}" CMATE_UCMD)
+    cmate_setg(CMATE_UCMD "${CMATE_UCMD}")
     cmate_setg(CMATE_ARGS "${CMATE_ARGS}")
     cmate_setg(CMATE_ARGC ${CMATE_ARGC})
     get_filename_component(CMATE_ENV "${CMATE_ENV}" REALPATH)
@@ -834,26 +1091,71 @@ endfunction()
 # Content of cmate/deps.cmake
 #
 ###############################################################################
-function(cmate_dep_set_cache_dir NAME)
-    string(REPLACE "/" "_" DIR ${NAME})
-    set(DIR "${CMATE_DL_DIR}/${DIR}")
-    cmate_setg(CMATE_DEP_CACHE_DIR ${DIR})
-    cmate_setg(CMATE_DEP_SOURCE_DIR "${DIR}/sources")
-    cmate_setg(CMATE_DEP_BUILD_DIR "${DIR}/build")
-    cmate_setg(CMATE_DEP_STATE_DIR "${DIR}/state")
+cmate_setg(
+    CMATE_DEPS_PROPS
+    "TYPE;NAME;URL;HOST;REPO;REF;ARGS;SRCDIR;EXTRACT_DIR;SOURCE_DIR;BUILD_DIR"
+)
+
+macro(cmate_deps_copy_dep TOV FROMV)
+    set(SINGLE "")
+    set(MULTI "")
+    cmake_parse_arguments(ARGS "PARENT_SCOPE" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    if(ARGS_PARENT_SCOPE)
+        cmate_setprops(${TOV} ${FROMV} "${CMATE_DEPS_PROPS}" PARENT_SCOPE)
+    else()
+        cmate_setprops(${TOV} ${FROMV} "${CMATE_DEPS_PROPS}")
+    endif()
+endmacro()
+
+function(cmate_deps_get_dep_dir DEPV VAR)
+    string(MD5 HASH "${${DEPV}.URL}")
+    set(DIR "${CMATE_DL_DIR}/${HASH}")
+    set("${VAR}" "${DIR}" PARENT_SCOPE)
 endfunction()
 
-function(cmate_dep_state_file STATE VAR)
-    set(${VAR} "${CMATE_DEP_STATE_DIR}/.${STATE}" PARENT_SCOPE)
+function(cmate_deps_get_dep_cache_dir DEPV TYPE VAR)
+    cmate_deps_get_dep_dir("${DEPV}" DIR)
+    set("${VAR}" "${DIR}/${TYPE}" PARENT_SCOPE)
 endfunction()
 
-function(cmate_dep_set_state STATE)
-    file(MAKE_DIRECTORY ${CMATE_DEP_STATE_DIR})
-    cmate_dep_state_file(${STATE} FILE)
+function(cmate_deps_get_state_file DEPV STATE VAR)
+    cmate_deps_get_dep_cache_dir("${DEPV}" "state" DIR)
+    set(${VAR} "${DIR}/.${STATE}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_deps_set_state DEPV STATE)
+    cmate_deps_get_dep_cache_dir("${DEPV}" "state" DIR)
+    file(MAKE_DIRECTORY ${DIR})
+    cmate_deps_get_state_file("${DEPV}" ${STATE} FILE)
     file(TOUCH ${FILE})
 endfunction()
 
-function(cmate_dep_get_repo HOST REPO REF)
+function(cmate_deps_check_repo URL)
+    set(GIT_ARGS "ls-remote")
+    cmate_run_prog(
+        MSG "checking remote at ${URL}"
+        ERR "invalid remote at ${URL}"
+        CMD git ${GIT_ARGS} ${URL}
+        QUIET
+    )
+endfunction()
+
+function(cmate_deps_get_source_dir DEPV VAR)
+    set(DIR "${${DEPV}.EXTRACT_DIR}")
+
+    if(NOT "${${DEPV}.SRCDIR}" STREQUAL "")
+        set(DIR "${${DEPV}.EXTRACT_DIR}/${${DEPV}.SRCDIR}")
+    endif()
+
+    set(${VAR} ${DIR} PARENT_SCOPE)
+endfunction()
+
+function(cmate_deps_get_repo DEPV)
+    cmate_deps_copy_dep(DEP ${DEPV})
+
+    set(HOST "${DEP.HOST}")
+
     if(HOST MATCHES "^\\$\\{(.+)\\}$")
         # Dereference variable
         set(HOST ${${CMAKE_MATCH_1}})
@@ -865,7 +1167,9 @@ function(cmate_dep_get_repo HOST REPO REF)
         set(HOST "https://gitlab.com")
     endif()
 
-    set(URL "${HOST}/${REPO}.git")
+    set(URL "${HOST}/${DEP.REPO}.git")
+
+    cmate_deps_check_repo(${URL})
 
     set(GIT_ARGS "clone")
     list(
@@ -874,61 +1178,111 @@ function(cmate_dep_get_repo HOST REPO REF)
         --depth 1
     )
 
-    if(REF)
-        list(APPEND GIT_ARGS --branch "${REF}")
+    if("${DEP.REF}")
+        list(APPEND GIT_ARGS --branch "${DEPV.REF}")
     endif()
 
-    cmate_dep_set_cache_dir(${REPO})
-    cmate_dep_state_file("fetched" FETCHED)
+    cmate_deps_get_dep_cache_dir(DEP "sources" SDIR)
+    cmate_deps_get_dep_cache_dir(DEP "build" BDIR)
+    cmate_deps_get_state_file(DEP "fetched" FETCHED)
 
-    if(NOT IS_DIRECTORY ${CMATE_DEP_SOURCE_DIR} OR NOT EXISTS ${FETCHED})
+    if(NOT IS_DIRECTORY ${SDIR} OR NOT EXISTS ${FETCHED})
         # Whatever the reason, we're (re-)fetching
-        file(REMOVE_RECURSE ${CMATE_DEP_SOURCE_DIR})
-        cmate_info("cloning ${URL} in ${CMATE_DEP_SOURCE_DIR}")
-        cmate_run_prog(CMD git ${GIT_ARGS} ${URL} ${CMATE_DEP_SOURCE_DIR})
-        cmate_dep_set_state("fetched")
+        file(REMOVE_RECURSE ${SDIR})
+        cmate_info("cloning ${URL} in ${SDIR}")
+        cmate_run_prog(CMD git ${GIT_ARGS} ${URL} ${SDIR})
+        cmate_deps_set_state(DEP "fetched")
     endif()
+
+    cmate_setprop(DEP EXTRACT_DIR ${SDIR})
+    cmate_deps_get_source_dir(DEP SOURCE_DIR)
+    cmate_setprop(DEP EXTRACT_DIR ${SDIR})
+    cmate_setprop(DEP SOURCE_DIR ${SOURCE_DIR})
+    cmate_setprop(DEP BUILD_DIR ${BDIR})
+
+    cmate_deps_copy_dep(${DEPV} DEP PARENT_SCOPE)
 endfunction()
 
-function(cmate_dep_get_url URL)
-    string(MD5 HASH ${URL})
-
-    if(URL MATCHES "/([^/]+)$")
+function(cmate_deps_get_url_filename DEPV VAR)
+    if("${${DEPV}.URL}" MATCHES "/([^/]+)$")
         set(FILE ${CMAKE_MATCH_1})
     else()
-        cmate_die("can't find filename from URL: ${URL}")
+        cmate_die("can't find filename from URL: ${${DEPV}.URL}")
     endif()
 
-    cmate_dep_set_cache_dir(${HASH})
-    cmate_dep_state_file("fetched" FETCHED)
-    cmate_dep_state_file("extracted" EXTRACTED)
-    set(CFILE "${CMATE_DEP_CACHE_DIR}/${FILE}")
+    set(${VAR} "${FILE}" PARENT_SCOPE)
+endfunction()
 
-    if(NOT EXISTS ${CFILE})
-        cmate_info("downloading ${URL} in ${CDIR}")
-        cmate_download(${URL} ${CFILE})
-        cmate_dep_set_state("fetched")
+function(cmate_deps_get_url DEPV)
+    cmate_deps_copy_dep(DEP ${DEPV})
+
+    cmate_deps_get_url_filename(${DEPV} DFILE)
+    cmate_deps_get_state_file("${DEPV}" "fetched" FETCHED)
+    cmate_deps_get_state_file("${DEPV}" "extracted" EXTRACTED)
+    cmate_deps_get_dep_dir(${DEPV} DDIR)
+    cmate_deps_get_dep_cache_dir(${DEPV} "sources" DSDIR)
+    cmate_deps_get_dep_cache_dir(${DEPV} "build" BDIR)
+
+    set(DFILE "${DDIR}/${DFILE}")
+
+    if(NOT EXISTS ${DFILE})
+        file(MAKE_DIRECTORY ${DDIR})
+        cmate_info("downloading ${URL} in ${DDIR}")
+        cmate_download("${${DEPV}.URL}" ${DFILE})
+        cmate_deps_set_state("${DEPV}" "fetched")
+    else()
     endif()
 
-    if(NOT IS_DIRECTORY ${CMATE_DEP_SOURCE_DIR} OR NOT EXISTS ${EXTRACTED})
-        file(REMOVE_RECURSE ${CMATE_DEP_SOURCE_DIR})
+    if(NOT IS_DIRECTORY ${DSDIR} OR NOT EXISTS ${EXTRACTED})
+        file(REMOVE_RECURSE ${DSDIR})
         cmate_info("extracting ${FILE}")
         file(
             ARCHIVE_EXTRACT
-            INPUT ${CFILE}
-            DESTINATION ${CMATE_DEP_SOURCE_DIR}
+            INPUT ${DFILE}
+            DESTINATION ${DSDIR}
         )
-        cmate_dep_set_state("extracted")
+        cmate_deps_set_state("${DEPV}" "extracted")
     endif()
 
-    cmate_unique_dir(${CMATE_DEP_SOURCE_DIR} SDIR)
-    cmate_setg(CMATE_DEP_SOURCE_DIR ${SDIR})
+    cmate_unique_dir(${DSDIR} UDIR)
+    cmate_setprop(${DEPV} EXTRACT_DIR ${UDIR})
+    cmate_deps_get_source_dir(${DEPV} SOURCE_DIR)
+    cmate_setprop(${DEPV} SOURCE_DIR ${SOURCE_DIR})
+    cmate_setprop(${DEPV} BUILD_DIR ${BDIR})
+
+    cmate_deps_copy_dep(${DEPV} DEP PARENT_SCOPE)
 endfunction()
 
-cmate_setg(CMATE_DEP_PROPS "TYPE;NAME;URL;HOST;REPO;TAG;ARGS;SRCDIR")
+function(cmate_deps_dump_dep DEPV)
+    foreach(PROP ${CMATE_DEPS_PROPS})
+        cmate_msg("DEP.${PROP}=${${DEPV}.${PROP}}")
+    endforeach()
+endfunction()
 
-function(cmate_dep_parse SPEC VAR)
-    if(SPEC MATCHES "^([A-Za-z0-9_]+)@([a-z]+://[^ ]+)$")
+function(cmate_deps_parse_spec SPEC VAR)
+    if(SPEC MATCHES "^([a-z]+)://([^ /]+)/([^ ]+)$")
+        message("1=${CMAKE_MATCH_1}")
+        message("2=${CMAKE_MATCH_2}")
+        message("3=${CMAKE_MATCH_3}")
+        set(SCHEME ${CMAKE_MATCH_1})
+        set(HOST ${CMAKE_MATCH_2})
+        set(REPO ${CMAKE_MATCH_3})
+
+        if(REPO MATCHES "(.+)\\.git(@([^ ]+))?$")
+            # Full remote Git URL
+            cmate_setprop(DEP TYPE "git")
+            cmate_setprop(DEP REPO ${CMAKE_MATCH_1})
+            cmate_setprop(DEP REF "${CMAKE_MATCH_3}")
+            cmate_setprop(DEP URL "${SCHEME}://${HOST}/${REPO}.git")
+        else()
+            # Raw URL, find a name
+            cmate_setprop(DEP URL ${SPEC})
+            cmate_setprop(DEP TYPE "url")
+            cmate_deps_get_url_filename(DEP DFILE)
+            get_filename_component(NAME ${DFILE} NAME_WE)
+            cmate_setprop(DEP NAME ${NAME})
+        endif()
+    elseif(SPEC MATCHES "^([A-Za-z0-9_]+)@([a-z]+://[^ ]+)$")
         # name@URL
         cmate_setprop(DEP TYPE "url")
         cmate_setprop(DEP NAME ${CMAKE_MATCH_1})
@@ -948,15 +1302,198 @@ function(cmate_dep_parse SPEC VAR)
         endif()
 
         cmate_setprop(DEP REPO ${CMAKE_MATCH_3})
-        cmate_setprop(DEP TAG "${CMAKE_MATCH_5}")
+        cmate_setprop(DEP REF "${CMAKE_MATCH_5}")
         cmate_setprop(DEP URL "${DEP.HOST}/${DEP.REPO}.git")
         set("DEP.NAME" ${DEP.REPO})
         string(REGEX REPLACE "[^A-Za-z0-9_]" "_" "DEP.NAME" "${DEP.NAME}")
     else()
         cmate_die("unable to parse dependency: ${SPEC}")
+
     endif()
 
-    cmate_setprops(${VAR} DEP "${CMATE_DEP_PROPS}" PARENT_SCOPE)
+    cmate_setprops(${VAR} DEP "${CMATE_DEPS_PROPS}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_deps_make_dep JSON_SPEC DEPV)
+    string(JSON T ERROR_VARIABLE ERR TYPE ${JSON_SPEC})
+
+    if(T STREQUAL "OBJECT")
+        string(JSON DKEYS LENGTH ${JSON_SPEC})
+
+        if(NOT DKEYS EQUAL 1)
+            cmate_die("invalid dependency: expected a single key, got ${NKEYS}: ${JSON_SPEC}")
+        endif()
+
+        string(JSON SPEC MEMBER ${JSON_SPEC} 0)
+        cmate_deps_parse_spec(${SPEC} DEP)
+        cmate_json_get_array(${JSON_SPEC} "${SPEC};args" DEP.ARGS)
+        cmate_json_get_array(${JSON_SPEC} "${SPEC};srcdir" DEP.SRCDIR)
+    elseif(T STREQUAL "STRING")
+        cmate_deps_parse_spec(${JSON_SPEC} DEP)
+    else()
+        cmate_die("invalid dependency: expected object or string, got ${JSON_SPEC}")
+    endif()
+
+    cmate_setprops(${DEPV} DEP "${CMATE_DEPS_PROPS}" PARENT_SCOPE)
+endfunction()
+
+function(cmate_deps_install_cmake_dep DEPV)
+    cmate_deps_get_state_file(${DEPV} "configured" CONFIGURED)
+    cmate_deps_get_state_file(${DEPV} "built" BUILT)
+    cmate_deps_get_state_file(${DEPV} "installed" INSTALLED)
+
+    if(NOT EXISTS ${CONFIGURED})
+        cmate_msg("building with: ${${DEPV}.ARGS}")
+
+        set(ARGS "")
+
+        find_program(CMATE_CCACHE ccache)
+
+        if(CMATE_CCACHE)
+            list(APPEND ARGS "-DCMAKE_C_COMPILER_LAUNCHER=${CMATE_CCACHE}")
+            list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
+        endif()
+
+        cmate_check_ninja()
+
+        cmate_run_prog(
+            CMD
+                ${CMAKE_COMMAND}
+                -DCMAKE_PREFIX_PATH=${CMATE_ENV_DIR}
+                -DCMAKE_INSTALL_PREFIX=${CMATE_ENV_DIR}
+                -DCMAKE_BUILD_TYPE=Release
+                -DBUILD_TESTING=OFF
+                -G Ninja
+                ${ARGS}
+                -S ${${DEPV}.SOURCE_DIR} -B ${${DEPV}.BUILD_DIR}
+                ${${DEPV}.ARGS}
+        )
+        cmate_deps_set_state(${DEPV} "configured")
+    endif()
+    if(NOT EXISTS ${BUILT})
+        cmate_run_prog(
+            CMD
+                ${CMAKE_COMMAND}
+                --build ${${DEPV}.BUILD_DIR}
+                --config Release
+                --parallel
+        )
+        cmate_deps_set_state(${DEPV} "built")
+    endif()
+    if(NOT EXISTS ${INSTALLED})
+        cmate_run_prog(
+            CMD
+                ${CMAKE_COMMAND}
+                --install ${${DEPV}.BUILD_DIR}
+                --config Release
+        )
+        cmate_deps_set_state(${DEPV} "installed")
+    endif()
+endfunction()
+
+function(cmate_deps_install_meson_dep DEPV)
+    cmate_deps_get_state_file(${DEPV} "configured" CONFIGURED)
+    cmate_deps_get_state_file(${DEPV} "installed" INSTALLED)
+    file(MAKE_DIRECTORY ${${DEPV}.BUILD_DIR})
+
+    if(NOT EXISTS ${CONFIGURED})
+        cmate_run_prog(
+            DIR ${${DEPV}.BUILD_DIR}
+            CMD
+                meson
+                --prefix=${CMATE_ENV_DIR}
+                --pkg-config-path=${CMATE_ENV_DIR}
+                --cmake-prefix-path=${CMATE_ENV_DIR}
+                ${${DEPV}.ARGS}
+                . ${${DEPV}.SOURCE_DIR}
+        )
+        cmate_deps_set_state(${DEPV} "configured")
+    endif()
+    if(NOT EXISTS ${INSTALLED})
+        cmate_run_prog(meson install)
+        cmate_deps_set_state(${DEPV} "installed")
+    endif()
+endfunction()
+
+function(cmate_deps_install_autotools_dep DEPV)
+    cmate_deps_get_state_file(${DEPV} "configured" CONFIGURED)
+    cmate_deps_get_state_file(${DEPV} "installed" INSTALLED)
+    file(MAKE_DIRECTORY ${${DEPV}.BUILD_DIR})
+
+    if(NOT EXISTS ${CONFIGURED})
+        cmate_run_prog(
+            DIR ${${DEPV}.BUILD_DIR}
+            CMD
+                ${${DEPV}.SOURCE_DIR}/configure
+                --prefix=${CMATE_ENV_DIR}
+                ${${DEPV}.ARGS}
+        )
+        cmate_deps_set_state(${DEPV} "configured")
+    endif()
+    if(NOT EXISTS ${INSTALLED})
+        cmate_run_prog(
+            DIR ${${DEPV}.BUILD_DIR}
+            CMD make install
+        )
+        cmate_deps_set_state(${DEPV} "installed")
+    endif()
+endfunction()
+
+function(cmate_deps_install_makefile_dep DEPV)
+    cmate_deps_get_state_file(${DEPV} "built" BUILT)
+    cmate_deps_get_state_file(${DEPV} "installed" INSTALLED)
+    file(MAKE_DIRECTORY ${${DEPV}.BUILD_DIR})
+
+    if(NOT EXISTS ${BUILT})
+        cmate_run_prog(
+            DIR ${${DEPV}.SOURCE_DIR}
+            CMD make
+        )
+        cmate_deps_set_state(${DEPV} "built")
+    endif()
+    if(NOT EXISTS ${INSTALLED})
+        cmate_run_prog(
+            DIR ${${DEPV}.SOURCE_DIR}
+            CMD make prefix=${CMATE_ENV_DIR} install
+        )
+        cmate_deps_set_state(${DEPV} "installed")
+    endif()
+endfunction()
+
+function(cmate_deps_install_dep DEPV)
+    set(SDIR "${${DEPV}.SOURCE_DIR}")
+
+    if(NOT IS_DIRECTORY "${SDIR}")
+        cmate_die("invalid source directory: ${SDIR}")
+    endif()
+
+    if(EXISTS "${SDIR}/CMakeLists.txt")
+        cmate_deps_install_cmake_dep(${DEPV})
+    elseif(EXISTS "${SDIR}/meson.build")
+        cmate_deps_install_meson_dep(${DEPV})
+    elseif(EXISTS "${SDIR}/configure")
+        cmate_deps_install_autotools_dep(${DEPV})
+    elseif(EXISTS "${SDIR}/Makefile")
+        cmate_deps_install_makefile_dep(${DEPV})
+    else()
+        cmate_die("don't know how to build in ${SDIR}")
+    endif()
+endfunction()
+
+function(cmate_deps_get_dep DEPV)
+    cmate_deps_copy_dep(DEP ${DEPV})
+
+    if(NOT "${DEP.REPO}" STREQUAL "")
+        cmate_msg("checking repository ${DEP.REPO}")
+        cmate_deps_get_repo(DEP)
+    elseif(NOT "${DEPV.URL}" STREQUAL "")
+        cmate_msg("checking url ${DEP.URL}")
+        cmate_deps_get_url(DEP)
+    else()
+        cmate_die("invalid dependency: $DEP")
+    endif()
+
+    cmate_deps_copy_dep(${DEPV} DEP PARENT_SCOPE)
 endfunction()
 ###############################################################################
 #
@@ -1199,6 +1736,67 @@ function(cmate_config)
 endfunction()
 ###############################################################################
 #
+# Content of cmate/commands/new.cmake
+#
+###############################################################################
+set(CMATE_NEW_ALLOW_NO_CONF 1)
+set(CMATE_NEW_DEFAULT_VERSION "0.1.0")
+set(CMATE_NEW_DEFAULT_STD "20")
+
+list(APPEND CMATE_CMDS "new")
+list(
+    APPEND
+    CMATE_NEW_OPTIONS
+    "name"
+    "version"
+    "namespace"
+    "std"
+)
+set(CMATE_NEW_SHORT_HELP "Create new local project")
+set(
+    CMATE_NEW_HELP
+    "
+Usage: cmate new [OPTIONS]
+
+${CMATE_NEW_SHORT_HELP}
+
+Options:
+  --name=NAME            Project name
+  --version=SEMVER       Project version (default: ${CMATE_NEW_DEFAULT_VERSION})
+  --namespace=NAMESPACE  Project C++ namespace (default: project name)
+  --std=STD              Project C++ standard (default: ${CMATE_NEW_DEFAULT_STD})"
+)
+
+function(cmate_new_set_conf)
+    set(OPTS "")
+    set(SINGLE VAR KEY DEFAULT)
+    set(MULTI "")
+    cmake_parse_arguments(NEW "${OPTS}" "${SINGLE}" "${MULTI}" ${ARGN})
+
+    if(${NEW_VAR})
+        set(VAL "${${NEW_VAR}}")
+    else()
+        set(VAL "${NEW_DEFAULT}")
+    endif()
+
+    cmate_conf_set_str("${NEW_KEY}" "${VAL}")
+endfunction()
+
+function(cmate_new)
+    if(NOT CMATE_NEW_NAME)
+        cmate_die("missing project name")
+    else()
+        cmate_conf_set_str("name" "${CMATE_NEW_NAME}")
+    endif()
+
+    cmate_new_set_conf(KEY "version" VAR CMATE_NEW_VERSION DEFAULT "${CMATE_NEW_DEFAULT_VERSION}")
+    cmate_new_set_conf(KEY "namespace" VAR CMATE_NEW_NAMESPACE DEFAULT "${CMATE_NEW_NAME}")
+    cmate_new_set_conf(KEY "std" VAR CMATE_NEW_STD DEFAULT "${CMATE_NEW_DEFAULT_STD}")
+
+    cmate_save_conf("${CMATE_PRJFILE}")
+endfunction()
+###############################################################################
+#
 # Content of cmate/commands/configure.cmake
 #
 ###############################################################################
@@ -1333,29 +1931,6 @@ function(cmate_configure_cmake_package PKGDESC VAR)
     set("${VAR}.COMP_COUNT" ${COMP_COUNT} PARENT_SCOPE)
 endfunction()
 
-function(cmate_configure_make_dep DEP VAR)
-    string(JSON T ERROR_VARIABLE ERR TYPE ${DEP})
-
-    if(T STREQUAL "OBJECT")
-        string(JSON DKEYS LENGTH ${DEP})
-
-        if(NOT DKEYS EQUAL 1)
-            cmate_die("invalid dependency: expected a single key, got ${NKEYS}: ${DEP}")
-        endif()
-
-        string(JSON SPEC MEMBER ${DEP} 0)
-        cmate_dep_parse(${SPEC} DEP)
-        cmate_json_get_array(${DEP} "${SPEC};args" DEP.ARGS)
-        cmate_json_get_array(${DEP} "${SPEC};srcdir" DEP.SRCDIR)
-    elseif(T STREQUAL "STRING")
-        cmate_dep_parse(${DEP} DEP)
-    else()
-        cmate_die("invalid dependency: expected object or string, got ${DEP}")
-    endif()
-
-    cmate_setprops(${VAR} DEP "${CMATE_DEP_PROPS}" PARENT_SCOPE)
-endfunction()
-
 function(cmate_configure_project_cmake_packages VAR)
     cmate_conf_get("packages.cmake" PKGS)
 
@@ -1390,9 +1965,9 @@ macro(cmate_configure_project_set_deps)
     cmate_conf_get("deps" DEPS)
 
     foreach(SPEC ${DEPS})
-        cmate_configure_make_dep(${SPEC} DEP)
+        cmate_deps_make_dep(${SPEC} DEP)
         list(APPEND "P.DEPS" ${DEP.NAME})
-        cmate_setprops("P.DEPS.${DEP.NAME}" DEP "${CMATE_DEP_PROPS}")
+        cmate_deps_copy_dep("P.DEPS.${DEP.NAME}" DEP)
     endforeach()
 
     # Prepare CMake/PkgConfig dependencies names/structure
@@ -1864,7 +2439,7 @@ Options:
 function(cmate_clean)
     cmate_configure_find_targets()
 
-    set(DIRS "BUILD" "STAGE" "STATE")
+    set(DIRS "BUILD" "STAGE" "STATE" "TMP")
 
     if(${CMATE_CLEAN_PURGE})
         list(APPEND DIRS "ENV" "DEPS")
@@ -1882,6 +2457,33 @@ function(cmate_clean)
 endfunction()
 ###############################################################################
 #
+# Content of cmate/commands/add.cmake
+#
+###############################################################################
+list(APPEND CMATE_CMDS "add")
+set(CMATE_ADD_SHORT_HELP "Add a dependency to project.yaml")
+set(
+    CMATE_ADD_HELP
+    "
+Usage: cmate add URL
+
+${CMATE_ADD_SHORT_HELP}"
+)
+
+function(cmate_add)
+    cmate_conf_get("deps" DEPS)
+
+    if(CMATE_ARGC EQUAL 0)
+        cmate_die("missing URL")
+    endif()
+
+    list(GET CMATE_ARGS 0 URL)
+    cmate_deps_parse(${URL} DEP)
+    cmate_deps_dump_dep(DEP)
+    # cmate_deps_get_dep(DEP)
+endfunction()
+###############################################################################
+#
 # Content of cmate/commands/install.cmake
 #
 ###############################################################################
@@ -1895,188 +2497,13 @@ Usage: cmate install
 ${CMATE_INSTALL_SHORT_HELP}"
 )
 
-function(cmate_install_cmake_dep)
-    cmate_dep_state_file("configured" CONFIGURED)
-    cmate_dep_state_file("built" BUILT)
-    cmate_dep_state_file("installed" INSTALLED)
-
-    if(NOT EXISTS ${CONFIGURED})
-        cmate_msg("building with: ${DEP.ARGS}")
-
-        set(ARGS "")
-
-        find_program(CMATE_CCACHE ccache)
-
-        if(CMATE_CCACHE)
-            list(APPEND ARGS "-DCMAKE_C_COMPILER_LAUNCHER=${CMATE_CCACHE}")
-            list(APPEND ARGS "-DCMAKE_CXX_COMPILER_LAUNCHER=${CMATE_CCACHE}")
-        endif()
-
-        cmate_check_ninja()
-
-        cmate_run_prog(
-            CMD
-                ${CMAKE_COMMAND}
-                -DCMAKE_PREFIX_PATH=${CMATE_ENV_DIR}
-                -DCMAKE_INSTALL_PREFIX=${CMATE_ENV_DIR}
-                -DCMAKE_BUILD_TYPE=Release
-                -DBUILD_TESTING=OFF
-                -G Ninja
-                ${ARGS}
-                -S ${CMATE_DEP_SOURCE_DIR} -B ${CMATE_DEP_BUILD_DIR}
-                ${DEP.ARGS}
-        )
-        cmate_dep_set_state("configured")
-    endif()
-    if(NOT EXISTS ${BUILT})
-        cmate_run_prog(
-            CMD
-                ${CMAKE_COMMAND}
-                --build ${CMATE_DEP_BUILD_DIR}
-                --config Release
-                --parallel
-        )
-        cmate_dep_set_state("built")
-    endif()
-    if(NOT EXISTS ${INSTALLED})
-        cmate_run_prog(
-            CMD
-                ${CMAKE_COMMAND}
-                --install ${CMATE_DEP_BUILD_DIR}
-                --config Release
-        )
-        cmate_dep_set_state("installed")
-    endif()
-endfunction()
-
-function(cmate_install_meson_dep)
-    cmate_dep_state_file("configured" CONFIGURED)
-    cmate_dep_state_file("installed" INSTALLED)
-    file(MAKE_DIRECTORY ${CMATE_DEP_BUILD_DIR})
-
-    if(NOT EXISTS ${CONFIGURED})
-        cmate_run_prog(
-            DIR ${CMATE_DEP_BUILD_DIR}
-            CMD
-                meson
-                --prefix=${CMATE_ENV_DIR}
-                --pkg-config-path=${CMATE_ENV_DIR}
-                --cmake-prefix-path=${CMATE_ENV_DIR}
-                ${DEP.ARGS}
-                . ${SRCDIR}
-        )
-        cmate_dep_set_state("configured")
-    endif()
-    if(NOT EXISTS ${INSTALLED})
-        cmate_run_prog(meson install)
-        cmate_dep_set_state("installed")
-    endif()
-endfunction()
-
-function(cmate_install_autotools_dep)
-    cmate_dep_state_file("configured" CONFIGURED)
-    cmate_dep_state_file("installed" INSTALLED)
-    file(MAKE_DIRECTORY ${CMATE_DEP_BUILD_DIR})
-
-    if(NOT EXISTS ${CONFIGURED})
-        cmate_run_prog(
-            DIR ${CMATE_DEP_BUILD_DIR}
-            CMD
-                ${CMATE_DEP_SOURCE_DIR}/configure
-                --prefix=${CMATE_ENV_DIR}
-                ${DEP.ARGS}
-        )
-        cmate_dep_set_state("configured")
-    endif()
-    if(NOT EXISTS ${INSTALLED})
-        cmate_run_prog(
-            DIR ${CMATE_DEP_BUILD_DIR}
-            CMD make install
-        )
-        cmate_dep_set_state("installed")
-    endif()
-endfunction()
-
-function(cmate_install_makefile_dep)
-    cmate_dep_state_file("built" BUILT)
-    cmate_dep_state_file("installed" INSTALLED)
-    file(MAKE_DIRECTORY ${CMATE_DEP_BUILD_DIR})
-
-    if(NOT EXISTS ${BUILT})
-        cmate_run_prog(
-            DIR ${CMATE_DEP_SOURCE_DIR}
-            CMD make
-        )
-        cmate_dep_set_state("built")
-    endif()
-    if(NOT EXISTS ${INSTALLED})
-        cmate_run_prog(
-            DIR ${CMATE_DEP_SOURCE_DIR}
-            CMD make prefix=${CMATE_ENV_DIR} install
-        )
-        cmate_dep_set_state("installed")
-    endif()
-endfunction()
-
-function(cmate_install_dep)
-    if(NOT "${DEP.SRCDIR}" STREQUAL "")
-        cmate_setg(
-            CMATE_DEP_SOURCE_DIR
-            "${CMATE_DEP_SOURCE_DIR}/${DEP.SRCDIR}"
-        )
-    endif()
-
-    if(NOT IS_DIRECTORY "${CMATE_DEP_SOURCE_DIR}")
-        cmate_die("invalid source directory: ${CMATE_DEP_SOURCE_DIR}")
-    endif()
-
-    if(EXISTS "${CMATE_DEP_SOURCE_DIR}/CMakeLists.txt")
-        cmate_install_cmake_dep()
-    elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/meson.build")
-        cmate_install_meson_dep()
-    elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/configure")
-        cmate_install_autotools_dep()
-    elseif(EXISTS "${CMATE_DEP_SOURCE_DIR}/Makefile")
-        cmate_install_makefile_dep()
-    else()
-        cmate_die("don't know how to build in ${CMATE_DEP_SOURCE_DIR}")
-    endif()
-endfunction()
-
 function(cmate_install)
     cmate_conf_get("deps" DEPS)
 
-    foreach(DEP ${DEPS})
-        string(JSON T ERROR_VARIABLE ERR TYPE ${DEP})
-
-        if(T STREQUAL "OBJECT")
-            string(JSON DKEYS LENGTH ${DEP})
-
-            if(NOT DKEYS EQUAL 1)
-                cmate_die("invalid dependency: expected a single key, got ${NKEYS}: ${DEP}")
-            endif()
-
-            string(JSON SPEC MEMBER ${DEP} 0)
-            cmate_dep_parse(${SPEC} DEP)
-            cmate_json_get_array(${DEP} "${SPEC};args" DEP.ARGS)
-            cmate_json_get_array(${DEP} "${SPEC};srcdir" DEP.SRCDIR)
-        elseif(T STREQUAL "STRING")
-            cmate_dep_parse(${DEP} DEP)
-        else()
-            cmate_die("invalid dependency: expected object or string, got ${DEP}")
-        endif()
-
-        if(NOT "${DEP.REPO}" STREQUAL "")
-            cmate_msg("checking ${DEP.REPO}")
-            cmate_dep_get_repo(${DEP.HOST} ${DEP.REPO} "${DEP.TAG}")
-        elseif(NOT "${DEP.URL}" STREQUAL "")
-            cmate_msg("checking ${DEP.URL}")
-            cmate_dep_get_url(${DEP.URL})
-        else()
-            cmate_die("invalid dependency: ${DEP}")
-        endif()
-
-        cmate_install_dep()
+    foreach(SPEC ${DEPS})
+        cmate_deps_make_dep(${SPEC} DEP)
+        cmate_deps_get_dep(DEP)
+        cmate_deps_install_dep(DEP)
     endforeach()
 endfunction()
 ###############################################################################
@@ -2168,7 +2595,8 @@ endfunction()
 #
 ##############################################################################
 function(cmate_set_defaults)
-    # Policies
+    cmate_setg(CMATE_CONF "{}")
+
     set(ME ${CMAKE_CURRENT_LIST_FILE})
     get_filename_component(MYDIR "${ME}" DIRECTORY)
     get_filename_component(MYDIR "${MYDIR}/.." REALPATH)
@@ -2249,258 +2677,43 @@ endfunction()
 
 ###############################################################################
 #
-# Template CMAKE_CONFIG_CMAKE_IN
+# Template PROJECT_OPTIONS_TXT_IN
 #
 ###############################################################################
 set(
-    CMATE_CMAKE_CONFIG_CMAKE_IN
-    [=[
-%@PACKAGE_INIT@%
-include("${CMAKE_CURRENT_LIST_DIR}/@P.NAME@-targets.cmake")
-]=])
-
-###############################################################################
-#
-# Template TARGETS_LINK_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_TARGETS_LINK_TXT_IN
-    [=[
-% if(${TARGET_DEPS_COUNT} GREATER 0)
-
-target_link_libraries(
-    @T.TNAME@
-%     foreach(TYPE PUBLIC PRIVATE)
-%         if(${TARGET_${TYPE}_DEPS_COUNT} GREATER 0)
-    %{ ${TYPE} }%
-%             foreach(DEP ${TARGET_${TYPE}_DEPS})
-        %{ ${DEP} }%
-%             endforeach()
-%         endif()
-%     endforeach()
-)
-% endif()
-]=])
-
-###############################################################################
-#
-# Template TARGETS_BIN_CMAKELISTS_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_TARGETS_BIN_CMAKELISTS_TXT_IN
-    [=[
-add_%{ ${T.TTYPE} }%(@T.TNAME@)
-
-set(@T.UTNAME@_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-file(GLOB_RECURSE @T.UTNAME@_SOURCES "${@T.UTNAME@_SRC_DIR}/@CM.SPAT@")
-list(APPEND @T.UTNAME@_ALL_SOURCES ${@T.UTNAME@_SOURCES})
-
-target_sources(
-    @T.TNAME@
-    PRIVATE
-        ${@T.UTNAME@_ALL_SOURCES}
-)
-
-target_include_directories(
-    @T.TNAME@
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
-%%
-%%include <targets/link.txt.in>
-
-set_target_properties(
-    @T.TNAME@
-    PROPERTIES
-        CXX_STANDARD @P.STD@
-        OUTPUT_NAME @P.NS@_@T.NAME@
-)
-]=])
-
-###############################################################################
-#
-# Template TARGETS_LIB_CMAKELISTS_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_TARGETS_LIB_CMAKELISTS_TXT_IN
-    [=[
-add_library(@T.TNAME@)
-add_library(@P.NS@::@T.NAME@ ALIAS @T.TNAME@)
-
-set(@T.UTNAME@_INC_DIR "${PROJECT_SOURCE_DIR}/include/@T.NAME@")
-file(GLOB_RECURSE @T.UTNAME@_HEADERS "${@T.UTNAME@_INC_DIR}/@CM.HPAT@")
-list(APPEND @T.UTNAME@_ALL_SOURCES ${@T.UTNAME@_HEADERS})
-
-set(@T.UTNAME@_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-file(GLOB_RECURSE @T.UTNAME@_SOURCES "${@T.UTNAME@_SRC_DIR}/@CM.SPAT@")
-list(APPEND @T.UTNAME@_ALL_SOURCES ${@T.UTNAME@_SOURCES})
-
-target_sources(
-    @T.TNAME@
-    PRIVATE
-        ${@T.UTNAME@_ALL_SOURCES}
-)
-
-target_include_directories(
-    @T.TNAME@
-    PUBLIC
-        $<BUILD_INTERFACE:${@T.UTNAME@_INC_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/@P.NS@>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
-%%
-%%include <targets/link.txt.in>
-
-set_target_properties(
-    @T.TNAME@
-    PROPERTIES
-        CXX_STANDARD @P.STD@
-        VERSION @P.VER@
-        SOVERSION @P.VER_MAJOR@.@P.VER_MINOR@
-        EXPORT_NAME @T.NAME@
-        OUTPUT_NAME @P.NS@_@T.NAME@
-)
-]=])
-
-###############################################################################
-#
-# Template PROJECT_PKG_PKGCONFIG_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_PROJECT_PKG_PKGCONFIG_TXT_IN
-    [=[
-% if(${P.PC.PKG_COUNT} GREATER 0)
-
-%###
-%#
-%# pkg-config dependencies
-%#
-%###
-%     foreach(PKG ${P.PC.PKGS})
-pkg_check_modules(%{ ${PKG} }% REQUIRED IMPORTED_TARGET %{ ${PKG} }%)
-%     endforeach()
-% endif()
-]=])
-
-###############################################################################
-#
-# Template PROJECT_TARGETS_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_PROJECT_TARGETS_TXT_IN
+    CMATE_PROJECT_OPTIONS_TXT_IN
     [=[
 
 %###
 %#
-%# Targets
+%# Options
 %#
 %###
-% foreach(TYPE "LIB" "BIN")
-%     foreach(T ${P.TARGETS.${TYPE}})
-add_subdirectory(%{ ${P.TARGETS.${TYPE}.${T}.SUBDIR} }%)
-%     endforeach()
-% endforeach()
-%%
-% if(${P.TARGETS.TEST})
-
-if(@P.UNAME@_BUILD_TESTS)
-    include(CTest)
-    enable_testing()
-% foreach(T ${P.TARGETS.TEST})
-    add_subdirectory(%{ ${P.TARGETS.TEST.${T}.SUBDIR} }%)
-% endforeach()
-endif()
-% endif()
-]=])
-
-###############################################################################
-#
-# Template PROJECT_CMAKELISTS_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_PROJECT_CMAKELISTS_TXT_IN
-    [=[
-%%include <project/project.txt.in>
-%%
-%%include <project/options.txt.in>
-%%
-%%include <project/configuration.txt.in>
-%%
-%%include <project/pkg-cmake.txt.in>
-%%include <project/pkg-pkgconfig.txt.in>
-%%
-%%include <project/targets.txt.in>
-%%
-%%include <project/install.txt.in>
-]=])
-
-###############################################################################
-#
-# Template PROJECT_PKG_CMAKE_TXT_IN
-#
-###############################################################################
-set(
-    CMATE_PROJECT_PKG_CMAKE_TXT_IN
-    [=[
-% if(${P.CM.PKG_COUNT} GREATER 0)
-
-%###
-%#
-%# CMake dependencies
-%#
-%###
-if(@P.UNAME@_FETCH_DEPS)
-    include(FetchContent)
-%     foreach(DEP ${P.DEPS})
-
-    FetchContent_Declare(
-        %{ ${P.DEPS.${DEP}.NAME} }%
-%         if("${P.DEPS.${DEP}.TYPE}" STREQUAL "git")
-        GIT_REPOSITORY %{ ${P.DEPS.${DEP}.URL} }%
-        GIT_TAG %{ ${P.DEPS.${DEP}.TAG} }%
-%         elseif("${P.DEPS.${DEP}.TYPE}" STREQUAL "url")
-        URL %{ ${P.DEPS.${DEP}.URL} }%
-%         endif()
-        OVERRIDE_FIND_PACKAGE
-%         if(NOT "${P.DEPS.${DEP}.SRCDIR}" STREQUAL "")
-        SOURCE_SUBDIR "%{ ${P.DEPS.${DEP}.SRCDIR} }%"
-%         endif()
-    )
-%         if(NOT "${P.DEPS.${DEP}.ARGS}" STREQUAL "")
-
-%             foreach(ARG ${P.DEPS.${DEP}.ARGS})
-%                 if (ARG MATCHES "^-D([^=]+)=(([^=]+))$")
-    set(%{ ${CMAKE_MATCH_1} }% "%{ ${CMAKE_MATCH_2} }%")
-%                 endif()
-%             endforeach()
-
-%         endif()
-    FetchContent_MakeAvailable(%{ ${P.DEPS.${DEP}.NAME} }%)
-%     endforeach()
+if(${@P.UNAME@_MAIN_PROJECT})
+    set(@P.UNAME@_BUILD_TESTS_INIT ON)
+    set(@P.UNAME@_EXPORT_COMPILE_INIT ON)
+else()
+    set(@P.UNAME@_BUILD_TESTS_INIT OFF)
+    set(@P.UNAME@_EXPORT_COMPILE_INIT OFF)
 endif()
 
-%     foreach(PKG ${P.CM.PKGS})
-%         if(${P.CM.PKGS.${PKG}.COMP_COUNT} GREATER 0)
-find_package(
-    %{ ${PKG} }%
-    CONFIG REQUIRED
-    COMPONENTS
-%         foreach(COMP ${P.CM.PKGS.${PKG}.COMPS})
-        %{ ${COMP} }%
-%         endforeach()
+option(
+    @P.UNAME@_BUILD_TESTS
+    "Build the unit tests."
+    ${@P.UNAME@_BUILD_TESTS_INIT}
 )
-%         else()
-find_package(%{ ${PKG} }% CONFIG REQUIRED)
-%         endif()
-%     endforeach()
-% endif()
+
+option(
+    @P.UNAME@_EXPORT_COMPILE
+    "Export compile commands."
+    ${@P.UNAME@_EXPORT_COMPILE_INIT}
+)
+
+option(
+    @P.UNAME@_FETCH_DEPS
+    "Fetch dependencies via FetchContent."
+    ${@P.UNAME@_FETCH_DEPS}
+)
 ]=])
 
 ###############################################################################
@@ -2567,43 +2780,142 @@ install(
 
 ###############################################################################
 #
-# Template PROJECT_OPTIONS_TXT_IN
+# Template PROJECT_CONFIGURATION_TXT_IN
 #
 ###############################################################################
 set(
-    CMATE_PROJECT_OPTIONS_TXT_IN
+    CMATE_PROJECT_CONFIGURATION_TXT_IN
     [=[
 
 %###
 %#
-%# Options
+%# Configuration
 %#
 %###
-if(${@P.UNAME@_MAIN_PROJECT})
-    set(@P.UNAME@_BUILD_TESTS_INIT ON)
-    set(@P.UNAME@_EXPORT_COMPILE_INIT ON)
-else()
-    set(@P.UNAME@_BUILD_TESTS_INIT OFF)
-    set(@P.UNAME@_EXPORT_COMPILE_INIT OFF)
+include(GNUInstallDirs)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS)
 endif()
 
-option(
-    @P.UNAME@_BUILD_TESTS
-    "Build the unit tests."
-    ${@P.UNAME@_BUILD_TESTS_INIT}
-)
+if(@P.UNAME@_EXPORT_COMPILE)
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
+]=])
 
-option(
-    @P.UNAME@_EXPORT_COMPILE
-    "Export compile commands."
-    ${@P.UNAME@_EXPORT_COMPILE_INIT}
-)
+###############################################################################
+#
+# Template PROJECT_PKG_PKGCONFIG_TXT_IN
+#
+###############################################################################
+set(
+    CMATE_PROJECT_PKG_PKGCONFIG_TXT_IN
+    [=[
+% if(${P.PC.PKG_COUNT} GREATER 0)
 
-option(
-    @P.UNAME@_FETCH_DEPS
-    "Fetch dependencies via FetchContent."
-    ${@P.UNAME@_FETCH_DEPS}
+%###
+%#
+%# pkg-config dependencies
+%#
+%###
+%     foreach(PKG ${P.PC.PKGS})
+pkg_check_modules(%{ ${PKG} }% REQUIRED IMPORTED_TARGET %{ ${PKG} }%)
+%     endforeach()
+% endif()
+]=])
+
+###############################################################################
+#
+# Template PROJECT_TARGETS_TXT_IN
+#
+###############################################################################
+set(
+    CMATE_PROJECT_TARGETS_TXT_IN
+    [=[
+
+%###
+%#
+%# Targets
+%#
+%###
+% foreach(TYPE "LIB" "BIN")
+%     foreach(T ${P.TARGETS.${TYPE}})
+add_subdirectory(%{ ${P.TARGETS.${TYPE}.${T}.SUBDIR} }%)
+%     endforeach()
+% endforeach()
+%%
+% if(${P.TARGETS.TEST})
+
+if(@P.UNAME@_BUILD_TESTS)
+    include(CTest)
+    enable_testing()
+% foreach(T ${P.TARGETS.TEST})
+    add_subdirectory(%{ ${P.TARGETS.TEST.${T}.SUBDIR} }%)
+% endforeach()
+endif()
+% endif()
+]=])
+
+###############################################################################
+#
+# Template PROJECT_PKG_CMAKE_TXT_IN
+#
+###############################################################################
+set(
+    CMATE_PROJECT_PKG_CMAKE_TXT_IN
+    [=[
+% if(${P.CM.PKG_COUNT} GREATER 0)
+
+%###
+%#
+%# CMake dependencies
+%#
+%###
+if(@P.UNAME@_FETCH_DEPS)
+    include(FetchContent)
+%     foreach(DEP ${P.DEPS})
+
+    FetchContent_Declare(
+        %{ ${P.DEPS.${DEP}.NAME} }%
+%         if("${P.DEPS.${DEP}.TYPE}" STREQUAL "git")
+        GIT_REPOSITORY %{ ${P.DEPS.${DEP}.URL} }%
+        GIT_TAG %{ ${P.DEPS.${DEP}.REF} }%
+%         elseif("${P.DEPS.${DEP}.TYPE}" STREQUAL "url")
+        URL %{ ${P.DEPS.${DEP}.URL} }%
+%         endif()
+        OVERRIDE_FIND_PACKAGE
+%         if(NOT "${P.DEPS.${DEP}.SRCDIR}" STREQUAL "")
+        SOURCE_SUBDIR "%{ ${P.DEPS.${DEP}.SRCDIR} }%"
+%         endif()
+    )
+%         if(NOT "${P.DEPS.${DEP}.ARGS}" STREQUAL "")
+
+%             foreach(ARG ${P.DEPS.${DEP}.ARGS})
+%                 if (ARG MATCHES "^-D([^=]+)=(([^=]+))$")
+    set(%{ ${CMAKE_MATCH_1} }% "%{ ${CMAKE_MATCH_2} }%")
+%                 endif()
+%             endforeach()
+
+%         endif()
+    FetchContent_MakeAvailable(%{ ${P.DEPS.${DEP}.NAME} }%)
+%     endforeach()
+endif()
+
+%     foreach(PKG ${P.CM.PKGS})
+%         if(${P.CM.PKGS.${PKG}.COMP_COUNT} GREATER 0)
+find_package(
+    %{ ${PKG} }%
+    CONFIG REQUIRED
+    COMPONENTS
+%         foreach(COMP ${P.CM.PKGS.${PKG}.COMPS})
+        %{ ${COMP} }%
+%         endforeach()
 )
+%         else()
+find_package(%{ ${PKG} }% CONFIG REQUIRED)
+%         endif()
+%     endforeach()
+% endif()
 ]=])
 
 ###############################################################################
@@ -2638,27 +2950,143 @@ endif()
 
 ###############################################################################
 #
-# Template PROJECT_CONFIGURATION_TXT_IN
+# Template PROJECT_CMAKELISTS_TXT_IN
 #
 ###############################################################################
 set(
-    CMATE_PROJECT_CONFIGURATION_TXT_IN
+    CMATE_PROJECT_CMAKELISTS_TXT_IN
     [=[
+%%include <project/project.txt.in>
+%%
+%%include <project/options.txt.in>
+%%
+%%include <project/configuration.txt.in>
+%%
+%%include <project/pkg-cmake.txt.in>
+%%include <project/pkg-pkgconfig.txt.in>
+%%
+%%include <project/targets.txt.in>
+%%
+%%include <project/install.txt.in>
+]=])
 
-%###
-%#
-%# Configuration
-%#
-%###
-include(GNUInstallDirs)
+###############################################################################
+#
+# Template CMAKE_CONFIG_CMAKE_IN
+#
+###############################################################################
+set(
+    CMATE_CMAKE_CONFIG_CMAKE_IN
+    [=[
+%@PACKAGE_INIT@%
+include("${CMAKE_CURRENT_LIST_DIR}/@P.NAME@-targets.cmake")
+]=])
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS)
-endif()
+###############################################################################
+#
+# Template TARGETS_LIB_CMAKELISTS_TXT_IN
+#
+###############################################################################
+set(
+    CMATE_TARGETS_LIB_CMAKELISTS_TXT_IN
+    [=[
+add_library(@T.TNAME@)
+add_library(@P.NS@::@T.NAME@ ALIAS @T.TNAME@)
 
-if(@P.UNAME@_EXPORT_COMPILE)
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-endif()
+set(@T.UTNAME@_INC_DIR "${PROJECT_SOURCE_DIR}/include/@T.NAME@")
+file(GLOB_RECURSE @T.UTNAME@_HEADERS "${@T.UTNAME@_INC_DIR}/@CM.HPAT@")
+list(APPEND @T.UTNAME@_ALL_SOURCES ${@T.UTNAME@_HEADERS})
+
+set(@T.UTNAME@_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+file(GLOB_RECURSE @T.UTNAME@_SOURCES "${@T.UTNAME@_SRC_DIR}/@CM.SPAT@")
+list(APPEND @T.UTNAME@_ALL_SOURCES ${@T.UTNAME@_SOURCES})
+
+target_sources(
+    @T.TNAME@
+    PRIVATE
+        ${@T.UTNAME@_ALL_SOURCES}
+)
+
+target_include_directories(
+    @T.TNAME@
+    PUBLIC
+        $<BUILD_INTERFACE:${@T.UTNAME@_INC_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/@P.NS@>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+%%
+%%include <targets/link.txt.in>
+
+set_target_properties(
+    @T.TNAME@
+    PROPERTIES
+        CXX_STANDARD @P.STD@
+        VERSION @P.VER@
+        SOVERSION @P.VER_MAJOR@
+        EXPORT_NAME @T.NAME@
+        OUTPUT_NAME @P.NS@_@T.NAME@
+)
+]=])
+
+###############################################################################
+#
+# Template TARGETS_BIN_CMAKELISTS_TXT_IN
+#
+###############################################################################
+set(
+    CMATE_TARGETS_BIN_CMAKELISTS_TXT_IN
+    [=[
+add_%{ ${T.TTYPE} }%(@T.TNAME@)
+
+set(@T.UTNAME@_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+file(GLOB_RECURSE @T.UTNAME@_SOURCES "${@T.UTNAME@_SRC_DIR}/@CM.SPAT@")
+list(APPEND @T.UTNAME@_ALL_SOURCES ${@T.UTNAME@_SOURCES})
+
+target_sources(
+    @T.TNAME@
+    PRIVATE
+        ${@T.UTNAME@_ALL_SOURCES}
+)
+
+target_include_directories(
+    @T.TNAME@
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+%%
+%%include <targets/link.txt.in>
+
+set_target_properties(
+    @T.TNAME@
+    PROPERTIES
+        CXX_STANDARD @P.STD@
+        OUTPUT_NAME @T.NAME@
+)
+]=])
+
+###############################################################################
+#
+# Template TARGETS_LINK_TXT_IN
+#
+###############################################################################
+set(
+    CMATE_TARGETS_LINK_TXT_IN
+    [=[
+% if(${TARGET_DEPS_COUNT} GREATER 0)
+
+target_link_libraries(
+    @T.TNAME@
+%     foreach(TYPE PUBLIC PRIVATE)
+%         if(${TARGET_${TYPE}_DEPS_COUNT} GREATER 0)
+    %{ ${TYPE} }%
+%             foreach(DEP ${TARGET_${TYPE}_DEPS})
+        %{ ${DEP} }%
+%             endforeach()
+%         endif()
+%     endforeach()
+)
+% endif()
 ]=])
 
 ##############################################################################

@@ -9,3 +9,4 @@ venv/
 .tox/
 .coverage
 .coverage.*
+*.egg-info/
