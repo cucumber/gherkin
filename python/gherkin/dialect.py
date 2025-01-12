@@ -33,7 +33,6 @@ with open(DIALECT_FILE_PATH, encoding="utf-8") as file:
 
 
 class Dialect:
-
     @classmethod
     def for_name(cls, name: str) -> Self | None:
         return cls(DIALECTS[name]) if name in DIALECTS else None
