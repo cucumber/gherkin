@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Added
+- [All] Allow comment inside feature description ([#334](https://github.com/cucumber/gherkin/pull/334))
 - [.NET] Enabled overriding of parser's error-handling
 
 ### Fixed
