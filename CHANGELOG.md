@@ -17,6 +17,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Improved parsing time
 - [.NET] Use string-ordinal comparison consistently and remove old Mono workaround
 - [.NET] Improved startup time
+- [c] Optimise error handling for empty datatable rows
+- [Perl] Optimise error handling for unclosed DocStrings
 
 ### Changed
 - [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
