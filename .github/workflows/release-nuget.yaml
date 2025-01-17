@@ -9,7 +9,7 @@ jobs:
   publish-nuget:
     name: Publish package to NuGet.org
     # Failing on `ubuntu-24.04` (https://github.com/cucumber/gherkin/issues/349)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: Release
     steps:
       - uses: actions/checkout@v4
