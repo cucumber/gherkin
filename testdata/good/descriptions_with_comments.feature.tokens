@@ -1,0 +1,55 @@
+(1:1)FeatureLine:()Feature/Descriptions with comments everywhere/
+(2:1)Other:/  This is a description/
+(3:1)Comment:/  # comment/
+(4:1)Other:/  with a comment in the middle and at the end/
+(5:1)Comment:/  # comment 2/
+(6:1)Other://
+(7:3)ScenarioLine:()Scenario/two lines/
+(8:1)Other:/  This description/
+(9:1)Comment:/  # comment/
+(10:1)Comment:/  # comment 2/
+(11:1)Other:/  has two lines and two comments in the middle and is indented with two spaces/
+(12:5)StepLine:(Context)Given /the minimalism/
+(13:1)Empty://
+(14:1)ScenarioLine:()Scenario/without indentation/
+(15:1)Other:/This is a description without indentation/
+(16:1)Comment:/# comment/
+(17:1)Other:/and a comment in the middle and at the end/
+(18:1)Comment:/# comment 2/
+(19:1)Other://
+(20:3)StepLine:(Context)Given /the minimalism/
+(21:1)Empty://
+(22:3)ScenarioLine:()Scenario/empty lines in the middle/
+(23:1)Other:/  This description/
+(24:1)Comment:/  # comment/
+(25:1)Other://
+(26:1)Other:/  has an empty line and a comment in the middle/
+(27:5)StepLine:(Context)Given /the minimalism/
+(28:1)Empty://
+(29:3)ScenarioLine:()Scenario/empty lines around/
+(30:1)Empty://
+(31:1)Comment:/  # comment/
+(32:1)Other:/  This description/
+(33:1)Other:/  has an empty lines around/
+(34:1)Comment:/  # comment/
+(35:1)Other://
+(36:5)StepLine:(Context)Given /the minimalism/
+(37:1)Empty://
+(38:3)ScenarioLine:()Scenario Outline/scenario outline with a description/
+(39:1)Comment:/# comment/
+(40:1)Other:/This is a scenario outline description with comments/
+(41:1)Comment:/# comment 2/
+(42:1)Other:/in the middle and before and at the end/
+(43:1)Comment:/# comment 3/
+(44:5)StepLine:(Context)Given /the minimalism/
+(45:1)Empty://
+(46:3)ExamplesLine:()Examples/examples with description/
+(47:1)Comment:/# comment/
+(48:1)Other:/This is an examples description/
+(49:1)Comment:/# comment/
+(50:1)Other:/with a comment in the middle/
+(51:1)Comment:/# comment/
+(52:1)Other://
+(53:5)TableRow://7:foo
+(54:5)TableRow://7:bar
+EOF

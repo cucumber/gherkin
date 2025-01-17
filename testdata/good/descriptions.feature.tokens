@@ -34,7 +34,7 @@
 (34:1)Other:/  This description/
 (35:1)Other:/  has a comment right after/
 (36:1)Comment:/    #  this is another comment/
-(37:1)Empty://
+(37:1)Other://
 (38:5)StepLine:(Context)Given /the minimalism/
 (39:1)Empty://
 (40:3)ScenarioLine:()Scenario/description with escaped docstring separator/
