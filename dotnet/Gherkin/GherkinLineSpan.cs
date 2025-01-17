@@ -1,6 +1,6 @@
 namespace Gherkin;
 
-public struct GherkinLineSpan(int column, string text)
+public readonly struct GherkinLineSpan(int column, string text)
 {
     /// <summary>
     /// One-based line position

@@ -1,6 +1,6 @@
 namespace Gherkin.Ast;
 
-public class Rule(Tag[] tags, Location location, string keyword, string name, string description, IHasLocation[] children)
+public class Rule(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<IHasLocation> children)
     : IHasLocation, IHasDescription, IHasChildren, IHasTags
 {
     public Location Location { get; } = location;

@@ -23,6 +23,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
 - [.NET] Removed dependency on System.Text.Json and related logic in GherkinDialectProvider
 - [Elixir] Updates dependencies, bumps messages to 27.0.2
+- [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
 
 ### Removed
 - [Python] Dropped support for Python 3.8
