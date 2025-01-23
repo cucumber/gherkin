@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Added
+- [All] Allow comment inside descriptions ([#334](https://github.com/cucumber/gherkin/pull/334))
 - [.NET] Enabled overriding of parser's error-handling
 - [Python] Expose Python public API as package imports ([#352](https://github.com/cucumber/gherkin/pull/352))
 - [Python] Added support for Python 3.13
