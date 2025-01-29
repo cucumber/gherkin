@@ -7,23 +7,25 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [31.0.0] - 2025-01-29
 ### Added
 - [All] Allow comment inside descriptions ([#334](https://github.com/cucumber/gherkin/pull/334))
 - [.NET] Enabled overriding of parser's error-handling
 - [Python] Expose Python public API as package imports ([#352](https://github.com/cucumber/gherkin/pull/352))
 - [Python] Added support for Python 3.13
 
-### Fixed
-- [c] slight update to existing CMakeFiles.txt to propagate VERSION. Close #320 ([#328](https://github.com/cucumber/gherkin/pull/328))
-- [.NET] Improved parsing time
-- [.NET] Use string-ordinal comparison consistently and remove old Mono workaround
-- [.NET] Improved startup time
-
 ### Changed
 - [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
 - [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
 - [.NET] Removed dependency on System.Text.Json and related logic in GherkinDialectProvider
 - [Elixir] Updates dependencies, bumps messages to 27.0.2
+
+### Fixed
+- [c] slight update to existing CMakeFiles.txt to propagate VERSION. Close #320 ([#328](https://github.com/cucumber/gherkin/pull/328))
+- [.NET] Improved parsing time
+- [.NET] Use string-ordinal comparison consistently and remove old Mono workaround
+- [.NET] Improved startup time
 
 ### Removed
 - [Python] Dropped support for Python 3.8
@@ -731,7 +733,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.4...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v31.0.0...HEAD
+[31.0.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v31.0.0
 [30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
 [30.0.2]: https://github.com/cucumber/gherkin/compare/v30.0.1...v30.0.2
