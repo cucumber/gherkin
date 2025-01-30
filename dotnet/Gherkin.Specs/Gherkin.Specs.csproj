@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0;net472</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net472</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <StartupObject>Gherkin.Specs.CLI.Program</StartupObject>
   </PropertyGroup>
