@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- [.NET] Fix NuGet package generation
+
 ## [31.0.0] - 2025-01-29
 ### Added
 - [All] Allow comment inside descriptions ([#334](https://github.com/cucumber/gherkin/pull/334))
