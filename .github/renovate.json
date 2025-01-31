@@ -3,5 +3,8 @@
   "extends": [
     "github>cucumber/renovate-config"
   ],
+  "cpanfile": {
+    "enabled": false
+  },
   "dependencyDashboard": true
 }
