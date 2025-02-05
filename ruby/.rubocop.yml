@@ -35,6 +35,6 @@ Style/RegexpLiteral:
 RSpec/MessageSpies:
   EnforcedStyle: receive
 
-# Hack to make rubocop not flag these (We need to re-analyse these later on)
+# Bug in rubocop auto-gen config: https://github.com/rubocop/rubocop/issues/13795
 Naming/MethodName:
   Enabled: false
