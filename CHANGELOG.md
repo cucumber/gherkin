@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Changed
+- [.NET] Reduce NuGet size by only targeting .NET Standard 2.0
+
 ### Fixed
 - [.NET] Fix NuGet package generation
 
