@@ -12,7 +12,7 @@ inherit_mode:
 #  - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
   NewCops: enable
 
 # Disabled on our repo's to enable polyglot-release
