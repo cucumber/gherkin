@@ -34,7 +34,7 @@ Style/RegexpLiteral:
 
 RSpec/MessageSpies:
   EnforcedStyle: receive
-#
-## Bug in rubocop auto-gen config: https://github.com/rubocop/rubocop/issues/13795
-#Naming/MethodName:
-#  Enabled: false
+
+# Bug in rubocop auto-gen config: https://github.com/rubocop/rubocop/issues/13795
+Naming/MethodName:
+  Enabled: false
