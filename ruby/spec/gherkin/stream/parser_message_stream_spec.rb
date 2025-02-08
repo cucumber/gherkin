@@ -30,8 +30,8 @@ module Gherkin
 
       let(:scenario_id) { gherkin_document.feature.children.first.scenario.id }
 
-      context '#messages' do
-        it "raises an exception on second iteration" do
+      describe '#messages' do
+        it "raises an exception on the second iteration" do
           messages = ParserMessageStream.new([], [source_feature], options).messages
 
           expect { messages.map(&:to_s) }.not_to raise_exception
@@ -39,7 +39,7 @@ module Gherkin
         end
       end
 
-      context 'options.id_generator' do
+      describe '#options.id_generator' do
         context 'when not set' do
           it 'generates random UUIDs' do
             expect(scenario_id).to match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/)
@@ -57,6 +57,7 @@ module Gherkin
 
           it 'uses the generator instance to produce the IDs' do
             allow(id_generator).to receive(:new_id).and_return('some-random-id')
+
             expect(scenario_id).to eq('some-random-id')
           end
         end
