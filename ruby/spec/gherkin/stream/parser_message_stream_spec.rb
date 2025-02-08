@@ -3,10 +3,11 @@
 module Gherkin
   module Stream
     describe ParserMessageStream do
+      # TODO: Fix this up into a heredoc LH - Feb '25
       let(:feature_content) do
-        "Feature: my feature\n" \
-          "  Scenario: a scenario\n" \
-          "    Given some context"
+        "Feature: my feature\n  " \
+          "Scenario: a scenario\n    " \
+          "Given some context"
       end
 
       let(:source_feature) do
@@ -44,7 +45,6 @@ module Gherkin
             expect(scenario_id).to match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/)
           end
         end
-
 
         context 'when set' do
           let(:id_generator) { double }
