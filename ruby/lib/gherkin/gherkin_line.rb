@@ -85,7 +85,7 @@ module Gherkin
     end
 
     def tags
-      uncommented_line = @trimmed_line_text.split(/\s#/,2)[0]
+      uncommented_line = @trimmed_line_text.split(/\s#/, 2)[0]
       column = @indent + 1
       items = uncommented_line.split('@')
 
