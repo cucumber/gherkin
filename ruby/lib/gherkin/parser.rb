@@ -3254,8 +3254,8 @@ module Gherkin
 
     private
 
-    def handle_ast_error(context, &action)
-      handle_external_error(context, true, &action)
+    def handle_ast_error(context, &)
+      handle_external_error(context, true, &)
     end
 
     def handle_external_error(context, default_value, &action)
