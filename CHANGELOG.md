@@ -8,6 +8,11 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Changed
+- [.NET] Reduce NuGet size by only targeting .NET Standard 2.0
+- [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
+- [JavaScript] BREAKING CHANGE: Update supported Node.js versions to 18, 20, 22 and 23 ([#365](https://github.com/cucumber/gherkin/pull/365))
+
 ### Fixed
 - [.NET] Fix NuGet package generation
 
