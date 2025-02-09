@@ -37,7 +37,7 @@ jobs:
           install-modules-with: cpanm
           working-directory: perl
 
-      - run: cpanm --notest --installdeps --with-develop
+      - run: cpanm --notest --installdeps --with-develop .
         working-directory: perl
 
       - name: run tests
