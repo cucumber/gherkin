@@ -38,9 +38,7 @@ jobs:
           working-directory: perl
 
       - name: run tests
-        run: |
-          prove -l
-          AUTHOR_TESTS=1 prove -l
+        run: make test
         working-directory: perl
 
       - name: run acceptance tests
