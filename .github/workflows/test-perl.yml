@@ -37,14 +37,10 @@ jobs:
           install-modules-with: cpanm
           working-directory: perl
 
-      - run: cpanm --notest --installdeps --with-develop .
-        working-directory: perl
-
       - name: run tests
-        run: dzil test
+        run: make test
         working-directory: perl
 
-      # Run acceptance tests first! They build Languages.pm
       - name: run acceptance tests
         run: make acceptance
         working-directory: perl
