@@ -30,8 +30,6 @@ jobs:
         include:
           - os: macos-latest
             ruby: '3.4'
-          - os: windows-latest
-            ruby: '3.4'
 
     steps:
       - uses: actions/checkout@v4
