@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use lib 'lib';
+use lib 'Gherkin-latest/lib';
 
 use App::gherkin;
 
