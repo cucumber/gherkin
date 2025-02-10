@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is generated. Do not edit! Edit gherkin-ruby.razor instead.
 require_relative 'ast_builder'
 require_relative 'token_matcher'
@@ -5,7 +7,6 @@ require_relative 'token_scanner'
 require_relative 'errors'
 
 module Gherkin
-
   RULE_TYPE = [
     :None,
     :_EOF, # #EOF
@@ -3254,8 +3255,8 @@ module Gherkin
 
     private
 
-    def handle_ast_error(context, &action)
-      handle_external_error(context, true, &action)
+    def handle_ast_error(context, &)
+      handle_external_error(context, true, &)
     end
 
     def handle_external_error(context, default_value, &action)
@@ -3270,6 +3271,5 @@ module Gherkin
       end
       default_value
     end
-
   end
 end

@@ -27,7 +27,11 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake', '~> 13.1'
   s.add_development_dependency 'rspec', '~> 3.13'
-  s.add_development_dependency 'rubocop', '~> 1.71.0'
+  s.add_development_dependency 'rubocop', '~> 1.71.2'
+  s.add_development_dependency 'rubocop-rspec', '~> 3.4.0'
+  s.add_development_dependency 'rubocop-packaging', '~> 0.5.2'
+  s.add_development_dependency 'rubocop-performance', '~> 1.23.1'
+  s.add_development_dependency 'rubocop-rake', '~> 0.6.0'
 
   s.executables      = %w[gherkin-ruby gherkin]
   s.files            = Dir['README.md', 'LICENSE', 'lib/**/*']
