@@ -12,8 +12,6 @@
     "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
     "clean-tsc": "rm -rf dist",
     "test": "mocha",
-    "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix",
-    "eslint": "eslint --ext ts,tsx --max-warnings 0",
     "prepublishOnly": "tsc --build tsconfig.build.json"
   },
   "repository": {
@@ -33,7 +31,7 @@
   "devDependencies": {
     "@types/mocha": "10.0.10",
     "@types/node": "22.13.1",
-    "commander": "^12.0.0",
+    "commander": "^13.0.0",
     "core-js": "3.40.0",
     "mocha": "11.1.0",
     "ts-node": "10.9.2",

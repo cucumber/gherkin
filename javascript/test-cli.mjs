@@ -7,6 +7,7 @@ const program = new Command()
 program.option('--no-source', 'Do not output Source messages')
 program.option('--no-ast', 'Do not output GherkinDocument messages')
 program.option('--no-pickles', 'Do not output Pickle messages')
+program.allowExcessArguments(true)
 program.parse(process.argv)
 const [path] = program.args
 
