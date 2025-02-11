@@ -12,8 +12,6 @@
     "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
     "clean-tsc": "rm -rf dist",
     "test": "mocha",
-    "eslint-fix": "eslint --ext ts,tsx --max-warnings 0 --fix",
-    "eslint": "eslint --ext ts,tsx --max-warnings 0",
     "prepublishOnly": "tsc --build tsconfig.build.json"
   },
   "repository": {
