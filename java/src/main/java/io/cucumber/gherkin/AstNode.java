@@ -36,11 +36,10 @@ class AstNode {
     }
 
     public Token getToken(TokenType tokenType) {
-        RuleType ruleType = RuleType.cast(tokenType);
-        return getSingle(ruleType, new Token(null, null));
+        return getSingle(tokenType.ruleType, new Token(null, null));
     }
 
     public List<Token> getTokens(TokenType tokenType) {
-        return getItems(RuleType.cast(tokenType));
+        return getItems(tokenType.ruleType);
     }
 }

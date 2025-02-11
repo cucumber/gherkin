@@ -1,50 +1,80 @@
 package io.cucumber.gherkin;
 
-import java.util.regex.Pattern;
 
 class StringUtils {
 
-    private static final Pattern LTRIM = Pattern.compile("^[ \\t\\n\\x0B\\f\\r\\x85\\xA0]+");
-    private static final Pattern LTRIM_KEEP_NEW_LINES = Pattern.compile("^[ \\t\\x0B\\f\\r\\x85\\xA0]+");
-    private static final Pattern RTRIM_KEEP_NEW_LINES = Pattern.compile("[ \\t\\x0B\\f\\r\\x85\\xA0]+$");
-    private static final Pattern RTRIM = Pattern.compile("[ \\t\\n\\x0B\\f\\r\\x85\\xA0]+$");
-    private static final Pattern TRIM = Pattern.compile("^[ \\t\\n\\x0B\\f\\r\\x85\\xA0]+|[ \\t\\n\\x0B\\f\\r\\x85\\xA0]+$");
+    private static final Character[] WHITESPACE_CHARS = new Character[] {' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    private static final Character[] WHITESPACE_CHARS_KEEP_NEW_LINES = new Character[] {' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    private static final Character[] WHITESPACE_CHARS_SIMPLE = new Character[] {' ', '\t', '\n', '\u000B', '\f', '\r'};
 
-    static String ltrim(String s) {
-        // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
-        return LTRIM.matcher(s).replaceAll("");
-    }
-
-    /**
-     * Trims whitespace on the left-hand side up to the first 
-     * non-whitespace character and exclude new lines from the 
-     * usual definition of whitespace.
-     */
-    static String ltrimKeepNewLines(String s) {
-        // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
-        return LTRIM_KEEP_NEW_LINES.matcher(s).replaceAll("");
-    }
-
-    /**
-     * Trims whitespace on the right-hand side up to the first 
-     * non-whitespace character and exclude new lines from the 
-     * usual definition of whitespace.
-     */
-    static String rtrimKeepNewLines(String s) {
-        // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
-        return RTRIM_KEEP_NEW_LINES.matcher(s).replaceAll("");
-    }
 
     static String rtrim(String s) {
-        return RTRIM.matcher(s).replaceAll("");
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+
+        int length = s.length();
+
+        int end = length - 1;
+        while (end > 0 && contains(WHITESPACE_CHARS, s.charAt(end))) {
+            end--;
+        }
+
+        return s.substring(0, end + 1);
     }
 
-    static String trim(String s) {
-        return TRIM.matcher(s).replaceAll("");
+    static void trimAndIndent(String input, Indentable target) {
+        trimAndIndent(input, target, WHITESPACE_CHARS);
     }
 
-    static int symbolCount(String string) {
-        // http://rosettacode.org/wiki/String_length#Java
-        return string.codePointCount(0, string.length());
+    static void trimAndIndentKeepNewLines(String input, Indentable target) {
+        trimAndIndent(input, target, WHITESPACE_CHARS_KEEP_NEW_LINES);
     }
+
+    private static void trimAndIndent(String input, Indentable target, Character[] whitespaceChars) {
+        if (input == null || input.isEmpty()) {
+            target.indent(0, "");
+            return;
+        }
+
+        int start = 0;
+        int length = input.length();
+
+        while (start < length && contains(whitespaceChars, input.charAt(start))) {
+            start++;
+        }
+
+        int end = length - 1;
+        while (end > start && contains(whitespaceChars, input.charAt(end))) {
+            end--;
+        }
+
+        String trimmed = input.substring(start, end + 1);
+        int indent = input.codePointCount(0, start);
+        target.indent(indent, trimmed);
+    }
+
+    static String removeComments(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        int start = 0;
+        int length = input.length();
+
+        while (start < length-1 && !(contains(WHITESPACE_CHARS_SIMPLE, input.charAt(start)) &&
+                input.charAt(start+1) == '#')) {
+            start++;
+        }
+        return input.substring(0, start < length - 1 ? start : start + 1);
+    }
+
+    private static boolean contains(Character[] whitespaceChars, char c) {
+        for (Character whitespaceChar : whitespaceChars) {
+            if (whitespaceChar == c) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

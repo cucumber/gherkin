@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static io.cucumber.gherkin.Parser.Builder;
@@ -29,6 +30,7 @@ import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 
 class GherkinDocumentBuilder implements Builder<GherkinDocument> {
+    public static final Pattern PATTERN_SPACES = Pattern.compile("\\s*");
     private final List<Comment> comments = new ArrayList<>();
     private final IdGenerator idGenerator;
     private String uri;
@@ -53,12 +55,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     @Override
     public void build(Token token) {
-        RuleType ruleType = RuleType.cast(token.matchedType);
         if (token.matchedType == TokenType.Comment) {
-            Comment comment = new Comment(getLocation(token, 0), token.matchedText);
+            Comment comment = new Comment(getLocation(token), token.matchedText);
             comments.add(comment);
         } else {
-            currentNode().add(ruleType, token);
+            currentNode().add(token.matchedType.ruleType, token);
         }
     }
 
@@ -79,7 +80,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             case Step: {
                 Token stepLine = node.getToken(TokenType.StepLine);
                 return new Step(
-                        getLocation(stepLine, 0),
+                        getLocation(stepLine),
                         stepLine.matchedKeyword,
                         stepLine.keywordType,
                         stepLine.matchedText,
@@ -90,7 +91,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             }
             case DocString: {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
-                String mediaType = separatorToken.matchedText.length() > 0 ? separatorToken.matchedText : null;
+                String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 StringBuilder content = new StringBuilder();
                 boolean newLine = false;
@@ -101,7 +102,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 }
 
                 return new DocString(
-                        getLocation(separatorToken, 0),
+                        getLocation(separatorToken),
                         mediaType,
                         content.toString(),
                         separatorToken.matchedKeyword
@@ -114,7 +115,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             case Background: {
                 Token backgroundLine = node.getToken(TokenType.BackgroundLine);
                 return new Background(
-                        getLocation(backgroundLine, 0),
+                        getLocation(backgroundLine),
                         backgroundLine.matchedKeyword,
                         backgroundLine.matchedText,
                         getDescription(node),
@@ -127,7 +128,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token scenarioLine = scenarioNode.getToken(TokenType.ScenarioLine);
 
                 return new Scenario(
-                        getLocation(scenarioLine, 0),
+                        getLocation(scenarioLine),
                         getTags(node),
                         scenarioLine.matchedKeyword,
                         scenarioLine.matchedText,
@@ -145,7 +146,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 List<TableRow> tableBody = rows != null && !rows.isEmpty() ? rows.subList(1, rows.size()) : Collections.emptyList();
 
                 return new Examples(
-                        getLocation(examplesLine, 0),
+                        getLocation(examplesLine),
                         getTags(node),
                         examplesLine.matchedKeyword,
                         examplesLine.matchedText,
@@ -163,7 +164,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 // Trim trailing empty lines
                 int end = lineTokens.size();
-                while (end > 0 && lineTokens.get(end - 1).matchedText.matches("\\s*")) {
+                while (end > 0 && PATTERN_SPACES.matcher(lineTokens.get(end - 1).matchedText).matches()) {
                     end--;
                 }
                 lineTokens = lineTokens.subList(0, end);
@@ -196,7 +197,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 String language = featureLine.matchedGherkinDialect.getLanguage();
 
                 return new Feature(
-                        getLocation(featureLine, 0),
+                        getLocation(featureLine),
                         tags,
                         language,
                         featureLine.matchedKeyword,
@@ -224,7 +225,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 }
 
                 return new Rule(
-                        getLocation(ruleLine, 0),
+                        getLocation(ruleLine),
                         tags,
                         ruleLine.matchedKeyword,
                         ruleLine.matchedText,
@@ -244,10 +245,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private List<TableRow> getTableRows(AstNode node) {
-        List<TableRow> rows = new ArrayList<>();
+        List<Token> tokens = node.getTokens(TokenType.TableRow);
+        List<TableRow> rows = new ArrayList<>(tokens.size());
 
-        for (Token token : node.getTokens(TokenType.TableRow)) {
-            TableRow tableRow = new TableRow(getLocation(token, 0), getCells(token), idGenerator.newId());
+        for (Token token : tokens) {
+            TableRow tableRow = new TableRow(getLocation(token), getCells(token), idGenerator.newId());
             rows.add(tableRow);
         }
         ensureCellCount(rows);
@@ -271,7 +273,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private List<TableCell> getCells(Token token) {
-        List<TableCell> cells = new ArrayList<>();
+        List<TableCell> cells = new ArrayList<>(token.matchedItems.size());
         for (GherkinLineSpan cellItem : token.matchedItems) {
             TableCell tableCell = new TableCell(
                     getLocation(token, cellItem.column),
@@ -289,6 +291,10 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     private io.cucumber.messages.types.Location getLocation(Token token, int column) {
         column = column == 0 ? token.location.getColumn() : column;
         return new io.cucumber.messages.types.Location((long) token.location.getLine(), (long) column);
+    }
+
+    private io.cucumber.messages.types.Location getLocation(Token token) {
+        return new io.cucumber.messages.types.Location((long) token.location.getLine(), (long) token.location.getColumn());
     }
 
     private String getDescription(AstNode node) {

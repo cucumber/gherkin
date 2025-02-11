@@ -1,6 +1,5 @@
 package io.cucumber.gherkin;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,40 +20,74 @@ public class StringUtilsTest {
     }
 
     @Test
-    void testRtrimKeepNewlines() {
-        assertEquals(WHITESPACE + CUCUMBER + "\n", StringUtils.rtrimKeepNewLines(WHITESPACE + CUCUMBER + "\n" + WHITESPACE));
+    void testTrimAndIndent() {
+        // Given
+        MockIndentable trimmable = new MockIndentable();
+
+        // When
+        StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE, trimmable);
+
+        // Then
+        assertEquals(CUCUMBER, trimmable.trimmed);
+        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmable.indent);
     }
 
     @Test
-    void testLtrim() {
-        assertEquals(CUCUMBER + WHITESPACE, StringUtils.ltrim(WHITESPACE + CUCUMBER + WHITESPACE));
+    void testTrimAndIndent_multiline() {
+        // Given
+        MockIndentable trimmable = new MockIndentable();
+
+        // When
+        StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n", trimmable);
+
+        // Then
+        assertEquals(CUCUMBER, trimmable.trimmed);
+        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmable.indent);
     }
 
     @Test
-    void testLtrim_multiline() {
-        assertEquals(CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n",
-                StringUtils.ltrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
+    void testTrimAndIndent_empty() {
+        // Given
+        MockIndentable trimmable = new MockIndentable();
+
+        // When
+        StringUtils.trimAndIndent("", trimmable);
+
+        // Then
+        assertEquals("", trimmable.trimmed);
+        assertEquals(0, trimmable.indent);
+    }
+
+
+    @Test
+    void testTrimAndIndent_null() {
+        // Given
+        MockIndentable trimmable = new MockIndentable();
+
+        // When
+        StringUtils.trimAndIndent(null, trimmable);
+
+        // Then
+        assertEquals("", trimmable.trimmed);
+        assertEquals(0, trimmable.indent);
     }
 
     @Test
-    void testLtrimKeepNewlines() {
-        assertEquals("\n" + CUCUMBER + WHITESPACE, StringUtils.ltrimKeepNewLines(WHITESPACE + "\n" + CUCUMBER + WHITESPACE));
+    void removeComments() {
+        assertEquals("@this @is", StringUtils.removeComments("@this @is #@a @commented @sequence of tags"));
+        assertEquals("@this @is @a @commented @sequence of tags", StringUtils.removeComments("@this @is @a @commented @sequence of tags #"));
+        assertEquals("@this @is @a @commented @sequence of tags", StringUtils.removeComments("@this @is @a @commented @sequence of tags"));
     }
 
-    @Test
-    void testTrim() {
-        assertEquals(CUCUMBER, StringUtils.trim(WHITESPACE + CUCUMBER + WHITESPACE));
+    private static class MockIndentable implements Indentable {
+        int indent;
+        String trimmed;
+
+        @Override
+        public void indent(int indent, String trimmed) {
+            this.indent = indent;
+            this.trimmed = trimmed;
+        }
     }
 
-    @Test
-    void testTrim_multiline() {
-        assertEquals(CUCUMBER,
-                StringUtils.trim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
-    }
-
-    @Test
-    void testTrim_empty() {
-        assertEquals("",
-                StringUtils.trim(""));
-    }
 }

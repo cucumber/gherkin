@@ -18,22 +18,27 @@ import static java.util.Arrays.asList;
 
 class Parser<T> {
     enum TokenType {
-        None,
-        EOF,
-        Empty,
-        Comment,
-        TagLine,
-        FeatureLine,
-        RuleLine,
-        BackgroundLine,
-        ScenarioLine,
-        ExamplesLine,
-        StepLine,
-        DocStringSeparator,
-        TableRow,
-        Language,
-        Other,
-        ;
+        None(RuleType.None),
+        EOF(RuleType._EOF),
+        Empty(RuleType._Empty),
+        Comment(RuleType._Comment),
+        TagLine(RuleType._TagLine),
+        FeatureLine(RuleType._FeatureLine),
+        RuleLine(RuleType._RuleLine),
+        BackgroundLine(RuleType._BackgroundLine),
+        ScenarioLine(RuleType._ScenarioLine),
+        ExamplesLine(RuleType._ExamplesLine),
+        StepLine(RuleType._StepLine),
+        DocStringSeparator(RuleType._DocStringSeparator),
+        TableRow(RuleType._TableRow),
+        Language(RuleType._Language),
+        Other(RuleType._Other);
+
+        final RuleType ruleType;
+
+        TokenType(RuleType ruleType) {
+            this.ruleType = ruleType;
+        }
     }
 
     enum RuleType {
@@ -72,9 +77,6 @@ class Parser<T> {
         Description, // Description! := (#Other | #Comment)+
         ;
 
-        static RuleType cast(TokenType tokenType) {
-            return RuleType.values()[tokenType.ordinal()];
-        }
     }
 
     private final Builder<T> builder;
@@ -202,7 +204,7 @@ class Parser<T> {
     }
 
     private Token readToken(ParserContext context) {
-        return context.tokenQueue.size() > 0 ? context.tokenQueue.remove() : context.tokenScanner.read();
+        return context.tokenQueue.isEmpty() ? context.tokenScanner.read() : context.tokenQueue.remove();
     }
 
 
