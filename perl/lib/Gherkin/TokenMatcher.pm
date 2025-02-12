@@ -238,6 +238,9 @@ sub match_StepLine {
 
 sub match_DocStringSeparator {
     my ( $self, $token ) = @_;
+    if ($token->is_eof) {
+        return 0;
+    }
     if ( !$self->_active_doc_string_separator ) {
         return $self->_match_DocStringSeparator( $token, '"""', 1 )
           || $self->_match_DocStringSeparator( $token, '```', 1 );
