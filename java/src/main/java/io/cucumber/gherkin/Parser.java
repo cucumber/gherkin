@@ -32,7 +32,8 @@ class Parser<T> {
         DocStringSeparator(RuleType._DocStringSeparator),
         TableRow(RuleType._TableRow),
         Language(RuleType._Language),
-        Other(RuleType._Other);
+        Other(RuleType._Other),
+        ;
 
         final RuleType ruleType;
 
