@@ -49,7 +49,7 @@ class @Model.ParserClassName<T> {
     enum TokenType {
         None(RuleType.None),
         @foreach(var rule in Model.RuleSet.TokenRules)
-        {<text>        @rule.Name.Replace("#", "")(RuleType.</text><text>@rule.Name.Replace("#", "_")),
+        {<text>        @(rule.Name.Replace("#", ""))(RuleType.@(rule.Name.Replace("#", "_"))),
 </text>}        ;
 
         final RuleType ruleType;
