@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [32.0.0] - 2025-02-17
 ### Changed
 - [.NET] Reduce NuGet size by only targeting .NET Standard 2.0
 - [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
@@ -745,7 +746,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v31.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.0.0...HEAD
+[32.0.0]: https://github.com/cucumber/gherkin/compare/v31.0.0...v32.0.0
 [31.0.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v31.0.0
 [30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
