@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
@@ -45,23 +45,24 @@ public final class GherkinDialect {
         this.andKeywords = requireNonNull(andKeywords);
         this.butKeywords = requireNonNull(butKeywords);
 
-        List<String> stepKeywords = new ArrayList<>();
+        List<String> stepKeywords = new ArrayList<>(givenKeywords.size() + whenKeywords.size() +
+                thenKeywords.size() + andKeywords.size() + butKeywords.size());
         stepKeywords.addAll(givenKeywords);
-        stepKeywords.addAll(whenKeywords);
         stepKeywords.addAll(thenKeywords);
+        stepKeywords.addAll(whenKeywords);
         stepKeywords.addAll(andKeywords);
         stepKeywords.addAll(butKeywords);
-        this.stepKeywords = unmodifiableList(stepKeywords);
+        this.stepKeywords = unmodifiableList(stepKeywords.stream().distinct().collect(Collectors.toList()));
 
         Map<String, List<StepKeywordType>> stepKeywordsTypes = new HashMap<>();
         addStepKeywordsTypes(stepKeywordsTypes, getGivenKeywords(), StepKeywordType.CONTEXT);
         addStepKeywordsTypes(stepKeywordsTypes, getWhenKeywords(), StepKeywordType.ACTION);
         addStepKeywordsTypes(stepKeywordsTypes, getThenKeywords(), StepKeywordType.OUTCOME);
 
-        List<String> conjunctionKeywords = new ArrayList<>();
+        List<String> conjunctionKeywords = new ArrayList<>(andKeywords.size() + butKeywords.size());
         conjunctionKeywords.addAll(getAndKeywords());
         conjunctionKeywords.addAll(getButKeywords());
-        addStepKeywordsTypes(stepKeywordsTypes, conjunctionKeywords, StepKeywordType.CONJUNCTION);
+        addStepKeywordsTypes(stepKeywordsTypes, conjunctionKeywords.stream().distinct().collect(Collectors.toList()), StepKeywordType.CONJUNCTION);
         this.stepKeywordsTypes = stepKeywordsTypes;
     }
 
