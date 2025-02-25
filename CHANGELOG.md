@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
+
 ## [32.1.1] - 2025-04-11
 ### Fixed
 - [Java] Avoid unnecessary unboxing to Character
