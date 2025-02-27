@@ -26,13 +26,11 @@ import io.cucumber.messages.types.TableRow;
 import io.cucumber.messages.types.Tag;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -107,8 +105,9 @@ class PickleCompiler {
 
             StepKeywordType lastKeywordType = StepKeywordType.UNKNOWN;
             for (Step step : allSteps) {
-                if (step.getKeywordType().get() != StepKeywordType.CONJUNCTION)
-                    lastKeywordType = step.getKeywordType().get();
+                StepKeywordType stepKeywordType = step.getKeywordType().get();
+                if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                    lastKeywordType = stepKeywordType;
 
                 steps.add(pickleStep(step, lastKeywordType));
             }
@@ -144,8 +143,9 @@ class PickleCompiler {
 
                 if (!scenario.getSteps().isEmpty())
                     for (Step step : backgroundSteps) {
-                        if (step.getKeywordType().get() != StepKeywordType.CONJUNCTION)
-                            lastKeywordType = step.getKeywordType().get();
+                        StepKeywordType stepKeywordType = step.getKeywordType().get();
+                        if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                            lastKeywordType = stepKeywordType;
 
                         steps.add(pickleStep(step, lastKeywordType));
                     }
@@ -157,8 +157,9 @@ class PickleCompiler {
                 tags.addAll(examples.getTags());
 
                 for (Step scenarioOutlineStep : scenario.getSteps()) {
-                    if (scenarioOutlineStep.getKeywordType().get() != StepKeywordType.CONJUNCTION)
-                        lastKeywordType = scenarioOutlineStep.getKeywordType().get();
+                    StepKeywordType stepKeywordType = scenarioOutlineStep.getKeywordType().get();
+                    if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                        lastKeywordType = stepKeywordType;
 
                     PickleStep pickleStep = pickleStep(scenarioOutlineStep, variableCells, valuesRow, lastKeywordType);
 
@@ -220,7 +221,6 @@ class PickleCompiler {
         if (step.getDataTable().isPresent()) {
             argument = new PickleStepArgument(null, pickleDataTable(step.getDataTable().get(), variableCells, valueCells));
         }
-
         if (step.getDocString().isPresent()) {
             argument = new PickleStepArgument(pickleDocString(step.getDocString().get(), variableCells, valueCells), null);
         }
@@ -228,9 +228,7 @@ class PickleCompiler {
 
         List<String> astNodeIds;
         if (valuesRow != null) {
-            astNodeIds = Stream.of(singletonList(step.getId()), singletonList(valuesRow.getId()))
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
+            astNodeIds = Arrays.asList(step.getId(), valuesRow.getId());
 
         } else {
             astNodeIds = singletonList(step.getId());
@@ -261,6 +259,9 @@ class PickleCompiler {
     }
 
     private List<PickleTag> pickleTags(List<Tag> tags) {
+        if (tags.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<PickleTag> result = new ArrayList<>();
         for (Tag tag : tags) {
             result.add(pickleTag(tag));
