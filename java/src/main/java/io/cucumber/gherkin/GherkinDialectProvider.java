@@ -7,10 +7,11 @@ import static java.util.Objects.requireNonNull;
 
 public final class GherkinDialectProvider {
 
-    private final String defaultDialectName;
+    private final GherkinDialect defaultDialect;
 
     public GherkinDialectProvider(String defaultDialectName) {
-        this.defaultDialectName = requireNonNull(defaultDialectName);
+        this.defaultDialect = getDialect(defaultDialectName)
+                .orElseThrow(() -> new ParserException.NoSuchLanguageException(defaultDialectName, null));
     }
 
     public GherkinDialectProvider() {
@@ -18,7 +19,7 @@ public final class GherkinDialectProvider {
     }
 
     public GherkinDialect getDefaultDialect() {
-        return getDialect(defaultDialectName).orElseThrow(() -> new ParserException.NoSuchLanguageException(defaultDialectName, null));
+        return defaultDialect;
     }
 
     public Optional<GherkinDialect> getDialect(String language) {
