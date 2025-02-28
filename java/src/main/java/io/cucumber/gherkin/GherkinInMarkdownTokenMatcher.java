@@ -40,22 +40,44 @@ public class GherkinInMarkdownTokenMatcher {
         return currentDialect;
     }
 
-    public boolean matchFeatureLine(Token token) {
+    public boolean match_FeatureLine(Token token) {
+        return matchTitleLine(token, TokenType.FeatureLine, currentDialect.getFeatureKeywords());
+    }
+
+    public boolean match_RuleLine(Token token) {
+        return matchTitleLine(token, TokenType.RuleLine, currentDialect.getRuleKeywords());
+    }
+
+    public boolean match_BackgroundLine(Token token) {
+        return matchTitleLine(token, TokenType.BackgroundLine, currentDialect.getBackgroundKeywords());
+    }
+
+    public boolean match_ExamplesLine(Token token) {
+        return matchTitleLine(token, TokenType.ExamplesLine, currentDialect.getExamplesKeywords());
+    }
+
+    public boolean match_ScenarioLine(Token token) {
+        return matchTitleLine(token, TokenType.ScenarioLine, currentDialect.getScenarioKeywords()) ||
+                matchTitleLine(token, TokenType.ScenarioLine, currentDialect.getScenarioOutlineKeywords());
+    }
+
+    private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
         String pattern = KeywordPrefix.HEADER.getPattern() + "(" +
-                String.join("|", currentDialect.getFeatureKeywords()) + "):(\\s+)(.*)";
+                String.join("|", keywords) + "):(\\s+)(.*)";
         Pattern headerPattern = Pattern.compile(pattern);
         Matcher matcher = headerPattern.matcher(token.line.getLineText(-1));
         if (matcher.find()) {
             String keyword = matcher.group(2);
             String text = matcher.group(4).trim();
             int indent = matcher.group(1).length();
-            setTokenMatched(token, TokenType.FeatureLine, text, keyword, indent, null, null);
+            setTokenMatched(token, tokenType, text, keyword, indent, null, null);
             return true;
         }
         return false;
     }
 
-    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, Integer indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
+    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, Integer indent,
+            StepKeywordType keywordType, List<GherkinLineSpan> items) {
         token.matchedType = matchedType;
         token.matchedKeyword = keyword;
         token.matchedText = text;
@@ -66,6 +88,5 @@ public class GherkinInMarkdownTokenMatcher {
         token.location = new Location(token.location.getLine(), token.matchedIndent + 1);
         ;
     }
-    
 
 }
