@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN;
 import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +34,17 @@ public class GherkinParserTest {
     public void use_this_in_readme() {
         GherkinParser parser = GherkinParser.builder().build();
         Stream<Envelope> pickles = parser.parse(envelope).filter(envelope -> envelope.getPickle().isPresent());
+        assertEquals(1, pickles.count());
+    }
+
+    @Test public void can_parse_markdown_files() {
+        String feature = "# Feature: Minimal\n" +
+            "\n" +
+            "  ## Scenario: minimalistic\n" +
+            "  *  Given the minimalism\n";
+        Envelope mdEnvelope = Envelope.of(new Source("minimal.feature.md", feature, TEXT_X_CUCUMBER_GHERKIN_MARKDOWN));
+        GherkinParser parser = GherkinParser.builder().build();
+        Stream<Envelope> pickles = parser.parse(mdEnvelope).filter(a -> a.getPickle().isPresent());
         assertEquals(1, pickles.count());
     }
 

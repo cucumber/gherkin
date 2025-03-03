@@ -78,7 +78,7 @@ class Parser<T> {
     }
 
     private final Builder<T> builder;
-
+    private final ITokenMatcher tokenMatcher;
     static class ParserContext {
         final ITokenScanner tokenScanner;
         final ITokenMatcher tokenMatcher;
@@ -93,8 +93,9 @@ class Parser<T> {
         }
     }
 
-    Parser(Builder<T> builder) {
+    Parser(Builder<T> builder, ITokenMatcher tokenMatcher) {
         this.builder = builder;
+        this.tokenMatcher = tokenMatcher;
     }
 
     T parse(String source, String uri) {
@@ -106,7 +107,7 @@ class Parser<T> {
     }
 
     T parse(ITokenScanner tokenScanner, String uri) {
-        return parse(tokenScanner, new TokenMatcher(), uri);
+        return parse(tokenScanner, this.tokenMatcher, uri);
     }
 
     T parse(String source, ITokenMatcher tokenMatcher, String uri) {

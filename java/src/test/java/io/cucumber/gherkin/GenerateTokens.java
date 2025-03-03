@@ -9,8 +9,9 @@ import java.nio.charset.StandardCharsets;
 public final class GenerateTokens {
     public static void main(String[] args) throws FileNotFoundException {
         TokenFormatterBuilder builder = new TokenFormatterBuilder();
-        Parser<String> parser = new Parser<>(builder);
         TokenMatcher matcher = new TokenMatcher();
+        Parser<String> parser = new Parser<>(builder, matcher);
+        
         for (String fileName : args) {
             Reader in = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
             String result = parser.parse(in, matcher, fileName);
