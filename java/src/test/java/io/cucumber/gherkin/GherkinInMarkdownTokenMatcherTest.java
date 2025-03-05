@@ -349,7 +349,7 @@ class GherkinInMarkdownTokenMatcherTest {
     }
 
     private static Stream<Arguments> headerLineTestCases() {
-        return Stream.of(HeaderType.values()).flatMap(headerType -> Stream.of(
+        return Stream.of(HeaderType.values()).filter(headerType -> headerType != HeaderType.FEATURE).flatMap(headerType -> Stream.of(
                 // Valid cases
                 Arguments.of(headerType, "# " + headerType.keyword + ": hello", true, headerType.tokenType,
                         headerType.keyword, "hello", 2),
@@ -401,29 +401,33 @@ class GherkinInMarkdownTokenMatcherTest {
                 Arguments.of("Feature", "en", true),
                 // French
                 Arguments.of("Fonctionnalité", "fr", true),
-                Arguments.of("Feature", "fr", false),
+                Arguments.of("Feature", "fr", true),
                 // Spanish
                 Arguments.of("Característica", "es", true),
-                Arguments.of("Feature", "es", false));
+                Arguments.of("Feature", "es", true));
     }
 
     private static Stream<Arguments> tableRowTestCases() {
         return Stream.of(
             // Valid table rows
-            Arguments.of("| header1 | header2 |", true, Arrays.asList("header1", "header2")),
-            Arguments.of("|col1|col2|", true, Arrays.asList("col1", "col2")),
-            Arguments.of("| data 1 | data 2 |", true, Arrays.asList("data 1", "data 2")),
-            Arguments.of("|   spaced   |   cells   |", true, Arrays.asList("spaced", "cells")),
+            Arguments.of("  | header1 | header2 |", true, Arrays.asList("header1", "header2")),
+            Arguments.of("   |col1|col2|", true, Arrays.asList("col1", "col2")),
+            Arguments.of("    | data 1 | data 2 |", true, Arrays.asList("data 1", "data 2")),
+            Arguments.of("     |   spaced   |   cells   |", true, Arrays.asList("spaced", "cells")),
             
             // Valid with indentation
             Arguments.of("  | indented | row |", true, Arrays.asList("indented", "row")),
-            Arguments.of("\t| tabbed | row |", true, Arrays.asList("tabbed", "row")),
+            Arguments.of("\t\t| tabbed | row |", true, Arrays.asList("tabbed", "row")),
             
             // Valid empty cells
-            Arguments.of("| | empty cell |", true, Arrays.asList("", "empty cell")),
-            Arguments.of("| cell | |", true, Arrays.asList("cell", "")),
-            Arguments.of("|||", true, Arrays.asList("", "")),
+            Arguments.of("  | | empty cell |", true, Arrays.asList("", "empty cell")),
+            Arguments.of("  | cell | |", true, Arrays.asList("cell", "")),
+            Arguments.of("  |||", true, Arrays.asList("", "")),
             
+            // Invalid table rows less 2 or greater than 5 spaces indenting
+            Arguments.of(" | header1 | header2 |", false, null),
+            Arguments.of("|col1|col2|", false, null),
+            Arguments.of("      |   spaced   |   cells   |", false, null),
             // Invalid cases
             Arguments.of("not a table row", false, null),
             Arguments.of("|incomplete", false, null),
@@ -431,6 +435,7 @@ class GherkinInMarkdownTokenMatcherTest {
             Arguments.of("", false, null),
             Arguments.of("|", false, null),
             Arguments.of("||", false, null)  // Requires at least one character between pipes
+
         );
     }
 
