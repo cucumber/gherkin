@@ -268,15 +268,13 @@ class AstBuilder:
             return self.get_table_rows(node)
         elif node.rule_type == "Description":
             line_tokens = node.get_tokens("Other")
-            # Trim trailing empty lines
-            last_non_empty = next(
-                i for i, j in reversed(list(enumerate(line_tokens))) if j.matched_text
-            )
-            description = "\n".join(
-                [token.matched_text for token in line_tokens[: last_non_empty + 1]]
-            )
+            tokens = list(line_tokens)
 
-            return description
+            # Trim trailing empty lines
+            while tokens and not tokens[-1].matched_text:
+                tokens.pop()
+
+            return "\n".join(token.matched_text for token in tokens)
         elif node.rule_type == "Rule":
             header = cast(Union[AstNode, None], node.get_single("RuleHeader"))
             if not header:
