@@ -3,6 +3,7 @@ package io.cucumber.gherkin;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +19,7 @@ class EncodingParser {
     private static final Pattern COMMENT_OR_EMPTY_LINE_PATTERN = Pattern.compile("^\\s*#|^\\s*$");
     private static final Pattern ENCODING_PATTERN = Pattern.compile("^\\s*#\\s*encoding\\s*:\\s*([0-9a-zA-Z\\-]+)",
             CASE_INSENSITIVE);
+    private static final Pattern PATTERN_NEW_LINE = Pattern.compile("[\\n\\r]");
 
     static String readWithEncodingFromSource(byte[] source) {
         byte[] bomFreeSource = removeByteOrderMarker(source);
@@ -41,15 +43,18 @@ class EncodingParser {
     }
 
     private static Optional<Charset> parseEncodingPragma(String source) {
-        for (String line : source.split("[\\n\\r]")) {
-            if (!COMMENT_OR_EMPTY_LINE_PATTERN.matcher(line).find()) {
-                return Optional.empty();
-            }
-            Matcher matcher = ENCODING_PATTERN.matcher(line);
-            if (matcher.find()) {
-                String charSetName = matcher.group(1).toUpperCase(ROOT);
-                Charset charset = Charset.forName(charSetName);
-                return Optional.of(charset);
+        try (Scanner scanner = new Scanner(source)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (!COMMENT_OR_EMPTY_LINE_PATTERN.matcher(line).find()) {
+                    return Optional.empty();
+                }
+                Matcher matcher = ENCODING_PATTERN.matcher(line);
+                if (matcher.find()) {
+                    String charSetName = matcher.group(1).toUpperCase(ROOT);
+                    Charset charset = Charset.forName(charSetName);
+                    return Optional.of(charset);
+                }
             }
         }
         return Optional.empty();
