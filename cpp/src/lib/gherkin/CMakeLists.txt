@@ -35,8 +35,8 @@ set_target_properties(
     cucumber_gherkin_lib
     PROPERTIES
         CXX_STANDARD 20
-        VERSION 30.0.4
-        SOVERSION 30
+        VERSION ${VERSION}
+        SOVERSION ${VER_MAJOR}
         EXPORT_NAME gherkin
         OUTPUT_NAME cucumber_gherkin
 )

@@ -1,12 +1,21 @@
-###
-#
-# Project
-# name and version
-#
-###
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+set(VERSION 30.0.4)
 
-project(cucumber_gherkin VERSION 30.0.4 LANGUAGES C CXX)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
+    file(STRINGS "VERSION" LINES)
+    list(GET LINES 0 VERSION)
+endif()
+
+# Crude Semver parsing
+if("${VERSION}" MATCHES "^([^\\.]+)\\.([^\\.]+)\\.([^\\.]+)$")
+    set(VER_MAJOR ${CMAKE_MATCH_1})
+    set(VER_MINOR ${CMAKE_MATCH_2})
+    set(VER_PATCH ${CMAKE_MATCH_3})
+else()
+    message(FATAL_ERROR "unable to parse version: ${VERSION}")
+endif()
+
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+project(cucumber_gherkin VERSION ${VERSION} LANGUAGES C CXX)
 
 ###
 #

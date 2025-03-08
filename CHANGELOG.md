@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
+
 ## [32.0.0] - 2025-02-17
 ### Changed
 - [.NET] Reduce NuGet size by only targeting .NET Standard 2.0
