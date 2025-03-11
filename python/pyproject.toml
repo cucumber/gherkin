@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gherkin-official"
-version = "31.0.0"
+version = "32.0.0"
 description = "Gherkin parser (official, by Cucumber team)"
 readme = "README.md"
 requires-python = ">=3.9"
