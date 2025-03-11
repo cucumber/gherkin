@@ -201,4 +201,10 @@ public class GherkinLineTest {
         List<String> texts = gherkinLine.getTableCells().stream().map(span -> span.text).collect(Collectors.toList());
         assertEquals(asList("foo()\n  bar\nbaz"), texts);
     }
+
+    @Test
+    void startsWithTitleKeyword() {
+        GherkinLine gherkinLine = new GherkinLine("Feature: Hello", line);
+        assertEquals(true, gherkinLine.startsWithTitleKeyword("Feature"));
+    }
 }

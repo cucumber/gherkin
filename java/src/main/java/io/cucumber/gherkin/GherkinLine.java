@@ -1,6 +1,7 @@
 package io.cucumber.gherkin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.PrimitiveIterator;
 import java.util.regex.Pattern;
@@ -14,6 +15,7 @@ class GherkinLine implements IGherkinLine, Indentable {
     private static final Pattern PATTERN_ONLY_SPACES = Pattern.compile("^\\S+$");
     private final String lineText;
     private final int line;
+    private final boolean emptyTrimmedLineText;
     private String trimmedLineText;
     private int indent;
 
@@ -21,6 +23,7 @@ class GherkinLine implements IGherkinLine, Indentable {
         this.lineText = lineText;
         this.line = line;
         StringUtils.trimAndIndent(lineText, this);
+        emptyTrimmedLineText = trimmedLineText.isEmpty();
     }
 
     @Override
@@ -42,7 +45,7 @@ class GherkinLine implements IGherkinLine, Indentable {
 
     @Override
     public boolean isEmpty() {
-        return trimmedLineText.isEmpty();
+        return emptyTrimmedLineText;
     }
 
     @Override
@@ -57,12 +60,18 @@ class GherkinLine implements IGherkinLine, Indentable {
 
     @Override
     public List<GherkinLineSpan> getTags() {
-
+        // in most cases, the line contains no tag, so the code is optimized for this situation
+        if (emptyTrimmedLineText) {
+            return Collections.emptyList();
+        }
         String uncommentedLine = StringUtils.removeComments(trimmedLineText);
-        List<GherkinLineSpan> tags = new ArrayList<>();
         int indexInUncommentedLine = 0;
 
         String[] elements = uncommentedLine.split(TAG_PREFIX);
+        if (elements.length == 0) {
+            return Collections.emptyList();
+        }
+        List<GherkinLineSpan> tags = new ArrayList<>(elements.length);
         for (String element : elements) {
             String token = rtrim(element);
             if (token.isEmpty()) {
@@ -136,8 +145,7 @@ class GherkinLine implements IGherkinLine, Indentable {
         int textLength = text.length();
         return trimmedLineText.length() > textLength &&
                 trimmedLineText.startsWith(text) &&
-                trimmedLineText.substring(textLength, textLength + GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR.length())
-                        .equals(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR);
+                trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, textLength);
     }
 
     @Override

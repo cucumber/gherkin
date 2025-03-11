@@ -6,6 +6,7 @@ import java.util.List;
 
 class Token {
     public final IGherkinLine line;
+    final boolean eof;
     public Parser.TokenType matchedType;
     public String matchedKeyword;
     public String matchedText;
@@ -18,10 +19,11 @@ class Token {
     public Token(IGherkinLine line, Location location) {
         this.line = line;
         this.location = location;
+        this.eof = line == null;
     }
 
     public boolean isEOF() {
-        return line == null;
+        return eof;
     }
 
     public void detach() {

@@ -23,8 +23,8 @@ class AstNode {
     }
 
     public <T> T getSingle(RuleType ruleType, T defaultResult) {
-        List<Object> items = getItems(ruleType);
-        return (T) (items.isEmpty() ? defaultResult : items.get(0));
+        List<T> items = (List<T>) subItems.get(ruleType);
+        return (T) (items == null || items.isEmpty() ? defaultResult : items.get(0));
     }
 
     public <T> List<T> getItems(RuleType ruleType) {

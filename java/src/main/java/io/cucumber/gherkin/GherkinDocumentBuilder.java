@@ -93,12 +93,14 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
                 String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
+
+                // extract docstring content
                 StringBuilder content = new StringBuilder();
-                boolean newLine = false;
                 for (Token lineToken : lineTokens) {
-                    if (newLine) content.append("\n");
-                    newLine = true;
-                    content.append(lineToken.matchedText);
+                    content.append(lineToken.matchedText).append("\n");
+                }
+                if (content.length() > 0) {
+                    content.setLength(content.length() - 1); // Remove the last \n
                 }
 
                 return new DocString(
@@ -249,8 +251,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         List<TableRow> rows = new ArrayList<>(tokens.size());
 
         for (Token token : tokens) {
-            TableRow tableRow = new TableRow(getLocation(token), getCells(token), idGenerator.newId());
-            rows.add(tableRow);
+            rows.add(new TableRow(getLocation(token), getCells(token), idGenerator.newId()));
         }
         ensureCellCount(rows);
         return rows;
@@ -274,9 +275,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     private List<TableCell> getCells(Token token) {
         List<TableCell> cells = new ArrayList<>(token.matchedItems.size());
+        long tokenLocationLine = token.location.getLine();
+        long defaultLocationColumn = token.location.getColumn();
         for (GherkinLineSpan cellItem : token.matchedItems) {
             TableCell tableCell = new TableCell(
-                    getLocation(token, cellItem.column),
+                    getLocation(tokenLocationLine, cellItem.column, defaultLocationColumn),
                     cellItem.text
             );
             cells.add(tableCell);
@@ -288,9 +291,9 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node.getItems(RuleType.Step);
     }
 
-    private io.cucumber.messages.types.Location getLocation(Token token, int column) {
-        column = column == 0 ? token.location.getColumn() : column;
-        return new io.cucumber.messages.types.Location((long) token.location.getLine(), (long) column);
+    private io.cucumber.messages.types.Location getLocation(long tokenLocationLine, int column, long defaultLocationColumn) {
+        long col = column == 0 ? defaultLocationColumn : column;
+        return new io.cucumber.messages.types.Location(tokenLocationLine, col);
     }
 
     private io.cucumber.messages.types.Location getLocation(Token token) {
@@ -309,8 +312,10 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         List<Token> tokens = tagsNode.getTokens(TokenType.TagLine);
         List<Tag> tags = new ArrayList<>();
         for (Token token : tokens) {
+            long tokenLocationLine = token.location.getLine();
+            long defaultLocationColumn = token.location.getColumn();
             for (GherkinLineSpan tagItem : token.matchedItems) {
-                tags.add(new Tag(getLocation(token, tagItem.column), tagItem.text, idGenerator.newId()));
+                tags.add(new Tag(getLocation(tokenLocationLine, tagItem.column, defaultLocationColumn), tagItem.text, idGenerator.newId()));
             }
         }
         return tags;
