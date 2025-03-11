@@ -142,10 +142,8 @@ class GherkinLine implements IGherkinLine, Indentable {
 
     @Override
     public boolean startsWithTitleKeyword(String text) {
-        int textLength = text.length();
-        return trimmedLineText.length() > textLength &&
-                trimmedLineText.startsWith(text) &&
-                trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, textLength);
+        return trimmedLineText.startsWith(text) &&
+               trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, text.length());
     }
 
     @Override

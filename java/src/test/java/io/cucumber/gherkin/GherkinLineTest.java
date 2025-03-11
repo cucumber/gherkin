@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GherkinLineTest {
 
@@ -204,7 +203,21 @@ public class GherkinLineTest {
 
     @Test
     void startsWithTitleKeyword() {
+        // Given
         GherkinLine gherkinLine = new GherkinLine("Feature: Hello", line);
-        assertEquals(true, gherkinLine.startsWithTitleKeyword("Feature"));
+
+        // When/Then
+        assertTrue(gherkinLine.startsWithTitleKeyword("Feature"));
+        assertFalse(gherkinLine.startsWithTitleKeyword("Feature: Hello World"));
+        assertFalse(gherkinLine.startsWithTitleKeyword("Feat"));
+    }
+
+    @Test
+    void getTags_returns_empty_list_when_empty_line() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("", line);
+
+        // When/Then
+        assertTrue(gherkinLine.getTags().isEmpty());
     }
 }

@@ -28,7 +28,7 @@ import io.cucumber.messages.types.Tag;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -204,7 +204,7 @@ class PickleCompiler {
     }
 
 
-    private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new HashMap<>();
+    private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new EnumMap<>(StepKeywordType.class);
 
     static {
         pickleStepTypeFromKeywordType.put(StepKeywordType.UNKNOWN, PickleStepType.UNKNOWN);

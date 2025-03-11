@@ -1,10 +1,6 @@
 package io.cucumber.gherkin;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,7 +90,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Language(Token token) {
-        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getLineText(0));
+        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getLineText(-1));
         if (matcher.matches()) {
             String language = matcher.group(1);
             setTokenMatched(token, TokenType.Language, language, null, null, null, null);
