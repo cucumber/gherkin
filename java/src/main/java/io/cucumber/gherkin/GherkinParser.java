@@ -8,7 +8,6 @@ import io.cucumber.messages.types.ParseError;
 import io.cucumber.messages.types.Source;
 import io.cucumber.messages.types.SourceReference;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -113,7 +112,8 @@ public final class GherkinParser {
 
         envelope.getSource()
                 .map(this::parse)
-                .ifPresent(messages::addAll);
+                .ifPresent(envelopes -> messages.addAll(envelopes));
+        // Lambda is faster than method reference because if avoids the compiler to create Objects.requiresNonNull(messages)
 
         return messages.stream();
     }

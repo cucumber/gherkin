@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GherkinDocumentBuilderTest {
     private final IdGenerator idGenerator = new IncrementingIdGenerator();
@@ -88,4 +88,27 @@ public class GherkinDocumentBuilderTest {
         assertEquals("", row.getCells().get(1).getValue());
         assertEquals("b", row.getCells().get(2).getValue());
     }
+
+    @Test
+    public void table_cells_with_different_size_throws_exception() {
+        // Given
+        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+
+        // When
+        ParserException.CompositeParserException compositeParserException = assertThrows(ParserException.CompositeParserException.class, () -> parser.parse("" +
+                        "Feature:\n" +
+                        "  Scenario:\n" +
+                        "    Given a table\n" +
+                        "      |a|b|\n" +
+                        "      |c|d|e|",
+                "test.feature"
+        ));
+
+        // Then
+        assertTrue(compositeParserException.getMessage().contains("inconsistent cell count within the table"));
+        Location location = compositeParserException.errors.get(0).location;
+        assertEquals(5, location.getLine());
+        assertEquals(7, location.getColumn());
+    }
+
 }
