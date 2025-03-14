@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [CI] Replace deprecated `::set-output`
 
 ## [32.0.0] - 2025-02-17
 ### Changed
