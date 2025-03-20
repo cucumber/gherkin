@@ -246,7 +246,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private static String concatMatchedText(List<Token> lineTokens) {
-        StringBuilder content = new StringBuilder();
+        // we guess that the average line is about 50 characters
+        StringBuilder content = new StringBuilder(50 * lineTokens.size());
         for (Token lineToken : lineTokens) {
             content.append(lineToken.matchedText).append("\n");
         }
