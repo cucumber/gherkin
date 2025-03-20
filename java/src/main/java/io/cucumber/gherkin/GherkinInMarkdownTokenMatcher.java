@@ -11,9 +11,9 @@ import static io.cucumber.gherkin.Parser.TokenType;
 import static io.cucumber.gherkin.Parser.ITokenMatcher;
 import static io.cucumber.gherkin.StringUtils.ltrim;
 
-class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
+class GherkinInMarkdownTokenMatcher implements ITokenMatcher {
     private enum KeywordPrefix {
-        BULLET("^(\\s*[*+-]\\s)"),
+        BULLET("^(\\s*[*+-]\\s+)"),
         HEADER("^(#{1,6}\\s)");
 
         private final String pattern;
@@ -32,7 +32,8 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
     private int indentToRemove = 0;
     private final Pattern TABLE_ROW_PATTERN = Pattern.compile("^\\s{2,5}\\|.*\\S.*\\|$");
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-]+)\\s*$");
-    private boolean activeDocStringSeparator = false;
+    private static final String DEFAULT_DOC_STRING_SEPARATOR = "^\\s*(```[`]*)\\s*";
+    private String activeDocStringSeparator = DEFAULT_DOC_STRING_SEPARATOR;
     private boolean matchedFeatureLine = false;
 
     public GherkinInMarkdownTokenMatcher(GherkinDialectProvider dialectProvider) {
@@ -60,29 +61,27 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
         return false;
     }
 
-    
-
     @Override
     public boolean match_FeatureLine(Token token) {
-        // Early return if we've already matched a feature line
-        if (matchedFeatureLine) {
-            setTokenMatched(token, null, null, null, null, null, null);
-            return true;
-        }
 
-        if (token.line == null || token.line.isEmpty()) return false;
+        if (token.line == null || token.line.isEmpty())
+            return false;
 
         // First try to match "# Feature: blah"
         boolean result = matchTitleLine(token, TokenType.FeatureLine, currentDialect.getFeatureKeywords());
 
-        // If we didn't match "# Feature: blah", we still match this line as a FeatureLine
-        if (!result) {
-            setTokenMatched(token, TokenType.FeatureLine, ltrim(token.line.getLineText(0)), null, null, null, null);
+        // If we didn't match "# Feature: blah", we still match this line as a
+        // FeatureLine
+        if (!result && !matchedFeatureLine) {
+            setTokenMatched(token, TokenType.FeatureLine, ltrim(token.line.getLineText(0)),
+                    currentDialect.getFeatureKeywords().get(0), null, null, null);
             result = true;
         }
+        if (result) {
+            // Remember that we've matched a feature line
+            matchedFeatureLine = result;
+        }
 
-        // Remember that we've matched a feature line
-        matchedFeatureLine = result;
         return result;
 
     }
@@ -110,12 +109,12 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
 
     private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
         String pattern = KeywordPrefix.HEADER.getPattern() + "(" +
-                String.join("|", keywords) + "):(\\s+)(.*)";
+                String.join("|", keywords) + "):(\\s)?(.*)";
         Pattern headerPattern = Pattern.compile(pattern);
         Matcher matcher = headerPattern.matcher(token.line.getLineText(-1));
         if (matcher.find()) {
             String keyword = matcher.group(2);
-            String text = matcher.group(4).trim();
+            String text = matcher.groupCount() == 4 ? matcher.group(4).trim() : "";
             int indent = matcher.group(1).length();
             setTokenMatched(token, tokenType, text, keyword, indent, null, null);
             return true;
@@ -130,23 +129,22 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
         List<String> stepKeywords = currentDialect.getStepKeywords();
 
         // Build pattern: bullet point followed by step keyword
-        String pattern = KeywordPrefix.BULLET.getPattern() + 
-            "(" + 
-            //stream the step keywords and quote them then join them with |
-            stepKeywords.stream().map(keyword -> Pattern.quote(keyword)).collect(Collectors.joining("|")) + 
-            ")" + 
-            "(.*)"
-        ;
-        
+        String pattern = KeywordPrefix.BULLET.getPattern() +
+                "(" +
+                // stream the step keywords and quote them then join them with |
+                stepKeywords.stream().map(keyword -> Pattern.quote(keyword)).collect(Collectors.joining("|")) +
+                ")" +
+                "(.*)";
+
         Pattern stepPattern = Pattern.compile(pattern);
         Matcher matcher = stepPattern.matcher(token.line.getLineText(0));
 
         if (matcher.find()) {
-            String keyword = matcher.group(2);  // The step keyword
+            String keyword = matcher.group(2); // The step keyword
             List<StepKeywordType> keywordTypes = currentDialect.getStepKeywordTypes(keyword);
             StepKeywordType keywordType = (keywordTypes.size() > 1) ? StepKeywordType.UNKNOWN : keywordTypes.get(0);
-            String text = matcher.group(3).trim();  // The step text
-            int indent = matcher.group(1).length();  // Length of bullet + whitespace
+            String text = matcher.group(3).trim(); // The step text
+            int indent = matcher.group(1).length(); // Length of bullet + whitespace
 
             if (!text.isEmpty()) {
                 setTokenMatched(token, TokenType.StepLine, text, keyword, indent, keywordType, null);
@@ -161,9 +159,10 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
         Matcher matcher = TABLE_ROW_PATTERN.matcher(token.line.getLineText(0));
         if (matcher.find()) {
             List<GherkinLineSpan> tableCells = token.line.getTableCells();
-            if (isGfmTableSeparator(tableCells)) return false;
-            
-            setTokenMatched(token, TokenType.TableRow, null, "|", null, null, tableCells);
+            if (isGfmTableSeparator(tableCells))
+                return false;
+
+            setTokenMatched(token, TokenType.TableRow, null, null, null, null, tableCells);
             return true;
         }
         return false;
@@ -171,38 +170,61 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
 
     @Override
     public boolean match_Empty(Token token) {
-        if (token.line == null) return false;
-        if (token.line.isEmpty()) {
-            setTokenMatched(token, TokenType.Empty, null, null, null, null, null);
+        if (token.line == null)
+            return false;
+        if (token.line.isEmpty() // ){
+                ||
+                (!match_TagLine(token) &&
+                        !match_ScenarioLine(token) &&
+                        !match_BackgroundLine(token) &&
+                        !match_ExamplesLine(token) &&
+                        !match_RuleLine(token) &&
+                        !match_TableRow(token) &&
+                        !match_Comment(token) &&
+                        !match_Language(token) &&
+                        !match_DocStringSeparator(token) &&
+                        !match_EOF(token) &&
+                        !match_StepLine(token)
+                        && !match_FeatureLine(token))) {
+            setTokenMatched(token, TokenType.Empty, null, null, 0, null, null);
             return true;
+        }
+        Matcher matcher = TABLE_ROW_PATTERN.matcher(token.line.getLineText(0));
+        if (matcher.find()) {
+            List<GherkinLineSpan> tableCells = token.line.getTableCells();
+            if (isGfmTableSeparator(tableCells)) {
+                setTokenMatched(token, TokenType.Empty, null, null, null, null, null);
+                return true;
+            }
         }
         return false;
     }
 
     @Override
     public boolean match_TagLine(Token token) {
-        if (token.line == null) return false;
-        
+        if (token.line == null)
+            return false;
+
         String lineText = token.line.getLineText(-1);
         List<GherkinLineSpan> items = new ArrayList<>();
-        
+
         // Pattern for backtick-wrapped tags
         Pattern tagPattern = Pattern.compile("`(@[^\\s`]+)`");
         Matcher matcher = tagPattern.matcher(lineText);
-        
+
         boolean found = false;
         while (matcher.find()) {
             found = true;
-            String tag = matcher.group(1);  // Group 1 is the actual tag without backticks
-            int column = matcher.start(1) + 1;  // +1 for 1-based column indexing
+            String tag = matcher.group(1); // Group 1 is the actual tag without backticks
+            int column = matcher.start(1) + 1; // +1 for 1-based column indexing
             items.add(new GherkinLineSpan(column, tag));
         }
-        
+
         if (found) {
             setTokenMatched(token, TokenType.TagLine, null, null, null, null, items);
             return true;
         }
-        
+
         return false;
     }
 
@@ -221,38 +243,34 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
 
     @Override
     public boolean match_DocStringSeparator(Token token) {
-        if (token.line == null) return false;
-        return !activeDocStringSeparator  ?
-                // open
-                match_DocStringSeparator(token,  true)
-                // close
-                : match_DocStringSeparator(token,  false);
-    }
-
-    private boolean match_DocStringSeparator(Token token, boolean isOpen) {
-        String separator = GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
+        if (token.line == null)
+            return false;
+        Pattern docStringSeparatorPattern = Pattern.compile(activeDocStringSeparator);
         String lineText = token.line.getLineText(0);
-        if (lineText.trim().equals(separator)) {
-            String mediaType = null;
-            if (isOpen) {
-                mediaType = token.line.getRestTrimmed(separator.length());
-                activeDocStringSeparator = true;
-                indentToRemove = token.line.indent();
-            } else {
-                activeDocStringSeparator = false;
-                indentToRemove = 0;
-            }
+        Matcher docStringSeparatorPatternMatcher = docStringSeparatorPattern.matcher(lineText);
 
-            setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, null, null, null);
+        if (docStringSeparatorPatternMatcher.matches()) {
+            String newSeparator = docStringSeparatorPatternMatcher.group(1);
+            String mediaType = null;
+            if (activeDocStringSeparator.equals(DEFAULT_DOC_STRING_SEPARATOR)) {
+                activeDocStringSeparator = "^\\s*(" + newSeparator + ")$";
+                indentToRemove = token.line.indent();
+                mediaType = token.line.getRestTrimmed(newSeparator.length());
+            } else {
+                activeDocStringSeparator = DEFAULT_DOC_STRING_SEPARATOR;
+            }
+            setTokenMatched(token, TokenType.DocStringSeparator, mediaType, newSeparator, null, null, null);
             return true;
+
         }
         return false;
+
     }
 
     @Override
     public boolean match_Comment(Token token) {
-        if (token.line == null) return false;
-        
+        if (token.line == null)
+            return false;
         if (token.line.startsWith("|")) {
             List<GherkinLineSpan> tableCells = token.line.getTableCells();
             if (isGfmTableSeparator(tableCells)) {
@@ -264,21 +282,23 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
     }
 
     private boolean isGfmTableSeparator(List<GherkinLineSpan> tableCells) {
-        if (tableCells == null || tableCells.isEmpty()) return false;
-        
+        if (tableCells == null || tableCells.isEmpty())
+            return false;
+
         // Check if all cells match the GFM separator pattern: :?-+:?
         // Examples of valid separators: ---, :---, ---:, :---:
-        Pattern separatorPattern = Pattern.compile("^:?-+:?$");
-        
+        Pattern separatorPattern = Pattern.compile("^\\s*:?-+:?\\s*$");
+
         return tableCells.stream()
-            .map(cell -> cell.text)
-            .allMatch(text -> separatorPattern.matcher(text.trim()).matches());
+                .map(cell -> cell.text)
+                .allMatch(text -> separatorPattern.matcher(text.trim()).matches());
     }
 
     @Override
     public boolean match_Other(Token token) {
-        if (token.line == null) return false;
-        
+        if (token.line == null)
+            return false;
+
         String text = token.line.getLineText(indentToRemove); // take the entire line, except removing DocString indents
         setTokenMatched(token, TokenType.Other, text, null, 0, null, null);
         return true;
@@ -286,18 +306,19 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
 
     @Override
     public boolean match_Language(Token token) {
-        if (token.line == null) return false;
-        
+        if (token.line == null)
+            return false;
+
         Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getLineText(0));
         if (matcher.matches()) {
             String language = matcher.group(1);
             setTokenMatched(token, TokenType.Language, language, null, null, null, null);
-            
+
             // Update dialect
             GherkinDialectProvider dialectProvider = new GherkinDialectProvider(language);
             currentDialect = dialectProvider.getDialect(language)
-                .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
-            
+                    .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
+
             return true;
         }
         return false;
@@ -305,9 +326,9 @@ class GherkinInMarkdownTokenMatcher implements ITokenMatcher{
 
     @Override
     public void reset() {
-        activeDocStringSeparator = false;
+        activeDocStringSeparator = DEFAULT_DOC_STRING_SEPARATOR;
         indentToRemove = 0;
         currentDialect = dialectProvider.getDefaultDialect();
     }
-    
+
 }
