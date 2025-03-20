@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [Java] Support for Gherkin in Markdonw format ([#377](https://github.com/cucumber/gherkin/pull/377/))
 
 ## [32.0.0] - 2025-02-17
 ### Changed
