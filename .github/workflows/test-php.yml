@@ -41,7 +41,7 @@ jobs:
 
       - name: Discover composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-dir)"
+        run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
         working-directory: php
 
       - name: Cache composer
