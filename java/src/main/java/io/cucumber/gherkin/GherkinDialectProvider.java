@@ -6,11 +6,12 @@ import java.util.Set;
 import static java.util.Objects.requireNonNull;
 
 public final class GherkinDialectProvider {
+
     private final String defaultDialectName;
     private GherkinDialect defaultDialect;
 
     public GherkinDialectProvider(String defaultDialectName) {
-       this.defaultDialectName = requireNonNull(defaultDialectName);
+        this.defaultDialectName = requireNonNull(defaultDialectName);
     }
 
     public GherkinDialectProvider() {
