@@ -28,10 +28,10 @@ class AstNode {
     }
 
     public <T> T getSingle(RuleType ruleType, T defaultResult) {
-        List<T> items = (List<T>) subItems.get(ruleType);
-        return items == null ? defaultResult : items.get(0);
         // if not null, then at least one item is present because
         // the list was created in add(), so no need to check isEmpty()
+        List<T> items = (List<T>) subItems.get(ruleType);
+        return items == null ? defaultResult : items.get(0);
     }
 
     public <T> List<T> getItems(RuleType ruleType) {

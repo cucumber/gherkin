@@ -19,7 +19,7 @@ class EncodingParser {
     private static final Pattern COMMENT_OR_EMPTY_LINE_PATTERN = Pattern.compile("^\\s*#|^\\s*$");
     private static final Pattern ENCODING_PATTERN = Pattern.compile("^\\s*#\\s*encoding\\s*:\\s*([0-9a-zA-Z\\-]+)",
             CASE_INSENSITIVE);
-    private static final Pattern FEATURE_TEXT_PATTERN = Pattern.compile("[^\\s\\n#]");
+    private static final Pattern LINE_SPLIT_PATTERN = Pattern.compile("([^\\n\\r]+)[\\n\\r]");
 
     static String readWithEncodingFromSource(byte[] source) {
         byte[] bomFreeSource = removeByteOrderMarker(source);
@@ -43,28 +43,17 @@ class EncodingParser {
     }
 
     private static Optional<Charset> parseEncodingPragma(String source) {
-        // early detection pragma absence to avoid creating the Scanner (which costs a lot; and pragma are rarely used)
-        Matcher m = FEATURE_TEXT_PATTERN.matcher(source);
-        if (m.find()) {
-            int textStart = m.start();
-            int pragmaStart = source.indexOf('#');
-            if (pragmaStart == -1 || textStart < pragmaStart) {
+        Matcher m2 = LINE_SPLIT_PATTERN.matcher(source);
+        while (m2.find()) {
+            String line = m2.group(1);
+            if (!COMMENT_OR_EMPTY_LINE_PATTERN.matcher(line).find()) {
                 return Optional.empty();
             }
-        }
-
-        try (Scanner scanner = new Scanner(source)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (!COMMENT_OR_EMPTY_LINE_PATTERN.matcher(line).find()) {
-                    return Optional.empty();
-                }
-                Matcher matcher = ENCODING_PATTERN.matcher(line);
-                if (matcher.find()) {
-                    String charSetName = matcher.group(1).toUpperCase(ROOT);
-                    Charset charset = Charset.forName(charSetName);
-                    return Optional.of(charset);
-                }
+            Matcher matcher = ENCODING_PATTERN.matcher(line);
+            if (matcher.find()) {
+                String charSetName = matcher.group(1).toUpperCase(ROOT);
+                Charset charset = Charset.forName(charSetName);
+                return Optional.of(charset);
             }
         }
         return Optional.empty();
