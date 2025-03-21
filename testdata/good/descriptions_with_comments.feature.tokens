@@ -52,4 +52,14 @@
 (52:1)Other://
 (53:5)TableRow://7:foo
 (54:5)TableRow://7:bar
+(55:1)Empty://
+(56:3)ScenarioLine:()Scenario/scenario with just a comment/
+(57:1)Comment:/    # comment/
+(58:5)StepLine:(Context)Given /the minimalism/
+(59:1)Empty://
+(60:3)ScenarioLine:()Scenario/scenario with a comment with new lines around/
+(61:1)Empty://
+(62:1)Comment:/    # comment/
+(63:1)Other://
+(64:5)StepLine:(Context)Given /the minimalism/
 EOF

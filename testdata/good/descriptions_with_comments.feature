@@ -52,3 +52,13 @@ with a comment in the middle
 
     | foo |
     | bar |
+
+  Scenario: scenario with just a comment
+    # comment
+    Given the minimalism
+
+  Scenario: scenario with a comment with new lines around
+
+    # comment
+
+    Given the minimalism  
