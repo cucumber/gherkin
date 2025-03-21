@@ -118,3 +118,4 @@ For this reason, the `GherkinDocument` AST will have *empty description properti
 that the JSON formatter will not include a `description` property for scenarios.
 
 [^1]: Support for MDG is currently only supported in the [@cucumber/gherkin](../gherkin/javascript) (the JavaScript implementation), version `19.0.0` and above. The Cucumber team will gather feedback from users of [@cucumber/cucumber](https://www.npmjs.com/package/@cucumber/cucumber) before porting MDG to other programming languages.
+Support for MDG has been added for java [@cucumber/gherkin](../gherkin/java/) (the Java implementation)

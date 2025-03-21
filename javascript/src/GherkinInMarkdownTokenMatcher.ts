@@ -183,6 +183,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     if (!result) {
       token.matchedType = TokenType.FeatureLine
       token.matchedText = token.line.trimmedLineText
+      token.matchedKeyword = this.dialect.feature[0]
       result = this.setTokenMatched(token, null, true)
     }
     this.matchedFeatureLine = result
