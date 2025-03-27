@@ -6,7 +6,9 @@ import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.ParseError;
 import io.cucumber.messages.types.Source;
+import io.cucumber.messages.types.SourceMediaType;
 import io.cucumber.messages.types.SourceReference;
+import io.cucumber.gherkin.Parser.ITokenMatcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +21,11 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static io.cucumber.gherkin.EncodingParser.readWithEncodingFromSource;
+import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN;
 import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
+
 
 /**
  * Main entry point for the Gherkin library
@@ -99,6 +103,9 @@ public final class GherkinParser {
         requireNonNull(uri);
         requireNonNull(source);
         String withEncodingFromSource = readWithEncodingFromSource(source);
+        if (uri.endsWith(".md")) {
+            return parse(Envelope.of(new Source(uri, withEncodingFromSource, TEXT_X_CUCUMBER_GHERKIN_MARKDOWN)));
+        }
         return parse(Envelope.of(new Source(uri, withEncodingFromSource, TEXT_X_CUCUMBER_GHERKIN_PLAIN)));
     }
 
@@ -119,13 +126,14 @@ public final class GherkinParser {
     }
 
     private List<Envelope> parse(Source source) {
-        return parse(source.getUri(), source.getData());
+        return parse(source.getUri(), source.getData(), source.getMediaType());
     }
 
-    private List<Envelope> parse(String uri, String data) {
+    private List<Envelope> parse(String uri, String data, SourceMediaType mediaType) {
         List<Envelope> messages = new ArrayList<>();
         GherkinDocumentBuilder documentBuilder = new GherkinDocumentBuilder(idGenerator, uri);
-        Parser<GherkinDocument> parser = new Parser<>(documentBuilder);
+        ITokenMatcher tokenMatcher = mediaType == TEXT_X_CUCUMBER_GHERKIN_MARKDOWN ? new GherkinInMarkdownTokenMatcher() : new TokenMatcher();
+        Parser<GherkinDocument> parser = new Parser<>(documentBuilder, tokenMatcher);
 
         try {
             GherkinDocument gherkinDocument = parser.parse(data, uri);

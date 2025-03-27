@@ -17,9 +17,9 @@ public class GherkinDocumentBuilderTest {
 
     @Test
     public void is_reusable() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         TokenMatcher matcher = new TokenMatcher();
-
+        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"), matcher);
+        
         GherkinDocument d1 = parser.parse("Feature: 1", matcher, "1.feature");
         GherkinDocument d2 = parser.parse("Feature: 2", matcher, "2.feature");
 
@@ -29,7 +29,8 @@ public class GherkinDocumentBuilderTest {
 
     @Test
     public void parses_rules() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        TokenMatcher matcher = new TokenMatcher();
+        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"),matcher);
         String data = "" +
                 "Feature: Some rules\n" +
                 "\n" +
@@ -67,7 +68,8 @@ public class GherkinDocumentBuilderTest {
 
     @Test
     public void parses_just_comments() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        TokenMatcher matcher = new TokenMatcher();
+        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"),matcher);
         GherkinDocument doc = parser.parse("# Just a comment", "test.feature");
         List<Comment> children = doc.getComments();
         assertEquals(1, children.size());
@@ -75,7 +77,8 @@ public class GherkinDocumentBuilderTest {
 
     @Test
     public void sets_empty_table_cells() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        TokenMatcher matcher = new TokenMatcher();
+        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"),matcher);
         GherkinDocument doc = parser.parse("" +
                 "Feature:\n" +
                 "  Scenario:\n" +

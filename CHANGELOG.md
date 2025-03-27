@@ -9,6 +9,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [CI] Replace deprecated `::set-output`
+### Added
+- [Java] Support for Gherkin in Markdonw format ([#377](https://github.com/cucumber/gherkin/pull/377/))
 
 ## [32.0.0] - 2025-02-17
 ### Changed
