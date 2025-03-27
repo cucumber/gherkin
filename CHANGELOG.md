@@ -7,8 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Changed
-- [CI] Replace deprecated `::set-output`
+### Fixed
 - [Python] Fix a regression when a feature file only has a comment in the description
 
 ## [32.0.0] - 2025-02-17
