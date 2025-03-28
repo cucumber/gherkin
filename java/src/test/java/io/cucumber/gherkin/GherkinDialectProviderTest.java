@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GherkinDialectProviderTest {
+    
     @Test
     public void provides_emoji_dialect() {
         GherkinDialect em = new GherkinDialectProvider().getDialect("em").orElseThrow(() -> new RuntimeException("Missing dialect: em"));

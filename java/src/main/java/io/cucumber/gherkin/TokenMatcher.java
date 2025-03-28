@@ -1,8 +1,6 @@
 package io.cucumber.gherkin;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +14,6 @@ import static io.cucumber.gherkin.Parser.TokenType;
 
 class TokenMatcher implements ITokenMatcher {
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
-    private final Map<String, StepKeywordType> stepKeywordTypeCache = new HashMap<>();
     private final GherkinDialectProvider dialectProvider;
     private GherkinDialect currentDialect;
     private String activeDocStringSeparator = null;
@@ -39,11 +36,7 @@ class TokenMatcher implements ITokenMatcher {
     public void reset() {
         activeDocStringSeparator = null;
         indentToRemove = 0;
-        GherkinDialect defaultDialect = dialectProvider.getDefaultDialect();
-        if (!defaultDialect.equals(currentDialect)) {
-            stepKeywordTypeCache.clear();
-        }
-        currentDialect = defaultDialect;
+        currentDialect = dialectProvider.getDefaultDialect();
     }
 
     private GherkinDialect getCurrentDialect() {
@@ -98,7 +91,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Language(Token token) {
-        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getLineText(-1));
+        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getLineText(0));
         if (matcher.matches()) {
             String language = matcher.group(1);
             setTokenMatched(token, TokenType.Language, language, null, null, null, null);
@@ -190,7 +183,7 @@ class TokenMatcher implements ITokenMatcher {
         for (String keyword : keywords) {
             if (token.line.startsWith(keyword)) {
                 String stepText = token.line.getRestTrimmed(keyword.length());
-                StepKeywordType keywordType = stepKeywordTypeCache.computeIfAbsent(keyword, this::getKeywordType);
+                StepKeywordType keywordType = getKeywordType(keyword);
                 setTokenMatched(token, TokenType.StepLine, stepText, keyword, null, keywordType, null);
                 return true;
             }
@@ -199,7 +192,7 @@ class TokenMatcher implements ITokenMatcher {
     }
 
     private StepKeywordType getKeywordType(String stepKeyword) {
-        Set<StepKeywordType> keywordTypes = currentDialect.getDistinctStepKeywordTypes(stepKeyword);
+        Set<StepKeywordType> keywordTypes = currentDialect.getStepKeywordTypesSet(stepKeyword);
         if (keywordTypes.size() == 1) {
             return keywordTypes.iterator().next();
         }
