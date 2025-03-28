@@ -1,15 +1,19 @@
 package io.cucumber.gherkin;
 
-class GherkinLineSpan {
+class GherkinLineSpan implements Indentable {
     // One-based line position
-    public final int column;
+    public int column;
 
     // text part of the line
-    public final String text;
+    public String text;
 
     public GherkinLineSpan(int column, String text) {
         this.column = column;
         this.text = text;
+    }
+
+    public GherkinLineSpan(int column) {
+        this.column = column;
     }
 
     @Override
@@ -26,4 +30,11 @@ class GherkinLineSpan {
         result = 31 * result + text.hashCode();
         return result;
     }
+
+    @Override
+    public void indent(int indent, String trimmedText) {
+        this.column += indent;
+        this.text = trimmedText;
+    }
+
 }

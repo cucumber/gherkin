@@ -26,6 +26,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Fix NuGet package generation
 - [c] Optimise error handling for empty datatable rows
 - [Perl] Optimise error handling for unclosed DocStrings
+- [Java] Improved parsing time ([#361](https://github.com/cucumber/gherkin/issues/361))
 
 ## [31.0.0] - 2025-01-29
 ### Added
