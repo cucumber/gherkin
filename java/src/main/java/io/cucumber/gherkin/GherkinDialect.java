@@ -68,17 +68,17 @@ public final class GherkinDialect {
         this.andKeywords = requireNonNull(andKeywords);
         this.butKeywords = requireNonNull(butKeywords);
         
-        this.stepKeywords = uniqueKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
+        this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
     }
 
     @SafeVarargs
-    private static List<String> uniqueKeywords(List<String>... keywords) {
+    private static List<String> distinctKeywords(List<String>... keywords) {
         int totalSize = 0;
         for (List<String> keyword : keywords) {
             totalSize += keyword.size();
         }
-        LinkedHashSet<String> uniqueKeywords = new LinkedHashSet<>(totalSize);
+        Set<String> uniqueKeywords = new LinkedHashSet<>(totalSize);
         for (List<String> keyword : keywords) {
             uniqueKeywords.addAll(keyword);
         }
@@ -96,7 +96,7 @@ public final class GherkinDialect {
         addStepKeywordsTypes(stepKeywordsTypes, CONTEXT, givenKeywords);
         addStepKeywordsTypes(stepKeywordsTypes, ACTION, whenKeywords);
         addStepKeywordsTypes(stepKeywordsTypes, OUTCOME, thenKeywords);
-        addStepKeywordsTypes(stepKeywordsTypes, CONJUNCTION, uniqueKeywords(andKeywords, butKeywords));
+        addStepKeywordsTypes(stepKeywordsTypes, CONJUNCTION, distinctKeywords(andKeywords, butKeywords));
         stepKeywordsTypes.replaceAll((keyword, stepKeywordTypes) -> unmodifiableSet(stepKeywordTypes));
         return stepKeywordsTypes;
     }
