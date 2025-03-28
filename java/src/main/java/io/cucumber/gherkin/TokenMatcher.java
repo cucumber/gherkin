@@ -1,6 +1,9 @@
 package io.cucumber.gherkin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,7 @@ import static io.cucumber.gherkin.Parser.TokenType;
 
 class TokenMatcher implements ITokenMatcher {
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
+    private final Map<String, StepKeywordType> stepKeywordTypeCache = new HashMap<>();
     private final GherkinDialectProvider dialectProvider;
     private GherkinDialect currentDialect;
     private String activeDocStringSeparator = null;
@@ -35,7 +39,11 @@ class TokenMatcher implements ITokenMatcher {
     public void reset() {
         activeDocStringSeparator = null;
         indentToRemove = 0;
-        currentDialect = dialectProvider.getDefaultDialect();
+        GherkinDialect defaultDialect = dialectProvider.getDefaultDialect();
+        if (!defaultDialect.equals(currentDialect)) {
+            stepKeywordTypeCache.clear();
+        }
+        currentDialect = defaultDialect;
     }
 
     private GherkinDialect getCurrentDialect() {
@@ -182,13 +190,20 @@ class TokenMatcher implements ITokenMatcher {
         for (String keyword : keywords) {
             if (token.line.startsWith(keyword)) {
                 String stepText = token.line.getRestTrimmed(keyword.length());
-                List<StepKeywordType> keywordTypes = currentDialect.getStepKeywordTypes(keyword);
-                StepKeywordType keywordType = (keywordTypes.size() > 1) ? StepKeywordType.UNKNOWN : keywordTypes.get(0);
+                StepKeywordType keywordType = stepKeywordTypeCache.computeIfAbsent(keyword, this::getKeywordType);
                 setTokenMatched(token, TokenType.StepLine, stepText, keyword, null, keywordType, null);
                 return true;
             }
         }
         return false;
+    }
+
+    private StepKeywordType getKeywordType(String stepKeyword) {
+        Set<StepKeywordType> keywordTypes = currentDialect.getDistinctStepKeywordTypes(stepKeyword);
+        if (keywordTypes.size() == 1) {
+            return keywordTypes.iterator().next();
+        }
+        return StepKeywordType.UNKNOWN;
     }
 
     @Override
