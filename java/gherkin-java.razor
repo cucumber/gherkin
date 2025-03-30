@@ -128,7 +128,7 @@ class @Model.ParserClassName<T> {
 
         endRule(context, RuleType.@Model.RuleSet.StartRule.Name);
 
-        if (context.errors.size() > 0) {
+        if (!context.errors.isEmpty() {
             throw new ParserException.CompositeParserException(context.errors);
         }
 
