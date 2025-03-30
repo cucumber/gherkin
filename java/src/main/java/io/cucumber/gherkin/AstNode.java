@@ -8,33 +8,38 @@ import java.util.Map;
 
 import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
+import static java.util.Objects.requireNonNull;
 
 class AstNode {
-    // subItems is relatively sparse, so preinitializing all values with empty lists is not efficient
+    // subItems is relatively sparse, so pre-initializing all values with empty
+    // lists is not efficient
     private final Map<RuleType, List<Object>> subItems = new EnumMap<>(RuleType.class);
-    public final RuleType ruleType;
+    final RuleType ruleType;
 
-    public AstNode(RuleType ruleType) {
+    AstNode(RuleType ruleType) {
         this.ruleType = ruleType;
     }
 
-    public void add(RuleType ruleType, Object obj) {
+    void add(RuleType ruleType, Object obj) {
         List<Object> items = subItems.get(ruleType);
-        if (items == null) { // faster than Map.computeIfAbsent
+        //noinspection Java8MapApi faster than Map.computeIfAbsent
+        if (items == null) { 
             items = new ArrayList<>();
             subItems.put(ruleType, items);
         }
         items.add(obj);
     }
 
-    public <T> T getSingle(RuleType ruleType, T defaultResult) {
+    @SuppressWarnings("unchecked")
+    <T> T getSingle(RuleType ruleType, T defaultResult) {
         // if not null, then at least one item is present because
         // the list was created in add(), so no need to check isEmpty()
         List<T> items = (List<T>) subItems.get(ruleType);
         return items == null ? defaultResult : items.get(0);
     }
 
-    public <T> List<T> getItems(RuleType ruleType) {
+    @SuppressWarnings("unchecked")
+    <T> List<T> getItems(RuleType ruleType) {
         List<T> items = (List<T>) subItems.get(ruleType);
         if (items == null) {
             return Collections.emptyList();
@@ -42,11 +47,11 @@ class AstNode {
         return items;
     }
 
-    public Token getToken(TokenType tokenType) {
-        return getSingle(tokenType.ruleType, new Token(null, null));
+    Token getToken(TokenType tokenType) {
+        return requireNonNull(getSingle(tokenType.ruleType, null));
     }
 
-    public List<Token> getTokens(TokenType tokenType) {
+    List<Token> getTokens(TokenType tokenType) {
         return getItems(tokenType.ruleType);
     }
 }

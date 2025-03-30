@@ -1,5 +1,7 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.types.Location;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,20 +10,21 @@ import java.util.regex.Pattern;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
 import static io.cucumber.gherkin.StringUtils.rtrim;
+import static java.util.Objects.requireNonNull;
 
 class GherkinLine implements IGherkinLine, Indentable {
     // TODO: set this to 0 when/if we change to 0-indexed columns
     private static final int OFFSET = 1;
     private static final Pattern PATTERN_ONLY_SPACES = Pattern.compile("^\\S+$");
     private final String lineText;
-    private final int line;
+    private final Location line;
     private final boolean emptyTrimmedLineText;
     private String trimmedLineText;
     private int indent;
 
-    public GherkinLine(String lineText, int line) {
-        this.lineText = lineText;
-        this.line = line;
+    public GherkinLine(String lineText, Location line) {
+        this.lineText = requireNonNull(lineText);
+        this.line = requireNonNull(line);
         StringUtils.trimAndIndent(lineText, this);
         emptyTrimmedLineText = trimmedLineText.isEmpty();
     }
@@ -80,7 +83,7 @@ class GherkinLine implements IGherkinLine, Indentable {
             int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
             int column = indent() + symbolLength + 1;
             if (!PATTERN_ONLY_SPACES.matcher(token).matches()) {
-                throw new ParserException("A tag may not contain whitespace", new Location(line, column));
+                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(line, column));
             }
             tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));
             indexInUncommentedLine += element.length() + 1;
@@ -142,8 +145,10 @@ class GherkinLine implements IGherkinLine, Indentable {
 
     @Override
     public boolean startsWithTitleKeyword(String text) {
-        return trimmedLineText.startsWith(text) &&
-               trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, text.length());
+        int textLength = text.length();
+        return trimmedLineText.length() > textLength &&
+                trimmedLineText.startsWith(text) &&
+                trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, textLength);
     }
 
     @Override

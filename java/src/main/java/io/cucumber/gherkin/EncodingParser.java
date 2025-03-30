@@ -42,6 +42,7 @@ class EncodingParser {
     }
 
     private static Optional<Charset> parseEncodingPragma(String source) {
+        // Optimization: search for lines instead of splitting
         Matcher m2 = LINE_SPLIT_PATTERN.matcher(source);
         while (m2.find()) {
             String line = m2.group(1);
