@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
+- [Java] Optimize AstNode performance ([#383](https://github.com/cucumber/gherkin/pull/383))
 - [Java] Optimize EncodingParser performance ([#382](https://github.com/cucumber/gherkin/pull/382))
 - [Java] Optimize GherkinDialect performance ([#380](https://github.com/cucumber/gherkin/pull/380))
 
