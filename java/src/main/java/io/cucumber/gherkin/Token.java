@@ -8,7 +8,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 class Token {
-    public final IGherkinLine line;
+    public final GherkinLine line;
     public Parser.TokenType matchedType;
     public String matchedKeyword;
     public String matchedText;
@@ -18,7 +18,7 @@ class Token {
     public StepKeywordType keywordType;
     public Location location;
 
-    private Token(IGherkinLine line, Location location) {
+    private Token(GherkinLine line, Location location) {
         this.line = line;
         this.location = location;
     }
@@ -36,11 +36,6 @@ class Token {
 
     public boolean isEOF() {
         return line == null;
-    }
-
-    public void detach() {
-        if (line != null)
-            line.detach();
     }
 
     public String getTokenValue() {

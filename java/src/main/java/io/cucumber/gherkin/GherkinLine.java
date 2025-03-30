@@ -16,7 +16,7 @@ import static io.cucumber.gherkin.StringUtils.symbolCount;
 import static io.cucumber.gherkin.StringUtils.trim;
 import static java.util.Objects.requireNonNull;
 
-class GherkinLine implements IGherkinLine {
+class GherkinLine {
     // TODO: set this to 0 when/if we change to 0-indexed columns
     private static final int OFFSET = 1;
     private final String lineText;
@@ -31,39 +31,28 @@ class GherkinLine implements IGherkinLine {
         indent = symbolCount(lineText) - symbolCount(ltrim(lineText));
     }
 
-    @Override
     public int indent() {
         return indent;
     }
 
-    @Override
-    public void detach() {
-
-    }
-
-    @Override
     public String getLineText(int indentToRemove) {
         if (indentToRemove < 0 || indentToRemove > indent())
             return trimmedLineText;
         return lineText.substring(indentToRemove);
     }
 
-    @Override
     public boolean isEmpty() {
         return trimmedLineText.isEmpty();
     }
 
-    @Override
     public boolean startsWith(String prefix) {
         return trimmedLineText.startsWith(prefix);
     }
 
-    @Override
     public String getRestTrimmed(int length) {
         return trimmedLineText.substring(length).trim();
     }
 
-    @Override
     public List<GherkinLineSpan> getTags() {
 
         String uncommentedLine = trimmedLineText.split("\\s" + COMMENT_PREFIX, 2)[0];
@@ -87,7 +76,6 @@ class GherkinLine implements IGherkinLine {
         return tags;
     }
 
-    @Override
     public List<GherkinLineSpan> getTableCells() {
         List<GherkinLineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
@@ -140,7 +128,6 @@ class GherkinLine implements IGherkinLine {
         return lineSpans;
     }
 
-    @Override
     public boolean startsWithTitleKeyword(String text) {
         int textLength = text.length();
         return trimmedLineText.length() > textLength &&
