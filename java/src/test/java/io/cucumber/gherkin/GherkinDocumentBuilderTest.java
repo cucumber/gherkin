@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GherkinDocumentBuilderTest {
+class GherkinDocumentBuilderTest {
     private final IdGenerator idGenerator = new IncrementingIdGenerator();
 
     @Test
-    public void is_reusable() {
+    void is_reusable() {
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         TokenMatcher matcher = new TokenMatcher();
 
@@ -31,7 +31,7 @@ public class GherkinDocumentBuilderTest {
     }
 
     @Test
-    public void parses_rules() {
+    void parses_rules() {
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         String data = "" +
                 "Feature: Some rules\n" +
@@ -69,7 +69,7 @@ public class GherkinDocumentBuilderTest {
     }
 
     @Test
-    public void parses_just_comments() {
+    void parses_just_comments() {
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinDocument doc = parser.parse("# Just a comment", "test.feature");
         List<Comment> children = doc.getComments();
@@ -77,7 +77,7 @@ public class GherkinDocumentBuilderTest {
     }
 
     @Test
-    public void sets_empty_table_cells() {
+    void sets_empty_table_cells() {
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinDocument doc = parser.parse("" +
                 "Feature:\n" +
@@ -93,7 +93,7 @@ public class GherkinDocumentBuilderTest {
     }
 
     @Test
-    public void table_cells_with_different_size_throws_exception() {
+    void table_cells_with_different_size_throws_exception() {
         // Given
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
 
