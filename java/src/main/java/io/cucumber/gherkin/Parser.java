@@ -141,7 +141,7 @@ class Parser<T> {
 
         endRule(context, RuleType.GherkinDocument);
 
-        if (context.errors.size() > 0) {
+        if (!context.errors.isEmpty()) {
             throw new ParserException.CompositeParserException(context.errors);
         }
 

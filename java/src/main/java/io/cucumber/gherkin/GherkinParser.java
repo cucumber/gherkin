@@ -149,19 +149,12 @@ public final class GherkinParser {
     }
 
     private Envelope createParseError(ParserException e, String uri) {
-        long line = e.location.getLine();
-        long column = e.location.getColumn();
         return Envelope.of(new ParseError(
                 new SourceReference(
                         uri,
                         null,
                         null,
-                        // We want 0 values not to be serialised, which is why we set them to null
-                        // This is a legacy requirement brought over from old protobuf behaviour
-                        new io.cucumber.messages.types.Location(
-                                line,
-                                column == 0 ? null : column
-                        )
+                        e.location
                 ),
                 e.getMessage()
         ));

@@ -1,5 +1,6 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.types.Location;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -10,9 +11,9 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GherkinLineTest {
+class GherkinLineTest {
 
-    private final int line = 12;
+    final Location line = Locations.atLine(12);
 
     @Test
     public void allows_any_non_space_characters_in_a_tag() {
