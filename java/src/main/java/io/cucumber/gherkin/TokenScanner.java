@@ -1,9 +1,14 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.types.Location;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+
+import static io.cucumber.gherkin.Token.createEOF;
+import static io.cucumber.gherkin.Token.createGherkinLine;
 
 /**
  * <p>
@@ -30,8 +35,11 @@ class TokenScanner implements Parser.ITokenScanner {
     public Token read() {
         try {
             String line = reader.readLine();
-            Location location = new Location(++lineNumber, 0);
-            return line == null ? new Token(null, location) : new Token(new GherkinLine(line, lineNumber), location);
+            Location location = Locations.atLine(++lineNumber);
+            if (line == null) {
+                return createEOF(location);
+            }
+            return createGherkinLine(line, location);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

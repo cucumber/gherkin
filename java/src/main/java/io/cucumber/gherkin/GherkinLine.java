@@ -1,5 +1,7 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.types.Location;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
@@ -12,6 +14,7 @@ import static io.cucumber.gherkin.StringUtils.rtrim;
 import static io.cucumber.gherkin.StringUtils.rtrimKeepNewLines;
 import static io.cucumber.gherkin.StringUtils.symbolCount;
 import static io.cucumber.gherkin.StringUtils.trim;
+import static java.util.Objects.requireNonNull;
 
 class GherkinLine implements IGherkinLine {
     // TODO: set this to 0 when/if we change to 0-indexed columns
@@ -19,12 +22,12 @@ class GherkinLine implements IGherkinLine {
     private final String lineText;
     private final String trimmedLineText;
     private final int indent;
-    private final int line;
+    private final Location line;
 
-    public GherkinLine(String lineText, int line) {
-        this.lineText = lineText;
+    public GherkinLine(String lineText, Location line) {
+        this.lineText = requireNonNull(lineText);
         this.trimmedLineText = trim(lineText);
-        this.line = line;
+        this.line = requireNonNull(line);
         indent = symbolCount(lineText) - symbolCount(ltrim(lineText));
     }
 
@@ -47,7 +50,7 @@ class GherkinLine implements IGherkinLine {
 
     @Override
     public boolean isEmpty() {
-        return trimmedLineText.length() == 0;
+        return trimmedLineText.isEmpty();
     }
 
     @Override
@@ -76,7 +79,7 @@ class GherkinLine implements IGherkinLine {
             int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
             int column = indent() + symbolLength + 1;
             if (!token.matches("^\\S+$")) {
-                throw new ParserException("A tag may not contain whitespace", new Location(line, column));
+                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(line, column));
             }
             tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));
             indexInUncommentedLine += element.length() + 1;
@@ -142,8 +145,7 @@ class GherkinLine implements IGherkinLine {
         int textLength = text.length();
         return trimmedLineText.length() > textLength &&
                 trimmedLineText.startsWith(text) &&
-                trimmedLineText.substring(textLength, textLength + GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR.length())
-                        .equals(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR);
+                trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, textLength);
     }
 
 }

@@ -10,7 +10,7 @@ class TokenFormatter {
 
         return String.format("(%s:%s)%s:%s/%s/%s",
                 toString(token.location.getLine()),
-                toString(token.location.getColumn()),
+                toString(token.location.getColumn().orElse(0L)),
                 toString(token.matchedType),
                 token.matchedKeyword == null ? "" : String.format("(%s)%s",
                                                                   toString(token.keywordType),

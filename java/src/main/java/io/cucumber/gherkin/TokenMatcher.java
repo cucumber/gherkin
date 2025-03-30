@@ -9,6 +9,7 @@ import io.cucumber.messages.types.StepKeywordType;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
+import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.ITokenMatcher;
 import static io.cucumber.gherkin.Parser.TokenType;
 
@@ -51,7 +52,7 @@ class TokenMatcher implements ITokenMatcher {
         token.matchedItems = items;
         token.matchedGherkinDialect = getCurrentDialect();
         token.matchedIndent = indent != null ? indent : (token.line == null ? 0 : token.line.indent());
-        token.location = new Location(token.location.getLine(), token.matchedIndent + 1);
+        token.location = atColumn(token.location, token.matchedIndent + 1);
     }
 
     @Override

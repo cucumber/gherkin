@@ -8,6 +8,7 @@ import java.util.Map;
 
 import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
+import static java.util.Objects.requireNonNull;
 
 class AstNode {
     // subItems is relatively sparse, so pre-initializing all values with empty
@@ -28,6 +29,7 @@ class AstNode {
         items.add(obj);
     }
 
+    @SuppressWarnings("unchecked")
     <T> T getSingle(RuleType ruleType, T defaultResult) {
         // if not null, then at least one item is present because
         // the list was created in add(), so no need to check isEmpty()
@@ -45,7 +47,7 @@ class AstNode {
     }
 
     Token getToken(TokenType tokenType) {
-        return getSingle(tokenType.ruleType, new Token(null, null));
+        return requireNonNull(getSingle(tokenType.ruleType, null));
     }
 
     List<Token> getTokens(TokenType tokenType) {
