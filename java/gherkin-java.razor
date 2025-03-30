@@ -21,7 +21,6 @@
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
         final String stateComment = "State: @state.Id - @Raw(state.Comment)";
-        token.detach();
         List<String> expectedTokens = asList("@Raw(string.Join("\", \"", expectedTokens))");
         ParserException error = token.isEOF()
                 ? new ParserException.UnexpectedEOFException(token, expectedTokens, stateComment)
@@ -259,14 +258,12 @@ class @Model.ParserClassName<T> {
 {
 <text>
     private boolean lookahead_@(lookAheadHint.Id)(ParserContext context, Token currentToken) {
-        currentToken.detach();
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;
         do
         {
             token = readToken(context);
-            token.detach();
             queue.add(token);
 
             if (false
