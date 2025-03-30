@@ -30,19 +30,8 @@ import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 
 class GherkinDocumentBuilder implements Builder<GherkinDocument> {
-    public static final Pattern PATTERN_SPACES = Pattern.compile("\\s*");
-    /**
-     * Cache of Long objects for the range 0-3999. This is used
-     * to avoid creating a huge amount of Long objects in getLocation().
-     * We can't use Long.valueOf() because it caches only the first 128
-     * values, and typical feature files have much more lines.
-     */
-    private final static Long[] longs = new Long[4000];
-    static {
-        for (int i = 0; i < longs.length; i++) {
-            longs[i] = (long) i;
-        }
-    }
+    private static final Pattern PATTERN_SPACES = Pattern.compile("\\s*");
+
     private final List<Comment> comments = new ArrayList<>();
     private final IdGenerator idGenerator;
     private String uri;
@@ -320,11 +309,6 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     @Override
     public GherkinDocument getResult() {
         return currentNode().getSingle(RuleType.GherkinDocument, null);
-    }
-
-    private static Long getLong(int i) {
-        if (i>=longs.length) return (long) i;
-        return longs[i];
     }
 
 }
