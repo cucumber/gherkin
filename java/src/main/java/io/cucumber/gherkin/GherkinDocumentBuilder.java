@@ -53,12 +53,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     @Override
     public void build(Token token) {
-        RuleType ruleType = RuleType.cast(token.matchedType);
         if (token.matchedType == TokenType.Comment) {
             Comment comment = new Comment(getLocation(token, 0), token.matchedText);
             comments.add(comment);
         } else {
-            currentNode().add(ruleType, token);
+            currentNode().add(token.matchedType.ruleType, token);
         }
     }
 
@@ -90,7 +89,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             }
             case DocString: {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
-                String mediaType = separatorToken.matchedText.length() > 0 ? separatorToken.matchedText : null;
+                String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 StringBuilder content = new StringBuilder();
                 boolean newLine = false;
@@ -244,11 +243,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private List<TableRow> getTableRows(AstNode node) {
-        List<TableRow> rows = new ArrayList<>();
+        List<Token> tokens = node.getTokens(TokenType.TableRow);
+        List<TableRow> rows = new ArrayList<>(tokens.size());
 
-        for (Token token : node.getTokens(TokenType.TableRow)) {
-            TableRow tableRow = new TableRow(getLocation(token, 0), getCells(token), idGenerator.newId());
-            rows.add(tableRow);
+        for (Token token : tokens) {
+            rows.add(new TableRow(getLocation(token, 0), getCells(token), idGenerator.newId()));
         }
         ensureCellCount(rows);
         return rows;
@@ -261,9 +260,10 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         int cellCount = rows.get(0).getCells().size();
         for (TableRow row : rows) {
             if (row.getCells().size() != cellCount) {
+                io.cucumber.messages.types.Location rowLocation = row.getLocation();
                 io.cucumber.gherkin.Location location = new io.cucumber.gherkin.Location(
-                        row.getLocation().getLine().intValue(),
-                        row.getLocation().getColumn().orElse(0L).intValue()
+                        rowLocation.getLine().intValue(),
+                        rowLocation.getColumn().orElse(0L).intValue()
                 );
                 throw new ParserException.AstBuilderException("inconsistent cell count within the table", location);
             }

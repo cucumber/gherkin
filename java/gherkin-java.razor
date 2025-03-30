@@ -47,10 +47,16 @@ import static java.util.Arrays.asList;
 
 class @Model.ParserClassName<T> {
     enum TokenType {
-        None,
+        None(RuleType.None),
         @foreach(var rule in Model.RuleSet.TokenRules)
-        {<text>        @rule.Name.Replace("#", ""),
+        {<text>        @(rule.Name.Replace("#", ""))(RuleType.@(rule.Name.Replace("#", "_"))),
 </text>}        ;
+
+        final RuleType ruleType;
+
+        TokenType(RuleType ruleType) {
+            this.ruleType = ruleType;
+        }
     }
 
     enum RuleType {
@@ -59,9 +65,6 @@ class @Model.ParserClassName<T> {
         {<text>        @rule.Name.Replace("#", "_"), // @rule.ToString(true)
 </text>}        ;
 
-        static RuleType cast(TokenType tokenType) {
-            return RuleType.values()[tokenType.ordinal()];
-        }
     }
 
     private final Builder<T> builder;
@@ -189,7 +192,7 @@ class @Model.ParserClassName<T> {
     }
 
     private Token readToken(ParserContext context) {
-        return context.tokenQueue.size() > 0 ? context.tokenQueue.remove() : context.tokenScanner.read();
+        return context.tokenQueue.isEmpty() ? context.tokenScanner.read() : context.tokenQueue.remove();
     }
 
 @foreach(var rule in Model.RuleSet.TokenRules)
