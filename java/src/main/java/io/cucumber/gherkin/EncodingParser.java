@@ -18,6 +18,7 @@ class EncodingParser {
     private static final Pattern COMMENT_OR_EMPTY_LINE_PATTERN = Pattern.compile("^\\s*#|^\\s*$");
     private static final Pattern ENCODING_PATTERN = Pattern.compile("^\\s*#\\s*encoding\\s*:\\s*([0-9a-zA-Z\\-]+)",
             CASE_INSENSITIVE);
+    private static final Pattern LINE_SPLIT_PATTERN = Pattern.compile("([^\\n\\r]+)[\\n\\r]");
 
     static String readWithEncodingFromSource(byte[] source) {
         byte[] bomFreeSource = removeByteOrderMarker(source);
@@ -41,7 +42,10 @@ class EncodingParser {
     }
 
     private static Optional<Charset> parseEncodingPragma(String source) {
-        for (String line : source.split("[\\n\\r]")) {
+        // Optimization: search for lines instead of splitting
+        Matcher m2 = LINE_SPLIT_PATTERN.matcher(source);
+        while (m2.find()) {
+            String line = m2.group(1);
             if (!COMMENT_OR_EMPTY_LINE_PATTERN.matcher(line).find()) {
                 return Optional.empty();
             }
