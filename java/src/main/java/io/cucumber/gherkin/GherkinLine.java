@@ -12,7 +12,7 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
 import static io.cucumber.gherkin.StringUtils.rtrim;
 import static java.util.Objects.requireNonNull;
 
-class GherkinLine implements IGherkinLine, Indentable {
+class GherkinLine implements Indentable {
     // TODO: set this to 0 when/if we change to 0-indexed columns
     private static final int OFFSET = 1;
     private static final Pattern PATTERN_ONLY_SPACES = Pattern.compile("^\\S+$");
@@ -29,39 +29,28 @@ class GherkinLine implements IGherkinLine, Indentable {
         emptyTrimmedLineText = trimmedLineText.isEmpty();
     }
 
-    @Override
     public int indent() {
         return indent;
     }
 
-    @Override
-    public void detach() {
-
-    }
-
-    @Override
     public String getLineText(int indentToRemove) {
         if (indentToRemove < 0 || indentToRemove > indent())
             return trimmedLineText;
         return lineText.substring(indentToRemove);
     }
 
-    @Override
     public boolean isEmpty() {
         return emptyTrimmedLineText;
     }
 
-    @Override
     public boolean startsWith(String prefix) {
         return trimmedLineText.startsWith(prefix);
     }
 
-    @Override
     public String getRestTrimmed(int length) {
         return trimmedLineText.substring(length).trim();
     }
 
-    @Override
     public List<GherkinLineSpan> getTags() {
         // in most cases, the line contains no tag, so the code is optimized for this situation
         if (emptyTrimmedLineText) {
@@ -91,7 +80,6 @@ class GherkinLine implements IGherkinLine, Indentable {
         return tags;
     }
 
-    @Override
     public List<GherkinLineSpan> getTableCells() {
         List<GherkinLineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
@@ -143,7 +131,6 @@ class GherkinLine implements IGherkinLine, Indentable {
         return lineSpans;
     }
 
-    @Override
     public boolean startsWithTitleKeyword(String text) {
         int textLength = text.length();
         return trimmedLineText.length() > textLength &&
