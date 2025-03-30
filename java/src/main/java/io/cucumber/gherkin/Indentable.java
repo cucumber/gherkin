@@ -1,5 +1,5 @@
 package io.cucumber.gherkin;
 
-public interface Indentable {
+interface Indentable {
     void indent(int indent, String trimmed);
 }
