@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.Builder;
@@ -30,8 +29,6 @@ import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 
 class GherkinDocumentBuilder implements Builder<GherkinDocument> {
-    private static final Pattern PATTERN_SPACES = Pattern.compile("\\s*");
-
     private final List<Comment> comments = new ArrayList<>();
     private final IdGenerator idGenerator;
     private String uri;
@@ -158,7 +155,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 // Trim trailing empty lines
                 int end = lineTokens.size();
-                while (end > 0 && PATTERN_SPACES.matcher(lineTokens.get(end - 1).matchedText).matches()) {
+                while (end > 0 && lineTokens.get(end - 1).line.isEmpty()) {
                     end--;
                 }
                 lineTokens = lineTokens.subList(0, end);
@@ -236,8 +233,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private static String concatMatchedText(List<Token> lineTokens) {
-        // we guess that the average line is about 50 characters
-        StringBuilder content = new StringBuilder(50 * lineTokens.size());
+        StringBuilder content = new StringBuilder(InputStreams.AVERAGE_LINE_LENGTH * lineTokens.size());
         for (Token lineToken : lineTokens) {
             content.append(lineToken.matchedText).append("\n");
         }
