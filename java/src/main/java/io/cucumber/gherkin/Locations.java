@@ -12,14 +12,14 @@ class Locations {
      * We can't use Long.valueOf() because it caches only the first 128
      * values, and typical feature files have much more lines.
      */
-    private final static Long[] longs = new Long[4000];
+    private static final Long[] longs = new Long[4096];
     static {
         for (int i = 0; i < longs.length; i++) {
             longs[i] = (long) i;
         }
     }
 
-    private static Long getLong(int i) {
+    static Long getLong(int i) {
         if (i>=longs.length) return (long) i;
         return longs[i];
     }
