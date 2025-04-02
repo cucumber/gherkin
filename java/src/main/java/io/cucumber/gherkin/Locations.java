@@ -7,7 +7,7 @@ import static java.util.Objects.requireNonNull;
 class Locations {
 
     /**
-     * Cache of Long objects for the range 0-3999. This is used
+     * Cache of Long objects for the range 0-4095. This is used
      * to avoid creating a huge amount of Long objects in getLocation().
      * We can't use Long.valueOf() because it caches only the first 128
      * values, and typical feature files have much more lines.
@@ -25,11 +25,11 @@ class Locations {
         // Long.valueOf() when i>=4096).
         //
         // Tested variants:
-        // - static preinitialized cache of 127 elements
+        // - static pre-initialized cache of 127 elements
         //   (`Long.valueOf`)
-        // - static preinitialized cache of 4096 elements
+        // - static pre-initialized cache of 4096 elements
         //   (the current implemented version)
-        // - dynamic preinitialized cache with 256 / 512 /
+        // - dynamic pre-initialized cache with 256 / 512 /
         //   1024/2048/4096 initial size
         // - dynamic lazy initialized cache with 256
         //   initialized size
