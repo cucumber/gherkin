@@ -20,6 +20,19 @@ class Locations {
     }
 
     static Long getLong(int i) {
+        // JMH benchmark shows that this implementation is the
+        // fastest when i<4096 (and about 20% slower than
+        // Long.valueOf() when i>=4096).
+        //
+        // Tested variants:
+        // - static preinitialized cache of 127 elements
+        //   (`Long.valueOf`)
+        // - static preinitialized cache of 4096 elements
+        //   (the current implemented version)
+        // - dynamic preinitialized cache with 256 / 512 /
+        //   1024/2048/4096 initial size
+        // - dynamic lazy initialized cache with 256
+        //   initialized size
         if (i>=longs.length) return (long) i;
         return longs[i];
     }
