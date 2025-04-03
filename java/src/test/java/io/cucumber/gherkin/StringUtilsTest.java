@@ -14,6 +14,11 @@ public class StringUtilsTest {
     }
 
     @Test
+    void testRtrim_one_space() {
+        assertEquals("", StringUtils.rtrim(" "));
+    }
+
+    @Test
     void testRtrim_multiline() {
         assertEquals("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER,
                 StringUtils.rtrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));

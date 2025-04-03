@@ -16,7 +16,7 @@ class StringUtils {
         int length = s.length();
 
         int end = length - 1;
-        while (end > 0 && contains(WHITESPACE_CHARS, s.charAt(end))) {
+        while (end >= 0 && contains(WHITESPACE_CHARS, s.charAt(end))) {
             end--;
         }
 
