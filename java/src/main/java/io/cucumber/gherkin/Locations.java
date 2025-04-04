@@ -7,6 +7,11 @@ import static java.util.Objects.requireNonNull;
 class Locations {
 
     /**
+     * Columns are index-1 based.
+     */
+    static final int COLUMN_OFFSET = 1;
+
+    /**
      * Cache of Long objects for the range 0-4095. This is used
      * to avoid creating a huge amount of Long objects in getLocation().
      * We can't use Long.valueOf() because it caches only the first 128

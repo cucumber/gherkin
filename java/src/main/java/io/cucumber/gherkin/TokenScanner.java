@@ -34,12 +34,12 @@ class TokenScanner implements Parser.ITokenScanner {
     @Override
     public Token read() {
         try {
-            String line = reader.readLine();
+            String rawText = reader.readLine();
             Location location = Locations.atLine(++lineNumber);
-            if (line == null) {
+            if (rawText == null) {
                 return createEOF(location);
             }
-            return createGherkinLine(line, location);
+            return createGherkinLine(rawText, location);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

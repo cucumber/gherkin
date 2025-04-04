@@ -30,10 +30,10 @@ class Token {
         return new Token(null, location);
     }
 
-    static Token createGherkinLine(String line, Location location) {
-        requireNonNull(line);
+    static Token createGherkinLine(String rawText, Location location) {
+        requireNonNull(rawText);
         requireNonNull(location);
-        return new Token(new GherkinLine(line, location), location);
+        return new Token(new GherkinLine(rawText, location), location);
     }
 
     public boolean isEOF() {
@@ -41,7 +41,7 @@ class Token {
     }
 
     public String getTokenValue() {
-        return isEOF() ? "EOF" : line.getLineText(-1);
+        return isEOF() ? "EOF" : line.getText();
     }
 
     @Override

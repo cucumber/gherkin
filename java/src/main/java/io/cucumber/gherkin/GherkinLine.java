@@ -3,71 +3,80 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.Location;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.PrimitiveIterator;
 import java.util.regex.Pattern;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
+import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.StringUtils.rtrim;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 class GherkinLine {
-    // TODO: set this to 0 when/if we change to 0-indexed columns
-    private static final int OFFSET = 1;
+
     private static final Pattern PATTERN_ONLY_SPACES = Pattern.compile("^\\S+$");
 
-    private final String lineText;
-    private final Location line;
-    private final boolean emptyTrimmedLineText;
-    private final String trimmedLineText;
+    private final String rawText;
+    private final Location location;
+    private final boolean empty;
+    private final String text;
     private final int indent;
 
-    public GherkinLine(String lineText, Location line) {
-        this.lineText = requireNonNull(lineText);
-        this.line = requireNonNull(line);
-        Entry<String, Integer> trimmedIndent = trimAndIndent(lineText);
-        this.trimmedLineText = trimmedIndent.getKey();
+    GherkinLine(String rawText, Location location) {
+        this.rawText = requireNonNull(rawText);
+        this.location = requireNonNull(location);
+        Entry<String, Integer> trimmedIndent = trimAndIndent(rawText);
+        this.text = trimmedIndent.getKey();
         this.indent = trimmedIndent.getValue();
-        this.emptyTrimmedLineText = trimmedLineText.isEmpty();
+        this.empty = text.isEmpty();
     }
 
-    public int indent() {
+    int getIndent() {
         return indent;
     }
 
-    public String getLineText(int indentToRemove) {
-        if (indentToRemove < 0 || indentToRemove > indent())
-            return trimmedLineText;
-        return lineText.substring(indentToRemove);
+    String getText() {
+        return text;
     }
 
-    public boolean isEmpty() {
-        return emptyTrimmedLineText;
+    String getRawText() {
+        return rawText;
     }
 
-    public boolean startsWith(String prefix) {
-        return trimmedLineText.startsWith(prefix);
+    String getLineText(int indentToRemove) {
+        if (indentToRemove < 0 || indentToRemove > indent)
+            return text;
+        return rawText.substring(indentToRemove);
     }
 
-    public String getRestTrimmed(int length) {
-        return trimmedLineText.substring(length).trim();
+    boolean isEmpty() {
+        return empty;
     }
 
-    public List<GherkinLineSpan> getTags() {
+    boolean startsWith(String prefix) {
+        return text.startsWith(prefix);
+    }
+
+    String substring(int beginIndex) {
+        return text.substring(beginIndex);
+    }
+
+    List<GherkinLineSpan> getTags() {
         // in most cases, the line contains no tag, so the code is optimized for this situation
-        if (emptyTrimmedLineText) {
-            return Collections.emptyList();
+        if (empty) {
+            return emptyList();
         }
-        String uncommentedLine = StringUtils.removeComments(trimmedLineText);
+        String uncommentedLine = StringUtils.removeComments(text);
         int indexInUncommentedLine = 0;
 
         String[] elements = uncommentedLine.split(TAG_PREFIX);
         if (elements.length == 0) {
-            return Collections.emptyList();
+            return emptyList();
         }
         List<GherkinLineSpan> tags = new ArrayList<>(elements.length);
         for (String element : elements) {
@@ -76,9 +85,9 @@ class GherkinLine {
                 continue;
             }
             int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
-            int column = indent() + symbolLength + 1;
+            int column = indent + symbolLength + COLUMN_OFFSET;
             if (!PATTERN_ONLY_SPACES.matcher(token).matches()) {
-                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(line, column));
+                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
             }
             tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));
             indexInUncommentedLine += element.length() + 1;
@@ -86,14 +95,14 @@ class GherkinLine {
         return tags;
     }
 
-    public List<GherkinLineSpan> getTableCells() {
+    List<GherkinLineSpan> getTableCells() {
         List<GherkinLineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
         boolean beforeFirst = true;
         int col = 0;
         int cellStart = 0;
         boolean escape = false;
-        PrimitiveIterator.OfInt iterator = lineText.codePoints().iterator();
+        PrimitiveIterator.OfInt iterator = text.codePoints().iterator();
         while (iterator.hasNext()) {
             int c = iterator.next();
             if (escape) {
@@ -122,9 +131,9 @@ class GherkinLine {
                         // Skip the first empty span
                         beforeFirst = false;
                     } else {
-                        Entry<String, Integer> trimmedIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
-                        int indent = OFFSET + cellStart + trimmedIndent.getValue();
-                        lineSpans.add(new GherkinLineSpan(indent, trimmedIndent.getKey()));
+                        Entry<String, Integer> trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
+                        int column = indent + cellStart + trimmedCellIndent.getValue() + COLUMN_OFFSET;
+                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getKey()));
                     }
                     cellBuilder = new StringBuilder();
                     cellStart = col + 1;
@@ -137,11 +146,11 @@ class GherkinLine {
         return lineSpans;
     }
 
-    public boolean startsWithTitleKeyword(String text) {
-        int textLength = text.length();
-        return trimmedLineText.length() > textLength &&
-                trimmedLineText.startsWith(text) &&
-                trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, textLength);
+    boolean startsWithTitleKeyword(String keyword) {
+        int keywordLength = keyword.length();
+        return text.length() > keywordLength &&
+                text.startsWith(keyword) &&
+                text.startsWith(TITLE_KEYWORD_SEPARATOR, keywordLength);
     }
 
 }

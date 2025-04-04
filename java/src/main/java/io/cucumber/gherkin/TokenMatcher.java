@@ -7,14 +7,20 @@ import java.util.regex.Pattern;
 
 import io.cucumber.messages.types.StepKeywordType;
 
+import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
+import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.ITokenMatcher;
 import static io.cucumber.gherkin.Parser.TokenType;
 
 class TokenMatcher implements ITokenMatcher {
-    private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
+
+    private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private final GherkinDialectProvider dialectProvider;
     private GherkinDialect currentDialect;
     private String activeDocStringSeparator = null;
@@ -51,8 +57,8 @@ class TokenMatcher implements ITokenMatcher {
         token.matchedText = text;
         token.matchedItems = items;
         token.matchedGherkinDialect = getCurrentDialect();
-        token.matchedIndent = indent != null ? indent : (token.line == null ? 0 : token.line.indent());
-        token.location = atColumn(token.location, token.matchedIndent + 1);
+        token.matchedIndent = indent != null ? indent : (token.isEOF() ? 0 : token.line.getIndent());
+        token.location = atColumn(token.location, token.matchedIndent + COLUMN_OFFSET);
     }
 
     @Override
@@ -66,7 +72,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Other(Token token) {
-        String text = token.line.getLineText(indentToRemove); //take the entire line, except removing DocString indents
+        String text = token.line.getLineText(indentToRemove); // remove DocString indents
         setTokenMatched(token, TokenType.Other, unescapeDocString(text), null, 0, null, null);
         return true;
     }
@@ -82,8 +88,8 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Comment(Token token) {
-        if (token.line.startsWith(GherkinLanguageConstants.COMMENT_PREFIX)) {
-            String text = token.line.getLineText(0); //take the entire line
+        if (token.line.startsWith(COMMENT_PREFIX)) {
+            String text = token.line.getRawText();
             setTokenMatched(token, TokenType.Comment, text, null, 0, null, null);
             return true;
         }
@@ -92,7 +98,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Language(Token token) {
-        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getLineText(0));
+        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getText());
         if (matcher.matches()) {
             String language = matcher.group(1);
             setTokenMatched(token, TokenType.Language, language, null, null, null, null);
@@ -106,7 +112,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_TagLine(Token token) {
-        if (token.line.startsWith(GherkinLanguageConstants.TAG_PREFIX)) {
+        if (token.line.startsWith(TAG_PREFIX)) {
             setTokenMatched(token, TokenType.TagLine, null, null, null, null, token.line.getTags());
             return true;
         }
@@ -142,7 +148,7 @@ class TokenMatcher implements ITokenMatcher {
     private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
         for (String keyword : keywords) {
             if (token.line.startsWithTitleKeyword(keyword)) {
-                String title = token.line.getRestTrimmed(keyword.length() + GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR.length());
+                String title = token.line.substring(keyword.length() + TITLE_KEYWORD_SEPARATOR.length());
                 setTokenMatched(token, tokenType, title, keyword, null, null, null);
                 return true;
             }
@@ -155,7 +161,7 @@ class TokenMatcher implements ITokenMatcher {
         return activeDocStringSeparator == null
                 // open
                 ? match_DocStringSeparator(token, DOCSTRING_SEPARATOR, true) ||
-                match_DocStringSeparator(token, GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR, true)
+                match_DocStringSeparator(token, DOCSTRING_ALTERNATIVE_SEPARATOR, true)
                 // close
                 : match_DocStringSeparator(token, activeDocStringSeparator, false);
     }
@@ -164,9 +170,9 @@ class TokenMatcher implements ITokenMatcher {
         if (token.line.startsWith(separator)) {
             String mediaType = null;
             if (isOpen) {
-                mediaType = token.line.getRestTrimmed(separator.length());
+                mediaType = token.line.substring(separator.length());
                 activeDocStringSeparator = separator;
-                indentToRemove = token.line.indent();
+                indentToRemove = token.line.getIndent();
             } else {
                 activeDocStringSeparator = null;
                 indentToRemove = 0;
@@ -183,7 +189,7 @@ class TokenMatcher implements ITokenMatcher {
         List<String> keywords = currentDialect.getStepKeywords();
         for (String keyword : keywords) {
             if (token.line.startsWith(keyword)) {
-                String stepText = token.line.getRestTrimmed(keyword.length());
+                String stepText = token.line.substring(keyword.length());
                 StepKeywordType keywordType = getKeywordType(keyword);
                 setTokenMatched(token, TokenType.StepLine, stepText, keyword, null, keywordType, null);
                 return true;
@@ -202,7 +208,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_TableRow(Token token) {
-        if (token.line.startsWith(GherkinLanguageConstants.TABLE_CELL_SEPARATOR)) {
+        if (token.line.startsWith(TABLE_CELL_SEPARATOR)) {
             setTokenMatched(token, TokenType.TableRow, null, null, null, null, token.line.getTableCells());
             return true;
         }
