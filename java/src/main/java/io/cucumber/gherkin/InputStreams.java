@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 class InputStreams {
+
     /**
      * Shim for InputStream.readAllBytes
      */
