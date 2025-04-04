@@ -5,28 +5,34 @@ import io.cucumber.messages.types.Location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.PrimitiveIterator;
 import java.util.regex.Pattern;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
 import static io.cucumber.gherkin.StringUtils.rtrim;
+import static io.cucumber.gherkin.StringUtils.trimAndIndent;
+import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 import static java.util.Objects.requireNonNull;
 
-class GherkinLine implements Indentable {
+class GherkinLine {
     // TODO: set this to 0 when/if we change to 0-indexed columns
     private static final int OFFSET = 1;
     private static final Pattern PATTERN_ONLY_SPACES = Pattern.compile("^\\S+$");
+
     private final String lineText;
     private final Location line;
     private final boolean emptyTrimmedLineText;
-    private String trimmedLineText;
-    private int indent;
+    private final String trimmedLineText;
+    private final int indent;
 
     public GherkinLine(String lineText, Location line) {
         this.lineText = requireNonNull(lineText);
         this.line = requireNonNull(line);
-        StringUtils.trimAndIndent(lineText, this);
-        emptyTrimmedLineText = trimmedLineText.isEmpty();
+        Entry<String, Integer> trimmedIndent = trimAndIndent(lineText);
+        this.trimmedLineText = trimmedIndent.getKey();
+        this.indent = trimmedIndent.getValue();
+        this.emptyTrimmedLineText = trimmedLineText.isEmpty();
     }
 
     public int indent() {
@@ -116,9 +122,9 @@ class GherkinLine implements Indentable {
                         // Skip the first empty span
                         beforeFirst = false;
                     } else {
-                        GherkinLineSpan gherkinLineSpan = new GherkinLineSpan(cellStart + OFFSET);
-                        StringUtils.trimAndIndentKeepNewLines(cellBuilder.toString(), gherkinLineSpan);
-                        lineSpans.add(gherkinLineSpan);
+                        Entry<String, Integer> trimmedIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
+                        int indent = OFFSET + cellStart + trimmedIndent.getValue();
+                        lineSpans.add(new GherkinLineSpan(indent, trimmedIndent.getKey()));
                     }
                     cellBuilder = new StringBuilder();
                     cellStart = col + 1;
@@ -136,12 +142,6 @@ class GherkinLine implements Indentable {
         return trimmedLineText.length() > textLength &&
                 trimmedLineText.startsWith(text) &&
                 trimmedLineText.startsWith(GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR, textLength);
-    }
-
-    @Override
-    public void indent(int indent, String trimmedText) {
-        this.indent = indent;
-        this.trimmedLineText = trimmedText;
     }
 
 }

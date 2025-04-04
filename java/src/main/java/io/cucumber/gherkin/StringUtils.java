@@ -1,11 +1,14 @@
 package io.cucumber.gherkin;
 
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+
 class StringUtils {
 
-    private static final Character[] WHITESPACE_CHARS = new Character[] {' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    private static final Character[] WHITESPACE_CHARS_KEEP_NEW_LINES = new Character[] {' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    private static final Character[] WHITESPACE_CHARS_SIMPLE = new Character[] {' ', '\t', '\n', '\u000B', '\f', '\r'};
+    private static final Character[] WHITESPACE_CHARS = new Character[]{' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    private static final Character[] WHITESPACE_CHARS_KEEP_NEW_LINES = new Character[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    private static final Character[] WHITESPACE_CHARS_SIMPLE = new Character[]{' ', '\t', '\n', '\u000B', '\f', '\r'};
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -22,18 +25,17 @@ class StringUtils {
         return s.substring(0, end + 1);
     }
 
-    static void trimAndIndent(String input, Indentable target) {
-        trimAndIndent(input, target, WHITESPACE_CHARS);
+    static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
+        return trimAndIndent(input, WHITESPACE_CHARS_KEEP_NEW_LINES);
     }
 
-    static void trimAndIndentKeepNewLines(String input, Indentable target) {
-        trimAndIndent(input, target, WHITESPACE_CHARS_KEEP_NEW_LINES);
+    static Entry<String, Integer> trimAndIndent(String input) {
+        return trimAndIndent(input, WHITESPACE_CHARS);
     }
 
-    private static void trimAndIndent(String input, Indentable target, Character[] whitespaceChars) {
+    private static Entry<String, Integer> trimAndIndent(String input, Character[] whitespaceChars) {
         if (input.isEmpty()) {
-            target.indent(0, "");
-            return;
+            return new SimpleEntry<>("", 0);
         }
 
         int start = 0;
@@ -50,7 +52,7 @@ class StringUtils {
 
         String trimmed = input.substring(start, end + 1);
         int indent = input.codePointCount(0, start);
-        target.indent(indent, trimmed);
+        return new SimpleEntry<>(trimmed, indent);
     }
 
     static String removeComments(String input) {
@@ -60,8 +62,8 @@ class StringUtils {
         int start = 0;
         int length = input.length();
 
-        while (start < length-1 && !(contains(WHITESPACE_CHARS_SIMPLE, input.charAt(start)) &&
-                input.charAt(start+1) == '#')) {
+        while (start < length - 1 && !(contains(WHITESPACE_CHARS_SIMPLE, input.charAt(start)) &&
+                input.charAt(start + 1) == '#')) {
             start++;
         }
         return input.substring(0, start < length - 1 ? start : start + 1);

@@ -2,9 +2,11 @@ package io.cucumber.gherkin;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map.Entry;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StringUtilsTest {
+class StringUtilsTest {
     private static final String WHITESPACE = "\u00A0 \t";
     private static final String CUCUMBER = "🥒";
 
@@ -20,47 +22,37 @@ public class StringUtilsTest {
 
     @Test
     void testRtrim_multiline() {
-        assertEquals("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER,
-                StringUtils.rtrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
+        assertEquals("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER, StringUtils.rtrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
     }
 
     @Test
     void testTrimAndIndent() {
-        // Given
-        MockIndentable trimmable = new MockIndentable();
-
         // When
-        StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE, trimmable);
+        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
 
         // Then
-        assertEquals(CUCUMBER, trimmable.trimmed);
-        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmable.indent);
+        assertEquals(CUCUMBER, trimmedIndent.getKey());
+        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getValue());
     }
 
     @Test
     void testTrimAndIndent_multiline() {
-        // Given
-        MockIndentable trimmable = new MockIndentable();
-
         // When
-        StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n", trimmable);
+        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
 
         // Then
-        assertEquals(CUCUMBER, trimmable.trimmed);
-        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmable.indent);
+        assertEquals(CUCUMBER, trimmedIndent.getKey());
+        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getValue());
     }
 
     @Test
     void testTrimAndIndent_empty() {
-        // Given
-        MockIndentable trimmable = new MockIndentable();
-
         // When
-        StringUtils.trimAndIndent("", trimmable);
+        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("");
 
         // Then
-        assertEquals("", trimmable.trimmed);
-        assertEquals(0, trimmable.indent);
+        assertEquals("", trimmedIndent.getKey());
+        assertEquals(0, trimmedIndent.getValue());
     }
 
     @Test
@@ -70,15 +62,5 @@ public class StringUtilsTest {
         assertEquals("@this @is @a @commented @sequence of tags", StringUtils.removeComments("@this @is @a @commented @sequence of tags"));
     }
 
-    private static class MockIndentable implements Indentable {
-        int indent;
-        String trimmed;
-
-        @Override
-        public void indent(int indent, String trimmed) {
-            this.indent = indent;
-            this.trimmed = trimmed;
-        }
-    }
 
 }

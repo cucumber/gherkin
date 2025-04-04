@@ -125,10 +125,12 @@ class GherkinLineTest {
         // This is generated with `ruby -e 'STDOUT.write "\u00A0\u0020\u0009".encode("utf-8")' | pbcopy`
         // and pasted.
         GherkinLine gherkinLine = new GherkinLine("      |  \tred  \t|  \tblue  \t|  \t\uD83E\uDD52\uD83E\uDD52\uD83E\uDD52  \t|  \tgreen  \t|", line);
-        GherkinLineSpan redSpan = gherkinLine.getTableCells().get(0);
-        GherkinLineSpan blueSpan = gherkinLine.getTableCells().get(1);
-        GherkinLineSpan emojiSpan = gherkinLine.getTableCells().get(2);
-        GherkinLineSpan greenSpan = gherkinLine.getTableCells().get(3);
+        
+        List<GherkinLineSpan> tableCells = gherkinLine.getTableCells();
+        GherkinLineSpan redSpan = tableCells.get(0);
+        GherkinLineSpan blueSpan = tableCells.get(1);
+        GherkinLineSpan emojiSpan = tableCells.get(2);
+        GherkinLineSpan greenSpan = tableCells.get(3);
 
         assertEquals("red", redSpan.text);
         assertEquals(11, redSpan.column);
