@@ -4,10 +4,9 @@ import io.cucumber.messages.types.Envelope;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Example {
+class ExampleTest {
 
     @Test
     void test(){

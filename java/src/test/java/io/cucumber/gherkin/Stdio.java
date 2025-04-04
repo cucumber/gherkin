@@ -10,8 +10,4 @@ class Stdio {
      */
     public static final PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), true);
 
-    /**
-     * UTF-8 STDERR
-     */
-    public static final PrintWriter err = new PrintWriter(new OutputStreamWriter(System.err, StandardCharsets.UTF_8), true);
 }
