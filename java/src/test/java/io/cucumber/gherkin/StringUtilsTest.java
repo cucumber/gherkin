@@ -57,9 +57,11 @@ class StringUtilsTest {
 
     @Test
     void removeComments() {
+        assertEquals("", StringUtils.removeComments(""));
         assertEquals("@this @is", StringUtils.removeComments("@this @is #@a @commented @sequence of tags"));
-        assertEquals("@this @is @a @commented @sequence of tags", StringUtils.removeComments("@this @is @a @commented @sequence of tags #"));
-        assertEquals("@this @is @a @commented @sequence of tags", StringUtils.removeComments("@this @is @a @commented @sequence of tags"));
+        assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags #with a comment"));
+        assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags"));
+        assertEquals("@issue#1234 @issue#31415", StringUtils.removeComments("@issue#1234 @issue#31415"));
     }
 
 

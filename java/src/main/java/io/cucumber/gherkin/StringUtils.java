@@ -4,11 +4,25 @@ package io.cucumber.gherkin;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 
+import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
+
 class StringUtils {
 
-    private static final Character[] WHITESPACE_CHARS = new Character[]{' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    private static final Character[] WHITESPACE_CHARS_KEEP_NEW_LINES = new Character[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    private static final Character[] WHITESPACE_CHARS_SIMPLE = new Character[]{' ', '\t', '\n', '\u000B', '\f', '\r'};
+    /**
+     * Matches regex pattern for whitespace.
+     */
+    private static final char[] WHITESPACE_CHARS = new char[]{' ', '\t', '\n', '\u000B', '\f', '\r'};
+
+    /**
+     * Matches regex pattern whitespace + NEL + NBSP.
+     */
+    private static final char[] WHITESPACE_CHARS_EXTENDED = new char[]{' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    
+    /**
+     * Matches regex pattern whitespace + NEL + NBSP - new line.
+     */
+    private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -18,7 +32,7 @@ class StringUtils {
         int length = s.length();
 
         int end = length - 1;
-        while (end >= 0 && contains(WHITESPACE_CHARS, s.charAt(end))) {
+        while (end >= 0 && contains(WHITESPACE_CHARS_EXTENDED, s.charAt(end))) {
             end--;
         }
 
@@ -26,14 +40,14 @@ class StringUtils {
     }
 
     static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
-        return trimAndIndent(input, WHITESPACE_CHARS_KEEP_NEW_LINES);
+        return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
     }
 
     static Entry<String, Integer> trimAndIndent(String input) {
-        return trimAndIndent(input, WHITESPACE_CHARS);
+        return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED);
     }
 
-    private static Entry<String, Integer> trimAndIndent(String input, Character[] whitespaceChars) {
+    private static Entry<String, Integer> trimAndIndent(String input, char[] whitespaceChars) {
         if (input.isEmpty()) {
             return new SimpleEntry<>("", 0);
         }
@@ -56,22 +70,24 @@ class StringUtils {
     }
 
     static String removeComments(String input) {
-        if (input == null || input.isEmpty()) {
+        if (input.isEmpty()) {
             return input;
         }
         int start = 0;
         int length = input.length();
 
-        while (start < length - 1 && !(contains(WHITESPACE_CHARS_SIMPLE, input.charAt(start)) &&
-                input.charAt(start + 1) == '#')) {
+        while (start < length - 1 
+                && !(contains(WHITESPACE_CHARS, input.charAt(start)) 
+                && input.charAt(start + 1) == COMMENT_PREFIX_CHAR)
+        ) {
             start++;
         }
         return input.substring(0, start < length - 1 ? start : start + 1);
     }
 
-    private static boolean contains(Character[] whitespaceChars, char c) {
-        for (Character whitespaceChar : whitespaceChars) {
-            if (whitespaceChar == c) {
+    private static boolean contains(char[] characters, char c) {
+        for (Character candidate : characters) {
+            if (candidate == c) {
                 return true;
             }
         }
