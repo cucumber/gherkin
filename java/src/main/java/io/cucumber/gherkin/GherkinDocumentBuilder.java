@@ -91,7 +91,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
                 String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
-                String content = concatMatchedText(lineTokens);
+                String content = joinMatchedText(lineTokens);
                 return new DocString(
                         separatorToken.location,
                         mediaType,
@@ -159,7 +159,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                     end--;
                 }
                 lineTokens = lineTokens.subList(0, end);
-                return concatMatchedText(lineTokens);
+                return joinMatchedText(lineTokens);
             }
             case Feature: {
                 AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
@@ -232,8 +232,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node;
     }
 
-    private static String concatMatchedText(List<Token> lineTokens) {
-        StringBuilder content = new StringBuilder(InputStreams.AVERAGE_LINE_LENGTH * lineTokens.size());
+    private static String joinMatchedText(List<Token> lineTokens) {
+        StringBuilder content = new StringBuilder(GherkinParser.FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
         for (Token lineToken : lineTokens) {
             content.append(lineToken.matchedText).append("\n");
         }

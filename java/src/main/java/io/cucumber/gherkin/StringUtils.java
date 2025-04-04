@@ -7,7 +7,6 @@ class StringUtils {
     private static final Character[] WHITESPACE_CHARS_KEEP_NEW_LINES = new Character[] {' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
     private static final Character[] WHITESPACE_CHARS_SIMPLE = new Character[] {' ', '\t', '\n', '\u000B', '\f', '\r'};
 
-
     static String rtrim(String s) {
         if (s == null || s.isEmpty()) {
             return s;

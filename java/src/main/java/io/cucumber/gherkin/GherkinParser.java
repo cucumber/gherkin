@@ -27,6 +27,21 @@ import static java.util.stream.Collectors.toCollection;
  */
 public final class GherkinParser {
 
+    /**
+     * Estimate of the average line length in a feature file.
+     */
+    static final int FEATURE_FILE_AVERAGE_LINE_LENGTH = 100;
+    
+    /**
+     * Estimate of the average number of lines in a feature file.
+     */
+    static final int FEATURE_FILE_AVERAGE_LINE_COUNT = 2048;
+
+    /**
+     * Estimate of the average feature file size.
+     */
+    static final int FEATURE_FILE_AVERAGE_SIZE = FEATURE_FILE_AVERAGE_LINE_LENGTH * FEATURE_FILE_AVERAGE_LINE_COUNT;
+
     public final static class Builder {
         private boolean includeSource = true;
         private boolean includeGherkinDocument = true;
@@ -91,7 +106,7 @@ public final class GherkinParser {
     public Stream<Envelope> parse(String uri, InputStream source) throws IOException {
         requireNonNull(uri);
         requireNonNull(source);
-        return parse(uri, InputStreams.readAllBytes(source));
+        return parse(uri, InputStreams.readAllBytes(source, FEATURE_FILE_AVERAGE_SIZE));
     }
 
     public Stream<Envelope> parse(String uri, byte[] source) {
