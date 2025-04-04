@@ -39,11 +39,11 @@ class PickleCompiler {
 
     private final IdGenerator idGenerator;
 
-    public PickleCompiler(IdGenerator idGenerator) {
+    PickleCompiler(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
     }
 
-    public List<Pickle> compile(GherkinDocument gherkinDocument, String uri) {
+    List<Pickle> compile(GherkinDocument gherkinDocument, String uri) {
         List<Pickle> pickles = new ArrayList<>();
         if (!gherkinDocument.getFeature().isPresent()) {
             return pickles;

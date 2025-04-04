@@ -4,7 +4,7 @@ import static java.util.stream.Collectors.joining;
 
 class TokenFormatter {
 
-    public String formatToken(Token token) {
+    String formatToken(Token token) {
         if (token.isEOF())
             return "EOF";
 

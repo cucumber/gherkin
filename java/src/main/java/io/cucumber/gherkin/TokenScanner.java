@@ -5,7 +5,6 @@ import io.cucumber.messages.types.Location;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 
 import static io.cucumber.gherkin.Token.createEOF;
 import static io.cucumber.gherkin.Token.createGherkinLine;
@@ -23,11 +22,7 @@ class TokenScanner implements Parser.ITokenScanner {
     private final BufferedReader reader;
     private int lineNumber;
 
-    public TokenScanner(String source) {
-        this(new StringReader(source));
-    }
-
-    public TokenScanner(Reader source) {
+    TokenScanner(Reader source) {
         this.reader = new BufferedReader(source);
     }
 
