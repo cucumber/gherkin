@@ -110,10 +110,13 @@ public final class GherkinParser {
             messages.add(envelope);
         }
 
+
+        // Lambda is faster than method reference because if avoids a call to
+        // Objects.requiresNonNull(messages)
+        //noinspection Convert2MethodRef
         envelope.getSource()
                 .map(this::parse)
                 .ifPresent(envelopes -> messages.addAll(envelopes));
-        // Lambda is faster than method reference because if avoids the compiler to create Objects.requiresNonNull(messages)
 
         return messages.stream();
     }

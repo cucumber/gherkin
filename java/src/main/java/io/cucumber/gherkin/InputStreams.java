@@ -21,15 +21,15 @@ class InputStreams {
     static byte[] readAllBytes(InputStream source) throws IOException {
         final byte[] buffer = new byte[2 * 1024]; // 2KB
         int read;
-        // The BAOS initial capacity is guessed from the
-        // average line count and average line length,
-        // to avoid redimensioning the underlying array.
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(AVERAGE_LINE_COUNT*AVERAGE_LINE_LENGTH)) {
-            while (-1 != (read = source.read(buffer, 0, buffer.length))) {
-                outputStream.write(buffer, 0, read);
-            }
-            return outputStream.toByteArray();
+        // The BAOS initial capacity is guessed from the average line count
+        // and average line length, to avoid resizing the underlying array.
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(
+                AVERAGE_LINE_COUNT * AVERAGE_LINE_LENGTH
+        );
+        while (-1 != (read = source.read(buffer, 0, buffer.length))) {
+            outputStream.write(buffer, 0, read);
         }
+        return outputStream.toByteArray();
     }
 
 }
