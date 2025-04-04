@@ -187,7 +187,7 @@ class PickleCompiler {
         List<PickleTableRow> newRows = new ArrayList<>(rows.size());
         for (TableRow row : rows) {
             List<TableCell> cells = row.getCells();
-            List<PickleTableCell> newCells = new ArrayList<>();
+            List<PickleTableCell> newCells = new ArrayList<>(cells.size());
             for (TableCell cell : cells) {
                 newCells.add(new PickleTableCell(interpolate(cell.getValue(), variableCells, valueCells)));
             }

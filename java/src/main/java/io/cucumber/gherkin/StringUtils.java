@@ -106,7 +106,7 @@ class StringUtils {
     }
     
     private static boolean contains(char[] characters, char c) {
-        for (Character candidate : characters) {
+        for (char candidate : characters) {
             if (candidate == c) {
                 return true;
             }
