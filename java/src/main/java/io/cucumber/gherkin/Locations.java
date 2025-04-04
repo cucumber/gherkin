@@ -13,13 +13,14 @@ class Locations {
      * values, and typical feature files have much more lines.
      */
     private static final Long[] longs = new Long[4096];
+
     static {
         for (int i = 0; i < longs.length; i++) {
             longs[i] = (long) i;
         }
     }
 
-    static Long getLong(int i) {
+    private static Long getLong(int i) {
         // JMH benchmark shows that this implementation is the
         // fastest when i<4096 (and about 20% slower than
         // Long.valueOf() when i>=4096).
@@ -33,7 +34,9 @@ class Locations {
         //   1024/2048/4096 initial size
         // - dynamic lazy initialized cache with 256
         //   initialized size
-        if (i>=longs.length) return (long) i;
+        if (i >= longs.length) {
+            return (long) i;
+        }
         return longs[i];
     }
 
@@ -46,6 +49,9 @@ class Locations {
     }
 
     static Location atLine(int line) {
+        if (line < 0) {
+            throw new IllegalArgumentException("Lines are index-0 based");
+        }
         return new Location(getLong(line), null);
     }
 
