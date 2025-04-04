@@ -64,5 +64,4 @@ class StringUtilsTest {
         assertEquals("@issue#1234 @issue#31415", StringUtils.removeComments("@issue#1234 @issue#31415"));
     }
 
-
 }
