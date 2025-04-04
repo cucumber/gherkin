@@ -20,16 +20,16 @@ class TokenMatcher implements ITokenMatcher {
     private String activeDocStringSeparator = null;
     private int indentToRemove = 0;
 
-    public TokenMatcher(GherkinDialectProvider dialectProvider) {
+    TokenMatcher(GherkinDialectProvider dialectProvider) {
         this.dialectProvider = dialectProvider;
         reset();
     }
 
-    public TokenMatcher() {
+    TokenMatcher() {
         this(new GherkinDialectProvider());
     }
 
-    public TokenMatcher(String defaultDialectName) {
+    TokenMatcher(String defaultDialectName) {
         this(new GherkinDialectProvider(defaultDialectName));
     }
 

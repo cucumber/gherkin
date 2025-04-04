@@ -36,7 +36,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     private Deque<AstNode> stack;
 
-    public GherkinDocumentBuilder(IdGenerator idGenerator, String uri) {
+    GherkinDocumentBuilder(IdGenerator idGenerator, String uri) {
         this.idGenerator = idGenerator;
         reset(uri);
     }
