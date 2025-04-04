@@ -113,7 +113,7 @@ class TokenMatcher implements ITokenMatcher {
     @Override
     public boolean match_TagLine(Token token) {
         if (token.line.startsWith(TAG_PREFIX)) {
-            setTokenMatched(token, TokenType.TagLine, null, null, null, null, token.line.getTags());
+            setTokenMatched(token, TokenType.TagLine, null, null, null, null, token.line.parseTags());
             return true;
         }
         return false;
@@ -209,7 +209,7 @@ class TokenMatcher implements ITokenMatcher {
     @Override
     public boolean match_TableRow(Token token) {
         if (token.line.startsWith(TABLE_CELL_SEPARATOR)) {
-            setTokenMatched(token, TokenType.TableRow, null, null, null, null, token.line.getTableCells());
+            setTokenMatched(token, TokenType.TableRow, null, null, null, null, token.line.parseTableCells());
             return true;
         }
         return false;

@@ -1,10 +1,14 @@
 package io.cucumber.gherkin;
 
 class GherkinLineSpan {
-    // One-based line position
+    /**
+     * Index-1 based position in codepoints.
+      */ 
     final int column;
 
-    // text part of the line
+    /**
+     * Text part of the line 
+     */
     final String text;
 
     GherkinLineSpan(int column, String text) {

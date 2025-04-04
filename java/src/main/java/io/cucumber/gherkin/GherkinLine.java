@@ -19,10 +19,22 @@ import static java.util.Objects.requireNonNull;
 
 class GherkinLine {
 
+    /**
+     * The line text, including all leading and trailing whitespace characters.
+     */
     private final String rawText;
     private final Location location;
     private final boolean empty;
+    
+    /**
+     * The line text with any whitespace characters trimmed.
+     */
     private final String text;
+    
+    /**
+     * The offset in code-points of the first non-whitespace character in this
+     * line.
+     */
     private final int indent;
 
     GherkinLine(String rawText, Location location) {
@@ -62,7 +74,7 @@ class GherkinLine {
         return text.substring(beginIndex).trim();
     }
 
-    List<GherkinLineSpan> getTags() {
+    List<GherkinLineSpan> parseTags() {
         // in most cases, the line contains no tag, so the code is optimized for this situation
         if (empty) {
             return emptyList();
@@ -91,7 +103,7 @@ class GherkinLine {
         return tags;
     }
 
-    List<GherkinLineSpan> getTableCells() {
+    List<GherkinLineSpan> parseTableCells() {
         List<GherkinLineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
         boolean beforeFirst = true;
