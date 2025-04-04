@@ -9,6 +9,7 @@ import static java.util.Objects.requireNonNull;
 
 class Token {
     public final GherkinLine line;
+    final boolean eof;
     public Parser.TokenType matchedType;
     public String matchedKeyword;
     public String matchedText;
@@ -21,6 +22,7 @@ class Token {
     private Token(GherkinLine line, Location location) {
         this.line = line;
         this.location = location;
+        this.eof = line == null;
     }
 
     static Token createEOF(Location location) {
@@ -35,7 +37,7 @@ class Token {
     }
 
     public boolean isEOF() {
-        return line == null;
+        return eof;
     }
 
     public String getTokenValue() {

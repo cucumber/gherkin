@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static io.cucumber.gherkin.GherkinParser.FEATURE_FILE_AVERAGE_LINE_LENGTH;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.Builder;
 import static io.cucumber.gherkin.Parser.RuleType;
@@ -92,18 +92,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
                 String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
-                StringBuilder content = new StringBuilder();
-                boolean newLine = false;
-                for (Token lineToken : lineTokens) {
-                    if (newLine) content.append("\n");
-                    newLine = true;
-                    content.append(lineToken.matchedText);
-                }
-
+                String content = joinMatchedText(lineTokens);
                 return new DocString(
                         separatorToken.location,
                         mediaType,
-                        content.toString(),
+                        content,
                         separatorToken.matchedKeyword
                 );
             }
@@ -163,14 +156,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 // Trim trailing empty lines
                 int end = lineTokens.size();
-                while (end > 0 && lineTokens.get(end - 1).matchedText.matches("\\s*")) {
+                while (end > 0 && lineTokens.get(end - 1).line.isEmpty()) {
                     end--;
                 }
                 lineTokens = lineTokens.subList(0, end);
-
-                return lineTokens.stream()
-                        .map(t -> t.matchedText)
-                        .collect(Collectors.joining("\n"));
+                return joinMatchedText(lineTokens);
             }
             case Feature: {
                 AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
@@ -243,6 +233,18 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node;
     }
 
+    private static String joinMatchedText(List<Token> lineTokens) {
+        StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
+        for (Token lineToken : lineTokens) {
+            content.append(lineToken.matchedText).append("\n");
+        }
+        int contentLength = content.length();
+        if (contentLength > 0) {
+            content.setLength(contentLength - 1); // Remove the last \n
+        }
+        return content.toString();
+    }
+
     private List<TableRow> getTableRows(AstNode node) {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
         List<TableRow> rows = new ArrayList<>(tokens.size());
@@ -305,4 +307,5 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     public GherkinDocument getResult() {
         return currentNode().getSingle(RuleType.GherkinDocument, null);
     }
+
 }

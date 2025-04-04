@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
+- [Java] Optimize number of array copies ([#388](https://github.com/cucumber/gherkin/pull/388))
 - [Java] Optimize Location performance ([#385](https://github.com/cucumber/gherkin/pull/385))
 - [Java] Optimize AstNode performance ([#383](https://github.com/cucumber/gherkin/pull/383))
 - [Java] Optimize EncodingParser performance ([#382](https://github.com/cucumber/gherkin/pull/382))
