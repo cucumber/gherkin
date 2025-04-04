@@ -21,7 +21,7 @@ import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GherkinParserTest {
+class GherkinParserTest {
 
     final String feature = "Feature: Minimal\n" +
             "\n" +
@@ -30,14 +30,14 @@ public class GherkinParserTest {
     final Envelope envelope = Envelope.of(new Source("minimal.feature", feature, TEXT_X_CUCUMBER_GHERKIN_PLAIN));
 
     @Test
-    public void use_this_in_readme() {
+    void use_this_in_readme() {
         GherkinParser parser = GherkinParser.builder().build();
         Stream<Envelope> pickles = parser.parse(envelope).filter(envelope -> envelope.getPickle().isPresent());
         assertEquals(1, pickles.count());
     }
 
     @Test
-    public void can_parse_streams() throws IOException {
+    void can_parse_streams() throws IOException {
         try (InputStream is = new ByteArrayInputStream(feature.getBytes(StandardCharsets.UTF_8))){
             GherkinParser parser = GherkinParser.builder().build();
             Stream<Envelope> pickles = parser.parse("minimal.feature",is).filter(envelope -> envelope.getPickle().isPresent());
@@ -46,7 +46,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void provides_access_to_the_ast() {
+    void provides_access_to_the_ast() {
         // Get the AST
         GherkinDocument gherkinDocument = GherkinParser.builder()
                 .includeSource(false)
@@ -66,7 +66,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void provides_access_to_pickles_which_are_compiled_from_the_ast() {
+    void provides_access_to_pickles_which_are_compiled_from_the_ast() {
         // Get the first pickle
         Pickle pickle = GherkinParser.builder()
                 .includeSource(false)
@@ -82,7 +82,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void parses_supplied_source() {
+    void parses_supplied_source() {
         GherkinDocument gherkinDocument = GherkinParser.builder()
                 .includeSource(false)
                 .includePickles(false)
@@ -96,7 +96,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void parser_always_includes_errors() {
+    void parser_always_includes_errors() {
         Envelope singleParseError = Envelope.of(new Source("single_parser_error.feature",
                 "\n" +
                         "invalid line here\n" +
