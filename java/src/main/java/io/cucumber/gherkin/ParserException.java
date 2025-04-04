@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import io.cucumber.messages.types.Location;
 
+import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 
 class ParserException extends RuntimeException {
@@ -58,13 +59,16 @@ class ParserException extends RuntimeException {
         private static String getMessage(Token receivedToken, List<String> expectedTokenTypes) {
             return String.format("expected: %s, got '%s'",
                     String.join(", ", expectedTokenTypes),
-                    receivedToken.getTokenValue().trim());
+                    receivedToken.getTokenValue()
+            );
         }
 
         private static Location getLocation(Token receivedToken) {
-            return receivedToken.location.getColumn().isPresent()
-                    ? receivedToken.location
-                    : atColumn(receivedToken.location, receivedToken.line.indent() + 1);
+            if (receivedToken.location.getColumn().isPresent()) {
+                return receivedToken.location;
+            }
+            int column = COLUMN_OFFSET + receivedToken.line.getIndent();
+            return atColumn(receivedToken.location, column);
         }
     }
 
