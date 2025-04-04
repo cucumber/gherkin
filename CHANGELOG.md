@@ -8,6 +8,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
+- [Java] Improved parsing time ([#361](https://github.com/cucumber/gherkin/issues/361))
+- [Java] Optimize number of array copies ([#388](https://github.com/cucumber/gherkin/pull/388))
 - [Java] Optimize Location performance ([#385](https://github.com/cucumber/gherkin/pull/385))
 - [Java] Optimize AstNode performance ([#383](https://github.com/cucumber/gherkin/pull/383))
 - [Java] Optimize EncodingParser performance ([#382](https://github.com/cucumber/gherkin/pull/382))
@@ -29,7 +31,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Fix NuGet package generation
 - [c] Optimise error handling for empty datatable rows
 - [Perl] Optimise error handling for unclosed DocStrings
-- [Java] Improved parsing time ([#361](https://github.com/cucumber/gherkin/issues/361))
 
 ## [31.0.0] - 2025-01-29
 ### Added

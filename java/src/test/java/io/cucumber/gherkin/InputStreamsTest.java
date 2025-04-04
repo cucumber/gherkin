@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static io.cucumber.gherkin.GherkinParser.FEATURE_FILE_AVERAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class InputStreamsTest {
@@ -16,7 +15,7 @@ class InputStreamsTest {
     void readsAllBytes() throws IOException {
         byte[] input = "# sample comment".getBytes(StandardCharsets.UTF_8);
         try (InputStream is = new ByteArrayInputStream(input)) {
-            assertArrayEquals(input, InputStreams.readAllBytes(is, FEATURE_FILE_AVERAGE_SIZE));
+            assertArrayEquals(input, InputStreams.readAllBytes(is));
         }
     }
 
@@ -28,7 +27,7 @@ class InputStreamsTest {
         }
         byte[] input = builder.toString().getBytes(StandardCharsets.UTF_8);
         try (InputStream is = new ByteArrayInputStream(input)) {
-            assertArrayEquals(input, InputStreams.readAllBytes(is, FEATURE_FILE_AVERAGE_SIZE));
+            assertArrayEquals(input, InputStreams.readAllBytes(is));
         }
     }
 

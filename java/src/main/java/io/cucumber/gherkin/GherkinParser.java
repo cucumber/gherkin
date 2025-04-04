@@ -106,7 +106,7 @@ public final class GherkinParser {
     public Stream<Envelope> parse(String uri, InputStream source) throws IOException {
         requireNonNull(uri);
         requireNonNull(source);
-        return parse(uri, InputStreams.readAllBytes(source, FEATURE_FILE_AVERAGE_SIZE));
+        return parse(uri, InputStreams.readAllBytes(source));
     }
 
     public Stream<Envelope> parse(String uri, byte[] source) {

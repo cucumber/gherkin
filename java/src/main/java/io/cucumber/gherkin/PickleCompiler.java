@@ -27,12 +27,12 @@ import io.cucumber.messages.types.Tag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 class PickleCompiler {
@@ -214,7 +214,7 @@ class PickleCompiler {
     }
 
     private PickleStep pickleStep(Step step, List<TableCell> variableCells, TableRow valuesRow, StepKeywordType keywordType) {
-        List<TableCell> valueCells = valuesRow == null ? Collections.emptyList() : valuesRow.getCells();
+        List<TableCell> valueCells = valuesRow == null ? emptyList() : valuesRow.getCells();
         String stepText = interpolate(step.getText(), variableCells, valueCells);
 
         PickleStepArgument argument = null;
@@ -244,7 +244,7 @@ class PickleCompiler {
     }
 
     private PickleStep pickleStep(Step step, StepKeywordType keywordType) {
-        return pickleStep(step, Collections.emptyList(), null, keywordType);
+        return pickleStep(step, emptyList(), null, keywordType);
     }
 
     private String interpolate(String name, List<TableCell> variableCells, List<TableCell> valueCells) {
@@ -260,7 +260,7 @@ class PickleCompiler {
 
     private List<PickleTag> pickleTags(List<Tag> tags) {
         if (tags.isEmpty()) {
-            return Collections.emptyList();
+            return emptyList();
         }
         List<PickleTag> result = new ArrayList<>();
         for (Tag tag : tags) {

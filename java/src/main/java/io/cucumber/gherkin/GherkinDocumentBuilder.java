@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
+import static io.cucumber.gherkin.GherkinParser.FEATURE_FILE_AVERAGE_LINE_LENGTH;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.Builder;
 import static io.cucumber.gherkin.Parser.RuleType;
@@ -233,7 +234,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private static String joinMatchedText(List<Token> lineTokens) {
-        StringBuilder content = new StringBuilder(GherkinParser.FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
+        StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
         for (Token lineToken : lineTokens) {
             content.append(lineToken.matchedText).append("\n");
         }
