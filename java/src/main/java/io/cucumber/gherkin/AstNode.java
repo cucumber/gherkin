@@ -22,7 +22,8 @@ class AstNode {
 
     void add(RuleType ruleType, Object obj) {
         List<Object> items = subItems.get(ruleType);
-        if (items == null) { // faster than Map.computeIfAbsent
+        //noinspection Java8MapApi faster than Map.computeIfAbsent
+        if (items == null) { 
             items = new ArrayList<>();
             subItems.put(ruleType, items);
         }
