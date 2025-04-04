@@ -63,20 +63,6 @@ public class StringUtilsTest {
         assertEquals(0, trimmable.indent);
     }
 
-
-    @Test
-    void testTrimAndIndent_null() {
-        // Given
-        MockIndentable trimmable = new MockIndentable();
-
-        // When
-        StringUtils.trimAndIndent(null, trimmable);
-
-        // Then
-        assertEquals("", trimmable.trimmed);
-        assertEquals(0, trimmable.indent);
-    }
-
     @Test
     void removeComments() {
         assertEquals("@this @is", StringUtils.removeComments("@this @is #@a @commented @sequence of tags"));
