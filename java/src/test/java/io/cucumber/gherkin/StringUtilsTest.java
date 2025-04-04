@@ -11,22 +11,22 @@ class StringUtilsTest {
     private static final String CUCUMBER = "🥒";
 
     @Test
-    void testRtrim() {
+    void rtrim() {
         assertEquals(WHITESPACE + CUCUMBER, StringUtils.rtrim(WHITESPACE + CUCUMBER + WHITESPACE));
     }
 
     @Test
-    void testRtrim_one_space() {
+    void rtrim_one_space() {
         assertEquals("", StringUtils.rtrim(" "));
     }
 
     @Test
-    void testRtrim_multiline() {
+    void rtrim_multiline() {
         assertEquals("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER, StringUtils.rtrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
     }
 
     @Test
-    void testTrimAndIndent() {
+    void trimAndIndent() {
         // When
         Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
 
@@ -36,7 +36,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void testTrimAndIndent_multiline() {
+    void trimAndIndent_multiline() {
         // When
         Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
 
@@ -46,7 +46,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void testTrimAndIndent_empty() {
+    void trimAndIndent_empty() {
         // When
         Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("");
 
