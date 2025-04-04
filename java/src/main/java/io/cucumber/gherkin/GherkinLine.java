@@ -48,10 +48,10 @@ class GherkinLine {
         return rawText;
     }
 
-    String getLineText(int indentToRemove) {
-        if (indentToRemove < 0 || indentToRemove > indent)
+    String getRawLineText(int beginIndex) {
+        if (beginIndex < 0 || beginIndex > indent)
             return text;
-        return rawText.substring(indentToRemove);
+        return rawText.substring(beginIndex);
     }
 
     boolean isEmpty() {
@@ -62,8 +62,8 @@ class GherkinLine {
         return text.startsWith(prefix);
     }
 
-    String substring(int beginIndex) {
-        return text.substring(beginIndex);
+    String substringTrimmed(int beginIndex) {
+        return text.substring(beginIndex).trim();
     }
 
     List<GherkinLineSpan> getTags() {

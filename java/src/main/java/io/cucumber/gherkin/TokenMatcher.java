@@ -72,7 +72,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Other(Token token) {
-        String text = token.line.getLineText(indentToRemove); // remove DocString indents
+        String text = token.line.getRawLineText(indentToRemove); // remove DocString indents
         setTokenMatched(token, TokenType.Other, unescapeDocString(text), null, 0, null, null);
         return true;
     }
@@ -148,7 +148,7 @@ class TokenMatcher implements ITokenMatcher {
     private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
         for (String keyword : keywords) {
             if (token.line.startsWithTitleKeyword(keyword)) {
-                String title = token.line.substring(keyword.length() + TITLE_KEYWORD_SEPARATOR.length());
+                String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR.length());
                 setTokenMatched(token, tokenType, title, keyword, null, null, null);
                 return true;
             }
@@ -170,7 +170,7 @@ class TokenMatcher implements ITokenMatcher {
         if (token.line.startsWith(separator)) {
             String mediaType = null;
             if (isOpen) {
-                mediaType = token.line.substring(separator.length());
+                mediaType = token.line.substringTrimmed(separator.length());
                 activeDocStringSeparator = separator;
                 indentToRemove = token.line.getIndent();
             } else {
@@ -189,7 +189,7 @@ class TokenMatcher implements ITokenMatcher {
         List<String> keywords = currentDialect.getStepKeywords();
         for (String keyword : keywords) {
             if (token.line.startsWith(keyword)) {
-                String stepText = token.line.substring(keyword.length());
+                String stepText = token.line.substringTrimmed(keyword.length());
                 StepKeywordType keywordType = getKeywordType(keyword);
                 setTokenMatched(token, TokenType.StepLine, stepText, keyword, null, keywordType, null);
                 return true;
