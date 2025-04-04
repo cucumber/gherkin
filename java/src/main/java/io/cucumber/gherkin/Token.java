@@ -8,16 +8,16 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 class Token {
-    public final GherkinLine line;
+    final GherkinLine line;
     final boolean eof;
-    public Parser.TokenType matchedType;
-    public String matchedKeyword;
-    public String matchedText;
-    public List<GherkinLineSpan> matchedItems;
-    public int matchedIndent;
-    public GherkinDialect matchedGherkinDialect;
-    public StepKeywordType keywordType;
-    public Location location;
+    Parser.TokenType matchedType;
+    String matchedKeyword;
+    String matchedText;
+    List<GherkinLineSpan> matchedItems;
+    int matchedIndent;
+    GherkinDialect matchedGherkinDialect;
+    StepKeywordType keywordType;
+    Location location;
 
     private Token(GherkinLine line, Location location) {
         this.line = line;
@@ -36,11 +36,11 @@ class Token {
         return new Token(new GherkinLine(text, location), location);
     }
 
-    public boolean isEOF() {
+    boolean isEOF() {
         return eof;
     }
 
-    public String getTokenValue() {
+    String getTokenValue() {
         return isEOF() ? "EOF" : line.getText();
     }
 
