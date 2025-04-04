@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-- [Java] Improved parsing time ([#361](https://github.com/cucumber/gherkin/issues/361))
+- [Java] Optimize GherkinLine performance ([#361](https://github.com/cucumber/gherkin/issues/361))
 - [Java] Optimize number of array copies ([#388](https://github.com/cucumber/gherkin/pull/388))
 - [Java] Optimize Location performance ([#385](https://github.com/cucumber/gherkin/pull/385))
 - [Java] Optimize AstNode performance ([#383](https://github.com/cucumber/gherkin/pull/383))
