@@ -8,7 +8,7 @@ class StringUtils {
     private static final Character[] WHITESPACE_CHARS_SIMPLE = new Character[] {' ', '\t', '\n', '\u000B', '\f', '\r'};
 
     static String rtrim(String s) {
-        if (s == null || s.isEmpty()) {
+        if (s.isEmpty()) {
             return s;
         }
 
@@ -31,7 +31,7 @@ class StringUtils {
     }
 
     private static void trimAndIndent(String input, Indentable target, Character[] whitespaceChars) {
-        if (input == null || input.isEmpty()) {
+        if (input.isEmpty()) {
             target.indent(0, "");
             return;
         }
