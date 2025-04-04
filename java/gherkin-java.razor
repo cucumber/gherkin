@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 
@@ -146,13 +147,13 @@ class @Model.ParserClassName<T> {
             throw new ParserException.CompositeParserException(context.errors);
     }
 
-    private <V> V handleAstError(ParserContext context, final Func<V> action) {
-        return handleExternalError(context, action, null);
+    private void handleAstError(ParserContext context, final Supplier<Void> action) {
+        handleExternalError(context, null, action);
     }
 
-    private <V> V handleExternalError(ParserContext context, Func<V> action, V defaultValue) {
+    private <V> V handleExternalError(ParserContext context, V defaultValue, Supplier<V> action) {
         try {
-            return action.call();
+            return action.get();
         } catch (ParserException.CompositeParserException compositeParserException) {
             for (ParserException error : compositeParserException.errors) {
                 addError(context, error);
@@ -164,36 +165,29 @@ class @Model.ParserClassName<T> {
     }
 
     private void build(final ParserContext context, final Token token) {
-        handleAstError(context, new Func<Void>() {
-            public Void call() {
-                builder.build(token);
-                return null;
-            }
+        handleAstError(context, () -> {
+            builder.build(token);
+            return null;
         });
     }
 
     private void startRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, new Func<Void>() {
-            public Void call() {
-                builder.startRule(ruleType);
-                return null;
-            }
+        handleAstError(context, () -> {
+            builder.startRule(ruleType);
+            return null;
         });
     }
 
     private void endRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, new Func<Void>() {
-            public Void call() {
-                builder.endRule(ruleType);
-                return null;
-            }
+        handleAstError(context, () -> {
+            builder.endRule(ruleType);
+            return null;
         });
     }
 
     private Token readToken(ParserContext context) {
         return context.tokenQueue.isEmpty() ? context.tokenScanner.read() : context.tokenQueue.remove();
     }
-
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
     private boolean match_@(rule.Name.Replace("#", ""))(final ParserContext context, final Token token) {
@@ -201,12 +195,9 @@ class @Model.ParserClassName<T> {
         {
         @:if (token.isEOF()) return false;
         }
-        return handleExternalError(context, new Func<Boolean>() {
-            public Boolean call() {
-                return context.tokenMatcher.match_@(rule.Name.Replace("#", ""))(token);
-            }
-        }, false);
-    }</text>
+        return handleExternalError(context, false, () -> context.tokenMatcher.match_@(rule.Name.Replace("#", ""))(token));
+    }
+</text>
 }
 
     private int matchToken(int state, Token token, ParserContext context) {
@@ -223,7 +214,6 @@ class @Model.ParserClassName<T> {
         }
         return newState;
     }
-
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {
 <text>
