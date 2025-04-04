@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.PrimitiveIterator;
-import java.util.regex.Pattern;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
+import static io.cucumber.gherkin.StringUtils.containsWhiteSpace;
 import static io.cucumber.gherkin.StringUtils.rtrim;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
@@ -18,8 +18,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 class GherkinLine {
-
-    private static final Pattern PATTERN_ONLY_SPACES = Pattern.compile("^\\S+$");
 
     private final String rawText;
     private final Location location;
@@ -84,7 +82,7 @@ class GherkinLine {
             }
             int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
             int column = indent + symbolLength + COLUMN_OFFSET;
-            if (!PATTERN_ONLY_SPACES.matcher(token).matches()) {
+            if (containsWhiteSpace(token)) {
                 throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
             }
             tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));

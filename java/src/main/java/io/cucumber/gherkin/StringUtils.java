@@ -22,7 +22,6 @@ class StringUtils {
      * Matches regex pattern whitespace + NEL + NBSP - new line.
      */
     private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -52,19 +51,10 @@ class StringUtils {
             return new SimpleEntry<>("", 0);
         }
 
-        int start = 0;
-        int length = input.length();
+        int start = findFirstIndexNotIn(input, input.length(), whitespaceChars);
+        int end = findLastIndexNotIn(input, start, whitespaceChars);
 
-        while (start < length && contains(whitespaceChars, input.charAt(start))) {
-            start++;
-        }
-
-        int end = length - 1;
-        while (end > start && contains(whitespaceChars, input.charAt(end))) {
-            end--;
-        }
-
-        String trimmed = input.substring(start, end + 1);
+        String trimmed = input.substring(start, end);
         int indent = input.codePointCount(0, start);
         return new SimpleEntry<>(trimmed, indent);
     }
@@ -85,6 +75,36 @@ class StringUtils {
         return input.substring(0, start < length - 1 ? start : start + 1);
     }
 
+    static boolean containsWhiteSpace(String input) {
+        return findFirstIndexIn(input, WHITESPACE_CHARS) != -1;
+    }
+
+    private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {
+        int start = 0;
+        while (start < endIndex && contains(characters, input.charAt(start))) {
+            start++;
+        }
+        return start;
+    }
+    
+    private static int findLastIndexNotIn(String input, int beginIndex, char[] characters) {
+        int end = input.length();
+        while (end > beginIndex && contains(characters, input.charAt(end - 1))) {
+            end--;
+        }
+        return end;
+    }
+
+    private static int findFirstIndexIn(String input, char[] characters) {
+        int length = input.length();
+        for (int i = 0; i < length; i++) {
+            if (contains(characters, input.charAt(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
     private static boolean contains(char[] characters, char c) {
         for (Character candidate : characters) {
             if (candidate == c) {
