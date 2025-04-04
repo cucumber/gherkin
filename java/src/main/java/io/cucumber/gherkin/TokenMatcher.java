@@ -72,7 +72,7 @@ class TokenMatcher implements ITokenMatcher {
 
     @Override
     public boolean match_Other(Token token) {
-        String text = token.line.getRawLineText(indentToRemove); // remove DocString indents
+        String text = removeDocStringIndent(token);
         setTokenMatched(token, TokenType.Other, unescapeDocString(text), null, 0, null, null);
         return true;
     }
@@ -213,6 +213,17 @@ class TokenMatcher implements ITokenMatcher {
             return true;
         }
         return false;
+    }
+
+    private String removeDocStringIndent(Token token) {
+        if (activeDocStringSeparator == null) {
+            return token.line.getRawText();
+        }
+        if (indentToRemove > token.line.getIndent()) {
+            // BUG: Removes trailing whitespace!
+            return token.line.getText();
+        }
+        return token.line.getRawTextSubstring(indentToRemove);
     }
 
     private String unescapeDocString(String text) {

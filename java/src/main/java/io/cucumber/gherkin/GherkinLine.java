@@ -48,9 +48,7 @@ class GherkinLine {
         return rawText;
     }
 
-    String getRawLineText(int beginIndex) {
-        if (beginIndex < 0 || beginIndex > indent)
-            return text;
+    String getRawTextSubstring(int beginIndex) {
         return rawText.substring(beginIndex);
     }
 
