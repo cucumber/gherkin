@@ -223,6 +223,8 @@ class TokenMatcher implements ITokenMatcher {
             // BUG: Removes trailing whitespace!
             return token.line.getText();
         }
+        // Note: Indent to remove is in codePoints while getRawTextSubstring counts chars.
+        // This is okay because in this context all codepoints are one byte wide. 
         return token.line.getRawTextSubstring(indentToRemove);
     }
 
