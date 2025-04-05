@@ -10,7 +10,7 @@ class ParserTest {
 
     @Test
     void change_default_language() {
-        TokenMatcher matcher = new TokenMatcher("no");
+        GherkinTokenMatcher matcher = new GherkinTokenMatcher("no");
         IdGenerator idGenerator = new IncrementingIdGenerator();
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
 

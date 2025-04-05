@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.cucumber.gherkin.Parser.TokenMatcher;
 import io.cucumber.messages.types.StepKeywordType;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX;
@@ -15,10 +16,9 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
-import static io.cucumber.gherkin.Parser.ITokenMatcher;
 import static io.cucumber.gherkin.Parser.TokenType;
 
-class TokenMatcher implements ITokenMatcher {
+class GherkinTokenMatcher implements TokenMatcher {
 
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private final GherkinDialectProvider dialectProvider;
@@ -26,16 +26,16 @@ class TokenMatcher implements ITokenMatcher {
     private String activeDocStringSeparator = null;
     private int indentToRemove = 0;
 
-    TokenMatcher(GherkinDialectProvider dialectProvider) {
+    GherkinTokenMatcher(GherkinDialectProvider dialectProvider) {
         this.dialectProvider = dialectProvider;
         reset();
     }
 
-    TokenMatcher() {
+    GherkinTokenMatcher() {
         this(new GherkinDialectProvider());
     }
 
-    TokenMatcher(String defaultDialectName) {
+    GherkinTokenMatcher(String defaultDialectName) {
         this(new GherkinDialectProvider(defaultDialectName));
     }
 

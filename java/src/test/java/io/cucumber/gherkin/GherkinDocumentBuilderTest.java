@@ -21,7 +21,7 @@ class GherkinDocumentBuilderTest {
     @Test
     void is_reusable() {
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
-        TokenMatcher matcher = new TokenMatcher();
+        GherkinTokenMatcher matcher = new GherkinTokenMatcher();
 
         GherkinDocument d1 = parser.parse("Feature: 1", matcher, "1.feature");
         GherkinDocument d2 = parser.parse("Feature: 2", matcher, "2.feature");

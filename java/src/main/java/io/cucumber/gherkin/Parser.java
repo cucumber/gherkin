@@ -84,12 +84,12 @@ class Parser<T> {
     private final Builder<T> builder;
 
     static class ParserContext {
-        final ITokenScanner tokenScanner;
-        final ITokenMatcher tokenMatcher;
+        final TokenScanner tokenScanner;
+        final TokenMatcher tokenMatcher;
         final Queue<Token> tokenQueue;
         final List<ParserException> errors;
 
-        ParserContext(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher, Queue<Token> tokenQueue, List<ParserException> errors) {
+        ParserContext(TokenScanner tokenScanner, TokenMatcher tokenMatcher, Queue<Token> tokenQueue, List<ParserException> errors) {
             this.tokenScanner = tokenScanner;
             this.tokenMatcher = tokenMatcher;
             this.tokenQueue = tokenQueue;
@@ -102,26 +102,18 @@ class Parser<T> {
     }
 
     T parse(String source, String uri) {
-        return parse(new StringReader(source), uri);
-    }
-
-    T parse(Reader source, String uri) {
         return parse(new TokenScanner(source), uri);
     }
 
-    T parse(ITokenScanner tokenScanner, String uri) {
-        return parse(tokenScanner, new TokenMatcher(), uri);
+    T parse(TokenScanner tokenScanner, String uri) {
+        return parse(tokenScanner, new GherkinTokenMatcher(), uri);
     }
 
-    T parse(String source, ITokenMatcher tokenMatcher, String uri) {
-        return parse(new StringReader(source), tokenMatcher, uri);
-    }
-
-    T parse(Reader source, ITokenMatcher tokenMatcher, String uri) {
+    T parse(String source, TokenMatcher tokenMatcher, String uri) {
         return parse(new TokenScanner(source), tokenMatcher, uri);
     }
 
-    T parse(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher, String uri) {
+    T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher, String uri) {
         builder.reset(uri);
         tokenMatcher.reset();
 
@@ -3831,11 +3823,7 @@ class Parser<T> {
         void reset(String uri);
     }
 
-    interface ITokenScanner {
-        Token read();
-    }
-
-    interface ITokenMatcher {
+    interface TokenMatcher {
         boolean match_EOF(Token token);
         boolean match_Empty(Token token);
         boolean match_Comment(Token token);
