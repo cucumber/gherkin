@@ -92,7 +92,7 @@ class @Model.ParserClassName<T> {
     }
 
     T parse(TokenScanner tokenScanner, String uri) {
-        return parse(tokenScanner, new TokenMatcher(), uri);
+        return parse(tokenScanner, new GherkinTokenMatcher(), uri);
     }
 
     T parse(String source, TokenMatcher tokenMatcher, String uri) {
