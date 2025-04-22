@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish-pypi:
-    name: Release
+    name: Publish PyPI Package
     runs-on: ubuntu-latest
     environment: Release
     permissions:
