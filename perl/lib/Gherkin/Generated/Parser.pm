@@ -6,7 +6,7 @@ use warnings;
 
 use base 'Gherkin::ParserBase';
 
-our %states_to_match_names = (
+my %states_to_match_names = (
     0 => "match_token_at_0",
     1 => "match_token_at_1",
     2 => "match_token_at_2",
