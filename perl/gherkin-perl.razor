@@ -35,7 +35,7 @@ use warnings;
 
 use base 'Gherkin::ParserBase';
 
-our %states_to_match_names = (
+my %states_to_match_names = (
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState)) //..
     {
 @:    @state.Id => "match_token_at_@(state.Id)",
