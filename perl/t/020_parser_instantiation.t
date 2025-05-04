@@ -22,7 +22,7 @@ for (
     [ stringref => \$content ], # By content
     [ scanner => Gherkin::TokenScanner->new( '' . $file ) ], # Object
 ) {
-    my ( $type, $input ) = @$_;
+    my ( $type, $input ) = @{$_};
     $results{ $type } = Gherkin::Parser->new->parse( $input );
     ok( 'true', "Parsing via $type lived" );
 }
