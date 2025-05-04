@@ -160,6 +160,7 @@ sub next_id {
     return $self->{'id_generator'}->();
 }
 
+## no critic (ProhibitExcessComplexity, ProhibitCascadingIfElse)
 sub transform_node {
     my ( $self, $node ) = @_;
 
@@ -353,5 +354,6 @@ sub transform_node {
         return $node;
     }
 }
+## use critic
 
 1;
