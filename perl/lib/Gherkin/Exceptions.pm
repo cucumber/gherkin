@@ -1,3 +1,5 @@
+## no critic (ProhibitMultiplePackages, RequireExplicitPackage)
+
 use strict;
 use warnings;
 

@@ -39,8 +39,10 @@ sub from_paths {
         # accommodates the errors and simply continues, allowing us to
         # recode back to octets and then to the encoding indicated in the
         # header using the "# encoding: ..." header.
+        ## no critic (RequireEncodingWithUTF8Layer)
         open my $fh, '<:utf8', $path
             or die "Unable to open gherkin document $path: $!";
+        ## use critic
 
         # local $/ = undef; --> unset 'end-of-line' marker: slurp entire file
         # use the 'do' block to scope this binding to smallest possible scope

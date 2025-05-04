@@ -43,6 +43,10 @@ sub add_error {
     return;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+# Private subs (subs prefixed with an underscore) are used as "friend methods" here,
+# to be used by the actual parser class which is based on this one.
+
 sub _start_rule {
     my ( $self, $context, $ruleType ) = @_;
 
