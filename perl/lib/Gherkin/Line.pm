@@ -121,7 +121,7 @@ sub table_cells {
         $stripped_cell =~ s/\s+$//;
         $stripped_cell =~ s/(\\\\|\\\||\\n)/$unescape_map{$1}/g;
         push(
-            @$cells,
+            @{$cells},
             {
                 column => $col + $self->indent + $cell_indent,
                 text   => $stripped_cell

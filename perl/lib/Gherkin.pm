@@ -32,7 +32,7 @@ sub from_paths {
     my ($class, $paths, $id_generator, $sink, %options) = @_;
 
     my $gherkin = $class->new(%options);
-    for my $path (@$paths) {
+    for my $path (@{$paths}) {
         # Note: There's a huge difference between ':utf8' and
         # ':encoding(UTF-8)' in Perl: the latter causes strict UTF-8 conversion
         # and fails hard if there are encoding problems. The former
