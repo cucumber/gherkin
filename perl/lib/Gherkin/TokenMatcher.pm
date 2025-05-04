@@ -33,9 +33,10 @@ sub _add_keyword_type_mappings {
         }
         push @{$keyword_types->{$keyword}}, $type;
     }
+    return;
 }
 
-sub dialect_name { $_[0]->dialect->dialect }
+sub dialect_name { return $_[0]->dialect->dialect; }
 sub change_dialect {
     my $self = shift;
     $self->dialect->change_dialect(@_);
@@ -51,6 +52,7 @@ sub change_dialect {
                                [ @{ $self->dialect->And }, @{ $self->dialect->But } ],
                                Cucumber::Messages::Step::KEYWORDTYPE_CONJUNCTION);
     $self->_keyword_types( $keyword_types );
+    return;
 }
 
 sub reset {
@@ -58,39 +60,39 @@ sub reset {
     $self->change_dialect( $self->_default_dialect_name );
     $self->_indent_to_remove(0);
     $self->_active_doc_string_separator(undef);
-
+    return;
 }
 
 sub match_FeatureLine {
     my ( $self, $token ) = @_;
-    $self->_match_title_line( $token, FeatureLine => $self->dialect->Feature );
+    return $self->_match_title_line( $token, FeatureLine => $self->dialect->Feature );
 }
 
 sub match_RuleLine {
     my ( $self, $token ) = @_;
-    $self->_match_title_line( $token,
+    return $self->_match_title_line( $token,
         RuleLine => $self->dialect->Rule );
 }
 
 sub match_ScenarioLine {
     my ( $self, $token ) = @_;
-    $self->_match_title_line(
+    return $self->_match_title_line(
         $token,
         ScenarioLine => $self->dialect->Scenario )
-        or $self->_match_title_line(
+        || $self->_match_title_line(
             $token,
             ScenarioLine => $self->dialect->ScenarioOutline );
 }
 
 sub match_BackgroundLine {
     my ( $self, $token ) = @_;
-    $self->_match_title_line( $token,
+    return $self->_match_title_line( $token,
         BackgroundLine => $self->dialect->Background );
 }
 
 sub match_ExamplesLine {
     my ( $self, $token ) = @_;
-    $self->_match_title_line( $token,
+    return $self->_match_title_line( $token,
         ExamplesLine => $self->dialect->Examples );
 }
 
@@ -161,6 +163,7 @@ sub _set_token_matched {
 
     $token->location->{'column'} = $token->matched_indent + 1;
     $token->matched_gherkin_dialect( $self->dialect_name );
+    return;
 }
 
 sub match_EOF {
@@ -266,6 +269,7 @@ sub _match_DocStringSeparator {
 
     $self->_set_token_matched( $token,
         DocStringSeparator => { text => $content_type, keyword => $separator } );
+    return 1;
 }
 
 sub match_TableRow {
@@ -274,6 +278,7 @@ sub match_TableRow {
 
     $self->_set_token_matched( $token,
         TableRow => { items => $token->line->table_cells } );
+    return 1;
 }
 
 1;

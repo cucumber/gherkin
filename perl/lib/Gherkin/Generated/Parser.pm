@@ -92,7 +92,7 @@ sub match_token {
     my ( $self, $state, $token, $context ) = @_;
     my $method_name = $states_to_match_names{ $state } ||
         die "Unknown state: $state";
-    $self->$method_name( $token, $context );
+    return $self->$method_name( $token, $context );
 }
 
 sub _construct_parser_error {

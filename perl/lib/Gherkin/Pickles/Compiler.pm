@@ -56,6 +56,7 @@ sub _compile_feature {
             }
         }
     }
+    return;
 }
 
 sub _compile_scenario {
@@ -90,6 +91,7 @@ sub _compile_scenario {
                 uri          => $uri,
                 ast_node_ids => [ $scenario->id ]
             )));
+    return;
 }
 
 sub _compile_scenario_outline {
@@ -146,6 +148,7 @@ sub _compile_scenario_outline {
                     )));
         }
     }
+    return;
 }
 
 sub _compile_rule {
@@ -176,6 +179,7 @@ sub _compile_rule {
             die "Unimplemented";
         }
     }
+    return;
 }
 
 sub _interpolate {

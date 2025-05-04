@@ -12,14 +12,15 @@ sub new {
     my ( $class, $options ) = @_;
     $options->{'token_queue'} ||= [];
     $options->{'_errors'}     ||= [];
-    bless $options, $class;
+    return bless $options, $class;
 }
 
-sub add_tokens { my $self = shift; push( @{ $self->token_queue }, @_ ); }
+sub add_tokens { my $self = shift; push( @{ $self->token_queue }, @_ ); return; }
 sub errors     { my $self = shift; return @{ $self->_errors } }
 sub add_errors {
     my $self = shift;
     push @{ $self->{'_errors'} }, @_;
+    return;
 }
 
 sub read_token {

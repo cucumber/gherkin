@@ -27,7 +27,7 @@ sub new {
 }
 
 # Simple builder sugar
-sub ast_node { Gherkin::AstNode->new( $_[0] ) }
+sub ast_node { return Gherkin::AstNode->new( $_[0] ); }
 
 sub reset {
     my $self  = shift;
@@ -35,6 +35,7 @@ sub reset {
     $self->{'stack'}    = [ ast_node('None') ];
     $self->{'comments'} = [];
     $self->{'uri'}      = $uri;
+    return;
 }
 
 sub current_node {
@@ -45,12 +46,14 @@ sub current_node {
 sub start_rule {
     my ( $self, $rule_type ) = @_;
     push( @{ $self->{'stack'} }, ast_node($rule_type) );
+    return;
 }
 
 sub end_rule {
     my ( $self, $rule_type ) = @_;
     my $node = pop( @{ $self->{'stack'} } );
     $self->current_node->add( $node->rule_type, $self->transform_node($node) );
+    return;
 }
 
 sub build {
@@ -64,6 +67,7 @@ sub build {
     } else {
         $self->current_node->add( $token->matched_type, $token );
     }
+    return;
 }
 
 sub get_result {
@@ -134,6 +138,7 @@ sub ensure_cell_count {
                 $row->location );
         }
     }
+    return;
 }
 
 sub get_cells {

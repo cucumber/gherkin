@@ -8,6 +8,7 @@ sub reset {
     my $self = shift;
     $self->SUPER::reset();
     $self->{'formatted_tokens'} = [];
+    return;
 }
 
 sub formatted_tokens { return $_[0]->{'formatted_tokens'} }
@@ -15,6 +16,7 @@ sub formatted_tokens { return $_[0]->{'formatted_tokens'} }
 sub build {
     my ( $self, $token ) = @_;
     push( @{ $self->formatted_tokens }, $self->format_token($token) );
+    return;
 }
 
 sub start_rule { }
