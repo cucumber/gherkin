@@ -101,7 +101,7 @@ sub _compile_scenario_outline {
         my @tags        = (
             @{ $feature_tags },
             @{ $scenario->tags || [] },
-            @{ $examples->tags || [] }
+            @{ $examples->tags || [] },
             );
         my $variables = $examples->table_header->cells;
 
@@ -197,7 +197,7 @@ sub _pickle_step_props {
         ast_node_ids => [ $step->id ],
         type         => $keyword_type,
         text         => $class->_interpolate($step->text,
-                                             $variables, $value_cells)
+                                             $variables, $value_cells),
         );
 
     if ($values) {
