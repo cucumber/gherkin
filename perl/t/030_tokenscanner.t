@@ -10,7 +10,7 @@ use Gherkin::TokenScanner;
 
 ## Test the token scanner to report empty lines correctly
 
-my $feature = <<FEATURE;
+my $feature = <<'FEATURE';
 # comment line
 Feature: Testing an empty line
 
