@@ -6,14 +6,13 @@
 
 package io.cucumber.gherkin;
 
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.function.Supplier;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import static java.util.Arrays.asList;
 
@@ -153,13 +152,22 @@ class Parser<T> {
             throw new ParserException.CompositeParserException(context.errors);
     }
 
-    private void handleAstError(ParserContext context, final Supplier<Void> action) {
-        handleExternalError(context, null, action);
+    private <V> void handleAstError(ParserContext context, V value, Builder b, final BiConsumer<Builder, V> action) {
+        // TODO share code with handleExternalError
+        try {
+            action.accept(b, value);
+        } catch (ParserException.CompositeParserException compositeParserException) {
+            for (ParserException error : compositeParserException.errors) {
+                addError(context, error);
+            }
+        } catch (ParserException error) {
+            addError(context, error);
+        }
     }
 
-    private <V> V handleExternalError(ParserContext context, V defaultValue, Supplier<V> action) {
+    private <V> V handleExternalError(ParserContext context, V defaultValue, Token token, BiFunction<TokenMatcher, Token, V> action) {
         try {
-            return action.get();
+            return action.apply(context.tokenMatcher, token);
         } catch (ParserException.CompositeParserException compositeParserException) {
             for (ParserException error : compositeParserException.errors) {
                 addError(context, error);
@@ -171,24 +179,15 @@ class Parser<T> {
     }
 
     private void build(final ParserContext context, final Token token) {
-        handleAstError(context, () -> {
-            builder.build(token);
-            return null;
-        });
+        handleAstError(context, token, builder, Builder::build);
     }
 
     private void startRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, () -> {
-            builder.startRule(ruleType);
-            return null;
-        });
+        handleAstError(context, ruleType, builder, Builder::startRule);
     }
 
     private void endRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, () -> {
-            builder.endRule(ruleType);
-            return null;
-        });
+        handleAstError(context, ruleType, builder, Builder::endRule);
     }
 
     private Token readToken(ParserContext context) {
@@ -196,72 +195,72 @@ class Parser<T> {
     }
 
     private boolean match_EOF(final ParserContext context, final Token token) {
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_EOF(token));
+        return token.isEOF() ? handleExternalError(context, false, token, TokenMatcher::match_EOF) : false;
     }
 
     private boolean match_Empty(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_Empty(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_Empty);
     }
 
     private boolean match_Comment(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_Comment(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_Comment);
     }
 
     private boolean match_TagLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_TagLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_TagLine);
     }
 
     private boolean match_FeatureLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_FeatureLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_FeatureLine);
     }
 
     private boolean match_RuleLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_RuleLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_RuleLine);
     }
 
     private boolean match_BackgroundLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_BackgroundLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_BackgroundLine);
     }
 
     private boolean match_ScenarioLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_ScenarioLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_ScenarioLine);
     }
 
     private boolean match_ExamplesLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_ExamplesLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_ExamplesLine);
     }
 
     private boolean match_StepLine(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_StepLine(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_StepLine);
     }
 
     private boolean match_DocStringSeparator(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_DocStringSeparator(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_DocStringSeparator);
     }
 
     private boolean match_TableRow(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_TableRow(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_TableRow);
     }
 
     private boolean match_Language(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_Language(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_Language);
     }
 
     private boolean match_Other(final ParserContext context, final Token token) {
         if (token.isEOF()) return false;
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_Other(token));
+        return handleExternalError(context, false, token, TokenMatcher::match_Other);
     }
 
     private int matchToken(int state, Token token, ParserContext context) {
