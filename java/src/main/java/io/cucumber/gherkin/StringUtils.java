@@ -22,6 +22,7 @@ class StringUtils {
      * Matches regex pattern whitespace + NEL + NBSP - new line.
      */
     private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    public static final SimpleEntry<String, Integer> NO_INDENT_ENTRY = new SimpleEntry<>("", 0);
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -48,7 +49,7 @@ class StringUtils {
 
     private static Entry<String, Integer> trimAndIndent(String input, char[] whitespaceChars) {
         if (input.isEmpty()) {
-            return new SimpleEntry<>("", 0);
+            return NO_INDENT_ENTRY;
         }
 
         int start = findFirstIndexNotIn(input, input.length(), whitespaceChars);
