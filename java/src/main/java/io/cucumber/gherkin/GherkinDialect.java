@@ -36,6 +36,7 @@ public final class GherkinDialect {
     private final List<String> butKeywords;
     private final List<String> stepKeywords;
     private final Map<String, Set<StepKeywordType>> stepKeywordsTypes;
+    private final Map<String, StepKeywordType> stepKeywordsType;
 
     GherkinDialect(
             String language,
@@ -67,9 +68,23 @@ public final class GherkinDialect {
         this.thenKeywords = requireNonNull(thenKeywords);
         this.andKeywords = requireNonNull(andKeywords);
         this.butKeywords = requireNonNull(butKeywords);
-        
-        this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
+
+        // the step keywords are ordered by decreasing priority usage
+        // (supposedly Given, Then, When, And, But, "* ") to test the
+        // most probable keyword first in GherkinTokenMatcher.match_StepLine
+        this.stepKeywords = distinctKeywords(givenKeywords, thenKeywords, whenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
+        this.stepKeywordsType = defineSingleTypes();
+    }
+
+    private Map<String, StepKeywordType> defineSingleTypes() {
+        Map<String, StepKeywordType> stepKeywordsType = new HashMap<>();
+        for (Map.Entry<String, Set<StepKeywordType>> entry : stepKeywordsTypes.entrySet()) {
+            Set<StepKeywordType> stepKeywordTypes = entry.getValue();
+            StepKeywordType type = stepKeywordTypes.size() == 1 ? stepKeywordTypes.iterator().next() : StepKeywordType.UNKNOWN;
+            stepKeywordsType.put(entry.getKey(), type);
+        }
+        return stepKeywordsType;
     }
 
     @SafeVarargs
@@ -82,6 +97,12 @@ public final class GherkinDialect {
         for (List<String> keyword : keywords) {
             uniqueKeywords.addAll(keyword);
         }
+
+        // the "* " keyword is rarely used, so we put it at the end
+        if (uniqueKeywords.remove("* ")) {
+            uniqueKeywords.add("* ");
+        }
+
         return unmodifiableList(new ArrayList<>(uniqueKeywords));
     }
     
@@ -169,6 +190,15 @@ public final class GherkinDialect {
             throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
         }
         return stepKeywordTypes;
+    }
+
+    public StepKeywordType getStepKeywordType(String keyword) {
+        requireNonNull(keyword);
+        StepKeywordType stepKeywordType = stepKeywordsType.get(keyword);
+        if (stepKeywordType == null) {
+            throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
+        }
+        return stepKeywordType;
     }
 
     public List<String> getBackgroundKeywords() {
