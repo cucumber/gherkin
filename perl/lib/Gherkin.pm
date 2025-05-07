@@ -10,6 +10,8 @@ use Cucumber::Messages;
 use Gherkin::AstBuilder;
 use Gherkin::Parser;
 use Gherkin::Pickles::Compiler;
+use Gherkin::TokenMatcher;
+use Gherkin::MarkdownTokenMatcher;
 
 
 use Class::XSAccessor accessors =>
@@ -55,8 +57,10 @@ sub from_paths {
                 source => Cucumber::Messages::Source->new(
                     uri        => $path,
                     data       => $content,
-                    media_type => Cucumber::Messages::Source::MEDIATYPE_TEXT_X_CUCUMBER_GHERKIN_PLAIN,
-                    )
+                    media_type => $path =~ m/\.md$/
+                    ? Cucumber::Messages::Source::MEDIATYPE_TEXT_X_CUCUMBER_GHERKIN_MARKDOWN
+                    : Cucumber::Messages::Source::MEDIATYPE_TEXT_X_CUCUMBER_GHERKIN_PLAIN,
+                )
             ),
             $id_generator,
             $sink);
@@ -113,8 +117,11 @@ sub from_source {
     if ($self->include_ast or $self->include_pickles) {
         my $source = $envelope->source;
         my $parser = Gherkin::Parser->new(
-            Gherkin::AstBuilder->new($id_generator)
-            );
+            Gherkin::AstBuilder->new($id_generator),
+            $source->media_type eq Cucumber::Messages::Source::MEDIATYPE_TEXT_X_CUCUMBER_GHERKIN_MARKDOWN
+            ? Gherkin::MarkdownTokenMatcher->new()
+            : Gherkin::TokenMatcher->new()
+        );
         my $data = $source->data;
 
         local $@;
