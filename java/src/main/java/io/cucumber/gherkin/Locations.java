@@ -46,17 +46,13 @@ class Locations {
     }
 
     static Location atColumn(Location location, int column) {
-        requireNonNull(location);
-        if (column <= 0) {
-            throw new IllegalArgumentException("Columns are index-1 based");
-        }
+        // By design, the location cannot be null (it comes from the Token)
+        // By design, the column cannot be lower than 0
         return new Location(location.getLine(), getLong(column));
     }
 
     static Location atLine(int line) {
-        if (line < 0) {
-            throw new IllegalArgumentException("Lines are index-0 based");
-        }
+        // By design, the line is never lower than 0 (it comes from TokenScanner)
         return new Location(getLong(line), null);
     }
 

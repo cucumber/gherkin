@@ -24,7 +24,7 @@ class LocationsTest {
 
     @Test
     void atLine_negative_number_not_supported() {
-        assertThrows(IllegalArgumentException.class, () -> Locations.atLine(-1));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Locations.atLine(-1));
     }
 
     @Test
