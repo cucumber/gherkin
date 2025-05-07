@@ -44,7 +44,7 @@ class PickleCompiler {
     }
 
     List<Pickle> compile(GherkinDocument gherkinDocument, String uri) {
-        List<Pickle> pickles = new ArrayList<>();
+        List<Pickle> pickles = new ArrayList<>(GherkinParser.FEATURE_FILE_AVERAGE_LINE_COUNT);
         if (!gherkinDocument.getFeature().isPresent()) {
             return pickles;
         }
