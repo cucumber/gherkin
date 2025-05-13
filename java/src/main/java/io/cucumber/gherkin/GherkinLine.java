@@ -71,7 +71,11 @@ class GherkinLine {
     }
 
     String substringTrimmed(int beginIndex) {
-        return text.substring(beginIndex).trim();
+        // trim the beginning of the line (the end of line has already been trimmed in the constructor)
+        while ((beginIndex < text.length()) && (text.charAt(beginIndex)<=' ')) {
+            beginIndex++;
+        }
+        return text.substring(beginIndex);
     }
 
     List<GherkinLineSpan> parseTags() {
@@ -143,7 +147,7 @@ class GherkinLine {
                         int column = indent + cellStart + trimmedCellIndent.getValue() + COLUMN_OFFSET;
                         lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getKey()));
                     }
-                    cellBuilder = new StringBuilder();
+                    cellBuilder.delete(0, cellBuilder.length());// reuse instance rather than creating a new one is faster
                     cellStart = col + 1;
                 } else {
                     cellBuilder.appendCodePoint(c);
@@ -155,10 +159,8 @@ class GherkinLine {
     }
 
     boolean startsWithTitleKeyword(String keyword) {
-        int keywordLength = keyword.length();
-        return text.length() > keywordLength &&
-                text.startsWith(keyword) &&
-                text.startsWith(TITLE_KEYWORD_SEPARATOR, keywordLength);
+        return text.startsWith(keyword) &&
+               text.startsWith(TITLE_KEYWORD_SEPARATOR, keyword.length());
     }
 
 }

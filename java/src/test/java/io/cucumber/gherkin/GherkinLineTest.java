@@ -219,6 +219,15 @@ class GherkinLineTest {
     }
 
     @Test
+    void startsWithTitleKeyword_short() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("Rule: X", line);
+
+        // When/Then
+        assertFalse(gherkinLine.startsWithTitleKeyword("Background"));
+    }
+
+    @Test
     void parseTags_returns_empty_list_when_empty_line() {
         // Given
         GherkinLine gherkinLine = new GherkinLine("", line);
@@ -226,4 +235,23 @@ class GherkinLineTest {
         // When/Then
         assertTrue(gherkinLine.parseTags().isEmpty());
     }
+
+    @Test
+    void substringTrimmed_empty_idempotence() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("", line);
+
+        // When/Then
+        assertEquals("", gherkinLine.substringTrimmed(0));
+    }
+
+    @Test
+    void substringTrimmed_spaces_after_index_are_removed() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("Rule:    my rule name", line);
+
+        // When/Then
+        assertEquals("my rule name", gherkinLine.substringTrimmed(5));
+    }
+
 }
