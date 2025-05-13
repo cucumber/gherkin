@@ -60,7 +60,7 @@ sub build {
             Cucumber::Messages::Comment->new(
                 location => $self->get_location($token),
                 text     => $token->matched_text
-            );
+            ) unless $self->{uri} =~ m/\.md$/;
     } else {
         $self->current_node->add( $token->matched_type, $token );
     }
