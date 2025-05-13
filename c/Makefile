@@ -47,24 +47,24 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 
 .built: generate $(SRC_FILES) src/Makefile
 	$(CC) --version
-	cd src; $(MAKE)
+	$(MAKE) --directory=src
 	touch $@
 
 clean:
 	rm -rf .compared .built .run acceptance
-	cd src; $(MAKE) $@
+	$(MAKE) --directory=src $@
 .PHONY: clean
 
 cli: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makefile
-	cd src; $(MAKE) CC=$(CC) $@
+	$(MAKE) --directory=src CC=$(CC) $@
 .PHONY: libs
 
 libs: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makefile
-	cd src; $(MAKE) CC=$(CC) $@
+	$(MAKE) --directory=src CC=$(CC) $@
 .PHONY: libs
 
 libs_so: ./include/rule_type.h src/parser.c src/dialect.c $(SRC_FILES) src/Makefile
-	cd src; $(MAKE) CC=$(CC) $@
+	$(MAKE) --directory=src CC=$(CC) $@
 .PHONY: libs_so
 
 .run: cli $(GHERKIN) $(GOOD_FEATURE_FILES)
