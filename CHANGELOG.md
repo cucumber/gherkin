@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [Perl] Support for Gherkin in Markdown format (MDG)
 
 ## [32.1.2] - 2025-05-25
 ### Fixed
