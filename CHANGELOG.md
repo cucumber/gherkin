@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [Perl] Support for Gherkin in Markdown format (MDG)
 
 ### Fixed
 - [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
