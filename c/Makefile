@@ -25,8 +25,11 @@ endif
 
 .DELETE_ON_ERROR:
 
-default: .compared
-.PHONY: default
+.DEFAULT_GOAL = help
+
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+.PHONY: help
 
 acceptance: .compared ## Build acceptance test dir and compare results with reference
 
@@ -34,6 +37,7 @@ acceptance: .compared ## Build acceptance test dir and compare results with refe
 	touch $@
 
 generate: ./include/rule_type.h src/parser.c ## Generate gherkin parser files
+.PHONY: generate
 
 clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
 	rm -f ./include/rule_type.h src/parser.c
@@ -41,9 +45,11 @@ clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin par
 
 copy-gherkin-languages: src/dialect.c ## Copy gherkin-languages.json and/or generate derived files
 	echo "Nothing to do"
+.PHONY: copy-gherkin-languages
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	rm -f src/dialect.c
+.PHONY: clean-gherkin-languages
 
 .built: generate $(SRC_FILES) src/Makefile
 	$(CC) --version
