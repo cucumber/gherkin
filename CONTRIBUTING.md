@@ -131,7 +131,7 @@ good), but writing a few during development might help you progress.
 You'll spend quite a bit of time fiddling with the `.razor` template to make it
 generate code that is syntactically correct.
 
-When you get to that stage, `make clean acceptance` will run the acceptance tests, which iterate
+When you get to that stage, `make mostlyclean acceptance` will run the acceptance tests, which iterate
 over all the `.feature` files under `../testdata`, passes them through your
 `bin/gherkin-generate-tokens` and `bin/gherkin-generate-ast` command-line programs,
 and compares the output using `diff`.
