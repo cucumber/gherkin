@@ -27,7 +27,7 @@ sub new {
 }
 
 # Simple builder sugar
-sub ast_node { Gherkin::AstNode->new( $_[0] ) }
+sub ast_node { return Gherkin::AstNode->new( $_[0] ); }
 
 sub reset {
     my $self  = shift;
@@ -35,6 +35,7 @@ sub reset {
     $self->{'stack'}    = [ ast_node('None') ];
     $self->{'comments'} = [];
     $self->{'uri'}      = $uri;
+    return;
 }
 
 sub current_node {
@@ -45,12 +46,14 @@ sub current_node {
 sub start_rule {
     my ( $self, $rule_type ) = @_;
     push( @{ $self->{'stack'} }, ast_node($rule_type) );
+    return;
 }
 
 sub end_rule {
     my ( $self, $rule_type ) = @_;
     my $node = pop( @{ $self->{'stack'} } );
     $self->current_node->add( $node->rule_type, $self->transform_node($node) );
+    return;
 }
 
 sub build {
@@ -64,6 +67,7 @@ sub build {
     } else {
         $self->current_node->add( $token->matched_type, $token );
     }
+    return;
 }
 
 sub get_result {
@@ -121,11 +125,11 @@ sub get_table_rows {
 
 sub ensure_cell_count {
     my ( $self, $rows ) = @_;
-    return unless @$rows;
+    return unless @{$rows};
 
     my $cell_count;
 
-    for my $row (@$rows) {
+    for my $row (@{$rows}) {
         my $this_row_count = @{ $row->cells };
         $cell_count = $this_row_count unless defined $cell_count;
         unless ( $cell_count == $this_row_count ) {
@@ -134,6 +138,7 @@ sub ensure_cell_count {
                 $row->location );
         }
     }
+    return;
 }
 
 sub get_cells {
@@ -160,6 +165,7 @@ sub next_id {
     return $self->{'id_generator'}->();
 }
 
+## no critic (ProhibitExcessComplexity, ProhibitCascadingIfElse)
 sub transform_node {
     my ( $self, $node ) = @_;
 
@@ -182,7 +188,7 @@ sub transform_node {
         my $media_type      = $separator_token->matched_text;
         my $delimiter       = $separator_token->matched_keyword;
         my $line_tokens     = $node->get_tokens('Other');
-        my $content = join( "\n", map { $_->matched_text } @$line_tokens );
+        my $content = join( "\n", map { $_->matched_text } @{$line_tokens} );
 
         return Cucumber::Messages::DocString->new(
             location    => $self->get_location($separator_token),
@@ -353,5 +359,6 @@ sub transform_node {
         return $node;
     }
 }
+## use critic
 
 1;

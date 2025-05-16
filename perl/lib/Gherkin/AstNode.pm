@@ -7,12 +7,13 @@ use Class::XSAccessor accessors => [ qw/rule_type/, ];
 
 sub new {
     my ( $class, $rule_type ) = @_;
-    bless { rule_type => $rule_type, _sub_items => {} }, $class;
+    return bless { rule_type => $rule_type, _sub_items => {} }, $class;
 }
 
 sub add {
     my ( $self, $rule_type, $obj ) = @_;
     push( @{ ( $self->{'_sub_items'}->{$rule_type} ||= [] ) }, $obj );
+    return;
 }
 
 sub get_single {

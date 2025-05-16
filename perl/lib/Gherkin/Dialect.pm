@@ -23,8 +23,10 @@ sub new {
             close $fh;
             $options->{'dictionary'} = Cpanel::JSON::XS::decode_json($input);
         } else {
+            ## no critic (ProhibitPackageVars)
             require Gherkin::Generated::Languages;
             $options->{'dictionary'} = $Gherkin::Generated::Languages::data;
+            ## use critic
         }
     }
 
@@ -41,18 +43,19 @@ sub change_dialect {
       unless $self->dictionary->{$name};
     $self->{'dialect'} = $name;
     $self->{'_current_dialect'} = $self->dictionary->{$name};
+    return;
 }
 
-sub Feature    { $_[0]->_current_dialect->{'feature'}; }
-sub Rule       { $_[0]->_current_dialect->{'rule'}; }
-sub Scenario   { $_[0]->_current_dialect->{'scenario'}; }
-sub Background { $_[0]->_current_dialect->{'background'}; }
-sub Examples   { $_[0]->_current_dialect->{'examples'}; }
-sub Given      { $_[0]->_current_dialect->{'given'}; }
-sub When       { $_[0]->_current_dialect->{'when'}; }
-sub Then       { $_[0]->_current_dialect->{'then'}; }
-sub And        { $_[0]->_current_dialect->{'and'}; }
-sub But        { $_[0]->_current_dialect->{'but'}; }
+sub Feature    { return $_[0]->_current_dialect->{'feature'}; }
+sub Rule       { return $_[0]->_current_dialect->{'rule'}; }
+sub Scenario   { return $_[0]->_current_dialect->{'scenario'}; }
+sub Background { return $_[0]->_current_dialect->{'background'}; }
+sub Examples   { return $_[0]->_current_dialect->{'examples'}; }
+sub Given      { return $_[0]->_current_dialect->{'given'}; }
+sub When       { return $_[0]->_current_dialect->{'when'}; }
+sub Then       { return $_[0]->_current_dialect->{'then'}; }
+sub And        { return $_[0]->_current_dialect->{'and'}; }
+sub But        { return $_[0]->_current_dialect->{'but'}; }
 
 
 sub stepKeywordTypes {
@@ -60,7 +63,7 @@ sub stepKeywordTypes {
 }
 
 sub ScenarioOutline {
-    $_[0]->_current_dialect->{'scenarioOutline'};
+    return $_[0]->_current_dialect->{'scenarioOutline'};
 }
 
 1;
