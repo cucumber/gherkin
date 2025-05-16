@@ -47,10 +47,13 @@ acceptance/testdata/%.feature.errors.ndjson: ../testdata/%.feature ../testdata/%
 	bin/gherkin $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
 
-clean:
+mostlyclean:
 	rm -rf .compared .built acceptance
 	rm -rf build/
 	rm -rf *~
+.PHONY: mostlyclean
+
+clean: mostlyclean
 .PHONY: clean
 
 clobber: clean

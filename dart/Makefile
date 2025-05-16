@@ -23,8 +23,11 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 	rm -f $(GHERKIN_LANGUAGES_JSON)
 .PHONY: clean-gherkin-languages
 
-clean:
+mostlyclean:
 	echo "Nothing to do"
+.PHONY: mostlyclean
+
+clean: mostlyclean
 .PHONY: clean
 
 acceptance:
