@@ -6,7 +6,8 @@ use warnings;
 
 use base 'Gherkin::ParserBase';
 
-our %states_to_match_names = (
+## no critic (ProhibitMagicNumbers)
+my %states_to_match_names = (
     0 => "match_token_at_0",
     1 => "match_token_at_1",
     2 => "match_token_at_2",
@@ -50,6 +51,7 @@ our %states_to_match_names = (
     41 => "match_token_at_41",
     42 => "match_token_at_42",
 );
+## use critic
 
 sub parse {
     my ( $self, $token_scanner, $uri ) = @_;
@@ -103,6 +105,7 @@ sub _construct_parser_error {
     return $error_class->new( $token, @args );
 }
 
+## no critic (ProhibitExcessComplexity, ProhibitMagicNumbers, ProhibitPostfixControls)
 
 # Start
 sub match_token_at_0 {
@@ -3879,6 +3882,7 @@ sub match_token_at_42 {
     return 42;
 }
 
+## use critic
 
 sub lookahead_0 {
     my ($self, $context, $current_token) = @_;

@@ -23,8 +23,10 @@ sub new {
             close $fh;
             $options->{'dictionary'} = Cpanel::JSON::XS::decode_json($input);
         } else {
+            ## no critic (ProhibitPackageVars)
             require Gherkin::Generated::Languages;
             $options->{'dictionary'} = $Gherkin::Generated::Languages::data;
+            ## use critic
         }
     }
 

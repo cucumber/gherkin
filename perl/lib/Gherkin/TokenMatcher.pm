@@ -27,7 +27,7 @@ sub new {
 sub _add_keyword_type_mappings {
     my ($keyword_types, $keywords, $type) = @_;
 
-    for my $keyword (@$keywords) {
+    for my $keyword (@{$keywords}) {
         if (not exists $keyword_types->{$keyword}) {
             $keyword_types->{$keyword} = [];
         }
@@ -122,7 +122,7 @@ sub _match_title_line {
     my ( $self, $token, $token_type, $keywords ) = @_;
     return unless $token->line;
 
-    for my $keyword (@$keywords) {
+    for my $keyword (@{$keywords}) {
         if ( $token->line->startswith_title_keyword($keyword) ) {
             my $title =
               $token->line->get_rest_trimmed( length( $keyword . ': ' ) );
