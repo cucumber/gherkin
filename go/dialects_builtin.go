@@ -25,10 +25,10 @@ const (
 
 var builtinDialects = gherkinDialectMap{
 	"af": &Dialect{
-		Language:     "af",
-		Name:         "Afrikaans",
-		Native:       "Afrikaans",
-		Keywords:     map[string][]string{
+		Language: "af",
+		Name:     "Afrikaans",
+		Native:   "Afrikaans",
+		Keywords: map[string][]string{
 			feature: {
 				"Funksie",
 				"Besigheid Behoefte",
@@ -86,10 +86,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"am": &Dialect{
-		Language:     "am",
-		Name:         "Armenian",
-		Native:       "հայերեն",
-		Keywords:     map[string][]string{
+		Language: "am",
+		Name:     "Armenian",
+		Native:   "հայերեն",
+		Keywords: map[string][]string{
 			feature: {
 				"Ֆունկցիոնալություն",
 				"Հատկություն",
@@ -149,10 +149,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"an": &Dialect{
-		Language:     "an",
-		Name:         "Aragonese",
-		Native:       "Aragonés",
-		Keywords:     map[string][]string{
+		Language: "an",
+		Name:     "Aragonese",
+		Native:   "Aragonés",
+		Keywords: map[string][]string{
 			feature: {
 				"Caracteristica",
 			},
@@ -226,10 +226,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ar": &Dialect{
-		Language:     "ar",
-		Name:         "Arabic",
-		Native:       "العربية",
-		Keywords:     map[string][]string{
+		Language: "ar",
+		Name:     "Arabic",
+		Native:   "العربية",
+		Keywords: map[string][]string{
 			feature: {
 				"خاصية",
 			},
@@ -291,10 +291,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ast": &Dialect{
-		Language:     "ast",
-		Name:         "Asturian",
-		Native:       "asturianu",
-		Keywords:     map[string][]string{
+		Language: "ast",
+		Name:     "Asturian",
+		Native:   "asturianu",
+		Keywords: map[string][]string{
 			feature: {
 				"Carauterística",
 			},
@@ -362,10 +362,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"az": &Dialect{
-		Language:     "az",
-		Name:         "Azerbaijani",
-		Native:       "Azərbaycanca",
-		Keywords:     map[string][]string{
+		Language: "az",
+		Name:     "Azerbaijani",
+		Native:   "Azərbaycanca",
+		Keywords: map[string][]string{
 			feature: {
 				"Özəllik",
 			},
@@ -434,10 +434,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"be": &Dialect{
-		Language:     "be",
-		Name:         "Belarusian",
-		Native:       "Беларуская",
-		Keywords:     map[string][]string{
+		Language: "be",
+		Name:     "Belarusian",
+		Native:   "Беларуская",
+		Keywords: map[string][]string{
 			feature: {
 				"Функцыянальнасць",
 				"Фіча",
@@ -507,10 +507,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"bg": &Dialect{
-		Language:     "bg",
-		Name:         "Bulgarian",
-		Native:       "български",
-		Keywords:     map[string][]string{
+		Language: "bg",
+		Name:     "Bulgarian",
+		Native:   "български",
+		Keywords: map[string][]string{
 			feature: {
 				"Функционалност",
 			},
@@ -566,10 +566,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"bm": &Dialect{
-		Language:     "bm",
-		Name:         "Malay",
-		Native:       "Bahasa Melayu",
-		Keywords:     map[string][]string{
+		Language: "bm",
+		Name:     "Malay",
+		Native:   "Bahasa Melayu",
+		Keywords: map[string][]string{
 			feature: {
 				"Fungsi",
 			},
@@ -638,10 +638,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"bs": &Dialect{
-		Language:     "bs",
-		Name:         "Bosnian",
-		Native:       "Bosanski",
-		Keywords:     map[string][]string{
+		Language: "bs",
+		Name:     "Bosnian",
+		Native:   "Bosanski",
+		Keywords: map[string][]string{
 			feature: {
 				"Karakteristika",
 			},
@@ -702,10 +702,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ca": &Dialect{
-		Language:     "ca",
-		Name:         "Catalan",
-		Native:       "català",
-		Keywords:     map[string][]string{
+		Language: "ca",
+		Name:     "Catalan",
+		Native:   "català",
+		Keywords: map[string][]string{
 			feature: {
 				"Característica",
 				"Funcionalitat",
@@ -775,10 +775,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"cs": &Dialect{
-		Language:     "cs",
-		Name:         "Czech",
-		Native:       "Česky",
-		Keywords:     map[string][]string{
+		Language: "cs",
+		Name:     "Czech",
+		Native:   "Česky",
+		Keywords: map[string][]string{
 			feature: {
 				"Požadavek",
 			},
@@ -842,10 +842,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"cy-GB": &Dialect{
-		Language:     "cy-GB",
-		Name:         "Welsh",
-		Native:       "Cymraeg",
-		Keywords:     map[string][]string{
+		Language: "cy-GB",
+		Name:     "Welsh",
+		Native:   "Cymraeg",
+		Keywords: map[string][]string{
 			feature: {
 				"Arwedd",
 			},
@@ -901,10 +901,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"da": &Dialect{
-		Language:     "da",
-		Name:         "Danish",
-		Native:       "dansk",
-		Keywords:     map[string][]string{
+		Language: "da",
+		Name:     "Danish",
+		Native:   "dansk",
+		Keywords: map[string][]string{
 			feature: {
 				"Egenskab",
 			},
@@ -960,10 +960,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"de": &Dialect{
-		Language:     "de",
-		Name:         "German",
-		Native:       "Deutsch",
-		Keywords:     map[string][]string{
+		Language: "de",
+		Name:     "German",
+		Native:   "Deutsch",
+		Keywords: map[string][]string{
 			feature: {
 				"Funktionalität",
 				"Funktion",
@@ -1031,10 +1031,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"el": &Dialect{
-		Language:     "el",
-		Name:         "Greek",
-		Native:       "Ελληνικά",
-		Keywords:     map[string][]string{
+		Language: "el",
+		Name:     "Greek",
+		Native:   "Ελληνικά",
+		Keywords: map[string][]string{
 			feature: {
 				"Δυνατότητα",
 				"Λειτουργία",
@@ -1093,10 +1093,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"em": &Dialect{
-		Language:     "em",
-		Name:         "Emoji",
-		Native:       "😀",
-		Keywords:     map[string][]string{
+		Language: "em",
+		Name:     "Emoji",
+		Native:   "😀",
+		Keywords: map[string][]string{
 			feature: {
 				"📚",
 			},
@@ -1152,10 +1152,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en": &Dialect{
-		Language:     "en",
-		Name:         "English",
-		Native:       "English",
-		Keywords:     map[string][]string{
+		Language: "en",
+		Name:     "English",
+		Native:   "English",
+		Keywords: map[string][]string{
 			feature: {
 				"Feature",
 				"Business Need",
@@ -1215,10 +1215,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en-Scouse": &Dialect{
-		Language:     "en-Scouse",
-		Name:         "Scouse",
-		Native:       "Scouse",
-		Keywords:     map[string][]string{
+		Language: "en-Scouse",
+		Name:     "Scouse",
+		Native:   "Scouse",
+		Keywords: map[string][]string{
 			feature: {
 				"Feature",
 			},
@@ -1282,10 +1282,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en-au": &Dialect{
-		Language:     "en-au",
-		Name:         "Australian",
-		Native:       "Australian",
-		Keywords:     map[string][]string{
+		Language: "en-au",
+		Name:     "Australian",
+		Native:   "Australian",
+		Keywords: map[string][]string{
 			feature: {
 				"Pretty much",
 			},
@@ -1340,10 +1340,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en-lol": &Dialect{
-		Language:     "en-lol",
-		Name:         "LOLCAT",
-		Native:       "LOLCAT",
-		Keywords:     map[string][]string{
+		Language: "en-lol",
+		Name:     "LOLCAT",
+		Native:   "LOLCAT",
+		Keywords: map[string][]string{
 			feature: {
 				"OH HAI",
 			},
@@ -1398,10 +1398,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en-old": &Dialect{
-		Language:     "en-old",
-		Name:         "Old English",
-		Native:       "Englisc",
-		Keywords:     map[string][]string{
+		Language: "en-old",
+		Name:     "Old English",
+		Native:   "Englisc",
+		Keywords: map[string][]string{
 			feature: {
 				"Hwaet",
 				"Hwæt",
@@ -1500,10 +1500,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en-pirate": &Dialect{
-		Language:     "en-pirate",
-		Name:         "Pirate",
-		Native:       "Pirate",
-		Keywords:     map[string][]string{
+		Language: "en-pirate",
+		Name:     "Pirate",
+		Native:   "Pirate",
+		Keywords: map[string][]string{
 			feature: {
 				"Ahoy matey!",
 			},
@@ -1558,10 +1558,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"en-tx": &Dialect{
-		Language:     "en-tx",
-		Name:         "Texas",
-		Native:       "Texas",
-		Keywords:     map[string][]string{
+		Language: "en-tx",
+		Name:     "Texas",
+		Native:   "Texas",
+		Keywords: map[string][]string{
 			feature: {
 				"This ain’t my first rodeo",
 				"All gussied up",
@@ -1616,10 +1616,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"eo": &Dialect{
-		Language:     "eo",
-		Name:         "Esperanto",
-		Native:       "Esperanto",
-		Keywords:     map[string][]string{
+		Language: "eo",
+		Name:     "Esperanto",
+		Native:   "Esperanto",
+		Keywords: map[string][]string{
 			feature: {
 				"Trajto",
 			},
@@ -1681,10 +1681,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"es": &Dialect{
-		Language:     "es",
-		Name:         "Spanish",
-		Native:       "español",
-		Keywords:     map[string][]string{
+		Language: "es",
+		Name:     "Spanish",
+		Native:   "español",
+		Keywords: map[string][]string{
 			feature: {
 				"Característica",
 				"Necesidad del negocio",
@@ -1755,10 +1755,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"et": &Dialect{
-		Language:     "et",
-		Name:         "Estonian",
-		Native:       "eesti keel",
-		Keywords:     map[string][]string{
+		Language: "et",
+		Name:     "Estonian",
+		Native:   "eesti keel",
+		Keywords: map[string][]string{
 			feature: {
 				"Omadus",
 			},
@@ -1815,10 +1815,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"fa": &Dialect{
-		Language:     "fa",
-		Name:         "Persian",
-		Native:       "فارسی",
-		Keywords:     map[string][]string{
+		Language: "fa",
+		Name:     "Persian",
+		Native:   "فارسی",
+		Keywords: map[string][]string{
 			feature: {
 				"وِیژگی",
 			},
@@ -1874,10 +1874,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"fi": &Dialect{
-		Language:     "fi",
-		Name:         "Finnish",
-		Native:       "suomi",
-		Keywords:     map[string][]string{
+		Language: "fi",
+		Name:     "Finnish",
+		Native:   "suomi",
+		Keywords: map[string][]string{
 			feature: {
 				"Ominaisuus",
 			},
@@ -1932,10 +1932,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"fr": &Dialect{
-		Language:     "fr",
-		Name:         "French",
-		Native:       "français",
-		Keywords:     map[string][]string{
+		Language: "fr",
+		Name:     "French",
+		Native:   "français",
+		Keywords: map[string][]string{
 			feature: {
 				"Fonctionnalité",
 			},
@@ -2058,10 +2058,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ga": &Dialect{
-		Language:     "ga",
-		Name:         "Irish",
-		Native:       "Gaeilge",
-		Keywords:     map[string][]string{
+		Language: "ga",
+		Name:     "Irish",
+		Native:   "Gaeilge",
+		Keywords: map[string][]string{
 			feature: {
 				"Gné",
 			},
@@ -2135,10 +2135,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"gj": &Dialect{
-		Language:     "gj",
-		Name:         "Gujarati",
-		Native:       "ગુજરાતી",
-		Keywords:     map[string][]string{
+		Language: "gj",
+		Name:     "Gujarati",
+		Native:   "ગુજરાતી",
+		Keywords: map[string][]string{
 			feature: {
 				"લક્ષણ",
 				"વ્યાપાર જરૂર",
@@ -2197,10 +2197,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"gl": &Dialect{
-		Language:     "gl",
-		Name:         "Galician",
-		Native:       "galego",
-		Keywords:     map[string][]string{
+		Language: "gl",
+		Name:     "Galician",
+		Native:   "galego",
+		Keywords: map[string][]string{
 			feature: {
 				"Característica",
 			},
@@ -2271,10 +2271,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"he": &Dialect{
-		Language:     "he",
-		Name:         "Hebrew",
-		Native:       "עברית",
-		Keywords:     map[string][]string{
+		Language: "he",
+		Name:     "Hebrew",
+		Native:   "עברית",
+		Keywords: map[string][]string{
 			feature: {
 				"תכונה",
 			},
@@ -2333,10 +2333,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"hi": &Dialect{
-		Language:     "hi",
-		Name:         "Hindi",
-		Native:       "हिंदी",
-		Keywords:     map[string][]string{
+		Language: "hi",
+		Name:     "Hindi",
+		Native:   "हिंदी",
+		Keywords: map[string][]string{
 			feature: {
 				"रूप लेख",
 			},
@@ -2412,10 +2412,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"hr": &Dialect{
-		Language:     "hr",
-		Name:         "Croatian",
-		Native:       "hrvatski",
-		Keywords:     map[string][]string{
+		Language: "hr",
+		Name:     "Croatian",
+		Native:   "hrvatski",
+		Keywords: map[string][]string{
 			feature: {
 				"Osobina",
 				"Mogućnost",
@@ -2487,10 +2487,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ht": &Dialect{
-		Language:     "ht",
-		Name:         "Creole",
-		Native:       "kreyòl",
-		Keywords:     map[string][]string{
+		Language: "ht",
+		Name:     "Creole",
+		Native:   "kreyòl",
+		Keywords: map[string][]string{
 			feature: {
 				"Karakteristik",
 				"Mak",
@@ -2571,10 +2571,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"hu": &Dialect{
-		Language:     "hu",
-		Name:         "Hungarian",
-		Native:       "magyar",
-		Keywords:     map[string][]string{
+		Language: "hu",
+		Name:     "Hungarian",
+		Native:   "magyar",
+		Keywords: map[string][]string{
 			feature: {
 				"Jellemző",
 			},
@@ -2639,10 +2639,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"id": &Dialect{
-		Language:     "id",
-		Name:         "Indonesian",
-		Native:       "Bahasa Indonesia",
-		Keywords:     map[string][]string{
+		Language: "id",
+		Name:     "Indonesian",
+		Native:   "Bahasa Indonesia",
+		Keywords: map[string][]string{
 			feature: {
 				"Fitur",
 			},
@@ -2719,10 +2719,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"is": &Dialect{
-		Language:     "is",
-		Name:         "Icelandic",
-		Native:       "Íslenska",
-		Keywords:     map[string][]string{
+		Language: "is",
+		Name:     "Icelandic",
+		Native:   "Íslenska",
+		Keywords: map[string][]string{
 			feature: {
 				"Eiginleiki",
 			},
@@ -2779,10 +2779,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"it": &Dialect{
-		Language:     "it",
-		Name:         "Italian",
-		Native:       "italiano",
-		Keywords:     map[string][]string{
+		Language: "it",
+		Name:     "Italian",
+		Native:   "italiano",
+		Keywords: map[string][]string{
 			feature: {
 				"Funzionalità",
 				"Esigenza di Business",
@@ -2852,10 +2852,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ja": &Dialect{
-		Language:     "ja",
-		Name:         "Japanese",
-		Native:       "日本語",
-		Keywords:     map[string][]string{
+		Language: "ja",
+		Name:     "Japanese",
+		Native:   "日本語",
+		Keywords: map[string][]string{
 			feature: {
 				"フィーチャ",
 				"機能",
@@ -2927,10 +2927,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"jv": &Dialect{
-		Language:     "jv",
-		Name:         "Javanese",
-		Native:       "Basa Jawa",
-		Keywords:     map[string][]string{
+		Language: "jv",
+		Name:     "Javanese",
+		Native:   "Basa Jawa",
+		Keywords: map[string][]string{
 			feature: {
 				"Fitur",
 			},
@@ -3001,10 +3001,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ka": &Dialect{
-		Language:     "ka",
-		Name:         "Georgian",
-		Native:       "ქართული",
-		Keywords:     map[string][]string{
+		Language: "ka",
+		Name:     "Georgian",
+		Native:   "ქართული",
+		Keywords: map[string][]string{
 			feature: {
 				"თვისება",
 				"მოთხოვნა",
@@ -3087,10 +3087,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"kn": &Dialect{
-		Language:     "kn",
-		Name:         "Kannada",
-		Native:       "ಕನ್ನಡ",
-		Keywords:     map[string][]string{
+		Language: "kn",
+		Name:     "Kannada",
+		Native:   "ಕನ್ನಡ",
+		Keywords: map[string][]string{
 			feature: {
 				"ಹೆಚ್ಚಳ",
 			},
@@ -3146,10 +3146,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ko": &Dialect{
-		Language:     "ko",
-		Name:         "Korean",
-		Native:       "한국어",
-		Keywords:     map[string][]string{
+		Language: "ko",
+		Name:     "Korean",
+		Native:   "한국어",
+		Keywords: map[string][]string{
 			feature: {
 				"기능",
 			},
@@ -3213,10 +3213,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"lt": &Dialect{
-		Language:     "lt",
-		Name:         "Lithuanian",
-		Native:       "lietuvių kalba",
-		Keywords:     map[string][]string{
+		Language: "lt",
+		Name:     "Lithuanian",
+		Native:   "lietuvių kalba",
+		Keywords: map[string][]string{
 			feature: {
 				"Savybė",
 			},
@@ -3274,10 +3274,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"lu": &Dialect{
-		Language:     "lu",
-		Name:         "Luxemburgish",
-		Native:       "Lëtzebuergesch",
-		Keywords:     map[string][]string{
+		Language: "lu",
+		Name:     "Luxemburgish",
+		Native:   "Lëtzebuergesch",
+		Keywords: map[string][]string{
 			feature: {
 				"Funktionalitéit",
 			},
@@ -3339,10 +3339,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"lv": &Dialect{
-		Language:     "lv",
-		Name:         "Latvian",
-		Native:       "latviešu",
-		Keywords:     map[string][]string{
+		Language: "lv",
+		Name:     "Latvian",
+		Native:   "latviešu",
+		Keywords: map[string][]string{
 			feature: {
 				"Funkcionalitāte",
 				"Fīča",
@@ -3401,10 +3401,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"mk-Cyrl": &Dialect{
-		Language:     "mk-Cyrl",
-		Name:         "Macedonian",
-		Native:       "Македонски",
-		Keywords:     map[string][]string{
+		Language: "mk-Cyrl",
+		Name:     "Macedonian",
+		Native:   "Македонски",
+		Keywords: map[string][]string{
 			feature: {
 				"Функционалност",
 				"Бизнис потреба",
@@ -3470,10 +3470,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"mk-Latn": &Dialect{
-		Language:     "mk-Latn",
-		Name:         "Macedonian (Latin)",
-		Native:       "Makedonski (Latinica)",
-		Keywords:     map[string][]string{
+		Language: "mk-Latn",
+		Name:     "Macedonian (Latin)",
+		Native:   "Makedonski (Latinica)",
+		Keywords: map[string][]string{
 			feature: {
 				"Funkcionalnost",
 				"Biznis potreba",
@@ -3538,10 +3538,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"mn": &Dialect{
-		Language:     "mn",
-		Name:         "Mongolian",
-		Native:       "монгол",
-		Keywords:     map[string][]string{
+		Language: "mn",
+		Name:     "Mongolian",
+		Native:   "монгол",
+		Keywords: map[string][]string{
 			feature: {
 				"Функц",
 				"Функционал",
@@ -3609,10 +3609,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ne": &Dialect{
-		Language:     "ne",
-		Name:         "Nepali",
-		Native:       "नेपाली",
-		Keywords:     map[string][]string{
+		Language: "ne",
+		Name:     "Nepali",
+		Native:   "नेपाली",
+		Keywords: map[string][]string{
 			feature: {
 				"सुविधा",
 				"विशेषता",
@@ -3681,10 +3681,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"nl": &Dialect{
-		Language:     "nl",
-		Name:         "Dutch",
-		Native:       "Nederlands",
-		Keywords:     map[string][]string{
+		Language: "nl",
+		Name:     "Dutch",
+		Native:   "Nederlands",
+		Keywords: map[string][]string{
 			feature: {
 				"Functionaliteit",
 			},
@@ -3746,10 +3746,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"no": &Dialect{
-		Language:     "no",
-		Name:         "Norwegian",
-		Native:       "norsk",
-		Keywords:     map[string][]string{
+		Language: "no",
+		Name:     "Norwegian",
+		Native:   "norsk",
+		Keywords: map[string][]string{
 			feature: {
 				"Egenskap",
 			},
@@ -3806,10 +3806,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"pa": &Dialect{
-		Language:     "pa",
-		Name:         "Panjabi",
-		Native:       "ਪੰਜਾਬੀ",
-		Keywords:     map[string][]string{
+		Language: "pa",
+		Name:     "Panjabi",
+		Native:   "ਪੰਜਾਬੀ",
+		Keywords: map[string][]string{
 			feature: {
 				"ਖਾਸੀਅਤ",
 				"ਮੁਹਾਂਦਰਾ",
@@ -3871,10 +3871,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"pl": &Dialect{
-		Language:     "pl",
-		Name:         "Polish",
-		Native:       "polski",
-		Keywords:     map[string][]string{
+		Language: "pl",
+		Name:     "Polish",
+		Native:   "polski",
+		Keywords: map[string][]string{
 			feature: {
 				"Właściwość",
 				"Funkcja",
@@ -3952,10 +3952,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"pt": &Dialect{
-		Language:     "pt",
-		Name:         "Portuguese",
-		Native:       "português",
-		Keywords:     map[string][]string{
+		Language: "pt",
+		Name:     "Portuguese",
+		Native:   "português",
+		Keywords: map[string][]string{
 			feature: {
 				"Funcionalidade",
 				"Característica",
@@ -4034,10 +4034,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ro": &Dialect{
-		Language:     "ro",
-		Name:         "Romanian",
-		Native:       "română",
-		Keywords:     map[string][]string{
+		Language: "ro",
+		Name:     "Romanian",
+		Native:   "română",
+		Keywords: map[string][]string{
 			feature: {
 				"Functionalitate",
 				"Funcționalitate",
@@ -4120,10 +4120,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ru": &Dialect{
-		Language:     "ru",
-		Name:         "Russian",
-		Native:       "русский",
-		Keywords:     map[string][]string{
+		Language: "ru",
+		Name:     "Russian",
+		Native:   "русский",
+		Keywords: map[string][]string{
 			feature: {
 				"Функция",
 				"Функциональность",
@@ -4212,10 +4212,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"sk": &Dialect{
-		Language:     "sk",
-		Name:         "Slovak",
-		Native:       "Slovensky",
-		Keywords:     map[string][]string{
+		Language: "sk",
+		Name:     "Slovak",
+		Native:   "Slovensky",
+		Keywords: map[string][]string{
 			feature: {
 				"Požiadavka",
 				"Funkcia",
@@ -4293,10 +4293,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"sl": &Dialect{
-		Language:     "sl",
-		Name:         "Slovenian",
-		Native:       "Slovenski",
-		Keywords:     map[string][]string{
+		Language: "sl",
+		Name:     "Slovenian",
+		Native:   "Slovenski",
+		Keywords: map[string][]string{
 			feature: {
 				"Funkcionalnost",
 				"Funkcija",
@@ -4392,10 +4392,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"sr-Cyrl": &Dialect{
-		Language:     "sr-Cyrl",
-		Name:         "Serbian",
-		Native:       "Српски",
-		Keywords:     map[string][]string{
+		Language: "sr-Cyrl",
+		Name:     "Serbian",
+		Native:   "Српски",
+		Keywords: map[string][]string{
 			feature: {
 				"Функционалност",
 				"Могућност",
@@ -4467,10 +4467,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"sr-Latn": &Dialect{
-		Language:     "sr-Latn",
-		Name:         "Serbian (Latin)",
-		Native:       "Srpski (Latinica)",
-		Keywords:     map[string][]string{
+		Language: "sr-Latn",
+		Name:     "Serbian (Latin)",
+		Native:   "Srpski (Latinica)",
+		Keywords: map[string][]string{
 			feature: {
 				"Funkcionalnost",
 				"Mogućnost",
@@ -4543,10 +4543,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"sv": &Dialect{
-		Language:     "sv",
-		Name:         "Swedish",
-		Native:       "Svenska",
-		Keywords:     map[string][]string{
+		Language: "sv",
+		Name:     "Swedish",
+		Native:   "Svenska",
+		Keywords: map[string][]string{
 			feature: {
 				"Egenskap",
 			},
@@ -4602,10 +4602,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ta": &Dialect{
-		Language:     "ta",
-		Name:         "Tamil",
-		Native:       "தமிழ்",
-		Keywords:     map[string][]string{
+		Language: "ta",
+		Name:     "Tamil",
+		Native:   "தமிழ்",
+		Keywords: map[string][]string{
 			feature: {
 				"அம்சம்",
 				"வணிக தேவை",
@@ -4669,10 +4669,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"th": &Dialect{
-		Language:     "th",
-		Name:         "Thai",
-		Native:       "ไทย",
-		Keywords:     map[string][]string{
+		Language: "th",
+		Name:     "Thai",
+		Native:   "ไทย",
+		Keywords: map[string][]string{
 			feature: {
 				"โครงหลัก",
 				"ความต้องการทางธุรกิจ",
@@ -4731,10 +4731,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"te": &Dialect{
-		Language:     "te",
-		Name:         "Telugu",
-		Native:       "తెలుగు",
-		Keywords:     map[string][]string{
+		Language: "te",
+		Name:     "Telugu",
+		Native:   "తెలుగు",
+		Keywords: map[string][]string{
 			feature: {
 				"గుణము",
 			},
@@ -4790,10 +4790,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"tlh": &Dialect{
-		Language:     "tlh",
-		Name:         "Klingon",
-		Native:       "tlhIngan",
-		Keywords:     map[string][]string{
+		Language: "tlh",
+		Name:     "Klingon",
+		Native:   "tlhIngan",
+		Keywords: map[string][]string{
 			feature: {
 				"Qap",
 				"Qu'meH 'ut",
@@ -4862,10 +4862,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"tr": &Dialect{
-		Language:     "tr",
-		Name:         "Turkish",
-		Native:       "Türkçe",
-		Keywords:     map[string][]string{
+		Language: "tr",
+		Name:     "Turkish",
+		Native:   "Türkçe",
+		Keywords: map[string][]string{
 			feature: {
 				"Özellik",
 			},
@@ -4924,10 +4924,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"tt": &Dialect{
-		Language:     "tt",
-		Name:         "Tatar",
-		Native:       "Татарча",
-		Keywords:     map[string][]string{
+		Language: "tt",
+		Name:     "Tatar",
+		Native:   "Татарча",
+		Keywords: map[string][]string{
 			feature: {
 				"Мөмкинлек",
 				"Үзенчәлеклелек",
@@ -4990,10 +4990,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"uk": &Dialect{
-		Language:     "uk",
-		Name:         "Ukrainian",
-		Native:       "Українська",
-		Keywords:     map[string][]string{
+		Language: "uk",
+		Name:     "Ukrainian",
+		Native:   "Українська",
+		Keywords: map[string][]string{
 			feature: {
 				"Функціонал",
 			},
@@ -5070,10 +5070,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ur": &Dialect{
-		Language:     "ur",
-		Name:         "Urdu",
-		Native:       "اردو",
-		Keywords:     map[string][]string{
+		Language: "ur",
+		Name:     "Urdu",
+		Native:   "اردو",
+		Keywords: map[string][]string{
 			feature: {
 				"صلاحیت",
 				"کاروبار کی ضرورت",
@@ -5139,10 +5139,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"uz": &Dialect{
-		Language:     "uz",
-		Name:         "Uzbek",
-		Native:       "Узбекча",
-		Keywords:     map[string][]string{
+		Language: "uz",
+		Name:     "Uzbek",
+		Native:   "Узбекча",
+		Keywords: map[string][]string{
 			feature: {
 				"Функционал",
 			},
@@ -5203,10 +5203,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"vi": &Dialect{
-		Language:     "vi",
-		Name:         "Vietnamese",
-		Native:       "Tiếng Việt",
-		Keywords:     map[string][]string{
+		Language: "vi",
+		Name:     "Vietnamese",
+		Native:   "Tiếng Việt",
+		Keywords: map[string][]string{
 			feature: {
 				"Tính năng",
 			},
@@ -5266,10 +5266,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"zh-CN": &Dialect{
-		Language:     "zh-CN",
-		Name:         "Chinese simplified",
-		Native:       "简体中文",
-		Keywords:     map[string][]string{
+		Language: "zh-CN",
+		Name:     "Chinese simplified",
+		Native:   "简体中文",
+		Keywords: map[string][]string{
 			feature: {
 				"功能",
 			},
@@ -5339,10 +5339,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"ml": &Dialect{
-		Language:     "ml",
-		Name:         "Malayalam",
-		Native:       "മലയാളം",
-		Keywords:     map[string][]string{
+		Language: "ml",
+		Name:     "Malayalam",
+		Native:   "മലയാളം",
+		Keywords: map[string][]string{
 			feature: {
 				"സവിശേഷത",
 			},
@@ -5396,10 +5396,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"zh-TW": &Dialect{
-		Language:     "zh-TW",
-		Name:         "Chinese traditional",
-		Native:       "繁體中文",
-		Keywords:     map[string][]string{
+		Language: "zh-TW",
+		Name:     "Chinese traditional",
+		Native:   "繁體中文",
+		Keywords: map[string][]string{
 			feature: {
 				"功能",
 			},
@@ -5468,10 +5468,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"mr": &Dialect{
-		Language:     "mr",
-		Name:         "Marathi",
-		Native:       "मराठी",
-		Keywords:     map[string][]string{
+		Language: "mr",
+		Name:     "Marathi",
+		Native:   "मराठी",
+		Keywords: map[string][]string{
 			feature: {
 				"वैशिष्ट्य",
 				"सुविधा",
@@ -5539,10 +5539,10 @@ var builtinDialects = gherkinDialectMap{
 		},
 	},
 	"amh": &Dialect{
-		Language:     "amh",
-		Name:         "Amharic",
-		Native:       "አማርኛ",
-		Keywords:     map[string][]string{
+		Language: "amh",
+		Name:     "Amharic",
+		Native:   "አማርኛ",
+		Keywords: map[string][]string{
 			feature: {
 				"ስራ",
 				"የተፈለገው ስራ",
