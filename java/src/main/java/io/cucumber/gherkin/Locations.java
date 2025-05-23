@@ -2,8 +2,6 @@ package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
 
-import static java.util.Objects.requireNonNull;
-
 class Locations {
 
     /**
