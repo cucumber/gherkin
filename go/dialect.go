@@ -2,10 +2,23 @@ package gherkin
 
 import (
 	"sort"
-	"sync"
 
 	messages "github.com/cucumber/messages/go/v24"
 )
+
+func init() {
+	// only needs to be calcuated one, on startup
+	for _, d := range builtinDialects {
+		d.stepKeywords = d.Keywords[given]
+		d.stepKeywords = append(d.stepKeywords, d.Keywords[when]...)
+		d.stepKeywords = append(d.stepKeywords, d.Keywords[then]...)
+		d.stepKeywords = append(d.stepKeywords, d.Keywords[and]...)
+		d.stepKeywords = append(d.stepKeywords, d.Keywords[but]...)
+		sort.Slice(d.stepKeywords, func(i, j int) bool {
+			return d.stepKeywords[i] > d.stepKeywords[j]
+		})
+	}
+}
 
 type Dialect struct {
 	Language     string
@@ -14,8 +27,7 @@ type Dialect struct {
 	Keywords     map[string][]string
 	KeywordTypes map[string]messages.StepKeywordType
 
-	stepKeywordBuilder sync.Once
-	stepKeywordsCache  []string
+	stepKeywords []string
 }
 
 func (g *Dialect) FeatureKeywords() []string {
@@ -31,21 +43,7 @@ func (g *Dialect) ScenarioKeywords() []string {
 }
 
 func (g *Dialect) StepKeywords() []string {
-	// This only needs to be calculated the once, not every time
-	g.stepKeywordBuilder.Do(func() {
-		result := g.Keywords["given"]
-		result = append(result, g.Keywords["when"]...)
-		result = append(result, g.Keywords["then"]...)
-		result = append(result, g.Keywords["and"]...)
-		result = append(result, g.Keywords["but"]...)
-
-		sort.Slice(result, func(i, j int) bool {
-			return result[i] > result[j]
-		})
-		g.stepKeywordsCache = result
-	})
-
-	return g.stepKeywordsCache
+	return g.stepKeywords
 }
 
 func (g *Dialect) BackgroundKeywords() []string {
