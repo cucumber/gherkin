@@ -12,6 +12,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
 - [Java] Prefer the longest step keyword ([#401](https://github.com/cucumber/gherkin/pull/401))
 - [PHP] Prefer the longest step keyword ([#403](https://github.com/cucumber/gherkin/pull/403))
+- [Go] Prefer the longest step keyword ([#403](https://github.com/cucumber/gherkin/pull/404))
 
 ## [32.1.1] - 2025-04-11
 ### Fixed
