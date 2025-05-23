@@ -2,8 +2,6 @@ package io.cucumber.gherkin;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Map.Entry;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class StringUtilsTest {
@@ -28,31 +26,31 @@ class StringUtilsTest {
     @Test
     void trimAndIndent() {
         // When
-        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
+        StringUtils.TrimmedText trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
 
         // Then
-        assertEquals(CUCUMBER, trimmedIndent.getKey());
-        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getValue());
+        assertEquals(CUCUMBER, trimmedIndent.getText());
+        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getIndent());
     }
 
     @Test
     void trimAndIndent_multiline() {
         // When
-        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
+        StringUtils.TrimmedText trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
 
         // Then
-        assertEquals(CUCUMBER, trimmedIndent.getKey());
-        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getValue());
+        assertEquals(CUCUMBER, trimmedIndent.getText());
+        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getIndent());
     }
 
     @Test
     void trimAndIndent_empty() {
         // When
-        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("");
+        StringUtils.TrimmedText trimmedIndent = StringUtils.trimAndIndent("");
 
         // Then
-        assertEquals("", trimmedIndent.getKey());
-        assertEquals(0, trimmedIndent.getValue());
+        assertEquals("", trimmedIndent.getText());
+        assertEquals(0, trimmedIndent.getIndent());
     }
 
     @Test
