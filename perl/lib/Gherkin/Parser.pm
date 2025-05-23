@@ -75,6 +75,8 @@ The C<$uri> parameter is expected to be passed in all but the third case.
 
 =item * L<Gherkin::Dialect>
 
+=item * L<Gherkin::MarkdownTokenMatcher>
+
 =item * L<Gherkin::TokenMatcher>
 
 =item * L<Gherkin::TokenScanner>

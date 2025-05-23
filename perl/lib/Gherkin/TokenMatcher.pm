@@ -344,6 +344,8 @@ scanner with a C<reset> call in-between.
 
 =item * L<Gherkin::Dialect>
 
+=item * L<Gherkin::MarkdownTokenMatcher>
+
 =item * L<Gherkin::Parser>
 
 =back
