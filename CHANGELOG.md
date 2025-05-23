@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Fixed
 - [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
+- [Java] Prefer the longest step keyword ([#401](https://github.com/cucumber/gherkin/pull/401))
 
 ## [32.1.1] - 2025-04-11
 ### Fixed
