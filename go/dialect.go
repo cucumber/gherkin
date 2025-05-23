@@ -9,7 +9,8 @@ import (
 func init() {
 	// only needs to be calcuated one, on startup
 	for _, d := range builtinDialects {
-		d.stepKeywords = d.Keywords[given]
+		d.stepKeywords = []string{}
+		d.stepKeywords = append(d.stepKeywords, d.Keywords[given]...)
 		d.stepKeywords = append(d.stepKeywords, d.Keywords[when]...)
 		d.stepKeywords = append(d.stepKeywords, d.Keywords[then]...)
 		d.stepKeywords = append(d.stepKeywords, d.Keywords[and]...)
