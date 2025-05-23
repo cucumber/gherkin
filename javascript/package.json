@@ -31,7 +31,7 @@
   "devDependencies": {
     "@types/mocha": "10.0.10",
     "@types/node": "22.15.21",
-    "commander": "^13.0.0",
+    "commander": "^14.0.0",
     "core-js": "3.42.0",
     "mocha": "11.4.0",
     "ts-node": "10.9.2",
