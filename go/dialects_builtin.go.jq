@@ -3,7 +3,10 @@
   [ to_entries[]
     | [
         "\t",(.key|@json),": &Dialect{\n",
-        "\t\t", (.key|@json),", ", (.value.name|@json),", ", (.value.native|@json), ", map[string][]string{\n"
+        "\t\tLanguage: ", (.key|@json), ",\n",
+        "\t\tName:     ", (.value.name|@json),",\n",
+        "\t\tNative:   ",(.value.native|@json),",\n",
+        "\t\tKeywords: map[string][]string{\n"
       ] + (
           [ .value
             | {"feature","rule","background","scenario","scenarioOutline","examples","given","when","then","and","but"}
@@ -14,7 +17,7 @@
           ]
       ) + [
         "\t\t},\n",
-        "\t\tmap[string]messages.StepKeywordType{\n"
+        "\t\tKeywordTypes: map[string]messages.StepKeywordType{\n"
       ] + (
         [ .value.given
           | (
@@ -79,8 +82,8 @@
           "\t\t\t\"* \": messages.StepKeywordType_UNKNOWN,\n"
         ]
       ) + [
-        "\t\t}",
-        "},\n"
+        "\t\t},\n",
+        "\t},\n"
       ]
     | add
   ]
