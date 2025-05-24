@@ -8,12 +8,11 @@ namespace Gherkin.Specs;
 public class AstBuildingTests : EventTestBase
 {
     [Theory, MemberData(nameof(TestFileProvider.GetValidTestFiles), MemberType = typeof(TestFileProvider))]
-    public void TestSuccessfulAstBuilding(string testFeatureFile)
+    public async Task TestSuccessfulAstBuilding(string testFeatureFile)
     {
         var testFile = GetFullPathToTestFeatureFile(testFeatureFile, "good", ".ast.ndjson");
-        var expectedAstContent = GetExpectedContent(testFile.ExpectedFileFullPath);
 
-        var expectedGherkinDocumentEvent = NDJsonParser.Deserialize<Envelope>(expectedAstContent);
+        var expectedGherkinDocumentEvent = await NDJsonParser.DeserializeAsync<Envelope>(testFile.ExpectedFileFullPath);
 
         var raisedEvents = ProcessGherkinEvents(testFile.FullPath, false, true, false);
 
@@ -22,12 +21,11 @@ public class AstBuildingTests : EventTestBase
     }
 
     [Theory, MemberData(nameof(TestFileProvider.GetInvalidTestFiles), MemberType = typeof(TestFileProvider))]
-    public void TestFailedAstBuilding(string testFeatureFile)
+    public async Task TestFailedAstBuilding(string testFeatureFile)
     {
         var testFile = GetFullPathToTestFeatureFile(testFeatureFile, "bad", ".errors.ndjson");
-        var expectedAstContent = GetExpectedContent(testFile.ExpectedFileFullPath);
 
-        var expectedGherkinDocumentEvent = NDJsonParser.Deserialize<Envelope>(expectedAstContent);
+        var expectedGherkinDocumentEvent = await NDJsonParser.DeserializeAsync<Envelope>(testFile.ExpectedFileFullPath);
 
         var raisedEvents = ProcessGherkinEvents(testFile.FullPath, false, true, false);
 

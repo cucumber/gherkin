@@ -7,7 +7,7 @@ public class TokensGenerator
         var tokenFormatterBuilder = new TokenFormatterBuilder();
         var parser = new Parser<object>(tokenFormatterBuilder);
 
-        using (var stream = new FileStream(featureFilePath, FileMode.Open))
+        using (var stream = File.OpenRead(featureFilePath))
         {
             using (var reader = new StreamReader(stream))
             {

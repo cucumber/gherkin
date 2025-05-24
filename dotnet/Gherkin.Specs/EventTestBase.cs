@@ -71,9 +71,4 @@ public class EventTestBase
 
         return raisedEvents;
     }
-
-    protected string GetExpectedContent(string expectedAstFile)
-    {
-        return File.ReadAllText(expectedAstFile, Encoding.UTF8);
-    }
 }
