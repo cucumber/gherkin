@@ -35,6 +35,7 @@ public class GherkinDialect(
         .Concat(andStepKeywords)
         .Concat(butStepKeywords)
         .Distinct()
+        .OrderByDescending(x => x.Length) // To avoid conflicts when some keywords are prefixes of others, try the longest keywords first.
         .ToArray();
 
     public IDictionary<string, StepKeywordType> StepKeywordTypes { get; } = new[] { new { Keyword = AsteriskKeyword, Type = StepKeywordType.Unknown } }
