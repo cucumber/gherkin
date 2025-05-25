@@ -170,6 +170,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
       .concat(this.dialect.then)
       .concat(this.dialect.and)
       .concat(this.dialect.but)
+      .sort((a, b) => b.length - a.length) // longest first
     for (const keyword of keywords) {
       if (token.line.startsWith(keyword)) {
         const title = token.line.getRestTrimmed(keyword.length)
