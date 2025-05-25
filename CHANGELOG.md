@@ -16,6 +16,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Go] Prefer the longest step keyword ([#403](https://github.com/cucumber/gherkin/pull/404))
 - [JavaScript] Prefer the longest step keyword ([#407](https://github.com/cucumber/gherkin/pull/407))
 - [Perl] Prefer the longest step keyword ([#408](https://github.com/cucumber/gherkin/pull/408))
+- [Ruby] Prefer the longest step keyword ([#409](https://github.com/cucumber/gherkin/pull/409))
+- [Python] Prefer the longest step keyword ([#410](https://github.com/cucumber/gherkin/pull/410))
 
 ## [32.1.1] - 2025-04-11
 ### Fixed
