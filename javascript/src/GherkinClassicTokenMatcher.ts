@@ -6,6 +6,7 @@ import * as messages from '@cucumber/messages'
 import { TokenType } from './Parser'
 import ITokenMatcher from './ITokenMatcher'
 import countSymbols from './countSymbols'
+import { compareStepKeywords } from './compareStepKeywords'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const LANGUAGE_PATTERN = /^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/
@@ -170,7 +171,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
       .concat(this.dialect.then)
       .concat(this.dialect.and)
       .concat(this.dialect.but)
-      .sort((a, b) => b.length - a.length) // longest first
+      .sort(compareStepKeywords)
     for (const keyword of keywords) {
       if (token.line.startsWith(keyword)) {
         const title = token.line.getRestTrimmed(keyword.length)
