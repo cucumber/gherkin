@@ -1,7 +1,1 @@
-{
-  "source": {
-    "data": "# language: ht\nKarakteristik: Keywords can be a prefix of another\n  Some times keywords are a prefix of another keyword.\n  In this scenario the parser should prefer the longest keyword.\n\n  Senaryo: Erasing agent memory\n    Sipoze ke there is agent J\n    Ak there is agent K\n    Le I erase agent K's memory\n    Le sa a there should be agent J\n    Men there should not be agent K\n",
-    "mediaType": "text/x.cucumber.gherkin+plain",
-    "uri": "../testdata/good/prefixed-keywords.feature"
-  }
-}
+{"source": {"data": "# language: ht\nKarakteristik: Keywords can be a prefix of another\n  Some times keywords are a prefix of another keyword.\n  In this scenario the parser should prefer the longest keyword.\n\n  Senaryo: Erasing agent memory\n    Sipoze ke there is agent J\n    Ak there is agent K\n    Le I erase agent K's memory\n    Le sa a there should be agent J\n    Men there should not be agent K\n", "mediaType": "text/x.cucumber.gherkin+plain", "uri": "../testdata/good/prefixed-keywords.feature"}}
