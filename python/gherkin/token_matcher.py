@@ -72,13 +72,7 @@ class TokenMatcher:
         return True
 
     def match_StepLine(self, token: Token) -> bool:
-        keywords = (
-            self.dialect.given_keywords
-            + self.dialect.when_keywords
-            + self.dialect.then_keywords
-            + self.dialect.and_keywords
-            + self.dialect.but_keywords
-        )
+        keywords = self._sorted_step_keywords
         for keyword in (k for k in keywords if token.line.startswith(k)):
             title = token.line.get_rest_trimmed(len(keyword))
             keyword_types = self.keyword_types[keyword]
@@ -228,6 +222,15 @@ class TokenMatcher:
             self.keyword_types[keyword].append("Outcome")
         for keyword in self.dialect.and_keywords + self.dialect.but_keywords:
             self.keyword_types[keyword].append("Conjunction")
+
+        self._sorted_step_keywords = sorted(
+            (self.dialect.given_keywords
+             + self.dialect.when_keywords
+             + self.dialect.then_keywords
+             + self.dialect.and_keywords
+             + self.dialect.but_keywords),
+            key=len,
+            reverse=True)
 
     def _unescaped_docstring(self, text: str) -> str:
         if self._active_doc_string_separator == '"""':
