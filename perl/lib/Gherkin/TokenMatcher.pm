@@ -213,7 +213,11 @@ sub _unescaped_docstring {
 
 sub match_StepLine {
     my ( $self, $token ) = @_;
-    my @keywords = map { @{ $self->dialect->$_ } } qw/Given When Then And But/;
+    my @keywords = sort {
+        length $b <=> length $a  # longest keyword first (See #400)
+    } map {
+        @{ $self->dialect->$_ }
+    } qw/Given When Then And But/;
     my $line = $token->line;
 
     for my $keyword (@keywords) {
