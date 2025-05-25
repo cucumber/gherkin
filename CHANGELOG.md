@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [32.1.2] - 2025-05-25
 ### Fixed
 - [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
 - [Java] Prefer the longest step keyword ([#401](https://github.com/cucumber/gherkin/pull/401))
@@ -774,7 +775,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.1.1...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.1.2...HEAD
+[32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
 [32.1.1]: https://github.com/cucumber/gherkin/compare/v32.1.0...v32.1.1
 [32.1.0]: https://github.com/cucumber/gherkin/compare/v32.0.1...v32.1.0
 [32.0.1]: https://github.com/cucumber/gherkin/compare/v32.0.0...v32.0.1
