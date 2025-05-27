@@ -1,122 +1,147 @@
+from __future__ import annotations
+
 import re
+import textwrap
+
 from collections import defaultdict
+from collections.abc import Iterable
+from typing import TypedDict
+
 from .dialect import Dialect
 from .errors import NoSuchLanguageException
+from .parser_types import Location
+from .token import Token
 
-# Source: https://stackoverflow.com/a/8348914
-try:
-    import textwrap
-    textwrap.indent
-except AttributeError:  # undefined function (wasn't added until Python 3.3)
-    def indent(text, amount, ch=' '):
-        padding = amount * ch
-        return ''.join(padding+line for line in text.splitlines(True))
-else:
-    def indent(text, amount, ch=' '):
-        return textwrap.indent(text, amount * ch)
 
-class TokenMatcher(object):
+def indent(text: str, amount: int, ch: str = " ") -> str:
+    return textwrap.indent(text, amount * ch)
+
+
+class MatchedItems(TypedDict):
+    column: int
+    text: str
+
+
+class TokenMatcher:
     LANGUAGE_RE = re.compile(r"^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$")
 
-    def __init__(self, dialect_name='en'):
+    _indent_to_remove: int
+    _active_doc_string_separator: str | None
+
+    def __init__(self, dialect_name: str = "en") -> None:
         self._default_dialect_name = dialect_name
         self._change_dialect(dialect_name)
         self.reset()
 
-    def reset(self):
+    def reset(self) -> None:
         if self.dialect_name != self._default_dialect_name:
             self._change_dialect(self._default_dialect_name)
         self._indent_to_remove = 0
         self._active_doc_string_separator = None
 
-    def match_FeatureLine(self, token):
-        return self._match_title_line(token, 'FeatureLine', self.dialect.feature_keywords)
+    def match_FeatureLine(self, token: Token) -> bool:
+        return self._match_title_line(
+            token, "FeatureLine", self.dialect.feature_keywords
+        )
 
-    def match_RuleLine(self, token):
-        return self._match_title_line(token, 'RuleLine', self.dialect.rule_keywords)
+    def match_RuleLine(self, token: Token) -> bool:
+        return self._match_title_line(token, "RuleLine", self.dialect.rule_keywords)
 
-    def match_ScenarioLine(self, token):
-        return (self._match_title_line(token, 'ScenarioLine', self.dialect.scenario_keywords) or
-                self._match_title_line(token, 'ScenarioLine',
-                                       self.dialect.scenario_outline_keywords))
+    def match_ScenarioLine(self, token: Token) -> bool:
+        return self._match_title_line(
+            token, "ScenarioLine", self.dialect.scenario_keywords
+        ) or self._match_title_line(
+            token, "ScenarioLine", self.dialect.scenario_outline_keywords
+        )
 
-    def match_BackgroundLine(self, token):
-        return self._match_title_line(token, 'BackgroundLine', self.dialect.background_keywords)
+    def match_BackgroundLine(self, token: Token) -> bool:
+        return self._match_title_line(
+            token, "BackgroundLine", self.dialect.background_keywords
+        )
 
-    def match_ExamplesLine(self, token):
-        return self._match_title_line(token, 'ExamplesLine', self.dialect.examples_keywords)
+    def match_ExamplesLine(self, token: Token) -> bool:
+        return self._match_title_line(
+            token, "ExamplesLine", self.dialect.examples_keywords
+        )
 
-    def match_TableRow(self, token):
-        if not token.line.startswith('|'):
+    def match_TableRow(self, token: Token) -> bool:
+        if not token.line.startswith("|"):
             return False
         # TODO: indent
-        self._set_token_matched(token, 'TableRow', items=token.line.table_cells)
+        self._set_token_matched(token, "TableRow", items=token.line.table_cells)
         return True
 
-    def match_StepLine(self, token):
-        keywords = (self.dialect.given_keywords +
-                    self.dialect.when_keywords +
-                    self.dialect.then_keywords +
-                    self.dialect.and_keywords +
-                    self.dialect.but_keywords)
+    def match_StepLine(self, token: Token) -> bool:
+        keywords = self._sorted_step_keywords
         for keyword in (k for k in keywords if token.line.startswith(k)):
             title = token.line.get_rest_trimmed(len(keyword))
             keyword_types = self.keyword_types[keyword]
             if len(keyword_types) == 1:
                 keyword_type = keyword_types[0]
             else:
-                keyword_type = 'Unknown'
-            self._set_token_matched(token, 'StepLine', title, keyword, keyword_type=keyword_type)
+                keyword_type = "Unknown"
+            self._set_token_matched(
+                token, "StepLine", title, keyword, keyword_type=keyword_type
+            )
             return True
 
         return False
 
-    def match_Comment(self, token):
-        if not token.line.startswith('#'):
+    def match_Comment(self, token: Token) -> bool:
+        if not token.line.startswith("#"):
             return False
 
         text = token.line._line_text  # take the entire line, including leading space
-        self._set_token_matched(token, 'Comment', text, indent=0)
+        self._set_token_matched(token, "Comment", text, indent=0)
         return True
 
-    def match_Empty(self, token):
+    def match_Empty(self, token: Token) -> bool:
         if not token.line.is_empty():
             return False
 
-        self._set_token_matched(token, 'Empty', indent=0)
+        self._set_token_matched(token, "Empty", indent=0)
         return True
 
-    def match_Language(self, token):
+    def match_Language(self, token: Token) -> bool:
         match = self.LANGUAGE_RE.match(token.line.get_line_text())
         if not match:
             return False
 
         dialect_name = match.group(1)
-        self._set_token_matched(token, 'Language', dialect_name)
+        self._set_token_matched(token, "Language", dialect_name)
         self._change_dialect(dialect_name, token.location)
         return True
 
-    def match_TagLine(self, token):
-        if not token.line.startswith('@'):
+    def match_TagLine(self, token: Token) -> bool:
+        if not token.line.startswith("@"):
             return False
 
-        self._set_token_matched(token, 'TagLine', items=token.line.tags)
+        self._set_token_matched(token, "TagLine", items=token.line.tags)
         return True
 
-    def match_DocStringSeparator(self, token):
+    def match_DocStringSeparator(self, token: Token) -> bool:
         if not self._active_doc_string_separator:
             # open
-            return (self._match_DocStringSeparator(token, '"""', True) or
-                    self._match_DocStringSeparator(token, '```', True))
+            return self._match_DocStringSeparator(
+                token, '"""', True
+            ) or self._match_DocStringSeparator(token, "```", True)
         else:
             # close
-            return self._match_DocStringSeparator(token, self._active_doc_string_separator, False)
+            return self._match_DocStringSeparator(
+                token, self._active_doc_string_separator, False
+            )
 
-    def _match_DocStringSeparator(self, token, separator, is_open):
+    @staticmethod
+    def _default_docstring_content_type() -> None:
+        return None
+
+    def _match_DocStringSeparator(
+        self, token: Token, separator: str, is_open: bool
+    ) -> bool:
         if not token.line.startswith(separator):
             return False
 
-        content_type = None
+        content_type = self._default_docstring_content_type()
         if is_open:
             content_type = token.line.get_rest_trimmed(len(separator))
             self._active_doc_string_separator = separator
@@ -126,37 +151,49 @@ class TokenMatcher(object):
             self._indent_to_remove = 0
 
         # TODO: Use the separator as keyword. That's needed for pretty printing.
-        self._set_token_matched(token, 'DocStringSeparator', content_type, separator)
+        self._set_token_matched(token, "DocStringSeparator", content_type, separator)
         return True
 
-    def match_Other(self, token):
+    def match_Other(self, token: Token) -> bool:
         # take the entire line, except removing DocString indents
         text = token.line.get_line_text(self._indent_to_remove)
-        self._set_token_matched(token, 'Other', self._unescaped_docstring(text), indent=0)
+        self._set_token_matched(
+            token, "Other", self._unescaped_docstring(text), indent=0
+        )
         return True
 
-    def match_EOF(self, token):
+    def match_EOF(self, token: Token) -> bool:
         if not token.eof():
             return False
 
-        self._set_token_matched(token, 'EOF')
+        self._set_token_matched(token, "EOF")
         return True
 
-    def _match_title_line(self, token, token_type, keywords):
+    def _match_title_line(
+        self, token: Token, token_type: str, keywords: Iterable[str]
+    ) -> bool:
         for keyword in (k for k in keywords if token.line.startswith_title_keyword(k)):
-            title = token.line.get_rest_trimmed(len(keyword) + len(':'))
+            title = token.line.get_rest_trimmed(len(keyword) + len(":"))
             self._set_token_matched(token, token_type, title, keyword)
             return True
 
         return False
 
-    def _set_token_matched(self, token, matched_type, text=None,
-                           keyword=None, keyword_type=None, indent=None, items=None):
+    def _set_token_matched(
+        self,
+        token: Token,
+        matched_type: str | None,
+        text: str | None = None,
+        keyword: str | None = None,
+        keyword_type: str | None = None,
+        indent: int | None = None,
+        items: list[MatchedItems] | None = None,
+    ) -> None:
         if items is None:
             items = []
         token.matched_type = matched_type
         # text == '' should not result in None
-        token.matched_text = text.rstrip('\r\n') if text is not None else None
+        token.matched_text = text.rstrip("\r\n") if text is not None else None
         token.matched_keyword = keyword
         token.matched_keyword_type = keyword_type
         if indent is not None:
@@ -164,10 +201,12 @@ class TokenMatcher(object):
         else:
             token.matched_indent = token.line.indent if token.line else 0
         token.matched_items = items
-        token.location['column'] = token.matched_indent + 1
+        token.location["column"] = token.matched_indent + 1
         token.matched_gherkin_dialect = self.dialect_name
 
-    def _change_dialect(self, dialect_name, location=None):
+    def _change_dialect(
+        self, dialect_name: str, location: Location | None = None
+    ) -> None:
         dialect = Dialect.for_name(dialect_name)
         if not dialect:
             raise NoSuchLanguageException(dialect_name, location)
@@ -176,18 +215,27 @@ class TokenMatcher(object):
         self.dialect = dialect
         self.keyword_types = defaultdict(list)
         for keyword in self.dialect.given_keywords:
-            self.keyword_types[keyword].append('Context')
+            self.keyword_types[keyword].append("Context")
         for keyword in self.dialect.when_keywords:
-            self.keyword_types[keyword].append('Action')
+            self.keyword_types[keyword].append("Action")
         for keyword in self.dialect.then_keywords:
-            self.keyword_types[keyword].append('Outcome')
+            self.keyword_types[keyword].append("Outcome")
         for keyword in self.dialect.and_keywords + self.dialect.but_keywords:
-            self.keyword_types[keyword].append('Conjunction')
+            self.keyword_types[keyword].append("Conjunction")
 
-    def _unescaped_docstring(self, text):
+        self._sorted_step_keywords = sorted(
+            (self.dialect.given_keywords
+             + self.dialect.when_keywords
+             + self.dialect.then_keywords
+             + self.dialect.and_keywords
+             + self.dialect.but_keywords),
+            key=len,
+            reverse=True)
+
+    def _unescaped_docstring(self, text: str) -> str:
         if self._active_doc_string_separator == '"""':
             return text.replace('\\"\\"\\"', '"""')
-        elif self._active_doc_string_separator == '```':
-            return text.replace('\\`\\`\\`', '```')
+        elif self._active_doc_string_separator == "```":
+            return text.replace("\\`\\`\\`", "```")
         else:
             return text

@@ -37,6 +37,7 @@ final class AstNode
      */
     public function getItems(string $expectedType, RuleType $ruleType): array
     {
+        $expectedType == 0; // Avoid error: Param #1 is never referenced in this method (see https://psalm.dev/135)
         $items = $this->subItems[$ruleType->name] ?? [];
 
         /**
@@ -62,10 +63,16 @@ final class AstNode
         return $items[0] ?? $defaultValue;
     }
 
-    /** needed for non-object return */
-    public function getSingleUntyped(RuleType $ruleType, mixed $defaultValue = null): mixed
+    /**
+     * needed for non-object return
+     *
+     * @param null|string $defaultValue
+     *
+     * @psalm-param ''|null $defaultValue
+     */
+    public function getSingleUntyped(RuleType $ruleType, string|null $defaultValue = null): mixed
     {
-        $items =$this->subItems[$ruleType->name] ?? [];
+        $items = $this->subItems[$ruleType->name] ?? [];
 
         /**
          * Force the type because we trust the parser, could be validated instead

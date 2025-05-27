@@ -24,38 +24,46 @@ localisations and generating the parser is done separately from building each pr
 
 ## Generating parsers
 
-Prerequisites:
+*Either* start a docker container
 
-* .NET 5.0 (to run `berp` to generate parsers)
-* `berp` (install with `dotnet tool update Berp --version 1.3.0 --tool-path /usr/bin` )
-* `make`
-* `jq` (>= 1.4 for `--sort-keys` option)
-* `diff`
-* `git`
-
-With all this installed use Make:
-
+```shell
+docker build --tag berp-env . 
+docker run --rm --interactive --tty --volume ".:/app" berp-env
 ```
-make generate
+
+*Or* install on your system
+
+* .NET 8.0 (to run `berp` to generate parsers)
+* `berp` (install with `dotnet tool update Berp --version 1.4.0 --tool-path /usr/bin` )
+* `make`
+* `diff`
+
+With either of these done run:
+
+```shell
 make clean-generate
+make generate
 ```
 
 ## Adding or updating an i18n language
 
-Prerequisites:
+1) Edit `gherkin-languages.json`.
 
-* `make`
-* `jq` (>= 1.4 for `--sort-keys` option)
-* `git`
+2) Distribute the changes to the different parser implementations:
 
-1) Edit `gherkin-langauges.json`.
+    *Either* start a docker container. See [Generating Parsers](#generating-parsers)
 
-2) Distribute the changes to the different parser implementations, this requires `make`, `jq`, `diff`, but no compiler/interpreters:
+    *Or* install on your system
 
-```
-make clean-gherkin-languages
-make copy-gherkin-languages
-```
+   * `make`
+   * `jq` (>= 1.4 for `--sort-keys` option)
+
+    Then with either of these done run
+
+    ```shell
+    make clean-gherkin-languages
+    make copy-gherkin-languages
+    ```
 
 3) Make a pull request with the changed files.
 
@@ -123,7 +131,7 @@ good), but writing a few during development might help you progress.
 You'll spend quite a bit of time fiddling with the `.razor` template to make it
 generate code that is syntactically correct.
 
-When you get to that stage, `make clean acceptance` will run the acceptance tests, which iterate
+When you get to that stage, `make mostlyclean acceptance` will run the acceptance tests, which iterate
 over all the `.feature` files under `../testdata`, passes them through your
 `bin/gherkin-generate-tokens` and `bin/gherkin-generate-ast` command-line programs,
 and compares the output using `diff`.
@@ -134,7 +142,7 @@ pass!
 Then send us a pull-request :-)
 
 And if you're stuck - please shoot message to the #commiters channel in the 
-[CucumberBDD Slack](https://cucumberbdd-slack-invite.herokuapp.com/) <sup>[direct link](https://cucumberbdd.slack.com/)</sup>.
+[Cucumber Discord](https://cucumber.io/docs/community/get-in-touch/#discord).
 
 ## Make a release
 

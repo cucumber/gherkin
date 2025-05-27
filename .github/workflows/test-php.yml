@@ -5,34 +5,47 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - php/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - php/**
+      - testdata/**
+      - .github/**
   workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
   test-php:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1']
+        php: ['8.2']
         composer-mode: ['low-deps', 'high-deps']
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Discover composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-dir)"
+        run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
         working-directory: php
 
       - name: Cache composer
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: "${{ steps.composer-cache.outputs.dir }}"
           key: composer
@@ -49,7 +62,7 @@ jobs:
       - name: Run tests
         working-directory: php
         run: |
-          vendor/bin/php-cs-fixer --dry-run --diff fix
+          vendor/bin/php-cs-fixer --show-progress=none --dry-run --diff fix
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit
 

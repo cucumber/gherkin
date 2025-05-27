@@ -1,18 +1,7 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
-    ":preserveSemverRanges",
-    ":rebaseStalePrs",
-    ":disableDependencyDashboard"    
+    "github>cucumber/renovate-config"
   ],
-  "labels": [":robot: dependencies"],
-  "prHourlyLimit": 0,
-  "packageRules": [
-    {
-      "depTypeList": ["devDependencies", "dependencies"],
-      "updateTypes": ["minor", "patch"],
-      "automerge": true,
-      "automergeType": "branch"
-    }
-  ]
+  "dependencyDashboard": true
 }

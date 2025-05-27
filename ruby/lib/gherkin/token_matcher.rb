@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cucumber/messages'
 require_relative 'dialect'
 require_relative 'errors'
@@ -35,7 +37,7 @@ module Gherkin
 
     def match_ScenarioLine(token)
       match_title_line(token, :ScenarioLine, @dialect.scenario_keywords) ||
-          match_title_line(token, :ScenarioLine, @dialect.scenario_outline_keywords)
+        match_title_line(token, :ScenarioLine, @dialect.scenario_outline_keywords)
     end
 
     def match_BackgroundLine(token)
@@ -48,21 +50,22 @@ module Gherkin
 
     def match_TableRow(token)
       return false unless token.line.start_with?('|')
-      # TODO: indent
-      set_token_matched(token, :TableRow, nil, nil, nil, nil,
-                        token.line.table_cells)
+
+      set_token_matched(token, :TableRow, nil, nil, nil, nil, token.line.table_cells)
       true
     end
 
     def match_Empty(token)
       return false unless token.line.empty?
+
       set_token_matched(token, :Empty, nil, nil, 0)
       true
     end
 
     def match_Comment(token)
       return false unless token.line.start_with?('#')
-      text = token.line.get_line_text(0) #take the entire line, including leading space
+
+      text = token.line.get_line_text(0) # take the entire line, including leading space
       set_token_matched(token, :Comment, text, nil, 0)
       true
     end
@@ -70,7 +73,7 @@ module Gherkin
     def match_Language(token)
       return false unless token.line.trimmed_line_text =~ LANGUAGE_PATTERN
 
-      dialect_name = $1
+      dialect_name = Regexp.last_match(1)
       set_token_matched(token, :Language, dialect_name)
 
       change_dialect(dialect_name, token.location)
@@ -82,7 +85,7 @@ module Gherkin
       if @active_doc_string_separator.nil?
         # open
         _match_DocStringSeparator(token, '"""', true) ||
-            _match_DocStringSeparator(token, '```', true)
+          _match_DocStringSeparator(token, '```', true)
       else
         # close
         _match_DocStringSeparator(token, @active_doc_string_separator, false)
@@ -108,6 +111,7 @@ module Gherkin
 
     def match_EOF(token)
       return false unless token.eof?
+
       set_token_matched(token, :EOF)
       true
     end
@@ -119,35 +123,25 @@ module Gherkin
     end
 
     def match_StepLine(token)
-      keywords = @dialect.given_keywords +
-          @dialect.when_keywords +
-          @dialect.then_keywords +
-          @dialect.and_keywords +
-          @dialect.but_keywords
-
-      keyword = keywords.detect { |k| token.line.start_with?(k) }
+      keyword = @sorted_step_keywords.detect { |k| token.line.start_with?(k) }
 
       return false unless keyword
 
       title = token.line.get_rest_trimmed(keyword.length)
       keyword_types = @keyword_types[keyword]
       keyword_type = keyword_types[0]
-      if keyword_types.length() > 1
-        keyword_type = Cucumber::Messages::StepKeywordType::UNKNOWN
-      end
+      keyword_type = Cucumber::Messages::StepKeywordType::UNKNOWN if keyword_types.length > 1
 
       set_token_matched(token,
                         :StepLine, title, keyword, nil, keyword_type)
-      return true
+      true
     end
 
     private
 
     def add_keyword_type_mappings(keywords, type)
       keywords.each do |keyword|
-        if not @keyword_types.has_key?(keyword)
-          @keyword_types[keyword] = []
-        end
+        @keyword_types[keyword] = [] unless @keyword_types.has_key?(keyword)
         @keyword_types[keyword] += [type]
       end
     end
@@ -164,6 +158,15 @@ module Gherkin
       add_keyword_type_mappings(@dialect.then_keywords, Cucumber::Messages::StepKeywordType::OUTCOME)
       add_keyword_type_mappings(@dialect.and_keywords + @dialect.but_keywords,
                                 Cucumber::Messages::StepKeywordType::CONJUNCTION)
+
+      keywords =
+        @dialect.given_keywords +
+        @dialect.when_keywords +
+        @dialect.then_keywords +
+        @dialect.and_keywords +
+        @dialect.but_keywords
+
+      @sorted_step_keywords = keywords.sort_by(&:length).reverse
     end
 
     def match_title_line(token, token_type, keywords)

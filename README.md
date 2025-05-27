@@ -4,27 +4,47 @@ Gherkin is a parser and compiler for the Gherkin language.
 
 Gherkin is currently implemented for the following platforms (in order of birthday):
 
-- [.NET](./dotnet)
-- [Java](./java)
-- [JavaScript](./javascript)
-- [Ruby](./ruby)
-- [Go](./go)
-- [Python](./python)
-- [C](./c)
-- [Objective-C](./objective-c)
-- [Perl](./perl)
-- [PHP](./php)
+- [.NET](./dotnet) - [![test dotnet workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dotnet.yml/badge.svg)](./.github/workflows/test-dotnet.yml)
+- [Java](./java) - [![test java workflow](https://github.com/cucumber/gherkin/actions/workflows/test-java.yml/badge.svg)](./.github/workflows/test-java.yml)
+- [JavaScript](./javascript) - [![test javascript workflow](https://github.com/cucumber/gherkin/actions/workflows/test-javascript.yml/badge.svg)](./.github/workflows/test-javascript.yml)
+- [Ruby](./ruby) - [![test ruby workflow](https://github.com/cucumber/gherkin/actions/workflows/test-ruby.yml/badge.svg)](./.github/workflows/test-ruby.yml)
+- [Go](./go) - [![test go workflow](https://github.com/cucumber/gherkin/actions/workflows/test-go.yml/badge.svg)](./.github/workflows/test-go.yml)
+- [Python](./python) - [![test python workflow](https://github.com/cucumber/gherkin/actions/workflows/test-python.yml/badge.svg)](./.github/workflows/test-python.yml)
+- [C](./c) - [![test c workflow](https://github.com/cucumber/gherkin/actions/workflows/test-c.yml/badge.svg)](./.github/workflows/test-c.yml)
+- [Objective-C](./objective-c) - _Currently not actively tested, requires maintenance_
+- [Perl](./perl) - [![test perl workflow](https://github.com/cucumber/gherkin/actions/workflows/test-perl.yml/badge.svg)](./.github/workflows/test-perl.yml)
+- [PHP](./php) - [![test php workflow](https://github.com/cucumber/gherkin/actions/workflows/test-php.yml/badge.svg)](./.github/workflows/test-php.yml)
+- [Dart](./dart) - [![test dart workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dart.yml/badge.svg)](./.github/workflows/test-dart.yml)
+- [C++](./cpp) - [![test cpp workflow](https://github.com/cucumber/gherkin/actions/workflows/test-cpp.yml/badge.svg)](./.github/workflows/test-cpp.yml)
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser for a new language.
-Our wish-list is (in no particular order):
+The CI will run using the linked workflow when that specific language implementation is changed
+
+The CI will also run for any/all linked workflows when any [test data](./testdata) is modified
+(For example modifying one of the good or bad features / ndjson outputs)
+
+## Contributing Translations (i18n)
+
+In order to allow Gherkin to be written in a number of languages, the keywords
+have been translated into multiple languages. To improve readability and flow,
+some languages may have more than one translation for any given keyword.
+
+If you are looking to add, update or improve these translations please see
+[`CONTRIBUTING.md`](CONTRIBUTING.md#adding-or-updating-an-i18n-language).
+
+## Contributing a Parser Implementation
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to contribute a parser
+for a new programming language. Our wish-list is (in no particular order):
 
 - Rust
 
 ## Usage
 
-Gherkin can be used either through its command line interface (CLI) or as a library.
+Gherkin can be used either through its command line interface (CLI) or as a
+library.
 
-It is designed to be used in conjunction with other tools such as Cucumber which consumes the output from the CLI or library as [Cucumber Messages](../messages).
+It is designed to be used in conjunction with other tools such as Cucumber
+which consumes the output from the CLI or library as [Cucumber Messages](https://github.com/cucumber/messages).
 
 ### Library
 
@@ -38,21 +58,24 @@ that is easy to use. See the CLI implementations to get an idea of how to use it
 
 Alternatively, you can use the lower level parser and compiler. Some usage examples are below:
 
+#### Java
+
 ```java
-// Java
 Path path = Paths.get("../testdata/good/minimal.feature");
 GherkinParser parser = GherkinParser.builder().build();
 Stream<Envelope> pickles = parser.parse(envelope).filter(envelope -> envelope.getPickle().isPresent());
 ```
 
+#### C#
+
 ```csharp
-// C#
 var parser = new Parser();
 var gherkinDocument = parser.Parse(@"Drive:\PathToGherkinDocument\document.feature");
 ```
 
+#### Ruby
+
 ```ruby
-# Ruby
 require 'gherkin/parser'
 require 'gherkin/pickles/compiler'
 
@@ -68,43 +91,58 @@ id_generator = Cucumber::Messages::IdGenerator::UUID.new
 pickles = Gherkin::Pickles::Compiler.new(id_generator).compile(gherkin_document, source)
 ```
 
+#### JavaScript
+
 ```javascript
-// JavaScript
-var Gherkin = require('@cucumber/gherkin')
-var Messages = require('@cucumber/messages')
+var Gherkin = require("@cucumber/gherkin");
+var Messages = require("@cucumber/messages");
 
-var uuidFn = Messages.IdGenerator.uuid()
-var builder = new Gherkin.AstBuilder(uuidFn)
-var matcher = new Gherkin.GherkinClassicTokenMatcher() // or Gherkin.GherkinInMarkdownTokenMatcher()
+var uuidFn = Messages.IdGenerator.uuid();
+var builder = new Gherkin.AstBuilder(uuidFn);
+var matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInMarkdownTokenMatcher()
 
-var parser = new Gherkin.Parser(builder, matcher)
-var gherkinDocument = parser.parse('Feature: ...')
-var pickles = Gherkin.compile(gherkinDocument, 'uri_of_the_feature.feature', uuidFn)
+var parser = new Gherkin.Parser(builder, matcher);
+var gherkinDocument = parser.parse("Feature: ...");
+var pickles = Gherkin.compile(
+  gherkinDocument,
+  "uri_of_the_feature.feature",
+  uuidFn
+);
 ```
+
+#### Go
 
 ```go
-// Go
-// Download the package via: `go get github.com/cucumber/cucumber/gherkin/go`
+// Download the package via: `go get github.com/cucumber/gherkin/go/v27`
+//   && go get "github.com/cucumber/messages/go/v22"
 import (
   "strings"
-  gherkin "github.com/cucumber/cucumber/gherkin/go"
+
+  gherkin "github.com/cucumber/gherkin/go/v27"
+  messages "github.com/cucumber/messages/go/v22"
 )
-reader := strings.NewReader(`Feature: ...`)
-gherkinDocument, err := gherkin.ParseGherkinDocument(reader)
+
+func main() {
+  uuid := &message.UUID{} // or &message.Incrementing{}
+  reader := strings.NewReader(`Feature: ...`)
+  gherkinDocument, err := gherkin.ParseGherkinDocument(reader, uuid.NewId)
+  pickles := gherkin.Pickles(*gherkinDocument, "minimal.feature", uuid.NewId)
+}
 ```
+
+#### Python
 
 ```python
-# Python
-from gherkin.parser import Parser
-from gherkin.pickles.compiler import compile
+from gherkin import Compiler, Parser
 
-parser = Parser()
-gherkin_document = parser.parse("Feature: ...")
-pickles = compile(gherkin_document)
+gherkin_document = Parser().parse("Feature: ...")
+gherkin_document["uri"] = "uri_of_the_feature.feature"
+pickles = Compiler().compile(gherkin_document)
 ```
 
+#### Objective-C
+
 ```Objective-C
-// Objective-C
 #import "GHParser+Extensions.h"
 
 GHParser * parser = [[GHParser alloc] init];
@@ -116,8 +154,9 @@ if([content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewline
 GHGherkinDocument * result = [parser parseContent:content];
 ```
 
+#### Perl
+
 ```perl
-# Perl
 use Gherkin::Parser;
 use Gherkin::Pickles::Compiler;
 
@@ -126,8 +165,9 @@ my $gherkin_document = $parser->parse("Feature: ...");
 my $pickles = Gherkin::Pickles::Compiler->compile($gherkin_document);
 ```
 
+#### PHP
+
 ```php
-# PHP
 use Cucumber\Gherkin\GherkinParser;
 
 $path = '/path/to/my.feature';
@@ -139,22 +179,26 @@ $pickles = $parser->parseString(uri: $path, data: file_get_contents($path));
 ### CLI
 
 The Gherkin CLI `gherkin` reads Gherkin source files (`.feature` files) and outputs
-[ASTs](#ast) and [Pickles](#pickles).
+[ASTs](#abstract-syntax-tree-ast) and [Pickles](#pickles).
 
 The `gherkin` program takes any number of files as arguments and prints the results
-to `STDOUT` as [Newline Delimited JSON](http://ndjson.org/).
+to `STDOUT` as [Newline Delimited JSON](https://jsonlines.org).
 
-Each line is a JSON document that conforms to the [Cucumber Event Protocol](../messages).
+Each line is a JSON document that conforms to the [Cucumber Event Protocol](https://github.com/cucumber/messages).
 
 To try it out, just install Gherkin for your favourite language, and run it over the
 files in this repository:
 
-    gherkin testdata/**/*.feature
+```console
+gherkin testdata/**/*.feature
+```
 
 Ndjson is easy to read for programs, but hard for people. To pretty print each JSON
 document you can pipe it to the [jq](https://stedolan.github.io/jq/) program:
 
-    gherkin testdata/**/*.feature | jq
+```console
+gherkin testdata/**/*.feature | jq
+```
 
 ## Table cell escaping
 
@@ -166,9 +210,11 @@ finally, if you need a `\`, you can escape that with `\\`.
 
 The following diagram outlines the architecture:
 
-    ╔════════════╗   ┌───────┐   ╔══════╗   ┌──────┐   ╔═══╗
-    ║Feature file║──>│Scanner│──>║Tokens║──>│Parser│──>║AST║
-    ╚════════════╝   └───────┘   ╚══════╝   └──────┘   ╚═══╝
+```mermaid
+graph LR
+    A[Feature file] -->|Scanner| B[Tokens]
+    B -->|Parser| D[AST]
+```
 
 The _scanner_ reads a gherkin doc (typically read from a `.feature` file) and creates
 a _token_ for each line. The tokens are passed to the _parser_, which outputs an _AST_
@@ -184,23 +230,91 @@ parser generator as part of the build process.
 Berp takes a grammar file (`gherkin.berp`) and a template file (`gherkin-X.razor`) as input
 and outputs a parser in language _X_:
 
-    ╔════════════╗   ┌────────┐   ╔═══════════════╗
-    ║gherkin.berp║──>│berp.exe│<──║gherkin-X.razor║
-    ╚════════════╝   └────────┘   ╚═══════════════╝
-                          │
-                          V
-                     ╔════════╗
-                     ║Parser.x║
-                     ╚════════╝
-
-Also see the [wiki](https://github.com/cucumber/gherkin/wiki) for some early
-design docs (which might be a little outdated, but mostly OK).
+```mermaid
+graph TD
+    A[gherkin.berp] --> B[berp.exe]
+    C[gherkin-X.razor] --> B
+    B --> D[Parser.x]
+```
 
 ### Abstract Syntax Tree (AST)
 
 The AST produced by the parser can be described with the following class diagram:
 
-![](https://github.com/cucumber/gherkin/blob/main/docs/ast.png)
+```mermaid
+classDiagram
+    ScenarioOutline --|> ScenarioDefinition
+    GherkinDocument "1" *-- "0..1" Comment: comment
+    GherkinDocument "1" *-- "0..1" Feature: feature
+    Feature "1" *-- "0..*" ScenarioDefinition: scenarioDefinitions
+    Feature "1" *-- "0..*" Rule: rules
+    Rule "1" *-- "0..*" ScenarioDefinition: scenarioDefinitions
+    Background "0..1" --* "1" Rule: background
+    Feature "1" *-- "0..1" Background: background
+    Scenario --|> ScenarioDefinition
+    Tag "0..*" --* "1" Feature: tags
+    Tag "0..*" --* "1" Rule: tags
+    Tag "0..*" --* "1" Scenario: tags
+    Tag "0..*" --* "1" ScenarioOutline: tags
+    Tag "0..*" --* "1" Examples: tags
+    Examples "0..*" --* "1" ScenarioOutline: examples
+    TableRow "1" --* "1" Examples: header
+    TableRow "0..*" --* "1" Examples: rows
+    Background "1" *-- "0..*" Step: steps
+    Step "0..*" --* "1" ScenarioDefinition: steps
+    StepArgument "0..1" --* "1" Step: stepArgument
+    DataTable --|> StepArgument
+    StepArgument <|-- DocString
+    TableRow "0..*" --* "1" DataTable: rows
+    TableRow "1" *-- "0..*" TableCell: cells
+    class ScenarioDefinition {
+        keyword
+        name
+        description
+    }
+    class Step {
+        keyword
+        text
+    }
+    class Examples {
+        keyword
+        name
+        description
+    }
+    class Feature {
+        language
+        keyword
+        name
+        description
+    }
+    class Background {
+        keyword
+        name
+        description
+    }
+    class Rule {
+        keyword
+        name
+        description
+    }
+    class DocString {
+        content
+        contentType
+    }
+    class Comment {
+        text
+    }
+    class TableCell {
+        value
+    }
+    class Tag {
+        name
+    }
+    class Location {
+        line: int
+        column: int
+    }
+```
 
 Every class represents a node in the AST. Every node has a `Location` that describes
 the line number and column number in the input file. These numbers are 1-indexed.
@@ -225,9 +339,10 @@ into a simpler form called _Pickles_.
 
 The compiler compiles the AST produced by the parser into pickles:
 
-    ╔═══╗   ┌────────┐   ╔═══════╗
-    ║AST║──>│Compiler│──>║Pickles║
-    ╚═══╝   └────────┘   ╚═══════╝
+```mermaid
+graph LR
+    A[AST] -->|Compiler| B[Pickles]
+```
 
 The rationale is to decouple Gherkin from Cucumber so that Cucumber is open to
 support alternative formats to Gherkin (for example Markdown).
@@ -272,7 +387,9 @@ Feature:
 
 Using the [CLI](#cli) we can compile this into several pickle objects:
 
-    gherkin testdata/good/readme_example.feature --no-source --no-ast | jq
+```console
+gherkin testdata/good/readme_example.feature --no-source --no-ast | jq
+```
 
 Output:
 

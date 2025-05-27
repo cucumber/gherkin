@@ -1,7 +1,9 @@
 <Project>
 
   <PropertyGroup>
-    <LangVersion>9</LangVersion>
+    <LangVersion>13</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>

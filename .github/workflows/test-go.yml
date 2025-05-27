@@ -5,9 +5,17 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - go/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - go/**
+      - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
@@ -18,18 +26,18 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        go: ['1.13.x', '1.18.x']
+        go: ['1.20.x', '1.21.x']
         include:
 # Integration tests don't work on Windows, reason unknown
 #          - os: windows-latest
-#            go: '1.18.x'
+#            go: '1.21.x'
           - os: macos-latest
-            go: '1.18.x'
+            go: '1.21.x'
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v5
       with:
         go-version: ${{ matrix.go }}
 

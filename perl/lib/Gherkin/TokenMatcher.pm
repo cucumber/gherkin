@@ -8,7 +8,7 @@ use List::Util qw(any first reduce);
 our $LANGUAGE_RE = qr/^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/o;
 
 use Class::XSAccessor accessors => [
-    qw/dialect _default_dialect_name _indent_to_remove _active_doc_string_separator _keyword_types /,
+    qw/dialect _default_dialect_name _indent_to_remove _active_doc_string_separator _keyword_types _sorted_step_keywords /,
 ];
 
 use Cucumber::Messages;
@@ -27,7 +27,7 @@ sub new {
 sub _add_keyword_type_mappings {
     my ($keyword_types, $keywords, $type) = @_;
 
-    for my $keyword (@$keywords) {
+    for my $keyword (@{$keywords}) {
         if (not exists $keyword_types->{$keyword}) {
             $keyword_types->{$keyword} = [];
         }
@@ -51,6 +51,13 @@ sub change_dialect {
                                [ @{ $self->dialect->And }, @{ $self->dialect->But } ],
                                Cucumber::Messages::Step::KEYWORDTYPE_CONJUNCTION);
     $self->_keyword_types( $keyword_types );
+    $self->_sorted_step_keywords(
+        [ sort {
+            length $b <=> length $a  # longest keyword first (See #400)
+          } map {
+              @{ $self->dialect->$_ }
+          } qw/Given When Then And But/ ]
+        );
 }
 
 sub reset {
@@ -79,7 +86,7 @@ sub match_ScenarioLine {
         ScenarioLine => $self->dialect->Scenario )
         or $self->_match_title_line(
             $token,
-            ScenarioLine => $self->dialect->ScenarioOutline );;
+            ScenarioLine => $self->dialect->ScenarioOutline );
 }
 
 sub match_BackgroundLine {
@@ -96,12 +103,13 @@ sub match_ExamplesLine {
 
 sub match_Language {
     my ( $self, $token ) = @_;
-    if ( $token->line->get_line_text =~ $LANGUAGE_RE ) {
+    if ( $token->line and $token->line->get_line_text =~ $LANGUAGE_RE ) {
         my $dialect_name = $1;
         $self->_set_token_matched( $token,
-            Language => { text => $dialect_name } );
-        $self->change_dialect( $dialect_name, $token->location );
-        return 1;
+                                   Language => { text => $dialect_name } );
+        local $@;
+        eval { $self->change_dialect( $dialect_name, $token->location ) };
+        return (1, $@);
     } else {
         return;
     }
@@ -109,16 +117,19 @@ sub match_Language {
 
 sub match_TagLine {
     my ( $self, $token ) = @_;
-    return unless $token->line->startswith('@');
+    return unless $token->line and $token->line->startswith('@');
+
+    my ($tags, $err) = $token->line->tags;
     $self->_set_token_matched( $token,
-        TagLine => { items => $token->line->tags } );
-    return 1;
+                               TagLine => { items => $tags } );
+    return (1, $err);
 }
 
 sub _match_title_line {
     my ( $self, $token, $token_type, $keywords ) = @_;
+    return unless $token->line;
 
-    for my $keyword (@$keywords) {
+    for my $keyword (@{$keywords}) {
         if ( $token->line->startswith_title_keyword($keyword) ) {
             my $title =
               $token->line->get_rest_trimmed( length( $keyword . ': ' ) );
@@ -168,14 +179,14 @@ sub match_EOF {
 
 sub match_Empty {
     my ( $self, $token ) = @_;
-    return unless $token->line->is_empty;
+    return unless $token->line and $token->line->is_empty;
     $self->_set_token_matched( $token, Empty => { indent => 0 } );
     return 1;
 }
 
 sub match_Comment {
     my ( $self, $token ) = @_;
-    return unless $token->line->startswith('#');
+    return unless $token->line and $token->line->startswith('#');
 
     my $comment_text = $token->line->line_text;
     $comment_text =~ s/\r\n$//;    # Why?
@@ -187,6 +198,7 @@ sub match_Comment {
 
 sub match_Other {
     my ( $self, $token ) = @_;
+    return unless $token->line;
 
     # take the entire line, except removing DocString indents
     my $text = $token->line->get_line_text( $self->_indent_to_remove );
@@ -208,7 +220,7 @@ sub _unescaped_docstring {
 
 sub match_StepLine {
     my ( $self, $token ) = @_;
-    my @keywords = map { @{ $self->dialect->$_ } } qw/Given When Then And But/;
+    my @keywords = @{ $self->_sorted_step_keywords };
     my $line = $token->line;
 
     for my $keyword (@keywords) {
@@ -233,6 +245,9 @@ sub match_StepLine {
 
 sub match_DocStringSeparator {
     my ( $self, $token ) = @_;
+    if ($token->is_eof) {
+        return 0;
+    }
     if ( !$self->_active_doc_string_separator ) {
         return $self->_match_DocStringSeparator( $token, '"""', 1 )
           || $self->_match_DocStringSeparator( $token, '```', 1 );

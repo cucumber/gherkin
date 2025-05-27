@@ -5,9 +5,17 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - ruby/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - ruby/**
+      - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
@@ -18,24 +26,19 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        ruby: ["2.6", "2.7", "3.0", "3.1"]
+        ruby: ['3.2', '3.3', '3.4']
         include:
           - os: macos-latest
-            ruby: "3.1"
+            ruby: '3.4'
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
           working-directory: ruby
-
       - run: bundle exec rake
         working-directory: ruby
-
-      - name: run acceptance tests
-        run: make acceptance
+      - run: make acceptance
         working-directory: ruby

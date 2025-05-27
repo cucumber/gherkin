@@ -5,21 +5,29 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - dotnet/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - dotnet/**
+      - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
   test-dotnet:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '5.0.x'
-
+          dotnet-version: |
+            8.0.x
+            9.0.x
       - run: dotnet test
         working-directory: dotnet
 

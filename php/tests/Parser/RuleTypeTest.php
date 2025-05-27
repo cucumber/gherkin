@@ -18,7 +18,7 @@ final class RuleTypeTest extends TestCase
     /**
      * @return Generator<string,array{0:TokenType}>
      */
-    public function tokenCaseProvider(): Generator
+    public static function tokenCaseProvider(): Generator
     {
         foreach (TokenType::cases() as $case) {
             yield $case->name => [$case];

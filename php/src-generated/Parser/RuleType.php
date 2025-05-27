@@ -46,6 +46,6 @@ enum RuleType
     case DataTable; // DataTable! := #TableRow+
     case DocString; // DocString! := #DocStringSeparator #Other* #DocStringSeparator
     case Tags; // Tags! := #TagLine+
-    case DescriptionHelper; // DescriptionHelper := #Empty* Description? #Comment*
-    case Description; // Description! := #Other+
+    case DescriptionHelper; // DescriptionHelper := #Empty* Description?
+    case Description; // Description! := (#Other | #Comment)+
 }

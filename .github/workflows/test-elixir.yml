@@ -5,9 +5,17 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - elixir/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - elixir/**
+      - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
@@ -15,17 +23,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: '22.2'
-          elixir-version: '1.10.x'
-
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v1
-
+          otp-version: '27.1'
+          elixir-version: '1.17'
       - run: |
-          mix local.hex --force
           mix deps.get
         working-directory: elixir
 
@@ -34,4 +37,4 @@ jobs:
 
       - name: run acceptance tests
         run: make acceptance
-        working-directory: elixir
+        working-directory: 'elixir'

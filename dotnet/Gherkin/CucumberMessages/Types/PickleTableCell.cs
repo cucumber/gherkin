@@ -1,19 +1,18 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
-namespace Gherkin.CucumberMessages.Types
+namespace Gherkin.CucumberMessages.Types;
+
+public class PickleTableCell
 {
-    public class PickleTableCell
-    {
-        [DataMember(Name = "value")]
-        public string Value { get; set; }
+    [DataMember(Name = "value")]
+    public string Value { get; set; }
 
-        public PickleTableCell()
-        {
-        }
-        
-        public PickleTableCell(string value)
-        {
-            Value = value;
-        }
+    public PickleTableCell()
+    {
+    }
+
+    public PickleTableCell(string value)
+    {
+        Value = value;
     }
 }

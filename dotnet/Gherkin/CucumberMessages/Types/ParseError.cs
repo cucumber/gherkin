@@ -1,13 +1,12 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
-namespace Gherkin.CucumberMessages.Types
+namespace Gherkin.CucumberMessages.Types;
+
+public class ParseError
 {
-    public class ParseError
-    {
-        [DataMember(Name = "source")]
-        public SourceReference Source { get; set; }
+    [DataMember(Name = "source")]
+    public SourceReference Source { get; set; }
 
-        [DataMember(Name = "message")]
-        public string Message { get; set; }
-    }
+    [DataMember(Name = "message")]
+    public string Message { get; set; }
 }

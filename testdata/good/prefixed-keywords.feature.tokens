@@ -1,0 +1,12 @@
+(1:1)Language:/ht/
+(2:1)FeatureLine:()Karakteristik/Keywords can be a prefix of another/
+(3:1)Other:/  Some times keywords are a prefix of another keyword./
+(4:1)Other:/  In this scenario the parser should prefer the longest keyword./
+(5:1)Other://
+(6:3)ScenarioLine:()Senaryo/Erasing agent memory/
+(7:5)StepLine:(Context)Sipoze ke /there is agent J/
+(8:5)StepLine:(Conjunction)Ak /there is agent K/
+(9:5)StepLine:(Action)Le /I erase agent K's memory/
+(10:5)StepLine:(Outcome)Le sa a /there should be agent J/
+(11:5)StepLine:(Conjunction)Men /there should not be agent K/
+EOF

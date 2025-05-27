@@ -12,12 +12,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: '22.2'
-          elixir-version: '1.10.x'
+          otp-version: '27.1'
+          elixir-version: '1.17'
 
       - name: Install Protoc
         uses: arduino/setup-protoc@v1

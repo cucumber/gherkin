@@ -3,6 +3,8 @@ package Gherkin::ParserContext;
 use strict;
 use warnings;
 
+use List::Util qw( uniq );
+
 use Class::XSAccessor accessors =>
   [ qw/token_scanner token_matcher token_queue _errors/, ];
 
@@ -15,7 +17,10 @@ sub new {
 
 sub add_tokens { my $self = shift; push( @{ $self->token_queue }, @_ ); }
 sub errors     { my $self = shift; return @{ $self->_errors } }
-sub add_errors { my $self = shift; push( @{ $self->_errors },     @_ ); }
+sub add_errors {
+    my $self = shift;
+    push @{ $self->{'_errors'} }, @_;
+}
 
 sub read_token {
     my ($self) = shift();

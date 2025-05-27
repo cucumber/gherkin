@@ -1,16 +1,16 @@
 ﻿@using Berp;
-@helper CallProduction(ProductionRule production)
+@helper CallProduction(ProductionRule production, string extraIndent)
 {
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:  start_rule(context, :@production.RuleName);
+      @:@(extraIndent)  start_rule(context, :@production.RuleName);
       break;
     case ProductionRuleType.End:
-      @:  end_rule(context, :@production.RuleName);
+      @:@(extraIndent)  end_rule(context, :@production.RuleName);
       break;
     case ProductionRuleType.Process:
-      @:  build(context, token);
+      @:@(extraIndent)  build(context, token);
       break;
   }
 }
@@ -25,6 +25,8 @@
       return @state.Id</text>}
 @helper MatchToken(TokenType tokenType)
 {<text>match_@(tokenType)(context, token)</text>}
+# frozen_string_literal: true
+
 # This file is generated. Do not edit! Edit gherkin-ruby.razor instead.
 require_relative 'ast_builder'
 require_relative 'token_matcher'
@@ -32,7 +34,6 @@ require_relative 'token_scanner'
 require_relative 'errors'
 
 module Gherkin
-
   RULE_TYPE = [
     :None,
     @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
@@ -54,7 +55,7 @@ module Gherkin
   class @Model.ParserClassName
     attr_accessor :stop_at_first_error
 
-    def initialize(ast_builder = AstBuilder.new(Cucumber::Messages::IdGenerator::UUID.new))
+    def initialize(ast_builder = AstBuilder.new(Cucumber::Messages::Helpers::IdGenerator::UUID.new))
       @@ast_builder = ast_builder
     end
 
@@ -135,7 +136,7 @@ module Gherkin
       @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
       {
       @:when @state.Id
-        @:match_token_at_@(state.Id)(token, context)
+        @:match_token_at_state@(state.Id)(token, context)
       }
       else
         raise InvalidOperationException, "Unknown state: #{state}"
@@ -145,19 +146,21 @@ module Gherkin
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
     # @Raw(state.Comment)
-    def match_token_at_@(state.Id)(token, context)
+    def match_token_at_state@(state.Id)(token, context)
       @foreach(var transition in state.Transitions)
       {
       @:if @MatchToken(transition.TokenType)
+        var extraIndent = "";
         if (transition.LookAheadHint != null)
         {
-        @:@("if lookahead_")@(transition.LookAheadHint.Id)(context, token)
+          extraIndent = "  ";
+        @:@("if lookahead")@(transition.LookAheadHint.Id)(context, token)
         }
         foreach(var production in transition.Productions)
         {
-          @CallProduction(production)
+          @CallProduction(production, extraIndent)
         }
-        @:return @transition.TargetState
+        @:@(extraIndent)return @transition.TargetState
         if (transition.LookAheadHint != null)
         {
         @:end
@@ -171,9 +174,9 @@ module Gherkin
 
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
-    <text>
-    def lookahead_@(lookAheadHint.Id)(context, currentToken)
-      currentToken.detach
+<text>
+    def lookahead@(lookAheadHint.Id)(context, current_token)
+      current_token.detach
       token = nil
       queue = []
       match = false
@@ -194,13 +197,13 @@ module Gherkin
 
       return match
     end
-    </text>
+</text>
 }
 
     private
 
-    def handle_ast_error(context, &action)
-      handle_external_error(context, true, &action)
+    def handle_ast_error(context, &)
+      handle_external_error(context, true, &)
     end
 
     def handle_external_error(context, default_value, &action)
@@ -215,6 +218,5 @@ module Gherkin
       end
       default_value
     end
-
   end
 end

@@ -1,39 +1,40 @@
-﻿using Gherkin.Ast;
+using Gherkin.Ast;
 
-namespace Gherkin
+namespace Gherkin;
+
+public class Token
 {
-    public class Token
+    public Token(GherkinLine line, Location location)
     {
-        public bool IsEOF { get { return Line == null; } }
-        public IGherkinLine Line { get; set; }
-        public TokenType MatchedType { get; set; }
-        public string MatchedKeyword { get; set; }
-        public string MatchedText { get; set; }
-        public GherkinLineSpan[] MatchedItems { get; set; }
-        public int MatchedIndent { get; set; }
-        public GherkinDialect MatchedGherkinDialect { get; set; }
-        public Ast.Location Location { get; set; }
+        Line = line;
+        Location = location;
+    }
+    public Token(Location location)
+    {
+        Location = location;
+        IsEOF = true;
+    }
 
-        public Token(IGherkinLine line, Ast.Location location)
-        {
-            Line = line;
-            Location = location;
-        }
+    public bool IsEOF { get; }
+    public GherkinLine Line { get; set; }
+    public TokenType MatchedType { get; set; }
+    public string MatchedKeyword { get; set; }
+    public string MatchedText { get; set; }
+    public int MatchedIndent { get; set; }
+    public GherkinDialect MatchedGherkinDialect { get; set; }
+    public Location Location { get; set; }
 
-        public void Detach()
-        {
-            if (Line != null)
-                Line.Detach();
-        }
+    public void Detach()
+    {
+    }
 
-        public string GetTokenValue()
-        {
-            return IsEOF ? "EOF" : Line.GetLineText(-1);
-        }
+    public string GetTokenValue()
+    {
+        return IsEOF ? "EOF" : Line.GetLineText(-1);
+    }
 
-        public override string ToString()
-        {
-            return string.Format("{0}: {1}/{2}", MatchedType, MatchedKeyword, MatchedText);
-        }
+    public override string ToString()
+    {
+        return string.Format("{0}: {1}/{2}", MatchedType, MatchedKeyword, MatchedText);
     }
 }

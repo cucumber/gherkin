@@ -72,12 +72,10 @@ trait ParserTrait
     /**
      * @template U
      * @param callable() : U $action
-     *
-     * @return U
      */
-    private function handleAstError(ParserContext $context, callable $action): mixed
+    private function handleAstError(ParserContext $context, callable $action): void
     {
-        return $this->handleExternalError($context, $action, null);
+        $this->handleExternalError($context, $action, null);
     }
 
     /**

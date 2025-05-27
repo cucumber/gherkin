@@ -1,0 +1,48 @@
+// This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
+@using Berp;
+@functions {
+public static string ToSnakeCase(string str)
+{
+    return
+        string.Concat(
+            str.Select(
+                (x, i) => i > 0 && char.IsUpper(x)
+                ? "_" + x
+                : x.ToString()
+            )
+        ).ToLower();
+}
+
+public static string NameOf(Rule rule)
+{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+
+}
+#pragma once
+
+#include <ostream>
+#include <string_view>
+
+namespace cucumber::gherkin {
+
+enum class rule_type
+{
+    none = 0,
+    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+    {<text>    @NameOf(rule),
+</text>}
+    count
+};
+
+std::string_view
+to_string(rule_type r);
+
+inline
+std::ostream&
+operator<<(std::ostream& os, rule_type r)
+{
+    os << to_string(r);
+
+    return os;
+}
+
+}

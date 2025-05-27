@@ -78,7 +78,7 @@ sub _compile_scenario {
         }
     }
 
-    my @all_tags = (@$tags, @{ $scenario->tags || [] });
+    my @all_tags = (@{$tags}, @{ $scenario->tags || [] });
     $pickle_sink->(
         Cucumber::Messages::Envelope->new(
             pickle => Cucumber::Messages::Pickle->new(
@@ -101,7 +101,7 @@ sub _compile_scenario_outline {
         my @tags        = (
             @{ $feature_tags },
             @{ $scenario->tags || [] },
-            @{ $examples->tags || [] }
+            @{ $examples->tags || [] },
             );
         my $variables = $examples->table_header->cells;
 
@@ -152,7 +152,7 @@ sub _compile_rule {
     my ( $class, $uri, $feature_tags, $feature_background_steps,
          $rule_definition, $language, $id_generator, $pickle_sink )
         = @_;
-    my @background_steps = ( @$feature_background_steps );
+    my @background_steps = ( @{$feature_background_steps} );
     my @tags = (
         @{ $feature_tags || [] },
         @{ $rule_definition->tags || [] }
@@ -197,7 +197,7 @@ sub _pickle_step_props {
         ast_node_ids => [ $step->id ],
         type         => $keyword_type,
         text         => $class->_interpolate($step->text,
-                                             $variables, $value_cells)
+                                             $variables, $value_cells),
         );
 
     if ($values) {
@@ -241,7 +241,7 @@ sub _pickle_step_props {
 
 sub _pickle_tags {
     my ( $class, $tags ) = @_;
-    return [ map { $class->_pickle_tag( $_ ) } @$tags ];
+    return [ map { $class->_pickle_tag( $_ ) } @{$tags} ];
 }
 
 sub _pickle_tag {

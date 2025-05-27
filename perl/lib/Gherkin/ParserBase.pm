@@ -29,53 +29,42 @@ sub get_result { return $_[0]->ast_builder->get_result }
 sub add_error {
     my ( $self, $context, $error ) = @_;
 
-    $context->add_errors($error);
+    die $error if not ref $error; # rethrow if unstructured; not ours
+    die $error if $self->stop_at_first_error;
+    if ( ref $error eq 'Gherkin::Exceptions::CompositeParser' ) {
+        $context->add_errors( @{ $error->errors } );
+    } else {
+        $context->add_errors( $error );
+    }
 
     my @errors = $context->errors;
     Gherkin::Exceptions::CompositeParser->throw(@errors)
       if @errors > $self->max_errors;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+# Private subs (subs prefixed with an underscore) are used as "friend methods" here,
+# to be used by the actual parser class which is based on this one.
+
 sub _start_rule {
     my ( $self, $context, $ruleType ) = @_;
-    $self->_handle_ast_error( $context, start_rule => $ruleType );
+
+    if (not eval { $self->ast_builder->start_rule( $ruleType ); 1 }) {
+        $self->add_error( $context, $@ );
+    }
 }
 
 sub _end_rule {
     my ( $self, $context, $ruleType ) = @_;
-    $self->_handle_ast_error( $context, end_rule => $ruleType );
+    if (not eval { $self->ast_builder->end_rule( $ruleType ); 1 }) {
+        $self->add_error( $context, $@ );
+    }
 }
 
 sub _build {
     my ( $self, $context, $token ) = @_;
-    $self->_handle_ast_error( $context, build => $token );
-}
-
-sub _handle_ast_error {
-    my ( $self, $context, $method_name, $arg ) = @_;
-    my $action = sub {
-        $self->ast_builder->$method_name($arg);
-    };
-
-    $self->handle_external_error( $context, 1, $action );
-}
-
-sub handle_external_error {
-    my ( $self, $context, $default_value, $action ) = @_;
-    return $action->() if $self->stop_at_first_error;
-
-    my $result = eval { $action->() };
-    return $result unless $@;
-
-    # Non-structured exceptions
-    die $@ unless ref $@;
-
-    if ( ref $@ eq 'Gherkin::Exceptions::CompositeParser' ) {
-        $self->add_error( $context, $_ ) for @{ $@->errors };
-        return $default_value;
-    } else {
+    if (not eval { $self->ast_builder->build( $token ); 1 }) {
         $self->add_error( $context, $@ );
-        return $default_value;
     }
 }
 

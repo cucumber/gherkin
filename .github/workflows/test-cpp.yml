@@ -1,0 +1,47 @@
+name: test-cpp
+
+on:
+  push:
+    branches:
+      - main
+      - cpp*
+      - renovate/**
+    paths:
+      - cpp/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - cpp/**
+      - testdata/**
+      - .github/**
+  workflow_call:
+
+jobs:
+  test-cpp:
+    strategy:
+      matrix:
+        config:
+          - os: ubuntu-latest
+            cc: gcc
+          - os: ubuntu-latest
+            cc: clang
+          - os: macos-latest
+            cc: clang
+          - os: windows-latest
+            cc: cl
+    runs-on: ${{ matrix.config.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: install dependencies
+        working-directory: cpp
+        run: |
+          cmake -P cmake/cmate --cc=${{ matrix.config.cc }} install
+
+      - name: configure and build
+        working-directory: cpp
+        run: |
+          cmake -P cmake/cmate --cc=${{ matrix.config.cc }} build --release

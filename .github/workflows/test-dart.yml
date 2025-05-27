@@ -5,9 +5,17 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - dart/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - dart/**
+      - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:
@@ -15,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: install dart
-        uses: dart-lang/setup-dart@v1.3
+        uses: dart-lang/setup-dart@v1.4
 
       - name: run tests
         run: dart test

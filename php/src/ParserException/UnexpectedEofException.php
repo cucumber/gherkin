@@ -7,6 +7,9 @@ namespace Cucumber\Gherkin\ParserException;
 use Cucumber\Gherkin\ParserException;
 use Cucumber\Gherkin\Token;
 
+/**
+ * @psalm-api
+ */
 final class UnexpectedEofException extends ParserException
 {
     /**

@@ -5,6 +5,8 @@ acceptance/
 *.pyc
 dist/
 build/
+venv/
 .tox/
 .coverage
 .coverage.*
+*.egg-info/

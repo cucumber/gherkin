@@ -242,7 +242,6 @@ final class Parser
             31 => $this->matchTokenAt_31($token, $context),
             32 => $this->matchTokenAt_32($token, $context),
             33 => $this->matchTokenAt_33($token, $context),
-            34 => $this->matchTokenAt_34($token, $context),
             35 => $this->matchTokenAt_35($token, $context),
             36 => $this->matchTokenAt_36($token, $context),
             37 => $this->matchTokenAt_37($token, $context),
@@ -250,14 +249,7 @@ final class Parser
             39 => $this->matchTokenAt_39($token, $context),
             40 => $this->matchTokenAt_40($token, $context),
             41 => $this->matchTokenAt_41($token, $context),
-            43 => $this->matchTokenAt_43($token, $context),
-            44 => $this->matchTokenAt_44($token, $context),
-            45 => $this->matchTokenAt_45($token, $context),
-            46 => $this->matchTokenAt_46($token, $context),
-            47 => $this->matchTokenAt_47($token, $context),
-            48 => $this->matchTokenAt_48($token, $context),
-            49 => $this->matchTokenAt_49($token, $context),
-            50 => $this->matchTokenAt_50($token, $context),
+            42 => $this->matchTokenAt_42($token, $context),
             default => throw new \LogicException("Unknown state: $state"),
         };
     }
@@ -268,7 +260,7 @@ final class Parser
     {
         if ($this->match_EOF($context, $token)) {
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_Language($context, $token)) {
             $this->startRule($context, RuleType::Feature);
@@ -380,29 +372,30 @@ final class Parser
             $this->endRule($context, RuleType::FeatureHeader);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 3;
         }
         if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
             $this->build($context, $token);
-            return 5;
+            return 4;
         }
         if ($this->match_BackgroundLine($context, $token)) {
             $this->endRule($context, RuleType::FeatureHeader);
             $this->startRule($context, RuleType::Background);
             $this->build($context, $token);
-            return 6;
+            return 5;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::FeatureHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -411,21 +404,21 @@ final class Parser
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
             $this->endRule($context, RuleType::FeatureHeader);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
             $this->endRule($context, RuleType::FeatureHeader);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Other($context, $token)) {
             $this->startRule($context, RuleType::Description);
@@ -444,7 +437,7 @@ final class Parser
         return 3;
     }
 
-    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_4(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
@@ -452,28 +445,27 @@ final class Parser
             $this->endRule($context, RuleType::FeatureHeader);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
             $this->build($context, $token);
-            return 5;
+            return 4;
         }
         if ($this->match_BackgroundLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
             $this->endRule($context, RuleType::FeatureHeader);
             $this->startRule($context, RuleType::Background);
             $this->build($context, $token);
-            return 6;
+            return 5;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::FeatureHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
@@ -483,7 +475,7 @@ final class Parser
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
@@ -491,7 +483,7 @@ final class Parser
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
@@ -499,14 +491,14 @@ final class Parser
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 4;
         }
 
-        $stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>#Other:0";
+        $stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
         $expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
@@ -517,63 +509,68 @@ final class Parser
         return 4;
     }
 
-    // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
     private function matchTokenAt_5(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::FeatureHeader);
+            $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 5;
-        }
-        if ($this->match_BackgroundLine($context, $token)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::Background);
-            $this->build($context, $token);
-            return 6;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::FeatureHeader);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 5;
         }
+        if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 6;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 7;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 10;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 6;
+        }
 
-        $stateComment = "State: 5 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -583,67 +580,68 @@ final class Parser
         return 5;
     }
 
-    // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
+    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_6(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::Description);
             $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_Empty($context, $token)) {
-            $this->build($context, $token);
-            return 6;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
-            return 8;
+            return 6;
         }
         if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 9;
+            return 7;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Other($context, $token)) {
-            $this->startRule($context, RuleType::Description);
             $this->build($context, $token);
-            return 7;
+            return 6;
         }
 
-        $stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -653,69 +651,78 @@ final class Parser
         return 6;
     }
 
-    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
     private function matchTokenAt_7(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+        if ($this->match_TableRow($context, $token)) {
+            $this->startRule($context, RuleType::DataTable);
             $this->build($context, $token);
             return 8;
         }
+        if ($this->match_DocStringSeparator($context, $token)) {
+            $this->startRule($context, RuleType::DocString);
+            $this->build($context, $token);
+            return 41;
+        }
         if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 9;
+            return 7;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
-        if ($this->match_Other($context, $token)) {
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 7;
+        }
+        if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 7;
         }
 
-        $stateComment = "State: 7 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -725,62 +732,78 @@ final class Parser
         return 7;
     }
 
-    // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private function matchTokenAt_8(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
-        if ($this->match_Comment($context, $token)) {
+        if ($this->match_TableRow($context, $token)) {
             $this->build($context, $token);
             return 8;
         }
         if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 9;
+            return 7;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
+        }
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 8;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 8;
         }
 
-        $stateComment = "State: 8 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -790,66 +813,18 @@ final class Parser
         return 8;
     }
 
-    // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
     private function matchTokenAt_9(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::DataTable);
-            $this->build($context, $token);
-            return 10;
-        }
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->startRule($context, RuleType::DocString);
-            $this->build($context, $token);
-            return 49;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
+        if ($this->match_TagLine($context, $token)) {
             $this->build($context, $token);
             return 9;
         }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Tags);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
+            return 10;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
@@ -860,8 +835,8 @@ final class Parser
             return 9;
         }
 
-        $stateComment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 9 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
+        $expectedTokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -871,78 +846,87 @@ final class Parser
         return 9;
     }
 
-    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
     private function matchTokenAt_10(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->build($context, $token);
-            return 10;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 9;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 10;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 10;
         }
+        if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 11;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 12;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 15;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 10;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 11;
+        }
 
-        $stateComment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 10 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -952,30 +936,89 @@ final class Parser
         return 10;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_11(Token $token, ParserContext $context): int
     {
-        if ($this->match_TagLine($context, $token)) {
+        if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 11;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Tags);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 11;
         }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 12;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::Description);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 15;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 10;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 11;
         }
 
-        $stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
-        $expectedTokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"];
+        $stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -985,86 +1028,99 @@ final class Parser
         return 11;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
     private function matchTokenAt_12(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_TableRow($context, $token)) {
+            $this->startRule($context, RuleType::DataTable);
+            $this->build($context, $token);
+            return 13;
+        }
+        if ($this->match_DocStringSeparator($context, $token)) {
+            $this->startRule($context, RuleType::DocString);
+            $this->build($context, $token);
+            return 39;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
             return 12;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 14;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 15;
-        }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
-            return 18;
+            return 15;
         }
         if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
-        if ($this->match_Other($context, $token)) {
-            $this->startRule($context, RuleType::Description);
+        if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
-            return 13;
+            return 12;
+        }
+        if ($this->match_Empty($context, $token)) {
+            $this->build($context, $token);
+            return 12;
         }
 
-        $stateComment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1074,90 +1130,101 @@ final class Parser
         return 12;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private function matchTokenAt_13(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+        if ($this->match_TableRow($context, $token)) {
             $this->build($context, $token);
-            return 14;
+            return 13;
         }
         if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 15;
+            return 12;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
-            return 18;
+            return 15;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
-        if ($this->match_Other($context, $token)) {
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 13;
+        }
+        if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 13;
         }
 
-        $stateComment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1167,81 +1234,30 @@ final class Parser
         return 13;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
     private function matchTokenAt_14(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Feature);
+        if ($this->match_TagLine($context, $token)) {
             $this->build($context, $token);
-            return 42;
+            return 14;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Tags);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 15;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 14;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 15;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 18;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 14;
         }
 
-        $stateComment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
+        $expectedTokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1251,99 +1267,101 @@ final class Parser
         return 14;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
     private function matchTokenAt_15(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::DataTable);
-            $this->build($context, $token);
-            return 16;
-        }
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->startRule($context, RuleType::DocString);
-            $this->build($context, $token);
-            return 47;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 15;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 18;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 15;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 15;
         }
+        if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 16;
+        }
+        if ($this->match_TableRow($context, $token)) {
+            $this->startRule($context, RuleType::ExamplesTable);
+            $this->build($context, $token);
+            return 17;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 15;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 10;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 16;
+        }
 
-        $stateComment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1353,101 +1371,103 @@ final class Parser
         return 15;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_16(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->build($context, $token);
-            return 16;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 15;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 18;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 16;
         }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_TableRow($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::ExamplesTable);
+            $this->build($context, $token);
+            return 17;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 15;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 10;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 16;
         }
 
-        $stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1457,18 +1477,89 @@ final class Parser
         return 16;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
     private function matchTokenAt_17(Token $token, ParserContext $context): int
     {
-        if ($this->match_TagLine($context, $token)) {
+        if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Feature);
+            $this->build($context, $token);
+            return 34;
+        }
+        if ($this->match_TableRow($context, $token)) {
             $this->build($context, $token);
             return 17;
         }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Tags);
-            $this->startRule($context, RuleType::Examples);
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
             return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 15;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 10;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
@@ -1479,8 +1570,8 @@ final class Parser
             return 17;
         }
 
-        $stateComment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
-        $expectedTokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"];
+        $stateComment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1490,100 +1581,29 @@ final class Parser
         return 17;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
     private function matchTokenAt_18(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Feature);
+        if ($this->match_TagLine($context, $token)) {
             $this->build($context, $token);
-            return 42;
+            return 18;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 18;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 18;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 20;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::ExamplesTable);
-            $this->build($context, $token);
-            return 21;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 18;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->startRule($context, RuleType::Description);
-            $this->build($context, $token);
-            return 19;
-        }
 
-        $stateComment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 18 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
+        $expectedTokens = ["#TagLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1593,104 +1613,72 @@ final class Parser
         return 18;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
     private function matchTokenAt_19(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
+        }
+        if ($this->match_Empty($context, $token)) {
+            $this->build($context, $token);
+            return 19;
         }
         if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::Description);
             $this->build($context, $token);
             return 20;
         }
-        if ($this->match_TableRow($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::ExamplesTable);
+        if ($this->match_BackgroundLine($context, $token)) {
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Background);
             $this->build($context, $token);
             return 21;
         }
         if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::RuleHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
             return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->build($context, $token);
             return 19;
         }
+        if ($this->match_Other($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 20;
+        }
 
-        $stateComment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 19 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1700,95 +1688,72 @@ final class Parser
         return 19;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_20(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 20;
         }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::ExamplesTable);
+        if ($this->match_BackgroundLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Background);
             $this->build($context, $token);
             return 21;
         }
         if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::RuleHeader);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
             return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 20;
         }
 
-        $stateComment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1798,101 +1763,71 @@ final class Parser
         return 20;
     }
 
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
     private function matchTokenAt_21(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->build($context, $token);
-            return 21;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 18;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 21;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 21;
         }
+        if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 22;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 23;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 22;
+        }
 
-        $stateComment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 21 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1902,29 +1837,71 @@ final class Parser
         return 21;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_22(Token $token, ParserContext $context): int
     {
-        if ($this->match_TagLine($context, $token)) {
+        if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 23;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 22;
         }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 23;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 22;
         }
 
-        $stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
-        $expectedTokens = ["#TagLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -1934,71 +1911,81 @@ final class Parser
         return 22;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
     private function matchTokenAt_23(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
+        }
+        if ($this->match_TableRow($context, $token)) {
+            $this->startRule($context, RuleType::DataTable);
+            $this->build($context, $token);
+            return 24;
+        }
+        if ($this->match_DocStringSeparator($context, $token)) {
+            $this->startRule($context, RuleType::DocString);
+            $this->build($context, $token);
+            return 37;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 23;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 23;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 23;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 25;
-        }
-        if ($this->match_BackgroundLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Background);
-            $this->build($context, $token);
-            return 26;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->startRule($context, RuleType::Description);
-            $this->build($context, $token);
-            return 24;
-        }
 
-        $stateComment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 23 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2008,73 +1995,81 @@ final class Parser
         return 23;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private function matchTokenAt_24(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+        if ($this->match_TableRow($context, $token)) {
             $this->build($context, $token);
-            return 25;
+            return 24;
         }
-        if ($this->match_BackgroundLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Background);
-            $this->build($context, $token);
-            return 26;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
             return 23;
         }
-        if ($this->match_Other($context, $token)) {
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 24;
+        }
+        if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 24;
         }
 
-        $stateComment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 24 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2084,66 +2079,30 @@ final class Parser
         return 24;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
     private function matchTokenAt_25(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
+        if ($this->match_TagLine($context, $token)) {
             $this->build($context, $token);
-            return 42;
+            return 25;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Tags);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 25;
-        }
-        if ($this->match_BackgroundLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Background);
-            $this->build($context, $token);
-            return 26;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::RuleHeader);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 25;
         }
 
-        $stateComment = "State: 25 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 25 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
+        $expectedTokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2153,61 +2112,81 @@ final class Parser
         return 25;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
     private function matchTokenAt_26(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 26;
         }
         if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
             $this->build($context, $token);
-            return 28;
+            return 27;
         }
         if ($this->match_StepLine($context, $token)) {
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 29;
+            return 28;
         }
         if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+            if ($this->lookahead_1($context)) {
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Background);
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 31;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Other($context, $token)) {
             $this->startRule($context, RuleType::Description);
@@ -2215,8 +2194,8 @@ final class Parser
             return 27;
         }
 
-        $stateComment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 26 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2226,72 +2205,92 @@ final class Parser
         return 26;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_27(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
             $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
             $this->build($context, $token);
-            return 28;
+            return 27;
         }
         if ($this->match_StepLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 29;
+            return 28;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::Description);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
+            }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 31;
         }
         if ($this->match_ScenarioLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
             $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 27;
         }
 
-        $stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2301,65 +2300,102 @@ final class Parser
         return 27;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
     private function matchTokenAt_28(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
+        }
+        if ($this->match_TableRow($context, $token)) {
+            $this->startRule($context, RuleType::DataTable);
+            $this->build($context, $token);
+            return 29;
+        }
+        if ($this->match_DocStringSeparator($context, $token)) {
+            $this->startRule($context, RuleType::DocString);
+            $this->build($context, $token);
+            return 35;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 28;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 31;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
             return 28;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 29;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 28;
         }
 
-        $stateComment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 28 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2369,69 +2405,92 @@ final class Parser
         return 28;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
     private function matchTokenAt_29(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::DataTable);
-            $this->build($context, $token);
-            return 30;
-        }
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->startRule($context, RuleType::DocString);
-            $this->build($context, $token);
-            return 45;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
             return 29;
         }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
+            $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 31;
+            return 28;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
             }
         }
         if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::DataTable);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 31;
         }
         if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::DataTable);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
@@ -2442,8 +2501,8 @@ final class Parser
             return 29;
         }
 
-        $stateComment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 29 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2453,69 +2512,18 @@ final class Parser
         return 29;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
     private function matchTokenAt_30(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
+        if ($this->match_TagLine($context, $token)) {
             $this->build($context, $token);
             return 30;
         }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 29;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Tags);
+            $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
             return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
@@ -2526,8 +2534,8 @@ final class Parser
             return 30;
         }
 
-        $stateComment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 30 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
+        $expectedTokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2537,30 +2545,104 @@ final class Parser
         return 30;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
     private function matchTokenAt_31(Token $token, ParserContext $context): int
     {
-        if ($this->match_TagLine($context, $token)) {
+        if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Rule);
+            $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 31;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Tags);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 31;
+            return 34;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 31;
         }
+        if ($this->match_Comment($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 32;
+        }
+        if ($this->match_TableRow($context, $token)) {
+            $this->startRule($context, RuleType::ExamplesTable);
+            $this->build($context, $token);
+            return 33;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_1($context)) {
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::ExamplesDefinition);
+            $this->startRule($context, RuleType::Examples);
+            $this->build($context, $token);
+            return 31;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::Scenario);
+            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Other($context, $token)) {
+            $this->startRule($context, RuleType::Description);
+            $this->build($context, $token);
+            return 32;
+        }
 
-        $stateComment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
-        $expectedTokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"];
+        $stateComment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
+        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2570,49 +2652,58 @@ final class Parser
         return 31;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     private function matchTokenAt_32(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_Empty($context, $token)) {
-            $this->build($context, $token);
-            return 32;
+            return 34;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
-            return 34;
+            return 32;
         }
-        if ($this->match_StepLine($context, $token)) {
-            $this->startRule($context, RuleType::Step);
+        if ($this->match_TableRow($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->startRule($context, RuleType::ExamplesTable);
             $this->build($context, $token);
-            return 35;
+            return 33;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::Description);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
             }
         }
         if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
@@ -2620,39 +2711,47 @@ final class Parser
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ExamplesLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
-            return 38;
+            return 31;
         }
         if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Other($context, $token)) {
-            $this->startRule($context, RuleType::Description);
             $this->build($context, $token);
-            return 33;
+            return 32;
         }
 
-        $stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+        $expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2662,51 +2761,52 @@ final class Parser
         return 32;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
     private function matchTokenAt_33(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->build($context, $token);
             return 34;
         }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::Step);
+        if ($this->match_TableRow($context, $token)) {
             $this->build($context, $token);
-            return 35;
+            return 33;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::ExamplesTable);
+                $this->endRule($context, RuleType::Examples);
+                $this->endRule($context, RuleType::ExamplesDefinition);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
@@ -2714,41 +2814,51 @@ final class Parser
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
-            return 38;
+            return 31;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+            $this->endRule($context, RuleType::ExamplesTable);
+            $this->endRule($context, RuleType::Examples);
+            $this->endRule($context, RuleType::ExamplesDefinition);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
-        if ($this->match_Other($context, $token)) {
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 33;
+        }
+        if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 33;
         }
 
-        $stateComment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
+        $expectedTokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2758,189 +2868,20 @@ final class Parser
         return 33;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0
-    private function matchTokenAt_34(Token $token, ParserContext $context): int
-    {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 34;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 35;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 38;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Empty($context, $token)) {
-            $this->build($context, $token);
-            return 34;
-        }
-
-        $stateComment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 34;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private function matchTokenAt_35(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::DataTable);
+        if ($this->match_DocStringSeparator($context, $token)) {
             $this->build($context, $token);
             return 36;
         }
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->startRule($context, RuleType::DocString);
-            $this->build($context, $token);
-            return 43;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 35;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 38;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 35;
-        }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 35;
         }
 
-        $stateComment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
+        $expectedTokens = ["#DocStringSeparator", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -2950,54 +2891,50 @@ final class Parser
         return 35;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
     private function matchTokenAt_36(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->build($context, $token);
-            return 36;
+            return 34;
         }
         if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 35;
+            return 28;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 30;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DataTable);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
@@ -3006,28 +2943,28 @@ final class Parser
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
-            return 38;
+            return 31;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 26;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DataTable);
+            $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
@@ -3035,7 +2972,7 @@ final class Parser
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Comment($context, $token)) {
             $this->build($context, $token);
@@ -3046,8 +2983,8 @@ final class Parser
             return 36;
         }
 
-        $stateComment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
+        $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -3057,30 +2994,20 @@ final class Parser
         return 36;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private function matchTokenAt_37(Token $token, ParserContext $context): int
     {
-        if ($this->match_TagLine($context, $token)) {
-            $this->build($context, $token);
-            return 37;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Tags);
-            $this->startRule($context, RuleType::Examples);
+        if ($this->match_DocStringSeparator($context, $token)) {
             $this->build($context, $token);
             return 38;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 37;
-        }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 37;
         }
 
-        $stateComment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
-        $expectedTokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"];
+        $stateComment = "State: 37 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
+        $expectedTokens = ["#DocStringSeparator", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -3090,103 +3017,77 @@ final class Parser
         return 37;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
     private function matchTokenAt_38(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
+        }
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::Step);
+            $this->build($context, $token);
+            return 23;
+        }
+        if ($this->match_TagLine($context, $token)) {
+            if ($this->lookahead_0($context)) {
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 25;
+            }
+        }
+        if ($this->match_TagLine($context, $token)) {
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->startRule($context, RuleType::Tags);
+            $this->build($context, $token);
+            return 18;
+        }
+        if ($this->match_ScenarioLine($context, $token)) {
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->startRule($context, RuleType::ScenarioDefinition);
+            $this->startRule($context, RuleType::Scenario);
+            $this->build($context, $token);
+            return 26;
+        }
+        if ($this->match_RuleLine($context, $token)) {
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
+            $this->endRule($context, RuleType::Background);
+            $this->endRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::Rule);
+            $this->startRule($context, RuleType::RuleHeader);
+            $this->build($context, $token);
+            return 19;
+        }
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 38;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 38;
         }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 40;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::ExamplesTable);
-            $this->build($context, $token);
-            return 41;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 38;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->startRule($context, RuleType::Description);
-            $this->build($context, $token);
-            return 39;
-        }
 
-        $stateComment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
-        $expectedTokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 38 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
+        $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -3196,107 +3097,20 @@ final class Parser
         return 38;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private function matchTokenAt_39(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->endRule($context, RuleType::Description);
+        if ($this->match_DocStringSeparator($context, $token)) {
             $this->build($context, $token);
             return 40;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->startRule($context, RuleType::ExamplesTable);
-            $this->build($context, $token);
-            return 41;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 38;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Description);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
         }
         if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 39;
         }
 
-        $stateComment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>#Other:0";
-        $expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
+        $stateComment = "State: 39 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
+        $expectedTokens = ["#DocStringSeparator", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -3306,98 +3120,97 @@ final class Parser
         return 39;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0
+    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
     private function matchTokenAt_40(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
-        if ($this->match_Comment($context, $token)) {
+        if ($this->match_StepLine($context, $token)) {
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
+            $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 40;
-        }
-        if ($this->match_TableRow($context, $token)) {
-            $this->startRule($context, RuleType::ExamplesTable);
-            $this->build($context, $token);
-            return 41;
+            return 12;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->startRule($context, RuleType::ExamplesDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 14;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Scenario);
+                $this->endRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
             $this->build($context, $token);
-            return 22;
+            return 18;
         }
         if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::ExamplesDefinition);
             $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
-            return 38;
+            return 15;
         }
         if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 32;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
+            $this->endRule($context, RuleType::DocString);
+            $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Scenario);
             $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
+        }
+        if ($this->match_Comment($context, $token)) {
+            $this->build($context, $token);
+            return 40;
         }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
             return 40;
         }
 
-        $stateComment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:2>#Comment:0";
-        $expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Empty"];
+        $stateComment = "State: 40 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
+        $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -3407,104 +3220,20 @@ final class Parser
         return 40;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
     private function matchTokenAt_41(Token $token, ParserContext $context): int
     {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
+        if ($this->match_DocStringSeparator($context, $token)) {
             $this->build($context, $token);
             return 42;
         }
-        if ($this->match_TableRow($context, $token)) {
-            $this->build($context, $token);
-            return 41;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 38;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::ExamplesTable);
-            $this->endRule($context, RuleType::Examples);
-            $this->endRule($context, RuleType::ExamplesDefinition);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 41;
-        }
-        if ($this->match_Empty($context, $token)) {
+        if ($this->match_Other($context, $token)) {
             $this->build($context, $token);
             return 41;
         }
 
-        $stateComment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
-        $expectedTokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
+        $stateComment = "State: 41 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
+        $expectedTokens = ["#DocStringSeparator", "#Other"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
                 : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
@@ -3514,448 +3243,73 @@ final class Parser
         return 41;
     }
 
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private function matchTokenAt_43(Token $token, ParserContext $context): int
-    {
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->build($context, $token);
-            return 44;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->build($context, $token);
-            return 43;
-        }
-
-        $stateComment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        $expectedTokens = ["#DocStringSeparator", "#Other"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 43;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private function matchTokenAt_44(Token $token, ParserContext $context): int
+    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+    private function matchTokenAt_42(Token $token, ParserContext $context): int
     {
         if ($this->match_EOF($context, $token)) {
             $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
+            $this->endRule($context, RuleType::Background);
             $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
-            return 42;
+            return 34;
         }
         if ($this->match_StepLine($context, $token)) {
             $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->startRule($context, RuleType::Step);
             $this->build($context, $token);
-            return 35;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 37;
-            }
+            return 7;
         }
         if ($this->match_TagLine($context, $token)) {
             if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
-            $this->build($context, $token);
-            return 38;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 44;
-        }
-        if ($this->match_Empty($context, $token)) {
-            $this->build($context, $token);
-            return 44;
-        }
-
-        $stateComment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
-        $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 44;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private function matchTokenAt_45(Token $token, ParserContext $context): int
-    {
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->build($context, $token);
-            return 46;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->build($context, $token);
-            return 45;
-        }
-
-        $stateComment = "State: 45 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        $expectedTokens = ["#DocStringSeparator", "#Other"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 45;
-    }
-
-    // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private function matchTokenAt_46(Token $token, ParserContext $context): int
-    {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 29;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 31;
+                $this->endRule($context, RuleType::DocString);
+                $this->endRule($context, RuleType::Step);
+                $this->endRule($context, RuleType::Background);
+                $this->startRule($context, RuleType::ScenarioDefinition);
+                $this->startRule($context, RuleType::Tags);
+                $this->build($context, $token);
+                return 9;
             }
         }
         if ($this->match_TagLine($context, $token)) {
             $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
             $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 32;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 46;
-        }
-        if ($this->match_Empty($context, $token)) {
-            $this->build($context, $token);
-            return 46;
-        }
-
-        $stateComment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
-        $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 46;
-    }
-
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private function matchTokenAt_47(Token $token, ParserContext $context): int
-    {
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->build($context, $token);
-            return 48;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->build($context, $token);
-            return 47;
-        }
-
-        $stateComment = "State: 47 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        $expectedTokens = ["#DocStringSeparator", "#Other"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 47;
-    }
-
-    // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private function matchTokenAt_48(Token $token, ParserContext $context): int
-    {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->endRule($context, RuleType::Feature);
-            $this->build($context, $token);
-            return 42;
-        }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 15;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_1($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 17;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ExamplesLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::ExamplesDefinition);
-            $this->startRule($context, RuleType::Examples);
             $this->build($context, $token);
             return 18;
         }
         if ($this->match_ScenarioLine($context, $token)) {
             $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::ScenarioDefinition);
             $this->startRule($context, RuleType::Scenario);
             $this->build($context, $token);
-            return 12;
+            return 10;
         }
         if ($this->match_RuleLine($context, $token)) {
             $this->endRule($context, RuleType::DocString);
             $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Scenario);
-            $this->endRule($context, RuleType::ScenarioDefinition);
+            $this->endRule($context, RuleType::Background);
             $this->startRule($context, RuleType::Rule);
             $this->startRule($context, RuleType::RuleHeader);
             $this->build($context, $token);
-            return 23;
+            return 19;
         }
         if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 48;
-        }
-        if ($this->match_Empty($context, $token)) {
-            $this->build($context, $token);
-            return 48;
-        }
-
-        $stateComment = "State: 48 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
-        $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 48;
-    }
-
-    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    private function matchTokenAt_49(Token $token, ParserContext $context): int
-    {
-        if ($this->match_DocStringSeparator($context, $token)) {
-            $this->build($context, $token);
-            return 50;
-        }
-        if ($this->match_Other($context, $token)) {
-            $this->build($context, $token);
-            return 49;
-        }
-
-        $stateComment = "State: 49 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0";
-        $expectedTokens = ["#DocStringSeparator", "#Other"];
-        $error = $token->isEOF()
-                ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
-                : new UnexpectedTokenException($token, $expectedTokens, $stateComment);
-
-        $this->addError($context, $error);
-
-        return 49;
-    }
-
-    // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    private function matchTokenAt_50(Token $token, ParserContext $context): int
-    {
-        if ($this->match_EOF($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->endRule($context, RuleType::Feature);
             $this->build($context, $token);
             return 42;
         }
-        if ($this->match_StepLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->startRule($context, RuleType::Step);
-            $this->build($context, $token);
-            return 9;
-        }
-        if ($this->match_TagLine($context, $token)) {
-            if ($this->lookahead_0($context)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 11;
-            }
-        }
-        if ($this->match_TagLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->startRule($context, RuleType::Tags);
-            $this->build($context, $token);
-            return 22;
-        }
-        if ($this->match_ScenarioLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::ScenarioDefinition);
-            $this->startRule($context, RuleType::Scenario);
-            $this->build($context, $token);
-            return 12;
-        }
-        if ($this->match_RuleLine($context, $token)) {
-            $this->endRule($context, RuleType::DocString);
-            $this->endRule($context, RuleType::Step);
-            $this->endRule($context, RuleType::Background);
-            $this->startRule($context, RuleType::Rule);
-            $this->startRule($context, RuleType::RuleHeader);
-            $this->build($context, $token);
-            return 23;
-        }
-        if ($this->match_Comment($context, $token)) {
-            $this->build($context, $token);
-            return 50;
-        }
         if ($this->match_Empty($context, $token)) {
             $this->build($context, $token);
-            return 50;
+            return 42;
         }
 
-        $stateComment = "State: 50 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
+        $stateComment = "State: 42 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0";
         $expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
         $error = $token->isEOF()
                 ? new UnexpectedEofException($token, $expectedTokens, $stateComment)
@@ -3963,7 +3317,7 @@ final class Parser
 
         $this->addError($context, $error);
 
-        return 50;
+        return 42;
     }
 
 

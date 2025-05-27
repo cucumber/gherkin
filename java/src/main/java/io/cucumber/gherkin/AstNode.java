@@ -2,32 +2,44 @@ package io.cucumber.gherkin;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
+import static java.util.Objects.requireNonNull;
 
 class AstNode {
-    private final Map<RuleType, List<Object>> subItems = new HashMap<RuleType, List<Object>>();
-    public final RuleType ruleType;
+    // subItems is relatively sparse, so pre-initializing all values with empty
+    // lists is not efficient
+    private final Map<RuleType, List<Object>> subItems = new EnumMap<>(RuleType.class);
+    final RuleType ruleType;
 
-    public AstNode(RuleType ruleType) {
+    AstNode(RuleType ruleType) {
         this.ruleType = ruleType;
     }
 
-    public void add(RuleType ruleType, Object obj) {
-        List<Object> items = subItems.computeIfAbsent(ruleType, k -> new ArrayList<>());
+    void add(RuleType ruleType, Object obj) {
+        List<Object> items = subItems.get(ruleType);
+        //noinspection Java8MapApi faster than Map.computeIfAbsent
+        if (items == null) { 
+            items = new ArrayList<>();
+            subItems.put(ruleType, items);
+        }
         items.add(obj);
     }
 
-    public <T> T getSingle(RuleType ruleType, T defaultResult) {
-        List<Object> items = getItems(ruleType);
-        return (T) (items.isEmpty() ? defaultResult : items.get(0));
+    @SuppressWarnings("unchecked")
+    <T> T getSingle(RuleType ruleType, T defaultResult) {
+        // if not null, then at least one item is present because
+        // the list was created in add(), so no need to check isEmpty()
+        List<T> items = (List<T>) subItems.get(ruleType);
+        return items == null ? defaultResult : items.get(0);
     }
 
-    public <T> List<T> getItems(RuleType ruleType) {
+    @SuppressWarnings("unchecked")
+    <T> List<T> getItems(RuleType ruleType) {
         List<T> items = (List<T>) subItems.get(ruleType);
         if (items == null) {
             return Collections.emptyList();
@@ -35,12 +47,11 @@ class AstNode {
         return items;
     }
 
-    public Token getToken(TokenType tokenType) {
-        RuleType ruleType = RuleType.cast(tokenType);
-        return getSingle(ruleType, new Token(null, null));
+    Token getToken(TokenType tokenType) {
+        return requireNonNull(getSingle(tokenType.ruleType, null));
     }
 
-    public List<Token> getTokens(TokenType tokenType) {
-        return getItems(RuleType.cast(tokenType));
+    List<Token> getTokens(TokenType tokenType) {
+        return getItems(tokenType.ruleType);
     }
 }

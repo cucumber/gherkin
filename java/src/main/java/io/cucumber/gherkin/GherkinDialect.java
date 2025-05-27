@@ -3,11 +3,23 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.StepKeywordType;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
+import static io.cucumber.messages.types.StepKeywordType.ACTION;
+import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
+import static io.cucumber.messages.types.StepKeywordType.CONTEXT;
+import static io.cucumber.messages.types.StepKeywordType.OUTCOME;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableSet;
+import static java.util.Objects.requireNonNull;
 
 public final class GherkinDialect {
     private final String language;
@@ -25,49 +37,84 @@ public final class GherkinDialect {
     private final List<String> andKeywords;
     private final List<String> butKeywords;
     private final List<String> stepKeywords;
-    private final Map<String, List<StepKeywordType>> stepKeywordsTypes;
+    private final Map<String, Set<StepKeywordType>> stepKeywordsTypes;
 
-    GherkinDialect(String language, String name, String nativeName, List<String> featureKeywords, List<String> ruleKeywords, List<String> scenarioKeywords, List<String> scenarioOutlineKeywords, List<String> backgroundKeywords, List<String> examplesKeywords, List<String> givenKeywords, List<String> whenKeywords, List<String> thenKeywords, List<String> andKeywords, List<String> butKeywords) {
-        this.language = language;
-        this.name = name;
-        this.nativeName = nativeName;
-        this.featureKeywords = featureKeywords;
-        this.ruleKeywords = ruleKeywords;
-        this.scenarioKeywords = scenarioKeywords;
-        this.scenarioOutlineKeywords = scenarioOutlineKeywords;
-        this.backgroundKeywords = backgroundKeywords;
-        this.examplesKeywords = examplesKeywords;
-        this.givenKeywords = givenKeywords;
-        this.whenKeywords = whenKeywords;
-        this.thenKeywords = thenKeywords;
-        this.andKeywords = andKeywords;
-        this.butKeywords = butKeywords;
-
-        List<String> stepKeywords = new ArrayList<>();
-        stepKeywords.addAll(givenKeywords);
-        stepKeywords.addAll(whenKeywords);
-        stepKeywords.addAll(thenKeywords);
-        stepKeywords.addAll(andKeywords);
-        stepKeywords.addAll(butKeywords);
-        this.stepKeywords = unmodifiableList(stepKeywords);
-
-        Map<String, List<StepKeywordType>> stepKeywordsTypes = new HashMap<>();
-        addStepKeywordsTypes(stepKeywordsTypes, getGivenKeywords(), StepKeywordType.CONTEXT);
-        addStepKeywordsTypes(stepKeywordsTypes, getWhenKeywords(), StepKeywordType.ACTION);
-        addStepKeywordsTypes(stepKeywordsTypes, getThenKeywords(), StepKeywordType.OUTCOME);
-
-        List<String> conjunctionKeywords = new ArrayList<>();
-        conjunctionKeywords.addAll(getAndKeywords());
-        conjunctionKeywords.addAll(getButKeywords());
-        addStepKeywordsTypes(stepKeywordsTypes, conjunctionKeywords, StepKeywordType.CONJUNCTION);
-        this.stepKeywordsTypes = stepKeywordsTypes;
+    GherkinDialect(
+            String language,
+            String name,
+            String nativeName,
+            List<String> featureKeywords,
+            List<String> ruleKeywords,
+            List<String> scenarioKeywords,
+            List<String> scenarioOutlineKeywords,
+            List<String> backgroundKeywords,
+            List<String> examplesKeywords,
+            List<String> givenKeywords,
+            List<String> whenKeywords,
+            List<String> thenKeywords,
+            List<String> andKeywords,
+            List<String> butKeywords
+    ) {
+        this.language = requireNonNull(language);
+        this.name = requireNonNull(name);
+        this.nativeName = requireNonNull(nativeName);
+        this.featureKeywords = requireNonNull(featureKeywords);
+        this.ruleKeywords = requireNonNull(ruleKeywords);
+        this.scenarioKeywords = requireNonNull(scenarioKeywords);
+        this.scenarioOutlineKeywords = requireNonNull(scenarioOutlineKeywords);
+        this.backgroundKeywords = requireNonNull(backgroundKeywords);
+        this.examplesKeywords = requireNonNull(examplesKeywords);
+        this.givenKeywords = requireNonNull(givenKeywords);
+        this.whenKeywords = requireNonNull(whenKeywords);
+        this.thenKeywords = requireNonNull(thenKeywords);
+        this.andKeywords = requireNonNull(andKeywords);
+        this.butKeywords = requireNonNull(butKeywords);
+        
+        this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
+        this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
     }
 
-    private static void addStepKeywordsTypes(Map<String, List<StepKeywordType>> h, List<String> keywords, StepKeywordType type) {
+    @SafeVarargs
+    private static List<String> distinctKeywords(List<String>... keywords) {
+        int totalSize = 0;
+        for (List<String> keyword : keywords) {
+            totalSize += keyword.size();
+        }
+        Set<String> uniqueKeywords = new LinkedHashSet<>(totalSize);
+        for (List<String> keyword : keywords) {
+            uniqueKeywords.addAll(keyword);
+        }
+        List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
+        // Sort from longest to shortest
+        Comparator<String> naturalOrder = Comparator.naturalOrder();
+        Collections.sort(sortedKeywords, naturalOrder.reversed());
+        return unmodifiableList(sortedKeywords);
+    }
+    
+    private static Map<String, Set<StepKeywordType>> aggregateKeywordTypes(
+            List<String> givenKeywords,
+            List<String> whenKeywords,
+            List<String> thenKeywords,
+            List<String> andKeywords,
+            List<String> butKeywords
+    ) {
+        Map<String, Set<StepKeywordType>> stepKeywordsTypes = new HashMap<>();
+        addStepKeywordsTypes(stepKeywordsTypes, CONTEXT, givenKeywords);
+        addStepKeywordsTypes(stepKeywordsTypes, ACTION, whenKeywords);
+        addStepKeywordsTypes(stepKeywordsTypes, OUTCOME, thenKeywords);
+        addStepKeywordsTypes(stepKeywordsTypes, CONJUNCTION, distinctKeywords(andKeywords, butKeywords));
+        stepKeywordsTypes.replaceAll((keyword, stepKeywordTypes) -> unmodifiableSet(stepKeywordTypes));
+        return stepKeywordsTypes;
+    }
+
+    private static void addStepKeywordsTypes(Map<String, Set<StepKeywordType>> accumulator, StepKeywordType type, List<String> keywords) {
         for (String keyword : keywords) {
-            if (!h.containsKey(keyword))
-                h.put(keyword, new ArrayList<>());
-            h.get(keyword).add(type);
+            if (!accumulator.containsKey(keyword)) {
+                // Most keywords only have a single type.
+                accumulator.put(keyword, EnumSet.of(type));
+            } else {
+                accumulator.get(keyword).add(type);
+            }
         }
     }
 
@@ -99,8 +146,35 @@ public final class GherkinDialect {
         return stepKeywords;
     }
 
+    /**
+     * Returns the {@link StepKeywordType StepKeywordTypes} for a given keyword
+     * 
+     * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
+     * @param keyword to get the keyword type for
+     * @return the keywords type
+     */
+    @Deprecated
     public List<StepKeywordType> getStepKeywordTypes(String keyword) {
-        return stepKeywordsTypes.get(keyword);
+        Set<StepKeywordType> stepKeywordTypes = stepKeywordsTypes.get(keyword);
+        if (stepKeywordTypes == null) {
+            return null;
+        }
+        return new ArrayList<>(stepKeywordTypes);
+    }
+
+    /**
+     * Returns the {@link StepKeywordType StepKeywordTypes} for a given keyword
+     *
+     * @param keyword to get the keyword type for
+     * @return the keywords type
+     */
+    public Set<StepKeywordType> getStepKeywordTypesSet(String keyword) {
+        requireNonNull(keyword);
+        Set<StepKeywordType> stepKeywordTypes = stepKeywordsTypes.get(keyword);
+        if (stepKeywordTypes == null) {
+            throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
+        }
+        return stepKeywordTypes;
     }
 
     public List<String> getBackgroundKeywords() {

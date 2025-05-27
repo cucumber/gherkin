@@ -8,14 +8,15 @@ on:
 jobs:
   publish-nuget:
     name: Publish package to NuGet.org
-    runs-on: ubuntu-latest
+    # Failing on `ubuntu-24.04` (https://github.com/cucumber/gherkin/issues/349)
+    runs-on: ubuntu-22.04
     environment: Release
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 9.0.x
       - uses: cucumber/action-publish-nuget@v1.0.0
         with:
           nuget-api-key: ${{ secrets.NUGET_API_KEY }}

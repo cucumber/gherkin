@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ParserTest {
+class ParserTest {
 
     @Test
-    public void change_default_language() {
-        TokenMatcher matcher = new TokenMatcher("no");
+    void change_default_language() {
+        GherkinTokenMatcher matcher = new GherkinTokenMatcher("no");
         IdGenerator idGenerator = new IncrementingIdGenerator();
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
 

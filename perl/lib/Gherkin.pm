@@ -3,6 +3,7 @@ package Gherkin;
 use strict;
 use warnings;
 use Encode qw(encode_utf8 find_encoding);
+use Scalar::Util qw( blessed );
 
 use Cucumber::Messages;
 
@@ -31,15 +32,17 @@ sub from_paths {
     my ($class, $paths, $id_generator, $sink, %options) = @_;
 
     my $gherkin = $class->new(%options);
-    for my $path (@$paths) {
+    for my $path (@{$paths}) {
         # Note: There's a huge difference between ':utf8' and
         # ':encoding(UTF-8)' in Perl: the latter causes strict UTF-8 conversion
         # and fails hard if there are encoding problems. The former
         # accommodates the errors and simply continues, allowing us to
         # recode back to octets and then to the encoding indicated in the
         # header using the "# encoding: ..." header.
+        ## no critic (RequireEncodingWithUTF8Layer)
         open my $fh, '<:utf8', $path
             or die "Unable to open gherkin document $path: $!";
+        ## use critic
 
         # local $/ = undef; --> unset 'end-of-line' marker: slurp entire file
         # use the 'do' block to scope this binding to smallest possible scope
@@ -83,6 +86,22 @@ sub _parse_source_encoding_header {
     }
 }
 
+sub _parser_error_message {
+    my ( $error, $uri ) = @_;
+    return Cucumber::Messages::Envelope->new(
+        parse_error => Cucumber::Messages::ParseError->new(
+            source => Cucumber::Messages::SourceReference->new(
+                uri => $uri,
+                location => Cucumber::Messages::Location->new(
+                    line => $error->location->{line},
+                    column => $error->location->{column},
+                ),
+            ),
+            message => $error->stringify,
+        )
+    );
+}
+
 sub from_source {
     my ($self, $envelope, $id_generator, $sink) = @_;
 
@@ -97,11 +116,32 @@ sub from_source {
             Gherkin::AstBuilder->new($id_generator)
             );
         my $data = $source->data;
-        my $ast_msg = $parser->parse( \$data, $source->uri);
-        $sink->($ast_msg) if $self->include_ast;
 
-        if ($self->include_pickles) {
-            Gherkin::Pickles::Compiler->compile($ast_msg, $id_generator, $sink);
+        local $@;
+        my $ast_msg;
+        if (eval { $ast_msg = $parser->parse( \$data, $source->uri); 1 }) {
+            $sink->($ast_msg) if $self->include_ast;
+
+            if ($self->include_pickles) {
+                Gherkin::Pickles::Compiler->compile(
+                    $ast_msg,
+                    $id_generator,
+                    $sink);
+            }
+        }
+        else {
+            if ( blessed $@ ) {
+                if ( $@->isa( 'Gherkin::Exceptions::CompositeParser' ) ) {
+                    $sink->( _parser_error_message( $_, $source->uri ) )
+                        for ( @{ $@->errors } );
+                    return;
+                }
+                elsif ( $@->isa( 'Gherkin::Exceptions::SingleParser' ) ) {
+                    $sink->( _parser_error_message( $@, $source->uri ) );
+                    return;
+                }
+            }
+            die $@; # rethrow
         }
     }
 }

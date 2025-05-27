@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+namespace Gherkin.Ast;
 
-namespace Gherkin.Ast
+public interface IHasSteps
 {
-    public interface IHasSteps
-    {
-        IEnumerable<Step> Steps { get; }
-    }
+    IEnumerable<Step> Steps { get; }
 }

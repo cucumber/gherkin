@@ -6,3 +6,4 @@ perl5/
 .cpanfile_dependencies
 cpanfile.snapshot
 CHANGELOG.md
+lib/Gherkin/Generated/Languages.pm

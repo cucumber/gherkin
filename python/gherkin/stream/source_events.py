@@ -1,25 +1,39 @@
-import io
+from __future__ import annotations
 
-def source_event(path):
-    event = {
-        'source': {
-            'uri': path,
-            'data': io.open(path, 'r', encoding='utf8', newline='').read(),
-            'mediaType': _media_type(path)
-        }
-    }
-    return event
+from collections.abc import Iterable
+from typing import TypedDict
 
 
-def _media_type(path):
+class Source(TypedDict):
+    uri: str
+    data: str
+    mediaType: str
+
+
+class Event(TypedDict):
+    source: Source
+
+
+def _media_type(path) -> String:
     if(path.endswith(".feature")):
         return 'text/x.cucumber.gherkin+plain'
     if(path.endswith(".feature.md")):
         return 'text/x.cucumber.gherkin+markdown'
 
+def source_event(path: str) -> Event:
+    event: Event = {
+        "source": {
+            "uri": path,
+            "data": open(path, encoding="utf8", newline="").read(),
+            "mediaType": _media_type(path),
+        }
+    }
+    return event
+
+
 class SourceEvents:
-    def __init__(self, paths):
+    def __init__(self, paths: list[str]) -> None:
         self.paths = paths
 
-    def enum(self):
+    def enum(self) -> Iterable[Event]:
         return map(source_event, self.paths)

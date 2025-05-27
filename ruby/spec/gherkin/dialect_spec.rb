@@ -1,6 +1,4 @@
-# coding: utf-8
-require 'rspec'
-require 'gherkin/dialect'
+# frozen_string_literal: true
 
 module Gherkin
   describe Dialect do

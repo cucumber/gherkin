@@ -1,6 +1,5 @@
-﻿namespace Gherkin.Ast
+namespace Gherkin.Ast;
+
+public abstract class Node
 {
-    public abstract class Node
-    {
-    }
 }
