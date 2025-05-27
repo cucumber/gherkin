@@ -213,8 +213,7 @@ sub match_Comment {
     if (   $token->line->startswith('|')
         && $self->_is_gfm_table_separator( $token->line->table_cells ) )
     {
-        $self->_set_token_matched( $token,
-            Comment => { text => $token->line->line_text, indent => 0 } );
+        $self->_set_token_matched( $token, Empty => { indent => 0 } );
     }
 }
 
