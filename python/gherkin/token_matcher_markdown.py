@@ -106,15 +106,8 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         return len(separator_values) > 0
 
     def match_StepLine(self, token: Token) -> bool:
-        nonStarStepKeywords = (
-            self.dialect.given_keywords
-            + self.dialect.when_keywords
-            + self.dialect.then_keywords
-            + self.dialect.and_keywords
-            + self.dialect.but_keywords
-        )
         return self._match_title_line(
-            KEYWORD_PREFIX_BULLET, nonStarStepKeywords, "", token, "StepLine"
+            KEYWORD_PREFIX_BULLET, self._sorted_step_keywords, "", token, "StepLine"
         )
 
     def match_Comment(self, token: Token) -> bool:
@@ -228,53 +221,9 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
         return False
 
-    def _set_token_matched(
-            self,
-            token: Token,
-        matched_type: str | None,
-        text: str | None = None,
-        keyword: str | None = None,
-        keyword_type: str | None = None,
-        indent: int | None = None,
-        items: list[MatchedItems] | None = None,
-    ) -> None:
-        if items is None:
-            items = []
-        token.matched_type = matched_type
-        # text == '' should not result in None
-
-        token.matched_text = text.rstrip('\r\n') if (text is not None and text is not False) else None
-        token.matched_keyword = keyword
-        token.matched_keyword_type = keyword_type
-        if indent is not None:
-            token.matched_indent = indent
-        else:
-            token.matched_indent = token.line.indent if token.line else 0
-        token.matched_items = items
-        token.location['column'] = token.matched_indent + 1
-        token.matched_gherkin_dialect = self.dialect_name
-
     def _change_dialect(self, dialect_name, location=None) -> None:
-        dialect = Dialect.for_name(dialect_name)
-        if not dialect:
-            raise NoSuchLanguageException(dialect_name, location)
-
-        self.dialect_name = dialect_name
-        self.dialect = dialect
-        self.keyword_types = defaultdict(list)
-        for keyword in self.dialect.given_keywords:
-            self.keyword_types[keyword].append('Context')
-        for keyword in self.dialect.when_keywords:
-            self.keyword_types[keyword].append('Action')
-        for keyword in self.dialect.then_keywords:
-            self.keyword_types[keyword].append('Outcome')
-        for keyword in self.dialect.and_keywords + self.dialect.but_keywords:
-            self.keyword_types[keyword].append('Conjunction')
-
-    def _unescaped_docstring(self, text):
-        if self._active_doc_string_separator == '"""':
-            return text.replace('\\"\\"\\"', '"""')
-        elif self._active_doc_string_separator == '```':
-            return text.replace('\\`\\`\\`', '```')
-        else:
-            return text
+        super()._change_dialect(dialect_name, location)
+        self._sorted_step_keywords = list(filter(
+            lambda key: key != '* ',
+            self._sorted_step_keywords
+        ))
