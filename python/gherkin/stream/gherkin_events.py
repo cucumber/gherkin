@@ -11,6 +11,7 @@ from gherkin.errors import ParserError, CompositeParserException, ParserExceptio
 from gherkin.stream.id_generator import IdGenerator
 from gherkin.stream.source_events import Event
 from gherkin.token import Location
+from gherkin.token_matcher import TokenMatcher
 from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
 
 
@@ -67,9 +68,11 @@ class GherkinEvents:
 
         try:
             matcher=None
-            if(uri.endswith('.md')):
-                matcher=GherkinInMarkdownTokenMatcher()
-            gherkin_document = self.parser.parse(source)
+            if source_event["source"]["mediaType"] == 'text/x.cucumber.gherkin+plain':
+                matcher = TokenMatcher()
+            elif source_event["source"]["mediaType"] == 'text/x.cucumber.gherkin+markdown':
+                matcher = GherkinInMarkdownTokenMatcher()
+            gherkin_document = self.parser.parse(source, matcher)
             gherkin_document_with_uri: GherkinDocumentWithURI = {
                 **gherkin_document,
                 "uri": uri,

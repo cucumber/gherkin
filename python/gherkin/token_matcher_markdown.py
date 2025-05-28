@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import re
+from collections import defaultdict
 from collections.abc import Iterable
+from typing import TypedDict
 
 from .gherkin_line import Cell
 from .token import Token
 from .token_matcher import TokenMatcher, MatchedItems
+from .dialect import Dialect
 
 KEYWORD_PREFIX_BULLET = "^(\\s*[*+-]\\s*)"
 KEYWORD_PREFIX_HEADER = "^(#{1,6}\\s)"
@@ -23,7 +26,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
     def match_FeatureLine(self, token: Token) -> bool:
 
         if self.matched_feature_line:
-            self._set_token_matched(token, None)
+            return False
 
         # We first try to match "# Feature: blah"
         result = self._match_title_line(
@@ -39,8 +42,8 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
         if not result:
             self._set_token_matched(token, "FeatureLine", token.line.get_line_text())
-        self.matched_feature_line = result
-        return result
+        self.matched_feature_line = True
+        return True
 
     def match_RuleLine(self, token: Token) -> bool:
         return self._match_title_line(
@@ -118,11 +121,11 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         if token.line.startswith("|"):
             table_cells = token.line.table_cells
             if self._is_gfm_table_separator(table_cells):
+                self._set_token_matched(token, "Comment")
                 return True
-        return self._set_token_matched(token, None, False)
+        return False
 
     def match_Empty(self, token: Token) -> bool:
-
         result = False
         if token.line.is_empty():
             result = True
@@ -199,42 +202,48 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         token: Token,
         token_type: str,
     ) -> bool:
-        keywords_or_list = "|".join(map(lambda x: re.escape(x), keywords))
-        match = re.search(
-            f"{prefix}({keywords_or_list}){keywordSuffix}(.*)",
-            token.line.get_line_text(),
-        )
-        indent = token.line.indent
-        result = False
-        matchedKeywordType=None
-        if(match):
-            matchedKeyword = match.group(2)
-            indent += len(match.group(1))
+        text = token.line.get_line_text()
+        for keyword in keywords:
+            match = re.search(
+                    f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)",
+                    text
+            )
+            if match:
+                indent = token.line.indent + len(match.group(1))
+                matchedKeyword = match.group(2)
+                # only set the keyword type if this is a step keyword
+                if( matchedKeyword in self.keyword_types ):
+                    matchedKeywordType = self.keyword_types[matchedKeyword][0]
+                else:
+                    matchedKeywordType = None
+                self._set_token_matched(
+                    token,
+                    token_type,
+                    match.group(3).strip(),
+                    matchedKeyword,
+                    keyword_type=matchedKeywordType,
+                    indent=indent
+                )
+                return True
 
-            # only set the keyword type if this is a step keyword
-            if( matchedKeyword in self.keyword_types ):
-                matchedKeywordType = self.keyword_types[matchedKeyword][0]    
-
-            self._set_token_matched(token, token_type, match.group(3).strip(), matchedKeyword, keyword_type=matchedKeywordType, indent=indent)
-            return True
         return False
 
-    def _set_token_matched2(self, token, matched, indent=None, ):
-        token.matched_gherkin_dialect = self.dialect_name
-        if indent is not None:
-            token.matched_indent = indent
-        else:
-            token.matched_indent = token.line.indent if token.line else 0
-        token.location['column'] = token.matched_indent + 1
-        return matched
-
-    def _set_token_matched(self, token, matched_type, text=None,
-                           keyword=None, keyword_type=None, indent=None, items=None):
+    def _set_token_matched(
+            self,
+            token: Token,
+        matched_type: str | None,
+        text: str | None = None,
+        keyword: str | None = None,
+        keyword_type: str | None = None,
+        indent: int | None = None,
+        items: list[MatchedItems] | None = None,
+    ) -> None:
         if items is None:
             items = []
         token.matched_type = matched_type
         # text == '' should not result in None
-        token.matched_text = text.rstrip('\r\n') if text is not None else None
+
+        token.matched_text = text.rstrip('\r\n') if (text is not None and text is not False) else None
         token.matched_keyword = keyword
         token.matched_keyword_type = keyword_type
         if indent is not None:
@@ -245,7 +254,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         token.location['column'] = token.matched_indent + 1
         token.matched_gherkin_dialect = self.dialect_name
 
-    def _change_dialect(self, dialect_name, location=None):
+    def _change_dialect(self, dialect_name, location=None) -> None:
         dialect = Dialect.for_name(dialect_name)
         if not dialect:
             raise NoSuchLanguageException(dialect_name, location)
