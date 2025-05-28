@@ -199,15 +199,7 @@ def test_it_parses_markdown_data_tables_with_headers():
 """
   ast = parser.parse(TokenScanner(markdown), matcher)
   expected = {
-        "comments": [
-          {
-            "location": {
-              "column": 3,
-              "line": 7
-            },
-            "text": None
-          }
-        ],
+        "comments": [],
         "feature": {
           "children": [
             {

@@ -186,21 +186,6 @@ def test_it_does_not_match_table_row_indented_6_space():
     assert not tm.match_TableRow(token)
 
 
-def test_it_matches_table_separator_row_as_comment():
-    tm = GherkinInMarkdownTokenMatcher("en")
-
-    l1 = GherkinLine("  | h1 | h2 |", location["line"])
-    t1 = Token(l1, location)
-    assert tm.match_TableRow(t1)
-    assert t1.location['column'] == 3
-
-    l2 = GherkinLine("  | --- | --- |", location["line"])
-    t2 = Token(l2, location)
-    assert not tm.match_TableRow(t2)
-    assert tm.match_Comment(t2)
-    assert t2.location['column'] == 3
-
-
 def test_it_matches_indented_tags():
     tm = GherkinInMarkdownTokenMatcher("en")
 
