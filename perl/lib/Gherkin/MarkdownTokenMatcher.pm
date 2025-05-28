@@ -133,7 +133,7 @@ sub match_TagLine {
 
 sub _match_title_line {
     my ( $self, $prefix, $keyword_suffix, $token, $token_type, $keywords ) = @_;
-    my $regex = $prefix . '(' . join( '|', @{$keywords} ) . ')' . $keyword_suffix . '\s*(.*)';
+    my $regex = $prefix . '(' . join( '|', map { "\Q$_\E" } @{$keywords} ) . ')' . $keyword_suffix . '\s*(.*)';
     if ( $token->line->_trimmed_line_text =~ qr/$regex/ ) {
         my $indent  = $token->line->indent + ( length($1) || 0 );
         my $keyword = $2;
