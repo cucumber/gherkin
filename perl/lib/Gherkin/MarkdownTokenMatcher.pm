@@ -20,7 +20,7 @@ sub new {
     $options->{'dialect'} ||= Gherkin::Dialect->new( { dialect => 'en' } );
     my $self = bless $options, $class;
     $self->_default_dialect_name( $self->dialect_name );
-    my @non_star_step_keywords = map {
+    my @non_star_step_keywords = sort { length($b) <=> length($a) } map {
         grep { $_ ne '* ' }
           @{ $self->dialect->$_ }
     } qw/Given When Then And But/;
