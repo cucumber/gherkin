@@ -132,13 +132,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     let result = false
     if (token.line.startsWith('|')) {
       const tableCells = token.line.getTableCells()
-      if (this.isGfmTableSeparator(tableCells)) {
-        // Maintain consistency with Python implementation
-        token.matchedType = TokenType.Comment
-        token.matchedText = undefined
-        token.matchedIndent=0
-        result = true
-      }
+      if (this.isGfmTableSeparator(tableCells)) result = true
     }
     return this.setTokenMatched(token, null, result)
   }

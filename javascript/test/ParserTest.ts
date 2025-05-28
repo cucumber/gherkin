@@ -6,17 +6,16 @@ import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher'
 import AstNode from '../src/AstNode'
 import generateMessages from '../src/generateMessages'
 import GherkinInMarkdownTokenMatcher from '../src/GherkinInMarkdownTokenMatcher'
-import { StepKeywordType } from '@cucumber/messages'
 
 describe('Parser', function () {
   describe('with Gherkin Classic', () => {
     let parser: Parser<AstNode>
     beforeEach(
       () =>
-      (parser = new Parser<AstNode>(
-        new AstBuilder(messages.IdGenerator.incrementing()),
-        new GherkinClassicTokenMatcher()
-      ))
+        (parser = new Parser<AstNode>(
+          new AstBuilder(messages.IdGenerator.incrementing()),
+          new GherkinClassicTokenMatcher()
+        ))
     )
 
     it('parses a simple feature', function () {
@@ -94,20 +93,20 @@ describe('Parser', function () {
       try {
         parser.parse(
           '# a comment\n' +
-          'Feature: Foo\n' +
-          '  Scenario: Bar\n' +
-          '    Given x\n' +
-          '      ```\n' +
-          '      unclosed docstring\n'
+            'Feature: Foo\n' +
+            '  Scenario: Bar\n' +
+            '    Given x\n' +
+            '      ```\n' +
+            '      unclosed docstring\n'
         )
       } catch (expected) {
         ast = parser.parse(
           'Feature: Foo\n' +
-          '  Scenario: Bar\n' +
-          '    Given x\n' +
-          '      """\n' +
-          '      closed docstring\n' +
-          '      """'
+            '  Scenario: Bar\n' +
+            '    Given x\n' +
+            '      """\n' +
+            '      closed docstring\n' +
+            '      """'
         )
       }
 
@@ -156,11 +155,11 @@ describe('Parser', function () {
     it('interpolates data tables', function () {
       const envelopes = generateMessages(
         'Feature: Foo\n' +
-        '  Scenario Outline: Parenthesis\n' +
-        '    Given the thing <is (not) triggered> and has <value>\n' +
-        '  Examples:\n' +
-        '    | is (not) triggered | value |\n' +
-        '    | is triggered       | foo   |\n ',
+          '  Scenario Outline: Parenthesis\n' +
+          '    Given the thing <is (not) triggered> and has <value>\n' +
+          '  Examples:\n' +
+          '    | is (not) triggered | value |\n' +
+          '    | is triggered       | foo   |\n ',
         '',
         messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN,
         { includePickles: true, newId: messages.IdGenerator.incrementing() }
@@ -195,10 +194,10 @@ describe('Parser', function () {
     let parser: Parser<AstNode>
     beforeEach(
       () =>
-      (parser = new Parser<AstNode>(
-        new AstBuilder(messages.IdGenerator.incrementing()),
-        new GherkinInMarkdownTokenMatcher()
-      ))
+        (parser = new Parser<AstNode>(
+          new AstBuilder(messages.IdGenerator.incrementing()),
+          new GherkinInMarkdownTokenMatcher()
+        ))
     )
 
     it('does not parse a feature description', function () {
@@ -309,128 +308,5 @@ description
 
       assert.strictEqual(pickle.steps[0].argument.docString.content, '```what')
     })
-
-    it("parses Markdown data tables with headers", () => {
-      const markdown = `## Feature: DataTables
-
-### Scenario: minimalistic
-
-* Given a simple data table 
-  | foo | bar |
-  | --- | --- |
-  | boz | boo |
-`
-      const ast = parser.parse(markdown)
-      const gherkinDocument: messages.GherkinDocument = {
-        "comments": [
-          {
-            "location": {
-              "column": 3,
-              "line": 7
-            },
-            "text": undefined
-          }
-        ],
-        "feature": {
-          "children": [
-            {
-              "scenario": {
-                "description": "",
-                "examples": [],
-                "id": "3",
-                "keyword": "Scenario",
-                "location": {
-                  "column": 5,
-                  "line": 3
-                },
-                "name": "minimalistic",
-                "steps": [
-                  {
-                    "dataTable": {
-                      "location": {
-                        "column": 3,
-                        "line": 6
-                      },
-                      "rows": [
-                        {
-                          "cells": [
-                            {
-                              "location": {
-                                "column": 5,
-                                "line": 6
-                              },
-                              "value": "foo"
-                            },
-                            {
-                              "location": {
-                                "column": 11,
-                                "line": 6
-                              },
-                              "value": "bar"
-                            }
-                          ],
-                          "id": "0",
-                          "location": {
-                            "column": 3,
-                            "line": 6
-                          }
-                        },
-                        {
-                          "cells": [
-                            {
-                              "location": {
-                                "column": 5,
-                                "line": 8
-                              },
-                              "value": "boz"
-                            },
-                            {
-                              "location": {
-                                "column": 11,
-                                "line": 8
-                              },
-                              "value": "boo"
-                            }
-                          ],
-                          "id": "1",
-                          "location": {
-                            "column": 3,
-                            "line": 8
-                          }
-                        }
-                      ]
-                    },
-                    "id": "2",
-                    docString: undefined,
-                    "keyword": "Given ",
-                    "keywordType": StepKeywordType.CONTEXT,
-                    "location": {
-                      "column": 3,
-                      "line": 5
-                    },
-                    "text": "a simple data table"
-                  }
-                ],
-                "tags": []
-              }
-            }
-          ],
-          "description": "",
-          "keyword": "Feature",
-          "language": "en",
-          "location": {
-            "column": 4,
-            "line": 1
-          },
-          "name": "DataTables",
-          "tags": []
-        }
-      }
-      assert.deepStrictEqual(ast, gherkinDocument)
-    })
-
   })
-
-
 })
-

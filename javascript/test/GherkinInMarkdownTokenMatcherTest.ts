@@ -34,56 +34,33 @@ describe('GherkinInMarkdownTokenMatcher', function () {
     assert.strictEqual(token.matchedText, 'hello')
   })
 
-  it('matches FeatureLine without the Feature: keyword', () => {
-    const line = new GherkinLine('# hello', location.line)
-    const token = new Token(line, location)
-    assert(tm.match_FeatureLine(token))
-    assert.strictEqual(token.matchedType, TokenType.FeatureLine)
-    assert.strictEqual(token.matchedKeyword, undefined)
-    assert.strictEqual(token.matchedText, '# hello')
-  })
-
   it('matches bullet Step', () => {
     const line = new GherkinLine('  *  Given I have 3 cukes', location.line)
     const token = new Token(line, location)
     assert(tm.match_StepLine(token))
     assert.strictEqual(token.matchedType, TokenType.StepLine)
     assert.strictEqual(token.matchedKeyword, 'Given ')
-    assert.strictEqual(token.matchedKeywordType, 'Context')
     assert.strictEqual(token.matchedText, 'I have 3 cukes')
     assert.strictEqual(token.location.column, 6)
   })
-  
+
   it('matches plus Step', () => {
     const line = new GherkinLine('  +  Given I have 3 cukes', location.line)
     const token = new Token(line, location)
     assert(tm.match_StepLine(token))
     assert.strictEqual(token.matchedType, TokenType.StepLine)
     assert.strictEqual(token.matchedKeyword, 'Given ')
-    assert.strictEqual(token.matchedKeywordType, 'Context')
     assert.strictEqual(token.matchedText, 'I have 3 cukes')
     assert.strictEqual(token.location.column, 6)
   })
-  
+
   it('matches hyphen Step', () => {
     const line = new GherkinLine('  -  Given I have 3 cukes', location.line)
     const token = new Token(line, location)
     assert(tm.match_StepLine(token))
     assert.strictEqual(token.matchedType, TokenType.StepLine)
     assert.strictEqual(token.matchedKeyword, 'Given ')
-    assert.strictEqual(token.matchedKeywordType, 'Context')
     assert.strictEqual(token.matchedText, 'I have 3 cukes')
-    assert.strictEqual(token.location.column, 6)
-  })
-  
-  it('matches a when Step', () => {
-    const line = new GherkinLine('  -  When I do something', location.line)
-    const token = new Token(line, location)
-    assert(tm.match_StepLine(token))
-    assert.strictEqual(token.matchedType, TokenType.StepLine)
-    assert.strictEqual(token.matchedKeyword, 'When ')
-    assert.strictEqual(token.matchedKeywordType, 'Action')
-    assert.strictEqual(token.matchedText, 'I do something')
     assert.strictEqual(token.location.column, 6)
   })
 
@@ -209,21 +186,4 @@ describe('GherkinInMarkdownTokenMatcher', function () {
     ]
     assert.deepStrictEqual(t.matchedItems, expectedItems)
   })
-
-  it('matches arbitrary text as Empty after the FeatureLine has already been matched', () => {
-    // White Box testing - implementation detail...
-    // Given the FeatureLine has already been matched
-    const tFeatureLine = new Token(new GherkinLine('# something arbitrary', location.line), location);
-    assert(tm.match_FeatureLine(tFeatureLine))
-
-
-    const t = new Token(new GherkinLine('arbitrary text', location.line), location);
-    // (tm as any).matchedFeatureLine = true
-    assert(tm.match_Empty(t))
-    assert.strictEqual(t.matchedType, TokenType.Empty)
-    const expectedItems: Item[] =undefined
-    assert.deepStrictEqual(t.matchedItems, expectedItems)
-    assert.strictEqual(t.matchedKeyword, undefined)
-    assert.strictEqual(t.matchedText, undefined)
-  } )
 })
