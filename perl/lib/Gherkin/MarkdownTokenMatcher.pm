@@ -253,7 +253,7 @@ sub match_TableRow {
         my $table_cells = $token->line->table_cells;
         return if ( $self->_is_gfm_table_separator($table_cells) );
         $self->_set_token_matched( $token,
-            TableRow => { items => $table_cells } );
+            TableRow => { keyword => '|', items => $table_cells } );
     }
 }
 

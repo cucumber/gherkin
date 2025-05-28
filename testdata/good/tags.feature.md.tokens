@@ -15,16 +15,16 @@
 (15:1)TagLine://2:@ex_tag1,13:@ex_tag2
 (16:3)TagLine://4:@ex_tag3
 (17:5)ExamplesLine:()Examples//
-(18:3)TableRow://5:what
+(18:3)TableRow:()|//5:what
 (19:1)Empty://
-(20:3)TableRow://5:minimalism
+(20:3)TableRow:()|//5:minimalism
 (21:1)Empty://
 (22:1)TagLine://2:@ex_tag4,13:@ex_tag5
 (23:3)TagLine://4:@ex_tag6
 (24:5)ExamplesLine:()Examples//
-(25:3)TableRow://5:what
+(25:3)TableRow:()|//5:what
 (26:1)Empty://
-(27:3)TableRow://5:more minimalism
+(27:3)TableRow:()|//5:more minimalism
 (28:1)Empty://
 (29:1)TagLine://2:@comment_tag1
 (30:4)ScenarioLine:()Scenario/comments/
