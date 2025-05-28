@@ -121,7 +121,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         if token.line.startswith("|"):
             table_cells = token.line.table_cells
             if self._is_gfm_table_separator(table_cells):
-                self._set_token_matched(token, "Comment")
+                self._set_token_matched(token, "Empty", indent=0)
                 return True
         return False
 
