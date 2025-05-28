@@ -20,11 +20,6 @@ sub new {
     $options->{'dialect'} ||= Gherkin::Dialect->new( { dialect => 'en' } );
     my $self = bless $options, $class;
     $self->_default_dialect_name( $self->dialect_name );
-    my @non_star_step_keywords = sort { length($b) <=> length($a) } map {
-        grep { $_ ne '* ' }
-          @{ $self->dialect->$_ }
-    } qw/Given When Then And But/;
-    $self->_non_star_step_keywords( \@non_star_step_keywords );
     $self->reset();
     return $self;
 }
@@ -56,6 +51,12 @@ sub change_dialect {
     _add_keyword_type_mappings( $keyword_types, [ @{ $self->dialect->And }, @{ $self->dialect->But } ],
         Cucumber::Messages::Step::KEYWORDTYPE_CONJUNCTION );
     $self->_keyword_types($keyword_types);
+
+    my @non_star_step_keywords = sort { length($b) <=> length($a) } map {
+        grep { $_ ne '* ' }
+        @{ $self->dialect->$_ }
+    } qw/Given When Then And But/;
+    $self->_non_star_step_keywords( \@non_star_step_keywords );
 }
 
 sub reset {
