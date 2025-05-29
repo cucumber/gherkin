@@ -90,7 +90,8 @@ class GherkinLine {
             return emptyList();
         }
         List<GherkinLineSpan> tags = new ArrayList<>(elements.length);
-        for (String element : elements) {
+        for (int i = 0, elementsLength = elements.length; i < elementsLength; i++) {
+            String element = elements[i];
             String token = rtrim(element);
             if (token.isEmpty()) {
                 continue;

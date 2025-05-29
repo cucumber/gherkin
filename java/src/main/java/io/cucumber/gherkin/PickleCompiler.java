@@ -194,10 +194,12 @@ class PickleCompiler {
     private PickleTable pickleDataTable(DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
         List<TableRow> rows = dataTable.getRows();
         List<PickleTableRow> newRows = new ArrayList<>(rows.size());
-        for (TableRow row : rows) {
+        for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
+            TableRow row = rows.get(i);
             List<TableCell> cells = row.getCells();
             List<PickleTableCell> newCells = new ArrayList<>(cells.size());
-            for (TableCell cell : cells) {
+            for (int j = 0, cellsSize = cells.size(); j < cellsSize; j++) {
+                TableCell cell = cells.get(j);
                 newCells.add(new PickleTableCell(interpolate(cell.getValue(), variableCells, valueCells)));
             }
             newRows.add(new PickleTableRow(newCells));
@@ -257,9 +259,9 @@ class PickleCompiler {
     }
 
     private String interpolate(String name, List<TableCell> variableCells, List<TableCell> valueCells) {
-        int col = 0;
-        for (TableCell variableCell : variableCells) {
-            TableCell valueCell = valueCells.get(col++);
+        for (int i = 0, variableCellsSize = variableCells.size(); i < variableCellsSize; i++) {
+            TableCell variableCell = variableCells.get(i);
+            TableCell valueCell = valueCells.get(i);
             String header = variableCell.getValue();
             String value = valueCell.getValue();
             name = name.replace("<" + header + ">", value);

@@ -235,7 +235,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     private static String joinMatchedText(List<Token> lineTokens) {
         StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
-        for (Token lineToken : lineTokens) {
+        for (int i = 0, lineTokensSize = lineTokens.size(); i < lineTokensSize; i++) {
+            Token lineToken = lineTokens.get(i);
             content.append(lineToken.matchedText).append("\n");
         }
         int contentLength = content.length();
@@ -249,7 +250,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
         List<TableRow> rows = new ArrayList<>(tokens.size());
 
-        for (Token token : tokens) {
+        for (int i = 0, tokensSize = tokens.size(); i < tokensSize; i++) {
+            Token token = tokens.get(i);
             rows.add(new TableRow(token.location, getCells(token), idGenerator.newId()));
         }
         ensureCellCount(rows);
@@ -261,7 +263,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             return;
 
         int cellCount = rows.get(0).getCells().size();
-        for (TableRow row : rows) {
+        for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
+            TableRow row = rows.get(i);
             if (row.getCells().size() != cellCount) {
                 throw new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
             }
@@ -270,7 +273,9 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     private List<TableCell> getCells(Token token) {
         List<TableCell> cells = new ArrayList<>(token.matchedItems.size());
-        for (GherkinLineSpan cellItem : token.matchedItems) {
+        List<GherkinLineSpan> matchedItems = token.matchedItems;
+        for (int i = 0, matchedItemsSize = matchedItems.size(); i < matchedItemsSize; i++) {
+            GherkinLineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
                     cellItem.text
