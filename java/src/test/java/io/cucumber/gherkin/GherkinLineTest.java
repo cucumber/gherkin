@@ -228,6 +228,15 @@ class GherkinLineTest {
     }
 
     @Test
+    void startsWithTitleKeyword_mini() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("Rule", line);
+
+        // When/Then
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rule"));
+    }
+
+    @Test
     void parseTags_returns_empty_list_when_empty_line() {
         // Given
         GherkinLine gherkinLine = new GherkinLine("", line);
