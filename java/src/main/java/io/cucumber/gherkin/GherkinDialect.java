@@ -98,10 +98,9 @@ public final class GherkinDialect {
             uniqueKeywords.addAll(keyword);
         }
 
-        // the "* " keyword is rarely used, so we put it at the end
-        if (uniqueKeywords.remove("* ")) {
-            uniqueKeywords.add("* ");
-        }
+        // the "* " keyword is rarely used, so having it at the
+        // end would theoretically improve the performance, but
+        // it's so tiny that the profiler doesn't see the difference.
 
         return unmodifiableList(new ArrayList<>(uniqueKeywords));
     }
