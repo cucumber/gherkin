@@ -13,8 +13,7 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
@@ -121,7 +120,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_TagLine(Token token) {
-        if (!token.line.getText().isEmpty() && token.line.getText().charAt(0)==TAG_PREFIX.charAt(0)) {
+        if (token.line.startsWith(TAG_PREFIX_CHAR)) {
             setTokenMatched(token, TokenType.TagLine, null, null, null, null, token.line.parseTags());
             return true;
         }
@@ -158,7 +157,7 @@ class GherkinTokenMatcher implements TokenMatcher {
         for (int i = 0, keywordsSize = keywords.size(); i < keywordsSize; i++) {
             String keyword = keywords.get(i);
             if (token.line.startsWithTitleKeyword(keyword)) {
-                String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR.length());
+                String title = token.line.substringTrimmed(keyword.length() + 1); // +1 for the ':' after the keyword
                 setTokenMatched(token, tokenType, title, keyword, null, null, null);
                 return true;
             }

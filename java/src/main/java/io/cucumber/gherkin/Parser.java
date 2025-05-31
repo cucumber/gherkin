@@ -152,8 +152,7 @@ class Parser<T> {
             throw new ParserException.CompositeParserException(context.errors);
     }
 
-    private <V> void handleAstError(ParserContext context, V value, Builder b, final BiConsumer<Builder, V> action) {
-        // TODO share code with handleExternalError
+    private <V> void handleAstError(ParserContext context, V value, Builder<T> b, final BiConsumer<Builder<T>, V> action) {
         try {
             action.accept(b, value);
         } catch (ParserException.CompositeParserException compositeParserException) {
@@ -165,7 +164,8 @@ class Parser<T> {
         }
     }
 
-    private <V> V handleExternalError(ParserContext context, V defaultValue, Token token, BiFunction<TokenMatcher, Token, V> action) {
+    private boolean handleExternalError(ParserContext context, Token token,
+                                        BiFunction<TokenMatcher, Token, Boolean> action) {
         try {
             return action.apply(context.tokenMatcher, token);
         } catch (ParserException.CompositeParserException compositeParserException) {
@@ -175,7 +175,7 @@ class Parser<T> {
         } catch (ParserException error) {
             addError(context, error);
         }
-        return defaultValue;
+        return false;
     }
 
     private void build(final ParserContext context, final Token token) {
@@ -195,72 +195,72 @@ class Parser<T> {
     }
 
     private boolean match_EOF(final ParserContext context, final Token token) {
-        return token.isEOF() ? handleExternalError(context, false, token, TokenMatcher::match_EOF) : false;
+        return token.isEOF() && handleExternalError(context, token, TokenMatcher::match_EOF);
     }
 
     private boolean match_Empty(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_Empty);
+        if (token.isEOF() || !token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_Empty);
     }
 
     private boolean match_Comment(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_Comment);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_Comment);
     }
 
     private boolean match_TagLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_TagLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_TagLine);
     }
 
     private boolean match_FeatureLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_FeatureLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_FeatureLine);
     }
 
     private boolean match_RuleLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_RuleLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_RuleLine);
     }
 
     private boolean match_BackgroundLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_BackgroundLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_BackgroundLine);
     }
 
     private boolean match_ScenarioLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_ScenarioLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_ScenarioLine);
     }
 
     private boolean match_ExamplesLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_ExamplesLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_ExamplesLine);
     }
 
     private boolean match_StepLine(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_StepLine);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_StepLine);
     }
 
     private boolean match_DocStringSeparator(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_DocStringSeparator);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_DocStringSeparator);
     }
 
     private boolean match_TableRow(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_TableRow);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_TableRow);
     }
 
     private boolean match_Language(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_Language);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_Language);
     }
 
     private boolean match_Other(final ParserContext context, final Token token) {
-        if (token.isEOF()) return false;
-        return handleExternalError(context, false, token, TokenMatcher::match_Other);
+        if (token.isEOF() || token.line.isEmpty()) return false;
+        return handleExternalError(context, token, TokenMatcher::match_Other);
     }
 
     private int matchToken(int state, Token token, ParserContext context) {

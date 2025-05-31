@@ -69,6 +69,10 @@ class GherkinLine {
         return text.startsWith(prefix);
     }
 
+    public boolean startsWith(char tableCellSeparator) {
+        return !empty && text.charAt(0) == tableCellSeparator;
+    }
+
     String substringTrimmed(int beginIndex) {
         // trim the beginning of the line (the end of line has already been trimmed in the constructor)
         while ((beginIndex < text.length()) && (text.charAt(beginIndex)<=' ')) {
@@ -161,7 +165,7 @@ class GherkinLine {
     boolean startsWithTitleKeyword(String keyword) {
         return text.startsWith(keyword) &&
                text.length() > keyword.length() &&
-               text.charAt(keyword.length())==TITLE_KEYWORD_SEPARATOR.charAt(0);
+               text.charAt(keyword.length())==TITLE_KEYWORD_SEPARATOR;
     }
 
 }
