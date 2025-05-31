@@ -8,8 +8,8 @@ SOURCE_FILES = $(shell find lib -name "*.pm" | grep -v $(GHERKIN_PARSER) | grep 
 GHERKIN = bin/gherkin
 GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
 
-GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
-BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
+GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature" -o -name "*.feature.md")
+BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature" -o -name "*.feature.md")
 
 TOKENS       = $(patsubst ../testdata/%,acceptance/testdata/%.tokens,$(GOOD_FEATURE_FILES))
 ASTS         = $(patsubst ../testdata/%,acceptance/testdata/%.ast.ndjson,$(GOOD_FEATURE_FILES))
