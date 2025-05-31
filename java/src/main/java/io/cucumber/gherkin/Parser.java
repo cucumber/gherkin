@@ -259,7 +259,7 @@ class Parser<T> {
     }
 
     private boolean match_Other(final ParserContext context, final Token token) {
-        if (token.isEOF() || token.line.isEmpty()) return false;
+        if (token.isEOF()) return false; // empty line is considered as Other token
         return handleExternalError(context, token, TokenMatcher::match_Other);
     }
 
