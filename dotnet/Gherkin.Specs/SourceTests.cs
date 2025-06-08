@@ -8,13 +8,11 @@ namespace Gherkin.Specs;
 public class SourceTests : EventTestBase
 {
     [Theory, MemberData(nameof(TestFileProvider.GetValidTestFiles), MemberType = typeof(TestFileProvider))]
-    public void TestSourceMessage(string testFeatureFile)
+    public async Task TestSourceMessage(string testFeatureFile)
     {
         var testFile = GetFullPathToTestFeatureFile(testFeatureFile, "good", ".source.ndjson");
 
-        var expectedAstContent = GetExpectedContent(testFile.ExpectedFileFullPath);
-
-        var expectedGherkinDocumentEvent = NDJsonParser.Deserialize<Envelope>(expectedAstContent);
+        var expectedGherkinDocumentEvent = await NDJsonParser.DeserializeAsync<Envelope>(testFile.ExpectedFileFullPath);
 
         var raisedEvents = ProcessGherkinEvents(testFile.FullPath, true, false, false);
 
