@@ -4,6 +4,8 @@ from gherkin.parser import Parser
 from gherkin.errors import CompositeParserException, ParserError
 import pytest
 
+from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
+
 
 def test_parser():
     parser = Parser()
@@ -104,6 +106,196 @@ def test_change_the_default_language():
 
     assert expected == feature_file
 
+def test_parsing_markdown_does_not_parse_a_feature_description():
+    parser = Parser()
+    matcher = GherkinInMarkdownTokenMatcher()
+    
+    feature_file = """# Feature: hello
+This is the
+description
+"""
+    ast = parser.parse(TokenScanner(feature_file), matcher)
+    expected = {
+        'feature': {
+          'tags': [],
+          'description': '',
+          'location': { 'line': 1, 'column': 3 },
+          'language': 'en',
+          'keyword': 'Feature',
+          'name': 'hello',
+          'children': [],
+        },
+        'comments': [],
+      }
+    assert ast == expected
+
+def test_parsing_markdown_parses_a_feature_without_a_hash_Feature_header():
+    parser = Parser()
+    matcher = GherkinInMarkdownTokenMatcher()
+    feature_file = """# Hello
+This is the
+description
+
+## Scenario: hello
++ Given a step
+
+## Some other header
+"""
+    ast = parser.parse(TokenScanner(feature_file), matcher)
+    expected = {
+        'feature': {
+          'tags': [],
+          'location': {
+            'line': 1,
+            'column': 1,
+          },
+          'language': 'en',
+          'name': '# Hello',
+          'description': '',
+          'children': [
+            {
+              'scenario': {
+                'id': '1',
+                'tags': [],
+                'location': {
+                  'line': 5,
+                  'column': 4,
+                },
+                'keyword': 'Scenario',
+                'name': 'hello',
+                'description': '',
+                'steps': [
+                  {
+                    'id': '0',
+                    'location': {
+                      'line': 6,
+                      'column': 3,
+                    },
+                    'keyword': 'Given ',
+                    'keywordType': "Context",
+                    'text': 'a step',
+                  },
+                ],
+                'examples': [],
+              },
+            },
+          ],
+        },
+        'comments': [],
+      }
+    assert ast == expected
+
+def test_it_parses_markdown_data_tables_with_headers():
+  parser = Parser()
+  matcher = GherkinInMarkdownTokenMatcher()
+  markdown = """## Feature: DataTables
+
+### Scenario: minimalistic
+
+* Given a simple data table 
+  | foo | bar |
+  | --- | --- |
+  | boz | boo |
+"""
+  ast = parser.parse(TokenScanner(markdown), matcher)
+  expected = {
+        "comments": [],
+        "feature": {
+          "children": [
+            {
+              "scenario": {
+                "description": "",
+                "examples": [],
+                "id": "3",
+                "keyword": "Scenario",
+                "location": {
+                  "column": 5,
+                  "line": 3
+                },
+                "name": "minimalistic",
+                "steps": [
+                  {
+                    "dataTable": {
+                      "location": {
+                        "column": 3,
+                        "line": 6
+                      },
+                      "rows": [
+                        {
+                          "cells": [
+                            {
+                              "location": {
+                                "column": 5,
+                                "line": 6
+                              },
+                              "value": "foo"
+                            },
+                            {
+                              "location": {
+                                "column": 11,
+                                "line": 6
+                              },
+                              "value": "bar"
+                            }
+                          ],
+                          "id": "0",
+                          "location": {
+                            "column": 3,
+                            "line": 6
+                          }
+                        },
+                        {
+                          "cells": [
+                            {
+                              "location": {
+                                "column": 5,
+                                "line": 8
+                              },
+                              "value": "boz"
+                            },
+                            {
+                              "location": {
+                                "column": 11,
+                                "line": 8
+                              },
+                              "value": "boo"
+                            }
+                          ],
+                          "id": "1",
+                          "location": {
+                            "column": 3,
+                            "line": 8
+                          }
+                        }
+                      ]
+                    },
+                    "id": "2",
+                    # "docString": None,
+                    "keyword": "Given ",
+                    "keywordType": "Context",
+                    "location": {
+                      "column": 3,
+                      "line": 5
+                    },
+                    "text": "a simple data table"
+                  }
+                ],
+                "tags": []
+              }
+            }
+          ],
+          "description": "",
+          "keyword": "Feature",
+          "language": "en",
+          "location": {
+            "column": 4,
+            "line": 1
+          },
+          "name": "DataTables",
+          "tags": []
+        }
+      }
+  assert ast == expected
 
 @pytest.mark.parametrize("trailing_text", ["\\", "\\ "])
 def test_inconsistent_cell_count_with_trailing_escape(trailing_text):
