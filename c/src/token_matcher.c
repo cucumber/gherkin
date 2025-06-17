@@ -275,13 +275,25 @@ static bool match_title_line(Token* token, TokenType matched_type, const Keyword
 }
 
 static bool match_step_keywords(Token* token, const KeywordType keyword_type, const Keywords* step_keywords) {
+    size_t len_longest = 0;
+    size_t len_i;
+    int i_longest = -1;
     int i;
+    /* Once we have a match, keep looking, but only for a longer match. This
+     * allows us to prefer the longest match without having to make a temporary
+     * sorted keyword array.
+     */
     for (i = 0; i < step_keywords->count; ++i) {
-        if (GherkinLine_start_with(token->line, step_keywords->keywords[i])) {
-            wchar_t* title = GherkinLine_copy_rest_trimmed(token->line, wcslen(step_keywords->keywords[i]));
-            set_token_matched(token, Token_StepLine, title, step_keywords->keywords[i], keyword_type, -1, 0);
-            return true;
+	len_i = wcslen(step_keywords->keywords[i]);
+	if (len_i > len_longest && GherkinLine_start_with(token->line, step_keywords->keywords[i])) {
+	    i_longest = i;
+	    len_longest = len_i;
         }
+    }
+    if (i_longest >= 0) {
+      wchar_t* title = GherkinLine_copy_rest_trimmed(token->line, wcslen(step_keywords->keywords[i_longest]));
+      set_token_matched(token, Token_StepLine, title, step_keywords->keywords[i_longest], keyword_type, -1, 0);
+      return true;
     }
     return false;
 }
