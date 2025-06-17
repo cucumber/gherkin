@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [cpp] Actually allow comment inside descriptions ([#414](https://github.com/cucumber/gherkin/pull/414))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed
