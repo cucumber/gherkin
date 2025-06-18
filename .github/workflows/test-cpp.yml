@@ -44,3 +44,8 @@ jobs:
         working-directory: cpp
         run: |
           cmake -P cmake/cmate --cc=${{ matrix.config.cc }} build --release
+
+      - name: run acceptance tests
+        working-directory: cpp
+        run: |
+          make acceptance
