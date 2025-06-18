@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Fixed
 - [cpp] Actually allow comment inside descriptions ([#414](https://github.com/cucumber/gherkin/pull/414))
+- [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed
