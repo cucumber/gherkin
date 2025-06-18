@@ -137,14 +137,14 @@ bool TokenMatcher_match_StepLine(TokenMatcher* token_matcher, Token* token) {
     keywords_result = match_step_keywords(token, Keyword_Action, token_matcher->dialect->when_keywords);
     if (keywords_result) {
         if (final_result) {
-	    token->matched_keyword_type = Keyword_Unknown;
+	    token->matched_keyword_type = Keyword_Action;
 	}
         final_result = true;
     }
     keywords_result = match_step_keywords(token, Keyword_Outcome, token_matcher->dialect->then_keywords);
     if (keywords_result) {
         if (final_result) {
-	    token->matched_keyword_type = Keyword_Unknown;
+	    token->matched_keyword_type = Keyword_Outcome;
 	}
         final_result = true;
     }
