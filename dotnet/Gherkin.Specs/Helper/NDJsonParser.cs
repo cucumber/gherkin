@@ -1,26 +1,25 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-
 namespace Gherkin.Specs.Helper;
 
 public class NDJsonParser
 {
-    public static List<T> Deserialize<T>(string ndjson)
+    static readonly JsonSerializerOptions s_SerializerOptions = new(JsonSerializerDefaults.Web)
     {
-        var lines = ndjson.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-        var result = new List<T>();
-
-        foreach (var line in lines)
+        Converters =
         {
-            var deserializedObject = JsonSerializer.Deserialize<T>(line, new JsonSerializerOptions(JsonSerializerDefaults.Web)
-            {
-                Converters =
-                {
-                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-                }
-            });
+            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+        }
+    };
+
+    public static async Task<List<T>> DeserializeAsync<T>(string expectedFile)
+    {
+        var result = new List<T>();
+        using var contentStream = File.OpenRead(expectedFile);
+
+        await foreach (var deserializedObject in JsonSerializer.DeserializeAsyncEnumerable<T>(contentStream, true, s_SerializerOptions))
+        {
             result.Add(deserializedObject);
         }
 

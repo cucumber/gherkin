@@ -8,13 +8,11 @@ namespace Gherkin.Specs;
 public class PicklesTests : EventTestBase
 {
     [Theory, MemberData(nameof(TestFileProvider.GetValidTestFiles), MemberType = typeof(TestFileProvider))]
-    public void TestPickleCompilation(string testFeatureFile)
+    public async Task TestPickleCompilation(string testFeatureFile)
     {
         var testFile = GetFullPathToTestFeatureFile(testFeatureFile, "good", ".pickles.ndjson");
 
-        var expectedContent = GetExpectedContent(testFile.ExpectedFileFullPath);
-
-        var expectedEvents = NDJsonParser.Deserialize<Envelope>(expectedContent);
+        var expectedEvents = await NDJsonParser.DeserializeAsync<Envelope>(testFile.ExpectedFileFullPath);
 
         var raisedEvents = ProcessGherkinEvents(testFile.FullPath, false, false, true);
 
