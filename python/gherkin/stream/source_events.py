@@ -14,12 +14,18 @@ class Event(TypedDict):
     source: Source
 
 
+def _media_type(path) -> String:
+    if(path.endswith(".feature")):
+        return 'text/x.cucumber.gherkin+plain'
+    if(path.endswith(".feature.md")):
+        return 'text/x.cucumber.gherkin+markdown'
+
 def source_event(path: str) -> Event:
     event: Event = {
         "source": {
             "uri": path,
             "data": open(path, encoding="utf8", newline="").read(),
-            "mediaType": "text/x.cucumber.gherkin+plain",
+            "mediaType": _media_type(path),
         }
     }
     return event

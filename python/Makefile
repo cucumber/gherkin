@@ -8,8 +8,8 @@ SOURCE_FILES = $(shell find . -name "*.py" | grep -v $(GHERKIN_PARSER))
 GHERKIN_GENERATE_EVENTS = python -m scripts.generate_events
 GHERKIN_GENERATE_TOKENS = python -m scripts.generate_tokens
 
-GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
-BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
+GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature" -o -name "*.feature.md")
+BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature" -o -name "*.feature.md")
 
 TOKENS       = $(patsubst ../testdata/%,acceptance/testdata/%.tokens,$(GOOD_FEATURE_FILES))
 ASTS         = $(patsubst ../testdata/%,acceptance/testdata/%.ast.ndjson,$(GOOD_FEATURE_FILES))

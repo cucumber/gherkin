@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import re
+from collections import defaultdict
 from collections.abc import Iterable
+from typing import TypedDict
 
 from .gherkin_line import Cell
 from .token import Token
 from .token_matcher import TokenMatcher, MatchedItems
+from .dialect import Dialect
 
 KEYWORD_PREFIX_BULLET = "^(\\s*[*+-]\\s*)"
 KEYWORD_PREFIX_HEADER = "^(#{1,6}\\s)"
@@ -23,7 +26,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
     def match_FeatureLine(self, token: Token) -> bool:
 
         if self.matched_feature_line:
-            self._set_token_matched(token, None)
+            return False
 
         # We first try to match "# Feature: blah"
         result = self._match_title_line(
@@ -39,8 +42,8 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
         if not result:
             self._set_token_matched(token, "FeatureLine", token.line.get_line_text())
-        self.matched_feature_line = result
-        return result
+        self.matched_feature_line = True
+        return True
 
     def match_RuleLine(self, token: Token) -> bool:
         return self._match_title_line(
@@ -103,26 +106,19 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         return len(separator_values) > 0
 
     def match_StepLine(self, token: Token) -> bool:
-        nonStarStepKeywords = (
-            self.dialect.given_keywords
-            + self.dialect.when_keywords
-            + self.dialect.then_keywords
-            + self.dialect.and_keywords
-            + self.dialect.but_keywords
-        )
         return self._match_title_line(
-            KEYWORD_PREFIX_BULLET, nonStarStepKeywords, "", token, "StepLine"
+            KEYWORD_PREFIX_BULLET, self._sorted_step_keywords, "", token, "StepLine"
         )
 
     def match_Comment(self, token: Token) -> bool:
         if token.line.startswith("|"):
             table_cells = token.line.table_cells
             if self._is_gfm_table_separator(table_cells):
+                self._set_token_matched(token, "Empty", indent=0)
                 return True
-        return self._set_token_matched(token, None, False)
+        return False
 
     def match_Empty(self, token: Token) -> bool:
-
         result = False
         if token.line.is_empty():
             result = True
@@ -199,18 +195,35 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         token: Token,
         token_type: str,
     ) -> bool:
-        keywords_or_list = "|".join(map(lambda x: re.escape(x), keywords))
-        match = re.search(
-            f"{prefix}({keywords_or_list}){keywordSuffix}(.*)",
-            token.line.get_line_text(),
-        )
-        indent = token.line.indent
-
-        if match:
-            matchedKeyword = match.group(2)
-            indent += len(match.group(1))
-            self._set_token_matched(
-                token, token_type, match.group(3).strip(), matchedKeyword, indent=indent
+        text = token.line.get_line_text()
+        for keyword in keywords:
+            match = re.search(
+                    f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)",
+                    text
             )
-            return True
+            if match:
+                indent = token.line.indent + len(match.group(1))
+                matchedKeyword = match.group(2)
+                # only set the keyword type if this is a step keyword
+                if( matchedKeyword in self.keyword_types ):
+                    matchedKeywordType = self.keyword_types[matchedKeyword][0]
+                else:
+                    matchedKeywordType = None
+                self._set_token_matched(
+                    token,
+                    token_type,
+                    match.group(3).strip(),
+                    matchedKeyword,
+                    keyword_type=matchedKeywordType,
+                    indent=indent
+                )
+                return True
+
         return False
+
+    def _change_dialect(self, dialect_name, location=None) -> None:
+        super()._change_dialect(dialect_name, location)
+        self._sorted_step_keywords = list(filter(
+            lambda key: key != '* ',
+            self._sorted_step_keywords
+        ))

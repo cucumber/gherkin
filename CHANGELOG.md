@@ -15,6 +15,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Actually allow comment inside descriptions ([#414](https://github.com/cucumber/gherkin/pull/414))
 - [cpp] Add missing translations for Rule ([#415](https://github.com/cucumber/gherkin/pull/415))
 - [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
+- [Python] Fix acceptance tests ([#64](https://github.com/cucumber/gherkin/pull/64))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed

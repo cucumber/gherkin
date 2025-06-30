@@ -1,8 +1,8 @@
 import sys
-
 from gherkin.token_scanner import TokenScanner
 from gherkin.token_formatter_builder import TokenFormatterBuilder
 from gherkin.parser import Parser
+from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
 
 
 def main() -> None:
@@ -10,7 +10,11 @@ def main() -> None:
     parser = Parser(TokenFormatterBuilder())
     for file in files:
         scanner = TokenScanner(file)
-        print(parser.parse(scanner))
+
+        if(file.endswith('.md')):
+            print(parser.parse(scanner, GherkinInMarkdownTokenMatcher()) )
+        else:
+            print(parser.parse(scanner))
 
 
 if __name__ == "__main__":
