@@ -121,7 +121,7 @@ final class StringGherkinLine implements GherkinLine
     #[\Override]
     public function getTags(): array
     {
-        $uncommentedLine = preg_replace('/\s' . preg_quote(GherkinLanguageConstants::COMMENT_PREFIX) . '.*$/u', '', $this->trimmedLineText);
+        $uncommentedLine = (string) preg_replace('/\s' . preg_quote(GherkinLanguageConstants::COMMENT_PREFIX) . '.*$/u', '', $this->trimmedLineText);
 
         /**
          * @var list<array{0:string, 1:int}> $elements guaranteed by PREG_SPLIT_OFFSET_CAPTURE

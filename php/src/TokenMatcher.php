@@ -23,6 +23,7 @@ final class TokenMatcher implements TokenMatcherInterface
         $this->reset();
     }
 
+    #[\Override]
     public function reset(): void
     {
         $this->currentDialect = $this->dialectProvider->getDefaultDialect();

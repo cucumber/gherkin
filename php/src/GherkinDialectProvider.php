@@ -25,16 +25,13 @@ final class GherkinDialectProvider
         private readonly string $defaultDialectName = 'en',
     ) {
         try {
+            $contents = file_get_contents(self::JSON_PATH);
+            assert(is_string($contents), "Could not read " . self::JSON_PATH);
             /**
              * Here we force the type checker to assume the decoded JSON has the correct
              * structure, rather than validating it. This is safe because it's not dynamic
              *
              * @var non-empty-array<non-empty-string, Dialect> $data
-             */
-            $contents = file_get_contents(self::JSON_PATH);
-            assert(is_string($contents), "Could not read " . self::JSON_PATH);
-            /**
-             * @var $data non-empty-array<non-empty-string, Dialect>
              */
             $data = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
             $this->DIALECTS = $data;
