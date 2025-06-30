@@ -10,6 +10,7 @@ final class GherkinDialectProviderTest extends TestCase
 {
     private GherkinDialectProvider $dialectProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->dialectProvider = new GherkinDialectProvider();

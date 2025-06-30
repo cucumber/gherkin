@@ -33,22 +33,26 @@ final class StringUtils
 
     public static function rtrim(string $string): string
     {
-        return preg_replace('/' . self::WHITESPACE_PATTERN . '$/u', '', $string);
+        $pattern = '/' . self::WHITESPACE_PATTERN . '$/u';
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function rtrimKeepNewLines(string $string): string
     {
-        return preg_replace('/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u', '', $string);
+        $pattern = '/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u';
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function ltrim(string $string): string
     {
-        return preg_replace('/^'. self::WHITESPACE_PATTERN . '/u', '', $string);
+        $pattern = '/^' . self::WHITESPACE_PATTERN . '/u';
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function ltrimKeepNewLines(string $string): string
     {
-        return preg_replace('/^'. self::WHITESPACE_PATTERN_NO_NEWLINE . '/u', '', $string);
+        $pattern = '/^' . self::WHITESPACE_PATTERN_NO_NEWLINE . '/u';
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function trim(string $string): string
@@ -60,8 +64,7 @@ final class StringUtils
     public static function replace(string $string, array $replacements): string
     {
         $patterns = array_map(fn ($p) => '/' . preg_quote($p) . '/u', array_keys($replacements));
-
-        return preg_replace($patterns, array_values($replacements), $string);
+        return (string) preg_replace($patterns, array_values($replacements), $string);
     }
 
     /** @return array<non-empty-string> */

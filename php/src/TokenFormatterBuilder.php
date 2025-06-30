@@ -22,25 +22,30 @@ final class TokenFormatterBuilder implements Builder
         $this->tokenFormatter = new TokenFormatter();
     }
 
+    #[\Override]
     public function build(Token $token): void
     {
         $this->lines[] = $this->tokenFormatter->formatToken($token);
     }
 
+    #[\Override]
     public function startRule(RuleType $ruleType): void
     {
     }
 
+    #[\Override]
     public function endRule(RuleType $ruleType): void
     {
     }
 
+    #[\Override]
     public function getResult(): string
     {
         // implode at the end is more efficient than repeated concat
         return implode("\n", [...$this->lines, '']);
     }
 
+    #[\Override]
     public function reset(string $uri): void
     {
     }
