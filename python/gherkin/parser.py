@@ -3341,7 +3341,9 @@ class Parser:
         token = None
         queue = []
         match = False
-        while True:
+        # Effectively do-while
+        continue_lookahead = True
+        while continue_lookahead:
             token = self.read_token(context)
             token.detach()
             queue.append(token)
@@ -3350,12 +3352,18 @@ class Parser:
                 match = True
                 break
 
+            continue_lookahead = False
+
             if self.match_Empty(context, token):
+                continue_lookahead = True
                 continue
             if self.match_Comment(context, token):
+                continue_lookahead = True
                 continue
             if self.match_TagLine(context, token):
+                continue_lookahead = True
                 continue
+
         context.token_queue.extend(queue)
 
         return match
@@ -3365,7 +3373,9 @@ class Parser:
         token = None
         queue = []
         match = False
-        while True:
+        # Effectively do-while
+        continue_lookahead = True
+        while continue_lookahead:
             token = self.read_token(context)
             token.detach()
             queue.append(token)
@@ -3374,12 +3384,18 @@ class Parser:
                 match = True
                 break
 
+            continue_lookahead = False
+
             if self.match_Empty(context, token):
+                continue_lookahead = True
                 continue
             if self.match_Comment(context, token):
+                continue_lookahead = True
                 continue
             if self.match_TagLine(context, token):
+                continue_lookahead = True
                 continue
+
         context.token_queue.extend(queue)
 
         return match

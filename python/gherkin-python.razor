@@ -202,7 +202,9 @@ class @(Model.ParserClassName):
         token = None
         queue = []
         match = False
-        while True:
+        # Effectively do-while
+        continue_lookahead = True
+        while continue_lookahead:
             token = self.read_token(context)
             token.detach()
             queue.append(token)
@@ -213,15 +215,15 @@ class @(Model.ParserClassName):
                 break</text>
             }
 
+
+            continue_lookahead = False
             @foreach(var tokenType in lookAheadHint.Skip) {
             <text>
             if self.@MatchToken(tokenType):
+                continue_lookahead = True
                 continue</text>
             }
-            @if(lookAheadHint.Skip.Length == 0) {
-            <text>
-            break</text>
-            }
+
 
         context.token_queue.extend(queue)
 
