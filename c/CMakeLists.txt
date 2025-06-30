@@ -131,10 +131,11 @@ add_custom_command(
     COMMAND ${CMAKE_CTEST_COMMAND}
 )
 ############ Installation section ############
-set(include_install_dir "include")
-set(lib_install_dir "lib/")
-set(bin_install_dir "bin/")
-set(config_install_dir "lib/cmake/")
+include(GNUInstallDirs)
+set(include_install_dir "${CMAKE_INSTALL_INCLUDEDIR}")
+set(lib_install_dir "${CMAKE_INSTALL_LIBDIR}/")
+set(bin_install_dir "${CMAKE_INSTALL_BINDIR}/")
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/")
 
 set(project_config "${CMAKE_CURRENT_BINARY_DIR}/generated/${PROJECT_NAME}Config.cmake")
 set(targets_export_name "${PROJECT_NAME}Targets")
@@ -154,14 +155,14 @@ install(
 
 install(
   DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-  DESTINATION ${include_install_dir}
+  DESTINATION ${include_install_dir}/cucumber/gherkin
   FILES_MATCHING PATTERN "*.*h")
 
 install(
     FILES "${project_config}"
-    DESTINATION "${config_install_dir}")
+    DESTINATION "${config_install_dir}/gherkin")
 
 install(
     EXPORT "${targets_export_name}"
     NAMESPACE "${namespace}"
-    DESTINATION "${config_install_dir}")
+    DESTINATION "${config_install_dir}/gherkin")

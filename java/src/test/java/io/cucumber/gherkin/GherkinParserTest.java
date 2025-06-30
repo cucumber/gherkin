@@ -14,14 +14,17 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GherkinParserTest {
+class GherkinParserTest {
 
     final String feature = "Feature: Minimal\n" +
             "\n" +
@@ -30,23 +33,32 @@ public class GherkinParserTest {
     final Envelope envelope = Envelope.of(new Source("minimal.feature", feature, TEXT_X_CUCUMBER_GHERKIN_PLAIN));
 
     @Test
-    public void use_this_in_readme() {
+    void use_this_in_readme() {
         GherkinParser parser = GherkinParser.builder().build();
         Stream<Envelope> pickles = parser.parse(envelope).filter(envelope -> envelope.getPickle().isPresent());
         assertEquals(1, pickles.count());
     }
 
     @Test
-    public void can_parse_streams() throws IOException {
-        try (InputStream is = new ByteArrayInputStream(feature.getBytes(StandardCharsets.UTF_8))){
-            GherkinParser parser = GherkinParser.builder().build();
-            Stream<Envelope> pickles = parser.parse("minimal.feature",is).filter(envelope -> envelope.getPickle().isPresent());
-            assertEquals(1, pickles.count());
+    void test_for_profiler_parser() throws IOException {
+        for (int i = 0; i < 1000; i++) {
+            GherkinParser.builder().build().parse(Paths.get("../testdata/good/very_long.feature"));
         }
     }
 
     @Test
-    public void provides_access_to_the_ast() {
+    void can_parse_streams() throws IOException {
+        InputStream is = new ByteArrayInputStream(feature.getBytes(StandardCharsets.UTF_8));
+        GherkinParser parser = GherkinParser.builder()
+                .includeSource(false)
+                .includeGherkinDocument(false)
+                .build();
+        List<Envelope> pickles = parser.parse("minimal.feature", is).collect(toList());
+        assertTrue(pickles.get(0).getPickle().isPresent());
+    }
+
+    @Test
+    void provides_access_to_the_ast() {
         // Get the AST
         GherkinDocument gherkinDocument = GherkinParser.builder()
                 .includeSource(false)
@@ -66,7 +78,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void provides_access_to_pickles_which_are_compiled_from_the_ast() {
+    void provides_access_to_pickles_which_are_compiled_from_the_ast() {
         // Get the first pickle
         Pickle pickle = GherkinParser.builder()
                 .includeSource(false)
@@ -82,7 +94,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void parses_supplied_source() {
+    void parses_supplied_source() {
         GherkinDocument gherkinDocument = GherkinParser.builder()
                 .includeSource(false)
                 .includePickles(false)
@@ -96,7 +108,7 @@ public class GherkinParserTest {
     }
 
     @Test
-    public void parser_always_includes_errors() {
+    void parser_always_includes_errors() {
         Envelope singleParseError = Envelope.of(new Source("single_parser_error.feature",
                 "\n" +
                         "invalid line here\n" +

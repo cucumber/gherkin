@@ -19,6 +19,6 @@ public class TokenScanner(TextReader reader) : ITokenScanner
     {
         var line = reader.ReadLine();
         var location = new Ast.Location(++lineNumber);
-        return line == null ? new Token(null, location) : new Token(new GherkinLine(line, lineNumber), location);
+        return line == null ? new Token(location) : new Token(new GherkinLine(line, lineNumber), location);
     }
 }

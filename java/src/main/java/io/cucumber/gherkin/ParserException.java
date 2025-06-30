@@ -4,42 +4,52 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.cucumber.messages.types.Location;
+
+import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
+import static io.cucumber.gherkin.Locations.atColumn;
+
 class ParserException extends RuntimeException {
-    public final Location location;
+    final Location location;
 
     protected ParserException(String message) {
         super(message);
-        location = new Location(-1, -1);
+        location = null;
     }
 
     protected ParserException(String message, Location location) {
-        super(getMessage(message, location));
+        super(createMessage(message, location));
         this.location = location;
     }
 
-    private static String getMessage(String message, Location location) {
-        return String.format("(%s:%s): %s", location.getLine(), location.getColumn(), message);
+    private static String createMessage(String message, Location location) {
+        if (location == null) {
+            return String.format("(-1,0): %s", message);
+        }
+        Long line = location.getLine();
+        Long column = location.getColumn().orElse(0L);
+        return String.format("(%s:%s): %s", line, column, message);
     }
 
-    public static class AstBuilderException extends ParserException {
-        public AstBuilderException(String message, Location location) {
+    static class AstBuilderException extends ParserException {
+        AstBuilderException(String message, Location location) {
             super(message, location);
         }
     }
 
-    public static class NoSuchLanguageException extends ParserException {
-        public NoSuchLanguageException(String language, Location location) {
+    static class NoSuchLanguageException extends ParserException {
+        NoSuchLanguageException(String language, Location location) {
             super("Language not supported: " + language, location);
         }
     }
 
-    public static class UnexpectedTokenException extends ParserException {
-        public String stateComment;
+    static class UnexpectedTokenException extends ParserException {
+        String stateComment;
 
-        public final Token receivedToken;
-        public final List<String> expectedTokenTypes;
+        final Token receivedToken;
+        final List<String> expectedTokenTypes;
 
-        public UnexpectedTokenException(Token receivedToken, List<String> expectedTokenTypes, String stateComment) {
+        UnexpectedTokenException(Token receivedToken, List<String> expectedTokenTypes, String stateComment) {
             super(getMessage(receivedToken, expectedTokenTypes), getLocation(receivedToken));
             this.receivedToken = receivedToken;
             this.expectedTokenTypes = expectedTokenTypes;
@@ -49,21 +59,24 @@ class ParserException extends RuntimeException {
         private static String getMessage(Token receivedToken, List<String> expectedTokenTypes) {
             return String.format("expected: %s, got '%s'",
                     String.join(", ", expectedTokenTypes),
-                    receivedToken.getTokenValue().trim());
+                    receivedToken.getTokenValue()
+            );
         }
 
         private static Location getLocation(Token receivedToken) {
-            return receivedToken.location.getColumn() > 1
-                    ? receivedToken.location
-                    : new Location(receivedToken.location.getLine(), receivedToken.line.indent() + 1);
+            if (receivedToken.location.getColumn().isPresent()) {
+                return receivedToken.location;
+            }
+            int column = COLUMN_OFFSET + receivedToken.line.getIndent();
+            return atColumn(receivedToken.location, column);
         }
     }
 
-    public static class UnexpectedEOFException extends ParserException {
-        public final String stateComment;
-        public final List<String> expectedTokenTypes;
+    static class UnexpectedEOFException extends ParserException {
+        final String stateComment;
+        final List<String> expectedTokenTypes;
 
-        public UnexpectedEOFException(Token receivedToken, List<String> expectedTokenTypes, String stateComment) {
+        UnexpectedEOFException(Token receivedToken, List<String> expectedTokenTypes, String stateComment) {
             super(getMessage(expectedTokenTypes), receivedToken.location);
             this.expectedTokenTypes = expectedTokenTypes;
             this.stateComment = stateComment;
@@ -75,10 +88,10 @@ class ParserException extends RuntimeException {
         }
     }
 
-    public static class CompositeParserException extends ParserException {
-        public final List<ParserException> errors;
+    static class CompositeParserException extends ParserException {
+        final List<ParserException> errors;
 
-        public CompositeParserException(List<ParserException> errors) {
+        CompositeParserException(List<ParserException> errors) {
             super(getMessage(errors));
             this.errors = Collections.unmodifiableList(errors);
         }

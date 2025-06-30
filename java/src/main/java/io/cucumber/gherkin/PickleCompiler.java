@@ -26,27 +26,24 @@ import io.cucumber.messages.types.TableRow;
 import io.cucumber.messages.types.Tag;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static java.util.Collections.unmodifiableList;
 
 class PickleCompiler {
 
     private final IdGenerator idGenerator;
 
-    public PickleCompiler(IdGenerator idGenerator) {
+    PickleCompiler(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
     }
 
-    public List<Pickle> compile(GherkinDocument gherkinDocument, String uri) {
+    List<Pickle> compile(GherkinDocument gherkinDocument, String uri) {
         List<Pickle> pickles = new ArrayList<>();
         if (!gherkinDocument.getFeature().isPresent()) {
             return pickles;
@@ -108,8 +105,9 @@ class PickleCompiler {
 
             StepKeywordType lastKeywordType = StepKeywordType.UNKNOWN;
             for (Step step : allSteps) {
-                if (step.getKeywordType().get() != StepKeywordType.CONJUNCTION)
-                    lastKeywordType = step.getKeywordType().get();
+                StepKeywordType stepKeywordType = step.getKeywordType().get();
+                if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                    lastKeywordType = stepKeywordType;
 
                 steps.add(pickleStep(step, lastKeywordType));
             }
@@ -145,8 +143,9 @@ class PickleCompiler {
 
                 if (!scenario.getSteps().isEmpty())
                     for (Step step : backgroundSteps) {
-                        if (step.getKeywordType().get() != StepKeywordType.CONJUNCTION)
-                            lastKeywordType = step.getKeywordType().get();
+                        StepKeywordType stepKeywordType = step.getKeywordType().get();
+                        if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                            lastKeywordType = stepKeywordType;
 
                         steps.add(pickleStep(step, lastKeywordType));
                     }
@@ -158,8 +157,9 @@ class PickleCompiler {
                 tags.addAll(examples.getTags());
 
                 for (Step scenarioOutlineStep : scenario.getSteps()) {
-                    if (scenarioOutlineStep.getKeywordType().get() != StepKeywordType.CONJUNCTION)
-                        lastKeywordType = scenarioOutlineStep.getKeywordType().get();
+                    StepKeywordType stepKeywordType = scenarioOutlineStep.getKeywordType().get();
+                    if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                        lastKeywordType = stepKeywordType;
 
                     PickleStep pickleStep = pickleStep(scenarioOutlineStep, variableCells, valuesRow, lastKeywordType);
 
@@ -187,7 +187,7 @@ class PickleCompiler {
         List<PickleTableRow> newRows = new ArrayList<>(rows.size());
         for (TableRow row : rows) {
             List<TableCell> cells = row.getCells();
-            List<PickleTableCell> newCells = new ArrayList<>();
+            List<PickleTableCell> newCells = new ArrayList<>(cells.size());
             for (TableCell cell : cells) {
                 newCells.add(new PickleTableCell(interpolate(cell.getValue(), variableCells, valueCells)));
             }
@@ -204,7 +204,7 @@ class PickleCompiler {
     }
 
 
-    private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new HashMap<>();
+    private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new EnumMap<>(StepKeywordType.class);
 
     static {
         pickleStepTypeFromKeywordType.put(StepKeywordType.UNKNOWN, PickleStepType.UNKNOWN);
@@ -214,14 +214,13 @@ class PickleCompiler {
     }
 
     private PickleStep pickleStep(Step step, List<TableCell> variableCells, TableRow valuesRow, StepKeywordType keywordType) {
-        List<TableCell> valueCells = valuesRow == null ? Collections.emptyList() : valuesRow.getCells();
+        List<TableCell> valueCells = valuesRow == null ? emptyList() : valuesRow.getCells();
         String stepText = interpolate(step.getText(), variableCells, valueCells);
 
         PickleStepArgument argument = null;
         if (step.getDataTable().isPresent()) {
             argument = new PickleStepArgument(null, pickleDataTable(step.getDataTable().get(), variableCells, valueCells));
         }
-
         if (step.getDocString().isPresent()) {
             argument = new PickleStepArgument(pickleDocString(step.getDocString().get(), variableCells, valueCells), null);
         }
@@ -229,9 +228,7 @@ class PickleCompiler {
 
         List<String> astNodeIds;
         if (valuesRow != null) {
-            astNodeIds = Stream.of(singletonList(step.getId()), singletonList(valuesRow.getId()))
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList());
+            astNodeIds = Arrays.asList(step.getId(), valuesRow.getId());
 
         } else {
             astNodeIds = singletonList(step.getId());
@@ -247,7 +244,7 @@ class PickleCompiler {
     }
 
     private PickleStep pickleStep(Step step, StepKeywordType keywordType) {
-        return pickleStep(step, Collections.emptyList(), null, keywordType);
+        return pickleStep(step, emptyList(), null, keywordType);
     }
 
     private String interpolate(String name, List<TableCell> variableCells, List<TableCell> valueCells) {
@@ -262,6 +259,9 @@ class PickleCompiler {
     }
 
     private List<PickleTag> pickleTags(List<Tag> tags) {
+        if (tags.isEmpty()) {
+            return emptyList();
+        }
         List<PickleTag> result = new ArrayList<>();
         for (Tag tag : tags) {
             result.add(pickleTag(tag));

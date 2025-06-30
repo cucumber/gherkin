@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Gherkin::GherkinLine do
-  context '#tags' do
+  describe '#tags' do
     def tags(line)
       Gherkin::GherkinLine.new(line, 12).tags.map(&:text)
     end
@@ -11,7 +11,7 @@ describe Gherkin::GherkinLine do
     end
   end
 
-  context '#table_cells' do
+  describe '#table_cells' do
     def cells_text(line)
       Gherkin::GherkinLine.new(line, 12).table_cells.map(&:text)
     end

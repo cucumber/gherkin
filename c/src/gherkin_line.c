@@ -76,17 +76,22 @@ wchar_t* GherkinLine_copy_line_text(const GherkinLine* line, int indent_to_remov
 
 const Items* GherkinLine_table_cells(const GherkinLine* line) {
     int item_count = calculate_cell_count(line->trimmed_line);
-    if (item_count == 0)
-        return (Items*)0;
+    Items* item_array = (Items*)malloc(sizeof(Items));
+    item_array->count = item_count;
+
+    if (item_count == 0) {
+        item_array->items = 0;
+        return item_array;
+    }
+
     Span* items = (Span*)malloc(item_count * sizeof(Span));
     int i;
     for (i = 0; i < item_count; ++i) {
         items[i].column = 0;
         items[i].text = 0;
     }
-    Items* item_array = (Items*)malloc(sizeof(Items));
-    item_array->count = item_count;
     item_array->items = items;
+
     const wchar_t* current_pos = line->trimmed_line;
     for (i = 0; i < item_count; ++i) {
         current_pos = populate_cell_data(&items[i], current_pos, current_pos - line->line_text);

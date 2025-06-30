@@ -92,7 +92,7 @@ public class AstBuilder<T> : IAstBuilder<T>
 
                     var description = GetDescription(scenarioNode);
                     var steps = GetSteps(scenarioNode);
-                    var examples = scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition).ToArray();
+                    List<Examples> examples = [.. scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition)];
                     return CreateScenario(tags, GetLocation(scenarioLine), scenarioLine.MatchedKeyword, scenarioLine.MatchedText, description, steps, examples, node);
                 }
             case RuleType.ExamplesDefinition:
@@ -102,9 +102,9 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var examplesLine = examplesNode.GetToken(TokenType.ExamplesLine);
                     var description = GetDescription(examplesNode);
 
-                    var allRows = examplesNode.GetSingle<TableRow[]>(RuleType.ExamplesTable);
-                    var header = allRows != null ? allRows.First() : null;
-                    var rows = allRows != null ? allRows.Skip(1).ToArray() : null;
+                    var allRows = examplesNode.GetSingle<List<TableRow>>(RuleType.ExamplesTable);
+                    var header = allRows != null ? allRows[0] : null;
+                    var rows = allRows != null ? allRows.Skip(1).ToList() : null;
                     return CreateExamples(tags, GetLocation(examplesLine), examplesLine.MatchedKeyword, examplesLine.MatchedText, description, header, rows, node);
                 }
             case RuleType.ExamplesTable:
@@ -113,7 +113,7 @@ public class AstBuilder<T> : IAstBuilder<T>
                 }
             case RuleType.Description:
                 {
-                    var lineTokens = node.GetTokens(TokenType.Other);
+                    IEnumerable<Token> lineTokens = node.GetTokens(TokenType.Other);
 
                     // Trim trailing empty lines
                     lineTokens = lineTokens.Reverse().SkipWhile(t => string.IsNullOrWhiteSpace(t.MatchedText)).Reverse();
@@ -130,16 +130,16 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var children = new List<IHasLocation>();
                     var background = node.GetSingle<Background>(RuleType.Background);
                     if (background != null)
-                    {
                         children.Add(background);
-                    }
-                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
-                                                     .Concat(node.GetItems<IHasLocation>(RuleType.Rule));
+                    foreach (var scenarioDefinition in node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                        children.Add(scenarioDefinition);
+                    foreach (var rule in node.GetItems<IHasLocation>(RuleType.Rule))
+                        children.Add(rule);
                     var description = GetDescription(header);
                     if (featureLine.MatchedGherkinDialect == null) return null;
                     var language = featureLine.MatchedGherkinDialect.Language;
 
-                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, children, node);
                 }
             case RuleType.Rule:
                 {
@@ -151,14 +151,13 @@ public class AstBuilder<T> : IAstBuilder<T>
                     var children = new List<IHasLocation>();
                     var background = node.GetSingle<Background>(RuleType.Background);
                     if (background != null)
-                    {
                         children.Add(background);
-                    }
-                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition));
+                    foreach (var scenarioDefinition in node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                        children.Add(scenarioDefinition);
                     var description = GetDescription(header);
                     if (ruleLine.MatchedGherkinDialect == null) return null;
 
-                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, children, node);
                 }
             case RuleType.GherkinDocument:
                 {
@@ -179,12 +178,12 @@ public class AstBuilder<T> : IAstBuilder<T>
         return stepKeywordType.Value;
     }
 
-    protected virtual Background CreateBackground(Location location, string keyword, string name, string description, Step[] steps, AstNode node)
+    protected virtual Background CreateBackground(Location location, string keyword, string name, string description, IEnumerable<Step> steps, AstNode node)
     {
         return new Background(location, keyword, name, description, steps);
     }
 
-    protected virtual DataTable CreateDataTable(TableRow[] rows, AstNode node)
+    protected virtual DataTable CreateDataTable(List<TableRow> rows, AstNode node)
     {
         return new DataTable(rows);
     }
@@ -194,12 +193,12 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Comment(location, text);
     }
 
-    protected virtual Examples CreateExamples(Tag[] tags, Location location, string keyword, string name, string description, TableRow header, TableRow[] body, AstNode node)
+    protected virtual Examples CreateExamples(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, TableRow header, IEnumerable<TableRow> body, AstNode node)
     {
         return new Examples(tags, location, keyword, name, description, header, body);
     }
 
-    protected virtual Scenario CreateScenario(Tag[] tags, Location location, string keyword, string name, string description, Step[] steps, Examples[] examples, AstNode node)
+    protected virtual Scenario CreateScenario(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<Step> steps, IEnumerable<Examples> examples, AstNode node)
     {
         return new Scenario(tags, location, keyword, name, description, steps, examples);
     }
@@ -214,17 +213,17 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Step(location, keyword, keywordType, text, argument);
     }
 
-    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, Comment[] gherkinDocumentComments, AstNode node)
+    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, IEnumerable<Comment> gherkinDocumentComments, AstNode node)
     {
         return new GherkinDocument(feature, gherkinDocumentComments);
     }
 
-    protected virtual Feature CreateFeature(Tag[] tags, Location location, string language, string keyword, string name, string description, IHasLocation[] children, AstNode node)
+    protected virtual Feature CreateFeature(IEnumerable<Tag> tags, Location location, string language, string keyword, string name, string description, IEnumerable<IHasLocation> children, AstNode node)
     {
         return new Feature(tags, location, language, keyword, name, description, children);
     }
 
-    protected virtual Rule CreateRule(Tag[] tags, Location location, string keyword, string name, string description, IHasLocation[] children, AstNode node)
+    protected virtual Rule CreateRule(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<IHasLocation> children, AstNode node)
     {
         return new Rule(tags, location, keyword, name, description, children);
     }
@@ -234,17 +233,17 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new Tag(location, name);
     }
 
-    protected virtual Location CreateLocation(int line, int column)
+    protected Location CreateLocation(int line, int column)
     {
         return new Location(line, column);
     }
 
-    protected virtual TableRow CreateTableRow(Location location, TableCell[] cells, AstNode node)
+    protected virtual TableRow CreateTableRow(Location location, IEnumerable<TableCell> cells, AstNode node)
     {
         return new TableRow(location, cells);
     }
 
-    protected virtual TableCell CreateTableCell(Location location, string value)
+    protected TableCell CreateTableCell(Location location, string value)
     {
         return new TableCell(location, value);
     }
@@ -254,39 +253,44 @@ public class AstBuilder<T> : IAstBuilder<T>
         return column == 0 ? token.Location : CreateLocation(token.Location.Line, column);
     }
 
-    private Tag[] GetTags(AstNode node)
+    private IEnumerable<Tag> GetTags(AstNode node)
     {
         var tagsNode = node.GetSingle<AstNode>(RuleType.Tags);
         if (tagsNode == null)
             return [];
 
-        return tagsNode.GetTokens(TokenType.TagLine)
-            .SelectMany(t => t.MatchedItems, (t, tagItem) =>
-                CreateTag(GetLocation(t, tagItem.Column), tagItem.Text, tagsNode))
-            .ToArray();
-    }
-
-    private TableRow[] GetTableRows(AstNode node)
-    {
-        var rows = node.GetTokens(TokenType.TableRow).Select(token => CreateTableRow(GetLocation(token), GetCells(token), node)).ToArray();
-        CheckCellCountConsistency(rows);
-        return rows;
-    }
-
-    protected virtual void CheckCellCountConsistency(TableRow[] rows)
-    {
-        if (rows.Length == 0)
-            return;
-
-        int cellCount = rows[0].Cells.Count();
-        for (int i = 1; i < rows.Length; i++)
+        var tags = new List<Tag>();
+        foreach (var line in tagsNode.GetTokens(TokenType.TagLine))
         {
-            var row = rows[i];
-            if (row.Cells.Count() != cellCount)
-            {
-                HandleAstError("inconsistent cell count within the table", row.Location);
-            }
+            foreach (var matchedItem in line.Line.GetTags())
+                tags.Add(CreateTag(GetLocation(line, matchedItem.Column), matchedItem.Text, tagsNode));
         }
+        return tags;
+    }
+
+    private List<TableRow> GetTableRows(AstNode node)
+    {
+        var rows = new List<TableRow>();
+        int cellCount = 0;
+        bool firstRow = true;
+        foreach (var rowToken in node.GetTokens(TokenType.TableRow))
+        {
+            var rowLocation = GetLocation(rowToken);
+            var cells = new List<TableCell>();
+            foreach (var cellItem in rowToken.Line.GetTableCells())
+                cells.Add(CreateTableCell(GetLocation(rowToken, cellItem.Column), cellItem.Text));
+            if (firstRow)
+            {
+                cellCount = cells.Count;
+                firstRow = false;
+            }
+            else if (cells.Count != cellCount)
+            {
+                HandleAstError("inconsistent cell count within the table", rowLocation);
+            }
+            rows.Add(CreateTableRow(rowLocation, cells, node));
+        }
+        return rows;
     }
 
     protected virtual void HandleAstError(string message, Location location)
@@ -294,20 +298,9 @@ public class AstBuilder<T> : IAstBuilder<T>
         throw new AstBuilderException(message, location);
     }
 
-    private TableCell[] GetCells(Token tableRowToken)
+    private static List<Step> GetSteps(AstNode scenarioDefinitionNode)
     {
-        var cells = new TableCell[tableRowToken.MatchedItems.Length];
-        for (int i = 0; i < cells.Length; i++)
-        {
-            var cellItem = tableRowToken.MatchedItems[i];
-            cells[i] = CreateTableCell(GetLocation(tableRowToken, cellItem.Column), cellItem.Text);
-        }
-        return cells;
-    }
-
-    private static Step[] GetSteps(AstNode scenarioDefinitionNode)
-    {
-        return scenarioDefinitionNode.GetItems<Step>(RuleType.Step).ToArray();
+        return [..scenarioDefinitionNode.GetItems<Step>(RuleType.Step)];
     }
 
     private static string GetDescription(AstNode scenarioDefinitionNode)

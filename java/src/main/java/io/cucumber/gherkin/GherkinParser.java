@@ -8,7 +8,6 @@ import io.cucumber.messages.types.ParseError;
 import io.cucumber.messages.types.Source;
 import io.cucumber.messages.types.SourceReference;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -27,6 +26,21 @@ import static java.util.stream.Collectors.toCollection;
  * Main entry point for the Gherkin library
  */
 public final class GherkinParser {
+
+    /**
+     * Estimate of the average line length in a feature file.
+     */
+    static final int FEATURE_FILE_AVERAGE_LINE_LENGTH = 100;
+    
+    /**
+     * Estimate of the average number of lines in a feature file.
+     */
+    static final int FEATURE_FILE_AVERAGE_LINE_COUNT = 2048;
+
+    /**
+     * Estimate of the average feature file size.
+     */
+    static final int FEATURE_FILE_AVERAGE_SIZE = FEATURE_FILE_AVERAGE_LINE_LENGTH * FEATURE_FILE_AVERAGE_LINE_COUNT;
 
     public final static class Builder {
         private boolean includeSource = true;
@@ -111,9 +125,13 @@ public final class GherkinParser {
             messages.add(envelope);
         }
 
+
+        // Lambda is faster than method reference because if avoids a call to
+        // Objects.requiresNonNull(messages)
+        //noinspection Convert2MethodRef
         envelope.getSource()
                 .map(this::parse)
-                .ifPresent(messages::addAll);
+                .ifPresent(envelopes -> messages.addAll(envelopes));
 
         return messages.stream();
     }
@@ -149,19 +167,12 @@ public final class GherkinParser {
     }
 
     private Envelope createParseError(ParserException e, String uri) {
-        long line = e.location.getLine();
-        long column = e.location.getColumn();
         return Envelope.of(new ParseError(
                 new SourceReference(
                         uri,
                         null,
                         null,
-                        // We want 0 values not to be serialised, which is why we set them to null
-                        // This is a legacy requirement brought over from old protobuf behaviour
-                        new io.cucumber.messages.types.Location(
-                                line,
-                                column == 0 ? null : column
-                        )
+                        e.location
                 ),
                 e.getMessage()
         ));

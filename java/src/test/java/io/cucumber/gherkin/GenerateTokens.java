@@ -1,19 +1,19 @@
 package io.cucumber.gherkin;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.readAllBytes;
 
 public final class GenerateTokens {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         TokenFormatterBuilder builder = new TokenFormatterBuilder();
         Parser<String> parser = new Parser<>(builder);
-        TokenMatcher matcher = new TokenMatcher();
+        GherkinTokenMatcher matcher = new GherkinTokenMatcher();
         for (String fileName : args) {
-            Reader in = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
-            String result = parser.parse(in, matcher, fileName);
+            byte[] bytes = readAllBytes(Paths.get(fileName));
+            String result = parser.parse(new String(bytes, UTF_8), matcher, fileName);
             Stdio.out.print(result);
             Stdio.out.flush(); // print doesn't autoflush
         }

@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/cucumber/gherkin'
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 3.0'
+  s.required_ruby_version = '>= 3.2'
   s.required_rubygems_version = '>= 3.2.8'
 
   s.metadata = {
@@ -27,7 +27,11 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake', '~> 13.1'
   s.add_development_dependency 'rspec', '~> 3.13'
-  s.add_development_dependency 'rubocop', '~> 1.26.0'
+  s.add_development_dependency 'rubocop', '~> 1.71.2'
+  s.add_development_dependency 'rubocop-rspec', '~> 3.4.0'
+  s.add_development_dependency 'rubocop-packaging', '~> 0.5.2'
+  s.add_development_dependency 'rubocop-performance', '~> 1.23.1'
+  s.add_development_dependency 'rubocop-rake', '~> 0.6.0'
 
   s.executables      = %w[gherkin-ruby gherkin]
   s.files            = Dir['README.md', 'LICENSE', 'lib/**/*']

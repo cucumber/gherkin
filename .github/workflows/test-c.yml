@@ -24,7 +24,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: run make
-        run: make
+      - name: run acceptance tests
+        run: make acceptance
         working-directory: c
