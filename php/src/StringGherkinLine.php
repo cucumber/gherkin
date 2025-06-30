@@ -98,7 +98,7 @@ final class StringGherkinLine implements GherkinLine
 
                 // Match \N and then replace based on what X is
                 // done this way so that \\n => \n once and isn't then recursively replaced again (or similar)
-                $unescaped = preg_replace_callback(
+                $unescaped = (string) preg_replace_callback(
                     '/(\\\\.)/u',
                     function ($groups) {
                         return match ($groups[0]) {
