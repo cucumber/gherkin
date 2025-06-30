@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Cucumber\Gherkin;
 
-use RuntimeException;
-
 /**
  * Keeps common string operations in one place using correct unicode functions
  * (and normalises naming with other implementations)
@@ -37,9 +35,7 @@ final class StringUtils
     {
         $pattern = '/' . self::WHITESPACE_PATTERN . '$/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null) {
-            throw new RuntimeException("invalid pattern " . $pattern);
-        }
+        assert(is_string($value), "Invalid pattern " . $pattern);
         return $value;
     }
 
@@ -47,9 +43,7 @@ final class StringUtils
     {
         $pattern = '/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null) {
-            throw new RuntimeException("invalid pattern " . $pattern);
-        }
+        assert(is_string($value), "Invalid pattern " . $pattern);
         return $value;
     }
 
@@ -57,9 +51,7 @@ final class StringUtils
     {
         $pattern = '/^' . self::WHITESPACE_PATTERN . '/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null) {
-            throw new RuntimeException("invalid pattern " . $pattern);
-        }
+        assert(is_string($value), "Invalid pattern " . $pattern);
         return $value;
     }
 
@@ -67,9 +59,7 @@ final class StringUtils
     {
         $pattern = '/^' . self::WHITESPACE_PATTERN_NO_NEWLINE . '/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null) {
-            throw new RuntimeException("invalid pattern " . $pattern);
-        }
+        assert(is_string($value), "Invalid pattern " . $pattern);
         return $value;
     }
 

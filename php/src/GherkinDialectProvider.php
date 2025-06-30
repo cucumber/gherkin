@@ -32,9 +32,7 @@ final class GherkinDialectProvider
              * @var non-empty-array<non-empty-string, Dialect> $data
              */
             $contents = file_get_contents(self::JSON_PATH);
-            if(!is_string($contents)) {
-                throw new RuntimeException("Unable to read " . self::JSON_PATH);
-            }
+            assert(is_string($contents), "Could not read " . self::JSON_PATH);
             $data = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
             $this->DIALECTS = $data;
         } catch (JsonException $e) {
