@@ -3350,15 +3350,12 @@ class Parser:
                 match = True
                 break
 
-            if not any(
-                (
-                    self.match_Empty(context, token),
-                    self.match_Comment(context, token),
-                    self.match_TagLine(context, token),
-                )
-            ):
-                break
-
+            if self.match_Empty(context, token):
+                continue
+            if self.match_Comment(context, token):
+                continue
+            if self.match_TagLine(context, token):
+                continue
         context.token_queue.extend(queue)
 
         return match
@@ -3377,15 +3374,12 @@ class Parser:
                 match = True
                 break
 
-            if not any(
-                (
-                    self.match_Empty(context, token),
-                    self.match_Comment(context, token),
-                    self.match_TagLine(context, token),
-                )
-            ):
-                break
-
+            if self.match_Empty(context, token):
+                continue
+            if self.match_Comment(context, token):
+                continue
+            if self.match_TagLine(context, token):
+                continue
         context.token_queue.extend(queue)
 
         return match

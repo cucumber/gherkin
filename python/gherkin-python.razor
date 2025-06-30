@@ -206,19 +206,22 @@ class @(Model.ParserClassName):
             token = self.read_token(context)
             token.detach()
             queue.append(token)
-
-            if @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>self.@MatchToken(tokenType)</text>}:
+            @foreach(var tokenType in lookAheadHint.ExpectedTokens) {
+            <text>
+            if self.@MatchToken(tokenType):
                 match = True
-                break
+                break</text>
+            }
 
-            if not any(
-                (@foreach(var tokenType in lookAheadHint.Skip) {
-                        <text>
-                    self.@MatchToken(tokenType),</text>}
-
-                )
-            ):
-                break
+            @foreach(var tokenType in lookAheadHint.Skip) {
+            <text>
+            if self.@MatchToken(tokenType):
+                continue</text>
+            }
+            @if(lookAheadHint.Skip.Length == 0) {
+            <text>
+            break</text>
+            }
 
         context.token_queue.extend(queue)
 
