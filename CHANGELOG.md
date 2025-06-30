@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [C] Prefer the longest step keyword ([#417](https://github.com/cucumber/gherkin/pull/417))
+- [cpp] Actually allow comment inside descriptions ([#414](https://github.com/cucumber/gherkin/pull/414))
+- [cpp] Add missing translations for Rule ([#415](https://github.com/cucumber/gherkin/pull/415))
+- [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed

@@ -5,6 +5,8 @@
 #include <cucumber/gherkin/regex.hpp>
 #include <cucumber/gherkin/exceptions.hpp>
 
+#include <algorithm>
+
 namespace cucumber::gherkin {
 
 static const std::regex language_re{
@@ -212,6 +214,17 @@ token_matcher::match_step_line(token& token)
 {
     string_views kws = { "given", "when", "then", "and", "but" };
     auto keywords = cucumber::gherkin::keywords(dialect_name_, kws);
+
+    // Prefer the longest step keyword by sorting keywords in descending order
+    // by length (in bytes, not codepoints or graphemes - adequate for dealing
+    // with keywords that are prefixes of each other).
+    std::sort(
+        keywords.begin(),
+	keywords.end(),
+        [](const std::string_view& a, const std::string_view& b) {
+            return a.length() > b.length();
+        }
+    );
 
     for (const auto& keyword : keywords) {
         if (!token.line.startswith(keyword)) {
