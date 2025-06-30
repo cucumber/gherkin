@@ -155,14 +155,14 @@ install(
 
 install(
   DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-  DESTINATION ${include_install_dir}
+  DESTINATION ${include_install_dir}/cucumber/gherkin
   FILES_MATCHING PATTERN "*.*h")
 
 install(
     FILES "${project_config}"
-    DESTINATION "${config_install_dir}")
+    DESTINATION "${config_install_dir}/gherkin")
 
 install(
     EXPORT "${targets_export_name}"
     NAMESPACE "${namespace}"
-    DESTINATION "${config_install_dir}")
+    DESTINATION "${config_install_dir}/gherkin")
