@@ -34,33 +34,25 @@ final class StringUtils
     public static function rtrim(string $string): string
     {
         $pattern = '/' . self::WHITESPACE_PATTERN . '$/u';
-        $value = preg_replace($pattern, '', $string);
-        assert(is_string($value), "Invalid pattern " . $pattern);
-        return $value;
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function rtrimKeepNewLines(string $string): string
     {
         $pattern = '/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u';
-        $value = preg_replace($pattern, '', $string);
-        assert(is_string($value), "Invalid pattern " . $pattern);
-        return $value;
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function ltrim(string $string): string
     {
         $pattern = '/^' . self::WHITESPACE_PATTERN . '/u';
-        $value = preg_replace($pattern, '', $string);
-        assert(is_string($value), "Invalid pattern " . $pattern);
-        return $value;
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function ltrimKeepNewLines(string $string): string
     {
         $pattern = '/^' . self::WHITESPACE_PATTERN_NO_NEWLINE . '/u';
-        $value = preg_replace($pattern, '', $string);
-        assert(is_string($value), "Invalid pattern " . $pattern);
-        return $value;
+        return (string) preg_replace($pattern, '', $string);
     }
 
     public static function trim(string $string): string
@@ -72,8 +64,7 @@ final class StringUtils
     public static function replace(string $string, array $replacements): string
     {
         $patterns = array_map(fn ($p) => '/' . preg_quote($p) . '/u', array_keys($replacements));
-
-        return preg_replace($patterns, array_values($replacements), $string);
+        return (string) preg_replace($patterns, array_values($replacements), $string);
     }
 
     /** @return array<non-empty-string> */
