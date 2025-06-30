@@ -45,6 +45,7 @@ final class GherkinDocumentBuilder implements Builder
         $this->reset($uri);
     }
 
+    #[\Override]
     public function build(Token $token): void
     {
         if (null === $token->match) {
@@ -60,11 +61,13 @@ final class GherkinDocumentBuilder implements Builder
         }
     }
 
+    #[\Override]
     public function startRule(RuleType $ruleType): void
     {
         array_push($this->stack, new AstNode($ruleType));
     }
-
+    
+    #[\Override]
     public function endRule(RuleType $ruleType): void
     {
         $node = array_pop($this->stack);
@@ -74,6 +77,7 @@ final class GherkinDocumentBuilder implements Builder
         }
     }
 
+    #[\Override]
     public function getResult(): GherkinDocument
     {
         $document = $this->currentNode()->getSingle(GherkinDocument::class, Ruletype::GherkinDocument);
@@ -85,6 +89,7 @@ final class GherkinDocumentBuilder implements Builder
         return $document;
     }
 
+    #[\Override]
     public function reset(string $uri): void
     {
         $this->stack = [new AstNode(RuleType::None)];
