@@ -15,7 +15,6 @@ KEYWORD_PREFIX_HEADER = "^(#{1,6}\\s)"
 
 
 class GherkinInMarkdownTokenMatcher(TokenMatcher):
-
     def __init__(self, dialect_name: str = "en") -> None:
         super().__init__(dialect_name)
 
@@ -24,7 +23,6 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         self.matched_feature_line = False
 
     def match_FeatureLine(self, token: Token) -> bool:
-
         if self.matched_feature_line:
             return False
 
