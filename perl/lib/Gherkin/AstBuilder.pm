@@ -121,11 +121,11 @@ sub get_table_rows {
 
 sub ensure_cell_count {
     my ( $self, $rows ) = @_;
-    return unless @$rows;
+    return unless @{$rows};
 
     my $cell_count;
 
-    for my $row (@$rows) {
+    for my $row (@{$rows}) {
         my $this_row_count = @{ $row->cells };
         $cell_count = $this_row_count unless defined $cell_count;
         unless ( $cell_count == $this_row_count ) {
@@ -160,6 +160,7 @@ sub next_id {
     return $self->{'id_generator'}->();
 }
 
+## no critic (ProhibitExcessComplexity, ProhibitCascadingIfElse)
 sub transform_node {
     my ( $self, $node ) = @_;
 
@@ -182,7 +183,7 @@ sub transform_node {
         my $media_type      = $separator_token->matched_text;
         my $delimiter       = $separator_token->matched_keyword;
         my $line_tokens     = $node->get_tokens('Other');
-        my $content = join( "\n", map { $_->matched_text } @$line_tokens );
+        my $content = join( "\n", map { $_->matched_text } @{$line_tokens} );
 
         return Cucumber::Messages::DocString->new(
             location    => $self->get_location($separator_token),
@@ -353,5 +354,6 @@ sub transform_node {
         return $node;
     }
 }
+## use critic
 
 1;

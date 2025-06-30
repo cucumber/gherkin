@@ -1,36 +1,47 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.StepKeywordType;
 
 import java.util.List;
 
-class Token {
-    public final IGherkinLine line;
-    public Parser.TokenType matchedType;
-    public String matchedKeyword;
-    public String matchedText;
-    public List<GherkinLineSpan> matchedItems;
-    public int matchedIndent;
-    public GherkinDialect matchedGherkinDialect;
-    public StepKeywordType keywordType;
-    public Location location;
+import static java.util.Objects.requireNonNull;
 
-    public Token(IGherkinLine line, Location location) {
+class Token {
+    final GherkinLine line;
+    final boolean eof;
+    Parser.TokenType matchedType;
+    String matchedKeyword;
+    String matchedText;
+    List<GherkinLineSpan> matchedItems;
+    int matchedIndent;
+    GherkinDialect matchedGherkinDialect;
+    StepKeywordType keywordType;
+    Location location;
+
+    private Token(GherkinLine line, Location location) {
         this.line = line;
         this.location = location;
+        this.eof = line == null;
     }
 
-    public boolean isEOF() {
-        return line == null;
+    static Token createEOF(Location location) {
+        requireNonNull(location);
+        return new Token(null, location);
     }
 
-    public void detach() {
-        if (line != null)
-            line.detach();
+    static Token createGherkinLine(String text, Location location) {
+        requireNonNull(text);
+        requireNonNull(location);
+        return new Token(new GherkinLine(text, location), location);
     }
 
-    public String getTokenValue() {
-        return isEOF() ? "EOF" : line.getLineText(-1);
+    boolean isEOF() {
+        return eof;
+    }
+
+    String getTokenValue() {
+        return isEOF() ? "EOF" : line.getText();
     }
 
     @Override

@@ -4,13 +4,13 @@ import static java.util.stream.Collectors.joining;
 
 class TokenFormatter {
 
-    public String formatToken(Token token) {
+    String formatToken(Token token) {
         if (token.isEOF())
             return "EOF";
 
         return String.format("(%s:%s)%s:%s/%s/%s",
                 toString(token.location.getLine()),
-                toString(token.location.getColumn()),
+                toString(token.location.getColumn().orElse(0L)),
                 toString(token.matchedType),
                 token.matchedKeyword == null ? "" : String.format("(%s)%s",
                                                                   toString(token.keywordType),

@@ -8,7 +8,7 @@ use List::Util qw(any first reduce);
 our $LANGUAGE_RE = qr/^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/o;
 
 use Class::XSAccessor accessors => [
-    qw/dialect _default_dialect_name _indent_to_remove _active_doc_string_separator _keyword_types /,
+    qw/dialect _default_dialect_name _indent_to_remove _active_doc_string_separator _keyword_types _sorted_step_keywords /,
 ];
 
 use Cucumber::Messages;
@@ -27,7 +27,7 @@ sub new {
 sub _add_keyword_type_mappings {
     my ($keyword_types, $keywords, $type) = @_;
 
-    for my $keyword (@$keywords) {
+    for my $keyword (@{$keywords}) {
         if (not exists $keyword_types->{$keyword}) {
             $keyword_types->{$keyword} = [];
         }
@@ -51,6 +51,13 @@ sub change_dialect {
                                [ @{ $self->dialect->And }, @{ $self->dialect->But } ],
                                Cucumber::Messages::Step::KEYWORDTYPE_CONJUNCTION);
     $self->_keyword_types( $keyword_types );
+    $self->_sorted_step_keywords(
+        [ sort {
+            length $b <=> length $a  # longest keyword first (See #400)
+          } map {
+              @{ $self->dialect->$_ }
+          } qw/Given When Then And But/ ]
+        );
 }
 
 sub reset {
@@ -122,7 +129,7 @@ sub _match_title_line {
     my ( $self, $token, $token_type, $keywords ) = @_;
     return unless $token->line;
 
-    for my $keyword (@$keywords) {
+    for my $keyword (@{$keywords}) {
         if ( $token->line->startswith_title_keyword($keyword) ) {
             my $title =
               $token->line->get_rest_trimmed( length( $keyword . ': ' ) );
@@ -213,7 +220,7 @@ sub _unescaped_docstring {
 
 sub match_StepLine {
     my ( $self, $token ) = @_;
-    my @keywords = map { @{ $self->dialect->$_ } } qw/Given When Then And But/;
+    my @keywords = @{ $self->_sorted_step_keywords };
     my $line = $token->line;
 
     for my $keyword (@keywords) {
@@ -238,6 +245,9 @@ sub match_StepLine {
 
 sub match_DocStringSeparator {
     my ( $self, $token ) = @_;
+    if ($token->is_eof) {
+        return 0;
+    }
     if ( !$self->_active_doc_string_separator ) {
         return $self->_match_DocStringSeparator( $token, '"""', 1 )
           || $self->_match_DocStringSeparator( $token, '```', 1 );

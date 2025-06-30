@@ -4,15 +4,14 @@ inherit_mode:
   merge:
     - Exclude
 
-#require:
-#  - rubocop-packaging
-#  - rubocop-performance
-#  - rubocop-rails
-#  - rubocop-rake
-#  - rubocop-rspec
+require:
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
   NewCops: enable
 
 # Disabled on our repo's to enable polyglot-release
@@ -33,10 +32,9 @@ Style/RegexpLiteral:
   EnforcedStyle: slashes
   AllowInnerSlashes: true
 
-## Disabled until rubocop-rspec is introduced
-#RSpec/MessageSpies:
-#  EnforcedStyle: receive
+RSpec/MessageSpies:
+  EnforcedStyle: receive
 
-# Hack to make rubocop not flag these (We need to re-analyse these later on)
+# Bug in rubocop auto-gen config: https://github.com/rubocop/rubocop/issues/13795
 Naming/MethodName:
   Enabled: false

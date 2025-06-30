@@ -7,9 +7,66 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [C] Prefer the longest step keyword ([#417](https://github.com/cucumber/gherkin/pull/417))
+- [cpp] Actually allow comment inside descriptions ([#414](https://github.com/cucumber/gherkin/pull/414))
+- [cpp] Add missing translations for Rule ([#415](https://github.com/cucumber/gherkin/pull/415))
+- [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
+
+## [32.1.2] - 2025-05-25
+### Fixed
+- [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))
+- [Java] Prefer the longest step keyword ([#401](https://github.com/cucumber/gherkin/pull/401))
+- [.NET] Prefer the longest step keyword ([#405](https://github.com/cucumber/gherkin/pull/405))
+- [PHP] Prefer the longest step keyword ([#403](https://github.com/cucumber/gherkin/pull/403))
+- [Go] Prefer the longest step keyword ([#403](https://github.com/cucumber/gherkin/pull/404))
+- [JavaScript] Prefer the longest step keyword ([#407](https://github.com/cucumber/gherkin/pull/407))
+- [Perl] Prefer the longest step keyword ([#408](https://github.com/cucumber/gherkin/pull/408))
+- [Ruby] Prefer the longest step keyword ([#409](https://github.com/cucumber/gherkin/pull/409))
+- [Python] Prefer the longest step keyword ([#410](https://github.com/cucumber/gherkin/pull/410))
+
+## [32.1.1] - 2025-04-11
+### Fixed
+- [Java] Avoid unnecessary unboxing to Character
+
+## [32.1.0] - 2025-04-04
+### Changed
+- [Java] Optimize GherkinLine performance ([#361](https://github.com/cucumber/gherkin/issues/361))
+- [Java] Optimize number of array copies ([#388](https://github.com/cucumber/gherkin/pull/388))
+- [Java] Optimize Location performance ([#385](https://github.com/cucumber/gherkin/pull/385))
+- [Java] Optimize AstNode performance ([#383](https://github.com/cucumber/gherkin/pull/383))
+- [Java] Optimize EncodingParser performance ([#382](https://github.com/cucumber/gherkin/pull/382))
+- [Java] Optimize GherkinDialect performance ([#380](https://github.com/cucumber/gherkin/pull/380))
+
+## [32.0.1] - 2025-03-27
+### Fixed
+- [Python] Fix a regression when a feature file only has a comment in the description
+
+## [32.0.0] - 2025-02-17
+### Changed
+- [.NET] Reduce NuGet size by only targeting .NET Standard 2.0
+- [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
+- [Ruby] Update minimum ruby requirement from 3.0 to 3.2
+- [Ruby] Introduce rubocop subgems to facilitate optimisations
+- [JavaScript] BREAKING CHANGE: Update supported Node.js versions to 18, 20, 22 and 23 ([#365](https://github.com/cucumber/gherkin/pull/365))
+
+### Fixed
+- [.NET] Fix NuGet package generation
+- [c] Optimise error handling for empty datatable rows
+- [Perl] Optimise error handling for unclosed DocStrings
+
+## [31.0.0] - 2025-01-29
 ### Added
+- [All] Allow comment inside descriptions ([#334](https://github.com/cucumber/gherkin/pull/334))
 - [.NET] Enabled overriding of parser's error-handling
 - [Python] Expose Python public API as package imports ([#352](https://github.com/cucumber/gherkin/pull/352))
+- [Python] Added support for Python 3.13
+
+### Changed
+- [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
+- [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
+- [.NET] Removed dependency on System.Text.Json and related logic in GherkinDialectProvider
+- [Elixir] Updates dependencies, bumps messages to 27.0.2
 
 ### Fixed
 - [c] slight update to existing CMakeFiles.txt to propagate VERSION. Close #320 ([#328](https://github.com/cucumber/gherkin/pull/328))
@@ -17,11 +74,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Use string-ordinal comparison consistently and remove old Mono workaround
 - [.NET] Improved startup time
 
-### Changed
-- [cpp] add generic support for ABI versioning with VERSION ([#328](https://github.com/cucumber/gherkin/pull/328))
-- [cpp] namespace was changed to 'cucumber::gherkin' to better reflect project structure and prevent clashing
-- [.NET] Removed dependency on System.Text.Json and related logic in GherkinDialectProvider
-- [Elixir] Updates dependencies, bumps messages to 27.0.2
+### Removed
+- [Python] Dropped support for Python 3.8
 
 ## [30.0.4] - 2024-11-15
 ### Fixed
@@ -726,7 +780,13 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.0.4...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.1.2...HEAD
+[32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
+[32.1.1]: https://github.com/cucumber/gherkin/compare/v32.1.0...v32.1.1
+[32.1.0]: https://github.com/cucumber/gherkin/compare/v32.0.1...v32.1.0
+[32.0.1]: https://github.com/cucumber/gherkin/compare/v32.0.0...v32.0.1
+[32.0.0]: https://github.com/cucumber/gherkin/compare/v31.0.0...v32.0.0
+[31.0.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v31.0.0
 [30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
 [30.0.2]: https://github.com/cucumber/gherkin/compare/v30.0.1...v30.0.2

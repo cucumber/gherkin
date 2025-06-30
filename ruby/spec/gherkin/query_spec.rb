@@ -107,7 +107,7 @@ describe Gherkin::Query do
       end
     end
 
-    context 'in a scenario outline' do
+    context 'with a scenario outline' do
       let(:scenario) { scenarios.last }
 
       it 'provides the feature and background locations of a given scenario outline node id' do

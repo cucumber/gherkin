@@ -32,15 +32,17 @@ sub from_paths {
     my ($class, $paths, $id_generator, $sink, %options) = @_;
 
     my $gherkin = $class->new(%options);
-    for my $path (@$paths) {
+    for my $path (@{$paths}) {
         # Note: There's a huge difference between ':utf8' and
         # ':encoding(UTF-8)' in Perl: the latter causes strict UTF-8 conversion
         # and fails hard if there are encoding problems. The former
         # accommodates the errors and simply continues, allowing us to
         # recode back to octets and then to the encoding indicated in the
         # header using the "# encoding: ..." header.
+        ## no critic (RequireEncodingWithUTF8Layer)
         open my $fh, '<:utf8', $path
             or die "Unable to open gherkin document $path: $!";
+        ## use critic
 
         # local $/ = undef; --> unset 'end-of-line' marker: slurp entire file
         # use the 'do' block to scope this binding to smallest possible scope

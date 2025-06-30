@@ -52,7 +52,7 @@ class EncodingParserTest {
                 "# encoding: ISO-8859-1\n" +
                 "Fonctionnalité: Concombres dans ISO-8859-1\n" +
                 "\n" +
-                "  Scénario: dans la ventre\n" +
+                "  Scénario: dans le ventre\n" +
                 "    Étant donné j'ai 5 concombres\n";
         String parsed = readWithEncodingFromSource(iso_8859_1(feature));
         assertEquals(feature, parsed);

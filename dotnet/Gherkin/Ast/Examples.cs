@@ -1,6 +1,6 @@
 namespace Gherkin.Ast;
 
-public class Examples(Tag[] tags, Location location, string keyword, string name, string description, TableRow header, TableRow[] body)
+public class Examples(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, TableRow header, IEnumerable<TableRow> body)
     : IHasLocation, IHasDescription, IHasRows, IHasTags
 {
     public IEnumerable<Tag> Tags { get; } = tags;
