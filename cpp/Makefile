@@ -68,7 +68,7 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 
 .built: $(SOURCE_FILES)
 	./cmake/cmate install
-	./cmake/cmate build
+	./cmake/cmate build --release
 	./cmake/cmate stage
 	touch $@
 
