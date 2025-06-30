@@ -16,6 +16,9 @@ sub new {
 
     # Perl convention is that a string reference is the string itself, but that
     # a straight string is a path
+    ## no critic (RequireBriefOpen)
+    # the file is opened in this object constructor,
+    # and will be closed in the method next_line at the end
     my $fh;
     if ( ref $path_or_str eq 'SCALAR' ) {
         my $bytes = Encode::encode('UTF-8', ${ $path_or_str });
@@ -25,6 +28,7 @@ sub new {
           || croak "Can't open [$path_or_str] for reading";
         $fh->binmode(':utf8');
     }
+    ## use critic
 
     return bless { fh => $fh, line_number => 0 }, $class;
 }

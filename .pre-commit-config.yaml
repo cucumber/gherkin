@@ -1,0 +1,25 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: c53240a7f974b3707e13eac6710542cc96a2d61a  # frozen: 24.10.0
+    hooks:
+      - id: black
+        files: "^python/"
+  - repo: https://github.com/asottile/pyupgrade
+    rev: 19364aa1b2ac289ce75e6bbe93994f7b4b9425f6  # frozen: v3.19.0
+    hooks:
+      - id: pyupgrade
+        files: "^python/"
+        args: [ "--py39-plus" ]
+  - repo: https://github.com/pycqa/flake8
+    rev: "e43806be3607110919eff72939fda031776e885a"  # frozen: 7.1.1
+    hooks:
+      - id: flake8
+        files: "^python/"
+        args: [ "--toml-config=python/pyproject.toml" ]
+        additional_dependencies: [
+            "flake8-pyproject",
+            "flake8-bugbear",
+        ]

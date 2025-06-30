@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'stringio'
 require_relative 'token'
 require_relative 'gherkin_line'
@@ -14,7 +16,7 @@ module Gherkin
     def initialize(source_or_io)
       @line_number = 0
 
-      case(source_or_io)
+      case source_or_io
       when String
         @io = StringIO.new(source_or_io)
       when StringIO, IO
@@ -25,9 +27,11 @@ module Gherkin
     end
 
     def read
-      location = {line: @line_number += 1}
-      if @io.nil? || line = @io.gets
-        gherkin_line = line ? GherkinLine.new(line, location[:line]) : nil
+      location = { line: @line_number += 1 }
+      if @io.nil?
+        Token.new(nil, location)
+      elsif (line = @io.gets)
+        gherkin_line = GherkinLine.new(line, location[:line])
         Token.new(gherkin_line, location)
       else
         @io.close unless @io.closed? # ARGF closes the last file after final gets
@@ -35,6 +39,5 @@ module Gherkin
         Token.new(nil, location)
       end
     end
-
   end
 end

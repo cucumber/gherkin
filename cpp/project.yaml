@@ -1,0 +1,16 @@
+---
+name: cucumber_gherkin
+version_file: VERSION
+namespace: cucumber
+std: 20
+packages:
+  cmake:
+    - nlohmann_json
+    - cucumber_messages
+deps:
+  - nlohmann/json@v3.11.3:
+      args:
+        - -DJSON_BuildTests=OFF
+        - -DJSON_Install=ON
+  - cucumber/messages@main:
+      srcdir: cpp

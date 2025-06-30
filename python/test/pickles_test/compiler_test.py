@@ -1,12 +1,8 @@
-# coding=utf-8
-from __future__ import print_function
 import json
 import textwrap
 
 from gherkin.ast_builder import AstBuilder
 from gherkin.parser import Parser
-from gherkin.parser import Parser
-from gherkin.errors import ParserError
 from gherkin.pickles.compiler import Compiler
 from gherkin.stream.id_generator import IdGenerator
 
@@ -17,10 +13,11 @@ def test_compiles_a_scenario():
         Feature: f
           Scenario: s
             Given passing
-        """)
+        """
+    )
     id_generator = IdGenerator()
     gherkin_document = Parser(AstBuilder(id_generator)).parse(feature_text)
-    gherkin_document['uri'] = 'uri'
+    gherkin_document["uri"] = "uri"
     pickle = Compiler(id_generator).compile(gherkin_document)
     expected_pickle = textwrap.dedent(
         """\
@@ -57,10 +54,11 @@ def test_compiles_a_scenario_outline_with_i18n_characters():
             Examples:
             | with-é  |
             | passing |
-        """)
+        """
+    )
     id_generator = IdGenerator()
     gherkin_document = Parser(AstBuilder(id_generator)).parse(feature_text)
-    gherkin_document['uri'] = 'uri'
+    gherkin_document["uri"] = "uri"
     pickle = Compiler(id_generator).compile(gherkin_document)
     expected_pickle = textwrap.dedent(
         """\

@@ -1,9 +1,8 @@
-﻿namespace Gherkin.Ast
+namespace Gherkin.Ast;
+
+public interface IHasDescription
 {
-    public interface IHasDescription
-    {
-        string Keyword { get; }
-        string Name { get; }
-        string Description { get; }
-    }
+    string Keyword { get; }
+    string Name { get; }
+    string Description { get; }
 }

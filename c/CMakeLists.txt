@@ -1,5 +1,21 @@
-PROJECT(gherkin C)
+set(VERSION 27.0.2)
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
+    file(STRINGS "VERSION" LINES)
+    list(GET LINES 0 VERSION)
+endif()
+
+# Crude Semver parsing
+if("${VERSION}" MATCHES "^([^\\.]+)\\.([^\\.]+)\\.([^\\.]+)$")
+    set(VER_MAJOR ${CMAKE_MATCH_1})
+    set(VER_MINOR ${CMAKE_MATCH_2})
+    set(VER_PATCH ${CMAKE_MATCH_3})
+else()
+    message(FATAL_ERROR "unable to parse version: ${VERSION}")
+endif()
+
 cmake_minimum_required(VERSION 3.0)
+PROJECT(gherkin VERSION ${VERSION} LANGUAGES C)
 enable_testing()
 
 # Install library & headers in your directory
@@ -68,7 +84,17 @@ LIST(APPEND GHERKIN_CLI
         )
 
 
+
+
 add_library(gherkin ${GHERKIN_SRS})
+
+set_target_properties(
+    gherkin
+    PROPERTIES
+        VERSION ${VERSION}
+        SOVERSION ${VER_MAJOR}
+)
+
 include(CheckLibraryExists)
 CHECK_LIBRARY_EXISTS(m log10 "" HAVE_LIB_M)
 if (HAVE_LIB_M)
@@ -102,13 +128,14 @@ add_custom_command(
     TARGET gherkinexe
     COMMENT "Run tests"
     POST_BUILD
-    COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION>
+    COMMAND ${CMAKE_CTEST_COMMAND}
 )
 ############ Installation section ############
-set(include_install_dir "include")
-set(lib_install_dir "lib/")
-set(bin_install_dir "bin/")
-set(config_install_dir "lib/cmake/")
+include(GNUInstallDirs)
+set(include_install_dir "${CMAKE_INSTALL_INCLUDEDIR}")
+set(lib_install_dir "${CMAKE_INSTALL_LIBDIR}/")
+set(bin_install_dir "${CMAKE_INSTALL_BINDIR}/")
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/")
 
 set(project_config "${CMAKE_CURRENT_BINARY_DIR}/generated/${PROJECT_NAME}Config.cmake")
 set(targets_export_name "${PROJECT_NAME}Targets")
@@ -128,14 +155,14 @@ install(
 
 install(
   DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-  DESTINATION ${include_install_dir}
+  DESTINATION ${include_install_dir}/cucumber/gherkin
   FILES_MATCHING PATTERN "*.*h")
 
 install(
     FILES "${project_config}"
-    DESTINATION "${config_install_dir}")
+    DESTINATION "${config_install_dir}/gherkin")
 
 install(
     EXPORT "${targets_export_name}"
     NAMESPACE "${namespace}"
-    DESTINATION "${config_install_dir}")
+    DESTINATION "${config_install_dir}/gherkin")

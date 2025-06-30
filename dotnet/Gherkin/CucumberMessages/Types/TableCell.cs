@@ -1,13 +1,12 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
-namespace Gherkin.CucumberMessages.Types
+namespace Gherkin.CucumberMessages.Types;
+
+public class TableCell
 {
-    public class TableCell
-    {
-        [DataMember(Name = "location")]
-        public Location Location { get; set; }
-        
-        [DataMember(Name = "value")]
-        public string Value { get; set; }
-    }
+    [DataMember(Name = "location")]
+    public Location Location { get; set; }
+
+    [DataMember(Name = "value")]
+    public string Value { get; set; }
 }

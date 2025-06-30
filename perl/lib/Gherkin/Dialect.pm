@@ -23,8 +23,10 @@ sub new {
             close $fh;
             $options->{'dictionary'} = Cpanel::JSON::XS::decode_json($input);
         } else {
+            ## no critic (ProhibitPackageVars)
             require Gherkin::Generated::Languages;
             $options->{'dictionary'} = $Gherkin::Generated::Languages::data;
+            ## use critic
         }
     }
 
@@ -94,7 +96,8 @@ one to be used for keyword translation lookup. Out of the box, Gherkin comes
 with actual translations, such as C<Afrikaans> as well as 'slang-like'
 translations such as "Pirate English".
 
-This module is used by the L<token matcher|Gherkin::TokenMatcher> to identify
+This module is used by the L<token matcher|Gherkin::TokenMatcher> and
+the L<Markdown token matcher|Gherkin::MarkdownTokenMatcher> to identify
 the type of token (input line) passed to the scanner.
 
 =head1 METHODS

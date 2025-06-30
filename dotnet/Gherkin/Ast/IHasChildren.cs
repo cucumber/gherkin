@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+namespace Gherkin.Ast;
 
-namespace Gherkin.Ast
+public interface IHasChildren
 {
-    public interface IHasChildren
-    {
-        IEnumerable<IHasLocation> Children { get; }
-    }
+    IEnumerable<IHasLocation> Children { get; }
 }

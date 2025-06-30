@@ -18,6 +18,8 @@ use Generator;
 
 /**
  * Parses a Gherkin document (or list of Source envelopes) and emits Cucumber Messages envelopes
+ *
+ * @psalm-api
  */
 final class GherkinParser
 {
@@ -28,13 +30,13 @@ final class GherkinParser
      * @param bool $predictableIds Ignored if IdGenerator is provided
      */
     public function __construct(
-        private readonly bool $predictableIds = false,
+        bool $predictableIds = false,
         private readonly bool $includeSource = true,
         private readonly bool $includeGherkinDocument = true,
         private readonly bool $includePickles = true,
         ?IdGenerator $idGenerator = null,
     ) {
-        $this->idGenerator = $idGenerator ?? ($this->predictableIds ? new IncrementingIdGenerator() : new UuidIdGenerator());
+        $this->idGenerator = $idGenerator ?? ($predictableIds ? new IncrementingIdGenerator() : new UuidIdGenerator());
         $this->pickleCompiler = new PickleCompiler($this->idGenerator);
     }
 

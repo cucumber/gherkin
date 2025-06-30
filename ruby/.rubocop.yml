@@ -1,0 +1,40 @@
+inherit_from: .rubocop_todo.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+
+require:
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+
+# Disabled on our repo's to enable polyglot-release
+Gemspec/RequireMFA:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 200
+
+# This allows us to read the chmod action in a more reproducible way
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
+
+Style/Documentation:
+  Enabled: false
+
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+# Bug in rubocop auto-gen config: https://github.com/rubocop/rubocop/issues/13795
+Naming/MethodName:
+  Enabled: false

@@ -1,32 +1,30 @@
-﻿using System.IO;
 using Gherkin.Ast;
 
-namespace Gherkin
+namespace Gherkin;
+
+public class Parser : Parser<GherkinDocument>
 {
-    public class Parser : Parser<GherkinDocument>
+    public Parser()
     {
-        public Parser()
-        {
-        }
+    }
 
-        public Parser(IAstBuilder<GherkinDocument> astBuilder)
-            : base(astBuilder)
-        {
-        }
+    public Parser(IAstBuilder<GherkinDocument> astBuilder)
+        : base(astBuilder)
+    {
+    }
 
-        public GherkinDocument Parse(TextReader reader)
-        {
-            return Parse(new TokenScanner(reader));
-        }
+    public GherkinDocument Parse(TextReader reader)
+    {
+        return Parse(new TokenScanner(reader));
+    }
 
-        public GherkinDocument Parse(string sourceFile)
+    public GherkinDocument Parse(string sourceFile)
+    {
+        using (var stream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
         {
-            using (var stream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
             {
-                using (var reader = new StreamReader(stream))
-                {
-                    return Parse(new TokenScanner(reader));
-                }
+                return Parse(new TokenScanner(reader));
             }
         }
     }

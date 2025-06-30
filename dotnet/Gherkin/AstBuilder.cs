@@ -1,62 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Gherkin.Ast;
 
-namespace Gherkin
+namespace Gherkin;
+
+public class AstBuilder<T> : IAstBuilder<T>
 {
-    public class AstBuilder<T> : IAstBuilder<T>
+    private readonly Stack<AstNode> _stack = new();
+    private AstNode CurrentNode => _stack.Peek();
+    private readonly List<Comment> _comments = new();
+
+    public AstBuilder()
     {
-        private readonly Stack<AstNode> _stack = new();
-        private AstNode CurrentNode => _stack.Peek();
-        private readonly List<Comment> _comments = new();
+        Reset();
+    }
 
-        public AstBuilder()
+    public void Reset()
+    {
+        _stack.Clear();
+        _stack.Push(new AstNode(RuleType.None));
+        _comments.Clear();
+    }
+
+    public void Build(Token token)
+    {
+        if (token.MatchedType == TokenType.Comment)
         {
-            Reset();
+            _comments.Add(CreateComment(GetLocation(token), token.MatchedText));
         }
-
-        public void Reset()
+        else
         {
-            _stack.Clear();
-            _stack.Push(new AstNode(RuleType.None));
-            _comments.Clear();
+            CurrentNode.Add((RuleType)token.MatchedType, token);
         }
+    }
 
-        public void Build(Token token)
-        {
-            if (token.MatchedType == TokenType.Comment)
-            {
-                _comments.Add(CreateComment(GetLocation(token), token.MatchedText));
-            }
-            else
-            {
-                CurrentNode.Add((RuleType) token.MatchedType, token);
-            }
-        }
+    public void StartRule(RuleType ruleType)
+    {
+        _stack.Push(new AstNode(ruleType));
+    }
 
-        public void StartRule(RuleType ruleType)
-        {
-            _stack.Push(new AstNode(ruleType));
-        }
+    public void EndRule(RuleType ruleType)
+    {
+        var node = _stack.Pop();
+        object transformedNode = GetTransformedNode(node);
+        CurrentNode.Add(node.RuleType, transformedNode);
+    }
 
-        public void EndRule(RuleType ruleType)
-        {
-            var node = _stack.Pop();
-            object transformedNode = GetTransformedNode(node);
-            CurrentNode.Add(node.RuleType, transformedNode);
-        }
+    public T GetResult()
+    {
+        return CurrentNode.GetSingle<T>(RuleType.GherkinDocument);
+    }
 
-        public T GetResult()
+    private object GetTransformedNode(AstNode node)
+    {
+        switch (node.RuleType)
         {
-            return CurrentNode.GetSingle<T>(RuleType.GherkinDocument);
-        }
-
-        private object GetTransformedNode(AstNode node)
-        {
-            switch (node.RuleType)
-            {
-                case RuleType.Step:
+            case RuleType.Step:
                 {
                     var stepLine = node.GetToken(TokenType.StepLine);
                     var stepArg = node.GetSingle<StepArgument>(RuleType.DataTable) ??
@@ -64,7 +61,7 @@ namespace Gherkin
                     var keywordType = GetKeywordType(stepLine);
                     return CreateStep(GetLocation(stepLine), stepLine.MatchedKeyword, keywordType, stepLine.MatchedText, stepArg, node);
                 }
-                case RuleType.DocString:
+            case RuleType.DocString:
                 {
                     var separatorToken = node.GetTokens(TokenType.DocStringSeparator).First();
                     var contentType = separatorToken.MatchedText.Length == 0 ? null : separatorToken.MatchedText;
@@ -74,19 +71,19 @@ namespace Gherkin
 
                     return CreateDocString(GetLocation(separatorToken), contentType, content, delimiter, node);
                 }
-                case RuleType.DataTable:
+            case RuleType.DataTable:
                 {
                     var rows = GetTableRows(node);
                     return CreateDataTable(rows, node);
                 }
-                case RuleType.Background:
+            case RuleType.Background:
                 {
                     var backgroundLine = node.GetToken(TokenType.BackgroundLine);
                     var description = GetDescription(node);
                     var steps = GetSteps(node);
                     return CreateBackground(GetLocation(backgroundLine), backgroundLine.MatchedKeyword, backgroundLine.MatchedText, description, steps, node);
                 }
-                case RuleType.ScenarioDefinition:
+            case RuleType.ScenarioDefinition:
                 {
                     var tags = GetTags(node);
 
@@ -95,56 +92,56 @@ namespace Gherkin
 
                     var description = GetDescription(scenarioNode);
                     var steps = GetSteps(scenarioNode);
-                    var examples = scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition).ToArray();
+                    List<Examples> examples = [.. scenarioNode.GetItems<Examples>(RuleType.ExamplesDefinition)];
                     return CreateScenario(tags, GetLocation(scenarioLine), scenarioLine.MatchedKeyword, scenarioLine.MatchedText, description, steps, examples, node);
                 }
-                case RuleType.ExamplesDefinition:
+            case RuleType.ExamplesDefinition:
                 {
                     var tags = GetTags(node);
                     var examplesNode = node.GetSingle<AstNode>(RuleType.Examples);
                     var examplesLine = examplesNode.GetToken(TokenType.ExamplesLine);
                     var description = GetDescription(examplesNode);
 
-                    var allRows = examplesNode.GetSingle<TableRow[]>(RuleType.ExamplesTable);
-                    var header = allRows != null ? allRows.First() : null;
-                    var rows = allRows != null ? allRows.Skip(1).ToArray() : null;
+                    var allRows = examplesNode.GetSingle<List<TableRow>>(RuleType.ExamplesTable);
+                    var header = allRows != null ? allRows[0] : null;
+                    var rows = allRows != null ? allRows.Skip(1).ToList() : null;
                     return CreateExamples(tags, GetLocation(examplesLine), examplesLine.MatchedKeyword, examplesLine.MatchedText, description, header, rows, node);
                 }
-                case RuleType.ExamplesTable:
+            case RuleType.ExamplesTable:
                 {
                     return GetTableRows(node);
                 }
-                case RuleType.Description:
+            case RuleType.Description:
                 {
-                    var lineTokens = node.GetTokens(TokenType.Other);
+                    IEnumerable<Token> lineTokens = node.GetTokens(TokenType.Other);
 
                     // Trim trailing empty lines
                     lineTokens = lineTokens.Reverse().SkipWhile(t => string.IsNullOrWhiteSpace(t.MatchedText)).Reverse();
 
                     return string.Join(Environment.NewLine, lineTokens.Select(lt => lt.MatchedText));
                 }
-                case RuleType.Feature:
+            case RuleType.Feature:
                 {
                     var header = node.GetSingle<AstNode>(RuleType.FeatureHeader);
-                    if(header == null) return null;
+                    if (header == null) return null;
                     var tags = GetTags(header);
                     var featureLine = header.GetToken(TokenType.FeatureLine);
-                    if(featureLine == null) return null;
-                    var children = new List<IHasLocation> ();
+                    if (featureLine == null) return null;
+                    var children = new List<IHasLocation>();
                     var background = node.GetSingle<Background>(RuleType.Background);
-                    if (background != null) 
-                    {
-                        children.Add (background);
-                    }
-                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
-                                                     .Concat(node.GetItems<IHasLocation>(RuleType.Rule));
+                    if (background != null)
+                        children.Add(background);
+                    foreach (var scenarioDefinition in node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                        children.Add(scenarioDefinition);
+                    foreach (var rule in node.GetItems<IHasLocation>(RuleType.Rule))
+                        children.Add(rule);
                     var description = GetDescription(header);
-                    if(featureLine.MatchedGherkinDialect == null) return null;
+                    if (featureLine.MatchedGherkinDialect == null) return null;
                     var language = featureLine.MatchedGherkinDialect.Language;
 
-                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                    return CreateFeature(tags, GetLocation(featureLine), language, featureLine.MatchedKeyword, featureLine.MatchedText, description, children, node);
                 }
-                case RuleType.Rule:
+            case RuleType.Rule:
                 {
                     var header = node.GetSingle<AstNode>(RuleType.RuleHeader);
                     if (header == null) return null;
@@ -154,162 +151,160 @@ namespace Gherkin
                     var children = new List<IHasLocation>();
                     var background = node.GetSingle<Background>(RuleType.Background);
                     if (background != null)
-                    {
                         children.Add(background);
-                    }
-                    var childrenEnumerable = children.Concat(node.GetItems<IHasLocation>(RuleType.ScenarioDefinition));
+                    foreach (var scenarioDefinition in node.GetItems<IHasLocation>(RuleType.ScenarioDefinition))
+                        children.Add(scenarioDefinition);
                     var description = GetDescription(header);
                     if (ruleLine.MatchedGherkinDialect == null) return null;
 
-                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, childrenEnumerable.ToArray(), node);
+                    return CreateRule(tags, GetLocation(ruleLine), ruleLine.MatchedKeyword, ruleLine.MatchedText, description, children, node);
                 }
-                case RuleType.GherkinDocument:
+            case RuleType.GherkinDocument:
                 {
                     var feature = node.GetSingle<Feature>(RuleType.Feature);
 
                     return CreateGherkinDocument(feature, _comments.ToArray(), node);
                 }
-            }
-
-            return node;
         }
 
-        protected virtual StepKeywordType GetKeywordType(Token stepLine)
+        return node;
+    }
+
+    protected virtual StepKeywordType GetKeywordType(Token stepLine)
+    {
+        var stepKeywordType = stepLine.MatchedGherkinDialect.GetStepKeywordType(stepLine.MatchedKeyword);
+        if (stepKeywordType == null || stepKeywordType == StepKeywordType.Unspecified)
+            return StepKeywordType.Unspecified;
+        return stepKeywordType.Value;
+    }
+
+    protected virtual Background CreateBackground(Location location, string keyword, string name, string description, IEnumerable<Step> steps, AstNode node)
+    {
+        return new Background(location, keyword, name, description, steps);
+    }
+
+    protected virtual DataTable CreateDataTable(List<TableRow> rows, AstNode node)
+    {
+        return new DataTable(rows);
+    }
+
+    protected virtual Comment CreateComment(Location location, string text)
+    {
+        return new Comment(location, text);
+    }
+
+    protected virtual Examples CreateExamples(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, TableRow header, IEnumerable<TableRow> body, AstNode node)
+    {
+        return new Examples(tags, location, keyword, name, description, header, body);
+    }
+
+    protected virtual Scenario CreateScenario(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<Step> steps, IEnumerable<Examples> examples, AstNode node)
+    {
+        return new Scenario(tags, location, keyword, name, description, steps, examples);
+    }
+
+    protected virtual DocString CreateDocString(Location location, string contentType, string content, string delimiter, AstNode node)
+    {
+        return new DocString(location, contentType, content, delimiter);
+    }
+
+    protected virtual Step CreateStep(Location location, string keyword, StepKeywordType keywordType, string text, StepArgument argument, AstNode node)
+    {
+        return new Step(location, keyword, keywordType, text, argument);
+    }
+
+    protected virtual GherkinDocument CreateGherkinDocument(Feature feature, IEnumerable<Comment> gherkinDocumentComments, AstNode node)
+    {
+        return new GherkinDocument(feature, gherkinDocumentComments);
+    }
+
+    protected virtual Feature CreateFeature(IEnumerable<Tag> tags, Location location, string language, string keyword, string name, string description, IEnumerable<IHasLocation> children, AstNode node)
+    {
+        return new Feature(tags, location, language, keyword, name, description, children);
+    }
+
+    protected virtual Rule CreateRule(IEnumerable<Tag> tags, Location location, string keyword, string name, string description, IEnumerable<IHasLocation> children, AstNode node)
+    {
+        return new Rule(tags, location, keyword, name, description, children);
+    }
+
+    protected virtual Tag CreateTag(Location location, string name, AstNode node)
+    {
+        return new Tag(location, name);
+    }
+
+    protected Location CreateLocation(int line, int column)
+    {
+        return new Location(line, column);
+    }
+
+    protected virtual TableRow CreateTableRow(Location location, IEnumerable<TableCell> cells, AstNode node)
+    {
+        return new TableRow(location, cells);
+    }
+
+    protected TableCell CreateTableCell(Location location, string value)
+    {
+        return new TableCell(location, value);
+    }
+
+    private Location GetLocation(Token token, int column = 0)
+    {
+        return column == 0 ? token.Location : CreateLocation(token.Location.Line, column);
+    }
+
+    private IEnumerable<Tag> GetTags(AstNode node)
+    {
+        var tagsNode = node.GetSingle<AstNode>(RuleType.Tags);
+        if (tagsNode == null)
+            return [];
+
+        var tags = new List<Tag>();
+        foreach (var line in tagsNode.GetTokens(TokenType.TagLine))
         {
-            var stepKeywordType = stepLine.MatchedGherkinDialect.GetStepKeywordType(stepLine.MatchedKeyword);
-            if (stepKeywordType == null || stepKeywordType == StepKeywordType.Unspecified)
-                return StepKeywordType.Unspecified;
-            return stepKeywordType.Value;
+            foreach (var matchedItem in line.Line.GetTags())
+                tags.Add(CreateTag(GetLocation(line, matchedItem.Column), matchedItem.Text, tagsNode));
         }
+        return tags;
+    }
 
-        protected virtual Background CreateBackground(Location location, string keyword, string name, string description, Step[] steps, AstNode node)
+    private List<TableRow> GetTableRows(AstNode node)
+    {
+        var rows = new List<TableRow>();
+        int cellCount = 0;
+        bool firstRow = true;
+        foreach (var rowToken in node.GetTokens(TokenType.TableRow))
         {
-            return new Background(location, keyword, name, description, steps);
-        }
-
-        protected virtual DataTable CreateDataTable(TableRow[] rows, AstNode node)
-        {
-            return new DataTable(rows);
-        }
-
-        protected virtual Comment CreateComment(Location location, string text)
-        {
-            return new Comment(location, text);
-        }
-
-        protected virtual Examples CreateExamples(Tag[] tags, Location location, string keyword, string name, string description, TableRow header, TableRow[] body, AstNode node)
-        {
-            return new Examples(tags, location, keyword, name, description, header, body);
-        }
-
-        protected virtual Scenario CreateScenario(Tag[] tags, Location location, string keyword, string name, string description, Step[] steps, Examples[] examples, AstNode node)
-        {
-            return new Scenario(tags, location, keyword, name, description, steps, examples);
-        }
-
-        protected virtual DocString CreateDocString(Location location, string contentType, string content, string delimiter, AstNode node)
-        {
-            return new DocString(location, contentType, content, delimiter);
-        }
-
-        protected virtual Step CreateStep(Location location, string keyword, StepKeywordType keywordType, string text, StepArgument argument, AstNode node)
-        {
-            return new Step(location, keyword, keywordType, text, argument);
-        }
-
-        protected virtual GherkinDocument CreateGherkinDocument(Feature feature, Comment[] gherkinDocumentComments, AstNode node) {
-            return new GherkinDocument(feature, gherkinDocumentComments);
-        }
-
-        protected virtual Feature CreateFeature(Tag[] tags, Location location, string language, string keyword, string name, string description, IHasLocation[] children, AstNode node)
-        {
-            return new Feature(tags, location, language, keyword, name, description, children);
-        }
-
-        protected virtual Rule CreateRule(Tag[] tags, Location location, string keyword, string name, string description, IHasLocation[] children, AstNode node)
-        {
-            return new Rule(tags, location, keyword, name, description, children);
-        }
-
-        protected virtual Tag CreateTag(Location location, string name, AstNode node)
-        {
-            return new Tag(location, name);
-        }
-
-        protected virtual Location CreateLocation(int line, int column)
-        {
-            return new Location(line, column);
-        }
-
-        protected virtual TableRow CreateTableRow(Location location, TableCell[] cells, AstNode node)
-        {
-            return new TableRow(location, cells);
-        }
-
-        protected virtual TableCell CreateTableCell(Location location, string value)
-        {
-            return new TableCell(location, value);
-        }
-
-        private Location GetLocation(Token token, int column = 0)
-        {
-            return column == 0 ? token.Location : CreateLocation(token.Location.Line, column);
-        }
-
-        private Tag[] GetTags(AstNode node)
-        {
-            var tagsNode = node.GetSingle<AstNode>(RuleType.Tags);
-            if (tagsNode == null)
-                return new Tag[0];
-
-            return tagsNode.GetTokens(TokenType.TagLine)
-                .SelectMany(t => t.MatchedItems, (t, tagItem) =>
-                    CreateTag(GetLocation(t, tagItem.Column), tagItem.Text, tagsNode))
-                .ToArray();
-        }
-
-        private TableRow[] GetTableRows(AstNode node)
-        {
-            var rows = node.GetTokens(TokenType.TableRow).Select(token => CreateTableRow(GetLocation(token), GetCells(token), node)).ToArray();
-            CheckCellCountConsistency(rows);
-            return rows;
-        }
-
-        protected virtual void CheckCellCountConsistency(TableRow[] rows)
-        {
-            if (rows.Length == 0)
-                return;
-
-            int cellCount = rows[0].Cells.Count();
-            foreach (var row in rows)
+            var rowLocation = GetLocation(rowToken);
+            var cells = new List<TableCell>();
+            foreach (var cellItem in rowToken.Line.GetTableCells())
+                cells.Add(CreateTableCell(GetLocation(rowToken, cellItem.Column), cellItem.Text));
+            if (firstRow)
             {
-                if (row.Cells.Count() != cellCount)
-                {
-                    HandleAstError("inconsistent cell count within the table", row.Location);
-                }
+                cellCount = cells.Count;
+                firstRow = false;
             }
+            else if (cells.Count != cellCount)
+            {
+                HandleAstError("inconsistent cell count within the table", rowLocation);
+            }
+            rows.Add(CreateTableRow(rowLocation, cells, node));
         }
+        return rows;
+    }
 
-        protected virtual void HandleAstError(string message, Location location)
-        {
-            throw new AstBuilderException(message, location);
-        }
+    protected virtual void HandleAstError(string message, Location location)
+    {
+        throw new AstBuilderException(message, location);
+    }
 
-        private TableCell[] GetCells(Token tableRowToken)
-        {
-            return tableRowToken.MatchedItems
-                .Select(cellItem => CreateTableCell(GetLocation(tableRowToken, cellItem.Column), cellItem.Text))
-                .ToArray();
-        }
+    private static List<Step> GetSteps(AstNode scenarioDefinitionNode)
+    {
+        return [..scenarioDefinitionNode.GetItems<Step>(RuleType.Step)];
+    }
 
-        private static Step[] GetSteps(AstNode scenarioDefinitionNode)
-        {
-            return scenarioDefinitionNode.GetItems<Step>(RuleType.Step).ToArray();
-        }
-
-        private static string GetDescription(AstNode scenarioDefinitionNode)
-        {
-            return scenarioDefinitionNode.GetSingle<string>(RuleType.Description);
-        }
+    private static string GetDescription(AstNode scenarioDefinitionNode)
+    {
+        return scenarioDefinitionNode.GetSingle<string>(RuleType.Description);
     }
 }

@@ -1,0 +1,40 @@
+name: test-elixir
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - elixir/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - elixir/**
+      - testdata/**
+      - .github/**
+  workflow_call:
+
+jobs:
+  test-elixir:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: '27.1'
+          elixir-version: '1.17'
+      - run: |
+          mix deps.get
+        working-directory: elixir
+
+      - run: mix test
+        working-directory: elixir
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: 'elixir'

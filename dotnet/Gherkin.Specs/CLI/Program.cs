@@ -1,112 +1,113 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Gherkin.CucumberMessages;
 using Gherkin.Specs.EventStubs;
 using Gherkin.Specs.Tokens;
-using Utf8Json.Resolvers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace Gherkin.Specs.CLI
+namespace Gherkin.Specs.CLI;
+
+class Program
 {
-    class Program
+    static int Main(string[] argv)
     {
-        static int Main(string[] argv)
+        if (argv.Length == 0)
         {
-            if (argv.Length == 0)
-            {
-                ShowUsage();
-                return 100;
-            }
-
-            switch (argv[0].ToLowerInvariant())
-            {
-                case "tokens":
-                    return PrintTokens(argv.Skip(1));
-                case "events":
-                    var printEventArgs = GetPrintEventsArgs(argv.Skip(1));
-                    return PrintEvents(printEventArgs);
-                default:
-                    ShowUsage();
-                    return 110;
-            }
+            ShowUsage();
+            return 100;
         }
 
-        private static void ShowUsage()
+        switch (argv[0].ToLowerInvariant())
         {
-            Console.WriteLine(@"Usage: 
+            case "tokens":
+                return PrintTokens(argv.Skip(1));
+            case "events":
+                var printEventArgs = GetPrintEventsArgs(argv.Skip(1));
+                return PrintEvents(printEventArgs);
+            default:
+                ShowUsage();
+                return 110;
+        }
+    }
+
+    private static void ShowUsage()
+    {
+        Console.WriteLine(@"Usage: 
     dotnet Gherkin.Specs events [--no-source] [--no-ast] [--no-pickles] feature-file.feature
     - or -
     dotnet Gherkin.Specs tokens feature-file.feature
 ");
-        }
+    }
 
-        class PrintEventsArgs
+    class PrintEventsArgs
+    {
+        public bool PrintSource { get; set; } = true;
+        public bool PrintAst { get; set; } = true;
+        public bool PrintPickles { get; set; } = true;
+        public List<string> Paths { get; } = new();
+    }
+
+    private static PrintEventsArgs GetPrintEventsArgs(IEnumerable<string> args)
+    {
+        var result = new PrintEventsArgs();
+
+        foreach (string arg in args)
         {
-            public bool PrintSource { get; set; } = true;
-            public bool PrintAst { get; set; } = true;
-            public bool PrintPickles { get; set; } = true;
-            public List<string> Paths { get; } = new();
-        }
-
-        private static PrintEventsArgs GetPrintEventsArgs(IEnumerable<string> args)
-        {
-            var result = new PrintEventsArgs();
-
-            foreach (string arg in args)
+            switch (arg)
             {
-                switch (arg)
-                {
-                    case "--no-source":
-                        result.PrintSource = false;
-                        break;
-                    case "--no-ast":
-                        result.PrintAst = false;
-                        break;
-                    case "--no-pickles":
-                        result.PrintPickles = false;
-                        break;
-                    default:
-                        result.Paths.Add(arg);
-                        break;
-                }
+                case "--no-source":
+                    result.PrintSource = false;
+                    break;
+                case "--no-ast":
+                    result.PrintAst = false;
+                    break;
+                case "--no-pickles":
+                    result.PrintPickles = false;
+                    break;
+                default:
+                    result.Paths.Add(arg);
+                    break;
             }
-
-            return result;
         }
 
-        private static int PrintTokens(IEnumerable<string> paths)
+        return result;
+    }
+
+    private static int PrintTokens(IEnumerable<string> paths)
+    {
+        foreach (var featureFilePath in paths)
         {
-            foreach (var featureFilePath in paths)
+            try
             {
-                try
-                {
-                    var tokensText = TokensGenerator.GenerateTokens(featureFilePath);
-                    Console.WriteLine(tokensText);
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex.Message);
-                    return 1;
-                }
+                var tokensText = TokensGenerator.GenerateTokens(featureFilePath);
+                Console.WriteLine(tokensText);
             }
-
-            return 0;
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return 1;
+            }
         }
 
-        private static int PrintEvents(PrintEventsArgs args)
+        return 0;
+    }
+
+    private static int PrintEvents(PrintEventsArgs args)
+    {
+        var sourceProvider = new SourceProvider();
+        var sources = sourceProvider.GetSources(args.Paths);
+        var gherkinEventsProvider = new GherkinEventsProvider(args.PrintSource, args.PrintAst, args.PrintPickles, new IncrementingIdGenerator());
+        foreach (var sourceEventEvent in sources)
         {
-            var sourceProvider = new SourceProvider();
-            var sources = sourceProvider.GetSources(args.Paths);
-            var gherkinEventsProvider = new GherkinEventsProvider(args.PrintSource, args.PrintAst, args.PrintPickles, new IncrementingIdGenerator());
-            foreach (var sourceEventEvent in sources)
+            foreach (var evt in gherkinEventsProvider.GetEvents(sourceEventEvent))
             {
-                foreach (var evt in gherkinEventsProvider.GetEvents(sourceEventEvent))
+                var jsonString = JsonSerializer.Serialize(evt, new JsonSerializerOptions(JsonSerializerDefaults.Web)
                 {
-                    var jsonString = Utf8Json.JsonSerializer.ToJsonString((object)evt, StandardResolver.ExcludeNullCamelCase);
-                    Console.WriteLine(jsonString);
-                }
+                    Converters = { new JsonStringEnumConverter() },
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                });
+                Console.WriteLine(jsonString);
             }
-            return 0;
         }
+        return 0;
     }
 }

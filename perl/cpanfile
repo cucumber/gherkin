@@ -4,8 +4,8 @@ requires "Cpanel::JSON::XS";
 requires "Class::XSAccessor";
 requires "Cucumber::Messages", ">= 22.0.0, < 23.0.0";
 requires "Data::UUID";
-requires "Getopt::Long", "2.57";
-requires "List::Util", "1.63";
+requires "Getopt::Long", "2.58";
+requires "List::Util", "1.69";
 
 on 'test' => sub {
     requires "Path::Class";
@@ -15,5 +15,5 @@ on 'test' => sub {
 };
 
 on 'develop' => sub {
-   # there are no specific development dependencies...
+    requires "Dist::Zilla";
 };

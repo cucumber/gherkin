@@ -35,12 +35,14 @@ use warnings;
 
 use base 'Gherkin::ParserBase';
 
-our %states_to_match_names = (
+## no critic (ProhibitMagicNumbers)
+my %states_to_match_names = (
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState)) //..
     {
 @:    @state.Id => "match_token_at_@(state.Id)",
     }
 );
+## use critic
 
 sub parse {
     my ( $self, $token_scanner, $uri ) = @@_;
@@ -94,6 +96,7 @@ sub _construct_parser_error {
     return $error_class->new( $token, @@args );
 }
 
+## no critic (ProhibitExcessComplexity, ProhibitMagicNumbers, ProhibitPostfixControls)
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState)) //..
 {<text>
 # @Raw(state.Comment)
@@ -126,6 +129,7 @@ sub match_token_at_@(state.Id) {
 </text>
 }
 
+## use critic
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>

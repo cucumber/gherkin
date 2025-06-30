@@ -8,12 +8,14 @@ on:
     paths:
       - dart/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - dart/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 jobs:

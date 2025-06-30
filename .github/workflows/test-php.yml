@@ -8,12 +8,14 @@ on:
     paths:
       - php/**
       - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
     paths:
       - php/**
       - testdata/**
+      - .github/**
   workflow_call:
 
 permissions:
@@ -39,7 +41,7 @@ jobs:
 
       - name: Discover composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-dir)"
+        run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
         working-directory: php
 
       - name: Cache composer
@@ -60,7 +62,7 @@ jobs:
       - name: Run tests
         working-directory: php
         run: |
-          vendor/bin/php-cs-fixer --dry-run --diff fix
+          vendor/bin/php-cs-fixer --show-progress=none --dry-run --diff fix
           vendor/bin/psalm --no-cache
           vendor/bin/phpunit
 

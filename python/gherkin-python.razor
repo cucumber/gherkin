@@ -19,19 +19,29 @@
         token.detach
         expected_tokens = ["@Raw(string.Join("\", \"", expectedTokens))"]
         error = UnexpectedEOFException(token, expected_tokens, state_comment) if token.eof() else UnexpectedTokenException(token, expected_tokens, state_comment)
-        if (self.stop_at_first_error):
+        if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
         return @state.Id</text>}
 @helper MatchToken(TokenType tokenType)
 {<text>match_@(tokenType)(context, token)</text>}
 # This file is generated. Do not edit! Edit gherkin-python.razor instead.
-import sys
+from __future__ import annotations
+
 from collections import deque
+from collections.abc import Callable
+from typing import cast, TypeVar
+
 from .ast_builder import AstBuilder
+from .token import Token
 from .token_matcher import TokenMatcher
 from .token_scanner import TokenScanner
+from .parser_types import GherkinDocument
 from .errors import UnexpectedEOFException, UnexpectedTokenException, ParserException, CompositeParserException
+
+_T = TypeVar('_T')
+_U = TypeVar('_U')
+_V = TypeVar('_V')
 
 RULE_TYPE = [
     'None',
@@ -41,24 +51,31 @@ RULE_TYPE = [
 ]
 
 
-class ParserContext(object):
-    def __init__(self, token_scanner, token_matcher, token_queue, errors):
+class ParserContext:
+    def __init__(
+        self,
+        token_scanner: TokenScanner,
+        token_matcher: TokenMatcher,
+        token_queue: deque[Token],
+        errors: list[ParserException],
+    ) -> None:
         self.token_scanner = token_scanner
         self.token_matcher = token_matcher
         self.token_queue = token_queue
         self.errors = errors
 
 
-class @(Model.ParserClassName)(object):
-    def __init__(self, ast_builder=None):
+class @(Model.ParserClassName):
+    def __init__(self, ast_builder: AstBuilder | None = None) -> None:
         self.ast_builder = ast_builder if ast_builder is not None else AstBuilder()
         self.stop_at_first_error = False
 
-    def parse(self, token_scanner_or_str, token_matcher=None):
-        if sys.version_info < (3, 0):
-            token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, basestring) else token_scanner_or_str
-        else:
-            token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
+    def parse(
+        self,
+        token_scanner_or_str: TokenScanner | str,
+        token_matcher: TokenMatcher | None = None,
+    ) -> GherkinDocument:
+        token_scanner = TokenScanner(token_scanner_or_str) if isinstance(token_scanner_or_str, str) else token_scanner_or_str
         self.ast_builder.reset()
         if token_matcher is None:
             token_matcher = TokenMatcher()
@@ -83,34 +100,34 @@ class @(Model.ParserClassName)(object):
         if context.errors:
             raise CompositeParserException(context.errors)
 
-        return self.get_result()
+        return cast(GherkinDocument, self.get_result())
 
-    def build(self, context, token):
+    def build(self, context: ParserContext, token: Token) -> None:
         self.handle_ast_error(context, token, self.ast_builder.build)
 
-    def add_error(self, context, error):
+    def add_error(self, context: ParserContext, error: ParserException) -> None:
         if str(error) not in (str(e) for e in context.errors):
             context.errors.append(error)
             if len(context.errors) > 10:
                 raise CompositeParserException(context.errors)
 
-    def start_rule(self, context, rule_type):
+    def start_rule(self, context: ParserContext, rule_type: str) -> None:
         self.handle_ast_error(context, rule_type, self.ast_builder.start_rule)
 
-    def end_rule(self, context, rule_type):
+    def end_rule(self, context: ParserContext, rule_type: str) -> None:
         self.handle_ast_error(context, rule_type, self.ast_builder.end_rule)
 
-    def get_result(self):
+    def get_result(self) -> object:
         return self.ast_builder.get_result()
 
-    def read_token(self, context):
+    def read_token(self, context: ParserContext) -> Token:
         if context.token_queue:
             return context.token_queue.popleft()
         else:
             return context.token_scanner.read()
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
-    def match_@(rule.Name.Replace("#", ""))(self, context, token):
+    def match_@(rule.Name.Replace("#", ""))(self, context: ParserContext, token: Token) -> bool:
         @if (rule.Name != "#EOF")
         {
         @:if token.eof():
@@ -119,8 +136,8 @@ class @(Model.ParserClassName)(object):
         return self.handle_external_error(context, False, token, context.token_matcher.match_@(rule.Name.Replace("#", "")))</text>
 }
 
-    def match_token(self, state, token, context):
-        state_map = {
+    def match_token(self, state: int, token: Token, context: ParserContext) -> int:
+        state_map: dict[int, Callable[[Token, ParserContext], int]]= {
         @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
         {
         @:    @state.Id: self.match_token_at_@(state.Id),
@@ -133,7 +150,7 @@ class @(Model.ParserClassName)(object):
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
     # @Raw(state.Comment)
-    def match_token_at_@(state.Id)(self, token, context):
+    def match_token_at_@(state.Id)(self, token: Token, context: ParserContext) -> int:
         @foreach(var transition in state.Transitions)
         {
         @:if self.@MatchToken(transition.TokenType):
@@ -153,7 +170,7 @@ class @(Model.ParserClassName)(object):
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-    def lookahead_@(lookAheadHint.Id)(self, context, currentToken):
+    def lookahead_@(lookAheadHint.Id)(self, context: ParserContext, currentToken: Token) -> bool:
         currentToken.detach
         token = None
         queue = []
@@ -177,10 +194,21 @@ class @(Model.ParserClassName)(object):
 
     # private
 
-    def handle_ast_error(self, context, argument, action):
+    def handle_ast_error(
+        self,
+        context: ParserContext,
+        argument: _T,
+        action: Callable[[_T], object],
+    ) -> None:
         self.handle_external_error(context, True, argument, action)
 
-    def handle_external_error(self, context, default_value, argument, action):
+    def handle_external_error(
+        self,
+        context: ParserContext,
+        default_value: _U,
+        argument: _T,
+        action: Callable[[_T], _V],
+    ) -> _V | _U:
         if self.stop_at_first_error:
             return action(argument)
 

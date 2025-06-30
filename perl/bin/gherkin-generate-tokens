@@ -2,20 +2,27 @@
 
 use strict;
 use warnings;
-use lib 'lib';
+use lib 'Gherkin-latest/lib';
 
 use Gherkin::Parser;
 use Gherkin::TokenFormatterBuilder;
+use Gherkin::TokenMatcher;
+use Gherkin::MarkdownTokenMatcher;
 
 package App::GherkinGenerateTokens;
 
 sub run {
     my ( $class, $fh, @file_list ) = @_;
 
-    my $parser
-        = Gherkin::Parser->new( Gherkin::TokenFormatterBuilder->new() );
-
-    print $fh join "\n", @{ $parser->parse($_) } for @file_list;
+    print $fh join "\n",
+      @{ Gherkin::Parser->new(
+            Gherkin::TokenFormatterBuilder->new(),
+            /\.md$/
+            ? Gherkin::MarkdownTokenMatcher->new()
+            : Gherkin::TokenMatcher->new()
+        )->parse($_)
+      }
+      for @file_list;
     print $fh "\n";
 
 }

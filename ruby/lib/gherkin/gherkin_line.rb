@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Gherkin
   class GherkinLine
     attr_reader :indent, :trimmed_line_text
+
     def initialize(line_text, line_number)
       @line_text = line_text
       @line_number = line_number
@@ -13,7 +16,7 @@ module Gherkin
     end
 
     def start_with_title_keyword?(keyword)
-      start_with?(keyword+':') # The C# impl is more complicated. Find out why.
+      start_with?(keyword + ':') # The C# impl is more complicated. Find out why.
     end
 
     def get_rest_trimmed(length)
@@ -66,7 +69,7 @@ module Gherkin
           cell = ''
           start_col = col + 1
         elsif char == '\\'
-          char = row[col]
+          char = row[col] || ''
           col += 1
           if char == 'n'
             cell += "\n"
@@ -82,16 +85,14 @@ module Gherkin
     end
 
     def tags
-      uncommented_line = @trimmed_line_text.split(/\s#/,2)[0]
+      uncommented_line = @trimmed_line_text.split(/\s#/, 2)[0]
       column = @indent + 1
       items = uncommented_line.split('@')
 
       tags = []
-      items.each { |untrimmed|
+      items.each do |untrimmed|
         item = untrimmed.strip
-        if item.length == 0
-          next
-        end
+        next if item.length == 0
 
         unless item =~ /^\S+$/
           location = { line: @line_number, column: column }
@@ -100,7 +101,7 @@ module Gherkin
 
         tags << Span.new(column, '@' + item)
         column += untrimmed.length + 1
-      }
+      end
       tags
     end
 
