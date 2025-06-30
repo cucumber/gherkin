@@ -66,7 +66,7 @@ final class GherkinDocumentBuilder implements Builder
     {
         array_push($this->stack, new AstNode($ruleType));
     }
-    
+
     #[\Override]
     public function endRule(RuleType $ruleType): void
     {
