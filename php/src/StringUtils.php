@@ -37,7 +37,7 @@ final class StringUtils
     {
         $pattern = '/' . self::WHITESPACE_PATTERN . '$/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null){
+        if($value === null) {
             throw new RuntimeException("invalid pattern " . $pattern);
         }
         return $value;
@@ -47,7 +47,7 @@ final class StringUtils
     {
         $pattern = '/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null){
+        if($value === null) {
             throw new RuntimeException("invalid pattern " . $pattern);
         }
         return $value;
@@ -57,7 +57,7 @@ final class StringUtils
     {
         $pattern = '/^' . self::WHITESPACE_PATTERN . '/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null){
+        if($value === null) {
             throw new RuntimeException("invalid pattern " . $pattern);
         }
         return $value;
@@ -67,7 +67,7 @@ final class StringUtils
     {
         $pattern = '/^' . self::WHITESPACE_PATTERN_NO_NEWLINE . '/u';
         $value = preg_replace($pattern, '', $string);
-        if($value === null){
+        if($value === null) {
             throw new RuntimeException("invalid pattern " . $pattern);
         }
         return $value;
