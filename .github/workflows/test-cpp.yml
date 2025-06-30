@@ -44,9 +44,25 @@ jobs:
         working-directory: cpp
         run: |
           cmake -P cmake/cmate --cc=${{ matrix.config.cc }} build --release
-
+  test-cpp-acceptance:
+    strategy:
+      matrix:
+        config:
+          - os: ubuntu-latest
+            cc: gcc
+          - os: ubuntu-latest
+            cc: clang
+          - os: macos-latest
+            cc: clang
+          # Doesn't work on windows. See: https://github.com/cucumber/gherkin/issues/412
+          # If fixed, please merge test-cpp and test-cpp-acceptance
+          # - os: windows-latest
+          #  cc: cl
+    runs-on: ${{ matrix.config.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
       - name: run acceptance tests
         working-directory: cpp
-        
         run: |
           make acceptance
