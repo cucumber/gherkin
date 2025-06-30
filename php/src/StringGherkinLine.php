@@ -23,11 +23,13 @@ final class StringGherkinLine implements GherkinLine
         $this->indent = StringUtils::symbolCount($lineText) - StringUtils::symbolCount(StringUtils::ltrim($lineText));
     }
 
+    #[\Override]
     public function indent(): int
     {
         return $this->indent;
     }
 
+    #[\Override]
     public function getLineText(int $indentToRemove): string
     {
         if ($indentToRemove < 0 || $indentToRemove > $this->indent) {
@@ -38,6 +40,7 @@ final class StringGherkinLine implements GherkinLine
     }
 
     /** @param non-empty-string $keyword */
+    #[\Override]
     public function startsWithTitleKeyword(string $keyword): bool
     {
         $textLength = StringUtils::symbolCount($keyword);
@@ -51,22 +54,26 @@ final class StringGherkinLine implements GherkinLine
             ) ===  GherkinLanguageConstants::TITLE_KEYWORD_SEPARATOR;
     }
 
+    #[\Override]
     public function getRestTrimmed(int $length): string
     {
         return StringUtils::trim(StringUtils::substring($this->trimmedLineText, $length));
     }
 
+    #[\Override]
     public function isEmpty(): bool
     {
         return StringUtils::symbolCount($this->trimmedLineText) === 0;
     }
 
+    #[\Override]
     public function startsWith(string $string): bool
     {
         return StringUtils::startsWith($this->trimmedLineText, $string);
     }
 
     /** @return list<GherkinLineSpan> */
+    #[\Override]
     public function getTableCells(): array
     {
         /**
@@ -111,6 +118,7 @@ final class StringGherkinLine implements GherkinLine
     }
 
     /** @return list<GherkinLineSpan> */
+    #[\Override]
     public function getTags(): array
     {
         $uncommentedLine = preg_replace('/\s' . preg_quote(GherkinLanguageConstants::COMMENT_PREFIX) . '.*$/u', '', $this->trimmedLineText);
