@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cucumber\Gherkin;
 
+use RuntimeException;
+
 /**
  * Keeps common string operations in one place using correct unicode functions
  * (and normalises naming with other implementations)
@@ -33,22 +35,42 @@ final class StringUtils
 
     public static function rtrim(string $string): string
     {
-        return preg_replace('/' . self::WHITESPACE_PATTERN . '$/u', '', $string);
+        $pattern = '/' . self::WHITESPACE_PATTERN . '$/u';
+        $value = preg_replace($pattern, '', $string);
+        if($value === null){
+            throw new RuntimeException("invalid pattern " . $pattern);
+        }
+        return $value;
     }
 
     public static function rtrimKeepNewLines(string $string): string
     {
-        return preg_replace('/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u', '', $string);
+        $pattern = '/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u';
+        $value = preg_replace($pattern, '', $string);
+        if($value === null){
+            throw new RuntimeException("invalid pattern " . $pattern);
+        }
+        return $value;
     }
 
     public static function ltrim(string $string): string
     {
-        return preg_replace('/^'. self::WHITESPACE_PATTERN . '/u', '', $string);
+        $pattern = '/^' . self::WHITESPACE_PATTERN . '/u';
+        $value = preg_replace($pattern, '', $string);
+        if($value === null){
+            throw new RuntimeException("invalid pattern " . $pattern);
+        }
+        return $value;
     }
 
     public static function ltrimKeepNewLines(string $string): string
     {
-        return preg_replace('/^'. self::WHITESPACE_PATTERN_NO_NEWLINE . '/u', '', $string);
+        $pattern = '/^' . self::WHITESPACE_PATTERN_NO_NEWLINE . '/u';
+        $value = preg_replace($pattern, '', $string);
+        if($value === null){
+            throw new RuntimeException("invalid pattern " . $pattern);
+        }
+        return $value;
     }
 
     public static function trim(string $string): string
