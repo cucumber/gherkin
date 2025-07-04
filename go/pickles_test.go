@@ -3,9 +3,10 @@ package gherkin
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cucumber/messages/go/v24"
 	"os"
 	"strings"
+
+	messages "github.com/cucumber/messages/go/v27"
 )
 
 func ExampleCompilePickles() {

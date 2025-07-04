@@ -114,12 +114,12 @@ var pickles = Gherkin.compile(
 
 ```go
 // Download the package via: `go get github.com/cucumber/gherkin/go/v27`
-//   && go get "github.com/cucumber/messages/go/v22"
+//   && go get "github.com/cucumber/messages/go/v27"
 import (
   "strings"
 
   gherkin "github.com/cucumber/gherkin/go/v27"
-  messages "github.com/cucumber/messages/go/v22"
+  messages "github.com/cucumber/messages/go/v27"
 )
 
 func main() {
