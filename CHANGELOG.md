@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [32.2.0] - 2025-07-07
 ### Added
 - [Perl] Support for Gherkin in Markdown format (MDG)
 
@@ -784,7 +786,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.1.2...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.2.0...HEAD
+[32.2.0]: https://github.com/cucumber/gherkin/compare/v32.1.2...v32.2.0
 [32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
 [32.1.1]: https://github.com/cucumber/gherkin/compare/v32.1.0...v32.1.1
 [32.1.0]: https://github.com/cucumber/gherkin/compare/v32.0.1...v32.1.0
