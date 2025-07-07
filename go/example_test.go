@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	messages "github.com/cucumber/messages/go/v27"
+	messages "github.com/cucumber/messages/go/v28"
 )
 
 func ExampleParseGherkinDocument() {

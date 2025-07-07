@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	messages "github.com/cucumber/messages/go/v27"
+	messages "github.com/cucumber/messages/go/v28"
 )
 
 type Parser interface {

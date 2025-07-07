@@ -12,7 +12,7 @@ import (
 	"os"
 
 	gherkin "github.com/cucumber/gherkin/go/v32"
-	"github.com/cucumber/messages/go/v27"
+	"github.com/cucumber/messages/go/v28"
 )
 
 var noSource = flag.Bool("no-source", false, "Skip gherkin source events")

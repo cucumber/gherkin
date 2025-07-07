@@ -16,7 +16,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Add missing translations for Rule ([#415](https://github.com/cucumber/gherkin/pull/415))
 - [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
 - [Python] Fix acceptance tests ([#64](https://github.com/cucumber/gherkin/pull/64))
-- [go] Use latest version of messages ([#420](https://github.com/cucumber/gherkin/pull/420))
+
+### Changed
+- [go] Use messages v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed

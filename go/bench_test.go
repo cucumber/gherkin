@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	messages "github.com/cucumber/messages/go/v27"
+	messages "github.com/cucumber/messages/go/v28"
 )
 
 const benchmarkGherkinText = `

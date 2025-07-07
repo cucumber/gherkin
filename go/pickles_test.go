@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	messages "github.com/cucumber/messages/go/v27"
+	messages "github.com/cucumber/messages/go/v28"
 )
 
-func ExampleCompilePickles() {
+func ExamplePickles() {
 
 	input := `Feature: test
 
