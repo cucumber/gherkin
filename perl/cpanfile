@@ -2,7 +2,7 @@
 requires "perl", "5.14.4";
 requires "Cpanel::JSON::XS";
 requires "Class::XSAccessor";
-requires "Cucumber::Messages", ">= 22.0.0, < 23.0.0";
+requires "Cucumber::Messages", ">= 22.0.0, < 29.0.0";
 requires "Data::UUID";
 requires "Getopt::Long", "2.58";
 requires "List::Util", "1.69";
