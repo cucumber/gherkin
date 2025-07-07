@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Changed
+- [Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
+
 ## [32.2.0] - 2025-07-07
 ### Added
 - [Perl] Support for Gherkin in Markdown format (MDG)
@@ -18,9 +21,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Add missing translations for Rule ([#415](https://github.com/cucumber/gherkin/pull/415))
 - [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
 - [Python] Fix acceptance tests ([#64](https://github.com/cucumber/gherkin/pull/64))
-
-### Changed
-- [Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed
