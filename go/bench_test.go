@@ -1,9 +1,10 @@
 package gherkin
 
 import (
-	messages "github.com/cucumber/messages/go/v24"
 	"strings"
 	"testing"
+
+	messages "github.com/cucumber/messages/go/v28"
 )
 
 const benchmarkGherkinText = `

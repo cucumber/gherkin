@@ -19,6 +19,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Prefer the longest step keyword ([#416](https://github.com/cucumber/gherkin/pull/416))
 - [Python] Fix acceptance tests ([#64](https://github.com/cucumber/gherkin/pull/64))
 
+### Changed
+- [go] Use messages v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
+
 ## [32.1.2] - 2025-05-25
 ### Fixed
 - [cpp] Actually use the VERSION file ([#376](https://github.com/cucumber/gherkin/pull/376))

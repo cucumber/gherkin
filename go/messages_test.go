@@ -3,10 +3,11 @@ package gherkin
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/cucumber/messages/go/v24"
+	"testing"
+
+	messages "github.com/cucumber/messages/go/v28"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestMessagesWithStdin(t *testing.T) {
