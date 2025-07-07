@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [33.0.0] - 2025-07-07
 ### Changed
 - [Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
 
@@ -789,7 +790,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.2.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v33.0.0...HEAD
+[33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
 [32.2.0]: https://github.com/cucumber/gherkin/compare/v32.1.2...v32.2.0
 [32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
 [32.1.1]: https://github.com/cucumber/gherkin/compare/v32.1.0...v32.1.1
