@@ -20,7 +20,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Python] Fix acceptance tests ([#64](https://github.com/cucumber/gherkin/pull/64))
 
 ### Changed
-- [go] Use messages v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
+- [Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
 
 ## [32.1.2] - 2025-05-25
 ### Fixed
