@@ -95,14 +95,11 @@ public final class GherkinDialect {
         for (List<String> keyword : keywords) {
             totalSize += keyword.size();
         }
+        // TODO performance: linkedHashSet is not needed as we sort the keywords from longest to shortest afterwards
         Set<String> uniqueKeywords = new LinkedHashSet<>(totalSize);
         for (List<String> keyword : keywords) {
             uniqueKeywords.addAll(keyword);
         }
-
-        // the "* " keyword is rarely used, so having it at the
-        // end would theoretically improve the performance, but
-        // it's so tiny that the profiler doesn't see the difference.
 
         List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
         // Sort from longest to shortest
