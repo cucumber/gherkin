@@ -1,7 +1,7 @@
 . as $root |
 [
-  "#include <gherkin/dialect.hpp>\n\n",
-  "namespace gherkin {\n\n",
+  "#include <cucumber/gherkin/dialect.hpp>\n\n",
+  "namespace cucumber::gherkin {\n\n",
   "const keywords_maps&\n",
   "all_keywords()\n",
   "{\n",

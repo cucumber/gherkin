@@ -2,8 +2,7 @@ name: Release NuGet
 
 on:
   push:
-    branches:
-      - "release/*"
+    branches: [ release/* ]
 
 jobs:
   publish-nuget:

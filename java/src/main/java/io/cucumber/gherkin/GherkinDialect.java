@@ -3,6 +3,8 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.StepKeywordType;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -102,7 +104,11 @@ public final class GherkinDialect {
         // end would theoretically improve the performance, but
         // it's so tiny that the profiler doesn't see the difference.
 
-        return unmodifiableList(new ArrayList<>(uniqueKeywords));
+        List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
+        // Sort from longest to shortest
+        Comparator<String> naturalOrder = Comparator.naturalOrder();
+        Collections.sort(sortedKeywords, naturalOrder.reversed());
+        return unmodifiableList(sortedKeywords);
     }
     
     private static Map<String, Set<StepKeywordType>> aggregateKeywordTypes(

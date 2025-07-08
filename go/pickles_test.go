@@ -3,12 +3,13 @@ package gherkin
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cucumber/messages/go/v24"
 	"os"
 	"strings"
+
+	messages "github.com/cucumber/messages/go/v28"
 )
 
-func ExampleCompilePickles() {
+func ExamplePickles() {
 
 	input := `Feature: test
 

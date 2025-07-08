@@ -6,6 +6,7 @@ import * as messages from '@cucumber/messages'
 import { TokenType } from './Parser'
 import ITokenMatcher from './ITokenMatcher'
 import countSymbols from './countSymbols'
+import { compareStepKeywords } from './compareStepKeywords'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const LANGUAGE_PATTERN = /^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/
@@ -25,6 +26,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
   private activeDocStringSeparator: string
   private indentToRemove: number
   private keywordTypesMap: { [key: string]: messages.StepKeywordType[] }
+  private sortedStepKeywords: readonly string[]
 
   constructor(private readonly defaultDialectName: string = 'en') {
     this.reset()
@@ -39,6 +41,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
     this.dialectName = newDialectName
     this.dialect = newDialect
     this.initializeKeywordTypes()
+    this.initializeSortedStepKeywords()
   }
 
   reset() {
@@ -57,6 +60,16 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
     addKeywordTypeMappings(this.keywordTypesMap,
                            [].concat(this.dialect.and).concat(this.dialect.but),
                            messages.StepKeywordType.CONJUNCTION)
+  }
+
+  initializeSortedStepKeywords() {
+    this.sortedStepKeywords = []
+      .concat(this.dialect.given)
+      .concat(this.dialect.when)
+      .concat(this.dialect.then)
+      .concat(this.dialect.and)
+      .concat(this.dialect.but)
+      .sort(compareStepKeywords)
   }
 
   match_TagLine(token: IToken<TokenType>) {
@@ -164,13 +177,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
   }
 
   match_StepLine(token: IToken<TokenType>) {
-    const keywords = []
-      .concat(this.dialect.given)
-      .concat(this.dialect.when)
-      .concat(this.dialect.then)
-      .concat(this.dialect.and)
-      .concat(this.dialect.but)
-    for (const keyword of keywords) {
+    for (const keyword of this.sortedStepKeywords) {
       if (token.line.startsWith(keyword)) {
         const title = token.line.getRestTrimmed(keyword.length)
         const keywordTypes = this.keywordTypesMap[keyword]

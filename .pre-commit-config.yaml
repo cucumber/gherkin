@@ -1,11 +1,10 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
-  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: c53240a7f974b3707e13eac6710542cc96a2d61a  # frozen: 24.10.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 89c421dff2e1026ba12cdb9ebd731f4a83aa8021  # frozen: v0.8.6
     hooks:
-      - id: black
+      - id: ruff-format
         files: "^python/"
   - repo: https://github.com/asottile/pyupgrade
     rev: 19364aa1b2ac289ce75e6bbe93994f7b4b9425f6  # frozen: v3.19.0

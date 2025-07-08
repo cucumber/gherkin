@@ -123,14 +123,7 @@ module Gherkin
     end
 
     def match_StepLine(token)
-      keywords =
-        @dialect.given_keywords +
-        @dialect.when_keywords +
-        @dialect.then_keywords +
-        @dialect.and_keywords +
-        @dialect.but_keywords
-
-      keyword = keywords.detect { |k| token.line.start_with?(k) }
+      keyword = @sorted_step_keywords.detect { |k| token.line.start_with?(k) }
 
       return false unless keyword
 
@@ -165,6 +158,15 @@ module Gherkin
       add_keyword_type_mappings(@dialect.then_keywords, Cucumber::Messages::StepKeywordType::OUTCOME)
       add_keyword_type_mappings(@dialect.and_keywords + @dialect.but_keywords,
                                 Cucumber::Messages::StepKeywordType::CONJUNCTION)
+
+      keywords =
+        @dialect.given_keywords +
+        @dialect.when_keywords +
+        @dialect.then_keywords +
+        @dialect.and_keywords +
+        @dialect.but_keywords
+
+      @sorted_step_keywords = keywords.sort_by(&:length).reverse
     end
 
     def match_title_line(token, token_type, keywords)

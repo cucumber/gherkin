@@ -92,11 +92,11 @@ final class GherkinDialectTest extends TestCase
     public function testItReturnsTheMergedStepKeywords(): void
     {
         $expected = [
-            'G1', 'G2', 'G3',
-            'W1', 'W2', 'W3',
-            'T1', 'T2', 'T3',
-            'A1', 'A2', 'A3',
-            'B1', 'B2', 'B3',
+            'W3', 'W2', 'W1',
+            'T3', 'T2', 'T1',
+            'G3', 'G2', 'G1',
+            'B3', 'B2', 'B1',
+            'A3', 'A2', 'A1',
         ];
         self::assertSame($expected, $this->dialect->getStepKeywords());
     }

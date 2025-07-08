@@ -21,6 +21,9 @@ namespace Cucumber\Gherkin;
  */
 final class GherkinDialect
 {
+    /** @var non-empty-list<non-empty-string> */
+    private readonly array $stepKeywords;
+
     /**
      * @param Dialect $dialect
      */
@@ -28,6 +31,7 @@ final class GherkinDialect
         private readonly string $language,
         private readonly array $dialect,
     ) {
+        $this->stepKeywords = $this->buildStepKeywords();
     }
 
     public function getLanguage(): string
@@ -98,18 +102,29 @@ final class GherkinDialect
     /** @return non-empty-list<non-empty-string> */
     public function getStepKeywords(): array
     {
-        return [
-            ...$this->getGivenKeywords(),
-            ...$this->getWhenKeywords(),
-            ...$this->getThenKeywords(),
-            ...$this->getAndKeywords(),
-            ...$this->getButKeywords(),
-        ];
+        return $this->stepKeywords;
     }
 
     /** @return non-empty-list<non-empty-string> */
     public function getExamplesKeywords(): array
     {
         return $this->dialect['examples'];
+    }
+
+    /** @return non-empty-list<non-empty-string> */
+    private function buildStepKeywords(): array
+    {
+        $keywords = [
+            ...$this->getGivenKeywords(),
+            ...$this->getWhenKeywords(),
+            ...$this->getThenKeywords(),
+            ...$this->getAndKeywords(),
+            ...$this->getButKeywords(),
+        ];
+
+        // Sort longer keywords before shorter keywords being their prefix
+        rsort($keywords);
+
+        return $keywords;
     }
 }

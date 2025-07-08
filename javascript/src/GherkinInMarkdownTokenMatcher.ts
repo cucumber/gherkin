@@ -5,6 +5,7 @@ import DIALECTS from './gherkin-languages.json'
 import { Item } from './IToken'
 import * as messages from '@cucumber/messages'
 import { NoSuchLanguageException } from './Errors'
+import { compareStepKeywords } from './compareStepKeywords'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const DEFAULT_DOC_STRING_SEPARATOR = /^(```[`]*)(.*)/
@@ -38,6 +39,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
       .concat(this.dialect.and)
       .concat(this.dialect.but)
       .filter((value, index, self) => value !== '* ' && self.indexOf(value) === index)
+      .sort(compareStepKeywords)
     this.initializeKeywordTypes()
 
     this.stepRegexp = new RegExp(
