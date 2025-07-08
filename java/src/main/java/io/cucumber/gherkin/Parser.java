@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 import static java.util.Arrays.asList;
 
@@ -165,9 +165,9 @@ class Parser<T> {
     }
 
     private boolean handleExternalError(ParserContext context, Token token,
-                                        BiFunction<TokenMatcher, Token, Boolean> action) {
+                                        BiPredicate<TokenMatcher, Token> action) {
         try {
-            return action.apply(context.tokenMatcher, token);
+            return action.test(context.tokenMatcher, token);
         } catch (ParserException.CompositeParserException compositeParserException) {
             for (ParserException error : compositeParserException.errors) {
                 addError(context, error);
@@ -199,7 +199,7 @@ class Parser<T> {
     }
 
     private boolean match_Empty(final ParserContext context, final Token token) {
-        if (token.isEOF() || !token.line.isEmpty()) return false;
+        if (!token.line.isEmpty()) return false;
         return handleExternalError(context, token, TokenMatcher::match_Empty);
     }
 
