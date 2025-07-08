@@ -141,6 +141,7 @@ public final class GherkinParser {
         return parse(source.getUri(), source.getData());
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<Envelope> parse(String uri, String data) {
         List<Envelope> messages = new ArrayList<>();
         GherkinDocumentBuilder documentBuilder = new GherkinDocumentBuilder(idGenerator, uri);

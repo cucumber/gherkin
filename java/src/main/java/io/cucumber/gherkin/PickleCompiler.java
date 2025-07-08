@@ -192,14 +192,17 @@ class PickleCompiler {
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private PickleTable pickleDataTable(DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
         List<TableRow> rows = dataTable.getRows();
-        List<PickleTableRow> newRows = new ArrayList<>(rows.size());
-        for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
+        int rowCount = rows.size();
+        List<PickleTableRow> newRows = new ArrayList<>(rowCount);
+        for (int i = 0; i < rowCount; i++) {
             TableRow row = rows.get(i);
             List<TableCell> cells = row.getCells();
-            List<PickleTableCell> newCells = new ArrayList<>(cells.size());
-            for (int j = 0, cellsSize = cells.size(); j < cellsSize; j++) {
+            int cellCount = cells.size();
+            List<PickleTableCell> newCells = new ArrayList<>(cellCount);
+            for (int j = 0; j < cellCount; j++) {
                 TableCell cell = cells.get(j);
                 newCells.add(new PickleTableCell(interpolate(cell.getValue(), variableCells, valueCells)));
             }

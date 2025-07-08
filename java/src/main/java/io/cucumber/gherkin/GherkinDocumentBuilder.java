@@ -92,7 +92,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
                 String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
-                String content = joinMatchedText(lineTokens);
+                String content = joinMatchedText(lineTokens, lineTokens.size());
                 return new DocString(
                         separatorToken.location,
                         mediaType,
@@ -159,8 +159,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 while (end > 0 && lineTokens.get(end - 1).line.isEmpty()) {
                     end--;
                 }
-                lineTokens = lineTokens.subList(0, end);
-                return joinMatchedText(lineTokens);
+                return joinMatchedText(lineTokens, end);
             }
             case Feature: {
                 AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
@@ -233,11 +232,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node;
     }
 
-    private static String joinMatchedText(List<Token> lineTokens) {
+    private static String joinMatchedText(List<Token> lineTokens, int endIndex) {
         StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
-        for (int i = 0, lineTokensSize = lineTokens.size(); i < lineTokensSize; i++) {
+        for (int i = 0; i < endIndex; i++) {
             Token lineToken = lineTokens.get(i);
-            content.append(lineToken.matchedText).append("\n");
+            content.append(lineToken.matchedText).append('\n');
         }
         int contentLength = content.length();
         if (contentLength > 0) {
@@ -246,11 +245,13 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return content.toString();
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableRow> getTableRows(AstNode node) {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
-        List<TableRow> rows = new ArrayList<>(tokens.size());
+        int tokenCount = tokens.size();
+        List<TableRow> rows = new ArrayList<>(tokenCount);
 
-        for (int i = 0, tokensSize = tokens.size(); i < tokensSize; i++) {
+        for (int i = 0; i < tokenCount; i++) {
             Token token = tokens.get(i);
             rows.add(new TableRow(token.location, getCells(token), idGenerator.newId()));
         }
@@ -258,6 +259,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return rows;
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private void ensureCellCount(List<TableRow> rows) {
         if (rows.isEmpty())
             return;
@@ -271,10 +273,12 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableCell> getCells(Token token) {
-        List<TableCell> cells = new ArrayList<>(token.matchedItems.size());
         List<GherkinLineSpan> matchedItems = token.matchedItems;
-        for (int i = 0, matchedItemsSize = matchedItems.size(); i < matchedItemsSize; i++) {
+        int lineCount = matchedItems.size();
+        List<TableCell> cells = new ArrayList<>(lineCount);
+        for (int i = 0; i < lineCount; i++) {
             GherkinLineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
