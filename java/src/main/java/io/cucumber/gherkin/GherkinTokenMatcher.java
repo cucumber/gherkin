@@ -54,17 +54,13 @@ class GherkinTokenMatcher implements TokenMatcher {
         prepareStepLineLoopUnrolling();
     }
 
-    private GherkinDialect getCurrentDialect() {
-        return currentDialect;
-    }
-
     private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
         token.matchedType = matchedType;
         token.matchedKeyword = keyword;
         token.keywordType = keywordType;
         token.matchedText = text;
         token.matchedItems = items;
-        token.matchedGherkinDialect = getCurrentDialect();
+        token.matchedGherkinDialect = currentDialect;
         token.matchedIndent = indent;
         token.location = atColumn(token.location, token.matchedIndent + COLUMN_OFFSET);
     }
