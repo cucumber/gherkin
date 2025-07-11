@@ -55,7 +55,7 @@ class StringUtils {
         String trimmed = input.substring(start, end);
         int indent = input.codePointCount(0, start);
         return new TrimmedText(trimmed, indent);
-        // In fact, the object instance is not created because
+        // the object instance is not truly created because
         // the code is inlined by the hotspot compiler
         // (as "-XX:+EliminateAllocations" is enabled by default).
     }
