@@ -1,9 +1,6 @@
 package io.cucumber.gherkin;
 
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-
 import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 
 class StringUtils {
@@ -22,6 +19,7 @@ class StringUtils {
      * Matches regex pattern whitespace + NEL + NBSP - new line.
      */
     private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    public static final TrimmedText NO_INDENT_ENTRY = new TrimmedText("", 0);
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -38,17 +36,17 @@ class StringUtils {
         return s.substring(0, end + 1);
     }
 
-    static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
+    static TrimmedText trimAndIndentKeepNewLines(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
     }
 
-    static Entry<String, Integer> trimAndIndent(String input) {
+    static TrimmedText trimAndIndent(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED);
     }
 
-    private static Entry<String, Integer> trimAndIndent(String input, char[] whitespaceChars) {
+    private static TrimmedText trimAndIndent(String input, char[] whitespaceChars) {
         if (input.isEmpty()) {
-            return new SimpleEntry<>("", 0);
+            return NO_INDENT_ENTRY;
         }
 
         int start = findFirstIndexNotIn(input, input.length(), whitespaceChars);
@@ -56,7 +54,10 @@ class StringUtils {
 
         String trimmed = input.substring(start, end);
         int indent = input.codePointCount(0, start);
-        return new SimpleEntry<>(trimmed, indent);
+        return new TrimmedText(trimmed, indent);
+        // the object instance is not truly created because
+        // the code is inlined by the hotspot compiler
+        // (as "-XX:+EliminateAllocations" is enabled by default).
     }
 
     static String removeComments(String input) {
@@ -114,4 +115,21 @@ class StringUtils {
         return false;
     }
 
+    public static class TrimmedText {
+        private final String text;
+        private final int indent;
+
+        public TrimmedText(String text, int indent) {
+            this.text = text;
+            this.indent = indent;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public int getIndent() {
+            return indent;
+        }
+    }
 }

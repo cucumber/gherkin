@@ -4,7 +4,6 @@ import io.cucumber.messages.types.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.PrimitiveIterator;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
@@ -40,9 +39,9 @@ class GherkinLine {
     GherkinLine(String rawText, Location location) {
         this.rawText = requireNonNull(rawText);
         this.location = requireNonNull(location);
-        Entry<String, Integer> trimmedIndent = trimAndIndent(rawText);
-        this.text = trimmedIndent.getKey();
-        this.indent = trimmedIndent.getValue();
+        StringUtils.TrimmedText trimmedIndent = trimAndIndent(rawText);
+        this.text = trimmedIndent.getText();
+        this.indent = trimmedIndent.getIndent();
         this.empty = text.isEmpty();
     }
 
@@ -139,9 +138,9 @@ class GherkinLine {
                         // Skip the first empty span
                         beforeFirst = false;
                     } else {
-                        Entry<String, Integer> trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
-                        int column = indent + cellStart + trimmedCellIndent.getValue() + COLUMN_OFFSET;
-                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getKey()));
+                        StringUtils.TrimmedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
+                        int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
+                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getText()));
                     }
                     cellBuilder = new StringBuilder();
                     cellStart = col + 1;
