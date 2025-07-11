@@ -13,8 +13,6 @@ import static java.util.Objects.requireNonNull;
 class AstNode {
     // subItems is relatively sparse, so pre-initializing all values with empty
     // lists is not efficient
-    // For most RuleType, there will be 1-10 items, but for ScenarioDefinition,
-    // the number of items is usually higher (=number of scenarios per feature).
     private final Map<RuleType, List<Object>> subItems = new EnumMap<>(RuleType.class);
     final RuleType ruleType;
 
