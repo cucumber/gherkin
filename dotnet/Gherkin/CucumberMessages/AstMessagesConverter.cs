@@ -55,7 +55,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
 
     private static Location ConvertLocation(Ast.Location location)
     {
-        return new Location(location.Column, location.Line);
+        return new Location(location.Line, location.Column);
     }
 
     private FeatureChild ConvertToFeatureChild(IHasLocation hasLocation)

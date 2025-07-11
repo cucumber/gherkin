@@ -180,7 +180,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
             Io.Cucumber.Messages.Types.StepKeywordType.ACTION => PickleStepType.ACTION,
             Io.Cucumber.Messages.Types.StepKeywordType.OUTCOME => PickleStepType.OUTCOME,
             Io.Cucumber.Messages.Types.StepKeywordType.UNKNOWN => PickleStepType.UNKNOWN,
-            Io.Cucumber.Messages.Types.StepKeywordType.CONJUNCTION => 
+            Io.Cucumber.Messages.Types.StepKeywordType.CONJUNCTION =>
                 (lastStepKeywordType == PickleStepType.UNKNOWN
                                 ? PickleStepType.CONTEXT
                                 : lastStepKeywordType),
@@ -226,8 +226,9 @@ public class PickleCompiler(IIdGenerator idGenerator)
                 new PickleStepArgument
                 (
                     new PickleDocString(
-                        Interpolate(ds.Content, variableCells, valueCells),
-                        ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells)),
+                        ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
+                        Interpolate(ds.Content, variableCells, valueCells)
+                    ),
                     null
                 );
         }

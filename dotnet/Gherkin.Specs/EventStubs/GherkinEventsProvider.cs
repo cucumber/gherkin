@@ -52,13 +52,18 @@ public class GherkinEventsProvider(bool printSource, bool printAst, bool printPi
 
     private void AddParseError(List<Envelope> events, ParserException e, String uri)
     {
+        // This forces the suppression of the Column value in the Location when the Location is zero (the default)
+        long? col = null;
+        if (e.Location.HasValue && e.Location.Value.Column != 0)
+            col = e.Location.Value.Column;
+
         events.Add(Envelope.Create(
                 new ParseError(
                     new SourceReference(
                         uri, // Add the missing 'uri' parameter here
                         null, // Assuming JavaMethod is not needed
                         null, // Assuming JavaStackTraceElement is not needed
-                        e.Location.HasValue ? new Location(e.Location.GetValueOrDefault().Column, e.Location.GetValueOrDefault().Line) : null
+                        e.Location.HasValue ? new Location(e.Location.GetValueOrDefault().Line, col) : null
                     ),
                     e.Message
             )
