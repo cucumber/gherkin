@@ -41,8 +41,8 @@ class GherkinLine {
         this.location = requireNonNull(location);
         StringUtils.TrimmedText trimmedIndent = trimAndIndent(rawText);
         this.text = trimmedIndent.getText();
-        this.textLength = text.length();
         this.indent = trimmedIndent.getIndent();
+        this.textLength = text.length();
         this.empty = text.isEmpty();
     }
 
