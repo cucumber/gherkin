@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
-import static io.cucumber.gherkin.StringUtils.containsWhiteSpace;
-import static io.cucumber.gherkin.StringUtils.rtrim;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 import static java.util.Collections.emptyList;
@@ -78,26 +77,52 @@ class GherkinLine {
         if (empty) {
             return emptyList();
         }
-        String uncommentedLine = StringUtils.removeComments(text);
-        int indexInUncommentedLine = 0;
 
-        String[] elements = uncommentedLine.split(TAG_PREFIX);
-        if (elements.length == 0) {
+        // look for the first tag
+        int indexStartTag = text.indexOf(TAG_PREFIX_CHAR);
+        int indexComment = text.indexOf(COMMENT_PREFIX_CHAR);
+        if (indexStartTag < 0 || (indexComment >= 0 && indexStartTag > indexComment)) {
+            // no tag found (or all tags are commented out)
             return emptyList();
         }
-        List<GherkinLineSpan> tags = new ArrayList<>(elements.length);
-        for (String element : elements) {
-            String token = rtrim(element);
-            if (token.isEmpty()) {
-                continue;
+
+        List<GherkinLineSpan> tags = new ArrayList<>();
+        int indexEndOfLine = indexComment >= 0 ? indexComment : text.length();
+        int indexEndTag;
+        while (indexStartTag < indexEndOfLine) {
+            // look for the next tag
+            int indexNextStartTag = indexStartTag + 1;
+            while (indexNextStartTag < indexEndOfLine && text.charAt(indexNextStartTag) != TAG_PREFIX_CHAR) {
+                indexNextStartTag++;
             }
-            int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
-            int column = indent + symbolLength + COLUMN_OFFSET;
-            if (containsWhiteSpace(token)) {
-                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+
+            // look for the end of current tag (going back from begin of next tag)
+            indexEndTag = indexNextStartTag - 1;
+            while (indexEndTag > indexStartTag && text.charAt(indexEndTag) <= ' ') {
+                indexEndTag--;
             }
-            tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));
-            indexInUncommentedLine += element.length() + 1;
+            indexEndTag++;
+
+            if (indexEndTag > indexStartTag + 1) {
+                // non-empty tag found
+
+                // check that the tag does not contain whitespace characters
+                int symbolLength = text.codePointCount(0, indexStartTag);
+                int column = indent + symbolLength + COLUMN_OFFSET;
+                for (int i = indexStartTag + 1; i < indexEndTag; i++) {
+                    if (text.charAt(i) <= ' ') {
+                        // skip whitespace characters
+                        throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+                    }
+                }
+
+                // build the line span
+                String token = text.substring(indexStartTag, indexEndTag);
+                tags.add(new GherkinLineSpan(column, token));
+            }
+
+            // setup for the next tag
+            indexStartTag = indexNextStartTag;
         }
         return tags;
     }
