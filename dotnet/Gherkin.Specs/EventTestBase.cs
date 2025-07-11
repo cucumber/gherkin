@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text;
 using FluentAssertions;
 using Gherkin.CucumberMessages;
-using Gherkin.CucumberMessages.Types;
+using Io.Cucumber.Messages.Types;
 using Gherkin.Specs.EventStubs;
 using Gherkin.Specs.Helper;
 

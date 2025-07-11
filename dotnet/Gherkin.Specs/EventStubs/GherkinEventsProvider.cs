@@ -1,6 +1,6 @@
 using Gherkin.CucumberMessages;
 using Gherkin.CucumberMessages.Pickles;
-using Gherkin.CucumberMessages.Types;
+using Io.Cucumber.Messages.Types;
 
 namespace Gherkin.Specs.EventStubs;
 
@@ -20,28 +20,18 @@ public class GherkinEventsProvider(bool printSource, bool printAst, bool printPi
 
             if (printSource)
             {
-                events.Add(new Envelope
-                {
-                    Source = source
-                });
+                events.Add(Envelope.Create(source));
             }
             if (printAst)
             {
-                events.Add(new Envelope
-                {
-                    GherkinDocument =
-                        _astMessagesConverter.ConvertGherkinDocumentToEventArgs(gherkinDocument, source.Uri)
-                });
+                events.Add(Envelope.Create(_astMessagesConverter.ConvertGherkinDocumentToEventArgs(gherkinDocument, source.Uri)));
             }
             if (printPickles)
             {
                 var pickles = _pickleCompiler.Compile(_astMessagesConverter.ConvertGherkinDocumentToEventArgs(gherkinDocument, source.Uri));
                 foreach (Pickle pickle in pickles)
                 {
-                    events.Add(new Envelope
-                    {
-                        Pickle = pickle
-                    });
+                    events.Add(Envelope.Create(pickle));
                 }
             }
         }
@@ -62,17 +52,16 @@ public class GherkinEventsProvider(bool printSource, bool printAst, bool printPi
 
     private void AddParseError(List<Envelope> events, ParserException e, String uri)
     {
-        events.Add(new Envelope
-        {
-            ParseError = new ParseError()
-            {
-                Message = e.Message,
-                Source = new SourceReference()
-                {
-                    Location = e.Location.HasValue ? new Location(e.Location.GetValueOrDefault().Column, e.Location.GetValueOrDefault().Line) : null,
-                    Uri = uri
-                }
-            }
-        });
+        events.Add(Envelope.Create(
+                new ParseError(
+                    new SourceReference(
+                        uri, // Add the missing 'uri' parameter here
+                        null, // Assuming JavaMethod is not needed
+                        null, // Assuming JavaStackTraceElement is not needed
+                        e.Location.HasValue ? new Location(e.Location.GetValueOrDefault().Column, e.Location.GetValueOrDefault().Line) : null
+                    ),
+                    e.Message
+            )
+        ));
     }
 }
