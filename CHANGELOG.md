@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- [.NET] Migrated to the use of Cucumber/Messages. Eliminated the built-in Gherkin.CucumberMessages.Types
 
 ## [33.0.0] - 2025-07-07
 ### Changed

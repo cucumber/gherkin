@@ -1,23 +1,15 @@
-using Gherkin.CucumberMessages.Types;
+using Io.Cucumber.Messages.Types;   
 
 namespace Gherkin.Specs.EventStubs;
 
 public class SourceProvider
 {
-    private const string GherkinMediaType = "text/x.cucumber.gherkin+plain";
-
     public IEnumerable<Source> GetSources(IEnumerable<string> paths)
     {
         foreach (var path in paths)
         {
             string data = File.ReadAllText(path);
-            yield return new Source
-            {
-                Data = data,
-                Uri = path,
-                MediaType = GherkinMediaType
-            };
+            yield return new Source(path, data, SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN);
         }
     }
-
 }

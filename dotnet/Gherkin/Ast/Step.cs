@@ -1,3 +1,5 @@
+using Io.Cucumber.Messages.Types;
+
 namespace Gherkin.Ast;
 
 public class Step(Location location, string keyword, StepKeywordType keywordType, string text, StepArgument argument) : IHasLocation
