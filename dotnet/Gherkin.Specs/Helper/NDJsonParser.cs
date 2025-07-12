@@ -1,4 +1,4 @@
-using Io.Cucumber.Messages.Types;
+using MessageTypes = Io.Cucumber.Messages.Types;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -10,13 +10,13 @@ public class NDJsonParser
     {
             var options = new JsonSerializerOptions();
             options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.Converters.Add(new CucumberMessageEnumConverter<AttachmentContentEncoding>());
-            options.Converters.Add(new CucumberMessageEnumConverter<HookType>());
-            options.Converters.Add(new CucumberMessageEnumConverter<PickleStepType>());
-            options.Converters.Add(new CucumberMessageEnumConverter<SourceMediaType>());
-            options.Converters.Add(new CucumberMessageEnumConverter<StepDefinitionPatternType>());
-            options.Converters.Add(new CucumberMessageEnumConverter<Io.Cucumber.Messages.Types.StepKeywordType>());
-            options.Converters.Add(new CucumberMessageEnumConverter<TestStepResultStatus>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.AttachmentContentEncoding>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.HookType>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.PickleStepType>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.SourceMediaType>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.StepDefinitionPatternType>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.StepKeywordType>());
+            options.Converters.Add(new CucumberMessageEnumConverter<MessageTypes.TestStepResultStatus>());
             options.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
             options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
 
