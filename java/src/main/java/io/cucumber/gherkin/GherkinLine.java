@@ -34,6 +34,7 @@ class GherkinLine {
      * line.
      */
     private final int indent;
+    private final int textLength;
 
     GherkinLine(String rawText, Location location) {
         this.rawText = requireNonNull(rawText);
@@ -41,6 +42,7 @@ class GherkinLine {
         StringUtils.TrimmedText trimmedIndent = trimAndIndent(rawText);
         this.text = trimmedIndent.getText();
         this.indent = trimmedIndent.getIndent();
+        this.textLength = text.length();
         this.empty = text.isEmpty();
     }
 
@@ -69,7 +71,11 @@ class GherkinLine {
     }
 
     String substringTrimmed(int beginIndex) {
-        return text.substring(beginIndex).trim();
+        // trim the beginning of the line (the end of line has already been trimmed in the constructor)
+        while ((beginIndex < textLength) && (text.charAt(beginIndex)<=' ')) {
+            beginIndex++;
+        }
+        return text.substring(beginIndex);
     }
 
     List<GherkinLineSpan> parseTags() {
@@ -179,10 +185,9 @@ class GherkinLine {
     }
 
     boolean startsWithTitleKeyword(String keyword) {
-        int keywordLength = keyword.length();
-        return text.length() > keywordLength &&
-                text.startsWith(keyword) &&
-                text.startsWith(TITLE_KEYWORD_SEPARATOR, keywordLength);
+        return textLength > keyword.length() &&
+               text.charAt(keyword.length())==TITLE_KEYWORD_SEPARATOR &&
+               text.startsWith(keyword);
     }
 
 }

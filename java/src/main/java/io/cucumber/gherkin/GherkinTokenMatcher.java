@@ -13,7 +13,7 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
@@ -148,7 +148,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
         for (String keyword : keywords) {
             if (token.line.startsWithTitleKeyword(keyword)) {
-                String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR.length());
+                String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH);
                 setTokenMatched(token, tokenType, title, keyword, null, null, null);
                 return true;
             }
