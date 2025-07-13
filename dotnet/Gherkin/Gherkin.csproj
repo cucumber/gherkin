@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cucumber.Messages" Version="28.*" />
+    <PackageReference Include="Cucumber.Messages" Version="[28.0, 29.0)"/>
   </ItemGroup>
 
 </Project>
