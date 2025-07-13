@@ -18,9 +18,8 @@ Feature: Conjunctions
     * a
     And a1
 
-  Scenario: This lasts until the next known keyword`
+  Scenario: This lasts until the next known keyword
     * a
     And a1
     When b
     And b1
-    
