@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import io.cucumber.gherkin.Parser.TokenMatcher;
 import io.cucumber.messages.types.StepKeywordType;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
@@ -92,7 +92,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_Comment(Token token) {
-        if (token.line.startsWith(COMMENT_PREFIX)) {
+        if (token.line.startsWith(COMMENT_PREFIX_CHAR)) {
             String text = token.line.getRawText();
             setTokenMatched(token, TokenType.Comment, text, null, 0, null, null);
             return true;
