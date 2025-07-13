@@ -92,7 +92,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
                 String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
-                String content = joinMatchedText(lineTokens);
+                String content = joinMatchedText(lineTokens, lineTokens.size());
                 return new DocString(
                         separatorToken.location,
                         mediaType,
@@ -159,8 +159,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 while (end > 0 && lineTokens.get(end - 1).line.isEmpty()) {
                     end--;
                 }
-                lineTokens = lineTokens.subList(0, end);
-                return joinMatchedText(lineTokens);
+                return joinMatchedText(lineTokens, end);
             }
             case Feature: {
                 AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
@@ -233,10 +232,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node;
     }
 
-    private static String joinMatchedText(List<Token> lineTokens) {
+    private static String joinMatchedText(List<Token> lineTokens, int endIndex) {
         StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
-        for (Token lineToken : lineTokens) {
-            content.append(lineToken.matchedText).append("\n");
+        for (int i = 0; i < endIndex; i++) {
+            Token lineToken = lineTokens.get(i);
+            content.append(lineToken.matchedText).append('\n');
         }
         int contentLength = content.length();
         if (contentLength > 0) {
