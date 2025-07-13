@@ -1,0 +1,10 @@
+(1:1)FeatureLine:()Feature/Star Keywords/
+(2:3)Empty://
+(3:1)Other:/  Sometimes a keyword is not the right way to express a scenario, while a list/
+(4:1)Other:/  of bullets points might be. /
+(5:1)Other:/  /
+(6:3)ScenarioLine:()Scenario/Stars are beautiful tonight/
+(7:5)StepLine:(Unknown)* /Betelgeuse/
+(8:5)StepLine:(Unknown)* /Alpha Centauri A/
+(9:5)StepLine:(Unknown)* /UY Scuti/
+EOF

@@ -1,0 +1,1 @@
+{"source": {"data": "Feature: Star Keywords\n  \n  Sometimes a keyword is not the right way to express a scenario, while a list\n  of bullets points might be. \n  \n  Scenario: Stars are beautiful tonight\n    * Betelgeuse\n    * Alpha Centauri A\n    * UY Scuti\n", "mediaType": "text/x.cucumber.gherkin+plain", "uri": "../testdata/good/star-keywords.feature"}}
