@@ -39,6 +39,7 @@ public final class GherkinDialect {
     private final List<String> butKeywords;
     private final List<String> stepKeywords;
     private final Map<String, Set<StepKeywordType>> stepKeywordsTypes;
+    private final Map<String, StepKeywordType> stepKeywordsType;
 
     GherkinDialect(
             String language,
@@ -73,6 +74,17 @@ public final class GherkinDialect {
         
         this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
+        this.stepKeywordsType = defineSingleTypes();
+    }
+
+    private Map<String, StepKeywordType> defineSingleTypes() {
+        Map<String, StepKeywordType> stepKeywordsType = new HashMap<>();
+        for (Map.Entry<String, Set<StepKeywordType>> entry : stepKeywordsTypes.entrySet()) {
+            Set<StepKeywordType> stepKeywordTypes = entry.getValue();
+            StepKeywordType type = stepKeywordTypes.size() == 1 ? stepKeywordTypes.iterator().next() : StepKeywordType.UNKNOWN;
+            stepKeywordsType.put(entry.getKey(), type);
+        }
+        return stepKeywordsType;
     }
 
     @SafeVarargs
@@ -171,6 +183,15 @@ public final class GherkinDialect {
             throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
         }
         return stepKeywordTypes;
+    }
+
+    public StepKeywordType getStepKeywordType(String keyword) {
+        requireNonNull(keyword);
+        StepKeywordType stepKeywordType = stepKeywordsType.get(keyword);
+        if (stepKeywordType == null) {
+            throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
+        }
+        return stepKeywordType;
     }
 
     public List<String> getBackgroundKeywords() {
