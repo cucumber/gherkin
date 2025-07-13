@@ -8,11 +8,11 @@ import java.util.regex.Pattern;
 import io.cucumber.gherkin.Parser.TokenMatcher;
 import io.cucumber.messages.types.StepKeywordType;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
@@ -88,7 +88,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_Comment(Token token) {
-        if (token.line.startsWith(COMMENT_PREFIX)) {
+        if (token.line.startsWith(COMMENT_PREFIX_CHAR)) {
             String text = token.line.getRawText();
             setTokenMatched(token, TokenType.Comment, text, null, 0, null, null);
             return true;
@@ -112,7 +112,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_TagLine(Token token) {
-        if (token.line.startsWith(TAG_PREFIX)) {
+        if (token.line.startsWith(TAG_PREFIX_CHAR)) {
             setTokenMatched(token, TokenType.TagLine, null, null, null, null, token.line.parseTags());
             return true;
         }

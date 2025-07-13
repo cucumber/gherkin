@@ -10,7 +10,7 @@ interface GherkinLanguageConstants {
      * Size of TITLE_KEYWORD_SEPARATOR = 1 char.
      */
     int TITLE_KEYWORD_SEPARATOR_LENGTH = 1;
-    String TABLE_CELL_SEPARATOR = "|";
+    char TABLE_CELL_SEPARATOR = '|';
     String DOCSTRING_SEPARATOR = "\"\"\"";
     String DOCSTRING_ALTERNATIVE_SEPARATOR = "```";
 }
