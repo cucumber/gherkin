@@ -46,25 +46,21 @@ class GherkinTokenMatcher implements TokenMatcher {
         currentDialect = dialectProvider.getDefaultDialect();
     }
 
-    private GherkinDialect getCurrentDialect() {
-        return currentDialect;
-    }
-
-    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, Integer indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
+    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
         token.matchedType = matchedType;
         token.matchedKeyword = keyword;
         token.keywordType = keywordType;
         token.matchedText = text;
         token.matchedItems = items;
-        token.matchedGherkinDialect = getCurrentDialect();
-        token.matchedIndent = indent != null ? indent : (token.isEOF() ? 0 : token.line.getIndent());
+        token.matchedGherkinDialect = currentDialect;
+        token.matchedIndent = indent;
         token.location = atColumn(token.location, token.matchedIndent + COLUMN_OFFSET);
     }
 
     @Override
     public boolean match_EOF(Token token) {
         if (token.isEOF()) {
-            setTokenMatched(token, TokenType.EOF, null, null, null, null, null);
+            setTokenMatched(token, TokenType.EOF, null, null, 0, null, null);
             return true;
         }
         return false;
@@ -80,7 +76,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_Empty(Token token) {
         if (token.line.isEmpty()) {
-            setTokenMatched(token, TokenType.Empty, null, null, null, null, null);
+            setTokenMatched(token, TokenType.Empty, null, null, token.line.getIndent(), null, null);
             return true;
         }
         return false;
@@ -101,7 +97,7 @@ class GherkinTokenMatcher implements TokenMatcher {
         Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getText());
         if (matcher.matches()) {
             String language = matcher.group(1);
-            setTokenMatched(token, TokenType.Language, language, null, null, null, null);
+            setTokenMatched(token, TokenType.Language, language, null, token.line.getIndent(), null, null);
 
             currentDialect = dialectProvider.getDialect(language)
                     .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
@@ -113,7 +109,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_TagLine(Token token) {
         if (token.line.startsWith(TAG_PREFIX_CHAR)) {
-            setTokenMatched(token, TokenType.TagLine, null, null, null, null, token.line.parseTags());
+            setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, token.line.parseTags());
             return true;
         }
         return false;
@@ -149,7 +145,7 @@ class GherkinTokenMatcher implements TokenMatcher {
         for (String keyword : keywords) {
             if (token.line.startsWithTitleKeyword(keyword)) {
                 String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH);
-                setTokenMatched(token, tokenType, title, keyword, null, null, null);
+                setTokenMatched(token, tokenType, title, keyword, token.line.getIndent(), null, null);
                 return true;
             }
         }
@@ -178,7 +174,7 @@ class GherkinTokenMatcher implements TokenMatcher {
                 indentToRemove = 0;
             }
 
-            setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, null, null, null);
+            setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, token.line.getIndent(), null, null);
             return true;
         }
         return false;
@@ -191,7 +187,7 @@ class GherkinTokenMatcher implements TokenMatcher {
             if (token.line.startsWith(keyword)) {
                 String stepText = token.line.substringTrimmed(keyword.length());
                 StepKeywordType keywordType = getKeywordType(keyword);
-                setTokenMatched(token, TokenType.StepLine, stepText, keyword, null, keywordType, null);
+                setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
                 return true;
             }
         }
@@ -209,7 +205,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_TableRow(Token token) {
         if (token.line.startsWith(TABLE_CELL_SEPARATOR)) {
-            setTokenMatched(token, TokenType.TableRow, null, null, null, null, token.line.parseTableCells());
+            setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, token.line.parseTableCells());
             return true;
         }
         return false;
