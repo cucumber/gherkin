@@ -72,7 +72,7 @@ public final class GherkinDialect {
         this.andKeywords = requireNonNull(andKeywords);
         this.butKeywords = requireNonNull(butKeywords);
 
-        this.stepKeywords = distinctKeywords(givenKeywords, thenKeywords, whenKeywords, andKeywords, butKeywords);
+        this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsType = defineSingleTypes();
     }
