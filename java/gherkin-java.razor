@@ -34,8 +34,6 @@
 
 package io.cucumber.gherkin;
 
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -167,24 +165,15 @@ class @Model.ParserClassName<T> {
     }
 
     private void build(final ParserContext context, final Token token) {
-        handleAstError(context, () -> {
-            builder.build(token);
-            return null;
-        });
+        handleAstError(context, token, builder, Builder::build);
     }
 
     private void startRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, () -> {
-            builder.startRule(ruleType);
-            return null;
-        });
+        handleAstError(context, ruleType, builder, Builder::startRule);
     }
 
     private void endRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, () -> {
-            builder.endRule(ruleType);
-            return null;
-        });
+        handleAstError(context, ruleType, builder, Builder::endRule);
     }
 
     private Token readToken(ParserContext context) {
@@ -193,11 +182,7 @@ class @Model.ParserClassName<T> {
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
     private boolean match_@(rule.Name.Replace("#", ""))(final ParserContext context, final Token token) {
-        @if (rule.Name != "#EOF")
-        {
-        @:if (token.isEOF()) return false;
-        }
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_@(rule.Name.Replace("#", ""))(token));
+        return handleExternalError(context, token, TokenMatcher::match_@(rule.Name.Replace("#", "")));
     }
 </text>
 }
