@@ -20,8 +20,12 @@ public final class GherkinDialectProvider {
 
     public GherkinDialect getDefaultDialect() {
         if (defaultDialect == null) {
-            this.defaultDialect = getDialect(defaultDialectName)
-                    .orElseThrow(() -> new ParserException.NoSuchLanguageException(defaultDialectName, null));
+            Optional<GherkinDialect> optionalGherkinDialect = getDialect(defaultDialectName);
+            if (optionalGherkinDialect.isPresent()) {
+                defaultDialect = optionalGherkinDialect.get();
+            } else {
+                throw new ParserException.NoSuchLanguageException(defaultDialectName, null);
+            }
         }
         return defaultDialect;
     }
