@@ -117,11 +117,12 @@ public final class GherkinDialect {
 
     private static void addStepKeywordsTypes(Map<String, Set<StepKeywordType>> accumulator, StepKeywordType type, List<String> keywords) {
         for (String keyword : keywords) {
-            if (!accumulator.containsKey(keyword)) {
+            Set<StepKeywordType> stepKeywordTypes = accumulator.get(keyword);
+            if (stepKeywordTypes == null) {
                 // Most keywords only have a single type.
                 accumulator.put(keyword, EnumSet.of(type));
             } else {
-                accumulator.get(keyword).add(type);
+                stepKeywordTypes.add(type);
             }
         }
     }
