@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -218,11 +219,13 @@ class PickleCompiler {
         String stepText = interpolate(step.getText(), variableCells, valueCells);
 
         PickleStepArgument argument = null;
-        if (step.getDataTable().isPresent()) {
-            argument = new PickleStepArgument(null, pickleDataTable(step.getDataTable().get(), variableCells, valueCells));
+        Optional<DataTable> dataTable = step.getDataTable();
+        if (dataTable.isPresent()) {
+            argument = new PickleStepArgument(null, pickleDataTable(dataTable.get(), variableCells, valueCells));
         }
-        if (step.getDocString().isPresent()) {
-            argument = new PickleStepArgument(pickleDocString(step.getDocString().get(), variableCells, valueCells), null);
+        Optional<DocString> docString = step.getDocString();
+        if (docString.isPresent()) {
+            argument = new PickleStepArgument(pickleDocString(docString.get(), variableCells, valueCells), null);
         }
 
 
