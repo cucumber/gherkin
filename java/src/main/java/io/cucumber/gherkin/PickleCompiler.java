@@ -45,7 +45,7 @@ class PickleCompiler {
     }
 
     List<Pickle> compile(GherkinDocument gherkinDocument, String uri) {
-        List<Pickle> pickles = new ArrayList<>();
+        List<Pickle> pickles = new ArrayList<>(GherkinParser.FEATURE_FILE_AVERAGE_LINE_COUNT);
         if (!gherkinDocument.getFeature().isPresent()) {
             return pickles;
         }
@@ -98,25 +98,34 @@ class PickleCompiler {
     }
 
     private void compileScenario(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
-        List<PickleStep> steps = new ArrayList<>();
+        int pickleStepCount = scenario.getSteps().size() + backgroundSteps.size();
+        List<PickleStep> steps = new ArrayList<>(pickleStepCount);
         if (!scenario.getSteps().isEmpty()) {
-            List<Step> allSteps = new ArrayList<>();
+            // usually, a scenario has at least one step, but that's not mandatory
+            List<Step> allSteps = new ArrayList<>(pickleStepCount);
             allSteps.addAll(backgroundSteps);
             allSteps.addAll(scenario.getSteps());
 
             StepKeywordType lastKeywordType = StepKeywordType.UNKNOWN;
             for (Step step : allSteps) {
                 StepKeywordType stepKeywordType = step.getKeywordType().get();
-                if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                if (stepKeywordType != StepKeywordType.CONJUNCTION) {
                     lastKeywordType = stepKeywordType;
+                }
 
                 steps.add(pickleStep(step, lastKeywordType));
             }
         }
 
-        List<Tag> scenarioTags = new ArrayList<>();
-        scenarioTags.addAll(parentTags);
-        scenarioTags.addAll(scenario.getTags());
+        List<Tag> scenarioTags;
+        if (parentTags.isEmpty() && scenario.getTags().isEmpty()) {
+            // in most cases, the scenario will have no tag, so we avoid creating a new list
+            scenarioTags = emptyList();
+        } else {
+            scenarioTags = new ArrayList<>();
+            scenarioTags.addAll(parentTags);
+            scenarioTags.addAll(scenario.getTags());
+        }
 
         List<String> sourceIds = singletonList(scenario.getId());
 
@@ -251,9 +260,9 @@ class PickleCompiler {
     }
 
     private String interpolate(String name, List<TableCell> variableCells, List<TableCell> valueCells) {
-        int col = 0;
-        for (TableCell variableCell : variableCells) {
-            TableCell valueCell = valueCells.get(col++);
+        for (int i = 0, variableCellsSize = variableCells.size(); i < variableCellsSize; i++) {
+            TableCell variableCell = variableCells.get(i);
+            TableCell valueCell = valueCells.get(i);
             String header = variableCell.getValue();
             String value = valueCell.getValue();
             name = name.replace("<" + header + ">", value);
