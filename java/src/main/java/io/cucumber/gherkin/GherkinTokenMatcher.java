@@ -150,8 +150,10 @@ class GherkinTokenMatcher implements TokenMatcher {
         return matchTitleLine(token, TokenType.ExamplesLine, currentDialect.getExamplesKeywords());
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
-        for (String keyword : keywords) {
+        for (int i = 0, keywordsSize = keywords.size(); i < keywordsSize; i++) {
+            String keyword = keywords.get(i);
             if (token.line.startsWithTitleKeyword(keyword)) {
                 String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH);
                 setTokenMatched(token, tokenType, title, keyword, token.line.getIndent(), null, null);

@@ -245,32 +245,41 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return content.toString();
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableRow> getTableRows(AstNode node) {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
-        List<TableRow> rows = new ArrayList<>(tokens.size());
+        int tokenCount = tokens.size();
+        List<TableRow> rows = new ArrayList<>(tokenCount);
 
-        for (Token token : tokens) {
+        for (int i = 0; i < tokenCount; i++) {
+            Token token = tokens.get(i);
             rows.add(new TableRow(token.location, getCells(token), idGenerator.newId()));
         }
         ensureCellCount(rows);
         return rows;
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private void ensureCellCount(List<TableRow> rows) {
         if (rows.isEmpty())
             return;
 
         int cellCount = rows.get(0).getCells().size();
-        for (TableRow row : rows) {
+        for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
+            TableRow row = rows.get(i);
             if (row.getCells().size() != cellCount) {
                 throw new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
             }
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableCell> getCells(Token token) {
-        List<TableCell> cells = new ArrayList<>(token.matchedItems.size());
-        for (GherkinLineSpan cellItem : token.matchedItems) {
+        List<GherkinLineSpan> matchedItems = token.matchedItems;
+        int lineCount = matchedItems.size();
+        List<TableCell> cells = new ArrayList<>(lineCount);
+        for (int i = 0; i < lineCount; i++) {
+            GherkinLineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
                     cellItem.text
