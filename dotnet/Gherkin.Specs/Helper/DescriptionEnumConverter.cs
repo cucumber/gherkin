@@ -7,12 +7,12 @@ using System.Text.Json.Serialization;
 
 namespace Gherkin.Specs.Helper
 {
-    internal class CucumberMessageEnumConverter<T> : JsonConverter<T> where T : struct, Enum
+    public class DescriptionEnumConverter<T> : JsonConverter<T> where T : struct, Enum
     {
         private readonly Dictionary<T, string> _enumToString = new();
         private readonly Dictionary<string, T> _stringToEnum = new();
 
-        protected internal CucumberMessageEnumConverter()
+        public DescriptionEnumConverter()
         {
             var type = typeof(T);
             foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
@@ -21,7 +21,9 @@ namespace Gherkin.Specs.Helper
                 var value = (T)field.GetValue(null);
 #pragma warning restore CS8605 // Unboxing a possibly null value.
                 var attribute = field.GetCustomAttribute<DescriptionAttribute>();
-                var name = attribute?.Description ?? field.Name;
+                if (attribute == null || string.IsNullOrEmpty(attribute.Description))
+                    throw new InvalidOperationException($"Enum {type.Name} field {field.Name} does not have a Description attribute or the Description attribute is empty.");
+                var name = attribute.Description;
                 _enumToString[value] = name;
                 _stringToEnum[name] = value;
             }
