@@ -289,7 +289,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private List<Tag> getTags(AstNode node) {
-        AstNode tagsNode = node.getSingle(RuleType.Tags, new AstNode(RuleType.None));
+        AstNode tagsNode = node.getSingle(RuleType.Tags, null);
         if (tagsNode == null)
             return Collections.emptyList();
 
