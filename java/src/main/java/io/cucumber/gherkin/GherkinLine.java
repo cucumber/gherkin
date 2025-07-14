@@ -177,7 +177,7 @@ class GherkinLine {
                         int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
                         lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getText()));
                     }
-                    cellBuilder = new StringBuilder();
+                    cellBuilder.setLength(0);// reuse instance rather than creating a new one is faster
                     cellStart = col + 1;
                 } else {
                     cellBuilder.appendCodePoint(c);
