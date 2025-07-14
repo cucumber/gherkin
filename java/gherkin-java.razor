@@ -34,14 +34,13 @@
 
 package io.cucumber.gherkin;
 
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.function.Supplier;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 import static java.util.Arrays.asList;
 
@@ -139,13 +138,9 @@ class @Model.ParserClassName<T> {
             throw new ParserException.CompositeParserException(context.errors);
     }
 
-    private void handleAstError(ParserContext context, final Supplier<Void> action) {
-        handleExternalError(context, null, action);
-    }
-
-    private <V> V handleExternalError(ParserContext context, V defaultValue, Supplier<V> action) {
+    private <V> void handleAstError(ParserContext context, V value, Builder<T> b, final BiConsumer<Builder<T>, V> action) {
         try {
-            return action.get();
+            action.accept(b, value);
         } catch (ParserException.CompositeParserException compositeParserException) {
             for (ParserException error : compositeParserException.errors) {
                 addError(context, error);
@@ -153,28 +148,32 @@ class @Model.ParserClassName<T> {
         } catch (ParserException error) {
             addError(context, error);
         }
-        return defaultValue;
+    }
+
+    private boolean handleExternalError(ParserContext context, Token token,
+                                        BiPredicate<TokenMatcher, Token> action) {
+        try {
+            return action.test(context.tokenMatcher, token);
+        } catch (ParserException.CompositeParserException compositeParserException) {
+            for (ParserException error : compositeParserException.errors) {
+                addError(context, error);
+            }
+        } catch (ParserException error) {
+            addError(context, error);
+        }
+        return false;
     }
 
     private void build(final ParserContext context, final Token token) {
-        handleAstError(context, () -> {
-            builder.build(token);
-            return null;
-        });
+        handleAstError(context, token, builder, Builder::build);
     }
 
     private void startRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, () -> {
-            builder.startRule(ruleType);
-            return null;
-        });
+        handleAstError(context, ruleType, builder, Builder::startRule);
     }
 
     private void endRule(final ParserContext context, final RuleType ruleType) {
-        handleAstError(context, () -> {
-            builder.endRule(ruleType);
-            return null;
-        });
+        handleAstError(context, ruleType, builder, Builder::endRule);
     }
 
     private Token readToken(ParserContext context) {
@@ -183,11 +182,7 @@ class @Model.ParserClassName<T> {
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
     private boolean match_@(rule.Name.Replace("#", ""))(final ParserContext context, final Token token) {
-        @if (rule.Name != "#EOF")
-        {
-        @:if (token.isEOF()) return false;
-        }
-        return handleExternalError(context, false, () -> context.tokenMatcher.match_@(rule.Name.Replace("#", ""))(token));
+        return handleExternalError(context, token, TokenMatcher::match_@(rule.Name.Replace("#", "")));
     }
 </text>
 }
