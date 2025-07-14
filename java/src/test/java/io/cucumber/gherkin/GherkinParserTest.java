@@ -1,5 +1,6 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.GherkinDocument;
@@ -8,6 +9,7 @@ import io.cucumber.messages.types.Pickle;
 import io.cucumber.messages.types.PickleStep;
 import io.cucumber.messages.types.Scenario;
 import io.cucumber.messages.types.Source;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -16,6 +18,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -42,8 +45,41 @@ class GherkinParserTest {
     @Test
     void test_for_profiler_parser() throws IOException {
         for (int i = 0; i < 1000; i++) {
-            GherkinParser.builder().build().parse(Paths.get("../testdata/good/very_long.feature"));
+            GherkinParser.builder()
+                    .idGenerator(new IdGenerator() {
+                        int id=0;
+                        @Override
+                        public String newId() {
+                            return Integer.toString(id++);
+                        }
+                    })
+                    .build().parse(Paths.get("../testdata/good/very_long.feature"));
         }
+    }
+
+    @Test
+    @Disabled
+    void test_for_profiler_parser_with_summary_statistics() throws IOException {
+        LongSummaryStatistics summaryStatistics = new LongSummaryStatistics();
+        for (int j = 0; j < 20; j++) {
+            long t0 = System.currentTimeMillis();
+            for (int i = 0; i < 1000; i++) {
+                GherkinParser.builder()
+                        .idGenerator(new IdGenerator() {
+                            int id=0;
+                            @Override
+                            public String newId() {
+                                return Integer.toString(id++);
+                            }
+                        })
+                        .build().parse(Paths.get("../testdata/good/very_long.feature"));
+            }
+            long t1 = System.currentTimeMillis();
+            summaryStatistics.accept(t1-t0);
+        }
+        System.out.println("Average time: " + summaryStatistics.getAverage());
+        System.out.println("Min time: " + summaryStatistics.getMin());
+        System.out.println("Max time: " + summaryStatistics.getMax());
     }
 
     @Test
