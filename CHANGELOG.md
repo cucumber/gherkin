@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
 
 ## [33.0.0] - 2025-07-07
 ### Changed
