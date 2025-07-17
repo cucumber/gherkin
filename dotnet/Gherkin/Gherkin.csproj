@@ -19,7 +19,7 @@
     <Product>Gherkin Parser</Product>
     <PackageId>Gherkin</PackageId>
     <Authors>Cucumber Ltd, Gaspar Nagy</Authors>
-    <Copyright>Copyright &#xA9; Cucumber Ltd, Gaspar Nagy</Copyright>
+    <Copyright>Copyright © Cucumber Ltd, Gaspar Nagy</Copyright>
     <Description>Cross-platform parser for the Gherkin language, used by Cucumber, SpecFlow and other Cucumber-based tools to parse feature files.</Description>
     <PackageTags>specflow gherkin cucumber</PackageTags>
     <PackageProjectUrl>https://github.com/cucumber/gherkin</PackageProjectUrl>
@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gherkin.SourceGenerator\Gherkin.SourceGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer"/>
+    <ProjectReference Include="..\Gherkin.SourceGenerator\Gherkin.SourceGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +42,10 @@
       <PackagePath>.</PackagePath>
       <Visible>true</Visible>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cucumber.Messages" Version="[28.0, 29.0)"/>
   </ItemGroup>
 
 </Project>
