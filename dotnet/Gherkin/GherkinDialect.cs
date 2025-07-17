@@ -45,6 +45,7 @@ public class GherkinDialect(
         .Concat(andStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Conjunction }))
         .Concat(butStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Conjunction }))
         .GroupBy(item => item.Keyword, item => item.Type)
+        // Fold keywords with ambiguous keyword types into unknown 
         .ToDictionary(item => item.Key, items => items.Count() == 1 ? items.First() : StepKeywordType.Unknown);
 
     public StepKeywordType? GetStepKeywordType(string keyword)
