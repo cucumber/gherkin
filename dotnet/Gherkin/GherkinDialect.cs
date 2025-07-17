@@ -38,14 +38,14 @@ public class GherkinDialect(
         .OrderByDescending(x => x.Length) // To avoid conflicts when some keywords are prefixes of others, try the longest keywords first.
         .ToArray();
 
-    public IDictionary<string, StepKeywordType> StepKeywordTypes { get; } = new[] { new { Keyword = AsteriskKeyword, Type = StepKeywordType.Unknown } }
-        .Concat(givenStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Context }))
+    public IDictionary<string, StepKeywordType> StepKeywordTypes { get; } = 
+                givenStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Context })
         .Concat(whenStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Action }))
         .Concat(thenStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Outcome }))
         .Concat(andStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Conjunction }))
         .Concat(butStepKeywords.Select(kw => new { Keyword = kw, Type = StepKeywordType.Conjunction }))
         .GroupBy(item => item.Keyword, item => item.Type)
-        .ToDictionary(item => item.Key, item => item.First());
+        .ToDictionary(item => item.Key, items => items.Count() == 1 ? items.First() : StepKeywordType.Unknown);
 
     public StepKeywordType? GetStepKeywordType(string keyword)
         => StepKeywordTypes.TryGetValue(keyword, out var tokenType) ? tokenType : null;
