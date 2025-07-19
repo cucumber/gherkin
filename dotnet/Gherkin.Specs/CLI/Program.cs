@@ -1,5 +1,6 @@
 using Gherkin.CucumberMessages;
 using Gherkin.Specs.EventStubs;
+using Gherkin.Specs.Helper;
 using Gherkin.Specs.Tokens;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -100,11 +101,8 @@ class Program
         {
             foreach (var evt in gherkinEventsProvider.GetEvents(sourceEventEvent))
             {
-                var jsonString = JsonSerializer.Serialize(evt, new JsonSerializerOptions(JsonSerializerDefaults.Web)
-                {
-                    Converters = { new JsonStringEnumConverter() },
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                });
+                var jsonString = JsonSerializer.Serialize(evt, NDJsonParser.SerializerOptions);
+
                 Console.WriteLine(jsonString);
             }
         }
