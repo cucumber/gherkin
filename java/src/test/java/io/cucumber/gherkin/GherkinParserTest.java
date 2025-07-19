@@ -47,7 +47,7 @@ class GherkinParserTest {
         for (int i = 0; i < 1000; i++) {
             GherkinParser.builder()
                     .idGenerator(new IdGenerator() {
-                        int id=0;
+                        int id = 0;
                         @Override
                         public String newId() {
                             return Integer.toString(id++);
@@ -66,7 +66,7 @@ class GherkinParserTest {
             for (int i = 0; i < 1000; i++) {
                 GherkinParser.builder()
                         .idGenerator(new IdGenerator() {
-                            int id=0;
+                            int id = 0;
                             @Override
                             public String newId() {
                                 return Integer.toString(id++);

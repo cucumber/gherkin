@@ -76,7 +76,7 @@ class GherkinLine {
 
     String substringTrimmed(int beginIndex) {
         // trim the beginning of the line (the end of line has already been trimmed in the constructor)
-        while ((beginIndex < textLength) && (text.charAt(beginIndex)<=' ')) {
+        while ((beginIndex < textLength) && (text.charAt(beginIndex) <= ' ')) {
             beginIndex++;
         }
         return text.substring(beginIndex);
@@ -190,7 +190,7 @@ class GherkinLine {
 
     boolean startsWithTitleKeyword(String keyword) {
         return textLength > keyword.length() &&
-               text.charAt(keyword.length())==TITLE_KEYWORD_SEPARATOR &&
+               text.charAt(keyword.length()) == TITLE_KEYWORD_SEPARATOR &&
                text.startsWith(keyword);
     }
 
