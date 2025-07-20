@@ -39,7 +39,7 @@ class GherkinLine {
     GherkinLine(String rawText, Location location) {
         this.rawText = requireNonNull(rawText);
         this.location = requireNonNull(location);
-        StringUtils.TrimmedText trimmedIndent = trimAndIndent(rawText);
+        StringUtils.IndentedText trimmedIndent = trimAndIndent(rawText);
         this.text = trimmedIndent.getText();
         this.indent = trimmedIndent.getIndent();
         this.textLength = text.length();
@@ -173,7 +173,7 @@ class GherkinLine {
                         // Skip the first empty span
                         beforeFirst = false;
                     } else {
-                        StringUtils.TrimmedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
+                        StringUtils.IndentedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
                         int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
                         lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getText()));
                     }

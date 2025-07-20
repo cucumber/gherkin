@@ -19,7 +19,7 @@ class StringUtils {
      * Matches regex pattern whitespace + NEL + NBSP - new line.
      */
     private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    public static final TrimmedText NO_INDENT_ENTRY = new TrimmedText("", 0);
+    public static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -36,15 +36,15 @@ class StringUtils {
         return s.substring(0, end + 1);
     }
 
-    static TrimmedText trimAndIndentKeepNewLines(String input) {
+    static IndentedText trimAndIndentKeepNewLines(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
     }
 
-    static TrimmedText trimAndIndent(String input) {
+    static IndentedText trimAndIndent(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED);
     }
 
-    private static TrimmedText trimAndIndent(String input, char[] whitespaceChars) {
+    private static IndentedText trimAndIndent(String input, char[] whitespaceChars) {
         if (input.isEmpty()) {
             return NO_INDENT_ENTRY;
         }
@@ -54,10 +54,10 @@ class StringUtils {
 
         String trimmed = input.substring(start, end);
         int indent = input.codePointCount(0, start);
-        return new TrimmedText(trimmed, indent);
         // the object instance is not truly created because
         // the code is inlined by the hotspot compiler
         // (as "-XX:+EliminateAllocations" is enabled by default).
+        return new IndentedText(indent, trimmed);
     }
 
     static String removeComments(String input) {
@@ -115,21 +115,22 @@ class StringUtils {
         return false;
     }
 
-    public static class TrimmedText {
-        private final String text;
+    public static class IndentedText {
         private final int indent;
+        private final String text;
 
-        public TrimmedText(String text, int indent) {
+        public IndentedText(int indent, String text) {
             this.text = text;
             this.indent = indent;
+        }
+
+        public int getIndent() {
+            return indent;
         }
 
         public String getText() {
             return text;
         }
 
-        public int getIndent() {
-            return indent;
-        }
     }
 }

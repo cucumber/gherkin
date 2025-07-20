@@ -26,7 +26,7 @@ class StringUtilsTest {
     @Test
     void trimAndIndent() {
         // When
-        StringUtils.TrimmedText trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
+        StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
 
         // Then
         assertEquals(CUCUMBER, trimmedIndent.getText());
@@ -36,7 +36,7 @@ class StringUtilsTest {
     @Test
     void trimAndIndent_multiline() {
         // When
-        StringUtils.TrimmedText trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
+        StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
 
         // Then
         assertEquals(CUCUMBER, trimmedIndent.getText());
@@ -46,7 +46,7 @@ class StringUtilsTest {
     @Test
     void trimAndIndent_empty() {
         // When
-        StringUtils.TrimmedText trimmedIndent = StringUtils.trimAndIndent("");
+        StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent("");
 
         // Then
         assertEquals("", trimmedIndent.getText());
