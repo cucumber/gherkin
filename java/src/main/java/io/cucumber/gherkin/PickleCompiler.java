@@ -126,7 +126,8 @@ class PickleCompiler {
                 language,
                 steps,
                 pickleTags(scenarioTags),
-                sourceIds
+                sourceIds,
+                scenario.getLocation()
         );
         pickles.add(pickle);
     }
@@ -174,7 +175,8 @@ class PickleCompiler {
                         language,
                         steps,
                         pickleTags(tags),
-                        sourceIds
+                        sourceIds,
+                        valuesRow.getLocation()
                 );
 
                 pickles.add(pickle);
