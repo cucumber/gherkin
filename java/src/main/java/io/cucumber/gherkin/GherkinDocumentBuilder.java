@@ -155,11 +155,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             case Description: {
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 // Trim trailing empty lines
-                int end = lineTokens.size();
-                while (end > 0 && lineTokens.get(end - 1).line.isEmpty()) {
-                    end--;
+                int toIndex = lineTokens.size();
+                while (toIndex > 0 && lineTokens.get(toIndex - 1).line.isEmpty()) {
+                    toIndex--;
                 }
-                return joinMatchedText(lineTokens, end);
+                return joinMatchedText(lineTokens, toIndex);
             }
             case Feature: {
                 AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
@@ -232,9 +232,9 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node;
     }
 
-    private static String joinMatchedText(List<Token> lineTokens, int endIndex) {
+    private static String joinMatchedText(List<Token> lineTokens, int toIndex) {
         StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
-        for (int i = 0; i < endIndex; i++) {
+        for (int i = 0; i < toIndex; i++) {
             Token lineToken = lineTokens.get(i);
             content.append(lineToken.matchedText).append('\n');
         }
