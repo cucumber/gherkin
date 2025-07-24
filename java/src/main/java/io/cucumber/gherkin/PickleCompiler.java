@@ -81,9 +81,7 @@ class PickleCompiler {
     private void compileRule(List<Pickle> pickles, Rule rule, List<Tag> parentTags, List<Step> featureBackgroundSteps, String language, String uri) {
         List<Step> ruleBackgroundSteps = new ArrayList<>(featureBackgroundSteps);
 
-        List<Tag> ruleTags = new ArrayList<>();
-        ruleTags.addAll(parentTags);
-        ruleTags.addAll(rule.getTags());
+        List<Tag> ruleTags = compileTags(parentTags, rule.getTags());
 
         for (RuleChild ruleChild : rule.getChildren()) {
             if (ruleChild.getBackground().isPresent()) {
@@ -100,7 +98,7 @@ class PickleCompiler {
     }
 
     private void compileScenario(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
-        List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps());
+        List<PickleStep> steps = compilePickleBackgroundSteps(backgroundSteps, scenario.getSteps());
         List<Tag> scenarioTags = compileTags(parentTags, scenario.getTags());
         List<String> sourceIds = singletonList(scenario.getId());
 
@@ -117,78 +115,61 @@ class PickleCompiler {
     }
 
     private List<Tag> compileTags(List<Tag> parentTags, List<Tag> scenarioTags) {
+        if (parentTags.isEmpty()) {
+            // Avoid array creation
+            return scenarioTags;
+        }
         if (scenarioTags.isEmpty()) {
-            // in most cases, the scenario will have no tag, so we avoid creating a new list
+            // Avoid array creation
             return parentTags;
         }
-        List<Tag> pickleTags = new ArrayList<>();
-        pickleTags.addAll(parentTags);
-        pickleTags.addAll(scenarioTags);
-        return pickleTags;
+        List<Tag> tags = new ArrayList<>(parentTags.size() + scenarioTags.size());
+        tags.addAll(parentTags);
+        tags.addAll(scenarioTags);
+        return tags;
     }
 
-    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps) {
-        List<PickleStep> steps = new ArrayList<>(scenarioSteps.size() + backgroundSteps.size());
-        if (!scenarioSteps.isEmpty()) {
-            StepKeywordType lastKeywordType = UNKNOWN;
-            for (Step step : backgroundSteps) {
-                StepKeywordType stepKeywordType = step.getKeywordType().orElse(UNKNOWN);
-                if (stepKeywordType != CONJUNCTION) {
-                    lastKeywordType = stepKeywordType;
-                }
-                steps.add(pickleStep(step, lastKeywordType));
+    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps, List<TableCell> variableCells, TableRow valuesRow) {
+        if (scenarioSteps.isEmpty()) {
+            return emptyList();
+        }
+        List<PickleStep> steps = new ArrayList<>(backgroundSteps.size() + scenarioSteps.size());
+        StepKeywordType lastKeywordType = UNKNOWN;
+        for (Step step : backgroundSteps) {
+            StepKeywordType stepKeywordType = step.getKeywordType().orElse(UNKNOWN);
+            if (stepKeywordType != CONJUNCTION) {
+                lastKeywordType = stepKeywordType;
             }
-            for (Step step : scenarioSteps) {
-                StepKeywordType stepKeywordType = step.getKeywordType().orElse(UNKNOWN);
-                if (stepKeywordType != CONJUNCTION) {
-                    lastKeywordType = stepKeywordType;
-                }
-                steps.add(pickleStep(step, lastKeywordType));
+            steps.add(pickleBackgroundStep(step, lastKeywordType));
+        }
+        for (Step scenarioStep : scenarioSteps) {
+            StepKeywordType stepKeywordType = scenarioStep.getKeywordType().orElse(UNKNOWN);
+            if (stepKeywordType != CONJUNCTION) {
+                lastKeywordType = stepKeywordType;
             }
+            steps.add(pickleStep(scenarioStep, variableCells, valuesRow, lastKeywordType));
         }
         return steps;
     }
 
-    private void compileScenarioOutline(List<Pickle> pickles, Scenario scenario, List<Tag> featureTags, List<Step> backgroundSteps, String language, String uri) {
+    private List<PickleStep> compilePickleBackgroundSteps(List<Step> backgroundSteps, List<Step> scenarioSteps) {
+        // Background steps are not interpolated
+        return compilePickleSteps(backgroundSteps, scenarioSteps, emptyList(), null);
+    }
+
+    private void compileScenarioOutline(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
+        List<Tag> scenarioTags = compileTags(parentTags, scenario.getTags());
         for (final Examples examples : scenario.getExamples()) {
             if (!examples.getTableHeader().isPresent()) continue;
             List<TableCell> variableCells = examples.getTableHeader().get().getCells();
             for (final TableRow valuesRow : examples.getTableBody()) {
-                List<TableCell> valueCells = valuesRow.getCells();
-
-                List<PickleStep> steps = new ArrayList<>();
-                StepKeywordType lastKeywordType = UNKNOWN;
-
-                if (!scenario.getSteps().isEmpty())
-                    for (Step step : backgroundSteps) {
-                        StepKeywordType stepKeywordType = step.getKeywordType().get();
-                        if (stepKeywordType != CONJUNCTION)
-                            lastKeywordType = stepKeywordType;
-
-                        steps.add(pickleStep(step, lastKeywordType));
-                    }
-
-
-                List<Tag> tags = new ArrayList<>();
-                tags.addAll(featureTags);
-                tags.addAll(scenario.getTags());
-                tags.addAll(examples.getTags());
-
-                for (Step scenarioOutlineStep : scenario.getSteps()) {
-                    StepKeywordType stepKeywordType = scenarioOutlineStep.getKeywordType().get();
-                    if (stepKeywordType != CONJUNCTION)
-                        lastKeywordType = stepKeywordType;
-
-                    PickleStep pickleStep = pickleStep(scenarioOutlineStep, variableCells, valuesRow, lastKeywordType);
-
-                    steps.add(pickleStep);
-                }
-
+                List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps(), variableCells, valuesRow);
+                List<Tag> tags = compileTags(scenarioTags, examples.getTags());
                 List<String> sourceIds = asList(scenario.getId(), valuesRow.getId());
                 Pickle pickle = new Pickle(
                         idGenerator.newId(),
                         uri,
-                        interpolate(scenario.getName(), variableCells, valueCells),
+                        interpolate(scenario.getName(), variableCells, valuesRow.getCells()),
                         language,
                         steps,
                         pickleTags(tags),
@@ -268,7 +249,8 @@ class PickleCompiler {
         );
     }
 
-    private PickleStep pickleStep(Step step, StepKeywordType keywordType) {
+    private PickleStep pickleBackgroundStep(Step step, StepKeywordType keywordType) {
+        // Background steps are not interpolated
         return pickleStep(step, emptyList(), null, keywordType);
     }
 
