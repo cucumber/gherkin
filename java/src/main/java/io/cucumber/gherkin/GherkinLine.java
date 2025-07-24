@@ -69,8 +69,8 @@ class GherkinLine {
         return text.startsWith(prefix);
     }
 
-    public boolean startsWith(char tableCellSeparator) {
-        return !empty && text.charAt(0) == tableCellSeparator;
+    public boolean startsWith(char prefix) {
+        return !empty && text.charAt(0) == prefix;
     }
 
     String substringTrimmed(int beginIndex) {
