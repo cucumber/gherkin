@@ -10,7 +10,7 @@ class Locations {
     static final int COLUMN_OFFSET = 1;
 
     /**
-     * Cache of Long objects for the range 0-4095. This is used
+     * Cache of Long objects for the range 1-4095. This is used
      * to avoid creating a huge amount of Long objects in getLocation().
      * We can't use Long.valueOf() because it caches only the first 128
      * values, and typical feature files have much more lines.
@@ -45,12 +45,12 @@ class Locations {
 
     static Location atColumn(Location location, int column) {
         // By design, the location cannot be null (it comes from the Token)
-        // By design, the column cannot be lower than 0
+        // By design, the column cannot be less than 1
         return new Location(location.getLine(), getLong(column));
     }
 
     static Location atLine(int line) {
-        // By design, the line is never lower than 0 (it comes from TokenScanner)
+        // By design, the column cannot be less than 1 (it comes from TokenScanner)
         return new Location(getLong(line), null);
     }
 
