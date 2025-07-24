@@ -186,7 +186,7 @@ public final class GherkinDialect {
         return stepKeywordTypes;
     }
 
-    public StepKeywordType getStepKeywordType(String keyword) {
+    StepKeywordType getStepKeywordType(String keyword) {
         requireNonNull(keyword);
         StepKeywordType stepKeywordType = stepKeywordsType.get(keyword);
         if (stepKeywordType == null) {
