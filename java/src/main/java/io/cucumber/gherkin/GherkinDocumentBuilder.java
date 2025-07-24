@@ -248,10 +248,9 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableRow> getTableRows(AstNode node) {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
-        int tokenCount = tokens.size();
-        List<TableRow> rows = new ArrayList<>(tokenCount);
-
-        for (int i = 0; i < tokenCount; i++) {
+        int tokenSize = tokens.size();
+        List<TableRow> rows = new ArrayList<>(tokenSize);
+        for (int i = 0; i < tokenSize; i++) {
             Token token = tokens.get(i);
             rows.add(new TableRow(token.location, getCells(token), idGenerator.newId()));
         }
@@ -276,9 +275,9 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableCell> getCells(Token token) {
         List<GherkinLineSpan> matchedItems = token.matchedItems;
-        int lineCount = matchedItems.size();
-        List<TableCell> cells = new ArrayList<>(lineCount);
-        for (int i = 0; i < lineCount; i++) {
+        int itemSize = matchedItems.size();
+        List<TableCell> cells = new ArrayList<>(itemSize);
+        for (int i = 0; i < itemSize; i++) {
             GherkinLineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
