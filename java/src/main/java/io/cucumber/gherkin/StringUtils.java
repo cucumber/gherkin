@@ -64,20 +64,18 @@ class StringUtils {
         if (input.isEmpty()) {
             return input;
         }
-        int start = 0;
         int length = input.length();
-
-        while (start < length - 1 
-                && !(contains(WHITESPACE_CHARS, input.charAt(start)) 
-                && input.charAt(start + 1) == COMMENT_PREFIX_CHAR)
-        ) {
-            start++;
-        }
-        return input.substring(0, start < length - 1 ? start : start + 1);
+        int start = findIndexOfComment(input);
+        return input.substring(0, start < 0 ? length : start);
     }
 
-    static boolean containsWhiteSpace(String input) {
-        return findFirstIndexIn(input, WHITESPACE_CHARS) != -1;
+    static int findIndexOfComment(String input) {
+        for (int i = 1, length = input.length(); i < length; i++) {
+            if (input.charAt(i) == COMMENT_PREFIX_CHAR && contains(WHITESPACE_CHARS, input.charAt(i - 1))) {
+                return i - 1;
+            }
+        }
+        return -1;
     }
 
     private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {

@@ -117,6 +117,16 @@ class GherkinLineTest {
     }
 
     @Test
+    void finds_tags_with_number() {
+        GherkinLine gherkinLine = new GherkinLine("@ISSUE#123", line);
+        List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
+
+        assertEquals(asList(
+                new GherkinLineSpan(1, "@ISSUE#123")
+        ), gherkinLineSpans);
+    }
+
+    @Test
     void finds_table_cells() {
         // The cells below has the following whitespace characters on each side:
         // - U+00A0 (non-breaking space)

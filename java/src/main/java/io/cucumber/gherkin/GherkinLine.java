@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
@@ -90,7 +89,7 @@ class GherkinLine {
 
         // look for the first tag
         int indexStartTag = text.indexOf(TAG_PREFIX_CHAR);
-        int indexComment = text.indexOf(COMMENT_PREFIX_CHAR);
+        int indexComment = StringUtils.findIndexOfComment(text);
         if (indexStartTag < 0 || (indexComment >= 0 && indexStartTag > indexComment)) {
             // no tag found (or all tags are commented out)
             return emptyList();
