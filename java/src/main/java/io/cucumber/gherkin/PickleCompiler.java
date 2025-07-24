@@ -131,6 +131,7 @@ class PickleCompiler {
 
     private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps, List<TableCell> variableCells, TableRow valuesRow) {
         if (scenarioSteps.isEmpty()) {
+            // usually, a scenario has at least one step, but that's not mandatory
             return emptyList();
         }
         List<PickleStep> steps = new ArrayList<>(backgroundSteps.size() + scenarioSteps.size());
