@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
+import static io.cucumber.messages.types.StepKeywordType.UNKNOWN;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -98,24 +100,7 @@ class PickleCompiler {
     }
 
     private void compileScenario(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
-        int pickleStepCount = scenario.getSteps().size() + backgroundSteps.size();
-        List<PickleStep> steps = new ArrayList<>(pickleStepCount);
-        if (!scenario.getSteps().isEmpty()) {
-            // usually, a scenario has at least one step, but that's not mandatory
-            List<Step> allSteps = new ArrayList<>(pickleStepCount);
-            allSteps.addAll(backgroundSteps);
-            allSteps.addAll(scenario.getSteps());
-
-            StepKeywordType lastKeywordType = StepKeywordType.UNKNOWN;
-            for (Step step : allSteps) {
-                StepKeywordType stepKeywordType = step.getKeywordType().get();
-                if (stepKeywordType != StepKeywordType.CONJUNCTION) {
-                    lastKeywordType = stepKeywordType;
-                }
-
-                steps.add(pickleStep(step, lastKeywordType));
-            }
-        }
+        List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps());
 
         List<Tag> scenarioTags;
         if (parentTags.isEmpty() && scenario.getTags().isEmpty()) {
@@ -141,6 +126,28 @@ class PickleCompiler {
         pickles.add(pickle);
     }
 
+    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps) {
+        List<PickleStep> steps = new ArrayList<>(scenarioSteps.size() + backgroundSteps.size());
+        if (!scenarioSteps.isEmpty()) {
+            StepKeywordType lastKeywordType = UNKNOWN;
+            for (Step step : backgroundSteps) {
+                StepKeywordType stepKeywordType = step.getKeywordType().orElse(UNKNOWN);
+                if (stepKeywordType != CONJUNCTION) {
+                    lastKeywordType = stepKeywordType;
+                }
+                steps.add(pickleStep(step, lastKeywordType));
+            }
+            for (Step step : scenarioSteps) {
+                StepKeywordType stepKeywordType = step.getKeywordType().orElse(UNKNOWN);
+                if (stepKeywordType != CONJUNCTION) {
+                    lastKeywordType = stepKeywordType;
+                }
+                steps.add(pickleStep(step, lastKeywordType));
+            }
+        }
+        return steps;
+    }
+
     private void compileScenarioOutline(List<Pickle> pickles, Scenario scenario, List<Tag> featureTags, List<Step> backgroundSteps, String language, String uri) {
         for (final Examples examples : scenario.getExamples()) {
             if (!examples.getTableHeader().isPresent()) continue;
@@ -149,12 +156,12 @@ class PickleCompiler {
                 List<TableCell> valueCells = valuesRow.getCells();
 
                 List<PickleStep> steps = new ArrayList<>();
-                StepKeywordType lastKeywordType = StepKeywordType.UNKNOWN;
+                StepKeywordType lastKeywordType = UNKNOWN;
 
                 if (!scenario.getSteps().isEmpty())
                     for (Step step : backgroundSteps) {
                         StepKeywordType stepKeywordType = step.getKeywordType().get();
-                        if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                        if (stepKeywordType != CONJUNCTION)
                             lastKeywordType = stepKeywordType;
 
                         steps.add(pickleStep(step, lastKeywordType));
@@ -168,7 +175,7 @@ class PickleCompiler {
 
                 for (Step scenarioOutlineStep : scenario.getSteps()) {
                     StepKeywordType stepKeywordType = scenarioOutlineStep.getKeywordType().get();
-                    if (stepKeywordType != StepKeywordType.CONJUNCTION)
+                    if (stepKeywordType != CONJUNCTION)
                         lastKeywordType = stepKeywordType;
 
                     PickleStep pickleStep = pickleStep(scenarioOutlineStep, variableCells, valuesRow, lastKeywordType);
@@ -222,7 +229,7 @@ class PickleCompiler {
     private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new EnumMap<>(StepKeywordType.class);
 
     static {
-        pickleStepTypeFromKeywordType.put(StepKeywordType.UNKNOWN, PickleStepType.UNKNOWN);
+        pickleStepTypeFromKeywordType.put(UNKNOWN, PickleStepType.UNKNOWN);
         pickleStepTypeFromKeywordType.put(StepKeywordType.CONTEXT, PickleStepType.CONTEXT);
         pickleStepTypeFromKeywordType.put(StepKeywordType.ACTION, PickleStepType.ACTION);
         pickleStepTypeFromKeywordType.put(StepKeywordType.OUTCOME, PickleStepType.OUTCOME);
