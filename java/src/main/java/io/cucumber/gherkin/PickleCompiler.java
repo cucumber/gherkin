@@ -101,17 +101,7 @@ class PickleCompiler {
 
     private void compileScenario(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
         List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps());
-
-        List<Tag> scenarioTags;
-        if (parentTags.isEmpty() && scenario.getTags().isEmpty()) {
-            // in most cases, the scenario will have no tag, so we avoid creating a new list
-            scenarioTags = emptyList();
-        } else {
-            scenarioTags = new ArrayList<>();
-            scenarioTags.addAll(parentTags);
-            scenarioTags.addAll(scenario.getTags());
-        }
-
+        List<Tag> scenarioTags = compileTags(parentTags, scenario.getTags());
         List<String> sourceIds = singletonList(scenario.getId());
 
         Pickle pickle = new Pickle(
@@ -124,6 +114,17 @@ class PickleCompiler {
                 sourceIds
         );
         pickles.add(pickle);
+    }
+
+    private List<Tag> compileTags(List<Tag> parentTags, List<Tag> scenarioTags) {
+        if (scenarioTags.isEmpty()) {
+            // in most cases, the scenario will have no tag, so we avoid creating a new list
+            return parentTags;
+        }
+        List<Tag> pickleTags = new ArrayList<>();
+        pickleTags.addAll(parentTags);
+        pickleTags.addAll(scenarioTags);
+        return pickleTags;
     }
 
     private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps) {
