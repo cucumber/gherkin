@@ -187,7 +187,6 @@ public final class GherkinDialect {
     }
 
     StepKeywordType getStepKeywordType(String keyword) {
-        requireNonNull(keyword);
         StepKeywordType stepKeywordType = stepKeywordsType.get(keyword);
         if (stepKeywordType == null) {
             throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
