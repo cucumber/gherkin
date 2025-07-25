@@ -18,7 +18,7 @@ class Locations {
     private static final Long[] longs = new Long[4096];
 
     static {
-        for (int i = 1; i < longs.length; i++) {
+        for (int i = 0; i < longs.length; i++) {
             longs[i] = (long) i;
         }
     }
