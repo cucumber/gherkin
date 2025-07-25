@@ -4,14 +4,13 @@ import io.cucumber.messages.types.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.PrimitiveIterator;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
+import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
-import static io.cucumber.gherkin.StringUtils.containsWhiteSpace;
-import static io.cucumber.gherkin.StringUtils.rtrim;
+import static io.cucumber.gherkin.StringUtils.containsWhiteSpaceExtended;
+import static io.cucumber.gherkin.StringUtils.isWhiteSpaceExtended;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 import static java.util.Collections.emptyList;
@@ -36,13 +35,15 @@ class GherkinLine {
      * line.
      */
     private final int indent;
+    private final int textLength;
 
     GherkinLine(String rawText, Location location) {
         this.rawText = requireNonNull(rawText);
         this.location = requireNonNull(location);
-        Entry<String, Integer> trimmedIndent = trimAndIndent(rawText);
-        this.text = trimmedIndent.getKey();
-        this.indent = trimmedIndent.getValue();
+        StringUtils.IndentedText trimmedIndent = trimAndIndent(rawText);
+        this.text = trimmedIndent.getText();
+        this.indent = trimmedIndent.getIndent();
+        this.textLength = text.length();
         this.empty = text.isEmpty();
     }
 
@@ -70,35 +71,58 @@ class GherkinLine {
         return text.startsWith(prefix);
     }
 
+    public boolean startsWith(char prefix) {
+        return !empty && text.charAt(0) == prefix;
+    }
+
     String substringTrimmed(int beginIndex) {
-        return text.substring(beginIndex).trim();
+        // trim the beginning of the line (the end of line has already been trimmed in the constructor)
+        while ((beginIndex < textLength) && (text.charAt(beginIndex) <= ' ')) {
+            beginIndex++;
+        }
+        return text.substring(beginIndex);
     }
 
     List<GherkinLineSpan> parseTags() {
-        // in most cases, the line contains no tag, so the code is optimized for this situation
-        if (empty) {
-            return emptyList();
-        }
-        String uncommentedLine = StringUtils.removeComments(text);
-        int indexInUncommentedLine = 0;
+        // TODO: These conditions should not sprawl into two methods. 
+        // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
+        // so there is always at least one tag, and it sits at the start of the
+        // text
+        int indexStartCurrentTag = 0;
+        int indexComment = StringUtils.findIndexOfTagComment(text);
 
-        String[] elements = uncommentedLine.split(TAG_PREFIX);
-        if (elements.length == 0) {
-            return emptyList();
-        }
-        List<GherkinLineSpan> tags = new ArrayList<>(elements.length);
-        for (String element : elements) {
-            String token = rtrim(element);
-            if (token.isEmpty()) {
-                continue;
+        List<GherkinLineSpan> tags = new ArrayList<>();
+        int indexEndOfLine = indexComment >= 0 ? indexComment : text.length();
+        int indexEndCurrentTag;
+        while (indexStartCurrentTag < indexEndOfLine) {
+            // look for the next tag
+            int indexStartNextTag = indexStartCurrentTag + 1;
+            while (indexStartNextTag < indexEndOfLine && text.charAt(indexStartNextTag) != TAG_PREFIX_CHAR) {
+                indexStartNextTag++;
             }
-            int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
-            int column = indent + symbolLength + COLUMN_OFFSET;
-            if (containsWhiteSpace(token)) {
-                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+
+            // look for the end of current tag (going back from begin of next tag)
+            indexEndCurrentTag = indexStartNextTag - 1;
+            while (indexEndCurrentTag > indexStartCurrentTag && isWhiteSpaceExtended(text.charAt(indexEndCurrentTag))) {
+                indexEndCurrentTag--;
             }
-            tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));
-            indexInUncommentedLine += element.length() + 1;
+            indexEndCurrentTag++;
+
+            if (indexEndCurrentTag > indexStartCurrentTag + 1) {
+                // non-empty tag found
+                // check that the tag does not contain whitespace characters
+                int symbolLength = text.codePointCount(0, indexStartCurrentTag);
+                int column = indent + symbolLength + COLUMN_OFFSET;
+                if(containsWhiteSpaceExtended(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
+                    throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+                }
+                // build the line span
+                String token = text.substring(indexStartCurrentTag, indexEndCurrentTag);
+                tags.add(new GherkinLineSpan(column, token));
+            }
+
+            // setup for the next tag
+            indexStartCurrentTag = indexStartNextTag;
         }
         return tags;
     }
@@ -139,11 +163,11 @@ class GherkinLine {
                         // Skip the first empty span
                         beforeFirst = false;
                     } else {
-                        Entry<String, Integer> trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
-                        int column = indent + cellStart + trimmedCellIndent.getValue() + COLUMN_OFFSET;
-                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getKey()));
+                        StringUtils.IndentedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
+                        int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
+                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getText()));
                     }
-                    cellBuilder = new StringBuilder();
+                    cellBuilder.setLength(0);// reuse instance rather than creating a new one is faster
                     cellStart = col + 1;
                 } else {
                     cellBuilder.appendCodePoint(c);
@@ -155,10 +179,9 @@ class GherkinLine {
     }
 
     boolean startsWithTitleKeyword(String keyword) {
-        int keywordLength = keyword.length();
-        return text.length() > keywordLength &&
-                text.startsWith(keyword) &&
-                text.startsWith(TITLE_KEYWORD_SEPARATOR, keywordLength);
+        return textLength > keyword.length() &&
+               text.charAt(keyword.length()) == TITLE_KEYWORD_SEPARATOR &&
+               text.startsWith(keyword);
     }
 
 }

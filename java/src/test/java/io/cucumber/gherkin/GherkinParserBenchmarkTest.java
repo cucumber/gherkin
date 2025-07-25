@@ -49,7 +49,7 @@ public class GherkinParserBenchmarkTest {
     @Test
     @Disabled
     public void profileParse() throws IOException {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             parse();
         }
     }

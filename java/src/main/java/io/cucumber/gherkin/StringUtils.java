@@ -1,9 +1,6 @@
 package io.cucumber.gherkin;
 
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-
 import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 
 class StringUtils {
@@ -22,6 +19,7 @@ class StringUtils {
      * Matches regex pattern whitespace + NEL + NBSP - new line.
      */
     private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    public static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
@@ -38,17 +36,17 @@ class StringUtils {
         return s.substring(0, end + 1);
     }
 
-    static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
+    static IndentedText trimAndIndentKeepNewLines(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
     }
 
-    static Entry<String, Integer> trimAndIndent(String input) {
+    static IndentedText trimAndIndent(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED);
     }
 
-    private static Entry<String, Integer> trimAndIndent(String input, char[] whitespaceChars) {
+    private static IndentedText trimAndIndent(String input, char[] whitespaceChars) {
         if (input.isEmpty()) {
-            return new SimpleEntry<>("", 0);
+            return NO_INDENT_ENTRY;
         }
 
         int start = findFirstIndexNotIn(input, input.length(), whitespaceChars);
@@ -56,27 +54,36 @@ class StringUtils {
 
         String trimmed = input.substring(start, end);
         int indent = input.codePointCount(0, start);
-        return new SimpleEntry<>(trimmed, indent);
+        // the object instance is not truly created because
+        // the code is inlined by the hotspot compiler
+        // (as "-XX:+EliminateAllocations" is enabled by default).
+        return new IndentedText(indent, trimmed);
     }
 
     static String removeComments(String input) {
         if (input.isEmpty()) {
             return input;
         }
-        int start = 0;
         int length = input.length();
-
-        while (start < length - 1 
-                && !(contains(WHITESPACE_CHARS, input.charAt(start)) 
-                && input.charAt(start + 1) == COMMENT_PREFIX_CHAR)
-        ) {
-            start++;
-        }
-        return input.substring(0, start < length - 1 ? start : start + 1);
+        int start = findIndexOfTagComment(input);
+        return input.substring(0, start < 0 ? length : start);
     }
 
-    static boolean containsWhiteSpace(String input) {
-        return findFirstIndexIn(input, WHITESPACE_CHARS) != -1;
+    /**
+     * Tags can have trailing comments with {@code <WHITESPACE_CHARS>#}.
+     */
+    static int findIndexOfTagComment(String input) {
+        for (int i = 1, length = input.length(); i < length; i++) {
+            // TODO: Use isWhiteSpaceExtended for consistency instead?
+            if (input.charAt(i) == COMMENT_PREFIX_CHAR && isWhiteSpace(input.charAt(i - 1))) {
+                return i - 1;
+            }
+        }
+        return -1;
+    }
+
+    private static boolean isWhiteSpace(char c) {
+        return contains(WHITESPACE_CHARS, c);
     }
 
     private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {
@@ -85,6 +92,19 @@ class StringUtils {
             start++;
         }
         return start;
+    }
+
+    static boolean containsWhiteSpaceExtended(String input, int fromIndex, int toIndex) {
+        for (int i = fromIndex; i < toIndex; i++) {
+            if (isWhiteSpaceExtended(input.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    static boolean isWhiteSpaceExtended(char input) {
+        return contains(WHITESPACE_CHARS_EXTENDED, input);
     }
     
     private static int findLastIndexNotIn(String input, int beginIndex, char[] characters) {
@@ -95,16 +115,6 @@ class StringUtils {
         return end;
     }
 
-    private static int findFirstIndexIn(String input, char[] characters) {
-        int length = input.length();
-        for (int i = 0; i < length; i++) {
-            if (contains(characters, input.charAt(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    
     private static boolean contains(char[] characters, char c) {
         for (char candidate : characters) {
             if (candidate == c) {
@@ -114,4 +124,22 @@ class StringUtils {
         return false;
     }
 
+    public static class IndentedText {
+        private final int indent;
+        private final String text;
+
+        public IndentedText(int indent, String text) {
+            this.text = text;
+            this.indent = indent;
+        }
+
+        public int getIndent() {
+            return indent;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+    }
 }

@@ -3,6 +3,7 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.StepKeywordType;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -49,5 +50,21 @@ class GherkinDialectTest {
 
         // Then the name is "English"
         assertEquals("English", name);
+    }
+
+    @Test
+    void keywords_are_sorted_from_longest_to_shortest() {
+        // Given a Gherkin dialect for French with a lot of keywords
+        GherkinDialect dialect = GherkinDialects.DIALECTS.get("fr");
+
+        // When I get the keywords
+        List<String> keywords = dialect.getStepKeywords();
+
+        // Then the keywords are sorted from longest to shortest
+        String[] sortedKeywords = keywords.toArray(new String[0]);
+        for (int i = 0; i < sortedKeywords.length - 1; i++) {
+            assertTrue(sortedKeywords[i].length() >= sortedKeywords[i + 1].length(),
+                    "Expected " + sortedKeywords[i] + " to be longer than or equal to " + sortedKeywords[i + 1]);
+        }
     }
 }

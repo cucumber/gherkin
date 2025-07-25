@@ -3,11 +3,10 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.StepKeywordType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -22,6 +21,8 @@ import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
 public final class GherkinDialect {
+    private static final Comparator<String> LONGEST_TO_SHORTEST_COMPARATOR =
+            (s1, s2) -> Integer.compare(s2.length(), s1.length());
     private final String language;
     private final String name;
     private final String nativeName;
@@ -38,6 +39,7 @@ public final class GherkinDialect {
     private final List<String> butKeywords;
     private final List<String> stepKeywords;
     private final Map<String, Set<StepKeywordType>> stepKeywordsTypes;
+    private final Map<String, StepKeywordType> stepKeywordsType;
 
     GherkinDialect(
             String language,
@@ -72,22 +74,28 @@ public final class GherkinDialect {
         
         this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
+        this.stepKeywordsType = defineSingleTypes();
+    }
+
+    private Map<String, StepKeywordType> defineSingleTypes() {
+        Map<String, StepKeywordType> stepKeywordsType = new HashMap<>();
+        for (Map.Entry<String, Set<StepKeywordType>> entry : stepKeywordsTypes.entrySet()) {
+            Set<StepKeywordType> stepKeywordTypes = entry.getValue();
+            StepKeywordType type = stepKeywordTypes.size() == 1 ? stepKeywordTypes.iterator().next() : StepKeywordType.UNKNOWN;
+            stepKeywordsType.put(entry.getKey(), type);
+        }
+        return stepKeywordsType;
     }
 
     @SafeVarargs
     private static List<String> distinctKeywords(List<String>... keywords) {
-        int totalSize = 0;
-        for (List<String> keyword : keywords) {
-            totalSize += keyword.size();
-        }
-        Set<String> uniqueKeywords = new LinkedHashSet<>(totalSize);
+        // french is the largest dialect with 32 keywords, so we build the sorting hashset with this max size
+        Set<String> uniqueKeywords = new HashSet<>(32);
         for (List<String> keyword : keywords) {
             uniqueKeywords.addAll(keyword);
         }
         List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
-        // Sort from longest to shortest
-        Comparator<String> naturalOrder = Comparator.naturalOrder();
-        Collections.sort(sortedKeywords, naturalOrder.reversed());
+        sortedKeywords.sort(LONGEST_TO_SHORTEST_COMPARATOR);
         return unmodifiableList(sortedKeywords);
     }
     
@@ -109,11 +117,12 @@ public final class GherkinDialect {
 
     private static void addStepKeywordsTypes(Map<String, Set<StepKeywordType>> accumulator, StepKeywordType type, List<String> keywords) {
         for (String keyword : keywords) {
-            if (!accumulator.containsKey(keyword)) {
+            Set<StepKeywordType> stepKeywordTypes = accumulator.get(keyword);
+            if (stepKeywordTypes == null) {
                 // Most keywords only have a single type.
                 accumulator.put(keyword, EnumSet.of(type));
             } else {
-                accumulator.get(keyword).add(type);
+                stepKeywordTypes.add(type);
             }
         }
     }
@@ -175,6 +184,14 @@ public final class GherkinDialect {
             throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
         }
         return stepKeywordTypes;
+    }
+
+    StepKeywordType getStepKeywordType(String keyword) {
+        StepKeywordType stepKeywordType = stepKeywordsType.get(keyword);
+        if (stepKeywordType == null) {
+            throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
+        }
+        return stepKeywordType;
     }
 
     public List<String> getBackgroundKeywords() {
