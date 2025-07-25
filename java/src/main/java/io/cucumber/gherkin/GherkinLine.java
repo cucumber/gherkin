@@ -9,8 +9,8 @@ import java.util.PrimitiveIterator;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
-import static io.cucumber.gherkin.StringUtils.containsWhiteSpace;
-import static io.cucumber.gherkin.StringUtils.isWhiteSpace;
+import static io.cucumber.gherkin.StringUtils.containsWhiteSpaceExtended;
+import static io.cucumber.gherkin.StringUtils.isWhiteSpaceExtended;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 import static java.util.Collections.emptyList;
@@ -109,7 +109,7 @@ class GherkinLine {
 
             // look for the end of current tag (going back from begin of next tag)
             indexEndCurrentTag = indexStartNextTag - 1;
-            while (indexEndCurrentTag > indexStartCurrentTag && isWhiteSpace(text.charAt(indexEndCurrentTag))) {
+            while (indexEndCurrentTag > indexStartCurrentTag && isWhiteSpaceExtended(text.charAt(indexEndCurrentTag))) {
                 indexEndCurrentTag--;
             }
             indexEndCurrentTag++;
@@ -119,7 +119,7 @@ class GherkinLine {
                 // check that the tag does not contain whitespace characters
                 int symbolLength = text.codePointCount(0, indexStartCurrentTag);
                 int column = indent + symbolLength + COLUMN_OFFSET;
-                if(containsWhiteSpace(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
+                if(containsWhiteSpaceExtended(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
                     throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
                 }
                 // build the line span

@@ -74,11 +74,16 @@ class StringUtils {
      */
     static int findIndexOfTagComment(String input) {
         for (int i = 1, length = input.length(); i < length; i++) {
-            if (input.charAt(i) == COMMENT_PREFIX_CHAR && contains(WHITESPACE_CHARS, input.charAt(i - 1))) {
+            // TODO: Use isWhiteSpaceExtended for consistency instead?
+            if (input.charAt(i) == COMMENT_PREFIX_CHAR && isWhiteSpace(input.charAt(i - 1))) {
                 return i - 1;
             }
         }
         return -1;
+    }
+
+    private static boolean isWhiteSpace(char c) {
+        return contains(WHITESPACE_CHARS, c);
     }
 
     private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {
@@ -89,16 +94,16 @@ class StringUtils {
         return start;
     }
 
-    static boolean containsWhiteSpace(String input, int fromIndex, int toIndex) {
+    static boolean containsWhiteSpaceExtended(String input, int fromIndex, int toIndex) {
         for (int i = fromIndex; i < toIndex; i++) {
-            if (contains(WHITESPACE_CHARS_EXTENDED, input.charAt(i))) {
+            if (isWhiteSpaceExtended(input.charAt(i))) {
                 return true;
             }
         }
         return false;
     }
     
-    static boolean isWhiteSpace(char input) {
+    static boolean isWhiteSpaceExtended(char input) {
         return contains(WHITESPACE_CHARS_EXTENDED, input);
     }
     
