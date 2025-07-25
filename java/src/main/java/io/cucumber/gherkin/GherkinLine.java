@@ -84,18 +84,12 @@ class GherkinLine {
     }
 
     List<GherkinLineSpan> parseTags() {
-        // in most cases, the line contains no tag, so the code is optimized for this situation
-        if (empty) {
-            return emptyList();
-        }
-
-        // look for the first tag
-        int indexStartCurrentTag = text.indexOf(TAG_PREFIX_CHAR);
+        // TODO: These conditions should not sprawl into two methods. 
+        // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
+        // so there is always at least one tag, and it sits at the start of the
+        // text
+        int indexStartCurrentTag = 0;
         int indexComment = StringUtils.findIndexOfTagComment(text);
-        if (indexStartCurrentTag < 0 || (indexComment >= 0 && indexStartCurrentTag > indexComment)) {
-            // no tag found (or all tags are commented out)
-            return emptyList();
-        }
 
         List<GherkinLineSpan> tags = new ArrayList<>();
         int indexEndOfLine = indexComment >= 0 ? indexComment : text.length();
