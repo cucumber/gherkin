@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -28,6 +30,58 @@ class GherkinLineTest {
                 new GherkinLineSpan(4, "@foo:bar"),
                 new GherkinLineSpan(14, "@zap\uD83E\uDD52yo")
         ), gherkinLineSpans);
+    }
+
+    @Test
+    void test() {
+        char[] c = new char[]{
+                '\t',
+                '\n',
+                '\u000B',
+                '\f',
+                '\r',
+                ' ',
+                '\u0085',
+                '\u00A0',
+                '\u1680',
+                '\u2000',
+                '\u2001',
+                '\u2002',
+                '\u2003',
+                '\u2004',
+                '\u2005',
+                '\u2006',
+                '\u2007',
+                '\u2008',
+                '\u2009',
+                '\u200A',
+                '\u2028',
+                '\u2029',
+                '\u202F',
+                '\u205F',
+                '\u3000'
+        };
+
+        Set<Integer> types = new TreeSet<>();
+        Set<Byte> directionality = new TreeSet<>();
+        
+        for (int i = 0; i < c.length; i++) {
+            types.add(Character.getType(c[i]));
+            directionality.add(Character.getDirectionality(c[i]));
+            System.out.print(i);
+            System.out.print(" "+ Character.getType(c[i]));
+            System.out.print(" "+ Character.getDirectionality(c[i]));
+            System.out.print(" "+ Character.isSpaceChar(c[i]));
+            System.out.print(" "+ Character.isWhitespace(c[i]));
+            System.out.print(" "+ StringUtils.isWhiteSpace(c[i]));
+            System.out.println(" "+ Character.getName(c[i]));
+        }
+
+        System.out.println(types);
+        System.out.println(directionality);
+        
+        System.out.println(new String(c));
+        
     }
 
 
