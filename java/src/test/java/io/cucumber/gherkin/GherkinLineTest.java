@@ -1,6 +1,7 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,6 +49,13 @@ class GherkinLineTest {
         GherkinLine gherkinLine = new GherkinLine("@this @is @a space separated @tag", line);
         assertThrows(ParserException.class, gherkinLine::parseTags);
     }
+    @Test
+    @Disabled
+    void does_not_throws_on_tags_with_extended_spaces() {
+        // TODO: This is probably a bug, lines are trimmed with the extended whitespace set
+        GherkinLine gherkinLine = new GherkinLine("@this @is @a\u0085space\u00A0separated @tag", line);
+        assertDoesNotThrow(gherkinLine::parseTags);
+    }
 
     @Test
     void throws_on_tags_with_leading_spaces() {
@@ -72,7 +81,7 @@ class GherkinLineTest {
 
     @Test
     void finds_tags__trim_whitespace() {
-        GherkinLine gherkinLine = new GherkinLine("    @this @is  @a @tag  ", line);
+        GherkinLine gherkinLine = new GherkinLine("    @this @is  @a @tag \t\n\u000B\f\r\u0085\u00A0", line);
         List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
 
         assertEquals(asList(
@@ -91,6 +100,19 @@ class GherkinLineTest {
         assertEquals(asList(
                 new GherkinLineSpan(1, "@this"),
                 new GherkinLineSpan(7, "@is")
+        ), gherkinLineSpans);
+    }
+
+    @Test
+    @Disabled
+    void finds_tags__comment_inside_tag_delimited_with_extended_whitespace() {
+        // TODO: This is probably a bug. 
+        GherkinLine gherkinLine = new GherkinLine("@this @is\u0085\u00A0#acomment  ", line);
+        List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
+
+        assertEquals(asList(
+                new GherkinLineSpan(1, "@this"),
+                new GherkinLineSpan(7, "@is\u0085\u00A0#acomment")
         ), gherkinLineSpans);
     }
 

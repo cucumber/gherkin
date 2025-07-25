@@ -76,7 +76,7 @@ class StringUtils {
     }
 
     static boolean containsWhiteSpace(String input) {
-        return findFirstIndexIn(input, WHITESPACE_CHARS) != -1;
+        return findFirstIndexIn(input, WHITESPACE_CHARS_EXTENDED) != -1;
     }
 
     private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {
