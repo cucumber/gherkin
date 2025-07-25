@@ -98,7 +98,7 @@ class PickleCompiler {
     }
 
     private void compileScenario(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
-        List<PickleStep> steps = compilePickleBackgroundSteps(backgroundSteps, scenario.getSteps());
+        List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps(), emptyList(), null);
         List<Tag> scenarioTags = compileTags(parentTags, scenario.getTags());
         List<String> sourceIds = singletonList(scenario.getId());
 
@@ -151,11 +151,6 @@ class PickleCompiler {
             steps.add(pickleStep(scenarioStep, variableCells, valuesRow, lastKeywordType));
         }
         return steps;
-    }
-
-    private List<PickleStep> compilePickleBackgroundSteps(List<Step> backgroundSteps, List<Step> scenarioSteps) {
-        // Background steps are not interpolated
-        return compilePickleSteps(backgroundSteps, scenarioSteps, emptyList(), null);
     }
 
     private void compileScenarioOutline(List<Pickle> pickles, Scenario scenario, List<Tag> parentTags, List<Step> backgroundSteps, String language, String uri) {
