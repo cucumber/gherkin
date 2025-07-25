@@ -85,6 +85,15 @@ class StringUtils {
         }
         return start;
     }
+
+    static boolean containsWhiteSpace(String input, int fromIndex, int toIndex) {
+        for (int i = fromIndex; i < toIndex; i++) {
+            if (contains(WHITESPACE_CHARS, input.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     private static int findLastIndexNotIn(String input, int beginIndex, char[] characters) {
         int end = input.length();
@@ -94,16 +103,6 @@ class StringUtils {
         return end;
     }
 
-    private static int findFirstIndexIn(String input, char[] characters) {
-        int length = input.length();
-        for (int i = 0; i < length; i++) {
-            if (contains(characters, input.charAt(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    
     private static boolean contains(char[] characters, char c) {
         for (char candidate : characters) {
             if (candidate == c) {

@@ -9,6 +9,7 @@ import java.util.PrimitiveIterator;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
+import static io.cucumber.gherkin.StringUtils.containsWhiteSpace;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 import static java.util.Collections.emptyList;
@@ -114,17 +115,12 @@ class GherkinLine {
 
             if (indexEndCurrentTag > indexStartCurrentTag + 1) {
                 // non-empty tag found
-
                 // check that the tag does not contain whitespace characters
                 int symbolLength = text.codePointCount(0, indexStartCurrentTag);
                 int column = indent + symbolLength + COLUMN_OFFSET;
-                for (int i = indexStartCurrentTag + 1; i < indexEndCurrentTag; i++) {
-                    if (text.charAt(i) <= ' ') {
-                        // skip whitespace characters
-                        throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
-                    }
+                if(containsWhiteSpace(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
+                    throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
                 }
-
                 // build the line span
                 String token = text.substring(indexStartCurrentTag, indexEndCurrentTag);
                 tags.add(new GherkinLineSpan(column, token));
