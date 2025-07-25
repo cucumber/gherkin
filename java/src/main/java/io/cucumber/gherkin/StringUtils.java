@@ -88,11 +88,15 @@ class StringUtils {
 
     static boolean containsWhiteSpace(String input, int fromIndex, int toIndex) {
         for (int i = fromIndex; i < toIndex; i++) {
-            if (contains(WHITESPACE_CHARS, input.charAt(i))) {
+            if (contains(WHITESPACE_CHARS_EXTENDED, input.charAt(i))) {
                 return true;
             }
         }
         return false;
+    }
+    
+    static boolean isWhiteSpace(char input) {
+        return contains(WHITESPACE_CHARS_EXTENDED, input);
     }
     
     private static int findLastIndexNotIn(String input, int beginIndex, char[] characters) {
