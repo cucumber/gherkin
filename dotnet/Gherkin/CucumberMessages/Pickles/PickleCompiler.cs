@@ -1,4 +1,4 @@
-using Gherkin.CucumberMessages.Types;
+using Io.Cucumber.Messages.Types;
 
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -6,7 +6,7 @@ namespace Gherkin.CucumberMessages.Pickles;
 
 public class PickleCompiler(IIdGenerator idGenerator)
 {
-    protected StepKeywordType CurrentStepKeywordType { get; set; }
+    protected PickleStepType CurrentStepKeywordType { get; set; }
 
     public List<Pickle> Compile(GherkinDocument gherkinDocument)
     {
@@ -79,7 +79,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
 
     private void BuildScenario(List<Pickle> pickles, string language, IEnumerable<Tag> tags, Func<IEnumerable<PickleStep>> backgroundStepsFactory, string gherkinDocumentUri, Scenario scenario)
     {
-        CurrentStepKeywordType = StepKeywordType.Unspecified;
+        CurrentStepKeywordType = PickleStepType.UNKNOWN;
         if (!scenario.Examples.Any())
         {
             CompileScenario(pickles, backgroundStepsFactory, scenario, tags, language, gherkinDocumentUri);
@@ -111,7 +111,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
                 language,
                 steps,
                 PickleTags(scenarioTags),
-                new[] { scenario.Id }
+                new List<string> { scenario.Id }
         );
         pickles.Add(pickle);
     }
@@ -157,7 +157,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
                         language,
                         steps,
                         PickleTags(tags),
-                        new[] { scenarioOutline.Id, values.Id }
+                        new List<string> { scenarioOutline.Id, values.Id }
                 );
 
                 pickles.Add(pickle);
@@ -168,27 +168,21 @@ public class PickleCompiler(IIdGenerator idGenerator)
     protected virtual PickleStep CreatePickleStep(Step step, string text, PickleStepArgument argument, IEnumerable<string> astNodeIds)
     {
         CurrentStepKeywordType = GetKeywordType(step, CurrentStepKeywordType);
-        return new PickleStep(argument, astNodeIds, idGenerator.GetNewId(), text, CurrentStepKeywordType);
+        return new PickleStep(argument, astNodeIds.ToList(), idGenerator.GetNewId(), CurrentStepKeywordType, text);
     }
 
-    protected virtual StepKeywordType GetKeywordType(Step step, StepKeywordType lastStepKeywordType)
+    protected virtual PickleStepType GetKeywordType(Step step, PickleStepType lastStepKeywordType)
     {
         var stepKeywordType = step.KeywordType;
-        switch (stepKeywordType)
+        return stepKeywordType switch
         {
-            case StepKeywordType.Context:
-            case StepKeywordType.Action:
-            case StepKeywordType.Outcome:
-            case StepKeywordType.Unknown:
-                return stepKeywordType;
-            case StepKeywordType.Conjunction:
-                return lastStepKeywordType == StepKeywordType.Unspecified ||
-                       lastStepKeywordType == StepKeywordType.Unknown
-                    ? StepKeywordType.Context
-                    : lastStepKeywordType;
-            default:
-                return StepKeywordType.Unspecified;
-        }
+            Io.Cucumber.Messages.Types.StepKeywordType.CONTEXT => PickleStepType.CONTEXT,
+            Io.Cucumber.Messages.Types.StepKeywordType.ACTION => PickleStepType.ACTION,
+            Io.Cucumber.Messages.Types.StepKeywordType.OUTCOME => PickleStepType.OUTCOME,
+            Io.Cucumber.Messages.Types.StepKeywordType.UNKNOWN => PickleStepType.UNKNOWN,
+            Io.Cucumber.Messages.Types.StepKeywordType.CONJUNCTION => lastStepKeywordType,
+            _ => PickleStepType.UNKNOWN
+        };
     }
 
 
@@ -219,10 +213,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
                 }
                 newRows.Add(new PickleTableRow(newCells));
             }
-            return new PickleStepArgument
-            {
-                DataTable = new PickleTable(newRows)
-            };
+            return new PickleStepArgument(null, new PickleTable(newRows));
         }
 
         if (step.DocString != null)
@@ -230,11 +221,13 @@ public class PickleCompiler(IIdGenerator idGenerator)
             var ds = step.DocString;
             return
                 new PickleStepArgument
-                {
-                    DocString = new PickleDocString(
-                        Interpolate(ds.Content, variableCells, valueCells),
-                        ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells))
-                };
+                (
+                    new PickleDocString(
+                        ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
+                        Interpolate(ds.Content, variableCells, valueCells)
+                    ),
+                    null
+                );
         }
 
         return null;
