@@ -212,7 +212,7 @@ class PickleCompiler {
     private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new EnumMap<>(StepKeywordType.class);
 
     static {
-        pickleStepTypeFromKeywordType.put(UNKNOWN, PickleStepType.UNKNOWN);
+        pickleStepTypeFromKeywordType.put(StepKeywordType.UNKNOWN, PickleStepType.UNKNOWN);
         pickleStepTypeFromKeywordType.put(StepKeywordType.CONTEXT, PickleStepType.CONTEXT);
         pickleStepTypeFromKeywordType.put(StepKeywordType.ACTION, PickleStepType.ACTION);
         pickleStepTypeFromKeywordType.put(StepKeywordType.OUTCOME, PickleStepType.OUTCOME);
