@@ -65,11 +65,14 @@ class StringUtils {
             return input;
         }
         int length = input.length();
-        int start = findIndexOfComment(input);
+        int start = findIndexOfTagComment(input);
         return input.substring(0, start < 0 ? length : start);
     }
 
-    static int findIndexOfComment(String input) {
+    /**
+     * Tags can have trailing comments with {@code <WHITESPACE_CHARS>#}.
+     */
+    static int findIndexOfTagComment(String input) {
         for (int i = 1, length = input.length(); i < length; i++) {
             if (input.charAt(i) == COMMENT_PREFIX_CHAR && contains(WHITESPACE_CHARS, input.charAt(i - 1))) {
                 return i - 1;

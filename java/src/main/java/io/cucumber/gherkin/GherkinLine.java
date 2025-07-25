@@ -91,7 +91,7 @@ class GherkinLine {
 
         // look for the first tag
         int indexStartCurrentTag = text.indexOf(TAG_PREFIX_CHAR);
-        int indexComment = StringUtils.findIndexOfComment(text);
+        int indexComment = StringUtils.findIndexOfTagComment(text);
         if (indexStartCurrentTag < 0 || (indexComment >= 0 && indexStartCurrentTag > indexComment)) {
             // no tag found (or all tags are commented out)
             return emptyList();
