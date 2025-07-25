@@ -1,7 +1,6 @@
 package io.cucumber.gherkin;
 
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -189,20 +188,12 @@ class GherkinTokenMatcher implements TokenMatcher {
         for (String keyword : keywords) {
             if (token.line.startsWith(keyword)) {
                 String stepText = token.line.substringTrimmed(keyword.length());
-                StepKeywordType keywordType = getKeywordType(keyword);
+                StepKeywordType keywordType = currentDialect.getStepKeywordType(keyword);
                 setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
                 return true;
             }
         }
         return false;
-    }
-
-    private StepKeywordType getKeywordType(String stepKeyword) {
-        Set<StepKeywordType> keywordTypes = currentDialect.getStepKeywordTypesSet(stepKeyword);
-        if (keywordTypes.size() == 1) {
-            return keywordTypes.iterator().next();
-        }
-        return StepKeywordType.UNKNOWN;
     }
 
     @Override
