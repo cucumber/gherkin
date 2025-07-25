@@ -20,7 +20,7 @@ public class GherkinParserBenchmarkTest {
         GherkinParser gherkinParser = GherkinParser.builder()
                 .idGenerator(new IncrementingIdGenerator())
                 .build();
-        return gherkinParser.parse(Paths.get("../testdata/good/very_long.feature"));
+        return gherkinParser.parse(Paths.get("../testdata/good/unicode_space.feature"));
     }
 
     /**
