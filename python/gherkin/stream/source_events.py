@@ -14,7 +14,7 @@ class Event(TypedDict):
     source: Source
 
 
-def _media_type(path) -> String:
+def _media_type(path: str) -> str | None:
     if path.endswith(".feature"):
         return "text/x.cucumber.gherkin+plain"
     if path.endswith(".feature.md"):

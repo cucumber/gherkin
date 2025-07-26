@@ -44,14 +44,8 @@ gherkin = ["*.json"]
 disallow_untyped_defs = true
 packages = ["gherkin"]
 
-[tool.flake8]
-# E1: indentation: already covered by `ruff`
-# E2: whitespace: already covered by `ruff`
-# E3: blank line: already covered by `ruff`
-# E501: line length: already covered by `ruff`
-extend-ignore = "E1,E2,E3,E501"
-
 [tool.ruff.lint]
 extend-select = [
+  "B",
   "UP",
 ]

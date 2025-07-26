@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import re
-from collections import defaultdict
 from collections.abc import Iterable
-from typing import TypedDict
 
 from .gherkin_line import Cell
 from .token import Token
 from .token_matcher import TokenMatcher, MatchedItems
-from .dialect import Dialect
 
 KEYWORD_PREFIX_BULLET = "^(\\s*[*+-]\\s*)"
 KEYWORD_PREFIX_HEADER = "^(#{1,6}\\s)"

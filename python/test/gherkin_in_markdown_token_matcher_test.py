@@ -41,7 +41,7 @@ def test_it_matches_FeatureLine_without_the_Feature_keyword():
     token = Token(gherkin_line=line, location=location)
     assert tm.match_FeatureLine(token)
     assert token.matched_type == "FeatureLine"
-    assert token.matched_keyword == None
+    assert token.matched_keyword is None
     assert token.matched_text == "# hello"
 
 
@@ -270,8 +270,8 @@ def test_it_matches_Empty():
     token = Token(gherkin_line=line, location=location)
     assert tm.match_Empty(token)
     assert token.matched_type == "Empty"
-    assert token.matched_keyword == None
-    assert token.matched_text == None
+    assert token.matched_keyword is None
+    assert token.matched_text is None
 
 
 def test_it_matches_arbitrary_text_as_Empty_after_the_FeatureLine_has_already_been_matched():
@@ -289,6 +289,6 @@ def test_it_matches_arbitrary_text_as_Empty_after_the_FeatureLine_has_already_be
     assert tm.match_Empty(token)
     assert token.matched_type == "Empty"
     assert token.matched_items == []
-    assert token.matched_keyword == None
-    assert token.matched_text == None
+    assert token.matched_keyword is None
+    assert token.matched_text is None
     pass
