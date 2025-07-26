@@ -47,6 +47,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           version: "0.8.3"
 
+      - name: Lint code
+        run: uv run pre-commit run --all-files
+
       - name: Run tests
         run: uv run pytest
 
