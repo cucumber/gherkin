@@ -44,9 +44,6 @@ gherkin = ["*.json"]
 disallow_untyped_defs = true
 packages = ["gherkin"]
 
-[tool.ruff]
-target-version = "py39"
-
 [tool.flake8]
 # E1: indentation: already covered by `ruff`
 # E2: whitespace: already covered by `ruff`

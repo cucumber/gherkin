@@ -196,14 +196,13 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         text = token.line.get_line_text()
         for keyword in keywords:
             match = re.search(
-                    f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)",
-                    text
+                f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)", text
             )
             if match:
                 indent = token.line.indent + len(match.group(1))
                 matchedKeyword = match.group(2)
                 # only set the keyword type if this is a step keyword
-                if( matchedKeyword in self.keyword_types ):
+                if matchedKeyword in self.keyword_types:
                     matchedKeywordType = self.keyword_types[matchedKeyword][0]
                 else:
                     matchedKeywordType = None
@@ -213,7 +212,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                     match.group(3).strip(),
                     matchedKeyword,
                     keyword_type=matchedKeywordType,
-                    indent=indent
+                    indent=indent,
                 )
                 return True
 
@@ -221,7 +220,6 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
     def _change_dialect(self, dialect_name, location=None) -> None:
         super()._change_dialect(dialect_name, location)
-        self._sorted_step_keywords = list(filter(
-            lambda key: key != '* ',
-            self._sorted_step_keywords
-        ))
+        self._sorted_step_keywords = list(
+            filter(lambda key: key != "* ", self._sorted_step_keywords)
+        )

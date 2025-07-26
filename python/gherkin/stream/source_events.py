@@ -15,10 +15,11 @@ class Event(TypedDict):
 
 
 def _media_type(path) -> String:
-    if(path.endswith(".feature")):
-        return 'text/x.cucumber.gherkin+plain'
-    if(path.endswith(".feature.md")):
-        return 'text/x.cucumber.gherkin+markdown'
+    if path.endswith(".feature"):
+        return "text/x.cucumber.gherkin+plain"
+    if path.endswith(".feature.md"):
+        return "text/x.cucumber.gherkin+markdown"
+
 
 def source_event(path: str) -> Event:
     event: Event = {

@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 89c421dff2e1026ba12cdb9ebd731f4a83aa8021  # frozen: v0.8.6
+    rev: 73b0f6d59bbfcb75e17a4653d581c9dfaca13969  # frozen: v0.12.5
     hooks:
       - id: ruff-format
         files: "^python/"
