@@ -4,14 +4,11 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 73b0f6d59bbfcb75e17a4653d581c9dfaca13969  # frozen: v0.12.5
     hooks:
+      - id: ruff-check
+        files: "^python/"
+        args: [ --select=UP ]
       - id: ruff-format
         files: "^python/"
-  - repo: https://github.com/asottile/pyupgrade
-    rev: 19364aa1b2ac289ce75e6bbe93994f7b4b9425f6  # frozen: v3.19.0
-    hooks:
-      - id: pyupgrade
-        files: "^python/"
-        args: [ "--py39-plus" ]
   - repo: https://github.com/pycqa/flake8
     rev: "e43806be3607110919eff72939fda031776e885a"  # frozen: 7.1.1
     hooks:
