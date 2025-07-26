@@ -49,3 +49,8 @@ extend-select = [
   "B",
   "UP",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=5.0",
+]
