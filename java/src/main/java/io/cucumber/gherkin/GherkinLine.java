@@ -45,8 +45,8 @@ class GherkinLine {
         return rawText;
     }
 
-    String getRawTextSubstring(int beginIndex) {
-        return rawText.substring(beginIndex);
+    String getRawTextSubstring(int indentToRemove) {
+        return rawText.substring(rawText.offsetByCodePoints(0, indentToRemove));
     }
 
     boolean isEmpty() {
