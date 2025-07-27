@@ -1,0 +1,1 @@
+{"source": {"data": "\t# All lines in this feature file except the last start and end with a tab\t\n\t\n\tFeature: Minimal\t\n\t\n\tScenario: minimalistic\t\n\t\n\t  Given the minimalism\t\n", "mediaType": "text/x.cucumber.gherkin+plain", "uri": "../testdata/good/trim_tab.feature"}}
