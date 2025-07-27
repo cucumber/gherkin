@@ -1,8 +1,6 @@
 package io.cucumber.gherkin;
 
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
-
 class StringUtils {
 
     /**
@@ -95,18 +93,6 @@ class StringUtils {
         // the code is inlined by the hotspot compiler
         // (as "-XX:+EliminateAllocations" is enabled by default).
         return new IndentedText(indent, trimmed);
-    }
-
-    /**
-     * Tags can have trailing comments with {@code <WHITESPACE_CHARS>#}.
-     */
-    static int findIndexOfTagComment(String input) {
-        for (int i = 1, length = input.length(); i < length; i++) {
-            if (input.charAt(i) == COMMENT_PREFIX_CHAR && isWhiteSpace(input.charAt(i - 1))) {
-                return i - 1;
-            }
-        }
-        return -1;
     }
 
     static boolean containsWhitespace(String input, int fromIndex, int toIndex) {
