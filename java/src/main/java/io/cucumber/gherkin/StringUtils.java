@@ -117,16 +117,16 @@ class StringUtils {
         private final int indent;
         private final String text;
 
-        public IndentedText(int indent, String text) {
+        IndentedText(int indent, String text) {
             this.text = text;
             this.indent = indent;
         }
 
-        public int getIndent() {
+        int getIndent() {
             return indent;
         }
 
-        public String getText() {
+        String getText() {
             return text;
         }
 
