@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Removed
+- [Python] Dropped legacy `.egg-info` metadata distribution artifacts
+
 ## [33.0.0] - 2025-07-07
 ### Changed
 - [Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
