@@ -50,7 +50,7 @@ class StringUtils {
                 ) >> Character.getDirectionality(c)) & 1) != 0;
     }
 
-    public static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
+    private static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
     static IndentedText trimAndIndentKeepNewLines(String input) {
         int length = input.length();
