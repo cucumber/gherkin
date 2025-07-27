@@ -3,56 +3,82 @@ package io.cucumber.gherkin;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 
-class StringUtils {
+final class StringUtils {
 
     /**
-     * Matches regex pattern for whitespace.
+     * An extended definition of Whitespace minus new lines.
+     * <p>
+     * Character in Unicode general category {@code Zs} and directionality
+     * categories {@code WS}, {@code B}, and {@code S} are considered whitespace
+     * for this definition.
+     *
+     * @param c character to test
+     * @return true iff the {@code c} is whitespace and not new line..
      */
-    private static final char[] WHITESPACE_CHARS = new char[]{' ', '\t', '\n', '\u000B', '\f', '\r'};
+    private static boolean isWhiteSpaceExcludingNewLine(Character c) {
+        return c != '\n' && isWhiteSpace(c);
+    }
 
     /**
-     * Matches regex pattern whitespace + NEL + NBSP.
+     * An extended definition of Whitespace.
+     * <p>
+     * Character in Unicode general category {@code Zs} and directionality
+     * categories {@code WS}, {@code B}, and {@code S} are considered whitespace
+     * for this definition.
+     *
+     * @param c character to test
+     * @return true iff the {@code c} is whitespace.
      */
-    private static final char[] WHITESPACE_CHARS_EXTENDED = new char[]{' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    
-    /**
-     * Matches regex pattern whitespace + NEL + NBSP - new line.
-     */
-    private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    static boolean isWhiteSpace(char c) {
+        // Fast path for the common case
+        return c == ' ' || c == '\t' || isCharacterTypeSpace(c) || isDirectionalitySpace(c);
+    }
+
+    private static boolean isCharacterTypeSpace(char c) {
+        return (((
+                (1 << Character.SPACE_SEPARATOR)
+                        // Not in the definition, but a subset of isDirectionalitySpace
+                        | (1 << Character.LINE_SEPARATOR)
+                        // Not in the definition, but a subset of isDirectionalitySpace
+                        | (1 << Character.PARAGRAPH_SEPARATOR)
+        ) >> Character.getType(c)) & 1) != 0;
+    }
+
+    private static boolean isDirectionalitySpace(char c) {
+        return (
+                (((1 << Character.DIRECTIONALITY_WHITESPACE)
+                        | (1 << Character.DIRECTIONALITY_PARAGRAPH_SEPARATOR)
+                        | (1 << Character.DIRECTIONALITY_SEGMENT_SEPARATOR)
+                ) >> Character.getDirectionality(c)) & 1) != 0;
+    }
 
     static String rtrim(String s) {
         if (s.isEmpty()) {
             return s;
         }
-
-        int length = s.length();
-
-        int end = length - 1;
-        while (end >= 0 && contains(WHITESPACE_CHARS_EXTENDED, s.charAt(end))) {
-            end--;
-        }
-
-        return s.substring(0, end + 1);
+        int end = findLastIndexNotIn(s, 0, StringUtils::isWhiteSpace);
+        return s.substring(0, end);
     }
 
     static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
-        return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
+        return trimAndIndent(input, StringUtils::isWhiteSpaceExcludingNewLine);
     }
 
     static Entry<String, Integer> trimAndIndent(String input) {
-        return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED);
+        return trimAndIndent(input, StringUtils::isWhiteSpace);
     }
 
-    private static Entry<String, Integer> trimAndIndent(String input, char[] whitespaceChars) {
+    private static Entry<String, Integer> trimAndIndent(String input, Predicate<Character> isSpace) {
         if (input.isEmpty()) {
             return new SimpleEntry<>("", 0);
         }
 
-        int start = findFirstIndexNotIn(input, input.length(), whitespaceChars);
-        int end = findLastIndexNotIn(input, start, whitespaceChars);
+        int start = findFirstIndexNotIn(input, input.length(), isSpace);
+        int end = findLastIndexNotIn(input, start, isSpace);
 
         String trimmed = input.substring(start, end);
         int indent = input.codePointCount(0, start);
@@ -66,8 +92,8 @@ class StringUtils {
         int start = 0;
         int length = input.length();
 
-        while (start < length - 1 
-                && !(contains(WHITESPACE_CHARS, input.charAt(start)) 
+        while (start < length - 1
+                && !(Character.isSpaceChar(input.charAt(start))
                 && input.charAt(start + 1) == COMMENT_PREFIX_CHAR)
         ) {
             start++;
@@ -76,42 +102,33 @@ class StringUtils {
     }
 
     static boolean containsWhiteSpace(String input) {
-        return findFirstIndexIn(input, WHITESPACE_CHARS) != -1;
+        return findFirstIndexIn(input, StringUtils::isWhiteSpace) != -1;
     }
 
-    private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {
+    private static int findFirstIndexNotIn(String input, int endIndex, Predicate<Character> isSpace) {
         int start = 0;
-        while (start < endIndex && contains(characters, input.charAt(start))) {
+        while (start < endIndex && isSpace.test(input.charAt(start))) {
             start++;
         }
         return start;
     }
-    
-    private static int findLastIndexNotIn(String input, int beginIndex, char[] characters) {
+
+    private static int findLastIndexNotIn(String input, int beginIndex, Predicate<Character> isSpace) {
         int end = input.length();
-        while (end > beginIndex && contains(characters, input.charAt(end - 1))) {
+        while (end > beginIndex && isSpace.test(input.charAt(end - 1))) {
             end--;
         }
         return end;
     }
 
-    private static int findFirstIndexIn(String input, char[] characters) {
+    private static int findFirstIndexIn(String input, Predicate<Character> isSpace) {
         int length = input.length();
         for (int i = 0; i < length; i++) {
-            if (contains(characters, input.charAt(i))) {
+            if (isSpace.test(input.charAt(i))) {
                 return i;
             }
         }
         return -1;
-    }
-    
-    private static boolean contains(char[] characters, char c) {
-        for (char candidate : characters) {
-            if (candidate == c) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }
