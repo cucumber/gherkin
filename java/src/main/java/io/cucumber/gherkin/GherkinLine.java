@@ -179,8 +179,9 @@ class GherkinLine {
     }
 
     boolean startsWithTitleKeyword(String keyword) {
-        return textLength > keyword.length() &&
-               text.charAt(keyword.length()) == TITLE_KEYWORD_SEPARATOR &&
+        int keywordLength = keyword.length();
+        return textLength > keywordLength &&
+               text.charAt(keywordLength) == TITLE_KEYWORD_SEPARATOR &&
                text.startsWith(keyword);
     }
 
