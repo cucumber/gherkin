@@ -1,8 +1,8 @@
 (1:1)Comment:/# https://en.wikipedia.org/wiki/Whitespace_character/
-(2:3)Empty://
-(3:3)FeatureLine:()Feature/Minimal/
-(4:3)Empty://
-(5:3)ScenarioLine:()Scenario/minimalistic/
-(6:3)Empty://
-(7:5)StepLine:(Context)Given /the minimalism/
+(2:2)Empty://
+(3:2)FeatureLine:()Feature/Minimal/
+(4:2)Empty://
+(5:2)ScenarioLine:()Scenario/minimalistic/
+(6:2)Empty://
+(7:4)StepLine:(Context)Given /the minimalism/
 EOF
