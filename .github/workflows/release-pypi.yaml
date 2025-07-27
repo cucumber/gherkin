@@ -30,4 +30,4 @@ jobs:
         run: uv build
 
       - name: Publish package
-        run: uv publish --trusted-publishing always
+        run: uv publish

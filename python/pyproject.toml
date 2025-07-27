@@ -42,6 +42,9 @@ dev = [
     "pytest>=5.0",
 ]
 
+[tool.uv]
+trusted-publishing = "always"
+
 [tool.uv.build-backend]
 module-name = "gherkin"
 module-root = ""
