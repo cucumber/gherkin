@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map.Entry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StringUtilsTest {
     private static final String WHITESPACE = "\u00A0 \t";
@@ -62,6 +63,42 @@ class StringUtilsTest {
         assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags #with a comment"));
         assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags"));
         assertEquals("@issue#1234 @issue#31415", StringUtils.removeComments("@issue#1234 @issue#31415"));
+    }
+
+    @Test
+    void isWhiteSpace() {
+        // https://en.wikipedia.org/wiki/Whitespace_character#Unicode
+        char[] whitespace = new char[]{
+                '\t',
+                '\n',
+                '\u000B',
+                '\f',
+                '\r',
+                ' ',
+                '\u0085',
+                '\u00A0',
+                '\u1680',
+                '\u2000',
+                '\u2001',
+                '\u2002',
+                '\u2003',
+                '\u2004',
+                '\u2005',
+                '\u2006',
+                '\u2007',
+                '\u2008',
+                '\u2009',
+                '\u200A',
+                '\u2028',
+                '\u2029',
+                '\u202F',
+                '\u205F',
+                '\u3000'
+        };
+
+        for (char c : whitespace) {
+            assertTrue(StringUtils.isWhiteSpace(c), Character.getName(c) + " was not whitespace");
+        }
     }
 
 }
