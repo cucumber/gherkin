@@ -38,6 +38,7 @@ Changelog = "https://github.com/cucumber/gherkin/releases"
 
 [dependency-groups]
 dev = [
+    "coverage>=4.2",
     "pre-commit==4.2.0",
     "pytest>=5.0",
 ]
