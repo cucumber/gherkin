@@ -163,7 +163,7 @@ bool TokenMatcher_match_Empty(TokenMatcher* token_matcher, Token* token) {
     if (!token || !token->line)
         return false;
     if (GherkinLine_is_empty(token->line)) {
-        set_token_matched(token, Token_Empty, 0, 0, Keyword_Type_None, -1, 0);
+        set_token_matched(token, Token_Empty, 0, 0, Keyword_Type_None, 0, 0);
         return true;
     }
     return false;

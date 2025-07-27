@@ -1,20 +1,7 @@
 package io.cucumber.gherkin;
 
-import io.cucumber.messages.types.Location;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.PrimitiveIterator;
-
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
-import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
-import static io.cucumber.gherkin.StringUtils.containsWhiteSpace;
-import static io.cucumber.gherkin.StringUtils.rtrim;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
-import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
-import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 class GherkinLine {
@@ -23,7 +10,6 @@ class GherkinLine {
      * The line text, including all leading and trailing whitespace characters.
      */
     private final String rawText;
-    private final Location location;
     private final boolean empty;
     
     /**
@@ -36,13 +22,14 @@ class GherkinLine {
      * line.
      */
     private final int indent;
+    private final int textLength;
 
-    GherkinLine(String rawText, Location location) {
+    GherkinLine(String rawText) {
         this.rawText = requireNonNull(rawText);
-        this.location = requireNonNull(location);
-        Entry<String, Integer> trimmedIndent = trimAndIndent(rawText);
-        this.text = trimmedIndent.getKey();
-        this.indent = trimmedIndent.getValue();
+        StringUtils.IndentedText trimmedIndent = trimAndIndent(rawText);
+        this.text = trimmedIndent.getText();
+        this.indent = trimmedIndent.getIndent();
+        this.textLength = text.length();
         this.empty = text.isEmpty();
     }
 
@@ -58,8 +45,8 @@ class GherkinLine {
         return rawText;
     }
 
-    String getRawTextSubstring(int beginIndex) {
-        return rawText.substring(beginIndex);
+    String getRawTextSubstring(int indentToRemove) {
+        return rawText.substring(rawText.offsetByCodePoints(0, indentToRemove));
     }
 
     boolean isEmpty() {
@@ -70,95 +57,20 @@ class GherkinLine {
         return text.startsWith(prefix);
     }
 
+    boolean startsWith(char prefix) {
+        return !empty && text.charAt(0) == prefix;
+    }
+
     String substringTrimmed(int beginIndex) {
-        return text.substring(beginIndex).trim();
-    }
-
-    List<GherkinLineSpan> parseTags() {
-        // in most cases, the line contains no tag, so the code is optimized for this situation
-        if (empty) {
-            return emptyList();
-        }
-        String uncommentedLine = StringUtils.removeComments(text);
-        int indexInUncommentedLine = 0;
-
-        String[] elements = uncommentedLine.split(TAG_PREFIX);
-        if (elements.length == 0) {
-            return emptyList();
-        }
-        List<GherkinLineSpan> tags = new ArrayList<>(elements.length);
-        for (String element : elements) {
-            String token = rtrim(element);
-            if (token.isEmpty()) {
-                continue;
-            }
-            int symbolLength = uncommentedLine.codePointCount(0, indexInUncommentedLine);
-            int column = indent + symbolLength + COLUMN_OFFSET;
-            if (containsWhiteSpace(token)) {
-                throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
-            }
-            tags.add(new GherkinLineSpan(column, TAG_PREFIX + token));
-            indexInUncommentedLine += element.length() + 1;
-        }
-        return tags;
-    }
-
-    List<GherkinLineSpan> parseTableCells() {
-        List<GherkinLineSpan> lineSpans = new ArrayList<>();
-        StringBuilder cellBuilder = new StringBuilder();
-        boolean beforeFirst = true;
-        int col = 0;
-        int cellStart = 0;
-        boolean escape = false;
-        PrimitiveIterator.OfInt iterator = text.codePoints().iterator();
-        while (iterator.hasNext()) {
-            int c = iterator.next();
-            if (escape) {
-                switch (c) {
-                    case 'n':
-                        cellBuilder.append('\n');
-                        break;
-                    case '\\':
-                        cellBuilder.append('\\');
-                        break;
-                    case '|':
-                        cellBuilder.append('|');
-                        break;
-                    default:
-                        // Invalid escape. We'll just ignore it.
-                        cellBuilder.append("\\");
-                        cellBuilder.appendCodePoint(c);
-                        break;
-                }
-                escape = false;
-            } else {
-                if (c == '\\') {
-                    escape = true;
-                } else if (c == '|') {
-                    if (beforeFirst) {
-                        // Skip the first empty span
-                        beforeFirst = false;
-                    } else {
-                        Entry<String, Integer> trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
-                        int column = indent + cellStart + trimmedCellIndent.getValue() + COLUMN_OFFSET;
-                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getKey()));
-                    }
-                    cellBuilder = new StringBuilder();
-                    cellStart = col + 1;
-                } else {
-                    cellBuilder.appendCodePoint(c);
-                }
-            }
-            col++;
-        }
-        return lineSpans;
+        // trim the beginning of the line (the end of line has already been trimmed in the constructor)
+        return StringUtils.substringAndTrim(text, beginIndex);
     }
 
     boolean startsWithTitleKeyword(String keyword) {
         int keywordLength = keyword.length();
-        return text.length() > keywordLength &&
-                text.startsWith(keyword) &&
-                text.startsWith(TITLE_KEYWORD_SEPARATOR, keywordLength);
+        return textLength > keywordLength &&
+               text.charAt(keywordLength) == TITLE_KEYWORD_SEPARATOR &&
+               text.startsWith(keyword);
     }
 
 }
