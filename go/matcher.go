@@ -81,7 +81,7 @@ func (m *matcher) MatchEOF(line *Line) (ok bool, token *Token, err error) {
 
 func (m *matcher) MatchEmpty(line *Line) (ok bool, token *Token, err error) {
 	if line.IsEmpty() {
-		token, ok = m.newTokenAtLocation(line.LineNumber, line.Indent()), true
+		token, ok = m.newTokenAtLocation(line.LineNumber, 0), true
 		token.Type = TokenTypeEmpty
 	}
 	return
