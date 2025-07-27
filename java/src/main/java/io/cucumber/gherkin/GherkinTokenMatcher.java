@@ -1,5 +1,7 @@
 package io.cucumber.gherkin;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +26,13 @@ class GherkinTokenMatcher implements TokenMatcher {
     private GherkinDialect currentDialect;
     private String activeDocStringSeparator = null;
     private int indentToRemove = 0;
+    private StepLineElem stepLineElem1;
+    private StepLineElem stepLineElem2;
+    private StepLineElem stepLineElem3;
+    private StepLineElem stepLineElem4;
+    private StepLineElem stepLineElem0;
+    private StepLineElem stepLineElem5;
+    private List<StepLineElem> remainingStepLineElems;
 
     GherkinTokenMatcher(GherkinDialectProvider dialectProvider) {
         this.dialectProvider = dialectProvider;
@@ -44,6 +53,7 @@ class GherkinTokenMatcher implements TokenMatcher {
         activeDocStringSeparator = null;
         indentToRemove = 0;
         currentDialect = dialectProvider.getDefaultDialect();
+        prepareStepLineLoopUnrolling();
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
@@ -101,6 +111,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
             currentDialect = dialectProvider.getDialect(language)
                     .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
+            prepareStepLineLoopUnrolling();
             return true;
         }
         return false;
@@ -183,18 +194,71 @@ class GherkinTokenMatcher implements TokenMatcher {
         return false;
     }
 
+    private void prepareStepLineLoopUnrolling() {
+        // Loop unrolling the step line keyword matching
+        // is 2x faster than using a loop.
+        // There are at least 6 keywords (Given, When, Then,
+        // And, But, *) in the English dialect, but some dialects
+        // may have more keywords. Thus, we unroll the first 6
+        // keywords, and process the other dynamically.
+        List<String> keywords = currentDialect.getStepKeywords();
+        stepLineElem0 = new StepLineElem(keywords.get(0), currentDialect.getStepKeywordType(keywords.get(0)));
+        stepLineElem1 = new StepLineElem(keywords.get(1), currentDialect.getStepKeywordType(keywords.get(1)));
+        stepLineElem2 = new StepLineElem(keywords.get(2), currentDialect.getStepKeywordType(keywords.get(2)));
+        stepLineElem3 = new StepLineElem(keywords.get(3), currentDialect.getStepKeywordType(keywords.get(3)));
+        stepLineElem4 = new StepLineElem(keywords.get(4), currentDialect.getStepKeywordType(keywords.get(4)));
+        stepLineElem5 = new StepLineElem(keywords.get(5), currentDialect.getStepKeywordType(keywords.get(5)));
+        int keywordCount = keywords.size();
+        if (keywordCount > 6) {
+            remainingStepLineElems = new ArrayList<>(keywordCount - 6);
+            for (int i = 6; i < keywordCount; i++) {
+                remainingStepLineElems.add(new StepLineElem(keywords.get(i), currentDialect.getStepKeywordType(keywords.get(i))));
+            }
+        } else {
+            remainingStepLineElems = Collections.emptyList();
+        }
+
+    }
+
     @Override
     public boolean match_StepLine(Token token) {
-        List<String> keywords = currentDialect.getStepKeywords();
-        for (String keyword : keywords) {
-            if (token.line.startsWith(keyword)) {
-                String stepText = token.line.substringTrimmed(keyword.length());
-                StepKeywordType keywordType = currentDialect.getStepKeywordType(keyword);
-                setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
+        if (token.line.startsWith(stepLineElem0.keyword)) {
+            matchStepKeyword(token, stepLineElem0);
+            return true;
+        }
+        if (token.line.startsWith(stepLineElem1.keyword)) {
+            matchStepKeyword(token, stepLineElem1);
+            return true;
+        }
+        if (token.line.startsWith(stepLineElem2.keyword)) {
+            matchStepKeyword(token, stepLineElem2);
+            return true;
+        }
+        if (token.line.startsWith(stepLineElem3.keyword)) {
+            matchStepKeyword(token, stepLineElem3);
+            return true;
+        }
+        if (token.line.startsWith(stepLineElem4.keyword)) {
+            matchStepKeyword(token, stepLineElem4);
+            return true;
+        }
+        if (token.line.startsWith(stepLineElem5.keyword)) {
+            matchStepKeyword(token, stepLineElem5);
+            return true;
+        }
+        for (StepLineElem stepLineElem : remainingStepLineElems) {
+            if (token.line.startsWith(stepLineElem.keyword)) {
+                matchStepKeyword(token, stepLineElem);
                 return true;
             }
         }
         return false;
+    }
+
+    private void matchStepKeyword(Token token, StepLineElem stepLineElem) {
+        String stepText = token.line.substringTrimmed(stepLineElem.keywordLength);
+        StepKeywordType keywordType = stepLineElem.keywordType;
+        setTokenMatched(token, TokenType.StepLine, stepText, stepLineElem.keyword, token.line.getIndent(), keywordType, null);
     }
 
     @Override
@@ -227,5 +291,17 @@ class GherkinTokenMatcher implements TokenMatcher {
             return text.replace("\\`\\`\\`", DOCSTRING_ALTERNATIVE_SEPARATOR);
         }
         return text;
+    }
+
+    public static class StepLineElem {
+        public final int keywordLength;
+        public final String keyword;
+        public final StepKeywordType keywordType;
+
+        public StepLineElem(String keyword, StepKeywordType keywordType) {
+            this.keywordLength = keyword.length();
+            this.keyword = keyword;
+            this.keywordType = keywordType;
+        }
     }
 }

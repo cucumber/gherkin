@@ -7,6 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GherkinTokenMatcherTest {
 
     @Test
+    void each_language_must_have_at_least_6_keywords_for_unrolling() {
+        GherkinDialects.DIALECTS.forEach((language, dialect) -> {
+            assertTrue(dialect.getStepKeywords().size() >= 6,
+                    "Language '" + language + "' must have at least 6 keywords for unrolling, but has " + dialect.getStepKeywords().size());
+        });
+    }
+
+    @Test
     void match_Language_change_the_language() {
         // Given
         GherkinTokenMatcher matcher = new GherkinTokenMatcher("en");
