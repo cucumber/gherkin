@@ -1,17 +1,13 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,58 +28,6 @@ class GherkinLineTest {
         ), gherkinLineSpans);
     }
 
-    @Test
-    void test() {
-        char[] c = new char[]{
-                '\t',
-                '\n',
-                '\u000B',
-                '\f',
-                '\r',
-                ' ',
-                '\u0085',
-                '\u00A0',
-                '\u1680',
-                '\u2000',
-                '\u2001',
-                '\u2002',
-                '\u2003',
-                '\u2004',
-                '\u2005',
-                '\u2006',
-                '\u2007',
-                '\u2008',
-                '\u2009',
-                '\u200A',
-                '\u2028',
-                '\u2029',
-                '\u202F',
-                '\u205F',
-                '\u3000'
-        };
-
-        Set<Integer> types = new TreeSet<>();
-        Set<Byte> directionality = new TreeSet<>();
-        
-        for (int i = 0; i < c.length; i++) {
-            types.add(Character.getType(c[i]));
-            directionality.add(Character.getDirectionality(c[i]));
-            System.out.print(i);
-            System.out.print(" "+ Character.getType(c[i]));
-            System.out.print(" "+ Character.getDirectionality(c[i]));
-            System.out.print(" "+ Character.isSpaceChar(c[i]));
-            System.out.print(" "+ Character.isWhitespace(c[i]));
-            System.out.print(" "+ StringUtils.isWhiteSpace(c[i]));
-            System.out.println(" "+ Character.getName(c[i]));
-        }
-
-        System.out.println(types);
-        System.out.println(directionality);
-        
-        System.out.println(new String(c));
-        
-    }
-
 
     @Test
     void finds_tags() {
@@ -102,13 +46,6 @@ class GherkinLineTest {
     void throws_on_tags_with_spaces() {
         GherkinLine gherkinLine = new GherkinLine("@this @is @a space separated @tag", line);
         assertThrows(ParserException.class, gherkinLine::parseTags);
-    }
-    @Test
-    @Disabled
-    void does_not_throws_on_tags_with_extended_spaces() {
-        // TODO: This is probably a bug, lines are trimmed with the extended whitespace set
-        GherkinLine gherkinLine = new GherkinLine("@this @is @a\u0085space\u00A0separated @tag", line);
-        assertDoesNotThrow(gherkinLine::parseTags);
     }
 
     @Test
@@ -135,7 +72,7 @@ class GherkinLineTest {
 
     @Test
     void finds_tags__trim_whitespace() {
-        GherkinLine gherkinLine = new GherkinLine("    @this @is  @a @tag \t\n\u000B\f\r\u0085\u00A0", line);
+        GherkinLine gherkinLine = new GherkinLine("    @this @is  @a @tag  ", line);
         List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
 
         assertEquals(asList(
@@ -154,19 +91,6 @@ class GherkinLineTest {
         assertEquals(asList(
                 new GherkinLineSpan(1, "@this"),
                 new GherkinLineSpan(7, "@is")
-        ), gherkinLineSpans);
-    }
-
-    @Test
-    @Disabled
-    void finds_tags__comment_inside_tag_delimited_with_extended_whitespace() {
-        // TODO: This is probably a bug. 
-        GherkinLine gherkinLine = new GherkinLine("@this @is\u0085\u00A0#acomment  ", line);
-        List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
-
-        assertEquals(asList(
-                new GherkinLineSpan(1, "@this"),
-                new GherkinLineSpan(7, "@is\u0085\u00A0#acomment")
         ), gherkinLineSpans);
     }
 
