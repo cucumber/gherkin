@@ -9,21 +9,6 @@ class StringUtilsTest {
     private static final String CUCUMBER = "🥒";
 
     @Test
-    void rtrim() {
-        assertEquals(WHITESPACE + CUCUMBER, StringUtils.rtrim(WHITESPACE + CUCUMBER + WHITESPACE));
-    }
-
-    @Test
-    void rtrim_one_space() {
-        assertEquals("", StringUtils.rtrim(" "));
-    }
-
-    @Test
-    void rtrim_multiline() {
-        assertEquals("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER, StringUtils.rtrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
-    }
-
-    @Test
     void trimAndIndent() {
         // When
         StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
@@ -51,15 +36,6 @@ class StringUtilsTest {
         // Then
         assertEquals("", trimmedIndent.getText());
         assertEquals(0, trimmedIndent.getIndent());
-    }
-
-    @Test
-    void removeComments() {
-        assertEquals("", StringUtils.removeComments(""));
-        assertEquals("@this @is", StringUtils.removeComments("@this @is #@a @commented @sequence of tags"));
-        assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags #with a comment"));
-        assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags"));
-        assertEquals("@issue#1234 @issue#31415", StringUtils.removeComments("@issue#1234 @issue#31415"));
     }
 
 }

@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GherkinLineTest {
+    private static final String WHITESPACE = "\u00A0 \t";
+    private static final String CUCUMBER = "🥒";
 
     final Location line = Locations.atLine(12);
 
@@ -275,12 +277,21 @@ class GherkinLineTest {
     }
 
     @Test
-    void substringTrimmed_spaces_after_index_are_removed() {
+    void substringTrimmed_regular_spaces_after_index_are_trimmed() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("Rule:    my rule name", line);
+        GherkinLine gherkinLine = new GherkinLine("Rule:    my rule name ", line);
 
         // When/Then
         assertEquals("my rule name", gherkinLine.substringTrimmed(5));
+    }
+
+    @Test
+    void substringTrimmed_unicode_spaces_after_index_are_trimmed() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("Rule:" + WHITESPACE + CUCUMBER + WHITESPACE, line);
+
+        // When/Then
+        assertEquals(CUCUMBER, gherkinLine.substringTrimmed(5));
     }
 
 }

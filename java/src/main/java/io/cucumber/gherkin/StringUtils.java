@@ -21,21 +21,6 @@ class StringUtils {
     private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
     public static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
-    static String rtrim(String s) {
-        if (s.isEmpty()) {
-            return s;
-        }
-
-        int length = s.length();
-
-        int end = length - 1;
-        while (end >= 0 && contains(WHITESPACE_CHARS_EXTENDED, s.charAt(end))) {
-            end--;
-        }
-
-        return s.substring(0, end + 1);
-    }
-
     static IndentedText trimAndIndentKeepNewLines(String input) {
         return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
     }
@@ -58,15 +43,6 @@ class StringUtils {
         // the code is inlined by the hotspot compiler
         // (as "-XX:+EliminateAllocations" is enabled by default).
         return new IndentedText(indent, trimmed);
-    }
-
-    static String removeComments(String input) {
-        if (input.isEmpty()) {
-            return input;
-        }
-        int length = input.length();
-        int start = findIndexOfTagComment(input);
-        return input.substring(0, start < 0 ? length : start);
     }
 
     /**
