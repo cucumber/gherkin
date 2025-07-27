@@ -13,10 +13,8 @@ import static io.cucumber.gherkin.StringUtils.isWhitespace;
 
 final class GherkinTagLine {
 
-    static List<GherkinLineSpan> parseTags(int indent, String text, Location location) {
+    static List<GherkinLineSpan> parse(int indent, String text, Location location) {
         int textLength = text.length();
-
-        // TODO: These conditions should not sprawl into two methods. 
         // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
         // so there is always at least one tag, and it sits at the start of the
         // text

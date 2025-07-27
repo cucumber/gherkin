@@ -109,7 +109,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_TagLine(Token token) {
         if (token.line.startsWith(TAG_PREFIX_CHAR)) {
-            List<GherkinLineSpan> tags = GherkinTagLine.parseTags(token.line.getIndent(), token.line.getText(), token.location);
+            List<GherkinLineSpan> tags = GherkinTagLine.parse(token.line.getIndent(), token.line.getText(), token.location);
             setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, tags);
             return true;
         }
@@ -200,7 +200,8 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_TableRow(Token token) {
         if (token.line.startsWith(TABLE_CELL_SEPARATOR)) {
-            setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, token.line.parseTableCells());
+            List<GherkinLineSpan> tableCells = GherkinTableRowLine.parse(token.line.getIndent(), token.line.getText());
+            setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, tableCells);
             return true;
         }
         return false;
