@@ -1,0 +1,8 @@
+(1:1)Comment:/ # All lines in this feature file except the last start and end with a space /
+(2:1)Empty://
+(3:2)FeatureLine:()Feature/Minimal/
+(4:1)Empty://
+(5:2)ScenarioLine:()Scenario/minimalistic/
+(6:1)Empty://
+(7:4)StepLine:(Context)Given /the minimalism/
+EOF

@@ -76,7 +76,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_Empty(Token token) {
         if (token.line.isEmpty()) {
-            setTokenMatched(token, TokenType.Empty, null, null, token.line.getIndent(), null, null);
+            setTokenMatched(token, TokenType.Empty, null, null, 0, null, null);
             return true;
         }
         return false;

@@ -95,6 +95,16 @@ class GherkinLineTest {
                 new GherkinLineSpan(7, "@is")
         ), gherkinLineSpans);
     }
+    @Test
+    void finds_tags__comment_inside_tag_preceded_by_nbsp() {
+        GherkinLine gherkinLine = new GherkinLine("@this @is\u202F#acomment  ", line);
+        List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
+
+        assertEquals(asList(
+                new GherkinLineSpan(1, "@this"),
+                new GherkinLineSpan(7, "@is")
+        ), gherkinLineSpans);
+    }
 
     @Test
     void finds_tags__comment_inside_tag() {

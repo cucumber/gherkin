@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Go] Trim trailing tab characters from title and step lines ([#441](https://github.com/cucumber/gherkin/pull/441))
+- [Java] Use a more consistent definition of whitespace ([#442](https://github.com/cucumber/gherkin/pull/442))
+
+### Changed
 - [Java] Optimize GherkinParser performance ([#436](https://github.com/cucumber/gherkin/pull/436))
 
 ## [33.0.0] - 2025-07-07

@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
+import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
-import static io.cucumber.gherkin.StringUtils.containsWhiteSpaceExtended;
-import static io.cucumber.gherkin.StringUtils.isWhiteSpaceExtended;
+import static io.cucumber.gherkin.StringUtils.containsWhitespace;
+import static io.cucumber.gherkin.StringUtils.isWhiteSpace;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
-import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 class GherkinLine {
@@ -79,7 +79,7 @@ class GherkinLine {
         // trim the beginning of the line (the end of line has already been trimmed in the constructor)
         while ((beginIndex < textLength)) {
             char c = text.charAt(beginIndex);
-            if (!(c <= ' ' || StringUtils.isWhiteSpaceExtended(c))) break;
+            if (!(c <= ' ' || StringUtils.isWhiteSpace(c))) break;
             beginIndex++;
         }
         return text.substring(beginIndex);
@@ -91,10 +91,12 @@ class GherkinLine {
         // so there is always at least one tag, and it sits at the start of the
         // text
         int indexStartCurrentTag = 0;
-        int indexComment = StringUtils.findIndexOfTagComment(text);
+        int indexEndOfLine = 1;
+        while (indexEndOfLine < textLength && !(text.charAt(indexEndOfLine) == COMMENT_PREFIX_CHAR && isWhiteSpace(text.charAt(indexEndOfLine - 1)))) {
+            indexEndOfLine++;
+        }
 
         List<GherkinLineSpan> tags = new ArrayList<>();
-        int indexEndOfLine = indexComment >= 0 ? indexComment : text.length();
         int indexEndCurrentTag;
         while (indexStartCurrentTag < indexEndOfLine) {
             // look for the next tag
@@ -105,7 +107,7 @@ class GherkinLine {
 
             // look for the end of current tag (going back from begin of next tag)
             indexEndCurrentTag = indexStartNextTag - 1;
-            while (indexEndCurrentTag > indexStartCurrentTag && isWhiteSpaceExtended(text.charAt(indexEndCurrentTag))) {
+            while (indexEndCurrentTag > indexStartCurrentTag && isWhiteSpace(text.charAt(indexEndCurrentTag))) {
                 indexEndCurrentTag--;
             }
             indexEndCurrentTag++;
@@ -115,7 +117,7 @@ class GherkinLine {
                 // check that the tag does not contain whitespace characters
                 int symbolLength = text.codePointCount(0, indexStartCurrentTag);
                 int column = indent + symbolLength + COLUMN_OFFSET;
-                if(containsWhiteSpaceExtended(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
+                if(containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
                     throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
                 }
                 // build the line span
