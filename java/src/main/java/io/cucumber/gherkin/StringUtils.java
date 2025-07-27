@@ -104,6 +104,15 @@ class StringUtils {
         return false;
     }
 
+    static String substringAndTrim(String input, int beginIndex) {
+        int length = input.length();
+        int start = beginIndex;
+        while (start < length && isWhiteSpace(input.charAt(start))) {
+            start++;
+        }
+        return input.substring(start);
+    }
+
     public static class IndentedText {
         private final int indent;
         private final String text;

@@ -77,12 +77,7 @@ class GherkinLine {
 
     String substringTrimmed(int beginIndex) {
         // trim the beginning of the line (the end of line has already been trimmed in the constructor)
-        while ((beginIndex < textLength)) {
-            char c = text.charAt(beginIndex);
-            if (!(c <= ' ' || StringUtils.isWhiteSpace(c))) break;
-            beginIndex++;
-        }
-        return text.substring(beginIndex);
+        return StringUtils.substringAndTrim(text, beginIndex);
     }
 
     List<GherkinLineSpan> parseTags() {
