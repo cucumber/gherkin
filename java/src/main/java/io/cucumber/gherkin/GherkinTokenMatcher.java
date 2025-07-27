@@ -26,11 +26,11 @@ class GherkinTokenMatcher implements TokenMatcher {
     private GherkinDialect currentDialect;
     private String activeDocStringSeparator = null;
     private int indentToRemove = 0;
+    private StepLineElem stepLineElem0;
     private StepLineElem stepLineElem1;
     private StepLineElem stepLineElem2;
     private StepLineElem stepLineElem3;
     private StepLineElem stepLineElem4;
-    private StepLineElem stepLineElem0;
     private StepLineElem stepLineElem5;
     private List<StepLineElem> remainingStepLineElems;
 
@@ -49,7 +49,10 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public void reset() {
-        // TODO performance: reset() is called once in the constructor and once for each file (Parser.parse()). It could be called only once, but there is no measurable impact with the profiler
+        // reset() is called once in the constructor and
+        // once for each file (Parser.parse()). It could
+        // be called only once, but there is no measurable
+        // impact with the profiler
         activeDocStringSeparator = null;
         indentToRemove = 0;
         currentDialect = dialectProvider.getDefaultDialect();
@@ -196,7 +199,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     private void prepareStepLineLoopUnrolling() {
         // Loop unrolling the step line keyword matching
-        // is 2x faster than using a loop.
+        // is ~2x faster than using a loop.
         // There are at least 6 keywords (Given, When, Then,
         // And, But, *) in the English dialect, but some dialects
         // may have more keywords. Thus, we unroll the first 6
@@ -220,34 +223,36 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     }
 
+    @SuppressWarnings("Duplicates") // unrolling leads to duplicated code
     @Override
     public boolean match_StepLine(Token token) {
-        if (token.line.startsWith(stepLineElem0.keyword)) {
+        GherkinLine line = token.line;
+        if (line.startsWith(stepLineElem0.keyword)) {
             matchStepKeyword(token, stepLineElem0);
             return true;
         }
-        if (token.line.startsWith(stepLineElem1.keyword)) {
+        if (line.startsWith(stepLineElem1.keyword)) {
             matchStepKeyword(token, stepLineElem1);
             return true;
         }
-        if (token.line.startsWith(stepLineElem2.keyword)) {
+        if (line.startsWith(stepLineElem2.keyword)) {
             matchStepKeyword(token, stepLineElem2);
             return true;
         }
-        if (token.line.startsWith(stepLineElem3.keyword)) {
+        if (line.startsWith(stepLineElem3.keyword)) {
             matchStepKeyword(token, stepLineElem3);
             return true;
         }
-        if (token.line.startsWith(stepLineElem4.keyword)) {
+        if (line.startsWith(stepLineElem4.keyword)) {
             matchStepKeyword(token, stepLineElem4);
             return true;
         }
-        if (token.line.startsWith(stepLineElem5.keyword)) {
+        if (line.startsWith(stepLineElem5.keyword)) {
             matchStepKeyword(token, stepLineElem5);
             return true;
         }
         for (StepLineElem stepLineElem : remainingStepLineElems) {
-            if (token.line.startsWith(stepLineElem.keyword)) {
+            if (line.startsWith(stepLineElem.keyword)) {
                 matchStepKeyword(token, stepLineElem);
                 return true;
             }
