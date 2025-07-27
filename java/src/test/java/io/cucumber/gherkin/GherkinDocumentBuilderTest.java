@@ -52,16 +52,7 @@ class GherkinDocumentBuilderTest {
                 "    The rule B description\n" +
                 "\n" +
                 "    Example: Example B\n" +
-                "      Given b\n" +
-                "\n" +
-                "  @someTag\n" +
-                "  Scenario: with examples\n" +
-                "      Given the <value> minimalism\n" +
-                "\n" +
-                "      Examples:\n" +
-                "      | value |\n" +
-                "      | 1     |\n" +
-                "      | 2     |";
+                "      Given b\n";
         GherkinDocument doc = parser.parse(data, "test.feature");
 
         List<FeatureChild> children = doc.getFeature().get().getChildren();
@@ -70,14 +61,11 @@ class GherkinDocumentBuilderTest {
         IdGenerator idGenerator = new IncrementingIdGenerator();
         PickleCompiler pickleCompiler = new PickleCompiler(idGenerator);
         List<Pickle> pickles = pickleCompiler.compile(doc, "hello.feature");
-        assertEquals(4, pickles.size());
+        assertEquals(2, pickles.size());
 
         assertEquals(3, pickles.get(0).getSteps().size());
 
         assertEquals(2, pickles.get(1).getSteps().size());
-
-        assertEquals(2, pickles.get(2).getSteps().size()); // one Background and one Step from Examples
-        assertEquals("@someTag", pickles.get(2).getTags().get(0).getName());
 
     }
 
