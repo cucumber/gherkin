@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Java] Optimize GherkinTokenMatcher performance ([#443](https://github.com/cucumber/gherkin/pull/443))
 
 ## [33.1.0] - 2025-07-27
 ### Changed

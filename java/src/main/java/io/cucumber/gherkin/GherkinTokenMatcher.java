@@ -199,7 +199,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     private void prepareStepLineLoopUnrolling() {
         // Loop unrolling the step line keyword matching
-        // is ~2x faster than using a loop.
+        // is ~30% faster than using a loop.
         // There are at least 6 keywords (Given, When, Then,
         // And, But, *) in the English dialect, but some dialects
         // may have more keywords. Thus, we unroll the first 6
