@@ -33,7 +33,7 @@ class Token {
     static Token createGherkinLine(String text, Location location) {
         requireNonNull(text);
         requireNonNull(location);
-        return new Token(new GherkinLine(text, location), location);
+        return new Token(new GherkinLine(text), location);
     }
 
     boolean isEOF() {

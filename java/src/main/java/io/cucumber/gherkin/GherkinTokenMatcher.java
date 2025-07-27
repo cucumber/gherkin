@@ -109,7 +109,8 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_TagLine(Token token) {
         if (token.line.startsWith(TAG_PREFIX_CHAR)) {
-            setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, token.line.parseTags());
+            List<GherkinLineSpan> tags = GherkinTagLine.parseTags(token.line.getIndent(), token.line.getText(), token.location);
+            setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, tags);
             return true;
         }
         return false;
