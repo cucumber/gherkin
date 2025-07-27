@@ -84,13 +84,23 @@ class GherkinLineTest {
     }
 
     @Test
-    void finds_tags__comment_inside_tag() {
+    void finds_tags__comment_after_tag() {
         GherkinLine gherkinLine = new GherkinLine("@this @is #acomment  ", line);
         List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
 
         assertEquals(asList(
                 new GherkinLineSpan(1, "@this"),
                 new GherkinLineSpan(7, "@is")
+        ), gherkinLineSpans);
+    }
+
+    @Test
+    void finds_tags__comment_inside_tag() {
+        GherkinLine gherkinLine = new GherkinLine("@comment_tag#2 #a comment", line);
+        List<GherkinLineSpan> gherkinLineSpans = gherkinLine.parseTags();
+
+        assertEquals(asList(
+                new GherkinLineSpan(1, "@comment_tag#2")
         ), gherkinLineSpans);
     }
 
@@ -218,27 +228,27 @@ class GherkinLineTest {
     }
 
     @Test
-    void startsWithTitleKeyword() {
+    void startsWithTitleKeyword_corresponding_keyword_match() {
         // Given
         GherkinLine gherkinLine = new GherkinLine("Feature: Hello", line);
 
         // When/Then
         assertTrue(gherkinLine.startsWithTitleKeyword("Feature"));
-        assertFalse(gherkinLine.startsWithTitleKeyword("Feature: Hello World"));
-        assertFalse(gherkinLine.startsWithTitleKeyword("Feat"));
     }
 
     @Test
-    void startsWithTitleKeyword_short() {
+    void startsWithTitleKeyword_non_corresponding_keyword_does_not_match() {
         // Given
         GherkinLine gherkinLine = new GherkinLine("Rule: X", line);
 
         // When/Then
-        assertFalse(gherkinLine.startsWithTitleKeyword("Background"));
+        assertFalse(gherkinLine.startsWithTitleKeyword("Background")); // not the same keyword
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rule: X")); // same keyword but with colon
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rul")); // shorter than keyword
     }
 
     @Test
-    void startsWithTitleKeyword_mini() {
+    void startsWithTitleKeyword_keyword_without_colon_does_not_match() {
         // Given
         GherkinLine gherkinLine = new GherkinLine("Rule", line);
 
