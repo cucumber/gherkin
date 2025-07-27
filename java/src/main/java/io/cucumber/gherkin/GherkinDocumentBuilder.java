@@ -263,10 +263,10 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         if (rows.isEmpty())
             return;
 
-        int cellCount = rows.get(0).getCells().size();
+        int firstRowCellsSize = rows.get(0).getCells().size();
         for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
             TableRow row = rows.get(i);
-            if (row.getCells().size() != cellCount) {
+            if (row.getCells().size() != firstRowCellsSize) {
                 throw new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
             }
         }
