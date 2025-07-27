@@ -20,6 +20,7 @@ class TokenScanner {
     private int lineNumber;
 
     TokenScanner(String source) {
+        // TODO performance: replace BufferedReader by Java 11 String.lines(source).iterator() : 25-50% faster
         this.reader = new BufferedReader(new StringReader(source));
     }
 

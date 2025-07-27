@@ -1,13 +1,7 @@
 package io.cucumber.gherkin;
 
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
-
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
-
-final class StringUtils {
+class StringUtils {
 
     /**
      * An extended definition of Whitespace minus new lines.
@@ -19,8 +13,8 @@ final class StringUtils {
      * @param c character to test
      * @return true iff the {@code c} is whitespace and not new line..
      */
-    private static boolean isWhiteSpaceExcludingNewLine(Character c) {
-        return c != '\n' && isWhiteSpace(c);
+    private static boolean isWhitespaceExcludingNewLine(char c) {
+        return c != '\n' && isWhitespace(c);
     }
 
     /**
@@ -33,7 +27,7 @@ final class StringUtils {
      * @param c character to test
      * @return true iff the {@code c} is whitespace.
      */
-    static boolean isWhiteSpace(char c) {
+    static boolean isWhitespace(char c) {
         // Fast path for the common case
         return c == ' ' || c == '\t' || isCharacterTypeSpace(c) || isDirectionalitySpace(c);
     }
@@ -56,79 +50,85 @@ final class StringUtils {
                 ) >> Character.getDirectionality(c)) & 1) != 0;
     }
 
-    static String rtrim(String s) {
-        if (s.isEmpty()) {
-            return s;
-        }
-        int end = findLastIndexNotIn(s, 0, StringUtils::isWhiteSpace);
-        return s.substring(0, end);
-    }
+    private static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
-    static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
-        return trimAndIndent(input, StringUtils::isWhiteSpaceExcludingNewLine);
-    }
-
-    static Entry<String, Integer> trimAndIndent(String input) {
-        return trimAndIndent(input, StringUtils::isWhiteSpace);
-    }
-
-    private static Entry<String, Integer> trimAndIndent(String input, Predicate<Character> isSpace) {
-        if (input.isEmpty()) {
-            return new SimpleEntry<>("", 0);
-        }
-
-        int start = findFirstIndexNotIn(input, input.length(), isSpace);
-        int end = findLastIndexNotIn(input, start, isSpace);
-
-        String trimmed = input.substring(start, end);
-        int indent = input.codePointCount(0, start);
-        return new SimpleEntry<>(trimmed, indent);
-    }
-
-    static String removeComments(String input) {
-        if (input.isEmpty()) {
-            return input;
-        }
-        int start = 0;
+    static IndentedText trimAndIndentKeepNewLines(String input) {
         int length = input.length();
-
-        while (start < length - 1
-                && !(Character.isSpaceChar(input.charAt(start))
-                && input.charAt(start + 1) == COMMENT_PREFIX_CHAR)
-        ) {
-            start++;
+        if (length == 0) {
+            return NO_INDENT_ENTRY;
         }
-        return input.substring(0, start < length - 1 ? start : start + 1);
-    }
 
-    static boolean containsWhiteSpace(String input) {
-        return findFirstIndexIn(input, StringUtils::isWhiteSpace) != -1;
-    }
-
-    private static int findFirstIndexNotIn(String input, int endIndex, Predicate<Character> isSpace) {
         int start = 0;
-        while (start < endIndex && isSpace.test(input.charAt(start))) {
+        while (start < length && isWhitespaceExcludingNewLine(input.charAt(start))) {
             start++;
         }
-        return start;
-    }
-
-    private static int findLastIndexNotIn(String input, int beginIndex, Predicate<Character> isSpace) {
-        int end = input.length();
-        while (end > beginIndex && isSpace.test(input.charAt(end - 1))) {
+        int end = length;
+        while (end > start && isWhitespaceExcludingNewLine(input.charAt(end - 1))) {
             end--;
         }
-        return end;
+        String trimmed = input.substring(start, end);
+        int indent = input.codePointCount(0, start);
+        // the object instance is not truly created because
+        // the code is inlined by the hotspot compiler
+        // (as "-XX:+EliminateAllocations" is enabled by default).
+        return new IndentedText(indent, trimmed);
     }
 
-    private static int findFirstIndexIn(String input, Predicate<Character> isSpace) {
+    static IndentedText trimAndIndent(String input) {
         int length = input.length();
-        for (int i = 0; i < length; i++) {
-            if (isSpace.test(input.charAt(i))) {
-                return i;
+        if (length == 0) {
+            return NO_INDENT_ENTRY;
+        }
+        int start = 0;
+        while (start < length && isWhitespace(input.charAt(start))) {
+            start++;
+        }
+        int end = length;
+        while (end > start && isWhitespace(input.charAt(end - 1))) {
+            end--;
+        }
+        String trimmed = input.substring(start, end);
+        int indent = input.codePointCount(0, start);
+        // the object instance is not truly created because
+        // the code is inlined by the hotspot compiler
+        // (as "-XX:+EliminateAllocations" is enabled by default).
+        return new IndentedText(indent, trimmed);
+    }
+
+    static boolean containsWhitespace(String input, int fromIndex, int toIndex) {
+        for (int i = fromIndex; i < toIndex; i++) {
+            if (isWhitespace(input.charAt(i))) {
+                return true;
             }
         }
-        return -1;
+        return false;
     }
 
+    static String substringAndTrim(String input, int beginIndex) {
+        int length = input.length();
+        int start = beginIndex;
+        while (start < length && isWhitespace(input.charAt(start))) {
+            start++;
+        }
+        return input.substring(start);
+    }
+
+    static class IndentedText {
+        private final int indent;
+        private final String text;
+
+        IndentedText(int indent, String text) {
+            this.text = text;
+            this.indent = indent;
+        }
+
+        int getIndent() {
+            return indent;
+        }
+
+        String getText() {
+            return text;
+        }
+
+    }
 }

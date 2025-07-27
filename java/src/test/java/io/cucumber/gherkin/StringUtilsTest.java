@@ -2,8 +2,6 @@ package io.cucumber.gherkin;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Map.Entry;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,61 +10,37 @@ class StringUtilsTest {
     private static final String CUCUMBER = "🥒";
 
     @Test
-    void rtrim() {
-        assertEquals(WHITESPACE + CUCUMBER, StringUtils.rtrim(WHITESPACE + CUCUMBER + WHITESPACE));
-    }
-
-    @Test
-    void rtrim_one_space() {
-        assertEquals("", StringUtils.rtrim(" "));
-    }
-
-    @Test
-    void rtrim_multiline() {
-        assertEquals("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER, StringUtils.rtrim("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n"));
-    }
-
-    @Test
     void trimAndIndent() {
         // When
-        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
+        StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent(WHITESPACE + CUCUMBER + WHITESPACE);
 
         // Then
-        assertEquals(CUCUMBER, trimmedIndent.getKey());
-        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getValue());
+        assertEquals(CUCUMBER, trimmedIndent.getText());
+        assertEquals(WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getIndent());
     }
 
     @Test
     void trimAndIndent_multiline() {
         // When
-        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
+        StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent("\n" + WHITESPACE + "\n" + WHITESPACE + CUCUMBER + WHITESPACE + "\n" + WHITESPACE + "\n");
 
         // Then
-        assertEquals(CUCUMBER, trimmedIndent.getKey());
-        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getValue());
+        assertEquals(CUCUMBER, trimmedIndent.getText());
+        assertEquals(2 + 2 * WHITESPACE.codePointCount(0, WHITESPACE.length()), trimmedIndent.getIndent());
     }
 
     @Test
     void trimAndIndent_empty() {
         // When
-        Entry<String, Integer> trimmedIndent = StringUtils.trimAndIndent("");
+        StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent("");
 
         // Then
-        assertEquals("", trimmedIndent.getKey());
-        assertEquals(0, trimmedIndent.getValue());
+        assertEquals("", trimmedIndent.getText());
+        assertEquals(0, trimmedIndent.getIndent());
     }
 
     @Test
-    void removeComments() {
-        assertEquals("", StringUtils.removeComments(""));
-        assertEquals("@this @is", StringUtils.removeComments("@this @is #@a @commented @sequence of tags"));
-        assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags #with a comment"));
-        assertEquals("@this @is @a @sequence of tags", StringUtils.removeComments("@this @is @a @sequence of tags"));
-        assertEquals("@issue#1234 @issue#31415", StringUtils.removeComments("@issue#1234 @issue#31415"));
-    }
-
-    @Test
-    void isWhiteSpace() {
+    void isWhitespace() {
         // https://en.wikipedia.org/wiki/Whitespace_character#Unicode
         char[] whitespace = new char[]{
                 '\t',
@@ -97,7 +71,7 @@ class StringUtilsTest {
         };
 
         for (char c : whitespace) {
-            assertTrue(StringUtils.isWhiteSpace(c), Character.getName(c) + " was not whitespace");
+            assertTrue(StringUtils.isWhitespace(c), Character.getName(c) + " was not whitespace");
         }
     }
 

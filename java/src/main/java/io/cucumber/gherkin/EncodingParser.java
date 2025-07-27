@@ -42,6 +42,7 @@ class EncodingParser {
     }
 
     private static Optional<Charset> parseEncodingPragma(String source) {
+        // TODO performance: replace Pattern.matcher by Java 11 Iterator<String> lines = source.lines().iterator() : to be about 2x faster
         // Optimization: search for lines instead of splitting
         Matcher m2 = LINE_SPLIT_PATTERN.matcher(source);
         while (m2.find()) {
