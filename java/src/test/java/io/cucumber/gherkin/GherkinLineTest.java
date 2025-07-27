@@ -294,4 +294,23 @@ class GherkinLineTest {
         assertEquals(CUCUMBER, gherkinLine.substringTrimmed(5));
     }
 
+    @Test
+    void getRawTextSubstring_substring_from_beginning() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("    some text", line);
+
+        // When/Then
+        assertEquals("    some text", gherkinLine.getRawTextSubstring(0));
+    }
+
+    @Test
+    void getRawTextSubstring_substring_from_middle() {
+        // Given
+        GherkinLine gherkinLine = new GherkinLine("    some text", line);
+
+        // When/Then
+        assertEquals(" some text", gherkinLine.getRawTextSubstring(3));
+    }
+
+
 }
