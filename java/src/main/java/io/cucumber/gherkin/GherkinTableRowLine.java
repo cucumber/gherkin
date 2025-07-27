@@ -7,7 +7,7 @@ import java.util.PrimitiveIterator;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 
-class GherkinTableRowLine {
+final class GherkinTableRowLine {
 
     static List<GherkinLineSpan> parse(int indent, String text) {
         List<GherkinLineSpan> lineSpans = new ArrayList<>();
@@ -59,4 +59,5 @@ class GherkinTableRowLine {
         }
         return lineSpans;
     }
+
 }
