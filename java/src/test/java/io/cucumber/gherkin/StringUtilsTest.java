@@ -67,6 +67,7 @@ class StringUtilsTest {
 
     @Test
     void isWhiteSpace() {
+        // https://en.wikipedia.org/wiki/Whitespace_character#Unicode
         char[] whitespace = new char[]{
                 '\t',
                 '\n',
