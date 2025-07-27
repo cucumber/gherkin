@@ -113,7 +113,7 @@ class StringUtils {
         return input.substring(start);
     }
 
-    public static class IndentedText {
+    static class IndentedText {
         private final int indent;
         private final String text;
 
