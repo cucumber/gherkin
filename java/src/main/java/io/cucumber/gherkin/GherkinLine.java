@@ -11,7 +11,7 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.StringUtils.containsWhitespace;
-import static io.cucumber.gherkin.StringUtils.isWhiteSpace;
+import static io.cucumber.gherkin.StringUtils.isWhitespace;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 import static java.util.Objects.requireNonNull;
@@ -87,7 +87,7 @@ class GherkinLine {
         // text
         int indexStartCurrentTag = 0;
         int indexEndOfLine = 1;
-        while (indexEndOfLine < textLength && !(text.charAt(indexEndOfLine) == COMMENT_PREFIX_CHAR && isWhiteSpace(text.charAt(indexEndOfLine - 1)))) {
+        while (indexEndOfLine < textLength && !(text.charAt(indexEndOfLine) == COMMENT_PREFIX_CHAR && isWhitespace(text.charAt(indexEndOfLine - 1)))) {
             indexEndOfLine++;
         }
 
@@ -102,7 +102,7 @@ class GherkinLine {
 
             // look for the end of current tag (going back from begin of next tag)
             indexEndCurrentTag = indexStartNextTag - 1;
-            while (indexEndCurrentTag > indexStartCurrentTag && isWhiteSpace(text.charAt(indexEndCurrentTag))) {
+            while (indexEndCurrentTag > indexStartCurrentTag && isWhitespace(text.charAt(indexEndCurrentTag))) {
                 indexEndCurrentTag--;
             }
             indexEndCurrentTag++;

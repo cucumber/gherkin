@@ -13,8 +13,8 @@ class StringUtils {
      * @param c character to test
      * @return true iff the {@code c} is whitespace and not new line..
      */
-    private static boolean isWhiteSpaceExcludingNewLine(char c) {
-        return c != '\n' && isWhiteSpace(c);
+    private static boolean isWhitespaceExcludingNewLine(char c) {
+        return c != '\n' && isWhitespace(c);
     }
 
     /**
@@ -27,7 +27,7 @@ class StringUtils {
      * @param c character to test
      * @return true iff the {@code c} is whitespace.
      */
-    static boolean isWhiteSpace(char c) {
+    static boolean isWhitespace(char c) {
         // Fast path for the common case
         return c == ' ' || c == '\t' || isCharacterTypeSpace(c) || isDirectionalitySpace(c);
     }
@@ -59,11 +59,11 @@ class StringUtils {
         }
 
         int start = 0;
-        while (start < length && isWhiteSpaceExcludingNewLine(input.charAt(start))) {
+        while (start < length && isWhitespaceExcludingNewLine(input.charAt(start))) {
             start++;
         }
         int end = length;
-        while (end > start && isWhiteSpaceExcludingNewLine(input.charAt(end - 1))) {
+        while (end > start && isWhitespaceExcludingNewLine(input.charAt(end - 1))) {
             end--;
         }
         String trimmed = input.substring(start, end);
@@ -80,11 +80,11 @@ class StringUtils {
             return NO_INDENT_ENTRY;
         }
         int start = 0;
-        while (start < length && isWhiteSpace(input.charAt(start))) {
+        while (start < length && isWhitespace(input.charAt(start))) {
             start++;
         }
         int end = length;
-        while (end > start && isWhiteSpace(input.charAt(end - 1))) {
+        while (end > start && isWhitespace(input.charAt(end - 1))) {
             end--;
         }
         String trimmed = input.substring(start, end);
@@ -97,7 +97,7 @@ class StringUtils {
 
     static boolean containsWhitespace(String input, int fromIndex, int toIndex) {
         for (int i = fromIndex; i < toIndex; i++) {
-            if (isWhiteSpace(input.charAt(i))) {
+            if (isWhitespace(input.charAt(i))) {
                 return true;
             }
         }
@@ -107,7 +107,7 @@ class StringUtils {
     static String substringAndTrim(String input, int beginIndex) {
         int length = input.length();
         int start = beginIndex;
-        while (start < length && isWhiteSpace(input.charAt(start))) {
+        while (start < length && isWhitespace(input.charAt(start))) {
             start++;
         }
         return input.substring(start);

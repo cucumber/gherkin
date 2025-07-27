@@ -40,7 +40,7 @@ class StringUtilsTest {
     }
 
     @Test
-    void isWhiteSpace() {
+    void isWhitespace() {
         // https://en.wikipedia.org/wiki/Whitespace_character#Unicode
         char[] whitespace = new char[]{
                 '\t',
@@ -71,7 +71,7 @@ class StringUtilsTest {
         };
 
         for (char c : whitespace) {
-            assertTrue(StringUtils.isWhiteSpace(c), Character.getName(c) + " was not whitespace");
+            assertTrue(StringUtils.isWhitespace(c), Character.getName(c) + " was not whitespace");
         }
     }
 
