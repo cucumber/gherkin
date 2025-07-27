@@ -63,7 +63,7 @@ public class TokenMatcher(IGherkinDialectProvider dialectProvider = null) : ITok
     {
         if (token.Line.IsEmpty())
         {
-            SetTokenMatched(token, TokenType.Empty);
+            SetTokenMatched(token, TokenType.Empty, indent: 0);
             return true;
         }
         return false;

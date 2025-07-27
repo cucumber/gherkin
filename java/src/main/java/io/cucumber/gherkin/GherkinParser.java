@@ -5,6 +5,7 @@ import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.ParseError;
+import io.cucumber.messages.types.Pickle;
 import io.cucumber.messages.types.Source;
 import io.cucumber.messages.types.SourceReference;
 
@@ -140,6 +141,7 @@ public final class GherkinParser {
         return parse(source.getUri(), source.getData());
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<Envelope> parse(String uri, String data) {
         List<Envelope> messages = new ArrayList<>();
         GherkinDocumentBuilder documentBuilder = new GherkinDocumentBuilder(idGenerator, uri);
@@ -151,10 +153,11 @@ public final class GherkinParser {
                 messages.add(Envelope.of(gherkinDocument));
             }
             if (includePickles) {
-                pickleCompiler.compile(gherkinDocument, uri)
-                        .stream()
-                        .map(Envelope::of)
-                        .collect(toCollection(() -> messages));
+                List<Pickle> compile = pickleCompiler.compile(gherkinDocument, uri);
+                for (int i = 0, compileSize = compile.size(); i < compileSize; i++) {
+                    Pickle pickle = compile.get(i);
+                    messages.add(Envelope.of(pickle));
+                }
             }
         } catch (CompositeParserException composite) {
             composite.errors.stream()

@@ -30,4 +30,12 @@ class GherkinLineSpan {
         result = 31 * result + text.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "GherkinLineSpan{" +
+                "column=" + column +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }
