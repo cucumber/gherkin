@@ -230,28 +230,27 @@ class GherkinTokenMatcher implements TokenMatcher {
     @Override
     public boolean match_StepLine(Token token) {
         GherkinLine line = token.line;
-        String text = line.getText();
-        if (stepLineElem0.keywordIsAtStartOfLine(text)) {
+        if (stepLineElem0.keywordIsAtStartOfLine(line)) {
             matchStepKeyword(token, stepLineElem0);
             return true;
         }
-        if (stepLineElem1.keywordIsAtStartOfLine(text)) {
+        if (stepLineElem1.keywordIsAtStartOfLine(line)) {
             matchStepKeyword(token, stepLineElem1);
             return true;
         }
-        if (stepLineElem2.keywordIsAtStartOfLine(text)) {
+        if (stepLineElem2.keywordIsAtStartOfLine(line)) {
             matchStepKeyword(token, stepLineElem2);
             return true;
         }
-        if (stepLineElem3.keywordIsAtStartOfLine(text)) {
+        if (stepLineElem3.keywordIsAtStartOfLine(line)) {
             matchStepKeyword(token, stepLineElem3);
             return true;
         }
-        if (stepLineElem4.keywordIsAtStartOfLine(text)) {
+        if (stepLineElem4.keywordIsAtStartOfLine(line)) {
             matchStepKeyword(token, stepLineElem4);
             return true;
         }
-        if (stepLineElem5.keywordIsAtStartOfLine(text)) {
+        if (stepLineElem5.keywordIsAtStartOfLine(line)) {
             matchStepKeyword(token, stepLineElem5);
             return true;
         }
@@ -316,12 +315,13 @@ class GherkinTokenMatcher implements TokenMatcher {
             this.keywordChars = keyword.toCharArray();
         }
 
-        public boolean keywordIsAtStartOfLine(String textChars) {
-            if (textChars.length() < keywordLength) {
+        public boolean keywordIsAtStartOfLine(GherkinLine textChars) {
+            if (textChars.getTextLength() < keywordLength) {
                 return false;
             }
+            String text = textChars.getText();
             for (int i = 0; i < keywordLength; i++) {
-                if (textChars.charAt(i) != keywordChars[i]) {
+                if (text.charAt(i) != keywordChars[i]) {
                     return false;
                 }
             }

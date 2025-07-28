@@ -73,4 +73,7 @@ class GherkinLine {
                text.startsWith(keyword);
     }
 
+    public int getTextLength() {
+        return textLength;
+    }
 }
