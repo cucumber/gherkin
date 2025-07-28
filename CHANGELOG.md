@@ -10,6 +10,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
 
+### Changed
+- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
+
 ## [33.1.0] - 2025-07-27
 ### Changed
 - [Java] Optimize GherkinParser performance ([#436](https://github.com/cucumber/gherkin/pull/436))

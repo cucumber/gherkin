@@ -35,7 +35,8 @@ var builtinDialects = gherkinDialectMap{
 				"Vermoë",
 			},
 			rule: {
-				"Regel",
+				"Reël",
+				"Reel",
 			},
 			background: {
 				"Agtergrond",
