@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
 
 ## [33.1.0] - 2025-07-27
 ### Changed
