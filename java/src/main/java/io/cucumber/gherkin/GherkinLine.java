@@ -63,7 +63,7 @@ class GherkinLine {
 
     String substringTrimmed(int beginIndex) {
         // trim the beginning of the line (the end of line has already been trimmed in the constructor)
-        return StringUtils.substringAndTrim(text, beginIndex);
+        return StringUtils.substringAndLeftTrim(text, beginIndex, textLength);
     }
 
     boolean startsWithTitleKeyword(String keyword) {
