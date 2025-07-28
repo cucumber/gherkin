@@ -53,7 +53,7 @@ jobs:
         run: uv run --no-editable pytest
 
       - name: Run acceptance tests
-        run: uv run make acceptance
+        run: make acceptance
 
       - name: Build package
         run: uv build
