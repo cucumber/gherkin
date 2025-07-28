@@ -33,6 +33,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     private StepLineElem stepLineElem4;
     private StepLineElem stepLineElem5;
     private List<StepLineElem> remainingStepLineElems;
+    private String stepLineElemsLanguage;
 
     GherkinTokenMatcher(GherkinDialectProvider dialectProvider) {
         this.dialectProvider = dialectProvider;
@@ -198,56 +199,59 @@ class GherkinTokenMatcher implements TokenMatcher {
     }
 
     private void prepareStepLineLoopUnrolling() {
-        // Loop unrolling the step line keyword matching
-        // is ~30% faster than using a loop.
-        // There are at least 6 keywords (Given, When, Then,
-        // And, But, *) in the English dialect, but some dialects
-        // may have more keywords. Thus, we unroll the first 6
-        // keywords, and process the other dynamically.
-        List<String> keywords = currentDialect.getStepKeywords();
-        stepLineElem0 = new StepLineElem(keywords.get(0), currentDialect.getStepKeywordType(keywords.get(0)));
-        stepLineElem1 = new StepLineElem(keywords.get(1), currentDialect.getStepKeywordType(keywords.get(1)));
-        stepLineElem2 = new StepLineElem(keywords.get(2), currentDialect.getStepKeywordType(keywords.get(2)));
-        stepLineElem3 = new StepLineElem(keywords.get(3), currentDialect.getStepKeywordType(keywords.get(3)));
-        stepLineElem4 = new StepLineElem(keywords.get(4), currentDialect.getStepKeywordType(keywords.get(4)));
-        stepLineElem5 = new StepLineElem(keywords.get(5), currentDialect.getStepKeywordType(keywords.get(5)));
-        int keywordCount = keywords.size();
-        if (keywordCount > 6) {
-            remainingStepLineElems = new ArrayList<>(keywordCount - 6);
-            for (int i = 6; i < keywordCount; i++) {
-                remainingStepLineElems.add(new StepLineElem(keywords.get(i), currentDialect.getStepKeywordType(keywords.get(i))));
+        if (stepLineElemsLanguage==null || !stepLineElemsLanguage.equals(currentDialect.getLanguage())) {
+            stepLineElemsLanguage = currentDialect.getLanguage();
+            // Loop unrolling the step line keyword matching
+            // is ~30% faster than using a loop.
+            // There are at least 6 keywords (Given, When, Then,
+            // And, But, *) in the English dialect, but some dialects
+            // may have more keywords. Thus, we unroll the first 6
+            // keywords, and process the other dynamically.
+            List<String> keywords = currentDialect.getStepKeywords();
+            stepLineElem0 = new StepLineElem(keywords.get(0), currentDialect.getStepKeywordType(keywords.get(0)));
+            stepLineElem1 = new StepLineElem(keywords.get(1), currentDialect.getStepKeywordType(keywords.get(1)));
+            stepLineElem2 = new StepLineElem(keywords.get(2), currentDialect.getStepKeywordType(keywords.get(2)));
+            stepLineElem3 = new StepLineElem(keywords.get(3), currentDialect.getStepKeywordType(keywords.get(3)));
+            stepLineElem4 = new StepLineElem(keywords.get(4), currentDialect.getStepKeywordType(keywords.get(4)));
+            stepLineElem5 = new StepLineElem(keywords.get(5), currentDialect.getStepKeywordType(keywords.get(5)));
+            int keywordCount = keywords.size();
+            if (keywordCount > 6) {
+                remainingStepLineElems = new ArrayList<>(keywordCount - 6);
+                for (int i = 6; i < keywordCount; i++) {
+                    remainingStepLineElems.add(new StepLineElem(keywords.get(i), currentDialect.getStepKeywordType(keywords.get(i))));
+                }
+            } else {
+                remainingStepLineElems = Collections.emptyList();
             }
-        } else {
-            remainingStepLineElems = Collections.emptyList();
         }
-
     }
 
     @SuppressWarnings("Duplicates") // unrolling leads to duplicated code
     @Override
     public boolean match_StepLine(Token token) {
         GherkinLine line = token.line;
-        if (line.startsWith(stepLineElem0.keyword)) {
+        String text = line.getText();
+        if (stepLineElem0.keywordIsAtStartOfLine(text)) {
             matchStepKeyword(token, stepLineElem0);
             return true;
         }
-        if (line.startsWith(stepLineElem1.keyword)) {
+        if (stepLineElem1.keywordIsAtStartOfLine(text)) {
             matchStepKeyword(token, stepLineElem1);
             return true;
         }
-        if (line.startsWith(stepLineElem2.keyword)) {
+        if (stepLineElem2.keywordIsAtStartOfLine(text)) {
             matchStepKeyword(token, stepLineElem2);
             return true;
         }
-        if (line.startsWith(stepLineElem3.keyword)) {
+        if (stepLineElem3.keywordIsAtStartOfLine(text)) {
             matchStepKeyword(token, stepLineElem3);
             return true;
         }
-        if (line.startsWith(stepLineElem4.keyword)) {
+        if (stepLineElem4.keywordIsAtStartOfLine(text)) {
             matchStepKeyword(token, stepLineElem4);
             return true;
         }
-        if (line.startsWith(stepLineElem5.keyword)) {
+        if (stepLineElem5.keywordIsAtStartOfLine(text)) {
             matchStepKeyword(token, stepLineElem5);
             return true;
         }
@@ -302,11 +306,26 @@ class GherkinTokenMatcher implements TokenMatcher {
         public final int keywordLength;
         public final String keyword;
         public final StepKeywordType keywordType;
+        public final char[] keywordChars;
+
 
         public StepLineElem(String keyword, StepKeywordType keywordType) {
             this.keywordLength = keyword.length();
             this.keyword = keyword;
             this.keywordType = keywordType;
+            this.keywordChars = keyword.toCharArray();
+        }
+
+        public boolean keywordIsAtStartOfLine(String textChars) {
+            if (textChars.length() < keywordLength) {
+                return false;
+            }
+            for (int i = 0; i < keywordLength; i++) {
+                if (textChars.charAt(i) != keywordChars[i]) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
