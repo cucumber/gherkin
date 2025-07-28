@@ -104,10 +104,9 @@ class StringUtils {
         return false;
     }
 
-    static String substringAndTrim(String input, int beginIndex) {
-        int length = input.length();
+    static String substringAndLeftTrim(String input, int beginIndex, int endIndex) {
         int start = beginIndex;
-        while (start < length && isWhitespace(input.charAt(start))) {
+        while (start < endIndex && isWhitespace(input.charAt(start))) {
             start++;
         }
         return input.substring(start);
