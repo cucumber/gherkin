@@ -192,12 +192,13 @@ class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_StepLine(Token token) {
-        String keyword = currentKeywordMatcher.matchStepKeyword(token.line);
-        if (keyword == null) {
+        KeywordMatcher.Match match = currentKeywordMatcher.matchStepKeyword(token.line);
+        if (match == null) {
             return false;
         }
+        String keyword = match.getKeyword();
+        StepKeywordType keywordType = match.getKeywordType();
         String stepText = token.line.substringTrimmed(keyword.length());
-        StepKeywordType keywordType = currentDialect.getStepKeywordType(keyword);
         setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
         return true;
     }
