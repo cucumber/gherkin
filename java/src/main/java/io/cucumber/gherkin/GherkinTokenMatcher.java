@@ -197,8 +197,9 @@ final class GherkinTokenMatcher implements TokenMatcher {
             return false;
         }
         String keyword = match.getKeyword();
+        int keywordLength = match.getKeywordLength();
         StepKeywordType keywordType = match.getKeywordType();
-        String stepText = token.line.substringTrimmed(keyword.length());
+        String stepText = token.line.substringTrimmed(keywordLength);
         setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
         return true;
     }

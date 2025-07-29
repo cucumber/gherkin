@@ -8,10 +8,12 @@ interface KeywordMatcher {
     
     final class Match {
         private final String keyword;
+        private final int keywordLength;
         private final StepKeywordType keywordType;
 
-        Match(String keyword, StepKeywordType keywordType) {
+        Match(String keyword, int keywordLength, StepKeywordType keywordType) {
             this.keyword = keyword;
+            this.keywordLength = keywordLength;
             this.keywordType = keywordType;
         }
 
@@ -19,9 +21,14 @@ interface KeywordMatcher {
             return keyword;
         }
 
+        int getKeywordLength() {
+            return keywordLength;
+        }
+        
         StepKeywordType getKeywordType() {
             return keywordType;
         }
+
     }
 
 }
