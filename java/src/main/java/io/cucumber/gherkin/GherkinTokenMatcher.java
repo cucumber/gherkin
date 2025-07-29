@@ -22,6 +22,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private final GherkinDialectProvider dialectProvider;
     private GherkinDialect currentDialect;
+    private KeywordMatcher currentKeywordMatcher;
     private String activeDocStringSeparator = null;
     private int indentToRemove = 0;
 
@@ -44,6 +45,8 @@ final class GherkinTokenMatcher implements TokenMatcher {
         activeDocStringSeparator = null;
         indentToRemove = 0;
         currentDialect = dialectProvider.getDefaultDialect();
+        // TODO: Make dynamic
+        currentKeywordMatcher = new EnKeywordMatcher();
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
@@ -52,6 +55,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         token.keywordType = keywordType;
         token.matchedText = text;
         token.matchedItems = items;
+        // TODO: Could be replace with current language if KeywordMatcher is used
         token.matchedGherkinDialect = currentDialect;
         token.matchedIndent = indent;
         token.location = atColumn(token.location, token.matchedIndent + COLUMN_OFFSET);
@@ -101,6 +105,9 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
             currentDialect = dialectProvider.getDialect(language)
                     .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
+            // TODO: Make dynamic
+            if ("en".equals(language)) currentKeywordMatcher = new EnKeywordMatcher();
+            else throw new UnsupportedOperationException("Not yet implemented");
             return true;
         }
         return false;
@@ -185,16 +192,14 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_StepLine(Token token) {
-        List<String> keywords = currentDialect.getStepKeywords();
-        for (String keyword : keywords) {
-            if (token.line.startsWith(keyword)) {
-                String stepText = token.line.substringTrimmed(keyword.length());
-                StepKeywordType keywordType = currentDialect.getStepKeywordType(keyword);
-                setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
-                return true;
-            }
+        String keyword = currentKeywordMatcher.matchStepKeyword(token.line);
+        if (keyword == null) {
+            return false;
         }
-        return false;
+        String stepText = token.line.substringTrimmed(keyword.length());
+        StepKeywordType keywordType = currentDialect.getStepKeywordType(keyword);
+        setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
+        return true;
     }
 
     @Override
