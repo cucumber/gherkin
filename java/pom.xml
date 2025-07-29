@@ -152,20 +152,39 @@
                         <goals>
                             <goal>java</goal>
                         </goals>
+                        <configuration>
+                            <classpathScope>test</classpathScope>
+                            <addOutputToClasspath>false</addOutputToClasspath>
+                            <addResourcesToClasspath>false</addResourcesToClasspath>
+                            <additionalClasspathElements>${project.build.directory}/codegen-classes
+                            </additionalClasspathElements>
+                            <mainClass>GenerateGherkinDialects</mainClass>
+                            <arguments>
+                                <argument>${project.build.directory}/generated-sources/gherkin-dialects</argument>
+                                <argument>io/cucumber/gherkin</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-keyword-matchers</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <classpathScope>test</classpathScope>
+                            <addOutputToClasspath>false</addOutputToClasspath>
+                            <addResourcesToClasspath>false</addResourcesToClasspath>
+                            <additionalClasspathElements>${project.build.directory}/codegen-classes
+                            </additionalClasspathElements>
+                            <mainClass>GenerateKeywordMatchers</mainClass>
+                            <arguments>
+                                <argument>${project.build.directory}/generated-sources/keyword-matchers</argument>
+                                <argument>io/cucumber/gherkin</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <classpathScope>test</classpathScope>
-                    <addOutputToClasspath>false</addOutputToClasspath>
-                    <addResourcesToClasspath>false</addResourcesToClasspath>
-                    <additionalClasspathElements>${project.build.directory}/codegen-classes
-                    </additionalClasspathElements>
-                    <mainClass>GenerateGherkinDialects</mainClass>
-                    <arguments>
-                        <argument>${project.build.directory}/generated-sources/gherkin-dialects</argument>
-                        <argument>io/cucumber/gherkin</argument>
-                    </arguments>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -180,6 +199,7 @@
                         <configuration>
                             <sources>
                                 <source>${project.build.directory}/generated-sources/gherkin-dialects</source>
+                                <argument>${project.build.directory}/generated-sources/keyword-matchers</argument>
                             </sources>
                         </configuration>
                     </execution>

@@ -13,6 +13,7 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
+import static io.cucumber.gherkin.KeywordMatchers.getKeywordMatcher;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
@@ -45,8 +46,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         activeDocStringSeparator = null;
         indentToRemove = 0;
         currentDialect = dialectProvider.getDefaultDialect();
-        // TODO: Make dynamic
-        currentKeywordMatcher = new EnKeywordMatcher();
+        currentKeywordMatcher = getKeywordMatcher(currentDialect.getLanguage());
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
@@ -105,9 +105,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
             currentDialect = dialectProvider.getDialect(language)
                     .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
-            // TODO: Make dynamic
-            if ("en".equals(language)) currentKeywordMatcher = new EnKeywordMatcher();
-            else throw new UnsupportedOperationException("Not yet implemented");
+            currentKeywordMatcher = getKeywordMatcher(language);
             return true;
         }
         return false;
