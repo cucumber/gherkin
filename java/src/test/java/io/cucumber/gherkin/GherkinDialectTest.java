@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GherkinDialectTest {
 
-    final GherkinDialect dialect = new GherkinDialectProvider().getDefaultDialect();
+    final GherkinDialect dialect = GherkinDialects.getDialect(Constants.DEFAULT_LANGUAGE)
+            .orElseThrow(() -> new IllegalStateException("No default dialects"));
     
     @Test
     void getDistinctStepKeywordTypes_star_has_multiple_stepKeywordTypes() {

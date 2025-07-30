@@ -5,10 +5,8 @@ import io.cucumber.messages.types.StepKeywordType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static io.cucumber.gherkin.Constants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,14 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class KeywordMatchersTest {
 
-    static final GherkinDialectProvider dialectProvider = new GherkinDialectProvider();
-
-    static List<GherkinDialect> languages() {
-        return dialectProvider.getLanguages().stream()
-                .map(dialectProvider::getDialect)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+    static Collection<GherkinDialect> languages() {
+        return GherkinDialects.getDialects();
     }
 
     @ParameterizedTest
