@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import static io.cucumber.messages.types.StepKeywordType.ACTION;
@@ -36,22 +37,15 @@ import static java.util.Comparator.naturalOrder;
 import static java.util.Map.Entry.comparingByKey;
 
 /*
- * This class generates the GherkinDialects class using the FreeMarker
+ * This class generates the KeywordMatchers class using the FreeMarker
  * template engine and provided templates.
  */
-public class GenerateKeywordMatchers {
+class GenerateKeywordMatchers {
 
     private static final Comparator<String> LONGEST_TO_SHORTEST_COMPARATOR =
             (s1, s2) -> Integer.compare(s2.length(), s1.length());
 
-    public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
-            throw new IllegalArgumentException("Usage: <baseDirectory> <packagePath>");
-        }
-
-        String baseDirectory = args[0];
-        String packagePath = args[1];
-
+    static void generate(String baseDirectory, String packagePath) throws Exception {
         Path path = Paths.get(baseDirectory, packagePath, "KeywordMatchers.java");
 
         Template dialectsSource = readTemplate();
@@ -98,10 +92,15 @@ public class GenerateKeywordMatchers {
                         Map.Entry::getKey, entry -> matcherModel(
                                 entry.getKey(),
                                 (Map<String, Object>) entry.getValue()),
-                        // TODO: Extract, fix
-                        (a, b) -> a,
+                        uniqueKeyCondition(),
                         LinkedHashMap::new
                 ));
+    }
+
+    private static BinaryOperator<Object> uniqueKeyCondition() {
+        return (a, b) ->  {
+            throw new IllegalStateException("Duplicate keys " + a + " and " + b);
+        };
     }
 
     @SuppressWarnings("unchecked")
@@ -185,7 +184,6 @@ public class GenerateKeywordMatchers {
 
         return model;
     }
-
 
     private static String capitalize(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
