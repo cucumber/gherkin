@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-class InputStreams {
+final class InputStreams {
 
     /**
      * Shim for InputStream.readAllBytes

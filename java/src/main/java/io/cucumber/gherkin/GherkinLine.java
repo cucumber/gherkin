@@ -4,7 +4,7 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARAT
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static java.util.Objects.requireNonNull;
 
-class GherkinLine {
+final class GherkinLine {
 
     /**
      * The line text, including all leading and trailing whitespace characters.

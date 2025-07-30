@@ -38,7 +38,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-class PickleCompiler {
+final class PickleCompiler {
 
     private final IdGenerator idGenerator;
 

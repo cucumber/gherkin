@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
  * <p>
  * Changes to this class will be lost if the code is regenerated.
  */
-class Parser<T> {
+final class Parser<T> {
     enum TokenType {
         None(RuleType.None),
         EOF(RuleType._EOF),
@@ -81,7 +81,7 @@ class Parser<T> {
 
     private final Builder<T> builder;
 
-    static class ParserContext {
+    static final class ParserContext {
         final TokenScanner tokenScanner;
         final TokenMatcher tokenMatcher;
         final Queue<Token> tokenQueue;

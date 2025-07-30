@@ -7,7 +7,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-class Token {
+final class Token {
     final GherkinLine line;
     final boolean eof;
     Parser.TokenType matchedType;
