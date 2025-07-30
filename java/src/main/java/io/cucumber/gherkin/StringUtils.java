@@ -1,7 +1,7 @@
 package io.cucumber.gherkin;
 
 
-class StringUtils {
+final class StringUtils {
 
     /**
      * An extended definition of Whitespace minus new lines.
@@ -112,7 +112,7 @@ class StringUtils {
         return input.substring(start);
     }
 
-    static class IndentedText {
+    static final class IndentedText {
         private final int indent;
         private final String text;
 

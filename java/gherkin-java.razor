@@ -43,7 +43,7 @@ import static java.util.Arrays.asList;
  * <p>
  * Changes to this class will be lost if the code is regenerated.
  */
-class @Model.ParserClassName<T> {
+final class @Model.ParserClassName<T> {
     enum TokenType {
         None(RuleType.None),
         @foreach(var rule in Model.RuleSet.TokenRules)
@@ -67,7 +67,7 @@ class @Model.ParserClassName<T> {
 
     private final Builder<T> builder;
 
-    static class ParserContext {
+    static final class ParserContext {
         final TokenScanner tokenScanner;
         final TokenMatcher tokenMatcher;
         final Queue<Token> tokenQueue;

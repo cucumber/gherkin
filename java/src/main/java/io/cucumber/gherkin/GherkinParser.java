@@ -43,7 +43,7 @@ public final class GherkinParser {
      */
     static final int FEATURE_FILE_AVERAGE_SIZE = FEATURE_FILE_AVERAGE_LINE_LENGTH * FEATURE_FILE_AVERAGE_LINE_COUNT;
 
-    public final static class Builder {
+    public static final class Builder {
         private boolean includeSource = true;
         private boolean includeGherkinDocument = true;
         private boolean includePickles = true;

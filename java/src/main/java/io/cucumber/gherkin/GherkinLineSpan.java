@@ -1,6 +1,6 @@
 package io.cucumber.gherkin;
 
-class GherkinLineSpan {
+final class GherkinLineSpan {
     /**
      * Index-1 based position in codepoints.
       */ 

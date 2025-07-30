@@ -17,7 +17,7 @@ import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
 
-class GherkinTokenMatcher implements TokenMatcher {
+final class GherkinTokenMatcher implements TokenMatcher {
 
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private final GherkinDialectProvider dialectProvider;
