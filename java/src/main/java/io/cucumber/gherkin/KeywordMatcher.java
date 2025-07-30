@@ -8,7 +8,7 @@ interface KeywordMatcher {
     Match matchBackgroundKeyword(Line line);
     Match matchRuleKeyword(Line line);
     Match matchScenarioKeyword(Line line);
-    Match matchExampleKeyword(Line line);
+    Match matchExamplesKeyword(Line line);
     StepMatch matchStepKeyword(Line line);
 
     final class StepMatch {

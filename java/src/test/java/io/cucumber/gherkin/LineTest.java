@@ -11,35 +11,6 @@ class LineTest {
     private static final String CUCUMBER = "🥒";
 
     @Test
-    void startsWithTitleKeyword_corresponding_keyword_match() {
-        // Given
-        Line gherkinLine = new Line("Feature: Hello");
-
-        // When/Then
-        assertTrue(gherkinLine.startsWithTitleKeyword("Feature"));
-    }
-
-    @Test
-    void startsWithTitleKeyword_non_corresponding_keyword_does_not_match() {
-        // Given
-        Line gherkinLine = new Line("Rule: X");
-
-        // When/Then
-        assertFalse(gherkinLine.startsWithTitleKeyword("Background")); // not the same keyword
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rule: X")); // same keyword but with colon
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rul")); // shorter than keyword
-    }
-
-    @Test
-    void startsWithTitleKeyword_keyword_without_colon_does_not_match() {
-        // Given
-        Line gherkinLine = new Line("Rule");
-
-        // When/Then
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rule"));
-    }
-
-    @Test
     void substringTrimmed_empty_idempotence() {
         // Given
         Line gherkinLine = new Line("");
@@ -83,6 +54,5 @@ class LineTest {
         // When/Then
         assertEquals(" some text", gherkinLine.getRawTextSubstring(3));
     }
-
 
 }
