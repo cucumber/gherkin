@@ -96,10 +96,10 @@ public class GenerateKeywordMatchers {
                 .sorted(comparingByKey())
                 .collect(Collectors.toMap(
                         Map.Entry::getKey, entry -> matcherModel(
-                                entry.getKey(), 
+                                entry.getKey(),
                                 (Map<String, Object>) entry.getValue()),
                         // TODO: Extract, fix
-                        (a,b) -> a, 
+                        (a, b) -> a,
                         LinkedHashMap::new
                 ));
     }
@@ -110,23 +110,29 @@ public class GenerateKeywordMatchers {
         Map<String, Object> model = new HashMap<>();
         model.put("className", capitalize(normalizedLanguage));
 
-        List<String> featureKeywords = (List<String>) dialect.get("feature");
+        List<String> featureKeywords = distinctSortedKeywords(
+                (List<String>) dialect.get("feature")
+        );
         model.put("features", featureKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
             return entry;
         }).collect(Collectors.toList()));
-        
-        List<String> backgroundKeywords = (List<String>) dialect.get("background");
+
+        List<String> backgroundKeywords = distinctSortedKeywords(
+                (List<String>) dialect.get("background")
+        );
         model.put("backgrounds", backgroundKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
             return entry;
         }).collect(Collectors.toList()));
-        
-        List<String> ruleKeywords = (List<String>) dialect.get("rule");
+
+        List<String> ruleKeywords = distinctSortedKeywords(
+                (List<String>) dialect.get("rule")
+        );
         model.put("rules", ruleKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
@@ -134,25 +140,27 @@ public class GenerateKeywordMatchers {
             return entry;
         }).collect(Collectors.toList()));
 
-        List<String> scenarioKeywords = distinctKeywords(
+        List<String> scenarioKeywords = distinctSortedKeywords(
                 (List<String>) dialect.get("scenario"),
                 (List<String>) dialect.get("scenarioOutline")
-        );        
+        );
         model.put("scenarios", scenarioKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
             return entry;
         }).collect(Collectors.toList()));
-      
-        List<String> exampleKeywords = (List<String>) dialect.get("examples");
+
+        List<String> exampleKeywords = distinctSortedKeywords(
+                (List<String>) dialect.get("examples")
+        );
         model.put("examples", exampleKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
             return entry;
         }).collect(Collectors.toList()));
-        
+
         Map<String, StepKeywordType> aggregateKeywordTypes = aggregateKeywordTypes(
                 (List<String>) dialect.get("given"),
                 (List<String>) dialect.get("when"),
@@ -160,7 +168,7 @@ public class GenerateKeywordMatchers {
                 (List<String>) dialect.get("and"),
                 (List<String>) dialect.get("but")
         );
-        List<String> stepKeywords = distinctKeywords(
+        List<String> stepKeywords = distinctSortedKeywords(
                 (List<String>) dialect.get("given"),
                 (List<String>) dialect.get("when"),
                 (List<String>) dialect.get("then"),
@@ -188,7 +196,7 @@ public class GenerateKeywordMatchers {
     }
 
     @SafeVarargs
-    private static List<String> distinctKeywords(List<String>... keywords) {
+    private static List<String> distinctSortedKeywords(List<String>... keywords) {
         // french is the largest dialect with 32 keywords, so we build the sorting hashset with this max size
         Set<String> uniqueKeywords = new HashSet<>(32);
         for (List<String> keyword : keywords) {
@@ -210,7 +218,7 @@ public class GenerateKeywordMatchers {
         mergeKeywordTypes(stepKeywordsTypes, CONTEXT, givenKeywords);
         mergeKeywordTypes(stepKeywordsTypes, ACTION, whenKeywords);
         mergeKeywordTypes(stepKeywordsTypes, OUTCOME, thenKeywords);
-        mergeKeywordTypes(stepKeywordsTypes, CONJUNCTION, distinctKeywords(andKeywords, butKeywords));
+        mergeKeywordTypes(stepKeywordsTypes, CONJUNCTION, distinctSortedKeywords(andKeywords, butKeywords));
         return stepKeywordsTypes;
     }
 
