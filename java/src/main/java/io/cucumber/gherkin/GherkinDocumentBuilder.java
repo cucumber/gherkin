@@ -179,18 +179,14 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 for (Rule rule : node.<Rule>getItems(RuleType.Rule)) {
                     children.add(new FeatureChild(rule, null, null));
                 }
-                String description = getDescription(header);
-                if (featureLine.matchedGherkinDialect == null)
-                    return null;
-                String language = featureLine.matchedGherkinDialect.getLanguage();
 
                 return new Feature(
                         featureLine.location,
                         tags,
-                        language,
+                        featureLine.matchedLanguage,
                         featureLine.matchedKeyword,
                         featureLine.matchedText,
-                        description,
+                        getDescription(header),
                         children
                 );
             }

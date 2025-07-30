@@ -14,7 +14,6 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
-import static io.cucumber.gherkin.KeywordMatchers.getKeywordMatcher;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
@@ -22,23 +21,20 @@ import static io.cucumber.gherkin.Parser.TokenType;
 final class GherkinTokenMatcher implements TokenMatcher {
 
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
-    private final GherkinDialectProvider dialectProvider;
-    private GherkinDialect currentDialect;
+    private static final String DEFAULT_LANGUAGE = "en";
+    private final String defaultLanguage;
+    private String currentLanguage;
     private KeywordMatcher currentKeywordMatcher;
     private String activeDocStringSeparator = null;
     private int indentToRemove = 0;
 
-    GherkinTokenMatcher(GherkinDialectProvider dialectProvider) {
-        this.dialectProvider = dialectProvider;
+    GherkinTokenMatcher(String defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
         reset();
     }
 
     GherkinTokenMatcher() {
-        this(new GherkinDialectProvider());
-    }
-
-    GherkinTokenMatcher(String defaultDialectName) {
-        this(new GherkinDialectProvider(defaultDialectName));
+        this(DEFAULT_LANGUAGE);
     }
 
     @Override
@@ -46,8 +42,8 @@ final class GherkinTokenMatcher implements TokenMatcher {
         // TODO performance: reset() is called once in the constructor and once for each file (Parser.parse()). It could be called only once, but there is no measurable impact with the profiler
         activeDocStringSeparator = null;
         indentToRemove = 0;
-        currentDialect = dialectProvider.getDefaultDialect();
-        currentKeywordMatcher = getKeywordMatcher(currentDialect.getLanguage());
+        currentLanguage = defaultLanguage;
+        currentKeywordMatcher = KeywordMatchers.of(defaultLanguage);
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
@@ -56,8 +52,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         token.keywordType = keywordType;
         token.matchedText = text;
         token.matchedItems = items;
-        // TODO: Could be replace with current language if KeywordMatcher is used
-        token.matchedGherkinDialect = currentDialect;
+        token.matchedLanguage = currentLanguage;
         token.matchedIndent = indent;
         token.location = atColumn(token.location, token.matchedIndent + COLUMN_OFFSET);
     }
@@ -103,10 +98,11 @@ final class GherkinTokenMatcher implements TokenMatcher {
         if (matcher.matches()) {
             String language = matcher.group(1);
             setTokenMatched(token, TokenType.Language, language, null, token.line.getIndent(), null, null);
-
-            currentDialect = dialectProvider.getDialect(language)
-                    .orElseThrow(() -> new ParserException.NoSuchLanguageException(language, token.location));
-            currentKeywordMatcher = getKeywordMatcher(language);
+            KeywordMatcher keywordMatcher = KeywordMatchers.of(language);
+            if (keywordMatcher == null) {
+                throw new ParserException.NoSuchLanguageException(language, token.location);
+            }
+            currentKeywordMatcher = keywordMatcher;
             return true;
         }
         return false;

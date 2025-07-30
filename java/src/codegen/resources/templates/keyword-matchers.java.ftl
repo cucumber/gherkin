@@ -10,7 +10,7 @@ import static io.cucumber.messages.types.StepKeywordType.UNKNOWN;
 
 final class KeywordMatchers {
 
-    static KeywordMatcher getKeywordMatcher(String language) {
+    static KeywordMatcher of(String language) {
         Objects.requireNonNull(language);
         switch (language){
 <#list matchers as name, matcher>
@@ -18,7 +18,7 @@ final class KeywordMatchers {
                 return new ${matcher.className}();
 </#list>
             default:
-                throw new ParserException.NoSuchLanguageException(language, null);
+                return null;
         }
     }
 <#list matchers as name, matcher>
