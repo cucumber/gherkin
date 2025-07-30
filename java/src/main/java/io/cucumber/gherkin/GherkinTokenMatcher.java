@@ -1,12 +1,15 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.gherkin.Parser.TokenMatcher;
+import io.cucumber.messages.types.Location;
+import io.cucumber.messages.types.StepKeywordType;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import io.cucumber.gherkin.Parser.TokenMatcher;
-import io.cucumber.messages.types.StepKeywordType;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
@@ -23,6 +26,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private static final String DEFAULT_LANGUAGE = "en";
     private final String defaultLanguage;
+    private final Map<String, KeywordMatcher> activeKeywordMatchers = new HashMap<>(2);
     private String currentLanguage;
     private KeywordMatcher currentKeywordMatcher;
     private String activeDocStringSeparator = null;
@@ -42,8 +46,16 @@ final class GherkinTokenMatcher implements TokenMatcher {
         // TODO performance: reset() is called once in the constructor and once for each file (Parser.parse()). It could be called only once, but there is no measurable impact with the profiler
         activeDocStringSeparator = null;
         indentToRemove = 0;
-        currentLanguage = defaultLanguage;
-        currentKeywordMatcher = KeywordMatchers.of(defaultLanguage);
+        setLanguageMatched(defaultLanguage, null);
+    }
+
+    private void setLanguageMatched(String language, Location location) {
+        currentLanguage = language;
+        KeywordMatcher keywordMatcher = activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
+        if (keywordMatcher == null) {
+            throw new ParserException.NoSuchLanguageException(language, location);
+        }
+        currentKeywordMatcher = keywordMatcher;
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
@@ -98,12 +110,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         if (matcher.matches()) {
             String language = matcher.group(1);
             setTokenMatched(token, TokenType.Language, language, null, token.line.getIndent(), null, null);
-            KeywordMatcher keywordMatcher = KeywordMatchers.of(language);
-            if (keywordMatcher == null) {
-                throw new ParserException.NoSuchLanguageException(language, token.location);
-            }
-            currentLanguage = language;
-            currentKeywordMatcher = keywordMatcher;
+            setLanguageMatched(language, token.location);
             return true;
         }
         return false;

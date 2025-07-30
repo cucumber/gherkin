@@ -70,7 +70,7 @@ public final class GherkinDialect {
         this.thenKeywords = requireNonNull(thenKeywords);
         this.andKeywords = requireNonNull(andKeywords);
         this.butKeywords = requireNonNull(butKeywords);
-        
+
         this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
     }
@@ -86,7 +86,7 @@ public final class GherkinDialect {
         sortedKeywords.sort(LONGEST_TO_SHORTEST_COMPARATOR);
         return unmodifiableList(sortedKeywords);
     }
-    
+
     private static Map<String, Set<StepKeywordType>> aggregateKeywordTypes(
             List<String> givenKeywords,
             List<String> whenKeywords,
@@ -145,10 +145,10 @@ public final class GherkinDialect {
 
     /**
      * Returns the {@link StepKeywordType StepKeywordTypes} for a given keyword
-     * 
-     * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
+     *
      * @param keyword to get the keyword type for
      * @return the keywords type
+     * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
      */
     @Deprecated
     public List<StepKeywordType> getStepKeywordTypes(String keyword) {
