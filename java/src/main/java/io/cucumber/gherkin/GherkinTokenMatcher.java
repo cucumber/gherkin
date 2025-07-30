@@ -26,6 +26,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
     private static final String DEFAULT_LANGUAGE = "en";
     private final String defaultLanguage;
+    // Expect at most two languages, the default language and one other
     private final Map<String, KeywordMatcher> activeKeywordMatchers = new HashMap<>(2);
     private String currentLanguage;
     private KeywordMatcher currentKeywordMatcher;
