@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
+import static io.cucumber.gherkin.GherkinLanguageConstants.DEFAULT_LANGUAGE;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
@@ -23,7 +24,6 @@ import static io.cucumber.gherkin.Parser.TokenType;
 final class GherkinTokenMatcher implements TokenMatcher {
 
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$");
-    private static final String DEFAULT_LANGUAGE = "en";
     private final String defaultLanguage;
     // Expect at most two languages, the default language and one other
     private final Map<String, KeywordMatcher> activeKeywordMatchers = new HashMap<>(2);
@@ -74,11 +74,11 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_EOF(Token token) {
-        if (token.isEOF()) {
-            setTokenMatched(token, TokenType.EOF, null, null, 0, null, null);
-            return true;
+        if (!token.isEOF()) {
+            return false;
         }
-        return false;
+        setTokenMatched(token, TokenType.EOF, null, null, 0, null, null);
+        return true;
     }
 
     @Override
@@ -90,43 +90,46 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_Empty(Token token) {
-        if (token.line.isEmpty()) {
-            setTokenMatched(token, TokenType.Empty, null, null, 0, null, null);
-            return true;
+        if (!token.line.isEmpty()) {
+            return false;
         }
-        return false;
+        setTokenMatched(token, TokenType.Empty, null, null, 0, null, null);
+        return true;
     }
 
     @Override
     public boolean match_Comment(Token token) {
-        if (token.line.startsWith(COMMENT_PREFIX_CHAR)) {
-            String text = token.line.getRawText();
-            setTokenMatched(token, TokenType.Comment, text, null, 0, null, null);
-            return true;
+        if (!token.line.startsWith(COMMENT_PREFIX_CHAR)) {
+            return false;
         }
-        return false;
+        String text = token.line.getRawText();
+        setTokenMatched(token, TokenType.Comment, text, null, 0, null, null);
+        return true;
     }
 
     @Override
     public boolean match_Language(Token token) {
-        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getText());
-        if (matcher.matches()) {
-            String language = matcher.group(1);
-            setTokenMatched(token, TokenType.Language, language, null, token.line.getIndent(), null, null);
-            setLanguageMatched(language, token.location);
-            return true;
+        if (!token.line.startsWith(COMMENT_PREFIX_CHAR)) {
+            return false;
         }
-        return false;
+        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getText());
+        if (!matcher.matches()) {
+            return false;
+        }
+        String language = matcher.group(1);
+        setTokenMatched(token, TokenType.Language, language, null, token.line.getIndent(), null, null);
+        setLanguageMatched(language, token.location);
+        return true;
     }
 
     @Override
     public boolean match_TagLine(Token token) {
-        if (token.line.startsWith(TAG_PREFIX_CHAR)) {
-            List<GherkinLineSpan> tags = GherkinTagLine.parse(token.line.getIndent(), token.line.getText(), token.location);
-            setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, tags);
-            return true;
+        if (!token.line.startsWith(TAG_PREFIX_CHAR)) {
+            return false;
         }
-        return false;
+        List<GherkinLineSpan> tags = GherkinTagLine.parse(token.line.getIndent(), token.line.getText(), token.location);
+        setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, tags);
+        return true;
     }
 
     @Override
@@ -177,21 +180,21 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     private boolean match_DocStringSeparator(Token token, String separator, boolean isOpen) {
-        if (token.line.startsWith(separator)) {
-            String mediaType = null;
-            if (isOpen) {
-                mediaType = token.line.substringTrimmed(separator.length());
-                activeDocStringSeparator = separator;
-                indentToRemove = token.line.getIndent();
-            } else {
-                activeDocStringSeparator = null;
-                indentToRemove = 0;
-            }
-
-            setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, token.line.getIndent(), null, null);
-            return true;
+        if (!token.line.startsWith(separator)) {
+            return false;
         }
-        return false;
+        String mediaType = null;
+        if (isOpen) {
+            mediaType = token.line.substringTrimmed(separator.length());
+            activeDocStringSeparator = separator;
+            indentToRemove = token.line.getIndent();
+        } else {
+            activeDocStringSeparator = null;
+            indentToRemove = 0;
+        }
+
+        setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, token.line.getIndent(), null, null);
+        return true;
     }
 
     @Override
@@ -210,12 +213,12 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_TableRow(Token token) {
-        if (token.line.startsWith(TABLE_CELL_SEPARATOR)) {
-            List<GherkinLineSpan> tableCells = GherkinTableRowLine.parse(token.line.getIndent(), token.line.getText());
-            setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, tableCells);
-            return true;
+        if (!token.line.startsWith(TABLE_CELL_SEPARATOR)) {
+            return false;
         }
-        return false;
+        List<GherkinLineSpan> tableCells = GherkinTableRowLine.parse(token.line.getIndent(), token.line.getText());
+        setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, tableCells);
+        return true;
     }
 
     private String removeDocStringIndent(Token token) {
