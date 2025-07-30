@@ -15,7 +15,7 @@ final class Token {
     String matchedText;
     List<GherkinLineSpan> matchedItems;
     int matchedIndent;
-    GherkinDialect matchedGherkinDialect;
+    String matchedLanguage;
     StepKeywordType keywordType;
     Location location;
 
