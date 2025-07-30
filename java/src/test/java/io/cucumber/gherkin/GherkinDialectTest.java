@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GherkinDialectTest {
 
     final GherkinDialect dialect = GherkinDialects.getDialect(Constants.DEFAULT_LANGUAGE)
-            .orElseThrow(() -> new IllegalStateException("No default dialects"));
+            .orElseThrow(() -> new IllegalStateException("No default dialect"));
     
     @Test
     void getDistinctStepKeywordTypes_star_has_multiple_stepKeywordTypes() {
@@ -56,7 +56,8 @@ class GherkinDialectTest {
     @Test
     void keywords_are_sorted_from_longest_to_shortest() {
         // Given a Gherkin dialect for French with a lot of keywords
-        GherkinDialect dialect = GherkinDialects.DIALECTS.get("fr");
+        GherkinDialect dialect = GherkinDialects.getDialect("fr")
+                .orElseThrow(() -> new IllegalStateException("No fr dialect"));
 
         // When I get the keywords
         List<String> keywords = dialect.getStepKeywords();

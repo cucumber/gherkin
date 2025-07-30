@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
 */
 public final class GherkinDialects {
 
-    static final Map<String, GherkinDialect> DIALECTS;
+    private static final Map<String, GherkinDialect> DIALECTS;
 
     private GherkinDialects() {
         // Utility class
