@@ -6,7 +6,7 @@ import java.util.Set;
 import static java.util.Objects.requireNonNull;
 
 /**
- * @deprecated use @{{@link GherkinDialects}} instead.
+ * @deprecated use {@link GherkinDialects} instead.
  */
 @Deprecated
 public final class GherkinDialectProvider {
