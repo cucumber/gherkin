@@ -51,11 +51,14 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     private void setLanguageMatched(String language, Location location) {
-        currentLanguage = language;
+        if (language.equals(currentLanguage)) {
+            return;
+        }
         KeywordMatcher keywordMatcher = activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
         if (keywordMatcher == null) {
             throw new ParserException.NoSuchLanguageException(language, location);
         }
+        currentLanguage = language;
         currentKeywordMatcher = keywordMatcher;
     }
 
