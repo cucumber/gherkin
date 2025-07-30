@@ -11,12 +11,12 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.DEFAULT_LANGUAGE;
-import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE_SEPARATOR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
+import static io.cucumber.gherkin.Constants.COMMENT_PREFIX_CHAR;
+import static io.cucumber.gherkin.Constants.DEFAULT_LANGUAGE;
+import static io.cucumber.gherkin.Constants.DOCSTRING_ALTERNATIVE_SEPARATOR;
+import static io.cucumber.gherkin.Constants.DOCSTRING_SEPARATOR;
+import static io.cucumber.gherkin.Constants.TABLE_CELL_SEPARATOR;
+import static io.cucumber.gherkin.Constants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
@@ -61,7 +61,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         currentKeywordMatcher = keywordMatcher;
     }
 
-    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<GherkinLineSpan> items) {
+    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<LineSpan> items) {
         token.matchedType = matchedType;
         token.matchedKeyword = keyword;
         token.keywordType = keywordType;
@@ -127,7 +127,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         if (!token.line.startsWith(TAG_PREFIX_CHAR)) {
             return false;
         }
-        List<GherkinLineSpan> tags = GherkinTagLine.parse(token.line.getIndent(), token.line.getText(), token.location);
+        List<LineSpan> tags = TagLine.parse(token.line.getIndent(), token.line.getText(), token.location);
         setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, tags);
         return true;
     }
@@ -157,7 +157,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         return matchTitleLine(token, TokenType.ExamplesLine, currentKeywordMatcher::matchExampleKeyword);
     }
 
-    private boolean matchTitleLine(Token token, TokenType tokenType, Function<GherkinLine, KeywordMatcher.Match> matcher) {
+    private boolean matchTitleLine(Token token, TokenType tokenType, Function<Line, KeywordMatcher.Match> matcher) {
         KeywordMatcher.Match match = matcher.apply(token.line);
         if (match == null) {
             return false;
@@ -216,7 +216,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         if (!token.line.startsWith(TABLE_CELL_SEPARATOR)) {
             return false;
         }
-        List<GherkinLineSpan> tableCells = GherkinTableRowLine.parse(token.line.getIndent(), token.line.getText());
+        List<LineSpan> tableCells = TableRowLine.parse(token.line.getIndent(), token.line.getText());
         setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, tableCells);
         return true;
     }

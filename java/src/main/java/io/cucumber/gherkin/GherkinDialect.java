@@ -20,9 +20,12 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Holds all localized keywords for a single language.
+ */
 public final class GherkinDialect {
     private static final Comparator<String> LONGEST_TO_SHORTEST_COMPARATOR =
-            (s1, s2) -> Integer.compare(s2.length(), s1.length());
+            (a, b) -> Integer.compare(b.length(), a.length());
     private final String language;
     private final String name;
     private final String nativeName;

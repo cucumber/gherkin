@@ -203,16 +203,6 @@ final class PickleCompiler {
         );
     }
 
-
-    private static final Map<StepKeywordType, PickleStepType> pickleStepTypeFromKeywordType = new EnumMap<>(StepKeywordType.class);
-
-    static {
-        pickleStepTypeFromKeywordType.put(StepKeywordType.UNKNOWN, PickleStepType.UNKNOWN);
-        pickleStepTypeFromKeywordType.put(StepKeywordType.CONTEXT, PickleStepType.CONTEXT);
-        pickleStepTypeFromKeywordType.put(StepKeywordType.ACTION, PickleStepType.ACTION);
-        pickleStepTypeFromKeywordType.put(StepKeywordType.OUTCOME, PickleStepType.OUTCOME);
-    }
-
     private PickleStep pickleStep(Step step, List<TableCell> variableCells, TableRow valuesRow, StepKeywordType keywordType) {
         List<TableCell> valueCells = valuesRow == null ? emptyList() : valuesRow.getCells();
         String stepText = interpolate(step.getText(), variableCells, valueCells);
@@ -227,7 +217,6 @@ final class PickleCompiler {
             argument = new PickleStepArgument(pickleDocString(docString.get(), variableCells, valueCells), null);
         }
 
-
         List<String> astNodeIds;
         if (valuesRow != null) {
             astNodeIds = Arrays.asList(step.getId(), valuesRow.getId());
@@ -240,9 +229,22 @@ final class PickleCompiler {
                 argument,
                 astNodeIds,
                 idGenerator.newId(),
-                pickleStepTypeFromKeywordType.get(keywordType),
+                pickleStepType(keywordType),
                 stepText
         );
+    }
+
+    private static PickleStepType pickleStepType(StepKeywordType keywordType) {
+        switch (keywordType) {
+            case CONTEXT:
+                return PickleStepType.CONTEXT;
+            case ACTION:
+                return PickleStepType.ACTION;
+            case OUTCOME:
+                return PickleStepType.OUTCOME;
+            default:
+                return PickleStepType.UNKNOWN;
+        }
     }
 
     private PickleStep pickleBackgroundStep(Step step, StepKeywordType keywordType) {

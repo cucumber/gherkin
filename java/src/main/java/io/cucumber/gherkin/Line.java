@@ -1,10 +1,10 @@
 package io.cucumber.gherkin;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR;
+import static io.cucumber.gherkin.Constants.TITLE_KEYWORD_SEPARATOR;
 import static io.cucumber.gherkin.StringUtils.trimAndIndent;
 import static java.util.Objects.requireNonNull;
 
-final class GherkinLine {
+final class Line {
 
     /**
      * The line text, including all leading and trailing whitespace characters.
@@ -24,7 +24,7 @@ final class GherkinLine {
     private final int indent;
     private final int textLength;
 
-    GherkinLine(String rawText) {
+    Line(String rawText) {
         this.rawText = requireNonNull(rawText);
         StringUtils.IndentedText trimmedIndent = trimAndIndent(rawText);
         this.text = trimmedIndent.getText();

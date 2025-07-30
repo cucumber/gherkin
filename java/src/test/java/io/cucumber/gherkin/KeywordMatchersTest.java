@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
+import static io.cucumber.gherkin.Constants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -33,7 +33,7 @@ class KeywordMatchersTest {
         assertThat(matcher).isNotNull();
 
         for (String keyword : dialect.getFeatureKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + ": some text");
+            Line line = new Line(keyword + ": some text");
             KeywordMatcher.Match match = matcher.matchFeatureKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
@@ -49,7 +49,7 @@ class KeywordMatchersTest {
         assertThat(matcher).isNotNull();
 
         for (String keyword : dialect.getBackgroundKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + ": some text");
+            Line line = new Line(keyword + ": some text");
             KeywordMatcher.Match match = matcher.matchBackgroundKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
@@ -65,7 +65,7 @@ class KeywordMatchersTest {
         assertThat(matcher).isNotNull();
 
         for (String keyword : dialect.getRuleKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + ": some text");
+            Line line = new Line(keyword + ": some text");
             KeywordMatcher.Match match = matcher.matchRuleKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
@@ -81,7 +81,7 @@ class KeywordMatchersTest {
         assertThat(matcher).isNotNull();
 
         for (String keyword : dialect.getScenarioKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + ": some text");
+            Line line = new Line(keyword + ": some text");
             KeywordMatcher.Match match = matcher.matchScenarioKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
@@ -89,7 +89,7 @@ class KeywordMatchersTest {
             );
         }
         for (String keyword : dialect.getScenarioOutlineKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + ": some text");
+            Line line = new Line(keyword + ": some text");
             KeywordMatcher.Match match = matcher.matchScenarioKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
@@ -105,7 +105,7 @@ class KeywordMatchersTest {
         assertThat(matcher).isNotNull();
 
         for (String keyword : dialect.getExamplesKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + ": some text");
+            Line line = new Line(keyword + ": some text");
             KeywordMatcher.Match match = matcher.matchExampleKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
@@ -121,7 +121,7 @@ class KeywordMatchersTest {
         assertThat(matcher).isNotNull();
 
         for (String keyword : dialect.getStepKeywords()) {
-            GherkinLine line = new GherkinLine(keyword + "some text");
+            Line line = new Line(keyword + "some text");
             StepMatch match = matcher.matchStepKeyword(line);
 
             assertAll(

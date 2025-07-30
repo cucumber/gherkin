@@ -6,14 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class GherkinLineTest {
+class LineTest {
     private static final String WHITESPACE = "\u00A0 \t";
     private static final String CUCUMBER = "🥒";
 
     @Test
     void startsWithTitleKeyword_corresponding_keyword_match() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("Feature: Hello");
+        Line gherkinLine = new Line("Feature: Hello");
 
         // When/Then
         assertTrue(gherkinLine.startsWithTitleKeyword("Feature"));
@@ -22,7 +22,7 @@ class GherkinLineTest {
     @Test
     void startsWithTitleKeyword_non_corresponding_keyword_does_not_match() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("Rule: X");
+        Line gherkinLine = new Line("Rule: X");
 
         // When/Then
         assertFalse(gherkinLine.startsWithTitleKeyword("Background")); // not the same keyword
@@ -33,7 +33,7 @@ class GherkinLineTest {
     @Test
     void startsWithTitleKeyword_keyword_without_colon_does_not_match() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("Rule");
+        Line gherkinLine = new Line("Rule");
 
         // When/Then
         assertFalse(gherkinLine.startsWithTitleKeyword("Rule"));
@@ -42,7 +42,7 @@ class GherkinLineTest {
     @Test
     void substringTrimmed_empty_idempotence() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("");
+        Line gherkinLine = new Line("");
 
         // When/Then
         assertEquals("", gherkinLine.substringTrimmed(0));
@@ -51,7 +51,7 @@ class GherkinLineTest {
     @Test
     void substringTrimmed_regular_spaces_after_index_are_trimmed() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("Rule:    my rule name ");
+        Line gherkinLine = new Line("Rule:    my rule name ");
 
         // When/Then
         assertEquals("my rule name", gherkinLine.substringTrimmed(5));
@@ -60,7 +60,7 @@ class GherkinLineTest {
     @Test
     void substringTrimmed_unicode_spaces_after_index_are_trimmed() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("Rule:" + WHITESPACE + CUCUMBER + WHITESPACE);
+        Line gherkinLine = new Line("Rule:" + WHITESPACE + CUCUMBER + WHITESPACE);
 
         // When/Then
         assertEquals(CUCUMBER, gherkinLine.substringTrimmed(5));
@@ -69,7 +69,7 @@ class GherkinLineTest {
     @Test
     void getRawTextSubstring_substring_from_beginning() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("    some text");
+        Line gherkinLine = new Line("    some text");
 
         // When/Then
         assertEquals("    some text", gherkinLine.getRawTextSubstring(0));
@@ -78,7 +78,7 @@ class GherkinLineTest {
     @Test
     void getRawTextSubstring_substring_from_middle() {
         // Given
-        GherkinLine gherkinLine = new GherkinLine("    some text");
+        Line gherkinLine = new Line("    some text");
 
         // When/Then
         assertEquals(" some text", gherkinLine.getRawTextSubstring(3));

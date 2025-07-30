@@ -8,18 +8,18 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 final class Token {
-    final GherkinLine line;
+    final Line line;
     final boolean eof;
     Parser.TokenType matchedType;
     String matchedKeyword;
     String matchedText;
-    List<GherkinLineSpan> matchedItems;
+    List<LineSpan> matchedItems;
     int matchedIndent;
     String matchedLanguage;
     StepKeywordType keywordType;
     Location location;
 
-    private Token(GherkinLine line, Location location) {
+    private Token(Line line, Location location) {
         this.line = line;
         this.location = location;
         this.eof = line == null;
@@ -33,7 +33,7 @@ final class Token {
     static Token createGherkinLine(String text, Location location) {
         requireNonNull(text);
         requireNonNull(location);
-        return new Token(new GherkinLine(text), location);
+        return new Token(new Line(text), location);
     }
 
     boolean isEOF() {

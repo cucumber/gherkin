@@ -4,12 +4,12 @@ import io.cucumber.messages.types.StepKeywordType;
 
 interface KeywordMatcher {
 
-    Match matchFeatureKeyword(GherkinLine line);
-    Match matchBackgroundKeyword(GherkinLine line);
-    Match matchRuleKeyword(GherkinLine line);
-    Match matchScenarioKeyword(GherkinLine line);
-    Match matchExampleKeyword(GherkinLine line);
-    StepMatch matchStepKeyword(GherkinLine line);
+    Match matchFeatureKeyword(Line line);
+    Match matchBackgroundKeyword(Line line);
+    Match matchRuleKeyword(Line line);
+    Match matchScenarioKeyword(Line line);
+    Match matchExampleKeyword(Line line);
+    StepMatch matchStepKeyword(Line line);
 
     final class StepMatch {
         private final String keyword;

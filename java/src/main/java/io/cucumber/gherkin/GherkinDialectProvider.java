@@ -5,6 +5,10 @@ import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @deprecated use @{{@link GherkinDialects}} instead.
+ */
+@Deprecated
 public final class GherkinDialectProvider {
 
     private final String defaultDialectName;
@@ -15,7 +19,7 @@ public final class GherkinDialectProvider {
     }
 
     public GherkinDialectProvider() {
-        this("en");
+        this(Constants.DEFAULT_LANGUAGE);
     }
 
     public GherkinDialect getDefaultDialect() {
