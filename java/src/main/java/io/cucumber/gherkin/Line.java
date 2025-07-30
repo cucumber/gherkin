@@ -66,11 +66,4 @@ final class Line {
         return StringUtils.substringAndLeftTrim(text, beginIndex, textLength);
     }
 
-    boolean startsWithTitleKeyword(String keyword) {
-        int keywordLength = keyword.length();
-        return textLength > keywordLength &&
-               text.charAt(keywordLength) == TITLE_KEYWORD_SEPARATOR &&
-               text.startsWith(keyword);
-    }
-
 }
