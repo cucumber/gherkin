@@ -1,14 +1,39 @@
 package io.cucumber.gherkin;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
+import static java.util.Objects.requireNonNull;
 
-final class GherkinDialects {
-    static final Map<String, GherkinDialect> DIALECTS;
+/**
+* Utility class to access all known {@linkplain  GherkinDialect gherkin dialects}.
+*/
+public final class GherkinDialects {
+
+    private static final Map<String, GherkinDialect> DIALECTS;
+
+    private GherkinDialects() {
+        // Utility class
+    }
+
+    public static Set<String> getLanguages() {
+        return GherkinDialects.DIALECTS.keySet();
+    }
+    
+    public static Collection<GherkinDialect> getDialects() {
+        return GherkinDialects.DIALECTS.values();
+    }
+    
+    public static Optional<GherkinDialect> getDialect(String language) {
+        requireNonNull(language);
+        return Optional.ofNullable(GherkinDialects.DIALECTS.get(language));
+    }
 
     static {
         Map<String, GherkinDialect> dialects  = new LinkedHashMap<>();

@@ -270,11 +270,11 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableCell> getCells(Token token) {
-        List<GherkinLineSpan> matchedItems = token.matchedItems;
+        List<LineSpan> matchedItems = token.matchedItems;
         int itemSize = matchedItems.size();
         List<TableCell> cells = new ArrayList<>(itemSize);
         for (int i = 0; i < itemSize; i++) {
-            GherkinLineSpan cellItem = matchedItems.get(i);
+            LineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
                     cellItem.text
@@ -300,7 +300,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         List<Token> tokens = tagsNode.getTokens(TokenType.TagLine);
         List<Tag> tags = new ArrayList<>();
         for (Token token : tokens) {
-            for (GherkinLineSpan tagItem : token.matchedItems) {
+            for (LineSpan tagItem : token.matchedItems) {
                 tags.add(new Tag(atColumn(token.location, tagItem.column), tagItem.text, idGenerator.newId()));
             }
         }

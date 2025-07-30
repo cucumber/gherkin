@@ -5,15 +5,15 @@ import io.cucumber.messages.types.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
+import static io.cucumber.gherkin.Constants.COMMENT_PREFIX_CHAR;
+import static io.cucumber.gherkin.Constants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.StringUtils.containsWhitespace;
 import static io.cucumber.gherkin.StringUtils.isWhitespace;
 
-final class GherkinTagLine {
+final class TagLine {
 
-    static List<GherkinLineSpan> parse(int indent, String text, Location location) {
+    static List<LineSpan> parse(int indent, String text, Location location) {
         int textLength = text.length();
         // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
         // so there is always at least one tag, and it sits at the start of the
@@ -24,7 +24,7 @@ final class GherkinTagLine {
             indexEndOfLine++;
         }
 
-        List<GherkinLineSpan> tags = new ArrayList<>();
+        List<LineSpan> tags = new ArrayList<>();
         int indexEndCurrentTag;
         while (indexStartCurrentTag < indexEndOfLine) {
             // look for the next tag
@@ -50,7 +50,7 @@ final class GherkinTagLine {
                 }
                 // build the line span
                 String token = text.substring(indexStartCurrentTag, indexEndCurrentTag);
-                tags.add(new GherkinLineSpan(column, token));
+                tags.add(new LineSpan(column, token));
             }
 
             // setup for the next tag
