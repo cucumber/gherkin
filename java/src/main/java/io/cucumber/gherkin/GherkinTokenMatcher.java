@@ -16,7 +16,6 @@ import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_ALTERNATIVE
 import static io.cucumber.gherkin.GherkinLanguageConstants.DOCSTRING_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TABLE_CELL_SEPARATOR;
 import static io.cucumber.gherkin.GherkinLanguageConstants.TAG_PREFIX_CHAR;
-import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
@@ -162,7 +161,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         }
         String keyword = match.getKeyword();
         int keywordLength = match.getKeywordLength();
-        String title = token.line.substringTrimmed(keywordLength + TITLE_KEYWORD_SEPARATOR_LENGTH);
+        String title = token.line.substringTrimmed(keywordLength);
         setTokenMatched(token, tokenType, title, keyword, token.line.getIndent(), null, null);
         return true;
     }

@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.cucumber.gherkin.GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -36,7 +37,7 @@ class KeywordMatchersTest {
             KeywordMatcher.Match match = matcher.matchFeatureKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
-                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length())
+                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
     }
@@ -52,7 +53,7 @@ class KeywordMatchersTest {
             KeywordMatcher.Match match = matcher.matchBackgroundKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
-                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length())
+                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
     }
@@ -68,7 +69,7 @@ class KeywordMatchersTest {
             KeywordMatcher.Match match = matcher.matchRuleKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
-                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length())
+                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
     }
@@ -84,7 +85,7 @@ class KeywordMatchersTest {
             KeywordMatcher.Match match = matcher.matchScenarioKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
-                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length())
+                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
         for (String keyword : dialect.getScenarioOutlineKeywords()) {
@@ -92,7 +93,7 @@ class KeywordMatchersTest {
             KeywordMatcher.Match match = matcher.matchScenarioKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
-                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length())
+                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
     }
@@ -108,7 +109,7 @@ class KeywordMatchersTest {
             KeywordMatcher.Match match = matcher.matchExampleKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
-                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length())
+                    () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
     }
