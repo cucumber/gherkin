@@ -102,6 +102,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
             if (keywordMatcher == null) {
                 throw new ParserException.NoSuchLanguageException(language, token.location);
             }
+            currentLanguage = language;
             currentKeywordMatcher = keywordMatcher;
             return true;
         }
