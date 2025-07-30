@@ -58,8 +58,8 @@ public class GenerateKeywordMatchers {
 
         Map<String, Map<String, Object>> binding = new LinkedHashMap<>();
         Map<String, Object> dialects = readGherkinLanguages();
-        Map<String, Object> model = createBinding(dialects);
-        binding.put("dialects", model);
+        Map<String, Object> matcherModels = createMatcherModels(dialects);
+        binding.put("matchers", matcherModels);
 
         try {
             Files.createDirectories(path.getParent());
@@ -90,12 +90,12 @@ public class GenerateKeywordMatchers {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> createBinding(Map<String, Object> dialects) {
+    private static Map<String, Object> createMatcherModels(Map<String, Object> dialects) {
         return dialects.entrySet()
                 .stream()
                 .sorted(comparingByKey())
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey, entry -> process(
+                        Map.Entry::getKey, entry -> matcherModel(
                                 entry.getKey(), 
                                 (Map<String, Object>) entry.getValue()),
                         // TODO: Extract, fix
@@ -105,30 +105,54 @@ public class GenerateKeywordMatchers {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> process(String language, Map<String, Object> dialect) {
+    private static Map<String, Object> matcherModel(String language, Map<String, Object> dialect) {
         String normalizedLanguage = getNormalizedLanguage(language);
         Map<String, Object> model = new HashMap<>();
         model.put("className", capitalize(normalizedLanguage));
 
-//        List<String> featureKeywords = (List<String>) dialect.get("feature");
-//        model.put("featureKeywords", featureKeywords);
-//        model.put("featureKeywordsLength", lengthsOf(featureKeywords));
-//        
-//        List<String> ruleKeywords = (List<String>) dialect.get("rule");
-//        model.put("ruleKeywords", ruleKeywords);
-//        model.put("ruleKeywordsLength", lengthsOf(ruleKeywords));
-//        
-//        List<String> scenarioKeywords = distinctKeywords(
-//                (List<String>) dialect.get("scenario"),
-//                (List<String>) dialect.get("scenarioOutline")
-//        );
-//        model.put("scenarioKeywords", scenarioKeywords);
-//        model.put("scenarioKeywordsLength", lengthsOf(scenarioKeywords));
-//
-//        List<String> exampleKeywords = (List<String>) dialect.get("example");
-//        model.put("exampleKeywords", exampleKeywords);
-//        model.put("exampleKeywordsLength", lengthsOf(exampleKeywords));
+        List<String> featureKeywords = (List<String>) dialect.get("feature");
+        model.put("features", featureKeywords.stream().map(keyword -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("keyword", keyword);
+            entry.put("length", keyword.length());
+            return entry;
+        }).collect(Collectors.toList()));
+        
+        List<String> backgroundKeywords = (List<String>) dialect.get("background");
+        model.put("backgrounds", backgroundKeywords.stream().map(keyword -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("keyword", keyword);
+            entry.put("length", keyword.length());
+            return entry;
+        }).collect(Collectors.toList()));
+        
+        List<String> ruleKeywords = (List<String>) dialect.get("rule");
+        model.put("rules", ruleKeywords.stream().map(keyword -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("keyword", keyword);
+            entry.put("length", keyword.length());
+            return entry;
+        }).collect(Collectors.toList()));
 
+        List<String> scenarioKeywords = distinctKeywords(
+                (List<String>) dialect.get("scenario"),
+                (List<String>) dialect.get("scenarioOutline")
+        );        
+        model.put("scenarios", scenarioKeywords.stream().map(keyword -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("keyword", keyword);
+            entry.put("length", keyword.length());
+            return entry;
+        }).collect(Collectors.toList()));
+      
+        List<String> exampleKeywords = (List<String>) dialect.get("examples");
+        model.put("examples", exampleKeywords.stream().map(keyword -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("keyword", keyword);
+            entry.put("length", keyword.length());
+            return entry;
+        }).collect(Collectors.toList()));
+        
         Map<String, StepKeywordType> aggregateKeywordTypes = aggregateKeywordTypes(
                 (List<String>) dialect.get("given"),
                 (List<String>) dialect.get("when"),

@@ -18,7 +18,7 @@ class KeywordMatchersTest {
             KeywordMatcher matcher = KeywordMatchers.getKeywordMatcher(language);
             for (String keyword : dialect.getStepKeywords()) {
                 GherkinLine line = new GherkinLine(keyword + "some text");
-                KeywordMatcher.Match match = matcher.matchStepKeyword(line);
+                KeywordMatcher.StepMatch match = matcher.matchStepKeyword(line);
                 assertEquals(keyword, match.getKeyword());
                 assertEquals(keyword.length(), match.getKeywordLength());
                 Set<StepKeywordType> stepKeywordTypesSet = dialect.getStepKeywordTypesSet(keyword);

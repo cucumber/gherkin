@@ -1,6 +1,7 @@
 package io.cucumber.gherkin;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -123,41 +124,39 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_FeatureLine(Token token) {
-        return matchTitleLine(token, TokenType.FeatureLine, currentDialect.getFeatureKeywords());
+        return matchTitleLine(token, TokenType.FeatureLine, currentKeywordMatcher::matchFeatureKeyword);
     }
 
     @Override
     public boolean match_RuleLine(Token token) {
-        return matchTitleLine(token, TokenType.RuleLine, currentDialect.getRuleKeywords());
+        return matchTitleLine(token, TokenType.RuleLine, currentKeywordMatcher::matchRuleKeyword);
     }
 
     @Override
     public boolean match_BackgroundLine(Token token) {
-        return matchTitleLine(token, TokenType.BackgroundLine, currentDialect.getBackgroundKeywords());
+        return matchTitleLine(token, TokenType.BackgroundLine, currentKeywordMatcher::matchBackgroundKeyword);
     }
 
     @Override
     public boolean match_ScenarioLine(Token token) {
-        return matchTitleLine(token, TokenType.ScenarioLine, currentDialect.getScenarioKeywords()) ||
-                matchTitleLine(token, TokenType.ScenarioLine, currentDialect.getScenarioOutlineKeywords());
+        return matchTitleLine(token, TokenType.ScenarioLine, currentKeywordMatcher::matchScenarioKeyword);
     }
 
     @Override
     public boolean match_ExamplesLine(Token token) {
-        return matchTitleLine(token, TokenType.ExamplesLine, currentDialect.getExamplesKeywords());
+        return matchTitleLine(token, TokenType.ExamplesLine, currentKeywordMatcher::matchExampleKeyword);
     }
 
-    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
-    private boolean matchTitleLine(Token token, TokenType tokenType, List<String> keywords) {
-        for (int i = 0, keywordsSize = keywords.size(); i < keywordsSize; i++) {
-            String keyword = keywords.get(i);
-            if (token.line.startsWithTitleKeyword(keyword)) {
-                String title = token.line.substringTrimmed(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH);
-                setTokenMatched(token, tokenType, title, keyword, token.line.getIndent(), null, null);
-                return true;
-            }
+    private boolean matchTitleLine(Token token, TokenType tokenType, Function<GherkinLine, KeywordMatcher.Match> matcher) {
+        KeywordMatcher.Match match = matcher.apply(token.line);
+        if (match == null) {
+            return false;
         }
-        return false;
+        String keyword = match.getKeyword();
+        int keywordLength = match.getKeywordLength();
+        String title = token.line.substringTrimmed(keywordLength + TITLE_KEYWORD_SEPARATOR_LENGTH);
+        setTokenMatched(token, tokenType, title, keyword, token.line.getIndent(), null, null);
+        return true;
     }
 
     @Override
@@ -190,7 +189,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_StepLine(Token token) {
-        KeywordMatcher.Match match = currentKeywordMatcher.matchStepKeyword(token.line);
+        KeywordMatcher.StepMatch match = currentKeywordMatcher.matchStepKeyword(token.line);
         if (match == null) {
             return false;
         }
