@@ -2,6 +2,7 @@ package io.cucumber.gherkin;
 
 import io.cucumber.gherkin.KeywordMatcher.StepMatch;
 import io.cucumber.messages.types.StepKeywordType;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -11,6 +12,8 @@ import java.util.Set;
 import static io.cucumber.gherkin.Constants.TITLE_KEYWORD_SEPARATOR_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class KeywordMatchersTest {
 
@@ -34,6 +37,20 @@ class KeywordMatchersTest {
         }
     }
 
+    @Test
+    void featureKeywordsDontMatchStringThatStartsSimilarlyButIsNotAFeatureKeyword() {
+        // Given
+        KeywordMatcher matcher = KeywordMatchers.of("en");
+        assertNotNull(matcher);
+        Line line = new Line("Feature that must not match: some text");
+
+        // When
+        KeywordMatcher.Match match = matcher.matchFeatureKeyword(line);
+
+        // Then
+        assertNull(match);
+    }
+
     @ParameterizedTest
     @MethodSource("languages")
     void backgroundKeywordsAreConsistent(GherkinDialect dialect) {
@@ -50,6 +67,20 @@ class KeywordMatchersTest {
         }
     }
 
+    @Test
+    void backgroundKeywordsDontMatchStringThatStartsSimilarlyButIsNotABackgroundKeyword() {
+        // Given
+        KeywordMatcher matcher = KeywordMatchers.of("en");
+        assertNotNull(matcher);
+        Line line = new Line("Background that must not match: some text");
+
+        // When
+        KeywordMatcher.Match match = matcher.matchBackgroundKeyword(line);
+
+        // Then
+        assertNull(match);
+    }
+
     @ParameterizedTest
     @MethodSource("languages")
     void ruleKeywordsAreConsistent(GherkinDialect dialect) {
@@ -64,6 +95,20 @@ class KeywordMatchersTest {
                     () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
+    }
+
+    @Test
+    void ruleKeywordsDontMatchStringThatStartsSimilarlyButIsNotARuleKeyword() {
+        // Given
+        KeywordMatcher matcher = KeywordMatchers.of("en");
+        assertNotNull(matcher);
+        Line line = new Line("Rule that must not match: some text");
+
+        // When
+        KeywordMatcher.Match match = matcher.matchRuleKeyword(line);
+
+        // Then
+        assertNull(match);
     }
 
     @ParameterizedTest
@@ -90,6 +135,20 @@ class KeywordMatchersTest {
         }
     }
 
+    @Test
+    void scenarioKeywordsDontMatchStringThatStartsSimilarlyButIsNotAScenarioKeyword() {
+        // Given
+        KeywordMatcher matcher = KeywordMatchers.of("en");
+        assertNotNull(matcher);
+        Line line = new Line("Scenario that must not match: some text");
+
+        // When
+        KeywordMatcher.Match match = matcher.matchScenarioKeyword(line);
+
+        // Then
+        assertNull(match);
+    }
+
     @ParameterizedTest
     @MethodSource("languages")
     void exampleKeywordsAreConsistent(GherkinDialect dialect) {
@@ -98,12 +157,26 @@ class KeywordMatchersTest {
 
         for (String keyword : dialect.getExamplesKeywords()) {
             Line line = new Line(keyword + ": some text");
-            KeywordMatcher.Match match = matcher.matchExampleKeyword(line);
+            KeywordMatcher.Match match = matcher.matchExamplesKeyword(line);
             assertAll(
                     () -> assertThat(match.getKeyword()).isEqualTo(keyword),
                     () -> assertThat(match.getKeywordLength()).isEqualTo(keyword.length() + TITLE_KEYWORD_SEPARATOR_LENGTH)
             );
         }
+    }
+
+    @Test
+    void exampleKeywordsDontMatchStringThatStartsSimilarlyButIsNotAnExampleKeyword() {
+        // Given
+        KeywordMatcher matcher = KeywordMatchers.of("en");
+        assertNotNull(matcher);
+        Line line = new Line("Examples that must not match: some text");
+
+        // When
+        KeywordMatcher.Match match = matcher.matchExamplesKeyword(line);
+
+        // Then
+        assertNull(match);
     }
 
     @ParameterizedTest
