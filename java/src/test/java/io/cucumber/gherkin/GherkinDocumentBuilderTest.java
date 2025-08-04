@@ -8,6 +8,8 @@ import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.Pickle;
 import io.cucumber.messages.types.TableRow;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 
@@ -30,43 +32,60 @@ class GherkinDocumentBuilderTest {
         assertEquals("2", d2.getFeature().get().getName());
     }
 
-    @Test
-    void parses_rules() {
+    @ParameterizedTest
+    @CsvSource({
+            "/features/io/cucumber/gherkin/dummyInitializationFeature.feature, 4, 3",
+            "/features/io/cucumber/gherkin/dummyCascadingInitializationFeature.feature, 5, 4"
+    })
+    void parses_rules(String initializationFeature, int numberOfStepsForScenario1, int numberOfStepsForScenario2) {
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
-        String data = "" +
-                "Feature: Some rules\n" +
-                "\n" +
-                "  Background:\n" +
-                "    Given fb\n" +
-                "\n" +
-                "  Rule: A\n" +
-                "    The rule A description\n" +
-                "\n" +
-                "    Background:\n" +
-                "      Given ab\n" +
-                "\n" +
-                "    Example: Example A\n" +
-                "      Given a\n" +
-                "\n" +
-                "  Rule: B\n" +
-                "    The rule B description\n" +
-                "\n" +
-                "    Example: Example B\n" +
-                "      Given b\n";
-        GherkinDocument doc = parser.parse(data, "test.feature");
 
+        String data =
+                "Feature: Some rules\n" +
+                        "\n" +
+                        "  Initialization Feature: " + initializationFeature + "\n" +
+                        "\n" +
+                        "  Background:\n" +
+                        "    Given a\n" +
+                        "\n" +
+                        "  Rule: A\n" +
+                        "    The rule A description\n" +
+                        "    Background:\n" +
+                        "      Given ab\n" +
+                        "    Example: Example A\n" +
+                        "      Given a\n" +
+                        "\n" +
+                        "  Rule: B\n" +
+                        "    The rule B description\n" +
+                        "    Example: Example B\n" +
+                        "      Given b\n";
+
+        GherkinDocument doc = parser.parse(data, "test.feature");
         List<FeatureChild> children = doc.getFeature().get().getChildren();
-        assertEquals(3, children.size());
+
+        // CODE OVERRIDE - START
+        // Actual assertion = assertEquals(3, children.size());
+        // Since we have added an initialization feature, the number of children is incremented by one.
+        assertEquals(4, children.size());
+        // CODE OVERRIDE - END
 
         IdGenerator idGenerator = new IncrementingIdGenerator();
         PickleCompiler pickleCompiler = new PickleCompiler(idGenerator);
         List<Pickle> pickles = pickleCompiler.compile(doc, "hello.feature");
+
         assertEquals(2, pickles.size());
 
-        assertEquals(3, pickles.get(0).getSteps().size());
+        // CODE OVERRIDE - START
+        // assertEquals(3, pickles.get(0).getSteps().size());
+        // One step is incremented as we have added an initialization feature containing 1 background step.
+        assertEquals(numberOfStepsForScenario1, pickles.get(0).getSteps().size());
+        // CODE OVERRIDE - END
 
-        assertEquals(2, pickles.get(1).getSteps().size());
-
+        // CODE OVERRIDE - START
+        // assertEquals(2, pickles.get(1).getSteps().size());
+        // One step is incremented as we have added an initialization feature containing 1 background step.
+        assertEquals(numberOfStepsForScenario2, pickles.get(1).getSteps().size());
+        // CODE OVERRIDE - END
     }
 
     @Test
