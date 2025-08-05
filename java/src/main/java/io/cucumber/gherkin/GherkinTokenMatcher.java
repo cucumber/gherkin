@@ -142,6 +142,32 @@ final class GherkinTokenMatcher implements TokenMatcher {
         return matchTitleLine(token, TokenType.RuleLine, currentKeywordMatcher::matchRuleKeyword);
     }
 
+// CODE OVERRIDE - START
+    /*
+    This method is added to match the initialization line in the Gherkin Parser.
+    This is currently only matching the keyword "Initialization Feature".
+    However to support multiple dialects as the other keywords, we can override io.cucumber.gherkin.GherkinDialects
+    along with adding below variable & method in io.cucumber.gherkin.GherkinDialect as
+
+        private final List<String> initializationKeywords;
+
+        public List<String> getInitializationKeywords() {
+            return initializationKeywords;
+        }
+
+    and call this method to match the keyword as
+    return matchTitleLine(token, TokenType.InitializationLine, currentDialect.getInitializationKeywords());
+    */
+    private static final Function<Line, KeywordMatcher.Match> initializationMatcher = line -> {
+        return !line.isEmpty() ? new KeywordMatcher.Match("Initialization Feature:", 23) : null;
+    };
+
+    @Override
+    public boolean match_InitializationLine(Token token) {
+        return matchTitleLine(token, TokenType.InitializationLine, initializationMatcher);
+    }
+// CODE OVERRIDE - END
+
     @Override
     public boolean match_BackgroundLine(Token token) {
         return matchTitleLine(token, TokenType.BackgroundLine, currentKeywordMatcher::matchBackgroundKeyword);
