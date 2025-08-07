@@ -224,13 +224,16 @@ class TokenMatcher:
             self.keyword_types[keyword].append("Conjunction")
 
         self._sorted_step_keywords = sorted(
-            (self.dialect.given_keywords
-             + self.dialect.when_keywords
-             + self.dialect.then_keywords
-             + self.dialect.and_keywords
-             + self.dialect.but_keywords),
+            (
+                self.dialect.given_keywords
+                + self.dialect.when_keywords
+                + self.dialect.then_keywords
+                + self.dialect.and_keywords
+                + self.dialect.but_keywords
+            ),
             key=len,
-            reverse=True)
+            reverse=True,
+        )
 
     def _unescaped_docstring(self, text: str) -> str:
         if self._active_doc_string_separator == '"""':

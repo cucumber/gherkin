@@ -11,8 +11,8 @@ def main() -> None:
     for file in files:
         scanner = TokenScanner(file)
 
-        if(file.endswith('.md')):
-            print(parser.parse(scanner, GherkinInMarkdownTokenMatcher()) )
+        if file.endswith(".md"):
+            print(parser.parse(scanner, GherkinInMarkdownTokenMatcher()))
         else:
             print(parser.parse(scanner))
 

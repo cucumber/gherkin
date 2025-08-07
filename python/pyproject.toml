@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.8.4,<0.9.0"]
+build-backend = "uv_build"
 
 [project]
 name = "gherkin-official"
@@ -11,13 +11,15 @@ requires-python = ">=3.9"
 authors = [
     { name = "Cucumber Ltd and Björn Rasmusson", email = "cukes@googlegroups.com" }
 ]
-
 dependencies = [
   "typing_extensions>=4",
 ]
 keywords = ["gherkin", "cucumber", "bdd"]
+license = "MIT"
+license-files = [
+  "LICENSE",
+]
 classifiers = [
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -34,22 +36,26 @@ Download = "https://pypi.python.org/pypi/gherkin-official"
 Issues = "https://github.com/cucumber/gherkin/issues"
 Changelog = "https://github.com/cucumber/gherkin/releases"
 
-[tool.setuptools.packages.find]
-include = ["gherkin", "gherkin.*"]
+[dependency-groups]
+dev = [
+    "coverage>=4.2",
+    "pre-commit==4.2.0",
+    "pytest>=5.0",
+]
 
-[tool.setuptools.package-data]
-gherkin = ["*.json"]
+[tool.uv]
+trusted-publishing = "always"
+
+[tool.uv.build-backend]
+module-name = "gherkin"
+module-root = ""
 
 [tool.mypy]
 disallow_untyped_defs = true
 packages = ["gherkin"]
 
-[tool.ruff]
-target-version = "py39"
-
-[tool.flake8]
-# E1: indentation: already covered by `ruff`
-# E2: whitespace: already covered by `ruff`
-# E3: blank line: already covered by `ruff`
-# E501: line length: already covered by `ruff`
-extend-ignore = "E1,E2,E3,E501"
+[tool.ruff.lint]
+extend-select = [
+  "B",
+  "UP",
+]
