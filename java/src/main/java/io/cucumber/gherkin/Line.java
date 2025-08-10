@@ -57,6 +57,19 @@ final class Line {
         return text.startsWith(prefix);
     }
 
+    /**
+     * The text is expected to be non-empty.
+     * This is an optimized version of startsWith(prefix) that
+     * avoids checking the prefix length for most negative matches.
+     * @param firstChar the first character of the prefix
+     * @param prefixAfterFirstChar the prefix after the first character.
+     * @return true if the text starts with the given prefix, false otherwise.
+     */
+    boolean startsWith(char firstChar, String prefixAfterFirstChar) {
+        return text.charAt(0) == firstChar && // fast check for the first character (avoids startsWith to compute the prefix length)
+               text.startsWith(prefixAfterFirstChar, 1);
+    }
+
     boolean startsWith(char prefix) {
         return !empty && text.charAt(0) == prefix;
     }
@@ -66,8 +79,7 @@ final class Line {
         return StringUtils.substringAndLeftTrim(text, beginIndex, textLength);
     }
 
-    boolean startsWithTitleKeyword(String keyword) {
-        int keywordLength = keyword.length();
+    boolean startsWithTitleKeyword(String keyword, int keywordLength) {
         return textLength > keywordLength &&
                text.charAt(keywordLength) == TITLE_KEYWORD_SEPARATOR &&
                text.startsWith(keyword);

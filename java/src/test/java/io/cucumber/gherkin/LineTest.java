@@ -16,7 +16,7 @@ class LineTest {
         Line gherkinLine = new Line("Feature: Hello");
 
         // When/Then
-        assertTrue(gherkinLine.startsWithTitleKeyword("Feature"));
+        assertTrue(gherkinLine.startsWithTitleKeyword("Feature", "Feature".length()));
     }
 
     @Test
@@ -25,9 +25,9 @@ class LineTest {
         Line gherkinLine = new Line("Rule: X");
 
         // When/Then
-        assertFalse(gherkinLine.startsWithTitleKeyword("Background")); // not the same keyword
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rule: X")); // same keyword but with colon
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rul")); // shorter than keyword
+        assertFalse(gherkinLine.startsWithTitleKeyword("Background", "Background".length())); // not the same keyword
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rule: X", "Rule: X".length())); // same keyword but with colon
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rul", "Rul".length())); // shorter than keyword
     }
 
     @Test
@@ -36,7 +36,7 @@ class LineTest {
         Line gherkinLine = new Line("Rule");
 
         // When/Then
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rule"));
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rule", "Rule".length()));
     }
 
     @Test

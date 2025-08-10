@@ -116,6 +116,7 @@ class GenerateKeywordMatchers {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
+            entry.put("codePointCount", keyword.codePointCount(0, keyword.length()));
             return entry;
         }).collect(Collectors.toList()));
 
@@ -126,6 +127,7 @@ class GenerateKeywordMatchers {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
+            entry.put("codePointCount", keyword.codePointCount(0, keyword.length()));
             return entry;
         }).collect(Collectors.toList()));
 
@@ -136,6 +138,7 @@ class GenerateKeywordMatchers {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
+            entry.put("codePointCount", keyword.codePointCount(0, keyword.length()));
             return entry;
         }).collect(Collectors.toList()));
 
@@ -147,6 +150,7 @@ class GenerateKeywordMatchers {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
+            entry.put("codePointCount", keyword.codePointCount(0, keyword.length()));
             return entry;
         }).collect(Collectors.toList()));
 
@@ -157,6 +161,7 @@ class GenerateKeywordMatchers {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
+            entry.put("codePointCount", keyword.codePointCount(0, keyword.length()));
             return entry;
         }).collect(Collectors.toList()));
 
@@ -179,6 +184,7 @@ class GenerateKeywordMatchers {
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
             entry.put("keywordType", aggregateKeywordTypes.get(keyword).name());
+            entry.put("codePointCount", keyword.codePointCount(0, keyword.length()));
             return entry;
         }).collect(Collectors.toList()));
 

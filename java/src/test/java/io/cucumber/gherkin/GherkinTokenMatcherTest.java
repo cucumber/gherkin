@@ -33,4 +33,16 @@ class GherkinTokenMatcherTest {
         // Then
         assertTrue(isStepLine, "Expected step line to match with language 'en'");
     }
+
+    @Test
+    void right_to_left_keywords_are_identified_properly() {
+        // Given
+        GherkinTokenMatcher matcher = new GherkinTokenMatcher("fa");
+
+        // When
+        boolean isStepLine = matcher.match_StepLine(Token.createGherkinLine(GherkinDialects.getDialect("fa").get().getStepKeywords().get(0)+" some text", Locations.atLine(1)));
+
+        // Then
+        assertTrue(isStepLine, "Expected step line to match with language 'en'");
+    }
 }
