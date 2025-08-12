@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Fixed
+- [.Net] Handle all ambiguous keywords properly ([#435](https://github.com/cucumber/gherkin/pull/435))
 - [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
 - [Java] Improve performance with a generated keyword matcher ([#445](https://github.com/cucumber/gherkin/pull/445))
 
@@ -28,7 +29,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [Go] Trim trailing tab characters from title and step lines ([#441](https://github.com/cucumber/gherkin/pull/441))
 - [Java] Use a more consistent definition of whitespace ([#442](https://github.com/cucumber/gherkin/pull/442))
-
 
 ## [33.0.0] - 2025-07-07
 ### Changed
