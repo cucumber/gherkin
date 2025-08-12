@@ -17,6 +17,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
 
+### Removed
+- [Python] Dropped legacy `.egg-info` metadata distribution artifacts
+
 ## [33.1.0] - 2025-07-27
 ### Changed
 - [Java] Optimize GherkinParser performance ([#436](https://github.com/cucumber/gherkin/pull/436))
