@@ -16,6 +16,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Changed
 - Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
+- [.NET] Migrated to the use of Cucumber/Messages. Eliminated the built-in Gherkin.CucumberMessages.Types ([#426](https://github.com/cucumber/gherkin/pull/426))
 
 ### Removed
 - [Python] Dropped legacy `.egg-info` metadata distribution artifacts
@@ -27,6 +28,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [Go] Trim trailing tab characters from title and step lines ([#441](https://github.com/cucumber/gherkin/pull/441))
 - [Java] Use a more consistent definition of whitespace ([#442](https://github.com/cucumber/gherkin/pull/442))
+
 
 ## [33.0.0] - 2025-07-07
 ### Changed
