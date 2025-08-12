@@ -13,7 +13,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 /**
  * Parser for the {@code # encoding: <encoding> } pragma.
  */
-class EncodingParser {
+final class EncodingParser {
     private static final byte[] UTF_BOM_BYTES = "\uFEFF".getBytes(UTF_8);
     private static final Pattern COMMENT_OR_EMPTY_LINE_PATTERN = Pattern.compile("^\\s*#|^\\s*$");
     private static final Pattern ENCODING_PATTERN = Pattern.compile("^\\s*#\\s*encoding\\s*:\\s*([0-9a-zA-Z\\-]+)",

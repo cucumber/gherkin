@@ -7,10 +7,10 @@ import java.util.PrimitiveIterator;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 
-final class GherkinTableRowLine {
+final class TableRowLine {
 
-    static List<GherkinLineSpan> parse(int indent, String text) {
-        List<GherkinLineSpan> lineSpans = new ArrayList<>();
+    static List<LineSpan> parse(int indent, String text) {
+        List<LineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
         boolean beforeFirst = true;
         int col = 0;
@@ -47,7 +47,7 @@ final class GherkinTableRowLine {
                     } else {
                         StringUtils.IndentedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
                         int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
-                        lineSpans.add(new GherkinLineSpan(column, trimmedCellIndent.getText()));
+                        lineSpans.add(new LineSpan(column, trimmedCellIndent.getText()));
                     }
                     cellBuilder.setLength(0);// reuse instance rather than creating a new one is faster
                     cellStart = col + 1;

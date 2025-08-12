@@ -2,7 +2,7 @@ package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
 
-class Locations {
+final class Locations {
 
     /**
      * Columns are index-1 based.

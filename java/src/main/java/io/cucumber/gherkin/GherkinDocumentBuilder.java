@@ -29,7 +29,7 @@ import static io.cucumber.gherkin.Parser.Builder;
 import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 
-class GherkinDocumentBuilder implements Builder<GherkinDocument> {
+final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     private final List<Comment> comments = new ArrayList<>();
     private final IdGenerator idGenerator;
     private String uri;
@@ -179,18 +179,14 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 for (Rule rule : node.<Rule>getItems(RuleType.Rule)) {
                     children.add(new FeatureChild(rule, null, null));
                 }
-                String description = getDescription(header);
-                if (featureLine.matchedGherkinDialect == null)
-                    return null;
-                String language = featureLine.matchedGherkinDialect.getLanguage();
 
                 return new Feature(
                         featureLine.location,
                         tags,
-                        language,
+                        featureLine.matchedLanguage,
                         featureLine.matchedKeyword,
                         featureLine.matchedText,
-                        description,
+                        getDescription(header),
                         children
                 );
             }
@@ -274,11 +270,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableCell> getCells(Token token) {
-        List<GherkinLineSpan> matchedItems = token.matchedItems;
+        List<LineSpan> matchedItems = token.matchedItems;
         int itemSize = matchedItems.size();
         List<TableCell> cells = new ArrayList<>(itemSize);
         for (int i = 0; i < itemSize; i++) {
-            GherkinLineSpan cellItem = matchedItems.get(i);
+            LineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
                     cellItem.text
@@ -304,7 +300,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         List<Token> tokens = tagsNode.getTokens(TokenType.TagLine);
         List<Tag> tags = new ArrayList<>();
         for (Token token : tokens) {
-            for (GherkinLineSpan tagItem : token.matchedItems) {
+            for (LineSpan tagItem : token.matchedItems) {
                 tags.add(new Tag(atColumn(token.location, tagItem.column), tagItem.text, idGenerator.newId()));
             }
         }
