@@ -9,6 +9,25 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Fixed
 - [.Net] Handle all ambiguous keywords properly ([#435](https://github.com/cucumber/gherkin/pull/435))
+- [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
+- [Java] Improve performance with a generated keyword matcher ([#445](https://github.com/cucumber/gherkin/pull/445))
+
+### Deprecated
+- [Java] Deprecate `GherkinDialectProvider` in favour of `GherkinDialects` ([#448](https://github.com/cucumber/gherkin/pull/448))
+
+### Changed
+- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
+
+### Removed
+- [Python] Dropped legacy `.egg-info` metadata distribution artifacts
+
+## [33.1.0] - 2025-07-27
+### Changed
+- [Java] Optimize GherkinParser performance ([#436](https://github.com/cucumber/gherkin/pull/436))
+
+### Fixed
+- [Go] Trim trailing tab characters from title and step lines ([#441](https://github.com/cucumber/gherkin/pull/441))
+- [Java] Use a more consistent definition of whitespace ([#442](https://github.com/cucumber/gherkin/pull/442))
 
 ## [33.0.0] - 2025-07-07
 ### Changed
@@ -792,7 +811,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v33.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v33.1.0...HEAD
+[33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
 [33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
 [32.2.0]: https://github.com/cucumber/gherkin/compare/v32.1.2...v32.2.0
 [32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
