@@ -3,11 +3,9 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.MessageToNdjsonWriter;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +59,7 @@ public class Main {
         try {
             writer.write(envelope);
         } catch (IOException e) {
-            throw new GherkinException("Couldn't print messages", e);
+            throw new RuntimeException("Couldn't print messages", e);
         }
     }
 

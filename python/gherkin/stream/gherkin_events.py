@@ -67,10 +67,13 @@ class GherkinEvents:
         source = source_event["source"]["data"]
 
         try:
-            matcher=None
-            if source_event["source"]["mediaType"] == 'text/x.cucumber.gherkin+plain':
+            matcher = None
+            if source_event["source"]["mediaType"] == "text/x.cucumber.gherkin+plain":
                 matcher = TokenMatcher()
-            elif source_event["source"]["mediaType"] == 'text/x.cucumber.gherkin+markdown':
+            elif (
+                source_event["source"]["mediaType"]
+                == "text/x.cucumber.gherkin+markdown"
+            ):
                 matcher = GherkinInMarkdownTokenMatcher()
             gherkin_document = self.parser.parse(source, matcher)
             gherkin_document_with_uri: GherkinDocumentWithURI = {

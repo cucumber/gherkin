@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Gherkin.CucumberMessages.Types;
+using Io.Cucumber.Messages.Types;
 using Gherkin.Specs.Helper;
 using Xunit;
 

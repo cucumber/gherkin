@@ -52,7 +52,7 @@ class GherkinDocumentBuilderTest {
                 "    The rule B description\n" +
                 "\n" +
                 "    Example: Example B\n" +
-                "      Given b";
+                "      Given b\n";
         GherkinDocument doc = parser.parse(data, "test.feature");
 
         List<FeatureChild> children = doc.getFeature().get().getChildren();
@@ -66,6 +66,7 @@ class GherkinDocumentBuilderTest {
         assertEquals(3, pickles.get(0).getSteps().size());
 
         assertEquals(2, pickles.get(1).getSteps().size());
+
     }
 
     @Test

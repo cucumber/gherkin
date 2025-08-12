@@ -23,41 +23,37 @@ on:
 
 jobs:
   test-python:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          # - windows-latest
         python-version:
-          - '3.13'
-          - '3.12'
-          - '3.11'
-          - '3.10'
-          - '3.9'
+          - "3.13"
+          - "3.12"
+          - "3.11"
+          - "3.10"
+          - "3.9"
     defaults:
       run:
         working-directory: python
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v6
         with:
+          enable-cache: true
           python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Show Python version
-        run: python --version
-      - name: Install Python package dependencies
-        run: |
-          pip install --requirement requirements.txt
-          pip install --editable .
+          version: "0.8.9"
+
+      - name: Lint code
+        run: uv run pre-commit run --all-files
+
       - name: Run tests
-        run: pytest
-      - name: Run Acceptance Tests
+        run: uv run --no-editable pytest
+
+      - name: Run acceptance tests
         run: make acceptance
+
       - name: Build package
-        run: |
-          python -m pip install build twine
-          python -m build
-          twine check --strict dist/*
+        run: uv build

@@ -81,7 +81,7 @@ func (m *matcher) MatchEOF(line *Line) (ok bool, token *Token, err error) {
 
 func (m *matcher) MatchEmpty(line *Line) (ok bool, token *Token, err error) {
 	if line.IsEmpty() {
-		token, ok = m.newTokenAtLocation(line.LineNumber, line.Indent()), true
+		token, ok = m.newTokenAtLocation(line.LineNumber, 0), true
 		token.Type = TokenTypeEmpty
 	}
 	return
@@ -136,7 +136,7 @@ func (m *matcher) matchTitleLine(line *Line, tokenType TokenType, keywords []str
 			token, ok = m.newTokenAtLocation(line.LineNumber, line.Indent()), true
 			token.Type = tokenType
 			token.Keyword = keyword
-			token.Text = strings.Trim(line.TrimmedLineText[len(keyword)+1:], " ")
+			token.Text = strings.Trim(line.TrimmedLineText[len(keyword)+1:], " \t")
 			return
 		}
 	}
@@ -172,7 +172,7 @@ func (m *matcher) MatchStepLine(line *Line) (ok bool, token *Token, err error) {
 			token.Type = TokenTypeStepLine
 			token.Keyword = keyword
 			token.KeywordType = m.dialect.StepKeywordType(keyword)
-			token.Text = strings.Trim(line.TrimmedLineText[len(keyword):], " ")
+			token.Text = strings.Trim(line.TrimmedLineText[len(keyword):], " \t")
 			return
 		}
 	}

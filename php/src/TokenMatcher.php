@@ -120,7 +120,7 @@ final class TokenMatcher implements TokenMatcherInterface
     public function match_Empty(Token $token): bool
     {
         if ($token->line?->isEmpty()) {
-            $this->setTokenMatched($token, TokenType::Empty);
+            $this->setTokenMatched($token, TokenType::Empty, indent: 0);
 
             return true;
         }
