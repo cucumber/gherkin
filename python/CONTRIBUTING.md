@@ -1,37 +1,45 @@
-Please read [CONTRIBUTING](https://github.com/cucumber/gherkin/blob/master/CONTRIBUTING.md) first.
-You should clone the [cucumber/gherkin](https://github.com/cucumber/gherkin) repo if you want
-to contribute.
+# Contributing
 
-# pre-commit hooks
-Make sure to install `pre-commit` and the hooks by running:
+Thank you for your interest in contributing to `gherkin-official`, the official Python parser implementation for Gherkin! This guide will help you get set up and understand our development workflow. Make sure to read the [language-agnostic contributing guidelines](https://github.com/cucumber/gherkin/blob/3322dba1bff0ffd94ad32c25be96c0af6af898a6/CONTRIBUTING.md) before proceeding.
 
-```shell
-pre-commit install
+## 🚀 Quick Start
+
+Using [`uv`](https://docs.astral.sh/uv/) is recommended for contributing with this project, though you can also install dependencies via `pip` (use `pip install . --group dev` with v25.1+) or your preferred tool.
+
+First change to the directory containing the Python implementation and install development dependencies.
+
+```console
+cd python
+uv sync
 ```
 
-## Run tests
+At the root of the repository, install pre-commit hooks to automatically validate linting and formatting of your Python code with every commit.
 
-### Using make
+```console
+cd ..
+uv run pre-commit install
+```
 
-Just run `make` from this directory.
+Unit tests can run via `pytest`.
 
-### Using pytest
+```console
+uv run pytest
+```
 
-Just run `pytest` from this directory (you need to `pip install -r requirements.txt` first).
+## 🧪 Running across Python versions
 
-Keep in mind that this will only run unit tests. The acceptance tests are only
-run when you build with `make`.
+Tests and linting can be validating across supported Python versions through [`tox`](https://tox.wiki/) - preferably via [`tox-uv`](https://github.com/tox-dev/tox-uv).
 
-## Make a release
+```console
+# Run unit tests on all supported Python versions
+tox
 
-This is based on [How to submit a package to PyPI](http://peterdowns.com/posts/first-time-with-pypi.html)
+# Test on a specific Python version
+tox -e py312
 
-    # Change `version` and `download_url` in `setup.py`
-    # Replace X.Y.Z with the version
+# Run test coverage
+tox -e coverage
 
-    python setup.py sdist upload -r pypi
-    git add .
-    git commit -m "Release X.Y.Z"
-    git tag -a -m "Version X.Y.Z" vX.Y.Z
-    git push
-    git push --tags
+# Run linting and formatting
+tox -e lint
+```

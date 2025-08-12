@@ -2,23 +2,16 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 89c421dff2e1026ba12cdb9ebd731f4a83aa8021  # frozen: v0.8.6
+    rev: 73b0f6d59bbfcb75e17a4653d581c9dfaca13969 # frozen: v0.12.5
     hooks:
+      - id: ruff-check
+        files: "^python/"
       - id: ruff-format
         files: "^python/"
-  - repo: https://github.com/asottile/pyupgrade
-    rev: 19364aa1b2ac289ce75e6bbe93994f7b4b9425f6  # frozen: v3.19.0
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 2a7c5cc44508119d0935b71797f61725c41af307 # frozen: 0.8.3
     hooks:
-      - id: pyupgrade
-        files: "^python/"
-        args: [ "--py39-plus" ]
-  - repo: https://github.com/pycqa/flake8
-    rev: "e43806be3607110919eff72939fda031776e885a"  # frozen: 7.1.1
-    hooks:
-      - id: flake8
-        files: "^python/"
-        args: [ "--toml-config=python/pyproject.toml" ]
-        additional_dependencies: [
-            "flake8-pyproject",
-            "flake8-bugbear",
-        ]
+      # Ensure the uv lock file is up to date
+      - id: uv-lock
+        files: python/pyproject.toml
+        args: [--project, python]

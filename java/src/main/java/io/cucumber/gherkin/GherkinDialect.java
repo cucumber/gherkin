@@ -3,11 +3,10 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.StepKeywordType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -21,7 +20,12 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Holds all localized keywords for a single language.
+ */
 public final class GherkinDialect {
+    private static final Comparator<String> LONGEST_TO_SHORTEST_COMPARATOR =
+            (a, b) -> Integer.compare(b.length(), a.length());
     private final String language;
     private final String name;
     private final String nativeName;
@@ -69,28 +73,23 @@ public final class GherkinDialect {
         this.thenKeywords = requireNonNull(thenKeywords);
         this.andKeywords = requireNonNull(andKeywords);
         this.butKeywords = requireNonNull(butKeywords);
-        
+
         this.stepKeywords = distinctKeywords(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
         this.stepKeywordsTypes = aggregateKeywordTypes(givenKeywords, whenKeywords, thenKeywords, andKeywords, butKeywords);
     }
 
     @SafeVarargs
     private static List<String> distinctKeywords(List<String>... keywords) {
-        int totalSize = 0;
-        for (List<String> keyword : keywords) {
-            totalSize += keyword.size();
-        }
-        Set<String> uniqueKeywords = new LinkedHashSet<>(totalSize);
+        // french is the largest dialect with 32 keywords, so we build the sorting hashset with this max size
+        Set<String> uniqueKeywords = new HashSet<>(32);
         for (List<String> keyword : keywords) {
             uniqueKeywords.addAll(keyword);
         }
         List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
-        // Sort from longest to shortest
-        Comparator<String> naturalOrder = Comparator.naturalOrder();
-        Collections.sort(sortedKeywords, naturalOrder.reversed());
+        sortedKeywords.sort(LONGEST_TO_SHORTEST_COMPARATOR);
         return unmodifiableList(sortedKeywords);
     }
-    
+
     private static Map<String, Set<StepKeywordType>> aggregateKeywordTypes(
             List<String> givenKeywords,
             List<String> whenKeywords,
@@ -109,11 +108,12 @@ public final class GherkinDialect {
 
     private static void addStepKeywordsTypes(Map<String, Set<StepKeywordType>> accumulator, StepKeywordType type, List<String> keywords) {
         for (String keyword : keywords) {
-            if (!accumulator.containsKey(keyword)) {
+            Set<StepKeywordType> stepKeywordTypes = accumulator.get(keyword);
+            if (stepKeywordTypes == null) {
                 // Most keywords only have a single type.
                 accumulator.put(keyword, EnumSet.of(type));
             } else {
-                accumulator.get(keyword).add(type);
+                stepKeywordTypes.add(type);
             }
         }
     }
@@ -148,10 +148,10 @@ public final class GherkinDialect {
 
     /**
      * Returns the {@link StepKeywordType StepKeywordTypes} for a given keyword
-     * 
-     * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
+     *
      * @param keyword to get the keyword type for
      * @return the keywords type
+     * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
      */
     @Deprecated
     public List<StepKeywordType> getStepKeywordTypes(String keyword) {
