@@ -50,7 +50,7 @@ jobs:
         run: uv run pre-commit run --all-files
 
       - name: Run tests
-        run: uv run --no-editable pytest
+        run: uv run --no-editable coverage run -m pytest
 
       - name: Run acceptance tests
         run: make acceptance
