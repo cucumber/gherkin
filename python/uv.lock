@@ -167,7 +167,7 @@ requires-dist = [{ name = "typing-extensions", specifier = ">=4" }]
 dev = [
     { name = "coverage", specifier = ">=7.2" },
     { name = "pre-commit", specifier = "==4.3.0" },
-    { name = "pytest", specifier = ">=5.0" },
+    { name = "pytest", specifier = ">=6.1" },
 ]
 
 [[package]]
