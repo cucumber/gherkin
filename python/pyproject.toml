@@ -50,6 +50,29 @@ trusted-publishing = "always"
 module-name = "gherkin"
 module-root = ""
 
+[tool.tox]
+requires = ["tox>=4.22"]
+env_list = ["3.13", "3.12", "3.11", "3.10", "3.9"]
+
+[tool.tox.env_run_base]
+dependency_groups = [
+  "dev",
+]
+commands = [["pytest", "{posargs}"]]
+
+[tool.tox.env.lint]
+description = "Run linting and formatting checks (and auto-fixes)"
+deps = ["pre-commit-uv>=4.1.1"]
+commands = [["pre-commit", "run", "--all-files", "--show-diff-on-failure"]]
+
+[tool.tox.env.coverage]
+commands = [
+  ["coverage", "run", "-m", "pytest", "{posargs}"],
+  ["coverage", "combine"],
+  ["coverage", "report"],
+  ["coverage", "html"],
+]
+
 [tool.mypy]
 disallow_untyped_defs = true
 packages = ["gherkin"]
