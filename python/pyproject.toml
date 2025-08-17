@@ -48,7 +48,6 @@ trusted-publishing = "always"
 
 [tool.uv.build-backend]
 module-name = "gherkin"
-module-root = ""
 
 [tool.tox]
 requires = ["tox>=4.22"]
