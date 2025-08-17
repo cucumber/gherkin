@@ -7,17 +7,19 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Fixed
-- [.Net] Handle all ambiguous keywords properly ([#435](https://github.com/cucumber/gherkin/pull/435))
-- [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
-- [Java] Improve performance with a generated keyword matcher ([#445](https://github.com/cucumber/gherkin/pull/445))
+
+## [34.0.0] - 2025-08-17
+### Changed
+- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
+- [.NET] Migrated to the use of Cucumber/Messages. Eliminated the built-in Gherkin.CucumberMessages.Types ([#426](https://github.com/cucumber/gherkin/pull/426))
 
 ### Deprecated
 - [Java] Deprecate `GherkinDialectProvider` in favour of `GherkinDialects` ([#448](https://github.com/cucumber/gherkin/pull/448))
 
-### Changed
-- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
-- [.NET] Migrated to the use of Cucumber/Messages. Eliminated the built-in Gherkin.CucumberMessages.Types ([#426](https://github.com/cucumber/gherkin/pull/426))
+### Fixed
+- [.Net] Handle all ambiguous keywords properly ([#435](https://github.com/cucumber/gherkin/pull/435))
+- [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
+- [Java] Improve performance with a generated keyword matcher ([#445](https://github.com/cucumber/gherkin/pull/445))
 
 ### Removed
 - [Python] Dropped legacy `.egg-info` metadata distribution artifacts
@@ -812,7 +814,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v33.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v34.0.0...HEAD
+[34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
 [33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
 [33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
 [32.2.0]: https://github.com/cucumber/gherkin/compare/v32.1.2...v32.2.0
