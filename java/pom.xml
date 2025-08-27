@@ -162,7 +162,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <id>generate-gherkin-dialects</id>
