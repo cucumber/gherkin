@@ -261,7 +261,6 @@ def test_it_parses_markdown_data_tables_with_headers():
                                     ],
                                 },
                                 "id": "2",
-                                # "docString": None,
                                 "keyword": "Given ",
                                 "keywordType": "Context",
                                 "location": {"column": 3, "line": 5},

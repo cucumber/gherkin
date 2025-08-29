@@ -81,7 +81,7 @@ packages = ["gherkin"]
 extend-select = [
   "B",
   "I",
-  "SIM",
+  "ERA",
   "UP",
 ]
 
