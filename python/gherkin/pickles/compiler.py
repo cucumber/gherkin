@@ -6,7 +6,7 @@ from typing import Any, TypedDict, cast, overload
 
 from typing_extensions import NotRequired, TypeIs
 
-from ..parser_types import (
+from gherkin.parser_types import (
     BackgroundEnvelope,
     Cell,
     Envelope,
@@ -18,7 +18,7 @@ from ..parser_types import (
     Step,
     Tag,
 )
-from ..stream.id_generator import IdGenerator
+from gherkin.stream.id_generator import IdGenerator
 
 
 class GherkinDocumentWithURI(GherkinDocument):

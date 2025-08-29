@@ -86,6 +86,7 @@ extend-select = [
   "ISC",
   "PIE",
   "RET",
+  "TID",
   "UP",
 ]
 
