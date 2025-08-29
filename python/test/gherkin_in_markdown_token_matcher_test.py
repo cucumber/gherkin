@@ -293,4 +293,3 @@ def test_it_matches_arbitrary_text_as_Empty_after_the_FeatureLine_has_already_be
     assert token.matched_items == []
     assert token.matched_keyword is None
     assert token.matched_text is None
-    pass

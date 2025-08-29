@@ -84,6 +84,7 @@ extend-select = [
   "COM",
   "I",
   "ISC",
+  "PIE",
   "UP",
 ]
 
