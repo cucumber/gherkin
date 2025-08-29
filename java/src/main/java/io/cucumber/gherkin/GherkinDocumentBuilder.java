@@ -162,7 +162,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 return joinMatchedText(lineTokens, toIndex);
             }
             case Feature: {
-                AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
+                AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader)); // TODO performance: remove new AstNode (not useful because null is handled)
                 if (header == null) return null;
                 List<Tag> tags = getTags(header);
                 Token featureLine = header.getToken(TokenType.FeatureLine);
@@ -191,7 +191,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case Rule: {
-                AstNode header = node.getSingle(RuleType.RuleHeader, new AstNode(RuleType.RuleHeader));
+                AstNode header = node.getSingle(RuleType.RuleHeader, new AstNode(RuleType.RuleHeader)); // TODO performance: remove new AstNode (not useful because null is handled)
                 if (header == null) return null;
                 Token ruleLine = header.getToken(TokenType.RuleLine);
                 if (ruleLine == null) return null;

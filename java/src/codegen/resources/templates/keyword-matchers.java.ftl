@@ -19,6 +19,22 @@ final class KeywordMatchers {
     static KeywordMatcher of(String language) {
         Objects.requireNonNull(language);
         switch (language){
+case "en-StartsWith":
+return new EnStartsWith();
+case "en-StartsWithFirstChar":
+return new EnStartsWithFirstChar();
+case "en-StartsWithFirstCharAndLastChar":
+return new EnStartsWithFirstCharAndLastChar();
+case "en-StartsWithLanguageAdaptative":
+return new EnStartsWithLanguageAdaptative();
+case "en-StartsWithFirstCharAndTitleKeywordWithLength":
+return new EnStartsWithFirstCharAndTitleKeywordWithLength();
+case "en-StartsWithLastChar":
+return new EnStartsWithLastChar();
+case "en-StartsWithTitleKeyword":
+return new EnStartsWithTitleKeyword();
+case "en-StartsWithTitleKeywordWithLength":
+return new EnStartsWithTitleKeywordWithLength();
 <#list matchers as name, matcher>
             case "${name}":
                 return new ${matcher.className}();
@@ -31,13 +47,15 @@ final class KeywordMatchers {
     private static final class ${matcher.className} implements KeywordMatcher {
         @Override
         public Match matchFeatureKeyword(Line line) {
-            if (line.isEmpty()) {
-                return null;
-            }
+            // first char
+            //if (line.isEmpty()) {
+            //    return null;
+            //}
     <#list matcher.features as feature>
         <#if feature.codePointCount == feature.length>
             <#-- optimized version for fixed-length characters -->
-            if (line.startsWith('${feature.keyword[0]?replace("'","\\'")}', "${feature.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            //if (line.startsWith('${feature.keyword[0]?replace("'","\\'")}', "${feature.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            if (line.startsWithTitleKeyword("${feature.keyword}", ${feature.length})) {
         <#else>
             <#-- non-optimized version for variable-length characters which cannot be stored to `char`, e.g. emojis -->
             if (line.startsWithTitleKeyword("${feature.keyword}", ${feature.length})) {
@@ -49,13 +67,15 @@ final class KeywordMatchers {
         }
         @Override
         public Match matchBackgroundKeyword(Line line) {
-            if (line.isEmpty()) {
-                return null;
-            }
+            // first char
+            //if (line.isEmpty()) {
+            //    return null;
+            //}
     <#list matcher.backgrounds as background>
         <#if background.codePointCount == background.length>
             <#-- optimized version for fixed-length characters -->
-            if (line.startsWith('${background.keyword[0]?replace("'","\\'")}', "${background.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            //if (line.startsWith('${background.keyword[0]?replace("'","\\'")}', "${background.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            if (line.startsWithTitleKeyword("${background.keyword}", ${background.length})) {
         <#else>
             <#-- non-optimized version for variable-length characters which cannot be stored to `char`, e.g. emojis -->
             if (line.startsWithTitleKeyword("${background.keyword}", ${background.length})) {
@@ -67,13 +87,15 @@ final class KeywordMatchers {
         }
         @Override
         public Match matchRuleKeyword(Line line) {
-            if (line.isEmpty()) {
-                return null;
-            }
+            // first char
+            //if (line.isEmpty()) {
+            //    return null;
+            //}
     <#list matcher.rules as rule>
         <#if rule.codePointCount == rule.length>
             <#-- optimized version for fixed-length characters -->
-            if (line.startsWith('${rule.keyword[0]?replace("'","\\'")}', "${rule.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            //if (line.startsWith('${rule.keyword[0]?replace("'","\\'")}', "${rule.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            if (line.startsWithTitleKeyword("${rule.keyword}", ${rule.length})) {
         <#else>
             <#-- non-optimized version for variable-length characters which cannot be stored to `char`, e.g. emojis -->
             if (line.startsWithTitleKeyword("${rule.keyword}", ${rule.length})) {
@@ -85,13 +107,15 @@ final class KeywordMatchers {
         }
         @Override
         public Match matchScenarioKeyword(Line line) {
-            if (line.isEmpty()) {
-                return null;
-            }
+            //titleKeyword
+            //if (line.isEmpty()) {
+            //    return null;
+            //}
     <#list matcher.scenarios as scenario>
         <#if scenario.codePointCount == scenario.length>
             <#-- optimized version for fixed-length characters -->
-            if (line.startsWith('${scenario.keyword[0]?replace("'","\\'")}', "${scenario.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            //if (line.startsWith('${scenario.keyword[0]?replace("'","\\'")}', "${scenario.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            if (line.startsWithTitleKeyword("${scenario.keyword}", ${scenario.length})) {
         <#else>
             <#-- non-optimized version for variable-length characters which cannot be stored to `char`, e.g. emojis -->
             if (line.startsWithTitleKeyword("${scenario.keyword}", ${scenario.length})) {
@@ -103,13 +127,15 @@ final class KeywordMatchers {
         }
         @Override
         public Match matchExampleKeyword(Line line) {
-            if (line.isEmpty()) {
-                return null;
-            }
+            // first char
+            //if (line.isEmpty()) {
+            //    return null;
+            //}
     <#list matcher.examples as example>
         <#if example.codePointCount == example.length>
             <#-- optimized version for fixed-length characters -->
-            if (line.startsWith('${example.keyword[0]?replace("'","\\'")}', "${example.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            //if (line.startsWith('${example.keyword[0]?replace("'","\\'")}', "${example.keyword?substring(1)}" + TITLE_KEYWORD_SEPARATOR)) {
+            if (line.startsWithTitleKeyword("${example.keyword}", ${example.length})) {
         <#else>
             <#-- non-optimized version for variable-length characters which cannot be stored to `char`, e.g. emojis -->
             if (line.startsWithTitleKeyword("${example.keyword}", ${example.length})) {
@@ -121,13 +147,15 @@ final class KeywordMatchers {
         }
         @Override
         public StepMatch matchStepKeyword(Line line) {
-            if (line.isEmpty()) {
-                return null;
-            }
+            // startsWith
+            //if (line.isEmpty()) {
+            //    return null;
+            //}
     <#list matcher.steps as step>
         <#if step.codePointCount == step.length>
             <#-- optimized version for fixed-length characters -->
-            if (line.startsWith('${step.keyword[0]?replace("'","\\'")}', "${step.keyword?substring(1)}")) {
+//            if (line.startsWith('${step.keyword[0]?replace("'","\\'")}', "${step.keyword?substring(1)}")) {
+            if (line.startsWith("${step.keyword}")) {
         <#else>
             <#-- non-optimized version for variable-length characters which cannot be stored to `char`, e.g. emojis -->
             if (line.startsWith("${step.keyword}")) {

@@ -22,12 +22,12 @@ public final class GherkinDialectProvider {
     }
 
     public GherkinDialect getDefaultDialect() {
-        return GherkinDialects.getDialect(defaultDialectName)
+        return GherkinDialects.getDialect(defaultDialectName)// TODO performance: do not instanciate an Optional
                 .orElseThrow(() -> new ParserException.NoSuchLanguageException(defaultDialectName, null));
     }
 
     public Optional<GherkinDialect> getDialect(String language) {
-        return GherkinDialects.getDialect(language);
+        return GherkinDialects.getDialect(language);// TODO performance: do not instanciate an Optional
     }
 
     public Set<String> getLanguages() {

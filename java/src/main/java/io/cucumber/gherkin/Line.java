@@ -70,10 +70,50 @@ final class Line {
                text.startsWith(prefixAfterFirstChar, 1);
     }
 
+    /**
+     * The text is expected to be non-empty.
+     * This is an optimized version of startsWith(prefix) that
+     * avoids checking the prefix length for most negative matches.
+     * @param firstChar the first character of the prefix
+     * @param prefixAfterFirstChar the prefix after the first character.
+     * @return true if the text starts with the given prefix, false otherwise.
+     */
+    boolean startsWith(char firstChar, String prefixAfterFirstChar, int keywordLength) {
+        return textLength > keywordLength &&
+                text.charAt(keywordLength) == TITLE_KEYWORD_SEPARATOR && // fast check for the last character (avoids startsWith to compute the prefix length)
+                text.charAt(0) == firstChar && // fast check for the first character (avoids startsWith to compute the prefix length)
+                text.startsWith(prefixAfterFirstChar, 1);
+    }
+
+    /**
+     * The text is expected to be non-empty.
+     * This is an optimized version of startsWith(prefix) that
+     * avoids checking the prefix length for most negative matches.
+     * @param firstChar the first character of the prefix
+     * @param prefixAfterFirstChar the prefix after the first character.
+     * @return true if the text starts with the given prefix, false otherwise.
+     */
+    boolean startsWith(char firstChar, String prefixAfterFirstChar, int indexLastChar, char expectedLastChar) {
+        return textLength > indexLastChar &&
+                text.charAt(indexLastChar) == expectedLastChar &&
+                text.charAt(0) == firstChar && // fast check for the first character (avoids startsWith to compute the prefix length)
+                text.startsWith(prefixAfterFirstChar, 1);
+    }
+
     boolean startsWith(char prefix) {
         return !empty && text.charAt(0) == prefix;
     }
-
+    boolean startsWith(String prefix, int indexLastChar, char expectedLastChar) {
+        return textLength > indexLastChar &&
+                text.charAt(indexLastChar) == expectedLastChar &&
+                text.startsWith(prefix);
+    }
+    boolean startsWithTitleKeyword(String keyword) {
+        int keywordLength = keyword.length();
+        return textLength > keywordLength &&
+                text.charAt(keywordLength) == TITLE_KEYWORD_SEPARATOR &&
+                text.startsWith(keyword);
+    }
     String substringTrimmed(int beginIndex) {
         // trim the beginning of the line (the end of line has already been trimmed in the constructor)
         return StringUtils.substringAndLeftTrim(text, beginIndex, textLength);
