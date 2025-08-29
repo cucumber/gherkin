@@ -76,10 +76,7 @@ class TokenMatcher:
         for keyword in (k for k in keywords if token.line.startswith(k)):
             title = token.line.get_rest_trimmed(len(keyword))
             keyword_types = self.keyword_types[keyword]
-            if len(keyword_types) == 1:
-                keyword_type = keyword_types[0]
-            else:
-                keyword_type = "Unknown"
+            keyword_type = keyword_types[0] if len(keyword_types) == 1 else "Unknown"
             self._set_token_matched(
                 token, "StepLine", title, keyword, keyword_type=keyword_type
             )

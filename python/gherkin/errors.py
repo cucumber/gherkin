@@ -17,7 +17,7 @@ class ParserException(ParserError):
             "("
             + str(location["line"])
             + ":"
-            + str(location["column"] if "column" in location else 0)
+            + str(location.get("column", 0))
             + "): "
             + message
         )
@@ -57,11 +57,7 @@ class UnexpectedTokenException(ParserException):
             + received_token.token_value().strip()
             + "'"
         )
-        column = (
-            received_token.location["column"]
-            if "column" in received_token.location
-            else None
-        )
+        column = received_token.location.get("column", None)
         location = (
             received_token.location
             if column

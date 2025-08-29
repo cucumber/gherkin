@@ -31,8 +31,8 @@ def test_parse_multiple_features():
     ff1 = parser.parse(TokenScanner("Feature: 1"))
     ff2 = parser.parse(TokenScanner("Feature: 2"))
 
-    assert "1" == ff1["feature"]["name"]
-    assert "2" == ff2["feature"]["name"]
+    assert ff1["feature"]["name"] == "1"
+    assert ff2["feature"]["name"] == "2"
 
 
 def test_parse_feature_after_parser_error():

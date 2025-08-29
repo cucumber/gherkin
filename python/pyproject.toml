@@ -80,8 +80,16 @@ packages = ["gherkin"]
 [tool.ruff.lint]
 extend-select = [
   "B",
+  "SIM",
   "UP",
 ]
+
+[tool.ruff.lint.extend-per-file-ignores]
+# Nested `if` statements a result of parser generation method
+"gherkin/parser.py" = ["SIM102"]
+# Require a refactor to use context managers
+"gherkin/token_scanner.py" = ["SIM115"]
+"gherkin/stream/source_events.py" = ["SIM115"]
 
 [tool.coverage.run]
 source = ["gherkin"]
