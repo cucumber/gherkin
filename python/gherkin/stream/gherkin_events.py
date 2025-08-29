@@ -5,9 +5,9 @@ from dataclasses import dataclass
 from typing import TypedDict
 
 from gherkin.ast_builder import AstBuilder
+from gherkin.errors import CompositeParserException, ParserError, ParserException
 from gherkin.parser import Parser
-from gherkin.pickles.compiler import Compiler, Pickle, GherkinDocumentWithURI
-from gherkin.errors import ParserError, CompositeParserException, ParserException
+from gherkin.pickles.compiler import Compiler, GherkinDocumentWithURI, Pickle
 from gherkin.stream.id_generator import IdGenerator
 from gherkin.stream.source_events import Event
 from gherkin.token import Location

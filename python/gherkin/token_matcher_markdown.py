@@ -5,7 +5,7 @@ from collections.abc import Iterable
 
 from .gherkin_line import Cell
 from .token import Token
-from .token_matcher import TokenMatcher, MatchedItems
+from .token_matcher import MatchedItems, TokenMatcher
 
 KEYWORD_PREFIX_BULLET = "^(\\s*[*+-]\\s*)"
 KEYWORD_PREFIX_HEADER = "^(#{1,6}\\s)"

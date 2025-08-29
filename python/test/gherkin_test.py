@@ -1,10 +1,10 @@
-from gherkin.token_scanner import TokenScanner
-from gherkin.token_matcher import TokenMatcher
-from gherkin.parser import Parser
-from gherkin.errors import CompositeParserException, ParserError
 import pytest
 
+from gherkin.errors import CompositeParserException, ParserError
+from gherkin.parser import Parser
+from gherkin.token_matcher import TokenMatcher
 from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
+from gherkin.token_scanner import TokenScanner
 
 
 def test_parser():

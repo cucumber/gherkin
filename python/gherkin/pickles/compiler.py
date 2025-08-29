@@ -2,20 +2,21 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable, Sequence
-from typing import TypedDict, Any, cast, overload
-from typing_extensions import TypeIs, NotRequired
+from typing import Any, TypedDict, cast, overload
+
+from typing_extensions import NotRequired, TypeIs
 
 from ..parser_types import (
-    GherkinDocument,
-    Envelope,
     BackgroundEnvelope,
+    Cell,
+    Envelope,
+    GherkinDocument,
+    Rule,
     RuleEnvelope,
     Scenario,
     ScenarioEnvelope,
-    Tag,
-    Rule,
     Step,
-    Cell,
+    Tag,
 )
 from ..stream.id_generator import IdGenerator
 

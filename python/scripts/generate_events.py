@@ -1,5 +1,5 @@
-from optparse import OptionParser
 import json
+from optparse import OptionParser
 
 from gherkin.stream.gherkin_events import GherkinEvents
 from gherkin.stream.source_events import SourceEvents

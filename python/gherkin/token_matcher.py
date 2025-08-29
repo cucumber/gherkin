@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import re
 import textwrap
-
 from collections import defaultdict
 from collections.abc import Iterable
 from typing import TypedDict

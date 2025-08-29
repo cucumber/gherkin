@@ -1,22 +1,22 @@
 from __future__ import annotations
 
-from typing import TypedDict, cast, TypeVar, Union
+from typing import TypedDict, TypeVar, Union, cast
 
 from .ast_node import AstNode
 from .errors import AstBuilderException
 from .parser_types import (
-    GherkinDocument,
-    Tag,
-    TableRow,
-    Cell,
-    Step,
-    DocString,
-    Scenario,
     Background,
+    Cell,
     DataTable,
+    DocString,
     Examples,
-    Rule,
     Feature,
+    GherkinDocument,
+    Rule,
+    Scenario,
+    Step,
+    TableRow,
+    Tag,
 )
 from .stream.id_generator import IdGenerator
 from .token import Location, Token

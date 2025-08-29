@@ -1,6 +1,6 @@
-from gherkin.stream.source_events import source_event
-
 from os import path
+
+from gherkin.stream.source_events import source_event
 
 
 def test_should_resolve_classic_feature():
