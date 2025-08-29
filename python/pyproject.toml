@@ -82,6 +82,7 @@ extend-select = [
   "B",
   "C4",
   "COM",
+  "FURB",
   "I",
   "ISC",
   "PERF",
