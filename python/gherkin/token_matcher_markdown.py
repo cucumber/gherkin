@@ -183,13 +183,12 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                 or self._match_DocStringSeparator(token, "````", True)
                 or self._match_DocStringSeparator(token, "```", True)
             )
-        else:
-            # close
-            return self._match_DocStringSeparator(
-                token,
-                self._active_doc_string_separator,
-                False,
-            )
+        # close
+        return self._match_DocStringSeparator(
+            token,
+            self._active_doc_string_separator,
+            False,
+        )
 
     @staticmethod
     def _default_docstring_content_type() -> str:

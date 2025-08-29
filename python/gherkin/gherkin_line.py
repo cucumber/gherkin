@@ -26,8 +26,7 @@ class GherkinLine:
     def get_line_text(self, indent_to_remove: int = -1) -> str:
         if indent_to_remove < 0 or indent_to_remove > self.indent:
             return self._trimmed_line_text
-        else:
-            return self._line_text[indent_to_remove:]
+        return self._line_text[indent_to_remove:]
 
     def is_empty(self) -> bool:
         return not self._trimmed_line_text

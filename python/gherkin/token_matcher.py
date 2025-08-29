@@ -137,13 +137,12 @@ class TokenMatcher:
                 '"""',
                 True,
             ) or self._match_DocStringSeparator(token, "```", True)
-        else:
-            # close
-            return self._match_DocStringSeparator(
-                token,
-                self._active_doc_string_separator,
-                False,
-            )
+        # close
+        return self._match_DocStringSeparator(
+            token,
+            self._active_doc_string_separator,
+            False,
+        )
 
     @staticmethod
     def _default_docstring_content_type() -> None:
@@ -263,7 +262,6 @@ class TokenMatcher:
     def _unescaped_docstring(self, text: str) -> str:
         if self._active_doc_string_separator == '"""':
             return text.replace('\\"\\"\\"', '"""')
-        elif self._active_doc_string_separator == "```":
+        if self._active_doc_string_separator == "```":
             return text.replace("\\`\\`\\`", "```")
-        else:
-            return text
+        return text

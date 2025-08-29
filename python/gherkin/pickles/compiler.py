@@ -289,7 +289,7 @@ class Compiler:
                 ]
                 table["rows"].append({"cells": cells})
             return PickleArgumentDataTableEnvelope(dataTable=table)
-        elif "docString" in step:
+        if "docString" in step:
             argument = step["docString"]
             docstring: PickleArgumentDocString = {
                 "content": self._interpolate(argument["content"], variables, values),
@@ -301,8 +301,7 @@ class Compiler:
                     values,
                 )
             return PickleArgumentDocStringEnvelope(docString=docstring)
-        else:
-            return None
+        return None
 
     @overload
     def _interpolate(
