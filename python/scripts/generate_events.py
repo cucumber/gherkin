@@ -42,7 +42,7 @@ def main() -> None:
             print_source=options.print_source,
             print_ast=options.print_ast,
             print_pickles=options.print_pickles,
-        )
+        ),
     )
 
     for source_event in source_events.enum():

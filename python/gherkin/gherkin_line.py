@@ -48,7 +48,7 @@ class GherkinLine:
                 {
                     "column": col + self.indent + cell_indent,
                     "text": re.sub(r"[^\S\n]*$", "", lstripped_cell, flags=re.U),
-                }
+                },
             )
         return cells
 
@@ -94,7 +94,9 @@ class GherkinLine:
     def tags(self) -> list[Cell]:
         column = self.indent + 1
         uncommented_line = re.split(
-            r"\s#", self._trimmed_line_text.strip(), maxsplit=2
+            r"\s#",
+            self._trimmed_line_text.strip(),
+            maxsplit=2,
         )[0]
         items = uncommented_line.strip().split("@")
         tags: list[Cell] = []

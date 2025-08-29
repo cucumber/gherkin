@@ -239,10 +239,14 @@ class Compiler:
                             else outline_step["keywordType"]
                         )
                         step_text = self._interpolate(
-                            outline_step["text"], variable_cells, value_cells
+                            outline_step["text"],
+                            variable_cells,
+                            value_cells,
                         )
                         argument = self._create_pickle_arguments(
-                            outline_step, variable_cells, value_cells
+                            outline_step,
+                            variable_cells,
+                            value_cells,
                         )
                         _pickle_step: PickleStep = {
                             "astNodeIds": [outline_step["id"], values["id"]],
@@ -259,7 +263,9 @@ class Compiler:
                     "astNodeIds": [scenario["id"], values["id"]],
                     "id": self.id_generator.get_next_id(),
                     "name": self._interpolate(
-                        scenario["name"], variable_cells, value_cells
+                        scenario["name"],
+                        variable_cells,
+                        value_cells,
                     ),
                     "language": language,
                     "steps": steps,
@@ -286,11 +292,13 @@ class Compiler:
         elif "docString" in step:
             argument = step["docString"]
             docstring: PickleArgumentDocString = {
-                "content": self._interpolate(argument["content"], variables, values)
+                "content": self._interpolate(argument["content"], variables, values),
             }
             if "mediaType" in argument:
                 docstring["mediaType"] = self._interpolate(
-                    argument["mediaType"], variables, values
+                    argument["mediaType"],
+                    variables,
+                    values,
                 )
             return PickleArgumentDocStringEnvelope(docString=docstring)
         else:

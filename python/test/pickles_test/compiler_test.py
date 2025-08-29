@@ -13,7 +13,7 @@ def test_compiles_a_scenario():
         Feature: f
           Scenario: s
             Given passing
-        """
+        """,
     )
     id_generator = IdGenerator()
     gherkin_document = Parser(AstBuilder(id_generator)).parse(feature_text)
@@ -39,7 +39,7 @@ def test_compiles_a_scenario():
             "uri": "uri"
           }
         ]
-        """
+        """,
     )
 
     assert pickle == json.loads(expected_pickle)
@@ -54,7 +54,7 @@ def test_compiles_a_scenario_outline_with_i18n_characters():
             Examples:
             | with-é  |
             | passing |
-        """
+        """,
     )
     id_generator = IdGenerator()
     gherkin_document = Parser(AstBuilder(id_generator)).parse(feature_text)
@@ -80,7 +80,7 @@ def test_compiles_a_scenario_outline_with_i18n_characters():
             "uri": "uri"
           }
         ]
-        """
+        """,
     )
 
     assert pickle == json.loads(expected_pickle)

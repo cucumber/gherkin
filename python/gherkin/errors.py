@@ -19,7 +19,7 @@ class ParserException(ParserError):
             + ":"
             + str(location.get("column", 0))
             + "): "
-            + message
+            + message,
         )
 
 
@@ -73,5 +73,5 @@ class CompositeParserException(ParserError):
     def __init__(self, errors: list[ParserException]) -> None:
         self.errors = errors
         super().__init__(
-            "Parser errors:\n" + "\n".join([error.args[0] for error in errors])
+            "Parser errors:\n" + "\n".join([error.args[0] for error in errors]),
         )

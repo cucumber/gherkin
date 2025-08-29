@@ -61,7 +61,8 @@ class GherkinEvents:
         self.compiler = Compiler(self.id_generator)
 
     def enum(
-        self, source_event: Event
+        self,
+        source_event: Event,
     ) -> Generator[Event | Error | GherkinDocumentEnvelope | PickleEnvelope,]:
         uri = source_event["source"]["uri"]
         source = source_event["source"]["data"]

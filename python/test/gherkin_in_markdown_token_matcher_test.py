@@ -137,7 +137,8 @@ def test_it_matches_4_ticks_doctring_separator():
     assert t1.matched_text == ""
 
     t2 = Token(
-        gherkin_line=GherkinLine("""  ```""", location["line"]), location=location
+        gherkin_line=GherkinLine("""  ```""", location["line"]),
+        location=location,
     )
     assert tm.match_Other(t2)
     assert t2.matched_type == "Other"
@@ -145,7 +146,8 @@ def test_it_matches_4_ticks_doctring_separator():
     assert t2.matched_text == "```"
 
     t3 = Token(
-        gherkin_line=GherkinLine("""  ````""", location["line"]), location=location
+        gherkin_line=GherkinLine("""  ````""", location["line"]),
+        location=location,
     )
     assert tm.match_DocStringSeparator(t3)
     assert t3.matched_type == "DocStringSeparator"

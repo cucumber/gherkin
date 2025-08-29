@@ -42,7 +42,11 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
     def match_RuleLine(self, token: Token) -> bool:
         return self._match_title_line(
-            KEYWORD_PREFIX_HEADER, self.dialect.rule_keywords, ":", token, "RuleLine"
+            KEYWORD_PREFIX_HEADER,
+            self.dialect.rule_keywords,
+            ":",
+            token,
+            "RuleLine",
         )
 
     def match_ScenarioLine(self, token: Token) -> bool:
@@ -87,7 +91,10 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                 return False
 
             self._set_token_matched(
-                token, "TableRow", keyword="|", items=token.line.table_cells
+                token,
+                "TableRow",
+                keyword="|",
+                items=token.line.table_cells,
             )
 
             return True
@@ -96,13 +103,17 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
     def _is_gfm_table_separator(self, table_cells: list[Cell]) -> bool:
         text_of_table_cells = map(lambda x: x["text"], table_cells)
         separator_values = list(
-            filter(lambda x: re.match("^:?-+:?$", x), text_of_table_cells)
+            filter(lambda x: re.match("^:?-+:?$", x), text_of_table_cells),
         )
         return len(separator_values) > 0
 
     def match_StepLine(self, token: Token) -> bool:
         return self._match_title_line(
-            KEYWORD_PREFIX_BULLET, self._sorted_step_keywords, "", token, "StepLine"
+            KEYWORD_PREFIX_BULLET,
+            self._sorted_step_keywords,
+            "",
+            token,
+            "StepLine",
         )
 
     def match_Comment(self, token: Token) -> bool:
@@ -155,7 +166,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                 {
                     "column": token.line.indent + match.start(idx) + 2,
                     "text": match.group(1),
-                }
+                },
             )
 
         if len(tags) == 0:
@@ -175,7 +186,9 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         else:
             # close
             return self._match_DocStringSeparator(
-                token, self._active_doc_string_separator, False
+                token,
+                self._active_doc_string_separator,
+                False,
             )
 
     @staticmethod
@@ -193,7 +206,8 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         text = token.line.get_line_text()
         for keyword in keywords:
             match = re.search(
-                f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)", text
+                f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)",
+                text,
             )
             if match:
                 indent = token.line.indent + len(match.group(1))
@@ -218,5 +232,5 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
     def _change_dialect(self, dialect_name, location=None) -> None:
         super()._change_dialect(dialect_name, location)
         self._sorted_step_keywords = list(
-            filter(lambda key: key != "* ", self._sorted_step_keywords)
+            filter(lambda key: key != "* ", self._sorted_step_keywords),
         )

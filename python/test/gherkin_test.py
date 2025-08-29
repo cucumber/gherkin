@@ -45,16 +45,16 @@ def test_parse_feature_after_parser_error():
                 + "  Scenario: Bar\n"
                 + "    Given x\n"
                 + "      ```\n"
-                + "      unclosed docstring\n"
-            )
+                + "      unclosed docstring\n",
+            ),
         )
     feature_file = parser.parse(
         TokenScanner(
             "Feature: Foo\n" + "  Scenario: Bar\n" + "    Given x\n"
             '      """\n'
             "      closed docstring\n"
-            '      """\n'
-        )
+            '      """\n',
+        ),
     )
     expected = [
         {
@@ -76,12 +76,12 @@ def test_parse_feature_after_parser_error():
                             "delimiter": '"""',
                             "location": {"column": 7, "line": 4},
                         },
-                    }
+                    },
                 ],
                 "location": {"column": 3, "line": 2},
                 "examples": [],
-            }
-        }
+            },
+        },
     ]
 
     assert expected == feature_file["feature"]["children"]
@@ -265,11 +265,11 @@ def test_it_parses_markdown_data_tables_with_headers():
                                 "keywordType": "Context",
                                 "location": {"column": 3, "line": 5},
                                 "text": "a simple data table",
-                            }
+                            },
                         ],
                         "tags": [],
-                    }
-                }
+                    },
+                },
             ],
             "description": "",
             "keyword": "Feature",

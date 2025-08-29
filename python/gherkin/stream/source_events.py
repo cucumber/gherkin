@@ -27,7 +27,7 @@ def source_event(path: str) -> Event:
             "uri": path,
             "data": open(path, encoding="utf8", newline="").read(),
             "mediaType": _media_type(path),
-        }
+        },
     }
     return event
 
