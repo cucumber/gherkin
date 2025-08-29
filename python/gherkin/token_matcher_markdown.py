@@ -158,16 +158,15 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         return False
 
     def match_TagLine(self, token: Token) -> bool:
-        tags: list[MatchedItems] = []
         matching_tags = re.finditer("`(@[^`]+)`", token.line.get_line_text())
         idx = 0
-        for match in matching_tags:
-            tags.append(
-                {
-                    "column": token.line.indent + match.start(idx) + 2,
-                    "text": match.group(1),
-                },
-            )
+        tags: list[MatchedItems] = [
+            {
+                "column": token.line.indent + match.start(idx) + 2,
+                "text": match.group(1),
+            }
+            for match in matching_tags
+        ]
 
         if len(tags) == 0:
             return False
