@@ -41,11 +41,11 @@ def test_parse_feature_after_parser_error():
         parser.parse(
             TokenScanner(
                 "# a comment\n"
-                + "Feature: Foo\n"
-                + "  Scenario: Bar\n"
-                + "    Given x\n"
-                + "      ```\n"
-                + "      unclosed docstring\n",
+                 "Feature: Foo\n"
+                 "  Scenario: Bar\n"
+                 "    Given x\n"
+                 "      ```\n"
+                 "      unclosed docstring\n",
             ),
         )
     feature_file = parser.parse(
