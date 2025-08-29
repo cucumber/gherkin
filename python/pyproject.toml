@@ -80,6 +80,7 @@ packages = ["gherkin"]
 [tool.ruff.lint]
 extend-select = [
   "B",
+  "C4",
   "COM",
   "I",
   "ERA",

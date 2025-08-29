@@ -101,7 +101,7 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         return False
 
     def _is_gfm_table_separator(self, table_cells: list[Cell]) -> bool:
-        text_of_table_cells = map(lambda x: x["text"], table_cells)
+        text_of_table_cells = (x["text"] for x in table_cells)
         separator_values = list(
             filter(lambda x: re.match("^:?-+:?$", x), text_of_table_cells),
         )

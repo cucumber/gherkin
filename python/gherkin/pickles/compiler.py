@@ -177,7 +177,7 @@ class Compiler:
     ) -> None:
         tags = list(inherited_tags) + list(scenario["tags"])
         last_keyword_type = "Unknown"
-        steps = list()
+        steps = []
         if scenario["steps"]:
             for step in background_steps + scenario["steps"]:
                 last_keyword_type = (
@@ -221,7 +221,7 @@ class Compiler:
                     + list(examples["tags"])
                 )
                 last_keyword_type = None
-                steps = list()
+                steps = []
                 if scenario["steps"]:
                     for step in background_steps:
                         last_keyword_type = (
