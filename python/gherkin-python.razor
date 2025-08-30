@@ -148,7 +148,10 @@ class @(Model.ParserClassName):
         @:    return False
         }
         return self.handle_external_error(
-            context, False, token, context.token_matcher.match_@(rule.Name.Replace("#", ""))
+            context,
+            False,
+            token,
+            context.token_matcher.match_@(rule.Name.Replace("#", "")),
         )
 </text>
 }
@@ -162,7 +165,7 @@ class @(Model.ParserClassName):
         }
 
         if state not in state_map:
-            raise RuntimeError("Unknown state: " + str(state))
+            raise RuntimeError(f"Unknown state: {state}")
 
         return state_map[state](token, context)
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
