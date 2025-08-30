@@ -1,5 +1,5 @@
-from optparse import OptionParser
 import json
+from optparse import OptionParser
 
 from gherkin.stream.gherkin_events import GherkinEvents
 from gherkin.stream.source_events import SourceEvents
@@ -42,7 +42,7 @@ def main() -> None:
             print_source=options.print_source,
             print_ast=options.print_ast,
             print_pickles=options.print_pickles,
-        )
+        ),
     )
 
     for source_event in source_events.enum():

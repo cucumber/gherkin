@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Python] extending formatting rules across package code ([#460](https://github.com/cucumber/gherkin/pull/460))
+
 ### Removed
 - [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
 

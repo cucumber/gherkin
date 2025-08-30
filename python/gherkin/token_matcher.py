@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import re
 import textwrap
-
 from collections import defaultdict
 from collections.abc import Iterable
 from typing import TypedDict
@@ -41,7 +40,9 @@ class TokenMatcher:
 
     def match_FeatureLine(self, token: Token) -> bool:
         return self._match_title_line(
-            token, "FeatureLine", self.dialect.feature_keywords
+            token,
+            "FeatureLine",
+            self.dialect.feature_keywords,
         )
 
     def match_RuleLine(self, token: Token) -> bool:
@@ -49,19 +50,27 @@ class TokenMatcher:
 
     def match_ScenarioLine(self, token: Token) -> bool:
         return self._match_title_line(
-            token, "ScenarioLine", self.dialect.scenario_keywords
+            token,
+            "ScenarioLine",
+            self.dialect.scenario_keywords,
         ) or self._match_title_line(
-            token, "ScenarioLine", self.dialect.scenario_outline_keywords
+            token,
+            "ScenarioLine",
+            self.dialect.scenario_outline_keywords,
         )
 
     def match_BackgroundLine(self, token: Token) -> bool:
         return self._match_title_line(
-            token, "BackgroundLine", self.dialect.background_keywords
+            token,
+            "BackgroundLine",
+            self.dialect.background_keywords,
         )
 
     def match_ExamplesLine(self, token: Token) -> bool:
         return self._match_title_line(
-            token, "ExamplesLine", self.dialect.examples_keywords
+            token,
+            "ExamplesLine",
+            self.dialect.examples_keywords,
         )
 
     def match_TableRow(self, token: Token) -> bool:
@@ -76,12 +85,13 @@ class TokenMatcher:
         for keyword in (k for k in keywords if token.line.startswith(k)):
             title = token.line.get_rest_trimmed(len(keyword))
             keyword_types = self.keyword_types[keyword]
-            if len(keyword_types) == 1:
-                keyword_type = keyword_types[0]
-            else:
-                keyword_type = "Unknown"
+            keyword_type = keyword_types[0] if len(keyword_types) == 1 else "Unknown"
             self._set_token_matched(
-                token, "StepLine", title, keyword, keyword_type=keyword_type
+                token,
+                "StepLine",
+                title,
+                keyword,
+                keyword_type=keyword_type,
             )
             return True
 
@@ -123,20 +133,26 @@ class TokenMatcher:
         if not self._active_doc_string_separator:
             # open
             return self._match_DocStringSeparator(
-                token, '"""', True
+                token,
+                '"""',
+                True,
             ) or self._match_DocStringSeparator(token, "```", True)
-        else:
-            # close
-            return self._match_DocStringSeparator(
-                token, self._active_doc_string_separator, False
-            )
+        # close
+        return self._match_DocStringSeparator(
+            token,
+            self._active_doc_string_separator,
+            False,
+        )
 
     @staticmethod
     def _default_docstring_content_type() -> None:
         return None
 
     def _match_DocStringSeparator(
-        self, token: Token, separator: str, is_open: bool
+        self,
+        token: Token,
+        separator: str,
+        is_open: bool,
     ) -> bool:
         if not token.line.startswith(separator):
             return False
@@ -158,7 +174,10 @@ class TokenMatcher:
         # take the entire line, except removing DocString indents
         text = token.line.get_line_text(self._indent_to_remove)
         self._set_token_matched(
-            token, "Other", self._unescaped_docstring(text), indent=0
+            token,
+            "Other",
+            self._unescaped_docstring(text),
+            indent=0,
         )
         return True
 
@@ -170,7 +189,10 @@ class TokenMatcher:
         return True
 
     def _match_title_line(
-        self, token: Token, token_type: str, keywords: Iterable[str]
+        self,
+        token: Token,
+        token_type: str,
+        keywords: Iterable[str],
     ) -> bool:
         for keyword in (k for k in keywords if token.line.startswith_title_keyword(k)):
             title = token.line.get_rest_trimmed(len(keyword) + len(":"))
@@ -205,7 +227,9 @@ class TokenMatcher:
         token.matched_gherkin_dialect = self.dialect_name
 
     def _change_dialect(
-        self, dialect_name: str, location: Location | None = None
+        self,
+        dialect_name: str,
+        location: Location | None = None,
     ) -> None:
         dialect = Dialect.for_name(dialect_name)
         if not dialect:
@@ -238,7 +262,6 @@ class TokenMatcher:
     def _unescaped_docstring(self, text: str) -> str:
         if self._active_doc_string_separator == '"""':
             return text.replace('\\"\\"\\"', '"""')
-        elif self._active_doc_string_separator == "```":
+        if self._active_doc_string_separator == "```":
             return text.replace("\\`\\`\\`", "```")
-        else:
-            return text
+        return text

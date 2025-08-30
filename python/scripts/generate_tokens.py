@@ -1,8 +1,9 @@
 import sys
-from gherkin.token_scanner import TokenScanner
-from gherkin.token_formatter_builder import TokenFormatterBuilder
+
 from gherkin.parser import Parser
+from gherkin.token_formatter_builder import TokenFormatterBuilder
 from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
+from gherkin.token_scanner import TokenScanner
 
 
 def main() -> None:

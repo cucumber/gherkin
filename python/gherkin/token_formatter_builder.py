@@ -51,7 +51,7 @@ class TokenFormatterBuilder(AstBuilder):
                             ),
                             ")",
                             token.matched_keyword,
-                        ]
+                        ],
                     )
                     if token.matched_keyword
                     else ""
@@ -63,7 +63,7 @@ class TokenFormatterBuilder(AstBuilder):
                     [
                         str(item["column"]) + ":" + item["text"]
                         for item in token.matched_items
-                    ]
+                    ],
                 ),
-            ]
+            ],
         )

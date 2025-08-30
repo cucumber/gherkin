@@ -1,11 +1,11 @@
+from gherkin.gherkin_line import GherkinLine
 from gherkin.token import Token
 from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
-from gherkin.gherkin_line import GherkinLine
 
 location = {"line": 1, "column": 1}
 
 
-def test_it_matches_FeatureLineH1():
+def test_it_matches_feature_line_h1():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""# Feature: hello""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -15,7 +15,7 @@ def test_it_matches_FeatureLineH1():
     assert token.matched_text == "hello"
 
 
-def test_it_matches_FeatureLineH2():
+def test_it_matches_feature_line_h2():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## Feature: hello""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -25,7 +25,7 @@ def test_it_matches_FeatureLineH2():
     assert token.matched_text == "hello"
 
 
-def test_it_matches_FeatureLine_in_French():
+def test_it_matches_feature_line_in_french():
     tm = GherkinInMarkdownTokenMatcher("fr")
     line = GherkinLine("""## Fonctionnalité: hello""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -35,7 +35,7 @@ def test_it_matches_FeatureLine_in_French():
     assert token.matched_text == "hello"
 
 
-def test_it_matches_FeatureLine_without_the_Feature_keyword():
+def test_it_matches_feature_line_without_the_feature_keyword():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""# hello""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -45,7 +45,7 @@ def test_it_matches_FeatureLine_without_the_Feature_keyword():
     assert token.matched_text == "# hello"
 
 
-def test_it_matches_bullet_Step():
+def test_it_matches_bullet_step():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""  *  Given I have 3 cukes""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -56,7 +56,7 @@ def test_it_matches_bullet_Step():
     assert token.location["column"] == 6
 
 
-def test_it_matches_plus_Step():
+def test_it_matches_plus_step():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""  +  Given I have 3 cukes""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -68,7 +68,7 @@ def test_it_matches_plus_Step():
     assert token.location["column"] == 6
 
 
-def test_it_matches_hyphen_Step():
+def test_it_matches_hyphen_step():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""  -  Given I have 3 cukes""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -80,7 +80,7 @@ def test_it_matches_hyphen_Step():
     assert token.location["column"] == 6
 
 
-def test_it_matches_a_when_Step():
+def test_it_matches_a_when_step():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""  -  When I do something""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -92,7 +92,7 @@ def test_it_matches_a_when_Step():
     assert token.location["column"] == 6
 
 
-def test_it_matches_arbitrary_text_as_Other():
+def test_it_matches_arbitrary_text_as_other():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""Whatever""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -100,7 +100,7 @@ def test_it_matches_arbitrary_text_as_Other():
     assert token.matched_type == "Other"
 
 
-def test_it_matches_a_non_keyword_line_as_Other():
+def test_it_matches_a_non_keyword_line_as_other():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""* whatever Given""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -108,7 +108,7 @@ def test_it_matches_a_non_keyword_line_as_Other():
     assert token.matched_type == "Other"
 
 
-def test_it_matches_a_non_keyword_header_line_as_Other():
+def test_it_matches_a_non_keyword_header_line_as_other():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## The world is wet""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -137,7 +137,8 @@ def test_it_matches_4_ticks_doctring_separator():
     assert t1.matched_text == ""
 
     t2 = Token(
-        gherkin_line=GherkinLine("""  ```""", location["line"]), location=location
+        gherkin_line=GherkinLine("""  ```""", location["line"]),
+        location=location,
     )
     assert tm.match_Other(t2)
     assert t2.matched_type == "Other"
@@ -145,7 +146,8 @@ def test_it_matches_4_ticks_doctring_separator():
     assert t2.matched_text == "```"
 
     t3 = Token(
-        gherkin_line=GherkinLine("""  ````""", location["line"]), location=location
+        gherkin_line=GherkinLine("""  ````""", location["line"]),
+        location=location,
     )
     assert tm.match_DocStringSeparator(t3)
     assert t3.matched_type == "DocStringSeparator"
@@ -214,7 +216,7 @@ def test_it_matches_unindented_tags():
     assert t1.matched_items == expected_items
 
 
-def test_it_matches_RuleLine():
+def test_it_matches_rule_line():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## Rule: the world""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -224,7 +226,7 @@ def test_it_matches_RuleLine():
     assert token.matched_text == "the world"
 
 
-def test_it_matches_ScenarioLine():
+def test_it_matches_scenario_line():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## Scenario: the one where""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -234,7 +236,7 @@ def test_it_matches_ScenarioLine():
     assert token.matched_text == "the one where"
 
 
-def test_it_matches_ScenarioLine_outline():
+def test_it_matches_scenario_line_outline():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## Scenario Outline: the ones where""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -244,7 +246,7 @@ def test_it_matches_ScenarioLine_outline():
     assert token.matched_text == "the ones where"
 
 
-def test_it_matches_backgroundLine():
+def test_it_matches_background_line():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## Background: once upon a time""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -254,7 +256,7 @@ def test_it_matches_backgroundLine():
     assert token.matched_text == "once upon a time"
 
 
-def test_it_matches_ExamplesLine():
+def test_it_matches_examples_line():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""## Examples: """, location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -264,7 +266,7 @@ def test_it_matches_ExamplesLine():
     assert token.matched_text == ""
 
 
-def test_it_matches_Empty():
+def test_it_matches_empty():
     tm = GherkinInMarkdownTokenMatcher("en")
     line = GherkinLine("""""", location["line"])
     token = Token(gherkin_line=line, location=location)
@@ -274,7 +276,7 @@ def test_it_matches_Empty():
     assert token.matched_text is None
 
 
-def test_it_matches_arbitrary_text_as_Empty_after_the_FeatureLine_has_already_been_matched():
+def test_it_matches_arbitrary_text_as_empty_after_the_feature_line_has_already_been_matched():
     # White Box testing - implementation detail...
     # Given the FeatureLine has already been matched
     tm = GherkinInMarkdownTokenMatcher("en")
@@ -291,4 +293,3 @@ def test_it_matches_arbitrary_text_as_Empty_after_the_FeatureLine_has_already_be
     assert token.matched_items == []
     assert token.matched_keyword is None
     assert token.matched_text is None
-    pass

@@ -1,10 +1,10 @@
-from gherkin.token_scanner import TokenScanner
-from gherkin.token_matcher import TokenMatcher
-from gherkin.parser import Parser
-from gherkin.errors import CompositeParserException, ParserError
 import pytest
 
+from gherkin.errors import CompositeParserException, ParserError
+from gherkin.parser import Parser
+from gherkin.token_matcher import TokenMatcher
 from gherkin.token_matcher_markdown import GherkinInMarkdownTokenMatcher
+from gherkin.token_scanner import TokenScanner
 
 
 def test_parser():
@@ -31,8 +31,8 @@ def test_parse_multiple_features():
     ff1 = parser.parse(TokenScanner("Feature: 1"))
     ff2 = parser.parse(TokenScanner("Feature: 2"))
 
-    assert "1" == ff1["feature"]["name"]
-    assert "2" == ff2["feature"]["name"]
+    assert ff1["feature"]["name"] == "1"
+    assert ff2["feature"]["name"] == "2"
 
 
 def test_parse_feature_after_parser_error():
@@ -41,20 +41,20 @@ def test_parse_feature_after_parser_error():
         parser.parse(
             TokenScanner(
                 "# a comment\n"
-                + "Feature: Foo\n"
-                + "  Scenario: Bar\n"
-                + "    Given x\n"
-                + "      ```\n"
-                + "      unclosed docstring\n"
-            )
+                "Feature: Foo\n"
+                "  Scenario: Bar\n"
+                "    Given x\n"
+                "      ```\n"
+                "      unclosed docstring\n",
+            ),
         )
     feature_file = parser.parse(
         TokenScanner(
             "Feature: Foo\n" + "  Scenario: Bar\n" + "    Given x\n"
             '      """\n'
             "      closed docstring\n"
-            '      """\n'
-        )
+            '      """\n',
+        ),
     )
     expected = [
         {
@@ -76,12 +76,12 @@ def test_parse_feature_after_parser_error():
                             "delimiter": '"""',
                             "location": {"column": 7, "line": 4},
                         },
-                    }
+                    },
                 ],
                 "location": {"column": 3, "line": 2},
                 "examples": [],
-            }
-        }
+            },
+        },
     ]
 
     assert expected == feature_file["feature"]["children"]
@@ -131,7 +131,7 @@ description
     assert ast == expected
 
 
-def test_parsing_markdown_parses_a_feature_without_a_hash_Feature_header():
+def test_parsing_markdown_parses_a_feature_without_a_hash_feature_header():
     parser = Parser()
     matcher = GherkinInMarkdownTokenMatcher()
     feature_file = """# Hello
@@ -261,16 +261,15 @@ def test_it_parses_markdown_data_tables_with_headers():
                                     ],
                                 },
                                 "id": "2",
-                                # "docString": None,
                                 "keyword": "Given ",
                                 "keywordType": "Context",
                                 "location": {"column": 3, "line": 5},
                                 "text": "a simple data table",
-                            }
+                            },
                         ],
                         "tags": [],
-                    }
-                }
+                    },
+                },
             ],
             "description": "",
             "keyword": "Feature",

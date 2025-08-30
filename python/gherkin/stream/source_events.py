@@ -19,6 +19,7 @@ def _media_type(path: str) -> str | None:
         return "text/x.cucumber.gherkin+plain"
     if path.endswith(".feature.md"):
         return "text/x.cucumber.gherkin+markdown"
+    return None
 
 
 def source_event(path: str) -> Event:
@@ -27,7 +28,7 @@ def source_event(path: str) -> Event:
             "uri": path,
             "data": open(path, encoding="utf8", newline="").read(),
             "mediaType": _media_type(path),
-        }
+        },
     }
     return event
 

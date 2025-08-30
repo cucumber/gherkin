@@ -2,9 +2,9 @@ import contextlib
 import io
 import os
 
+from .gherkin_line import GherkinLine
 from .parser_types import Location
 from .token import Token
-from .gherkin_line import GherkinLine
 
 
 class TokenScanner:
