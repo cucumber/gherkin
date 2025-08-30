@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Removed
+- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
 
 ## [34.0.0] - 2025-08-17
 ### Changed
