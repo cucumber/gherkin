@@ -13,19 +13,12 @@ class ParserError(Exception):
 class ParserException(ParserError):
     def __init__(self, message: str, location: Location) -> None:
         self.location = location
-        super().__init__(
-            "("
-            + str(location["line"])
-            + ":"
-            + str(location.get("column", 0))
-            + "): "
-            + message,
-        )
+        super().__init__(f"({location['line']}:{location.get('column', 0)}): {message}")
 
 
 class NoSuchLanguageException(ParserException):
     def __init__(self, language: str, location: Location) -> None:
-        super().__init__("Language not supported: " + language, location)
+        super().__init__(f"Language not supported: {language}", location)
 
 
 class AstBuilderException(ParserException):
@@ -39,10 +32,9 @@ class UnexpectedEOFException(ParserException):
         expected_token_types: list[str],
         state_comment: str,
     ) -> None:
-        message = "unexpected end of file, expected: " + ", ".join(expected_token_types)
+        message = f"unexpected end of file, expected: {', '.join(expected_token_types)}"
         super().__init__(message, received_token.location)
-
-
+    
 class UnexpectedTokenException(ParserException):
     def __init__(
         self,
@@ -50,13 +42,7 @@ class UnexpectedTokenException(ParserException):
         expected_token_types: list[str],
         state_comment: str,
     ) -> None:
-        message = (
-            "expected: "
-            + ", ".join(expected_token_types)
-            + ", got '"
-            + received_token.token_value().strip()
-            + "'"
-        )
+        message = f"expected: {', '.join(expected_token_types)}, got '{received_token.token_value().strip()}'"
         column = received_token.location.get("column", None)
         location = (
             received_token.location

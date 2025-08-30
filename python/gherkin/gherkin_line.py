@@ -100,7 +100,7 @@ class GherkinLine:
         items = uncommented_line.strip().split("@")
         tags: list[Cell] = []
         for item in items[1:]:
-            tag_value = "@" + item.strip()
+            tag_value = f"@{item.strip()}"
             if re.search(r"[^\S+]", tag_value) is not None:
                 location: Location = {"line": self._line_number, "column": column}
                 raise ParserException("A tag may not contain whitespace", location)

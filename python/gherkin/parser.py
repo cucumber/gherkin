@@ -317,7 +317,7 @@ class Parser:
         }
 
         if state not in state_map:
-            raise RuntimeError("Unknown state: " + str(state))
+            raise RuntimeError(f"Unknown state: {state}")
 
         return state_map[state](token, context)
 
