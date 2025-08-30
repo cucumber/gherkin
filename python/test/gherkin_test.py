@@ -131,7 +131,7 @@ description
     assert ast == expected
 
 
-def test_parsing_markdown_parses_a_feature_without_a_hash_Feature_header():
+def test_parsing_markdown_parses_a_feature_without_a_hash_feature_header():
     parser = Parser()
     matcher = GherkinInMarkdownTokenMatcher()
     feature_file = """# Hello

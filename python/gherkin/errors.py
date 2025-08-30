@@ -34,7 +34,8 @@ class UnexpectedEOFException(ParserException):
     ) -> None:
         message = f"unexpected end of file, expected: {', '.join(expected_token_types)}"
         super().__init__(message, received_token.location)
-    
+
+
 class UnexpectedTokenException(ParserException):
     def __init__(
         self,

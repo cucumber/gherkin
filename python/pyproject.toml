@@ -85,6 +85,7 @@ extend-select = [
   "FURB",
   "I",
   "ISC",
+  "N",
   "PERF",
   "PIE",
   "RET",
@@ -93,8 +94,12 @@ extend-select = [
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
+# Renaming exception suffixes to 'Error' impacts client code. Should fix in wider change.
+"gherkin/errors.py" = ["N818"]
+# Renaming matching functions to be PEP8 compliant could impact client code. Should fix in wider change.
+"gherkin/token_matcher*.py" = ["N"]
 # Nested `if` statements a result of parser generation method
-"gherkin/parser.py" = ["SIM102"]
+"gherkin/parser.py" = ["N", "SIM102"]
 # Require a refactor to use context managers
 "gherkin/token_scanner.py" = ["SIM115"]
 "gherkin/stream/source_events.py" = ["SIM115"]
