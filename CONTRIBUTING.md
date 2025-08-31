@@ -33,8 +33,8 @@ docker run --rm --interactive --tty --volume ".:/app" berp-env
 
 *Or* install on your system
 
-* .NET 8.0 (to run `berp` to generate parsers)
-* `berp` (install with `dotnet tool update Berp --version 1.4.0 --tool-path /usr/bin` )
+* .NET 9.0 (to run `berp` to generate parsers)
+* `berp` (install with `dotnet tool update Berp --version 1.6.0 --tool-path /usr/bin` )
 * `make`
 * `diff`
 
