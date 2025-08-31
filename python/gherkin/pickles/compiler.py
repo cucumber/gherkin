@@ -2,22 +2,23 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable, Sequence
-from typing import TypedDict, Any, cast, overload
-from typing_extensions import TypeIs, NotRequired
+from typing import Any, TypedDict, cast, overload
 
-from ..parser_types import (
-    GherkinDocument,
-    Envelope,
+from typing_extensions import NotRequired, TypeIs
+
+from gherkin.parser_types import (
     BackgroundEnvelope,
+    Cell,
+    Envelope,
+    GherkinDocument,
+    Rule,
     RuleEnvelope,
     Scenario,
     ScenarioEnvelope,
-    Tag,
-    Rule,
     Step,
-    Cell,
+    Tag,
 )
-from ..stream.id_generator import IdGenerator
+from gherkin.stream.id_generator import IdGenerator
 
 
 class GherkinDocumentWithURI(GherkinDocument):
@@ -176,7 +177,7 @@ class Compiler:
     ) -> None:
         tags = list(inherited_tags) + list(scenario["tags"])
         last_keyword_type = "Unknown"
-        steps = list()
+        steps = []
         if scenario["steps"]:
             for step in background_steps + scenario["steps"]:
                 last_keyword_type = (
@@ -220,7 +221,7 @@ class Compiler:
                     + list(examples["tags"])
                 )
                 last_keyword_type = None
-                steps = list()
+                steps = []
                 if scenario["steps"]:
                     for step in background_steps:
                         last_keyword_type = (
@@ -238,10 +239,14 @@ class Compiler:
                             else outline_step["keywordType"]
                         )
                         step_text = self._interpolate(
-                            outline_step["text"], variable_cells, value_cells
+                            outline_step["text"],
+                            variable_cells,
+                            value_cells,
                         )
                         argument = self._create_pickle_arguments(
-                            outline_step, variable_cells, value_cells
+                            outline_step,
+                            variable_cells,
+                            value_cells,
                         )
                         _pickle_step: PickleStep = {
                             "astNodeIds": [outline_step["id"], values["id"]],
@@ -258,7 +263,9 @@ class Compiler:
                     "astNodeIds": [scenario["id"], values["id"]],
                     "id": self.id_generator.get_next_id(),
                     "name": self._interpolate(
-                        scenario["name"], variable_cells, value_cells
+                        scenario["name"],
+                        variable_cells,
+                        value_cells,
                     ),
                     "language": language,
                     "steps": steps,
@@ -282,18 +289,19 @@ class Compiler:
                 ]
                 table["rows"].append({"cells": cells})
             return PickleArgumentDataTableEnvelope(dataTable=table)
-        elif "docString" in step:
+        if "docString" in step:
             argument = step["docString"]
             docstring: PickleArgumentDocString = {
-                "content": self._interpolate(argument["content"], variables, values)
+                "content": self._interpolate(argument["content"], variables, values),
             }
             if "mediaType" in argument:
                 docstring["mediaType"] = self._interpolate(
-                    argument["mediaType"], variables, values
+                    argument["mediaType"],
+                    variables,
+                    values,
                 )
             return PickleArgumentDocStringEnvelope(docString=docstring)
-        else:
-            return None
+        return None
 
     @overload
     def _interpolate(

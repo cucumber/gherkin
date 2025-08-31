@@ -1,22 +1,22 @@
 from __future__ import annotations
 
-from typing import TypedDict, cast, TypeVar, Union
+from typing import TypedDict, TypeVar, Union, cast
 
 from .ast_node import AstNode
 from .errors import AstBuilderException
 from .parser_types import (
-    GherkinDocument,
-    Tag,
-    TableRow,
-    Cell,
-    Step,
-    DocString,
-    Scenario,
     Background,
+    Cell,
     DataTable,
+    DocString,
     Examples,
-    Rule,
     Feature,
+    GherkinDocument,
+    Rule,
+    Scenario,
+    Step,
+    TableRow,
+    Tag,
 )
 from .stream.id_generator import IdGenerator
 from .token import Location, Token
@@ -56,7 +56,7 @@ class AstBuilder:
     def build(self, token: Token) -> None:
         if token.matched_type == "Comment":
             self.comments.append(
-                {"location": self.get_location(token), "text": token.matched_text}
+                {"location": self.get_location(token), "text": token.matched_text},
             )
         else:
             self.current_node.add(token.matched_type, token)
@@ -115,7 +115,8 @@ class AstBuilder:
         for row in rows:
             if len(row["cells"]) != cell_count:
                 raise AstBuilderException(
-                    "inconsistent cell count within the table", row["location"]
+                    "inconsistent cell count within the table",
+                    row["location"],
                 )
 
     def get_cells(self, table_row_token: Token) -> list[Cell]:
@@ -125,10 +126,11 @@ class AstBuilder:
                 self.reject_nones(
                     {
                         "location": self.get_location(
-                            table_row_token, cell_item["column"]
+                            table_row_token,
+                            cell_item["column"],
                         ),
                         "value": cell_item["text"],
-                    }
+                    },
                 ),
             )
             for cell_item in table_row_token.matched_items
@@ -143,7 +145,8 @@ class AstBuilder:
         return cast(list[Step], node.get_items("Step"))
 
     def transform_node(
-        self, node: AstNode
+        self,
+        node: AstNode,
     ) -> (
         Step
         | DocString
@@ -178,9 +181,9 @@ class AstBuilder:
                     "keywordType": step_line.matched_keyword_type,
                     "text": step_line.matched_text,
                     step_argument_type: step_argument,
-                }
+                },
             )
-        elif node.rule_type == "DocString":
+        if node.rule_type == "DocString":
             separator_token = node.get_tokens("DocStringSeparator")[0]
             media_type = (
                 separator_token.matched_text
@@ -196,17 +199,17 @@ class AstBuilder:
                     "content": content,
                     "delimiter": separator_token.matched_keyword,
                     "mediaType": media_type,
-                }
+                },
             )
-        elif node.rule_type == "DataTable":
+        if node.rule_type == "DataTable":
             rows = self.get_table_rows(node)
             return self.reject_nones(
                 {
                     "location": rows[0]["location"],
                     "rows": rows,
-                }
+                },
             )
-        elif node.rule_type == "Background":
+        if node.rule_type == "Background":
             background_line = node.get_token("BackgroundLine")
             description = self.get_description(node)
             steps = self.get_steps(node)
@@ -219,9 +222,9 @@ class AstBuilder:
                     "name": background_line.matched_text,
                     "description": description,
                     "steps": steps,
-                }
+                },
             )
-        elif node.rule_type == "ScenarioDefinition":
+        if node.rule_type == "ScenarioDefinition":
             tags = self.get_tags(node)
             scenario_node = cast(AstNode, node.get_single("Scenario"))
             scenario_line = scenario_node.get_token("ScenarioLine")
@@ -239,15 +242,16 @@ class AstBuilder:
                     "description": description,
                     "steps": steps,
                     "examples": examples,
-                }
+                },
             )
-        elif node.rule_type == "ExamplesDefinition":
+        if node.rule_type == "ExamplesDefinition":
             tags = self.get_tags(node)
             examples_node = cast(AstNode, node.get_single("Examples"))
             examples_line = examples_node.get_token("ExamplesLine")
             description = self.get_description(examples_node)
             examples_table_rows = cast(
-                list[TableRow], examples_node.get_single("ExamplesTable")
+                list[TableRow],
+                examples_node.get_single("ExamplesTable"),
             )
             table_header = examples_table_rows[0] if examples_table_rows else None
             table_body = examples_table_rows[1:] if examples_table_rows else []
@@ -262,11 +266,11 @@ class AstBuilder:
                     "description": description,
                     "tableHeader": table_header,
                     "tableBody": table_body,
-                }
+                },
             )
-        elif node.rule_type == "ExamplesTable":
+        if node.rule_type == "ExamplesTable":
             return self.get_table_rows(node)
-        elif node.rule_type == "Description":
+        if node.rule_type == "Description":
             line_tokens = node.get_tokens("Other")
             tokens = list(line_tokens)
 
@@ -275,7 +279,7 @@ class AstBuilder:
                 tokens.pop()
 
             return "\n".join(token.matched_text for token in tokens)
-        elif node.rule_type == "Rule":
+        if node.rule_type == "Rule":
             header = cast(Union[AstNode, None], node.get_single("RuleHeader"))
             if not header:
                 return None
@@ -302,9 +306,9 @@ class AstBuilder:
                     "name": rule_line.matched_text,
                     "description": description,
                     "children": children,
-                }
+                },
             )
-        elif node.rule_type == "Feature":
+        if node.rule_type == "Feature":
             header = cast(Union[AstNode, None], node.get_single("FeatureHeader"))
             if not header:
                 return None
@@ -334,14 +338,13 @@ class AstBuilder:
                     "name": feature_line.matched_text,
                     "description": description,
                     "children": children,
-                }
+                },
             )
-        elif node.rule_type == "GherkinDocument":
+        if node.rule_type == "GherkinDocument":
             feature = node.get_single("Feature")
 
             return self.reject_nones({"feature": feature, "comments": self.comments})
-        else:
-            return node
+        return node
 
     @staticmethod
     def reject_nones(values: dict[str, T | None]) -> dict[str, T]:

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-
 from collections.abc import Generator
 from typing import TypedDict
 
@@ -27,8 +26,7 @@ class GherkinLine:
     def get_line_text(self, indent_to_remove: int = -1) -> str:
         if indent_to_remove < 0 or indent_to_remove > self.indent:
             return self._trimmed_line_text
-        else:
-            return self._line_text[indent_to_remove:]
+        return self._line_text[indent_to_remove:]
 
     def is_empty(self) -> bool:
         return not self._trimmed_line_text
@@ -43,13 +41,13 @@ class GherkinLine:
     def table_cells(self) -> list[Cell]:
         cells: list[Cell] = []
         for cell, col in self.split_table_cells(self._trimmed_line_text.strip()):
-            lstripped_cell = re.sub(r"^[^\S\n]*", "", cell, flags=re.U)
+            lstripped_cell = re.sub(r"^[^\S\n]*", "", cell, flags=re.UNICODE)
             cell_indent = len(cell) - len(lstripped_cell)
             cells.append(
                 {
                     "column": col + self.indent + cell_indent,
-                    "text": re.sub(r"[^\S\n]*$", "", lstripped_cell, flags=re.U),
-                }
+                    "text": re.sub(r"[^\S\n]*$", "", lstripped_cell, flags=re.UNICODE),
+                },
             )
         return cells
 
@@ -95,12 +93,14 @@ class GherkinLine:
     def tags(self) -> list[Cell]:
         column = self.indent + 1
         uncommented_line = re.split(
-            r"\s#", self._trimmed_line_text.strip(), maxsplit=2
+            r"\s#",
+            self._trimmed_line_text.strip(),
+            maxsplit=2,
         )[0]
         items = uncommented_line.strip().split("@")
         tags: list[Cell] = []
         for item in items[1:]:
-            tag_value = "@" + item.strip()
+            tag_value = f"@{item.strip()}"
             if re.search(r"[^\S+]", tag_value) is not None:
                 location: Location = {"line": self._line_number, "column": column}
                 raise ParserException("A tag may not contain whitespace", location)

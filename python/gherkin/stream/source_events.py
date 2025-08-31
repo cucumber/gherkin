@@ -19,6 +19,7 @@ def _media_type(path: str) -> str | None:
         return "text/x.cucumber.gherkin+plain"
     if path.endswith(".feature.md"):
         return "text/x.cucumber.gherkin+markdown"
+    return None
 
 
 def source_event(path: str) -> Event:
@@ -27,7 +28,7 @@ def source_event(path: str) -> Event:
             "uri": path,
             "data": open(path, encoding="utf8", newline="").read(),
             "mediaType": _media_type(path),
-        }
+        },
     }
     return event
 
@@ -37,4 +38,4 @@ class SourceEvents:
         self.paths = paths
 
     def enum(self) -> Iterable[Event]:
-        return map(source_event, self.paths)
+        return (source_event(path) for path in self.paths)

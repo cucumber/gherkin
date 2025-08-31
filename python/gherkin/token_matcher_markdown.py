@@ -4,8 +4,9 @@ import re
 from collections.abc import Iterable
 
 from .gherkin_line import Cell
+from .parser_types import Location
 from .token import Token
-from .token_matcher import TokenMatcher, MatchedItems
+from .token_matcher import MatchedItems, TokenMatcher
 
 KEYWORD_PREFIX_BULLET = "^(\\s*[*+-]\\s*)"
 KEYWORD_PREFIX_HEADER = "^(#{1,6}\\s)"
@@ -42,7 +43,11 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
     def match_RuleLine(self, token: Token) -> bool:
         return self._match_title_line(
-            KEYWORD_PREFIX_HEADER, self.dialect.rule_keywords, ":", token, "RuleLine"
+            KEYWORD_PREFIX_HEADER,
+            self.dialect.rule_keywords,
+            ":",
+            token,
+            "RuleLine",
         )
 
     def match_ScenarioLine(self, token: Token) -> bool:
@@ -87,22 +92,31 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                 return False
 
             self._set_token_matched(
-                token, "TableRow", keyword="|", items=token.line.table_cells
+                token,
+                "TableRow",
+                keyword="|",
+                items=token.line.table_cells,
             )
 
             return True
         return False
 
     def _is_gfm_table_separator(self, table_cells: list[Cell]) -> bool:
-        text_of_table_cells = map(lambda x: x["text"], table_cells)
-        separator_values = list(
-            filter(lambda x: re.match("^:?-+:?$", x), text_of_table_cells)
-        )
+        text_of_table_cells = (x["text"] for x in table_cells)
+        separator_values = [
+            separator
+            for separator in text_of_table_cells
+            if re.match("^:?-+:?$", separator)
+        ]
         return len(separator_values) > 0
 
     def match_StepLine(self, token: Token) -> bool:
         return self._match_title_line(
-            KEYWORD_PREFIX_BULLET, self._sorted_step_keywords, "", token, "StepLine"
+            KEYWORD_PREFIX_BULLET,
+            self._sorted_step_keywords,
+            "",
+            token,
+            "StepLine",
         )
 
     def match_Comment(self, token: Token) -> bool:
@@ -147,16 +161,15 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         return False
 
     def match_TagLine(self, token: Token) -> bool:
-        tags: list[MatchedItems] = []
         matching_tags = re.finditer("`(@[^`]+)`", token.line.get_line_text())
         idx = 0
-        for match in matching_tags:
-            tags.append(
-                {
-                    "column": token.line.indent + match.start(idx) + 2,
-                    "text": match.group(1),
-                }
-            )
+        tags: list[MatchedItems] = [
+            {
+                "column": token.line.indent + match.start(idx) + 2,
+                "text": match.group(1),
+            }
+            for match in matching_tags
+        ]
 
         if len(tags) == 0:
             return False
@@ -172,11 +185,12 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
                 or self._match_DocStringSeparator(token, "````", True)
                 or self._match_DocStringSeparator(token, "```", True)
             )
-        else:
-            # close
-            return self._match_DocStringSeparator(
-                token, self._active_doc_string_separator, False
-            )
+        # close
+        return self._match_DocStringSeparator(
+            token,
+            self._active_doc_string_separator,
+            False,
+        )
 
     @staticmethod
     def _default_docstring_content_type() -> str:
@@ -193,7 +207,8 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
         text = token.line.get_line_text()
         for keyword in keywords:
             match = re.search(
-                f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)", text
+                f"{prefix}({re.escape(keyword)}){keywordSuffix}(.*)",
+                text,
             )
             if match:
                 indent = token.line.indent + len(match.group(1))
@@ -215,8 +230,12 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
         return False
 
-    def _change_dialect(self, dialect_name, location=None) -> None:
+    def _change_dialect(
+        self,
+        dialect_name: str,
+        location: Location | None = None,
+    ) -> None:
         super()._change_dialect(dialect_name, location)
-        self._sorted_step_keywords = list(
-            filter(lambda key: key != "* ", self._sorted_step_keywords)
-        )
+        self._sorted_step_keywords = [
+            key for key in self._sorted_step_keywords if key != "* "
+        ]
