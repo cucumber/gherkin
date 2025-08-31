@@ -4,6 +4,7 @@ import re
 from collections.abc import Iterable
 
 from .gherkin_line import Cell
+from .parser_types import Location
 from .token import Token
 from .token_matcher import MatchedItems, TokenMatcher
 
@@ -102,9 +103,11 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
     def _is_gfm_table_separator(self, table_cells: list[Cell]) -> bool:
         text_of_table_cells = (x["text"] for x in table_cells)
-        separator_values = list(
-            filter(lambda x: re.match("^:?-+:?$", x), text_of_table_cells),
-        )
+        separator_values = [
+            separator
+            for separator in text_of_table_cells
+            if re.match("^:?-+:?$", separator)
+        ]
         return len(separator_values) > 0
 
     def match_StepLine(self, token: Token) -> bool:
@@ -227,8 +230,12 @@ class GherkinInMarkdownTokenMatcher(TokenMatcher):
 
         return False
 
-    def _change_dialect(self, dialect_name, location=None) -> None:
+    def _change_dialect(
+        self,
+        dialect_name: str,
+        location: Location | None = None,
+    ) -> None:
         super()._change_dialect(dialect_name, location)
-        self._sorted_step_keywords = list(
-            filter(lambda key: key != "* ", self._sorted_step_keywords),
-        )
+        self._sorted_step_keywords = [
+            key for key in self._sorted_step_keywords if key != "* "
+        ]

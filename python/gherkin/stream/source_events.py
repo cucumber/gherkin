@@ -38,4 +38,4 @@ class SourceEvents:
         self.paths = paths
 
     def enum(self) -> Iterable[Event]:
-        return map(source_event, self.paths)
+        return (source_event(path) for path in self.paths)
