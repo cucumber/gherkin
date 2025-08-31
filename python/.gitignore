@@ -6,7 +6,11 @@ acceptance/
 dist/
 build/
 venv/
+.venv/
 .tox/
 .coverage
 .coverage.*
 *.egg-info/
+.mypy_cache/
+.pytest_cache/
+__pycache__/

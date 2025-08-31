@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 
-GHERKIN_LANGUAGES_JSON = gherkin/gherkin-languages.json
-GHERKIN_PARSER = gherkin/parser.py
+GHERKIN_LANGUAGES_JSON = src/gherkin/gherkin-languages.json
+GHERKIN_PARSER = src/gherkin/parser.py
 GHERKIN_RAZOR = gherkin-python.razor
 SOURCE_FILES = $(shell find . -name "*.py" | grep -v $(GHERKIN_PARSER))
 
