@@ -10,6 +10,9 @@ Feature: DataTables
       |   foo|bar|    boz    |    
     And a data table with an empty cell
       |foo||boz|
+    And a data table with escape characters
+      | foo | bar |
+      | bo \\z | boo\\ |
     And a data table with comments and newlines inside
       | foo | bar |
 

@@ -10,10 +10,13 @@
 (10:7)TableRow://11:foo,15:bar,23:boz
 (11:5)StepLine:(Conjunction)And /a data table with an empty cell/
 (12:7)TableRow://8:foo,12:,13:boz
-(13:5)StepLine:(Conjunction)And /a data table with comments and newlines inside/
+(13:5)StepLine:(Conjunction)And /a data table with escape characters/
 (14:7)TableRow://9:foo,15:bar
-(15:1)Empty://
-(16:7)TableRow://9:boz,16:boo
-(17:1)Comment:/      # this is a comment/
-(18:7)TableRow://9:boz2,16:boo2
+(15:7)TableRow://9:bo \z,18:boo\
+(16:5)StepLine:(Conjunction)And /a data table with comments and newlines inside/
+(17:7)TableRow://9:foo,15:bar
+(18:1)Empty://
+(19:7)TableRow://9:boz,16:boo
+(20:1)Comment:/      # this is a comment/
+(21:7)TableRow://9:boz2,16:boo2
 EOF
