@@ -2,6 +2,28 @@ package io.cucumber.gherkin;
 
 
 final class StringUtils {
+    private static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
+
+    /**
+     * Array to indicate presence of whitespace characters.
+     * WHITESPACE_CHARS[' ']==true if ' ' is a whitespace character.
+     * There is no whitespace character with a value > 12288.
+     * The memory footprint is 12289 x 1 byte = 12289 bytes. This is
+     * relatively large, but about 30% faster than java.util.BitSet.
+     */
+    private static final boolean[] WHITESPACE_CHARS = new boolean[12289];
+    static {
+        // Initialisation des valeurs connues
+        int[] numbers = {
+                9, 10, 11, 12, 13, 28, 29, 30, 31, 32,
+                133, 160, 5760, 8192, 8193, 8194, 8195,
+                8196, 8197, 8198, 8199, 8200, 8201, 8202,
+                8232, 8233, 8239, 8287, 12288
+        };
+        for (int number : numbers) {
+            WHITESPACE_CHARS[number] = true;
+        }
+    }
 
     /**
      * An extended definition of Whitespace minus new lines.
@@ -11,7 +33,7 @@ final class StringUtils {
      * for this definition.
      *
      * @param c character to test
-     * @return true iff the {@code c} is whitespace and not new line..
+     * @return true iff the {@code c} is whitespace and not new line.
      */
     private static boolean isWhitespaceExcludingNewLine(char c) {
         return c != '\n' && isWhitespace(c);
@@ -28,29 +50,8 @@ final class StringUtils {
      * @return true iff the {@code c} is whitespace.
      */
     static boolean isWhitespace(char c) {
-        // Fast path for the common case
-        return c == ' ' || c == '\t' || isCharacterTypeSpace(c) || isDirectionalitySpace(c);
+        return c < WHITESPACE_CHARS.length && WHITESPACE_CHARS[c];
     }
-
-    private static boolean isCharacterTypeSpace(char c) {
-        return (((
-                (1 << Character.SPACE_SEPARATOR)
-                        // Not in the definition, but a subset of isDirectionalitySpace
-                        | (1 << Character.LINE_SEPARATOR)
-                        // Not in the definition, but a subset of isDirectionalitySpace
-                        | (1 << Character.PARAGRAPH_SEPARATOR)
-        ) >> Character.getType(c)) & 1) != 0;
-    }
-
-    private static boolean isDirectionalitySpace(char c) {
-        return (
-                (((1 << Character.DIRECTIONALITY_WHITESPACE)
-                        | (1 << Character.DIRECTIONALITY_PARAGRAPH_SEPARATOR)
-                        | (1 << Character.DIRECTIONALITY_SEGMENT_SEPARATOR)
-                ) >> Character.getDirectionality(c)) & 1) != 0;
-    }
-
-    private static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
     static IndentedText trimAndIndentKeepNewLines(String input) {
         int length = input.length();

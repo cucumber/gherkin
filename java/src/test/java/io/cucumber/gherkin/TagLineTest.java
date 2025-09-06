@@ -11,7 +11,7 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class GherkinTagLineTest {
+class TagLineTest {
     final Location line = Locations.atLine(12);
 
     @Test
