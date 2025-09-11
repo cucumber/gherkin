@@ -45,7 +45,7 @@ final class TagLine {
                 // check that the tag does not contain whitespace characters
                 int symbolLength = text.codePointCount(0, indexStartCurrentTag);
                 int column = indent + symbolLength + COLUMN_OFFSET;
-                if(containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
+                if (containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)) {
                     throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
                 }
                 // build the line span

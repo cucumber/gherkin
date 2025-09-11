@@ -9,7 +9,7 @@ import static io.cucumber.gherkin.TableRowLine.parse;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GherkinTableRowLineTest {
+class TableRowLineTest {
 
     @Test
     void finds_table_cells() {
