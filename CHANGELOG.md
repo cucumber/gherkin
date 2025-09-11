@@ -7,14 +7,16 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Removed
-- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
+
+## [35.0.0] - 2025-09-11
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v29
 
 ### Fixed
 - [.NET] Don't trim whitespaces before escape character ([#467](https://github.com/cucumber/gherkin/pull/467))
 
-### Changed
-- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v29
+### Removed
+- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
 
 ## [34.0.0] - 2025-08-17
 ### Changed
@@ -822,7 +824,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v34.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v35.0.0...HEAD
+[35.0.0]: https://github.com/cucumber/gherkin/compare/v34.0.0...v35.0.0
 [34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
 [33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
 [33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
