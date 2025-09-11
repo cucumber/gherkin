@@ -13,6 +13,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [.NET] Don't trim whitespaces before escape character
 
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v29
+
 ## [34.0.0] - 2025-08-17
 ### Changed
 - Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
