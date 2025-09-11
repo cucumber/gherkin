@@ -56,7 +56,7 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>messages</artifactId>
-            <version>[19.1.4,29.0.0)</version>
+            <version>[19.1.4,30.0.0)</version>
         </dependency>
 
         <dependency>

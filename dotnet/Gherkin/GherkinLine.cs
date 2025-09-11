@@ -235,8 +235,11 @@ public readonly struct GherkinLine
                 startPos++;
 
             int trimedPos = pos - 2;
-            while (trimedPos >= startPos && Array.IndexOf(inlineWhitespaceChars, lineText[trimedPos]) != -1)
-                trimedPos--;
+            if (trim)
+            {
+                while (trimedPos >= startPos && Array.IndexOf(inlineWhitespaceChars, lineText[trimedPos]) != -1)
+                    trimedPos--;
+            }
 
             cell = lineText.Substring(startPos, trimedPos - startPos + 1);
         }
