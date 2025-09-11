@@ -23,6 +23,7 @@ final class TokenMatcher implements TokenMatcherInterface
         $this->reset();
     }
 
+    #[\Override]
     public function reset(): void
     {
         $this->currentDialect = $this->dialectProvider->getDefaultDialect();
@@ -54,6 +55,7 @@ final class TokenMatcher implements TokenMatcherInterface
         );
     }
 
+    #[\Override]
     public function match_EOF(Token $token): bool
     {
         if ($token->isEof()) {
@@ -65,27 +67,32 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_FeatureLine(Token $token): bool
     {
         return $this->matchTitleLine($token, TokenType::FeatureLine, $this->currentDialect->getFeatureKeywords());
     }
 
+    #[\Override]
     public function match_BackgroundLine(Token $token): bool
     {
         return $this->matchTitleLine($token, TokenType::BackgroundLine, $this->currentDialect->getBackgroundKeywords());
     }
 
+    #[\Override]
     public function match_ScenarioLine(Token $token): bool
     {
         return $this->matchTitleLine($token, TokenType::ScenarioLine, $this->currentDialect->getScenarioKeywords())
             || $this->matchTitleLine($token, TokenType::ScenarioLine, $this->currentDialect->getScenarioOutlineKeywords());
     }
 
+    #[\Override]
     public function match_RuleLine(Token $token): bool
     {
         return $this->matchTitleLine($token, TokenType::RuleLine, $this->currentDialect->getRuleKeywords());
     }
 
+    #[\Override]
     public function match_ExamplesLine(Token $token): bool
     {
         return $this->matchTitleLine($token, TokenType::ExamplesLine, $this->currentDialect->getExamplesKeywords());
@@ -108,6 +115,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_Other(Token $token): bool
     {
         //take the entire line, except removing DocString indents
@@ -117,6 +125,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return true;
     }
 
+    #[\Override]
     public function match_Empty(Token $token): bool
     {
         if ($token->line?->isEmpty()) {
@@ -128,6 +137,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_StepLine(Token $token): bool
     {
         $keywords = $this->currentDialect->getStepKeywords();
@@ -146,6 +156,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_TableRow(Token $token): bool
     {
         if ($token->line?->startsWith(GherkinLanguageConstants::TABLE_CELL_SEPARATOR)) {
@@ -158,6 +169,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_Comment(Token $token): bool
     {
         if ($token->line?->startsWith(GherkinLanguageConstants::COMMENT_PREFIX)) {
@@ -170,6 +182,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_DocStringSeparator(Token $token): bool
     {
         return $this->activeDocStringSeparator === null
@@ -200,6 +213,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_TagLine(Token $token): bool
     {
         if ($token->line?->startsWith(GherkinLanguageConstants::TAG_PREFIX)) {
@@ -211,6 +225,7 @@ final class TokenMatcher implements TokenMatcherInterface
         return false;
     }
 
+    #[\Override]
     public function match_Language(Token $token): bool
     {
         if ($token->line && preg_match(self::LANGUAGE_PATTERN, $token->line->getLineText(0), $matches)) {

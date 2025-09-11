@@ -10,6 +10,7 @@ final class TokenFormatterBuilderTest extends TestCase
 {
     private TokenFormatterBuilder $tokenBuilder;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->tokenBuilder = new TokenFormatterBuilder();

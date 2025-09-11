@@ -179,6 +179,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Remove duplicate scenario keyword from "sr-Cyrl" ([#264](https://github.com/cucumber/gherkin/pull/264))
 - Intermittent failure of cpp test jobs in CI ([#217](https://github.com/cucumber/gherkin/issues/217))
 
+### Changed
+- [PHP] Require PHP 8.2+ in CI and in composer.json.
+
 ## [28.0.0] - 2024-02-15
 ### Added
 - [Python] Added release workflow for releasing to Pypi ([#213](https://github.com/cucumber/gherkin/pull/213))
