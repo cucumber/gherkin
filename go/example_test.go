@@ -2,9 +2,10 @@ package gherkin
 
 import (
 	"fmt"
-	messages "github.com/cucumber/messages/go/v24"
 	"os"
 	"strings"
+
+	messages "github.com/cucumber/messages/go/v28"
 )
 
 func ExampleParseGherkinDocument() {

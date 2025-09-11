@@ -10,7 +10,7 @@ import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 import static java.util.Objects.requireNonNull;
 
-class AstNode {
+final class AstNode {
     // subItems is relatively sparse, so pre-initializing all values with empty
     // lists is not efficient
     private final Map<RuleType, List<Object>> subItems = new EnumMap<>(RuleType.class);

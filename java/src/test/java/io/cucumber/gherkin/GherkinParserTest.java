@@ -14,7 +14,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -37,13 +36,6 @@ class GherkinParserTest {
         GherkinParser parser = GherkinParser.builder().build();
         Stream<Envelope> pickles = parser.parse(envelope).filter(envelope -> envelope.getPickle().isPresent());
         assertEquals(1, pickles.count());
-    }
-
-    @Test
-    void test_for_profiler_parser() throws IOException {
-        for (int i = 0; i < 1000; i++) {
-            GherkinParser.builder().build().parse(Paths.get("../testdata/good/very_long.feature"));
-        }
     }
 
     @Test

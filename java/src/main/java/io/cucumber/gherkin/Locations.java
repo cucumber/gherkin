@@ -2,9 +2,7 @@ package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
 
-import static java.util.Objects.requireNonNull;
-
-class Locations {
+final class Locations {
 
     /**
      * Columns are index-1 based.
@@ -46,17 +44,13 @@ class Locations {
     }
 
     static Location atColumn(Location location, int column) {
-        requireNonNull(location);
-        if (column <= 0) {
-            throw new IllegalArgumentException("Columns are index-1 based");
-        }
+        // By design, the location cannot be null (it comes from the Token)
+        // By design, the column cannot be less than 1
         return new Location(location.getLine(), getLong(column));
     }
 
     static Location atLine(int line) {
-        if (line < 0) {
-            throw new IllegalArgumentException("Lines are index-0 based");
-        }
+        // By design, the column cannot be less than 1 (it comes from TokenScanner)
         return new Location(getLong(line), null);
     }
 

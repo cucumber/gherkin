@@ -1,12 +1,12 @@
 SHELL := /usr/bin/env bash
 
-GHERKIN_LANGUAGES_JSON = gherkin/gherkin-languages.json
-GHERKIN_PARSER = gherkin/parser.py
+GHERKIN_LANGUAGES_JSON = src/gherkin/gherkin-languages.json
+GHERKIN_PARSER = src/gherkin/parser.py
 GHERKIN_RAZOR = gherkin-python.razor
 SOURCE_FILES = $(shell find . -name "*.py" | grep -v $(GHERKIN_PARSER))
 
-GHERKIN_GENERATE_EVENTS = python -m scripts.generate_events
-GHERKIN_GENERATE_TOKENS = python -m scripts.generate_tokens
+GHERKIN_GENERATE_EVENTS = uv run scripts/generate_events.py
+GHERKIN_GENERATE_TOKENS = uv run scripts/generate_tokens.py
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature" -o -name "*.feature.md")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature" -o -name "*.feature.md")

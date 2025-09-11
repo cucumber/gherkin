@@ -15,7 +15,7 @@
   "require": {
     "php": "^8.3",
     "ext-mbstring": "*",
-    "cucumber/messages": ">=19.1.4 <=26"
+    "cucumber/messages": ">=19.1.4 <=29"
   },
   "require-dev": {
     "phpunit/phpunit": "11.5.25",

@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/gherkin/blob/main/ruby'
   }
 
-  s.add_runtime_dependency 'cucumber-messages', '> 25', '< 28'
+  s.add_runtime_dependency 'cucumber-messages', '> 25', '< 29'
 
   s.add_development_dependency 'rake', '~> 13.1'
   s.add_development_dependency 'rspec', '~> 3.13'

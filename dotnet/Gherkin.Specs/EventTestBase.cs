@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text;
 using FluentAssertions;
 using Gherkin.CucumberMessages;
-using Gherkin.CucumberMessages.Types;
+using Io.Cucumber.Messages.Types;
 using Gherkin.Specs.EventStubs;
 using Gherkin.Specs.Helper;
 
@@ -18,7 +18,35 @@ public class EventTestBase
            config => config
                .AllowingInfiniteRecursion()
                .IgnoringCyclicReferences()
-               .Excluding(ghe => ghe.Path.EndsWith("Uri"))
+                .ComparingByMembers<Background>()
+                .ComparingByMembers<Comment>()
+                .ComparingByMembers<Io.Cucumber.Messages.Types.DataTable>()
+                .ComparingByMembers<DocString>()
+                .ComparingByMembers<Envelope>()
+                .ComparingByMembers<Examples>()
+                .ComparingByMembers<Feature>()
+                .ComparingByMembers<FeatureChild>()
+                .ComparingByMembers<GherkinDocument>()
+                .ComparingByMembers<Location>()
+                .ComparingByMembers<ParseError>()
+                .ComparingByMembers<Pickle>()
+                .ComparingByMembers<PickleDocString>()
+                .ComparingByMembers<PickleStep>()
+                .ComparingByMembers<PickleStepArgument>()
+                .ComparingByMembers<PickleTable>()
+                .ComparingByMembers<PickleTableCell>()
+                .ComparingByMembers<PickleTableRow>()
+                .ComparingByMembers<PickleTag>()
+                .ComparingByMembers<Rule>()
+                .ComparingByMembers<RuleChild>()
+                .ComparingByMembers<Scenario>()
+                .ComparingByMembers<Source>()
+                .ComparingByMembers<SourceReference>()
+                .ComparingByMembers<Step>()
+                .ComparingByMembers<TableCell>()
+                .ComparingByMembers<TableRow>()
+                .ComparingByMembers<Tag>()
+                .Excluding(ghe => ghe.Path.EndsWith("uri", StringComparison.InvariantCultureIgnoreCase))
                .Using<string>(ctx =>
                                 {
                                     var replacedSubject = NormalizeNewLines(ctx.Subject);
@@ -70,10 +98,5 @@ public class EventTestBase
         }
 
         return raisedEvents;
-    }
-
-    protected string GetExpectedContent(string expectedAstFile)
-    {
-        return File.ReadAllText(expectedAstFile, Encoding.UTF8);
     }
 }

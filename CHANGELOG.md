@@ -7,6 +7,38 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Removed
+- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
+
+## [34.0.0] - 2025-08-17
+### Changed
+- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
+- [.NET] Migrated to the use of Cucumber/Messages. Eliminated the built-in Gherkin.CucumberMessages.Types ([#426](https://github.com/cucumber/gherkin/pull/426))
+
+### Deprecated
+- [Java] Deprecate `GherkinDialectProvider` in favour of `GherkinDialects` ([#448](https://github.com/cucumber/gherkin/pull/448))
+
+### Fixed
+- [.Net] Handle all ambiguous keywords properly ([#435](https://github.com/cucumber/gherkin/pull/435))
+- [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
+- [Java] Improve performance with a generated keyword matcher ([#445](https://github.com/cucumber/gherkin/pull/445))
+
+### Removed
+- [Python] Dropped legacy `.egg-info` metadata distribution artifacts
+
+## [33.1.0] - 2025-07-27
+### Changed
+- [Java] Optimize GherkinParser performance ([#436](https://github.com/cucumber/gherkin/pull/436))
+
+### Fixed
+- [Go] Trim trailing tab characters from title and step lines ([#441](https://github.com/cucumber/gherkin/pull/441))
+- [Java] Use a more consistent definition of whitespace ([#442](https://github.com/cucumber/gherkin/pull/442))
+
+## [33.0.0] - 2025-07-07
+### Changed
+- [Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v28 ([#420](https://github.com/cucumber/gherkin/pull/420))
+
+## [32.2.0] - 2025-07-07
 ### Added
 - [Perl] Support for Gherkin in Markdown format (MDG)
 
@@ -787,7 +819,11 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v32.1.2...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v34.0.0...HEAD
+[34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
+[33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
+[33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
+[32.2.0]: https://github.com/cucumber/gherkin/compare/v32.1.2...v32.2.0
 [32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
 [32.1.1]: https://github.com/cucumber/gherkin/compare/v32.1.0...v32.1.1
 [32.1.0]: https://github.com/cucumber/gherkin/compare/v32.0.1...v32.1.0
