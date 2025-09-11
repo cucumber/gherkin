@@ -11,7 +11,10 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
 
 ### Fixed
-- [.NET] Don't trim whitespaces before escape character
+- [.NET] Don't trim whitespaces before escape character ([#467](https://github.com/cucumber/gherkin/pull/467))
+
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v29
 
 ## [34.0.0] - 2025-08-17
 ### Changed
