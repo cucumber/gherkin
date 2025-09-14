@@ -40,6 +40,7 @@ jobs:
       uses: actions/setup-go@v6
       with:
         go-version: ${{ matrix.go }}
+        cache-dependency-path: go/go.sum
 
     - name: lint
       working-directory: go
