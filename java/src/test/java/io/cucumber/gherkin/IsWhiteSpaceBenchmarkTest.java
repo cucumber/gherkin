@@ -46,12 +46,25 @@ public class IsWhiteSpaceBenchmarkTest {
     }
 
     @Benchmark
-    public boolean benchmark() {
+    public boolean benchmarkIsWhiteSpace() {
         boolean hasWhitespace = false;
         for (char c : featureFileLinePrefixes) {
             hasWhitespace |= StringUtils.isWhitespace(c);
         }
         return hasWhitespace;
+    }
+
+    @Benchmark
+    public boolean benchmarkIsWhiteSpaceSlow() {
+        boolean hasWhitespace = false;
+        for (char c : featureFileLinePrefixes) {
+            hasWhitespace |= isWhiteSpaceReferenceImplementation(c);
+        }
+        return hasWhitespace;
+    }
+
+    private static boolean isWhiteSpaceReferenceImplementation(char c) {
+        return c == ' ' || c == '\t' || StringUtils.isWhiteSpaceSlow(c);
     }
 
     /**
@@ -71,7 +84,8 @@ public class IsWhiteSpaceBenchmarkTest {
      */
     @Test
     public void testBenchmark() {
-        benchmark();
+        benchmarkIsWhiteSpace();
+        benchmarkIsWhiteSpaceSlow();
     }
 
     /**
@@ -81,7 +95,7 @@ public class IsWhiteSpaceBenchmarkTest {
     @Disabled
     public void profileBenchmark() {
         for (int i = 0; i < 10_0000; i++) {
-            benchmark();
+            benchmarkIsWhiteSpace();
         }
     }
 }

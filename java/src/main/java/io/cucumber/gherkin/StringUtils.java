@@ -20,7 +20,7 @@ final class StringUtils {
     /**
      * An extended definition of Whitespace.
      * <p>
-     * Character in Unicode general category {@code Zs} and directionality
+     * Characters in Unicode general category {@code Zs} and directionality
      * categories {@code WS}, {@code B}, and {@code S} are considered whitespace
      * for this definition.
      *
