@@ -1,6 +1,6 @@
 {
   "name": "@cucumber/gherkin",
-  "version": "34.0.0",
+  "version": "35.0.0",
   "description": "Gherkin parser",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -30,7 +30,7 @@
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
     "@types/mocha": "10.0.10",
-    "@types/node": "22.18.1",
+    "@types/node": "22.18.3",
     "commander": "^14.0.0",
     "core-js": "3.45.1",
     "mocha": "11.7.2",
@@ -38,7 +38,7 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@cucumber/messages": ">=19.1.4 <29"
+    "@cucumber/messages": ">=19.1.4 <30"
   },
   "directories": {
     "test": "test"
