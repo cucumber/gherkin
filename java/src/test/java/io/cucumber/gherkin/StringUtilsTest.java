@@ -85,27 +85,8 @@ class StringUtilsTest {
     @Test
     void isWhitespace_contains_all_whitespaces_and_no_non_whitespace_chars() {
         for (char c = Character.MIN_VALUE; c < Character.MAX_VALUE; c++) {
-            assertEquals(isCharacterTypeSpace(c) || isDirectionalitySpace(c), StringUtils.isWhitespace(c),
+            assertEquals(StringUtils.isWhiteSpaceSlow(c), StringUtils.isWhitespace(c),
                     "Mismatch for char " + (int) c + " '" + c + "'");
         }
     }
-
-    private static boolean isCharacterTypeSpace(char c) {
-        return (((
-                (1 << Character.SPACE_SEPARATOR)
-                        // Not in the definition, but a subset of isDirectionalitySpace
-                        | (1 << Character.LINE_SEPARATOR)
-                        // Not in the definition, but a subset of isDirectionalitySpace
-                        | (1 << Character.PARAGRAPH_SEPARATOR)
-        ) >> Character.getType(c)) & 1) != 0;
-    }
-
-    private static boolean isDirectionalitySpace(char c) {
-        return (
-                (((1 << Character.DIRECTIONALITY_WHITESPACE)
-                        | (1 << Character.DIRECTIONALITY_PARAGRAPH_SEPARATOR)
-                        | (1 << Character.DIRECTIONALITY_SEGMENT_SEPARATOR)
-                ) >> Character.getDirectionality(c)) & 1) != 0;
-    }
-
 }
