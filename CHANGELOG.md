@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Java] Optimize `StrinUtils.isWhitespace` ([#468](https://github.com/cucumber/gherkin/pull/468))
 
 ## [35.0.0] - 2025-09-11
 ### Changed
@@ -17,9 +19,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Removed
 - [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
-
-### Fixed
-- [Java] Optimize `StrinUtils.isWhitespace` ([#468](https://github.com/cucumber/gherkin/pull/468))
 
 ## [34.0.0] - 2025-08-17
 ### Changed
