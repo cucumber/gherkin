@@ -57,33 +57,6 @@ public class IsWhiteSpaceBenchmarkTest {
     }
 
     @Benchmark
-    public boolean benchmarkIsWhiteSpaceNoIf() {
-        boolean hasWhitespace = false;
-        for (char c : featureFileLinePrefixes) {
-            hasWhitespace |= StringUtils.isWhitespaceNoIf(c);
-        }
-        return hasWhitespace;
-    }
-
-    @Benchmark
-    public boolean benchmarkIsWhitespaceLt32OrRange5760To12288ThenSparseSpaces() {
-        boolean hasWhitespace = false;
-        for (char c : featureFileLinePrefixes) {
-            hasWhitespace |= StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpaces(c);
-        }
-        return hasWhitespace;
-    }
-
-    @Benchmark
-    public boolean benchmarkIsWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf() {
-        boolean hasWhitespace = false;
-        for (char c : featureFileLinePrefixes) {
-            hasWhitespace |= StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf(c);
-        }
-        return hasWhitespace;
-    }
-
-    @Benchmark
     public boolean benchmarkIsWhiteSpaceSlow() {
         boolean hasWhitespace = false;
         for (char c : featureFileLinePrefixes) {
@@ -134,14 +107,8 @@ public class IsWhiteSpaceBenchmarkTest {
             boolean bSlow = StringUtils.isWhiteSpaceSlow(c);
             boolean bRI = isWhiteSpaceReferenceImplementation(c);
             boolean b0 = StringUtils.isWhitespace(c);
-            boolean b2 = StringUtils.isWhitespaceNoIf(c);
-            boolean b3 = StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpaces(c);
-            boolean b4 = StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf(c);
             assertEquals(bSlow, bRI, "Mismatch for char " + (int) c + " '" + c + "'");
             assertEquals(bSlow, b0, "Mismatch for char " + (int) c + " '" + c + "'");
-            assertEquals(bSlow, b2, "Mismatch for char " + (int) c + " '" + c + "'");
-            assertEquals(bSlow, b3, "Mismatch for char " + (int) c + " '" + c + "'");
-            assertEquals(bSlow, b4, "Mismatch for char " + (int) c + " '" + c + "'");
         }
     }
 
