@@ -98,7 +98,7 @@ final class StringUtils {
         //
         // So the slow path is okay for both.
         if (c < 32 || (c >= 5760 && c <= 12288)) {
-            return isCharacterTypeSpace(c) || isDirectionalitySpace(c);
+            return isWhiteSpaceSlow(c);
         }
         // Test only spaces characters not covered by the range above
         return c == 133 || c == 160;
@@ -106,7 +106,7 @@ final class StringUtils {
     static boolean isWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf(char c) {
         return (c == ' ' || c == '\t') // Cas commun
                 || ((c < 32 || (c >= 5760 && c <= 12288))
-                && (isCharacterTypeSpace(c) || isDirectionalitySpace(c))) // plage basse et haute
+                && isWhiteSpaceSlow(c)) // plage basse et haute
                 || (c == 133 || c == 160);// caractères spécifiques
     }
 
