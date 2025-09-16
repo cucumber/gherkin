@@ -68,6 +68,48 @@ final class StringUtils {
         return c == '\u0085' || c == '\u00a0';
     }
 
+    static boolean isWhitespaceNoIf(char c) {
+        return (c == ' ' || c == '\t') ||
+                (c < ' ' && isWhiteSpaceSlow(c)) ||
+                (c >= '\u1680' && c <= '\u3000' && isWhiteSpaceSlow(c)) ||
+                (c == '\u0085' || c == '\u00a0');
+    }
+
+    static boolean isWhitespaceLt32OrRange5760To12288ThenSparseSpaces(char c) {
+        /*
+        Catégorie 1(0..31) : 0 occurrences
+        Catégorie 2(32..32) : 2072 occurrences
+        Catégorie 3(33..133) : 38 occurrences
+        Catégorie 4(134..160) : 0 occurrences
+        Catégorie 5(161..5760) : 177 occurrences
+        Catégorie 6(5761..12288) : 0 occurrences
+        Catégorie 7(12289..65535) : 44 occurrences
+         */
+        // Fast path, common whitespace
+        if (c == ' ' || c == '\t') {
+            return true;
+        }
+        // The range below contains both whitespace and characters.
+        //
+        // * The characters in this range do not start a valid keyword (at
+        //   present).
+        // * The spaces in this range are not expected to be used in actual
+        //   feature files
+        //
+        // So the slow path is okay for both.
+        if (c < 32 || (c >= 5760 && c <= 12288)) {
+            return isCharacterTypeSpace(c) || isDirectionalitySpace(c);
+        }
+        // Test only spaces characters not covered by the range above
+        return c == 133 || c == 160;
+    }
+    static boolean isWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf(char c) {
+        return (c == ' ' || c == '\t') // Cas commun
+                || ((c < 32 || (c >= 5760 && c <= 12288))
+                && (isCharacterTypeSpace(c) || isDirectionalitySpace(c))) // plage basse et haute
+                || (c == 133 || c == 160);// caractères spécifiques
+    }
+
     static boolean isWhiteSpaceSlow(char c) {
         return isCharacterTypeSpace(c) || isDirectionalitySpace(c);
     }

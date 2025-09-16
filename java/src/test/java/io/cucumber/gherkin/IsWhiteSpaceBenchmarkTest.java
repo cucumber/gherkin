@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class IsWhiteSpaceBenchmarkTest {
 
     private static final char[] featureFileLinePrefixes = createLinePrefixes();
@@ -50,6 +52,33 @@ public class IsWhiteSpaceBenchmarkTest {
         boolean hasWhitespace = false;
         for (char c : featureFileLinePrefixes) {
             hasWhitespace |= StringUtils.isWhitespace(c);
+        }
+        return hasWhitespace;
+    }
+
+    @Benchmark
+    public boolean benchmarkIsWhiteSpaceNoIf() {
+        boolean hasWhitespace = false;
+        for (char c : featureFileLinePrefixes) {
+            hasWhitespace |= StringUtils.isWhitespaceNoIf(c);
+        }
+        return hasWhitespace;
+    }
+
+    @Benchmark
+    public boolean benchmarkIsWhitespaceLt32OrRange5760To12288ThenSparseSpaces() {
+        boolean hasWhitespace = false;
+        for (char c : featureFileLinePrefixes) {
+            hasWhitespace |= StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpaces(c);
+        }
+        return hasWhitespace;
+    }
+
+    @Benchmark
+    public boolean benchmarkIsWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf() {
+        boolean hasWhitespace = false;
+        for (char c : featureFileLinePrefixes) {
+            hasWhitespace |= StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf(c);
         }
         return hasWhitespace;
     }
@@ -98,4 +127,22 @@ public class IsWhiteSpaceBenchmarkTest {
             benchmarkIsWhiteSpace();
         }
     }
+
+    @Test
+    void all_implementations_behave_the_same() {
+        for (char c = Character.MIN_VALUE; c < Character.MAX_VALUE; c++) {
+            boolean bSlow = StringUtils.isWhiteSpaceSlow(c);
+            boolean bRI = isWhiteSpaceReferenceImplementation(c);
+            boolean b0 = StringUtils.isWhitespace(c);
+            boolean b2 = StringUtils.isWhitespaceNoIf(c);
+            boolean b3 = StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpaces(c);
+            boolean b4 = StringUtils.isWhitespaceLt32OrRange5760To12288ThenSparseSpacesNoIf(c);
+            assertEquals(bSlow, bRI, "Mismatch for char " + (int) c + " '" + c + "'");
+            assertEquals(bSlow, b0, "Mismatch for char " + (int) c + " '" + c + "'");
+            assertEquals(bSlow, b2, "Mismatch for char " + (int) c + " '" + c + "'");
+            assertEquals(bSlow, b3, "Mismatch for char " + (int) c + " '" + c + "'");
+            assertEquals(bSlow, b4, "Mismatch for char " + (int) c + " '" + c + "'");
+        }
+    }
+
 }
