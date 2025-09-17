@@ -4149,6 +4149,7 @@ var builtinDialects = gherkinDialectMap{
 			},
 			examples: {
 				"Примеры",
+				"Значения",
 			},
 			given: {
 				"* ",
