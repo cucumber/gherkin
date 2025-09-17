@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- (I18n) ru: Added word "Значения" as a synonym for examples ([#479](https://github.com/cucumber/gherkin/pull/479)
+
 
 ## [35.0.0] - 2025-09-11
 ### Changed
