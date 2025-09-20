@@ -7,11 +7,13 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Fixed
-- [Java] Optimize `StrinUtils.isWhitespace` ([#468](https://github.com/cucumber/gherkin/pull/468))
 
+## [35.1.0] - 2025-09-20
 ### Added
 - (I18n) ru: Added word "Значения" as a synonym for examples ([#479](https://github.com/cucumber/gherkin/pull/479)
+
+### Fixed
+- [Java] Optimize `StrinUtils.isWhitespace` ([#468](https://github.com/cucumber/gherkin/pull/468))
 
 ## [35.0.0] - 2025-09-11
 ### Changed
@@ -829,7 +831,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v35.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v35.1.0...HEAD
+[35.1.0]: https://github.com/cucumber/gherkin/compare/v35.0.0...v35.1.0
 [35.0.0]: https://github.com/cucumber/gherkin/compare/v34.0.0...v35.0.0
 [34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
 [33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
