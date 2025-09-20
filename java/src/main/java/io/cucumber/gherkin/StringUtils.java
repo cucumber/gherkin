@@ -38,7 +38,7 @@ final class StringUtils {
         // |                    | c --->                                                               |
         // | whitespace         | 10-31 | 32   |     | 133 || 160 |       | 5760-12288 |               |
         // | keyword characters |              || 39----------------4877 ||            || 12363-55357 ||
-        // | occurrences        | 0     | 1036 |          215             |             | 44           |
+        // | occurrences        | 0     | 1036 ||          215           |              | 44          ||
         //
         // Plotting this information for a hypothetical feature that uses every
         // keyword indented with 4 spaces we can see that there are only a few
