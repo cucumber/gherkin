@@ -45,7 +45,7 @@ final class TableRowLine {
                         // Skip the first empty span
                         beforeFirst = false;
                     } else {
-                        StringUtils.IndentedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder.toString());
+                        StringUtils.IndentedText trimmedCellIndent = trimAndIndentKeepNewLines(cellBuilder);
                         int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
                         lineSpans.add(new LineSpan(column, trimmedCellIndent.getText()));
                     }

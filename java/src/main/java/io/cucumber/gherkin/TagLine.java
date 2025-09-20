@@ -26,6 +26,8 @@ final class TagLine {
 
         List<LineSpan> tags = new ArrayList<>();
         int indexEndCurrentTag;
+        int totalCodepointLengthLastIndex = 0;
+        int totalCodepointLength = 0;
         while (indexStartCurrentTag < indexEndOfLine) {
             // look for the next tag
             int indexStartNextTag = indexStartCurrentTag + 1;
@@ -43,8 +45,10 @@ final class TagLine {
             if (indexEndCurrentTag > indexStartCurrentTag + 1) {
                 // non-empty tag found
                 // check that the tag does not contain whitespace characters
-                int symbolLength = text.codePointCount(0, indexStartCurrentTag);
-                int column = indent + symbolLength + COLUMN_OFFSET;
+                int symbolLength = text.codePointCount(totalCodepointLengthLastIndex, indexStartCurrentTag);
+                totalCodepointLength += symbolLength; // codePointCount is counted incrementally
+                totalCodepointLengthLastIndex = indexStartCurrentTag;
+                int column = indent + totalCodepointLength + COLUMN_OFFSET;
                 if (containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)) {
                     throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
                 }
