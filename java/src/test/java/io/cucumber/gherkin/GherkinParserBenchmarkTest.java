@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class GherkinParserBenchmarkTest {
 
     @Benchmark
-    public Stream<Envelope> parse() throws IOException {
+    public Stream<Envelope> benchmark() throws IOException {
         GherkinParser gherkinParser = GherkinParser.builder()
                 .idGenerator(new IncrementingIdGenerator())
                 .build();
@@ -39,8 +39,8 @@ public class GherkinParserBenchmarkTest {
      * Ensures we don't break the parse method in CI.
      */
     @Test
-    public void testParse() throws IOException {
-        parse();
+    public void testBenchmark() throws IOException {
+        benchmark();
     }
 
     /**
@@ -48,9 +48,9 @@ public class GherkinParserBenchmarkTest {
      */
     @Test
     @Disabled
-    public void profileParse() throws IOException {
+    public void profileBenchmark() throws IOException {
         for (int i = 0; i < 10_000; i++) {
-            parse();
+            benchmark();
         }
     }
 }

@@ -5,13 +5,10 @@ final class StringUtils {
 
     /**
      * An extended definition of Whitespace minus new lines.
-     * <p>
-     * Character in Unicode general category {@code Zs} and directionality
-     * categories {@code WS}, {@code B}, and {@code S} are considered whitespace
-     * for this definition.
      *
      * @param c character to test
-     * @return true iff the {@code c} is whitespace and not new line..
+     * @return true iff the {@code c} is whitespace and not new line.
+     * @see #isWhitespace(char)
      */
     private static boolean isWhitespaceExcludingNewLine(char c) {
         return c != '\n' && isWhitespace(c);
@@ -20,7 +17,7 @@ final class StringUtils {
     /**
      * An extended definition of Whitespace.
      * <p>
-     * Character in Unicode general category {@code Zs} and directionality
+     * Characters in Unicode general category {@code Zs} and directionality
      * categories {@code WS}, {@code B}, and {@code S} are considered whitespace
      * for this definition.
      *
@@ -28,8 +25,44 @@ final class StringUtils {
      * @return true iff the {@code c} is whitespace.
      */
     static boolean isWhitespace(char c) {
-        // Fast path for the common case
-        return c == ' ' || c == '\t' || isCharacterTypeSpace(c) || isDirectionalitySpace(c);
+        // This method is about twice faster than `isWhiteSpaceSlow(c)`.
+        // It has been optimized based on the expected use-case of
+        // left-trimming lines in valid feature files. 
+        //
+        // * There are 29 whitespace characters. However, we only expect spaces
+        //   or tabs to be used.
+        // * Valid feature files start each line with sequences of one or more
+        //   spaces followed by a keyword character.
+        // 
+        // | category           | 0     | 1    | 2                        | 3          | 4             |
+        // |                    | c --->                                                               |
+        // | whitespace         | 10-31 | 32   |     | 133 || 160 |       | 5760-12288 |               |
+        // | keyword characters |              || 39----------------4877 ||            || 12363-55357 ||
+        // | occurrences        | 0     | 1036 ||          215           |              | 44          ||
+        //
+        // Plotting this information for a hypothetical feature that uses every
+        // keyword indented with 4 spaces we can see that there are only a few
+        // ranges that have to be checked.
+        // 
+        // Category 0: Control symbols
+        // Category 1: Spaces (and tabs)
+        // Category 2: Latin block to Unified Canadian Aboriginal Syllabics block
+        // Category 3: Ogham block to the space in CJK Symbols and Punctuation
+        // Category 4: CJK Symbols and Punctuation block minus space and onwards
+
+        // Fast path, common whitespace
+        // Note: Single boolean expression is faster than if-else
+        return (c == ' ' || c == '\t')
+                // Slow path here is okay because:
+                // * Characters before space are not expected to be used
+                // * No Gherkin keyword starts with these characters
+                || ((c < ' ' || (c >= '\u1680' && c <= '\u3000')) && isWhiteSpaceSlow(c))
+                // Test only two remaining whitespace characters in the range (32, 5760).
+                || (c == '\u0085' || c == '\u00a0');
+    }
+
+    static boolean isWhiteSpaceSlow(char c) {
+        return isCharacterTypeSpace(c) || isDirectionalitySpace(c);
     }
 
     private static boolean isCharacterTypeSpace(char c) {
