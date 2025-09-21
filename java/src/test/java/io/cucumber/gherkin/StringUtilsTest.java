@@ -89,4 +89,44 @@ class StringUtilsTest {
                     "Mismatch for char " + (int) c + " '" + c + "'");
         }
     }
+
+    @Test
+    void trimAndIndentKeepNewLines_computes_space_codepoints_correctly() {
+        // When
+        for (char c = Character.MIN_VALUE; c < Character.MAX_VALUE; c++) {
+            if (StringUtils.isWhitespaceExcludingNewLine(c)) {
+                // Given a string with a single whitespace character followed by a non-whitespace character
+                String str = c + "x";
+
+                // When
+                StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndentKeepNewLines(new StringBuilder(str));
+
+                // Then the indent is the same as the number of codepoints in the whitespace character
+                // (which is always 1 because all whitespace characters are in
+                // the Unicode Basic Multilingual Plane, so are coded on one char)
+                assertEquals(str.codePointCount(0,1), trimmedIndent.getIndent());
+            }
+        }
+    }
+
+
+    @Test
+    void trimAndIndent_computes_space_codepoints_correctly() {
+        // When
+        for (char c = Character.MIN_VALUE; c < Character.MAX_VALUE; c++) {
+            if (StringUtils.isWhitespace(c)) {
+                // Given a string with a single whitespace character followed by a non-whitespace character
+                String str = c + "x";
+
+                // When
+                StringUtils.IndentedText trimmedIndent = StringUtils.trimAndIndent(str);
+
+                // Then the indent is the same as the number of codepoints in the whitespace character
+                // (which is always 1 because all whitespace characters are in
+                // the Unicode Basic Multilingual Plane, so are coded on one char)
+                assertEquals(str.codePointCount(0,1), trimmedIndent.getIndent());
+            }
+        }
+    }
+
 }

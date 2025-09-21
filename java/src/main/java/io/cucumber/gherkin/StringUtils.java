@@ -10,7 +10,7 @@ final class StringUtils {
      * @return true iff the {@code c} is whitespace and not new line.
      * @see #isWhitespace(char)
      */
-    private static boolean isWhitespaceExcludingNewLine(char c) {
+    static boolean isWhitespaceExcludingNewLine(char c) {
         return c != '\n' && isWhitespace(c);
     }
 
@@ -85,7 +85,7 @@ final class StringUtils {
 
     private static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
 
-    static IndentedText trimAndIndentKeepNewLines(String input) {
+    static IndentedText trimAndIndentKeepNewLines(StringBuilder input) {
         int length = input.length();
         if (length == 0) {
             return NO_INDENT_ENTRY;
@@ -100,11 +100,10 @@ final class StringUtils {
             end--;
         }
         String trimmed = input.substring(start, end);
-        int indent = input.codePointCount(0, start);
         // the object instance is not truly created because
         // the code is inlined by the hotspot compiler
         // (as "-XX:+EliminateAllocations" is enabled by default).
-        return new IndentedText(indent, trimmed);
+        return new IndentedText(start, trimmed);
     }
 
     static IndentedText trimAndIndent(String input) {
@@ -121,11 +120,10 @@ final class StringUtils {
             end--;
         }
         String trimmed = input.substring(start, end);
-        int indent = input.codePointCount(0, start);
         // the object instance is not truly created because
         // the code is inlined by the hotspot compiler
         // (as "-XX:+EliminateAllocations" is enabled by default).
-        return new IndentedText(indent, trimmed);
+        return new IndentedText(start, trimmed);
     }
 
     static boolean containsWhitespace(String input, int fromIndex, int toIndex) {
