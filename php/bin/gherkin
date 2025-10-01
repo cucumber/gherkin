@@ -12,6 +12,7 @@ assert(is_array($argv), "Script must be run from the command line");
 $options = ['predictable-ids', 'no-source', 'no-ast', 'no-pickles'];
 
 $selectedOptions = getopt('', $options, $restIndex);
+assert(is_array($selectedOptions), "Could not get options");
 
 $paths = array_slice($argv, $restIndex);
 
@@ -20,7 +21,9 @@ $sources = (
     /** @param list<string> $paths */
     function (array $paths) {
         foreach ($paths as $path) {
-            yield new Source(uri: $path, data: file_get_contents($path));
+            $contents = file_get_contents($path);
+            assert(is_string($contents), "Could not read " . $path);
+            yield new Source(uri: $path, data: $contents);
         }
     }
 )($paths);
@@ -33,6 +36,8 @@ $parser = new GherkinParser(
 );
 $envelopes = $parser->parse($sources);
 
-$output = fopen('php://stdout', 'w');
+$file = 'php://stdout';
+$output = fopen($file, 'w');
+assert(is_resource($output), "Could not open " . $file);
 $writer = NdJsonStreamWriter::fromFileHandle($output);
 $writer->writeEnvelopes($envelopes);

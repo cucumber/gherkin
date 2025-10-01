@@ -24,6 +24,7 @@ final class StringTokenScanner implements TokenScanner
     ) {
     }
 
+    #[\Override]
     public function read(): Token
     {
         if (preg_match(self::FIRST_LINE_PATTERN, $this->source, $matches)) {
