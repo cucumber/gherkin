@@ -24,11 +24,11 @@ jobs:
   test-java:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         os:
           - ubuntu-latest
-        java: ["17", "21"]
+        java: ['17', '21']
         include:
 # Integration tests don't work on windows, classpath must be seperated with a ';' instead.
 #          - os: windows-latest
@@ -41,9 +41,9 @@ jobs:
 
       - uses: actions/setup-java@v5
         with:
-          distribution: "temurin"
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
-          cache: "maven"
+          cache: 'maven'
 
       - run: mvn install
         working-directory: java
