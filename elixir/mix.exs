@@ -27,7 +27,7 @@ defmodule CucumberGherkin.MixProject do
   defp deps do
     [
       {:elixir_uuid, "~> 1.2"},
-      {:cucumber_messages, ">= 27.0.2 and < 30.0.0"},
+      {:cucumber_messages, ">= 27.0.2 and < 31.0.0"},
       {:ex_doc, "~> 0.38", only: :dev, runtime: false}
     ]
   end
