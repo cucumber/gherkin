@@ -39,6 +39,14 @@ final class AstNode {
     }
 
     @SuppressWarnings("unchecked")
+    <T> T getSingle(RuleType ruleType) {
+        // if not null, then at least one item is present because
+        // the list was created in add(), so no need to check isEmpty()
+        List<T> items = (List<T>) subItems.get(ruleType);
+        return items == null ? null : items.get(0);
+    }
+
+    @SuppressWarnings("unchecked")
     <T> List<T> getItems(RuleType ruleType) {
         List<T> items = (List<T>) subItems.get(ruleType);
         if (items == null) {
@@ -48,7 +56,7 @@ final class AstNode {
     }
 
     Token getToken(TokenType tokenType) {
-        return requireNonNull(getSingle(tokenType.ruleType, null));
+        return getSingle(tokenType.ruleType);
     }
 
     List<Token> getTokens(TokenType tokenType) {

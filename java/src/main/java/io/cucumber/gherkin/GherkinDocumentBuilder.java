@@ -83,8 +83,8 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                         stepLine.matchedKeyword,
                         stepLine.keywordType,
                         stepLine.matchedText,
-                        node.getSingle(RuleType.DocString, null),
-                        node.getSingle(RuleType.DataTable, null),
+                        node.getSingle(RuleType.DocString),
+                        node.getSingle(RuleType.DataTable),
                         idGenerator.newId()
                 );
             }
@@ -116,7 +116,8 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case ScenarioDefinition: {
-                AstNode scenarioNode = node.getSingle(RuleType.Scenario, null);
+                AstNode scenarioNode = node.getSingle(RuleType.Scenario);
+                //noinspection ConstantConditions  // scenarioNode should never be null because of the grammar (see Parser)
                 Token scenarioLine = scenarioNode.getToken(TokenType.ScenarioLine);
 
                 return new Scenario(
@@ -131,12 +132,22 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case ExamplesDefinition: {
-                AstNode examplesNode = node.getSingle(RuleType.Examples, null);
+                AstNode examplesNode = node.getSingle(RuleType.Examples);
+                //noinspection ConstantConditions  // examplesNode is never be null because of the grammar (see Parser)
                 Token examplesLine = examplesNode.getToken(TokenType.ExamplesLine);
-                List<TableRow> rows = examplesNode.getSingle(RuleType.ExamplesTable, null);
-                TableRow tableHeader = rows != null && !rows.isEmpty() ? rows.get(0) : null;
-                List<TableRow> tableBody = rows != null && !rows.isEmpty() ? rows.subList(1, rows.size()) : Collections.emptyList();
+                List<TableRow> rows = examplesNode.getSingle(RuleType.ExamplesTable);
+                TableRow tableHeader;
+                List<TableRow> tableBody;
+                // rows is null when a Scenario Outline has no Examples table
+                if (rows != null && !rows.isEmpty()) {
+                    tableHeader = rows.get(0);
+                    tableBody = rows.subList(1, rows.size());
+                } else {
+                    tableHeader = null;
+                    tableBody = Collections.emptyList();
+                }
 
+                //noinspection ConstantConditions  // examplesLine is never be null because of the grammar (see Parser)
                 return new Examples(
                         examplesLine.location,
                         getTags(node),
@@ -146,7 +157,6 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                         tableHeader,
                         tableBody,
                         idGenerator.newId()
-
                 );
             }
             case ExamplesTable: {
@@ -162,14 +172,17 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 return joinMatchedText(lineTokens, toIndex);
             }
             case Feature: {
-                AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
-                if (header == null) return null;
+                // when we transform a Feature, a FeatureHeader is always present
+                // and a FeatureLine are always present in the FeatureHeader
+                // because of the grammar (see Parser)
+                AstNode header = node.getSingle(RuleType.FeatureHeader);
+                //noinspection ConstantConditions  // header is never be null because of the grammar (see Parser)
                 List<Tag> tags = getTags(header);
                 Token featureLine = header.getToken(TokenType.FeatureLine);
-                if (featureLine == null) return null;
 
                 List<FeatureChild> children = new ArrayList<>();
-                Background background = node.getSingle(RuleType.Background, null);
+                Background background = node.getSingle(RuleType.Background);
+                // Background is an optional element of a Feature, so can be null
                 if (background != null) {
                     children.add(new FeatureChild(null, background, null));
                 }
@@ -180,6 +193,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                     children.add(new FeatureChild(rule, null, null));
                 }
 
+                //noinspection ConstantConditions  // featureLine is never be null because of the grammar (see Parser)
                 return new Feature(
                         featureLine.location,
                         tags,
@@ -191,15 +205,15 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case Rule: {
-                AstNode header = node.getSingle(RuleType.RuleHeader, new AstNode(RuleType.RuleHeader));
-                if (header == null) return null;
+                AstNode header = node.getSingle(RuleType.RuleHeader);
+                //noinspection ConstantConditions  // header is never be null because of the grammar (see Parser)
                 Token ruleLine = header.getToken(TokenType.RuleLine);
-                if (ruleLine == null) return null;
 
                 List<RuleChild> children = new ArrayList<>();
                 List<Tag> tags = getTags(header);
 
-                Background background = node.getSingle(RuleType.Background, null);
+                Background background = node.getSingle(RuleType.Background);
+                // Background is an optional element of a Feature, so can be null
                 if (background != null) {
                     children.add(new RuleChild(background, null));
                 }
@@ -208,6 +222,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                     children.add(new RuleChild(null, scenario));
                 }
 
+                //noinspection ConstantConditions  // ruleLine is never be null because of the grammar (see Parser)
                 return new Rule(
                         ruleLine.location,
                         tags,
@@ -220,7 +235,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
             }
             case GherkinDocument: {
-                Feature feature = node.getSingle(RuleType.Feature, null);
+                Feature feature = node.getSingle(RuleType.Feature);
                 return new GherkinDocument(uri, feature, comments);
             }
 
@@ -293,9 +308,10 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private List<Tag> getTags(AstNode node) {
-        AstNode tagsNode = node.getSingle(RuleType.Tags, null);
-        if (tagsNode == null)
+        AstNode tagsNode = node.getSingle(RuleType.Tags);
+        if (tagsNode == null) {// tags are optional
             return Collections.emptyList();
+        }
 
         List<Token> tokens = tagsNode.getTokens(TokenType.TagLine);
         List<Tag> tags = new ArrayList<>();
@@ -309,7 +325,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     @Override
     public GherkinDocument getResult() {
-        return currentNode().getSingle(RuleType.GherkinDocument, null);
+        return currentNode().getSingle(RuleType.GherkinDocument);
     }
 
 }
