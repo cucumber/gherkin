@@ -147,7 +147,7 @@ wheels = [
 
 [[package]]
 name = "gherkin-official"
-version = "34.0.0"
+version = "35.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "typing-extensions" },
