@@ -7,11 +7,13 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Fixed
-- [Java] Only use `org.assertj:assertj-core` in `test` scope.
 
+## [36.0.0] - 2025-10-09
 ### Changed
 - [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v31
+
+### Fixed
+- [Java] Only use `org.assertj:assertj-core` in `test` scope.
 
 ## [35.1.0] - 2025-09-20
 ### Added
@@ -836,7 +838,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v35.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v36.0.0...HEAD
+[36.0.0]: https://github.com/cucumber/gherkin/compare/v35.1.0...v36.0.0
 [35.1.0]: https://github.com/cucumber/gherkin/compare/v35.0.0...v35.1.0
 [35.0.0]: https://github.com/cucumber/gherkin/compare/v34.0.0...v35.0.0
 [34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0

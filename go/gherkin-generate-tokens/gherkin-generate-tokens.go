@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	gherkin "github.com/cucumber/gherkin/go/v35"
+	gherkin "github.com/cucumber/gherkin/go/v36"
 	"io"
 	"os"
 	"strings"
