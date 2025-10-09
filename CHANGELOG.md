@@ -10,6 +10,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [Java] Only use `org.assertj:assertj-core` in `test` scope.
 
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v31
+
 ## [35.1.0] - 2025-09-20
 ### Added
 - (I18n) ru: Added word "Значения" as a synonym for examples ([#479](https://github.com/cucumber/gherkin/pull/479)
