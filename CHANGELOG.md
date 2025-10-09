@@ -10,7 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [36.0.0] - 2025-10-09
 ### Changed
-- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v31
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v30
 
 ### Fixed
 - [Java] Only use `org.assertj:assertj-core` in `test` scope.
