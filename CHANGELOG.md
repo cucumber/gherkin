@@ -8,6 +8,13 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [36.0.0] - 2025-10-09
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v30
+
+### Fixed
+- [Java] Only use `org.assertj:assertj-core` in `test` scope.
+
 ## [35.1.0] - 2025-09-20
 ### Added
 - (I18n) ru: Added word "Значения" as a synonym for examples ([#479](https://github.com/cucumber/gherkin/pull/479)
@@ -831,7 +838,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v35.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v36.0.0...HEAD
+[36.0.0]: https://github.com/cucumber/gherkin/compare/v35.1.0...v36.0.0
 [35.1.0]: https://github.com/cucumber/gherkin/compare/v35.0.0...v35.1.0
 [35.0.0]: https://github.com/cucumber/gherkin/compare/v34.0.0...v35.0.0
 [34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
