@@ -10,6 +10,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Added
 - [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
 
+### Fixed
+- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder`.
+
 ## [36.0.0] - 2025-10-09
 ### Changed
 - [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v30

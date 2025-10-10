@@ -116,8 +116,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case ScenarioDefinition: {
-                AstNode scenarioNode = node.getSingle(RuleType.Scenario);
-                //noinspection ConstantConditions  // scenarioNode should never be null because of the grammar (see Parser)
+                AstNode scenarioNode = node.getRequiredSingle(RuleType.Scenario);
                 Token scenarioLine = scenarioNode.getToken(TokenType.ScenarioLine);
 
                 return new Scenario(
@@ -132,13 +131,12 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case ExamplesDefinition: {
-                AstNode examplesNode = node.getSingle(RuleType.Examples);
-                //noinspection ConstantConditions  // examplesNode is never be null because of the grammar (see Parser)
+                AstNode examplesNode = node.getRequiredSingle(RuleType.Examples);
                 Token examplesLine = examplesNode.getToken(TokenType.ExamplesLine);
+                // rows is null when a Scenario Outline has no Examples table
                 List<TableRow> rows = examplesNode.getSingle(RuleType.ExamplesTable);
                 TableRow tableHeader;
                 List<TableRow> tableBody;
-                // rows is null when a Scenario Outline has no Examples table
                 if (rows != null && !rows.isEmpty()) {
                     tableHeader = rows.get(0);
                     tableBody = rows.subList(1, rows.size());
@@ -147,7 +145,6 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                     tableBody = Collections.emptyList();
                 }
 
-                //noinspection ConstantConditions  // examplesLine is never be null because of the grammar (see Parser)
                 return new Examples(
                         examplesLine.location,
                         getTags(node),
@@ -172,17 +169,13 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 return joinMatchedText(lineTokens, toIndex);
             }
             case Feature: {
-                // when we transform a Feature, a FeatureHeader is always present
-                // and a FeatureLine are always present in the FeatureHeader
-                // because of the grammar (see Parser)
-                AstNode header = node.getSingle(RuleType.FeatureHeader);
-                //noinspection ConstantConditions  // header is never be null because of the grammar (see Parser)
+                AstNode header = node.getRequiredSingle(RuleType.FeatureHeader);
                 List<Tag> tags = getTags(header);
                 Token featureLine = header.getToken(TokenType.FeatureLine);
 
                 List<FeatureChild> children = new ArrayList<>();
-                Background background = node.getSingle(RuleType.Background);
                 // Background is an optional element of a Feature, so can be null
+                Background background = node.getSingle(RuleType.Background);
                 if (background != null) {
                     children.add(new FeatureChild(null, background, null));
                 }
@@ -193,7 +186,6 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                     children.add(new FeatureChild(rule, null, null));
                 }
 
-                //noinspection ConstantConditions  // featureLine is never be null because of the grammar (see Parser)
                 return new Feature(
                         featureLine.location,
                         tags,
@@ -205,15 +197,14 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case Rule: {
-                AstNode header = node.getSingle(RuleType.RuleHeader);
-                //noinspection ConstantConditions  // header is never be null because of the grammar (see Parser)
+                AstNode header = node.getRequiredSingle(RuleType.RuleHeader);
                 Token ruleLine = header.getToken(TokenType.RuleLine);
 
                 List<RuleChild> children = new ArrayList<>();
                 List<Tag> tags = getTags(header);
 
-                Background background = node.getSingle(RuleType.Background);
                 // Background is an optional element of a Feature, so can be null
+                Background background = node.getSingle(RuleType.Background);
                 if (background != null) {
                     children.add(new RuleChild(background, null));
                 }
@@ -222,7 +213,6 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                     children.add(new RuleChild(null, scenario));
                 }
 
-                //noinspection ConstantConditions  // ruleLine is never be null because of the grammar (see Parser)
                 return new Rule(
                         ruleLine.location,
                         tags,
@@ -236,6 +226,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             }
             case GherkinDocument: {
                 Feature feature = node.getSingle(RuleType.Feature);
+                // feature is null when the file is empty or contains only comments/whitespace, or no Cucumber feature
                 return new GherkinDocument(uri, feature, comments);
             }
 

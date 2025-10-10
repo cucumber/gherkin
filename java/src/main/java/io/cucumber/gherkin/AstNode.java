@@ -46,6 +46,10 @@ final class AstNode {
         return items == null ? null : items.get(0);
     }
 
+    <T> T getRequiredSingle(RuleType ruleType) {
+        return requireNonNull(getSingle(ruleType));
+    }
+
     @SuppressWarnings("unchecked")
     <T> List<T> getItems(RuleType ruleType) {
         List<T> items = (List<T>) subItems.get(ruleType);
@@ -56,7 +60,7 @@ final class AstNode {
     }
 
     Token getToken(TokenType tokenType) {
-        return getSingle(tokenType.ruleType);
+        return getRequiredSingle(tokenType.ruleType);
     }
 
     List<Token> getTokens(TokenType tokenType) {
