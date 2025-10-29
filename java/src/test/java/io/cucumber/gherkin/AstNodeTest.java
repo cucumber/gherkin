@@ -43,4 +43,26 @@ class AstNodeTest {
         // Then
         assertEquals(item1, astNode.getSingle(Parser.RuleType.Step, "defaultValue"));
     }
+
+    @Test
+    void getRequiredSingle_throws_exception_when_no_items() {
+        // Given a node
+        AstNode astNode = new AstNode(Parser.RuleType.Step);
+
+        // When no subItem is present
+
+        // Then
+        assertThrows(NullPointerException.class, () -> astNode.getRequiredSingle(Parser.RuleType.Scenario));
+    }
+
+    @Test
+    void getSingle_return_null_when_no_items() {
+        // Given a node
+        AstNode astNode = new AstNode(Parser.RuleType.Step);
+
+        // When no subItem is present
+
+        // Then
+        assertNull(astNode.getSingle(Parser.RuleType.Scenario));
+    }
 }
