@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- Update Java release process
+
 ## [30.1.1] - 2025-11-05
 ### Fixed
 - Release v30.1.1 as a copy of v30.0.4 to cover v36.1.0 that was accidentally released as v30.1.0
