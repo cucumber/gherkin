@@ -7,7 +7,12 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+## [30.1.3] - 2025-11-05
+### Fixed
+- Update Java release process
+
 ## [30.1.2] - 2025-11-05
+### Fixed
 - Update Java release process
 
 ## [30.1.1] - 2025-11-05
@@ -870,6 +875,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 [30.1.1]: https://github.com/cucumber/gherkin/compare/v30.0.4...v30.1.1
 [31.0.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v31.0.0
 [30.1.1]: https://github.com/cucumber/gherkin/compare/v30.1.1...v30.1.2
+[30.1.3]: https://github.com/cucumber/gherkin/compare/v30.1.2...v30.1.3
+[30.1.2]: https://github.com/cucumber/gherkin/compare/v30.1.1...v30.1.2
 [30.1.1]: https://github.com/cucumber/gherkin/compare/v30.0.4...v30.1.1
 [30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
