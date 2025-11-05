@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [36.1.0] - 2025-11-05
 ### Added
 - [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
 
@@ -844,7 +846,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v30.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v36.1.0...HEAD
+[36.1.0]: https://github.com/cucumber/gherkin/compare/v30.1.0...v36.1.0
 [30.1.0]: https://github.com/cucumber/gherkin/compare/v36.0.0...v30.1.0
 [36.0.0]: https://github.com/cucumber/gherkin/compare/v35.1.0...v36.0.0
 [35.1.0]: https://github.com/cucumber/gherkin/compare/v35.0.0...v35.1.0
