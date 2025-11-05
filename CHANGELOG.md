@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
 
 ## [30.1.0] - 2025-11-05
 ### Added
