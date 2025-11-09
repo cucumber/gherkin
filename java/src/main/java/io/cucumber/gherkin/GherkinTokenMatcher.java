@@ -45,7 +45,8 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public void reset() {
-        // TODO performance: reset() is called once in the constructor and once for each file (Parser.parse()). It could be called only once, but there is no measurable impact with the profiler
+        // TODO performance: reset() is called once in the constructor and once for each file (Parser.parse()). 
+        // It could be called only once, but there is no measurable impact with the profiler
         activeDocStringSeparator = null;
         indentToRemove = 0;
         setLanguageMatched(defaultLanguage, null);
