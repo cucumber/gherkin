@@ -24,6 +24,7 @@ import io.cucumber.messages.types.StepKeywordType;
 import io.cucumber.messages.types.TableCell;
 import io.cucumber.messages.types.TableRow;
 import io.cucumber.messages.types.Tag;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,10 +130,10 @@ final class PickleCompiler {
         return tags;
     }
 
-    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps, List<TableCell> variableCells, TableRow valuesRow) {
+    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps, List<TableCell> variableCells, @Nullable TableRow valuesRow) {
         if (scenarioSteps.isEmpty()) {
             // usually, a scenario has at least one step, but that's not mandatory
-            return emptyList();
+            return new ArrayList<>(0);
         }
         List<PickleStep> steps = new ArrayList<>(backgroundSteps.size() + scenarioSteps.size());
         StepKeywordType lastKeywordType = UNKNOWN;
@@ -203,7 +204,7 @@ final class PickleCompiler {
         );
     }
 
-    private PickleStep pickleStep(Step step, List<TableCell> variableCells, TableRow valuesRow, StepKeywordType keywordType) {
+    private PickleStep pickleStep(Step step, List<TableCell> variableCells, @Nullable TableRow valuesRow, StepKeywordType keywordType) {
         List<TableCell> valueCells = valuesRow == null ? emptyList() : valuesRow.getCells();
         String stepText = interpolate(step.getText(), variableCells, valueCells);
 
@@ -235,16 +236,12 @@ final class PickleCompiler {
     }
 
     private static PickleStepType pickleStepType(StepKeywordType keywordType) {
-        switch (keywordType) {
-            case CONTEXT:
-                return PickleStepType.CONTEXT;
-            case ACTION:
-                return PickleStepType.ACTION;
-            case OUTCOME:
-                return PickleStepType.OUTCOME;
-            default:
-                return PickleStepType.UNKNOWN;
-        }
+        return switch (keywordType) {
+            case CONTEXT -> PickleStepType.CONTEXT;
+            case ACTION -> PickleStepType.ACTION;
+            case OUTCOME -> PickleStepType.OUTCOME;
+            default -> PickleStepType.UNKNOWN;
+        };
     }
 
     private PickleStep pickleBackgroundStep(Step step, StepKeywordType keywordType) {
@@ -265,7 +262,7 @@ final class PickleCompiler {
 
     private List<PickleTag> pickleTags(List<Tag> tags) {
         if (tags.isEmpty()) {
-            return emptyList();
+            return new ArrayList<>(0);
         }
         List<PickleTag> result = new ArrayList<>();
         for (Tag tag : tags) {

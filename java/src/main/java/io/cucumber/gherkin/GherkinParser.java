@@ -22,6 +22,7 @@ import static io.cucumber.gherkin.EncodingParser.readWithEncodingFromSource;
 import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Main entry point for the Gherkin library
@@ -160,9 +161,9 @@ public final class GherkinParser {
                 }
             }
         } catch (CompositeParserException composite) {
-            composite.errors.stream()
+            messages.addAll(composite.errors.stream()
                     .map(error -> createParseError(error, uri))
-                    .collect(toCollection(() -> messages));
+                    .collect(toList()));
         } catch (ParserException error) {
             messages.add(createParseError(error, uri));
         }
@@ -177,7 +178,8 @@ public final class GherkinParser {
                         null,
                         e.location
                 ),
-                e.getMessage()
+                // ParserException always has a message
+                requireNonNull(e.getMessage())
         ));
     }
 

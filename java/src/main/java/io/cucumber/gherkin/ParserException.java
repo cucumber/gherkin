@@ -2,27 +2,31 @@ package io.cucumber.gherkin;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.cucumber.messages.types.Location;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
+import static java.util.Objects.requireNonNull;
 
 class ParserException extends RuntimeException {
-    final Location location;
+    final @Nullable Location location;
 
     protected ParserException(String message) {
         super(message);
         location = null;
     }
 
-    protected ParserException(String message, Location location) {
+    protected ParserException(String message, @Nullable Location location) {
         super(createMessage(message, location));
         this.location = location;
     }
 
-    private static String createMessage(String message, Location location) {
+    private static String createMessage(String message, @Nullable Location location) {
         if (location == null) {
             return String.format("(-1,0): %s", message);
         }
@@ -38,7 +42,7 @@ class ParserException extends RuntimeException {
     }
 
     static final class NoSuchLanguageException extends ParserException {
-        NoSuchLanguageException(String language, Location location) {
+        NoSuchLanguageException(String language, @Nullable Location location) {
             super("Language not supported: " + language, location);
         }
     }
@@ -67,7 +71,7 @@ class ParserException extends RuntimeException {
             if (receivedToken.location.getColumn().isPresent()) {
                 return receivedToken.location;
             }
-            int column = COLUMN_OFFSET + receivedToken.line.getIndent();
+            int column = COLUMN_OFFSET + requireNonNull(receivedToken.line).getIndent();
             return atColumn(receivedToken.location, column);
         }
     }
@@ -97,7 +101,6 @@ class ParserException extends RuntimeException {
         }
 
         private static String getMessage(List<ParserException> errors) {
-            if (errors == null) throw new NullPointerException("errors");
             return "Parser errors:\n" + errors.stream()
                     .map(Throwable::getMessage)
                     .collect(Collectors.joining("\n"));

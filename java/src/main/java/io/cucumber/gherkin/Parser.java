@@ -2,8 +2,8 @@ package io.cucumber.gherkin;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -118,7 +118,7 @@ final class Parser<T> {
         ParserContext context = new ParserContext(
                 tokenScanner,
                 tokenMatcher,
-                new LinkedList<>(),
+                new ArrayDeque<>(),
                 new ArrayList<>()
         );
 
@@ -142,7 +142,7 @@ final class Parser<T> {
     private void addError(ParserContext context, ParserException error) {
         String newErrorMessage = error.getMessage();
         for (ParserException e : context.errors) {
-            if (e.getMessage().equals(newErrorMessage)) {
+            if (Objects.equals(e.getMessage(), newErrorMessage)) {
                 return;
             }
         }
@@ -263,137 +263,53 @@ final class Parser<T> {
     }
 
     private int matchToken(int state, Token token, ParserContext context) {
-        int newState;
-        switch (state) {
-            case 0:
-                newState = matchTokenAt_0(token, context);
-                break;
-            case 1:
-                newState = matchTokenAt_1(token, context);
-                break;
-            case 2:
-                newState = matchTokenAt_2(token, context);
-                break;
-            case 3:
-                newState = matchTokenAt_3(token, context);
-                break;
-            case 4:
-                newState = matchTokenAt_4(token, context);
-                break;
-            case 5:
-                newState = matchTokenAt_5(token, context);
-                break;
-            case 6:
-                newState = matchTokenAt_6(token, context);
-                break;
-            case 7:
-                newState = matchTokenAt_7(token, context);
-                break;
-            case 8:
-                newState = matchTokenAt_8(token, context);
-                break;
-            case 9:
-                newState = matchTokenAt_9(token, context);
-                break;
-            case 10:
-                newState = matchTokenAt_10(token, context);
-                break;
-            case 11:
-                newState = matchTokenAt_11(token, context);
-                break;
-            case 12:
-                newState = matchTokenAt_12(token, context);
-                break;
-            case 13:
-                newState = matchTokenAt_13(token, context);
-                break;
-            case 14:
-                newState = matchTokenAt_14(token, context);
-                break;
-            case 15:
-                newState = matchTokenAt_15(token, context);
-                break;
-            case 16:
-                newState = matchTokenAt_16(token, context);
-                break;
-            case 17:
-                newState = matchTokenAt_17(token, context);
-                break;
-            case 18:
-                newState = matchTokenAt_18(token, context);
-                break;
-            case 19:
-                newState = matchTokenAt_19(token, context);
-                break;
-            case 20:
-                newState = matchTokenAt_20(token, context);
-                break;
-            case 21:
-                newState = matchTokenAt_21(token, context);
-                break;
-            case 22:
-                newState = matchTokenAt_22(token, context);
-                break;
-            case 23:
-                newState = matchTokenAt_23(token, context);
-                break;
-            case 24:
-                newState = matchTokenAt_24(token, context);
-                break;
-            case 25:
-                newState = matchTokenAt_25(token, context);
-                break;
-            case 26:
-                newState = matchTokenAt_26(token, context);
-                break;
-            case 27:
-                newState = matchTokenAt_27(token, context);
-                break;
-            case 28:
-                newState = matchTokenAt_28(token, context);
-                break;
-            case 29:
-                newState = matchTokenAt_29(token, context);
-                break;
-            case 30:
-                newState = matchTokenAt_30(token, context);
-                break;
-            case 31:
-                newState = matchTokenAt_31(token, context);
-                break;
-            case 32:
-                newState = matchTokenAt_32(token, context);
-                break;
-            case 33:
-                newState = matchTokenAt_33(token, context);
-                break;
-            case 35:
-                newState = matchTokenAt_35(token, context);
-                break;
-            case 36:
-                newState = matchTokenAt_36(token, context);
-                break;
-            case 37:
-                newState = matchTokenAt_37(token, context);
-                break;
-            case 38:
-                newState = matchTokenAt_38(token, context);
-                break;
-            case 39:
-                newState = matchTokenAt_39(token, context);
-                break;
-            case 40:
-                newState = matchTokenAt_40(token, context);
-                break;
-            case 41:
-                newState = matchTokenAt_41(token, context);
-                break;
-            case 42:
-                newState = matchTokenAt_42(token, context);
-                break;
-            default:
+        int newState = switch (state) {
+            case 0 -> matchTokenAt_0(token, context);
+            case 1 -> matchTokenAt_1(token, context);
+            case 2 -> matchTokenAt_2(token, context);
+            case 3 -> matchTokenAt_3(token, context);
+            case 4 -> matchTokenAt_4(token, context);
+            case 5 -> matchTokenAt_5(token, context);
+            case 6 -> matchTokenAt_6(token, context);
+            case 7 -> matchTokenAt_7(token, context);
+            case 8 -> matchTokenAt_8(token, context);
+            case 9 -> matchTokenAt_9(token, context);
+            case 10 -> matchTokenAt_10(token, context);
+            case 11 -> matchTokenAt_11(token, context);
+            case 12 -> matchTokenAt_12(token, context);
+            case 13 -> matchTokenAt_13(token, context);
+            case 14 -> matchTokenAt_14(token, context);
+            case 15 -> matchTokenAt_15(token, context);
+            case 16 -> matchTokenAt_16(token, context);
+            case 17 -> matchTokenAt_17(token, context);
+            case 18 -> matchTokenAt_18(token, context);
+            case 19 -> matchTokenAt_19(token, context);
+            case 20 -> matchTokenAt_20(token, context);
+            case 21 -> matchTokenAt_21(token, context);
+            case 22 -> matchTokenAt_22(token, context);
+            case 23 -> matchTokenAt_23(token, context);
+            case 24 -> matchTokenAt_24(token, context);
+            case 25 -> matchTokenAt_25(token, context);
+            case 26 -> matchTokenAt_26(token, context);
+            case 27 -> matchTokenAt_27(token, context);
+            case 28 -> matchTokenAt_28(token, context);
+            case 29 -> matchTokenAt_29(token, context);
+            case 30 -> matchTokenAt_30(token, context);
+            case 31 -> matchTokenAt_31(token, context);
+            case 32 -> matchTokenAt_32(token, context);
+            case 33 -> matchTokenAt_33(token, context);
+            case 35 -> matchTokenAt_35(token, context);
+            case 36 -> matchTokenAt_36(token, context);
+            case 37 -> matchTokenAt_37(token, context);
+            case 38 -> matchTokenAt_38(token, context);
+            case 39 -> matchTokenAt_39(token, context);
+            case 40 -> matchTokenAt_40(token, context);
+            case 41 -> matchTokenAt_41(token, context);
+            case 42 -> matchTokenAt_42(token, context);
+            default -> {
                 throw new IllegalStateException("Unknown state: " + state);
-        }
+            }
+        };
         return newState;
     }
 
@@ -544,7 +460,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.FeatureHeader);
                 startRule(context, RuleType.ScenarioDefinition);
@@ -620,7 +536,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.FeatureHeader);
@@ -702,7 +618,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
@@ -777,7 +693,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
@@ -862,7 +778,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
@@ -947,7 +863,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
@@ -1074,7 +990,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
@@ -1084,7 +1000,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
@@ -1171,7 +1087,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Description);
                 startRule(context, RuleType.ExamplesDefinition);
@@ -1182,7 +1098,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Scenario);
@@ -1280,7 +1196,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
@@ -1291,7 +1207,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
@@ -1389,7 +1305,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
@@ -1401,7 +1317,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
@@ -1543,7 +1459,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Examples);
                 endRule(context, RuleType.ExamplesDefinition);
@@ -1555,7 +1471,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Examples);
                 endRule(context, RuleType.ExamplesDefinition);
@@ -1654,7 +1570,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Examples);
@@ -1667,7 +1583,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Examples);
@@ -1763,7 +1679,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.ExamplesTable);
                 endRule(context, RuleType.Examples);
@@ -1776,7 +1692,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.ExamplesTable);
                 endRule(context, RuleType.Examples);
@@ -1921,7 +1837,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.RuleHeader);
                 startRule(context, RuleType.ScenarioDefinition);
@@ -2000,7 +1916,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.RuleHeader);
@@ -2085,7 +2001,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Background);
                 startRule(context, RuleType.ScenarioDefinition);
@@ -2163,7 +2079,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Background);
@@ -2251,7 +2167,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Background);
@@ -2339,7 +2255,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
@@ -2469,7 +2385,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 startRule(context, RuleType.ExamplesDefinition);
                 startRule(context, RuleType.Tags);
@@ -2479,7 +2395,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Scenario);
                 endRule(context, RuleType.ScenarioDefinition);
@@ -2569,7 +2485,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Description);
                 startRule(context, RuleType.ExamplesDefinition);
@@ -2580,7 +2496,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Scenario);
@@ -2681,7 +2597,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Step);
                 startRule(context, RuleType.ExamplesDefinition);
@@ -2692,7 +2608,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Step);
                 endRule(context, RuleType.Scenario);
@@ -2793,7 +2709,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
@@ -2805,7 +2721,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DataTable);
                 endRule(context, RuleType.Step);
@@ -2950,7 +2866,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Examples);
                 endRule(context, RuleType.ExamplesDefinition);
@@ -2962,7 +2878,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Examples);
                 endRule(context, RuleType.ExamplesDefinition);
@@ -3064,7 +2980,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Examples);
@@ -3077,7 +2993,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.Description);
                 endRule(context, RuleType.Examples);
@@ -3176,7 +3092,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.ExamplesTable);
                 endRule(context, RuleType.Examples);
@@ -3189,7 +3105,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.ExamplesTable);
                 endRule(context, RuleType.Examples);
@@ -3318,7 +3234,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
@@ -3330,7 +3246,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
@@ -3453,7 +3369,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
@@ -3563,7 +3479,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_1(context, token))
+            if (lookahead_1(context))
             {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
@@ -3575,7 +3491,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
@@ -3695,7 +3611,7 @@ final class Parser<T> {
         }
         if (match_TagLine(context, token))
         {
-            if (lookahead_0(context, token))
+            if (lookahead_0(context))
             {
                 endRule(context, RuleType.DocString);
                 endRule(context, RuleType.Step);
@@ -3759,7 +3675,7 @@ final class Parser<T> {
     }
 
 
-    private boolean lookahead_0(ParserContext context, Token currentToken) {
+    private boolean lookahead_0(ParserContext context) {
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;
@@ -3786,7 +3702,7 @@ final class Parser<T> {
         return match;
     }
 
-    private boolean lookahead_1(ParserContext context, Token currentToken) {
+    private boolean lookahead_1(ParserContext context) {
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;

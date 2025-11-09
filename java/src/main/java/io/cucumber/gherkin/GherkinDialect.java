@@ -1,6 +1,7 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.StepKeywordType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -154,7 +155,7 @@ public final class GherkinDialect {
      * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
      */
     @Deprecated
-    public List<StepKeywordType> getStepKeywordTypes(String keyword) {
+    public @Nullable List<StepKeywordType> getStepKeywordTypes(String keyword) {
         Set<StepKeywordType> stepKeywordTypes = stepKeywordsTypes.get(keyword);
         if (stepKeywordTypes == null) {
             return null;

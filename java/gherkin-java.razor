@@ -30,8 +30,8 @@ package io.cucumber.gherkin;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -104,7 +104,7 @@ final class @Model.ParserClassName<T> {
         ParserContext context = new ParserContext(
                 tokenScanner,
                 tokenMatcher,
-                new LinkedList<>(),
+                new ArrayDeque<>(),
                 new ArrayList<>()
         );
 
@@ -128,7 +128,7 @@ final class @Model.ParserClassName<T> {
     private void addError(ParserContext context, ParserException error) {
         String newErrorMessage = error.getMessage();
         for (ParserException e : context.errors) {
-            if (e.getMessage().equals(newErrorMessage)) {
+            if (Objects.equals(e.getMessage(), newErrorMessage)) {
                 return;
             }
         }
@@ -191,17 +191,15 @@ final class @Model.ParserClassName<T> {
 }
 
     private int matchToken(int state, Token token, ParserContext context) {
-        int newState;
-        switch (state) {
+        int newState = switch (state) {
         @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
         {
-            @:case @state.Id:
-                @:newState = matchTokenAt_@(state.Id)(token, context);
-                @:break;
+            @:case @state.Id -> matchTokenAt_@(state.Id)(token, context);
         }
-            default:
+            default -> {
                 throw new IllegalStateException("Unknown state: " + state);
-        }
+            }
+        };
         return newState;
     }
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
@@ -215,7 +213,7 @@ final class @Model.ParserClassName<T> {
         @:{
             if (transition.LookAheadHint != null)
             {
-            @:if (lookahead_@(transition.LookAheadHint.Id)(context, token))
+            @:if (lookahead_@(transition.LookAheadHint.Id)(context))
             @:{
             }
             foreach(var production in transition.Productions)
@@ -237,7 +235,7 @@ final class @Model.ParserClassName<T> {
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-    private boolean lookahead_@(lookAheadHint.Id)(ParserContext context, Token currentToken) {
+    private boolean lookahead_@(lookAheadHint.Id)(ParserContext context) {
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;
