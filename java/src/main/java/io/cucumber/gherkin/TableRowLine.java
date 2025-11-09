@@ -21,20 +21,11 @@ final class TableRowLine {
             int c = iterator.next();
             if (escape) {
                 switch (c) {
-                    case 'n':
-                        cellBuilder.append('\n');
-                        break;
-                    case '\\':
-                        cellBuilder.append('\\');
-                        break;
-                    case '|':
-                        cellBuilder.append('|');
-                        break;
-                    default:
-                        // Invalid escape. We'll just ignore it.
-                        cellBuilder.append("\\");
-                        cellBuilder.appendCodePoint(c);
-                        break;
+                    case 'n' -> cellBuilder.append('\n');
+                    case '\\' -> cellBuilder.append('\\');
+                    case '|' -> cellBuilder.append('|');
+                    // Invalid escape. We'll just ignore it.
+                    default -> cellBuilder.append("\\").appendCodePoint(c);
                 }
                 escape = false;
             } else {

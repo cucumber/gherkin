@@ -3,6 +3,7 @@ package io.cucumber.gherkin;
 import io.cucumber.gherkin.Parser.TokenMatcher;
 import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.StepKeywordType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,13 +28,14 @@ final class GherkinTokenMatcher implements TokenMatcher {
     private final String defaultLanguage;
     // Expect at most two languages, the default language and one other
     private final Map<String, KeywordMatcher> activeKeywordMatchers = new HashMap<>(2);
-    private String currentLanguage;
+    private @Nullable String currentLanguage;
     private KeywordMatcher currentKeywordMatcher;
-    private String activeDocStringSeparator = null;
+    private @Nullable String activeDocStringSeparator = null;
     private int indentToRemove = 0;
 
     GherkinTokenMatcher(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
+        this.currentKeywordMatcher = activeKeywordMatchers.computeIfAbsent(defaultLanguage, KeywordMatchers::of);
         reset();
     }
 
@@ -49,7 +51,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         setLanguageMatched(defaultLanguage, null);
     }
 
-    private void setLanguageMatched(String language, Location location) {
+    private void setLanguageMatched(String language, @Nullable Location location) {
         if (language.equals(currentLanguage)) {
             return;
         }
@@ -61,7 +63,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
         currentKeywordMatcher = keywordMatcher;
     }
 
-    private void setTokenMatched(Token token, TokenType matchedType, String text, String keyword, int indent, StepKeywordType keywordType, List<LineSpan> items) {
+    private void setTokenMatched(Token token, TokenType matchedType, @Nullable String text, @Nullable String keyword, int indent, @Nullable StepKeywordType keywordType, @Nullable List<LineSpan> items) {
         token.matchedType = matchedType;
         token.matchedKeyword = keyword;
         token.keywordType = keywordType;
@@ -90,7 +92,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_Empty(Token token) {
-        if (!token.line.isEmpty()) {
+        if (!token.getRequiredLine().isEmpty()) {
             return false;
         }
         setTokenMatched(token, TokenType.Empty, null, null, 0, null, null);
@@ -99,36 +101,39 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     @Override
     public boolean match_Comment(Token token) {
-        if (!token.line.startsWith(COMMENT_PREFIX_CHAR)) {
+        Line line = token.getRequiredLine();
+        if (!line.startsWith(COMMENT_PREFIX_CHAR)) {
             return false;
         }
-        String text = token.line.getRawText();
+        String text = line.getRawText();
         setTokenMatched(token, TokenType.Comment, text, null, 0, null, null);
         return true;
     }
 
     @Override
     public boolean match_Language(Token token) {
-        if (!token.line.startsWith(COMMENT_PREFIX_CHAR)) {
+        Line line = token.getRequiredLine();
+        if (!line.startsWith(COMMENT_PREFIX_CHAR)) {
             return false;
         }
-        Matcher matcher = LANGUAGE_PATTERN.matcher(token.line.getText());
+        Matcher matcher = LANGUAGE_PATTERN.matcher(line.getText());
         if (!matcher.matches()) {
             return false;
         }
         String language = matcher.group(1);
-        setTokenMatched(token, TokenType.Language, language, null, token.line.getIndent(), null, null);
+        setTokenMatched(token, TokenType.Language, language, null, line.getIndent(), null, null);
         setLanguageMatched(language, token.location);
         return true;
     }
 
     @Override
     public boolean match_TagLine(Token token) {
-        if (!token.line.startsWith(TAG_PREFIX_CHAR)) {
+        Line line = token.getRequiredLine();
+        if (!line.startsWith(TAG_PREFIX_CHAR)) {
             return false;
         }
-        List<LineSpan> tags = TagLine.parse(token.line.getIndent(), token.line.getText(), token.location);
-        setTokenMatched(token, TokenType.TagLine, null, null, token.line.getIndent(), null, tags);
+        List<LineSpan> tags = TagLine.parse(line.getIndent(), line.getText(), token.location);
+        setTokenMatched(token, TokenType.TagLine, null, null, line.getIndent(), null, tags);
         return true;
     }
 
@@ -157,15 +162,16 @@ final class GherkinTokenMatcher implements TokenMatcher {
         return matchTitleLine(token, TokenType.ExamplesLine, currentKeywordMatcher::matchExampleKeyword);
     }
 
-    private boolean matchTitleLine(Token token, TokenType tokenType, Function<Line, KeywordMatcher.Match> matcher) {
-        KeywordMatcher.Match match = matcher.apply(token.line);
+    private boolean matchTitleLine(Token token, TokenType tokenType, Function<Line, KeywordMatcher.@Nullable Match> matcher) {
+        Line line = token.getRequiredLine();
+        KeywordMatcher.Match match = matcher.apply(line);
         if (match == null) {
             return false;
         }
         String keyword = match.getKeyword();
         int keywordLength = match.getKeywordLength();
-        String title = token.line.substringTrimmed(keywordLength);
-        setTokenMatched(token, tokenType, title, keyword, token.line.getIndent(), null, null);
+        String title = line.substringTrimmed(keywordLength);
+        setTokenMatched(token, tokenType, title, keyword, line.getIndent(), null, null);
         return true;
     }
 
@@ -180,56 +186,60 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     private boolean match_DocStringSeparator(Token token, String separator, boolean isOpen) {
-        if (!token.line.startsWith(separator)) {
+        Line line = token.getRequiredLine();
+        if (!line.startsWith(separator)) {
             return false;
         }
         String mediaType = null;
         if (isOpen) {
-            mediaType = token.line.substringTrimmed(separator.length());
+            mediaType = line.substringTrimmed(separator.length());
             activeDocStringSeparator = separator;
-            indentToRemove = token.line.getIndent();
+            indentToRemove = line.getIndent();
         } else {
             activeDocStringSeparator = null;
             indentToRemove = 0;
         }
 
-        setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, token.line.getIndent(), null, null);
+        setTokenMatched(token, TokenType.DocStringSeparator, mediaType, separator, line.getIndent(), null, null);
         return true;
     }
 
     @Override
     public boolean match_StepLine(Token token) {
-        KeywordMatcher.StepMatch match = currentKeywordMatcher.matchStepKeyword(token.line);
+        Line line = token.getRequiredLine();
+        KeywordMatcher.StepMatch match = currentKeywordMatcher.matchStepKeyword(line);
         if (match == null) {
             return false;
         }
         String keyword = match.getKeyword();
         int keywordLength = match.getKeywordLength();
         StepKeywordType keywordType = match.getKeywordType();
-        String stepText = token.line.substringTrimmed(keywordLength);
-        setTokenMatched(token, TokenType.StepLine, stepText, keyword, token.line.getIndent(), keywordType, null);
+        String stepText = line.substringTrimmed(keywordLength);
+        setTokenMatched(token, TokenType.StepLine, stepText, keyword, line.getIndent(), keywordType, null);
         return true;
     }
 
     @Override
     public boolean match_TableRow(Token token) {
-        if (!token.line.startsWith(TABLE_CELL_SEPARATOR)) {
+        Line line = token.getRequiredLine();
+        if (!line.startsWith(TABLE_CELL_SEPARATOR)) {
             return false;
         }
-        List<LineSpan> tableCells = TableRowLine.parse(token.line.getIndent(), token.line.getText());
-        setTokenMatched(token, TokenType.TableRow, null, null, token.line.getIndent(), null, tableCells);
+        List<LineSpan> tableCells = TableRowLine.parse(line.getIndent(), line.getText());
+        setTokenMatched(token, TokenType.TableRow, null, null, line.getIndent(), null, tableCells);
         return true;
     }
 
     private String removeDocStringIndent(Token token) {
+        Line line = token.getRequiredLine();
         if (activeDocStringSeparator == null) {
-            return token.line.getRawText();
+            return line.getRawText();
         }
-        if (indentToRemove > token.line.getIndent()) {
+        if (indentToRemove > line.getIndent()) {
             // BUG: Removes trailing whitespace!
-            return token.line.getText();
+            return line.getText();
         }
-        return token.line.getRawTextSubstring(indentToRemove);
+        return line.getRawTextSubstring(indentToRemove);
     }
 
     private String unescapeDocString(String text) {

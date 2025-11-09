@@ -10,12 +10,14 @@ class ExampleTest {
 
     @Test
     void test(){
-        String feature = "Feature: Feature 2\n" +
-                "  # some comment\n" +
-                "  some description\n" +
-                "\n" +
-                "  Scenario: Scenario 1\n" +
-                "    * Wait 3s";
+        String feature = """
+                Feature: Feature 2
+                  # some comment
+                  some description
+                
+                  Scenario: Scenario 1
+                    * Wait 3s
+                """;
 
         GherkinParser parser = GherkinParser.builder().build();
 

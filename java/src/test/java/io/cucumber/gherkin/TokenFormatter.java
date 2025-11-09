@@ -1,5 +1,7 @@
 package io.cucumber.gherkin;
 
+import org.jspecify.annotations.Nullable;
+
 import static java.util.stream.Collectors.joining;
 
 class TokenFormatter {
@@ -22,7 +24,7 @@ class TokenFormatter {
         );
     }
 
-    private String toString(Object o) {
+    private String toString(@Nullable Object o) {
         return o == null ? "" : o.toString();
     }
 }

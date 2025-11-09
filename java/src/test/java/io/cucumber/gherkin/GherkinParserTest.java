@@ -25,10 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GherkinParserTest {
 
-    final String feature = "Feature: Minimal\n" +
-            "\n" +
-            "  Scenario: minimalistic\n" +
-            "    Given the minimalism\n";
+    final String feature = """
+            Feature: Minimal
+            
+              Scenario: minimalistic
+                Given the minimalism
+            """;
     final Envelope envelope = Envelope.of(new Source("minimal.feature", feature, TEXT_X_CUCUMBER_GHERKIN_PLAIN));
 
     @Test
@@ -45,7 +47,7 @@ class GherkinParserTest {
                 .includeSource(false)
                 .includeGherkinDocument(false)
                 .build();
-        List<Envelope> pickles = parser.parse("minimal.feature", is).collect(toList());
+        List<Envelope> pickles = parser.parse("minimal.feature", is).toList();
         assertTrue(pickles.get(0).getPickle().isPresent());
     }
 
@@ -102,13 +104,15 @@ class GherkinParserTest {
     @Test
     void parser_always_includes_errors() {
         Envelope singleParseError = Envelope.of(new Source("single_parser_error.feature",
-                "\n" +
-                        "invalid line here\n" +
-                        "\n" +
-                        "Feature: Single parser error\n" +
-                        "\n" +
-                        "  Scenario: minimalistic\n" +
-                        "    Given the minimalism\n",
+                """
+                        
+                        invalid line here
+                        
+                        Feature: Single parser error
+                        
+                          Scenario: minimalistic
+                            Given the minimalism
+                        """,
                 TEXT_X_CUCUMBER_GHERKIN_PLAIN));
         Optional<ParseError> parseError = GherkinParser.builder()
                 .includeSource(false)

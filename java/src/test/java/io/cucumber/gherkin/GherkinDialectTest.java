@@ -31,12 +31,6 @@ class GherkinDialectTest {
         // Then multiple types are possible
         assertEquals(1, stepKeywordTypes.size());
     }
-    
-    @Test
-    void getDistinctStepKeywordTypes_null_throws() {
-        // When I get the step keyword types
-        assertThrows(NullPointerException.class, () -> dialect.getStepKeywordTypesSet(null));
-    }
 
     @Test
     void getDistinctStepKeywordTypes_unknown_throws() {

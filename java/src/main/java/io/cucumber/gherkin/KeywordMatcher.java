@@ -1,15 +1,16 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.StepKeywordType;
+import org.jspecify.annotations.Nullable;
 
 interface KeywordMatcher {
 
-    Match matchFeatureKeyword(Line line);
-    Match matchBackgroundKeyword(Line line);
-    Match matchRuleKeyword(Line line);
-    Match matchScenarioKeyword(Line line);
-    Match matchExampleKeyword(Line line);
-    StepMatch matchStepKeyword(Line line);
+    @Nullable Match matchFeatureKeyword(Line line);
+    @Nullable Match matchBackgroundKeyword(Line line);
+    @Nullable Match matchRuleKeyword(Line line);
+    @Nullable Match matchScenarioKeyword(Line line);
+    @Nullable Match matchExampleKeyword(Line line);
+    @Nullable StepMatch matchStepKeyword(Line line);
 
     final class StepMatch {
         private final String keyword;
