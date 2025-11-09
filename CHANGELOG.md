@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder`.
+
+
 ## [30.1.3] - 2025-11-05
 ### Fixed
 - Update Java release process
@@ -26,9 +30,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [30.1.0] - 2025-11-05
 ### Added
 - [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
-
-### Fixed
-- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder`.
 
 ## [36.0.0] - 2025-10-09
 ### Changed
