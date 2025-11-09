@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Fixed
-- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder`.
+- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder` ([#497](https://github.com/cucumber/gherkin/pull/497)).
 
 
 ## [30.1.3] - 2025-11-05
