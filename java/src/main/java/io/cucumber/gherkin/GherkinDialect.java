@@ -17,8 +17,6 @@ import static io.cucumber.messages.types.StepKeywordType.ACTION;
 import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
 import static io.cucumber.messages.types.StepKeywordType.CONTEXT;
 import static io.cucumber.messages.types.StepKeywordType.OUTCOME;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -88,7 +86,7 @@ public final class GherkinDialect {
         }
         List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
         sortedKeywords.sort(LONGEST_TO_SHORTEST_COMPARATOR);
-        return unmodifiableList(sortedKeywords);
+        return List.copyOf(sortedKeywords);
     }
 
     private static Map<String, Set<StepKeywordType>> aggregateKeywordTypes(
@@ -103,7 +101,7 @@ public final class GherkinDialect {
         addStepKeywordsTypes(stepKeywordsTypes, ACTION, whenKeywords);
         addStepKeywordsTypes(stepKeywordsTypes, OUTCOME, thenKeywords);
         addStepKeywordsTypes(stepKeywordsTypes, CONJUNCTION, distinctKeywords(andKeywords, butKeywords));
-        stepKeywordsTypes.replaceAll((keyword, stepKeywordTypes) -> unmodifiableSet(stepKeywordTypes));
+        stepKeywordsTypes.replaceAll((keyword, stepKeywordTypes) -> Set.copyOf(stepKeywordTypes));
         return stepKeywordsTypes;
     }
 

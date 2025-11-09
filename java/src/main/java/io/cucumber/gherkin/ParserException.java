@@ -97,7 +97,7 @@ class ParserException extends RuntimeException {
 
         CompositeParserException(List<ParserException> errors) {
             super(getMessage(errors));
-            this.errors = Collections.unmodifiableList(errors);
+            this.errors = List.copyOf(errors);
         }
 
         private static String getMessage(List<ParserException> errors) {

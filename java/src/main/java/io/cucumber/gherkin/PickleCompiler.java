@@ -27,15 +27,11 @@ import io.cucumber.messages.types.Tag;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
 import static io.cucumber.messages.types.StepKeywordType.UNKNOWN;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -162,7 +158,7 @@ final class PickleCompiler {
             for (final TableRow valuesRow : examples.getTableBody()) {
                 List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps(), variableCells, valuesRow);
                 List<Tag> tags = compileTags(scenarioTags, examples.getTags());
-                List<String> sourceIds = asList(scenario.getId(), valuesRow.getId());
+                List<String> sourceIds = List.of(scenario.getId(), valuesRow.getId());
                 Pickle pickle = new Pickle(
                         idGenerator.newId(),
                         uri,
@@ -220,10 +216,10 @@ final class PickleCompiler {
 
         List<String> astNodeIds;
         if (valuesRow != null) {
-            astNodeIds = Arrays.asList(step.getId(), valuesRow.getId());
+            astNodeIds = List.of(step.getId(), valuesRow.getId());
 
         } else {
-            astNodeIds = singletonList(step.getId());
+            astNodeIds = List.of(step.getId());
         }
 
         return new PickleStep(
