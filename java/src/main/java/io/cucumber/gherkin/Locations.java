@@ -17,15 +17,15 @@ class Locations {
      * We can't use Long.valueOf() because it caches only the first 128
      * values, and typical feature files have much more lines.
      */
-    private static final Long[] longs = new Long[4096];
+    private static final Integer[] ints = new Integer[4096];
 
     static {
-        for (int i = 0; i < longs.length; i++) {
-            longs[i] = (long) i;
+        for (int i = 0; i < ints.length; i++) {
+            ints[i] = i;
         }
     }
 
-    private static Long getLong(int i) {
+    private static Integer getInteger(int i) {
         // JMH benchmark shows that this implementation is the
         // fastest when i<4096 (and about 20% slower than
         // Long.valueOf() when i>=4096).
@@ -39,10 +39,10 @@ class Locations {
         //   1024/2048/4096 initial size
         // - dynamic lazy initialized cache with 256
         //   initialized size
-        if (i >= longs.length) {
-            return (long) i;
+        if (i >= ints.length) {
+            return i;
         }
-        return longs[i];
+        return ints[i];
     }
 
     static Location atColumn(Location location, int column) {
@@ -50,14 +50,14 @@ class Locations {
         if (column <= 0) {
             throw new IllegalArgumentException("Columns are index-1 based");
         }
-        return new Location(location.getLine(), getLong(column));
+        return new Location(location.getLine(), getInteger(column));
     }
 
     static Location atLine(int line) {
         if (line < 0) {
             throw new IllegalArgumentException("Lines are index-0 based");
         }
-        return new Location(getLong(line), null);
+        return new Location(getInteger(line), null);
     }
 
 }

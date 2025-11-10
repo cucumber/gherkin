@@ -122,12 +122,12 @@ class PickleCompiler {
         Pickle pickle = new Pickle(
                 idGenerator.newId(),
                 uri,
+                scenario.getLocation(),
                 scenario.getName(),
                 language,
                 steps,
                 pickleTags(scenarioTags),
-                sourceIds,
-                scenario.getLocation()
+                sourceIds
         );
         pickles.add(pickle);
     }
@@ -171,12 +171,12 @@ class PickleCompiler {
                 Pickle pickle = new Pickle(
                         idGenerator.newId(),
                         uri,
+                        valuesRow.getLocation(),
                         interpolate(scenario.getName(), variableCells, valueCells),
                         language,
                         steps,
                         pickleTags(tags),
-                        sourceIds,
-                        valuesRow.getLocation()
+                        sourceIds
                 );
 
                 pickles.add(pickle);

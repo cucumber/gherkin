@@ -26,8 +26,8 @@ class ParserException extends RuntimeException {
         if (location == null) {
             return String.format("(-1,0): %s", message);
         }
-        Long line = location.getLine();
-        Long column = location.getColumn().orElse(0L);
+        Integer line = location.getLine();
+        Integer column = location.getColumn().orElse(0);
         return String.format("(%s:%s): %s", line, column, message);
     }
 
