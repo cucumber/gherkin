@@ -35,7 +35,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     GherkinTokenMatcher(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
-        this.currentKeywordMatcher = requireKeywordMatcher(defaultLanguage, new Location(0L, 0L));
+        this.currentKeywordMatcher = requireKeywordMatcher(defaultLanguage, new Location(0, 0));
         reset();
     }
 

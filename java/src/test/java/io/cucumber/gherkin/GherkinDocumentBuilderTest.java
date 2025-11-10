@@ -119,7 +119,7 @@ class GherkinDocumentBuilderTest {
         Assertions.assertThat(compositeParserException.errors)
                 .singleElement()
                 .extracting(e -> e.location)
-                        .isEqualTo(new Location(5L, 7L));
+                        .isEqualTo(new Location(5, 7));
     }
 
 }

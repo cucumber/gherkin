@@ -102,6 +102,7 @@ final class PickleCompiler {
         Pickle pickle = new Pickle(
                 idGenerator.newId(),
                 uri,
+                scenario.getLocation(),
                 scenario.getName(),
                 language,
                 steps,
@@ -162,6 +163,7 @@ final class PickleCompiler {
                 Pickle pickle = new Pickle(
                         idGenerator.newId(),
                         uri,
+                        valuesRow.getLocation(),
                         interpolate(scenario.getName(), variableCells, valuesRow.getCells()),
                         language,
                         steps,
