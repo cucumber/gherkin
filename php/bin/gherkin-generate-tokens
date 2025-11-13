@@ -17,9 +17,15 @@ $parser = new Parser(new TokenFormatterBuilder());
 array_shift($argv);
 
 foreach($argv as $fileName) {
+    $input = file_get_contents($fileName);
+
+    if ($input === false) {
+        throw new \RuntimeException(\sprintf('Could not read file "%s".', $fileName));
+    }
+
     $result = $parser->parse(
             $fileName,
-            new StringTokenScanner(file_get_contents($fileName)),
+            new StringTokenScanner($input),
             new TokenMatcher(),
     );
     echo $result;

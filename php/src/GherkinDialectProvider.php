@@ -27,9 +27,12 @@ final class GherkinDialectProvider
         try {
             /**
              * Here we force the type checker to assume the decoded JSON has the correct
-             * structure, rather than validating it. This is safe because it's not dynamic
+             * structure, rather than validating it. This is safe because it's not dynamic.
+             * We also assume that reading the file won't fail as this is a file shipped in
+             * the package.
              *
              * @var non-empty-array<non-empty-string, Dialect> $data
+             * @psalm-suppress PossiblyFalseArgument
              */
             $data = json_decode(file_get_contents(self::JSON_PATH), true, flags: JSON_THROW_ON_ERROR);
             $this->DIALECTS = $data;

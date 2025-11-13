@@ -13,6 +13,8 @@ $options = ['predictable-ids', 'no-source', 'no-ast', 'no-pickles'];
 
 $selectedOptions = getopt('', $options, $restIndex);
 
+assert($selectedOptions !== false, "getopt returns false only when it cannot find the argv array.");
+
 $paths = array_slice($argv, $restIndex);
 
 // lazily-read list of Sources
@@ -20,7 +22,13 @@ $sources = (
     /** @param list<string> $paths */
     function (array $paths) {
         foreach ($paths as $path) {
-            yield new Source(uri: $path, data: file_get_contents($path));
+            $data = file_get_contents($path);
+
+            if ($data === false) {
+                throw new RuntimeException(sprintf('Unable to read file "%s".', $path));
+            }
+
+            yield new Source(uri: $path, data: $data);
         }
     }
 )($paths);
@@ -34,5 +42,6 @@ $parser = new GherkinParser(
 $envelopes = $parser->parse($sources);
 
 $output = fopen('php://stdout', 'w');
+assert($output !== false);
 $writer = NdJsonStreamWriter::fromFileHandle($output);
 $writer->writeEnvelopes($envelopes);

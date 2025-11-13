@@ -26,6 +26,7 @@ use Cucumber\Messages\TableCell;
 use Cucumber\Messages\TableRow;
 use Cucumber\Messages\Tag;
 use LogicException;
+use RuntimeException;
 
 /**
  * @implements Builder<GherkinDocument>
@@ -315,6 +316,10 @@ final class GherkinDocumentBuilder implements Builder
             '',
             $this->joinMatchedTextWithLinebreaks($lineTokens),
         );
+
+        if ($lineText === null) {
+            throw new RuntimeException('Failed to trim the description: ' . preg_last_error_msg());
+        }
 
         return $lineText;
     }
