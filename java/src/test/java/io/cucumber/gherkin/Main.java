@@ -6,7 +6,6 @@ import io.cucumber.messages.MessageToNdjsonWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -37,7 +36,8 @@ public class Main {
 
         GherkinParser parser = builder.build();
 
-        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(nonClosableSystemOut(), OBJECT_MAPPER::writeValue)) {
+        OutputStream out = new NonClosableOutputStream(System.out);
+        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(out, OBJECT_MAPPER::writeValue)) {
             for (String path : paths) {
                 try (InputStream fis  = Files.newInputStream(Paths.get(path))) {
                     // Don't use parser.parse(Path). The test suite uses relative paths.
@@ -48,15 +48,6 @@ public class Main {
         }
     }
 
-    private static OutputStream nonClosableSystemOut() {
-        return new OutputStream() {
-            @Override
-            public void write(int b) {
-                System.out.write(b);
-            }
-        };
-    }
-
     private static void printMessage(MessageToNdjsonWriter writer, Envelope envelope) {
         try {
             writer.write(envelope);
@@ -65,4 +56,21 @@ public class Main {
         }
     }
 
+    private static class NonClosableOutputStream extends OutputStream {
+        private final OutputStream delegate;
+
+        private NonClosableOutputStream(OutputStream delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            delegate.write(b);
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            delegate.write(b, off, len);
+        }
+    }
 }
