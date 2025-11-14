@@ -15,12 +15,14 @@ class EncodingParserTest {
         String parsed = readWithEncodingFromSource(utf_8(feature));
         assertEquals(feature, parsed);
     }
+
     @Test
     void nearly_empty() throws RuntimeException {
         String feature = "\n";
         String parsed = readWithEncodingFromSource(utf_8(feature));
         assertEquals(feature, parsed);
     }
+
     @Test
     void only_comment() throws RuntimeException {
         String feature = "#Sample comment\n";
@@ -45,6 +47,7 @@ class EncodingParserTest {
         String parsed = readWithEncodingFromSource(utf_8(feature));
         assertEquals(feature, parsed);
     }
+
     @Test
     void reads_with_encoding_from_pragma() throws RuntimeException {
         String feature = "" +

@@ -14,8 +14,12 @@ import java.util.List;
 import static io.cucumber.gherkin.Jackson.OBJECT_MAPPER;
 import static java.util.Arrays.asList;
 
-public class Main {
+public final class Main {
 
+    private Main(){
+        // main class
+    }
+    
     public static void main(String[] argv) throws IOException {
         List<String> args = new ArrayList<>(asList(argv));
         List<String> paths = new ArrayList<>();
@@ -56,7 +60,7 @@ public class Main {
         }
     }
 
-    private static class NonClosableOutputStream extends OutputStream {
+    private static final class NonClosableOutputStream extends OutputStream {
         private final OutputStream delegate;
 
         private NonClosableOutputStream(OutputStream delegate) {

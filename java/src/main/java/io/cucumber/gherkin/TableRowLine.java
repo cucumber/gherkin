@@ -9,6 +9,10 @@ import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 
 final class TableRowLine {
 
+    private TableRowLine(){
+        // utility class
+    }
+    
     static List<LineSpan> parse(int indent, String text) {
         List<LineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
@@ -40,7 +44,8 @@ final class TableRowLine {
                         int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
                         lineSpans.add(new LineSpan(column, trimmedCellIndent.getText()));
                     }
-                    cellBuilder.setLength(0);// reuse instance rather than creating a new one is faster
+                    // reuse instance rather than creating a new one is faster
+                    cellBuilder.setLength(0);
                     cellStart = col + 1;
                 } else {
                     cellBuilder.appendCodePoint(c);

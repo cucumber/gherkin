@@ -42,42 +42,8 @@ import java.util.function.BiPredicate;
  * Changes to this class will be lost if the code is regenerated.
  */
 final class @Model.ParserClassName<T> {
-    enum TokenType {
-        None(RuleType.None),
-        @foreach(var rule in Model.RuleSet.TokenRules)
-        {<text>        @(rule.Name.Replace("#", ""))(RuleType.@(rule.Name.Replace("#", "_"))),
-</text>}        ;
-
-        final RuleType ruleType;
-
-        TokenType(RuleType ruleType) {
-            this.ruleType = ruleType;
-        }
-    }
-
-    enum RuleType {
-        None,
-        @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-        {<text>        @rule.Name.Replace("#", "_"), // @rule.ToString(true)
-</text>}        ;
-
-    }
 
     private final Builder<T> builder;
-
-    static final class ParserContext {
-        final TokenScanner tokenScanner;
-        final TokenMatcher tokenMatcher;
-        final Queue<Token> tokenQueue;
-        final List<ParserException> errors;
-
-        ParserContext(TokenScanner tokenScanner, TokenMatcher tokenMatcher, Queue<Token> tokenQueue, List<ParserException> errors) {
-            this.tokenScanner = tokenScanner;
-            this.tokenMatcher = tokenMatcher;
-            this.tokenQueue = tokenQueue;
-            this.errors = errors;
-        }
-    }
 
     Parser(Builder<T> builder) {
         this.builder = builder;
@@ -268,9 +234,13 @@ final class @Model.ParserClassName<T> {
 
     interface Builder<T> {
         void build(Token token);
+        
         void startRule(RuleType ruleType);
+        
         void endRule(RuleType ruleType);
+        
         T getResult();
+        
         void reset(String uri);
     }
 
@@ -278,7 +248,43 @@ final class @Model.ParserClassName<T> {
         @foreach(var rule in Model.RuleSet.TokenRules)
         {
         @:boolean match_@(rule.Name.Replace("#", ""))(Token token);
+        @:
         }
         void reset();
+    }
+
+    static final class ParserContext {
+        final TokenScanner tokenScanner;
+        final TokenMatcher tokenMatcher;
+        final Queue<Token> tokenQueue;
+        final List<ParserException> errors;
+
+        ParserContext(TokenScanner tokenScanner, TokenMatcher tokenMatcher, Queue<Token> tokenQueue, List<ParserException> errors) {
+            this.tokenScanner = tokenScanner;
+            this.tokenMatcher = tokenMatcher;
+            this.tokenQueue = tokenQueue;
+            this.errors = errors;
+        }
+    }
+
+    enum TokenType {
+        None(RuleType.None),
+        @foreach(var rule in Model.RuleSet.TokenRules)
+        {<text>        @(rule.Name.Replace("#", ""))(RuleType.@(rule.Name.Replace("#", "_"))),
+</text>}        ;
+
+        final RuleType ruleType;
+
+        TokenType(RuleType ruleType) {
+            this.ruleType = ruleType;
+        }
+    }
+
+    enum RuleType {
+        None,
+        @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+        {<text>        /** @rule.ToString(true) **/
+        @rule.Name.Replace("#", "_"), 
+</text>}
     }
 }

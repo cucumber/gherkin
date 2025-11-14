@@ -2,7 +2,6 @@ package io.cucumber.gherkin;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +18,10 @@ final class EncodingParser {
     private static final Pattern COMMENT_OR_EMPTY_LINE_PATTERN = Pattern.compile("^\\s*#|^\\s*$");
     private static final Pattern ENCODING_PATTERN = Pattern.compile("^\\s*#\\s*encoding\\s*:\\s*([0-9a-zA-Z\\-]+)",
             CASE_INSENSITIVE);
+    
+    private EncodingParser(){
+        // utility class
+    }
 
     static String readWithEncodingFromSource(byte[] source) {
         byte[] bomFreeSource = removeByteOrderMarker(source);

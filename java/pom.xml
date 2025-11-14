@@ -229,6 +229,9 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <configuration>
+                            <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

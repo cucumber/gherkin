@@ -6,10 +6,15 @@ import org.jspecify.annotations.Nullable;
 interface KeywordMatcher {
 
     @Nullable Match matchFeatureKeyword(Line line);
+
     @Nullable Match matchBackgroundKeyword(Line line);
+
     @Nullable Match matchRuleKeyword(Line line);
+
     @Nullable Match matchScenarioKeyword(Line line);
+
     @Nullable Match matchExampleKeyword(Line line);
+
     @Nullable StepMatch matchStepKeyword(Line line);
 
     final class StepMatch {
@@ -30,13 +35,13 @@ interface KeywordMatcher {
         int getKeywordLength() {
             return keywordLength;
         }
-        
+
         StepKeywordType getKeywordType() {
             return keywordType;
         }
 
     }
-    
+
     final class Match {
         private final String keyword;
         private final int keywordLength;

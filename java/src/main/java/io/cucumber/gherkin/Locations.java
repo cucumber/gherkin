@@ -22,6 +22,10 @@ final class Locations {
             ints[i] = i;
         }
     }
+    
+    private Locations(){
+        // utility class
+    }
 
     private static Integer getInteger(int i) {
         // JMH benchmark shows that this implementation is the

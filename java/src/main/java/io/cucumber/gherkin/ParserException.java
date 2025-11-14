@@ -1,12 +1,9 @@
 package io.cucumber.gherkin;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.cucumber.messages.types.Location;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
@@ -48,10 +45,10 @@ class ParserException extends RuntimeException {
     }
 
     static final class UnexpectedTokenException extends ParserException {
-        String stateComment;
 
         final Token receivedToken;
         final List<String> expectedTokenTypes;
+        final String stateComment;
 
         UnexpectedTokenException(Token receivedToken, List<String> expectedTokenTypes, String stateComment) {
             super(getMessage(receivedToken, expectedTokenTypes), getLocation(receivedToken));

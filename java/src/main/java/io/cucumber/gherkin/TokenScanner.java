@@ -1,7 +1,6 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -11,7 +10,7 @@ import static io.cucumber.gherkin.Token.createGherkinLine;
 /**
  * The scanner reads a gherkin doc (typically read from a .feature file) and
  * creates a token for each line. The tokens are passed to the parser, which
- * outputs an AST (Abstract Syntax Tree).</p>
+ * outputs an AST (Abstract Syntax Tree).
  */
 final class TokenScanner {
 

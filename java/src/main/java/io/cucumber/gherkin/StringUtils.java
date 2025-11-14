@@ -3,6 +3,10 @@ package io.cucumber.gherkin;
 
 final class StringUtils {
 
+    private StringUtils(){
+        // utility class
+    }
+    
     /**
      * An extended definition of Whitespace minus new lines.
      *
@@ -24,6 +28,7 @@ final class StringUtils {
      * @param c character to test
      * @return true iff the {@code c} is whitespace.
      */
+    @SuppressWarnings("UnnecessaryParentheses")
     static boolean isWhitespace(char c) {
         // This method is about twice faster than `isWhiteSpaceSlow(c)`.
         // It has been optimized based on the expected use-case of

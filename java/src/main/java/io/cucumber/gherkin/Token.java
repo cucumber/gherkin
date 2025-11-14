@@ -2,7 +2,6 @@ package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.StepKeywordType;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;

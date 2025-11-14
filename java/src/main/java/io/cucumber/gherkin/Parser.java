@@ -14,84 +14,8 @@ import java.util.function.BiPredicate;
  * Changes to this class will be lost if the code is regenerated.
  */
 final class Parser<T> {
-    enum TokenType {
-        None(RuleType.None),
-        EOF(RuleType._EOF),
-        Empty(RuleType._Empty),
-        Comment(RuleType._Comment),
-        TagLine(RuleType._TagLine),
-        FeatureLine(RuleType._FeatureLine),
-        RuleLine(RuleType._RuleLine),
-        BackgroundLine(RuleType._BackgroundLine),
-        ScenarioLine(RuleType._ScenarioLine),
-        ExamplesLine(RuleType._ExamplesLine),
-        StepLine(RuleType._StepLine),
-        DocStringSeparator(RuleType._DocStringSeparator),
-        TableRow(RuleType._TableRow),
-        Language(RuleType._Language),
-        Other(RuleType._Other),
-        ;
-
-        final RuleType ruleType;
-
-        TokenType(RuleType ruleType) {
-            this.ruleType = ruleType;
-        }
-    }
-
-    enum RuleType {
-        None,
-        _EOF, // #EOF
-        _Empty, // #Empty
-        _Comment, // #Comment
-        _TagLine, // #TagLine
-        _FeatureLine, // #FeatureLine
-        _RuleLine, // #RuleLine
-        _BackgroundLine, // #BackgroundLine
-        _ScenarioLine, // #ScenarioLine
-        _ExamplesLine, // #ExamplesLine
-        _StepLine, // #StepLine
-        _DocStringSeparator, // #DocStringSeparator
-        _TableRow, // #TableRow
-        _Language, // #Language
-        _Other, // #Other
-        GherkinDocument, // GherkinDocument! := Feature?
-        Feature, // Feature! := FeatureHeader Background? ScenarioDefinition* Rule*
-        FeatureHeader, // FeatureHeader! := #Language? Tags? #FeatureLine DescriptionHelper
-        Rule, // Rule! := RuleHeader Background? ScenarioDefinition*
-        RuleHeader, // RuleHeader! := Tags? #RuleLine DescriptionHelper
-        Background, // Background! := #BackgroundLine DescriptionHelper Step*
-        ScenarioDefinition, // ScenarioDefinition! [#Empty|#Comment|#TagLine->#ScenarioLine] := Tags? Scenario
-        Scenario, // Scenario! := #ScenarioLine DescriptionHelper Step* ExamplesDefinition*
-        ExamplesDefinition, // ExamplesDefinition! [#Empty|#Comment|#TagLine->#ExamplesLine] := Tags? Examples
-        Examples, // Examples! := #ExamplesLine DescriptionHelper ExamplesTable?
-        ExamplesTable, // ExamplesTable! := #TableRow #TableRow*
-        Step, // Step! := #StepLine StepArg?
-        StepArg, // StepArg := (DataTable | DocString)
-        DataTable, // DataTable! := #TableRow+
-        DocString, // DocString! := #DocStringSeparator #Other* #DocStringSeparator
-        Tags, // Tags! := #TagLine+
-        DescriptionHelper, // DescriptionHelper := #Empty* Description?
-        Description, // Description! := (#Other | #Comment)+
-        ;
-
-    }
 
     private final Builder<T> builder;
-
-    static final class ParserContext {
-        final TokenScanner tokenScanner;
-        final TokenMatcher tokenMatcher;
-        final Queue<Token> tokenQueue;
-        final List<ParserException> errors;
-
-        ParserContext(TokenScanner tokenScanner, TokenMatcher tokenMatcher, Queue<Token> tokenQueue, List<ParserException> errors) {
-            this.tokenScanner = tokenScanner;
-            this.tokenMatcher = tokenMatcher;
-            this.tokenQueue = tokenQueue;
-            this.errors = errors;
-        }
-    }
 
     Parser(Builder<T> builder) {
         this.builder = builder;
@@ -3729,27 +3653,152 @@ final class Parser<T> {
 
     interface Builder<T> {
         void build(Token token);
+        
         void startRule(RuleType ruleType);
+        
         void endRule(RuleType ruleType);
+        
         T getResult();
+        
         void reset(String uri);
     }
 
     interface TokenMatcher {
         boolean match_EOF(Token token);
+        
         boolean match_Empty(Token token);
+        
         boolean match_Comment(Token token);
+        
         boolean match_TagLine(Token token);
+        
         boolean match_FeatureLine(Token token);
+        
         boolean match_RuleLine(Token token);
+        
         boolean match_BackgroundLine(Token token);
+        
         boolean match_ScenarioLine(Token token);
+        
         boolean match_ExamplesLine(Token token);
+        
         boolean match_StepLine(Token token);
+        
         boolean match_DocStringSeparator(Token token);
+        
         boolean match_TableRow(Token token);
+        
         boolean match_Language(Token token);
+        
         boolean match_Other(Token token);
+        
         void reset();
+    }
+
+    static final class ParserContext {
+        final TokenScanner tokenScanner;
+        final TokenMatcher tokenMatcher;
+        final Queue<Token> tokenQueue;
+        final List<ParserException> errors;
+
+        ParserContext(TokenScanner tokenScanner, TokenMatcher tokenMatcher, Queue<Token> tokenQueue, List<ParserException> errors) {
+            this.tokenScanner = tokenScanner;
+            this.tokenMatcher = tokenMatcher;
+            this.tokenQueue = tokenQueue;
+            this.errors = errors;
+        }
+    }
+
+    enum TokenType {
+        None(RuleType.None),
+        EOF(RuleType._EOF),
+        Empty(RuleType._Empty),
+        Comment(RuleType._Comment),
+        TagLine(RuleType._TagLine),
+        FeatureLine(RuleType._FeatureLine),
+        RuleLine(RuleType._RuleLine),
+        BackgroundLine(RuleType._BackgroundLine),
+        ScenarioLine(RuleType._ScenarioLine),
+        ExamplesLine(RuleType._ExamplesLine),
+        StepLine(RuleType._StepLine),
+        DocStringSeparator(RuleType._DocStringSeparator),
+        TableRow(RuleType._TableRow),
+        Language(RuleType._Language),
+        Other(RuleType._Other),
+        ;
+
+        final RuleType ruleType;
+
+        TokenType(RuleType ruleType) {
+            this.ruleType = ruleType;
+        }
+    }
+
+    enum RuleType {
+        None,
+        /** #EOF **/
+        _EOF, 
+        /** #Empty **/
+        _Empty, 
+        /** #Comment **/
+        _Comment, 
+        /** #TagLine **/
+        _TagLine, 
+        /** #FeatureLine **/
+        _FeatureLine, 
+        /** #RuleLine **/
+        _RuleLine, 
+        /** #BackgroundLine **/
+        _BackgroundLine, 
+        /** #ScenarioLine **/
+        _ScenarioLine, 
+        /** #ExamplesLine **/
+        _ExamplesLine, 
+        /** #StepLine **/
+        _StepLine, 
+        /** #DocStringSeparator **/
+        _DocStringSeparator, 
+        /** #TableRow **/
+        _TableRow, 
+        /** #Language **/
+        _Language, 
+        /** #Other **/
+        _Other, 
+        /** GherkinDocument! := Feature? **/
+        GherkinDocument, 
+        /** Feature! := FeatureHeader Background? ScenarioDefinition* Rule* **/
+        Feature, 
+        /** FeatureHeader! := #Language? Tags? #FeatureLine DescriptionHelper **/
+        FeatureHeader, 
+        /** Rule! := RuleHeader Background? ScenarioDefinition* **/
+        Rule, 
+        /** RuleHeader! := Tags? #RuleLine DescriptionHelper **/
+        RuleHeader, 
+        /** Background! := #BackgroundLine DescriptionHelper Step* **/
+        Background, 
+        /** ScenarioDefinition! [#Empty|#Comment|#TagLine->#ScenarioLine] := Tags? Scenario **/
+        ScenarioDefinition, 
+        /** Scenario! := #ScenarioLine DescriptionHelper Step* ExamplesDefinition* **/
+        Scenario, 
+        /** ExamplesDefinition! [#Empty|#Comment|#TagLine->#ExamplesLine] := Tags? Examples **/
+        ExamplesDefinition, 
+        /** Examples! := #ExamplesLine DescriptionHelper ExamplesTable? **/
+        Examples, 
+        /** ExamplesTable! := #TableRow #TableRow* **/
+        ExamplesTable, 
+        /** Step! := #StepLine StepArg? **/
+        Step, 
+        /** StepArg := (DataTable | DocString) **/
+        StepArg, 
+        /** DataTable! := #TableRow+ **/
+        DataTable, 
+        /** DocString! := #DocStringSeparator #Other* #DocStringSeparator **/
+        DocString, 
+        /** Tags! := #TagLine+ **/
+        Tags, 
+        /** DescriptionHelper := #Empty* Description? **/
+        DescriptionHelper, 
+        /** Description! := (#Other | #Comment)+ **/
+        Description, 
     }
 }

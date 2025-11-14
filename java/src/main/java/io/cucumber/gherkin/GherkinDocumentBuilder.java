@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
-import java.util.Objects;
 
 import static io.cucumber.gherkin.GherkinParser.FEATURE_FILE_AVERAGE_LINE_LENGTH;
 import static io.cucumber.gherkin.Locations.atColumn;
@@ -243,16 +242,18 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         }
         int contentLength = content.length();
         if (contentLength > 0) {
-            content.setLength(contentLength - 1); // Remove the last \n
+            // Remove the last \n
+            content.setLength(contentLength - 1); 
         }
         return content.toString();
     }
 
-    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     private List<TableRow> getTableRows(AstNode node) {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
         int tokenSize = tokens.size();
         List<TableRow> rows = new ArrayList<>(tokenSize);
+        // classic 'for' loop is ~2x faster than 'for-each'
         for (int i = 0; i < tokenSize; i++) {
             Token token = tokens.get(i);
             rows.add(new TableRow(token.location, getCells(token), idGenerator.newId()));
@@ -261,12 +262,13 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return rows;
     }
 
-    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     private void ensureCellCount(List<TableRow> rows) {
         if (rows.isEmpty())
             return;
 
         int firstRowCellsSize = rows.get(0).getCells().size();
+        // classic 'for' loop is ~2x faster than 'for-each'
         for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
             TableRow row = rows.get(i);
             if (row.getCells().size() != firstRowCellsSize) {
@@ -275,7 +277,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         }
     }
 
-    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
+    @SuppressWarnings("ForLoopReplaceableByForEach") 
     private List<TableCell> getCells(Token token) {
         List<LineSpan> matchedItems = token.matchedItems;
         if (matchedItems == null) {
@@ -283,6 +285,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         }
         int itemSize = matchedItems.size();
         List<TableCell> cells = new ArrayList<>(itemSize);
+        // classic 'for' loop is ~2x faster than 'for-each'
         for (int i = 0; i < itemSize; i++) {
             LineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
@@ -304,7 +307,8 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     private List<Tag> getTags(AstNode node) {
         AstNode tagsNode = node.getSingle(RuleType.Tags);
-        if (tagsNode == null) {// tags are optional
+        // tags are optional
+        if (tagsNode == null) {
             return new ArrayList<>(0);
         }
 

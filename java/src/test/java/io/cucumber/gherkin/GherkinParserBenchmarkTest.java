@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class GherkinParserBenchmarkTest {
-
+public final class GherkinParserBenchmarkTest {
+    
     @Benchmark
+    @SuppressWarnings("UnusedReturnValue")
     public Stream<Envelope> benchmark() throws IOException {
         GherkinParser gherkinParser = GherkinParser.builder()
                 .idGenerator(new IncrementingIdGenerator())
