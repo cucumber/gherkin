@@ -1,3 +1,5 @@
+package io.cucumber.gherkin.dialects;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.Configuration;
@@ -21,7 +23,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import static io.cucumber.messages.types.StepKeywordType.ACTION;
@@ -35,6 +36,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Map.Entry.comparingByKey;
+import static java.util.Objects.requireNonNull;
 
 /*
  * This class generates the KeywordMatchers class using the FreeMarker
@@ -74,7 +76,7 @@ class GenerateKeywordMatchers {
 
     private static Map<String, Object> readGherkinLanguages() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<Map<String, Object>> mapObjectType = new TypeReference<Map<String, Object>>() {
+        TypeReference<Map<String, Object>> mapObjectType = new TypeReference<>() {
         };
         try (Reader reader = newBufferedReader(Paths.get("../gherkin-languages.json"))) {
             Map<String, Object> sorted = new TreeMap<>(naturalOrder());
@@ -92,15 +94,13 @@ class GenerateKeywordMatchers {
                         Map.Entry::getKey, entry -> matcherModel(
                                 entry.getKey(),
                                 (Map<String, Object>) entry.getValue()),
-                        uniqueKeyCondition(),
+                        GenerateKeywordMatchers::requireUniqueKeys,
                         LinkedHashMap::new
                 ));
     }
 
-    private static BinaryOperator<Object> uniqueKeyCondition() {
-        return (a, b) ->  {
-            throw new IllegalStateException("Duplicate keys " + a + " and " + b);
-        };
+    private static boolean requireUniqueKeys(Object a, Object b) {
+        throw new IllegalStateException("Duplicate keys " + a + " and " + b);
     }
 
     @SuppressWarnings("unchecked")
@@ -110,7 +110,7 @@ class GenerateKeywordMatchers {
         model.put("className", capitalize(normalizedLanguage));
 
         List<String> featureKeywords = distinctSortedKeywords(
-                (List<String>) dialect.get("feature")
+                (List<String>) requireNonNull(dialect.get("feature"))
         );
         model.put("features", featureKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
@@ -120,7 +120,7 @@ class GenerateKeywordMatchers {
         }).collect(Collectors.toList()));
 
         List<String> backgroundKeywords = distinctSortedKeywords(
-                (List<String>) dialect.get("background")
+                (List<String>) requireNonNull(dialect.get("background"))
         );
         model.put("backgrounds", backgroundKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
@@ -130,7 +130,7 @@ class GenerateKeywordMatchers {
         }).collect(Collectors.toList()));
 
         List<String> ruleKeywords = distinctSortedKeywords(
-                (List<String>) dialect.get("rule")
+                (List<String>) requireNonNull(dialect.get("rule"))
         );
         model.put("rules", ruleKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
@@ -140,8 +140,8 @@ class GenerateKeywordMatchers {
         }).collect(Collectors.toList()));
 
         List<String> scenarioKeywords = distinctSortedKeywords(
-                (List<String>) dialect.get("scenario"),
-                (List<String>) dialect.get("scenarioOutline")
+                (List<String>) requireNonNull(dialect.get("scenario")),
+                (List<String>) requireNonNull(dialect.get("scenarioOutline"))
         );
         model.put("scenarios", scenarioKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
@@ -151,7 +151,7 @@ class GenerateKeywordMatchers {
         }).collect(Collectors.toList()));
 
         List<String> exampleKeywords = distinctSortedKeywords(
-                (List<String>) dialect.get("examples")
+                (List<String>) requireNonNull(dialect.get("examples"))
         );
         model.put("examples", exampleKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
@@ -161,24 +161,24 @@ class GenerateKeywordMatchers {
         }).collect(Collectors.toList()));
 
         Map<String, StepKeywordType> aggregateKeywordTypes = aggregateKeywordTypes(
-                (List<String>) dialect.get("given"),
-                (List<String>) dialect.get("when"),
-                (List<String>) dialect.get("then"),
-                (List<String>) dialect.get("and"),
-                (List<String>) dialect.get("but")
+                (List<String>) requireNonNull(dialect.get("given")),
+                (List<String>) requireNonNull(dialect.get("when")),
+                (List<String>) requireNonNull(dialect.get("then")),
+                (List<String>) requireNonNull(dialect.get("and")),
+                (List<String>) requireNonNull(dialect.get("but"))
         );
         List<String> stepKeywords = distinctSortedKeywords(
-                (List<String>) dialect.get("given"),
-                (List<String>) dialect.get("when"),
-                (List<String>) dialect.get("then"),
-                (List<String>) dialect.get("and"),
-                (List<String>) dialect.get("but")
+                (List<String>) requireNonNull(dialect.get("given")),
+                (List<String>) requireNonNull(dialect.get("when")),
+                (List<String>) requireNonNull(dialect.get("then")),
+                (List<String>) requireNonNull(dialect.get("and")),
+                (List<String>) requireNonNull(dialect.get("but"))
         );
         model.put("steps", stepKeywords.stream().map(keyword -> {
             Map<String, Object> entry = new HashMap<>();
             entry.put("keyword", keyword);
             entry.put("length", keyword.length());
-            entry.put("keywordType", aggregateKeywordTypes.get(keyword).name());
+            entry.put("keywordType", requireNonNull(aggregateKeywordTypes.get(keyword)).name());
             return entry;
         }).collect(Collectors.toList()));
 
@@ -186,11 +186,11 @@ class GenerateKeywordMatchers {
     }
 
     private static String capitalize(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+        return str.substring(0, 1).toUpperCase(Locale.US) + str.substring(1);
     }
 
     private static String getNormalizedLanguage(String language) {
-        return language.replaceAll("[\\s-]", "_").toLowerCase();
+        return language.replaceAll("[\\s-]", "_").toLowerCase(Locale.US);
     }
 
     @SafeVarargs

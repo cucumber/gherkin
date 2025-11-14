@@ -1,5 +1,7 @@
 package io.cucumber.gherkin;
 
+import org.jspecify.annotations.Nullable;
+
 import static java.util.stream.Collectors.joining;
 
 class TokenFormatter {
@@ -10,7 +12,7 @@ class TokenFormatter {
 
         return String.format("(%s:%s)%s:%s/%s/%s",
                 toString(token.location.getLine()),
-                toString(token.location.getColumn().orElse(0L)),
+                toString(token.location.getColumn().orElse(0)),
                 toString(token.matchedType),
                 token.matchedKeyword == null ? "" : String.format("(%s)%s",
                                                                   toString(token.keywordType),
@@ -22,7 +24,7 @@ class TokenFormatter {
         );
     }
 
-    private String toString(Object o) {
+    private String toString(@Nullable Object o) {
         return o == null ? "" : o.toString();
     }
 }

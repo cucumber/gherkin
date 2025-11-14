@@ -24,17 +24,14 @@ import io.cucumber.messages.types.StepKeywordType;
 import io.cucumber.messages.types.TableCell;
 import io.cucumber.messages.types.TableRow;
 import io.cucumber.messages.types.Tag;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
 import static io.cucumber.messages.types.StepKeywordType.UNKNOWN;
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -105,6 +102,7 @@ final class PickleCompiler {
         Pickle pickle = new Pickle(
                 idGenerator.newId(),
                 uri,
+                scenario.getLocation(),
                 scenario.getName(),
                 language,
                 steps,
@@ -129,10 +127,10 @@ final class PickleCompiler {
         return tags;
     }
 
-    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps, List<TableCell> variableCells, TableRow valuesRow) {
+    private List<PickleStep> compilePickleSteps(List<Step> backgroundSteps, List<Step> scenarioSteps, List<TableCell> variableCells, @Nullable TableRow valuesRow) {
         if (scenarioSteps.isEmpty()) {
             // usually, a scenario has at least one step, but that's not mandatory
-            return emptyList();
+            return new ArrayList<>(0);
         }
         List<PickleStep> steps = new ArrayList<>(backgroundSteps.size() + scenarioSteps.size());
         StepKeywordType lastKeywordType = UNKNOWN;
@@ -161,10 +159,11 @@ final class PickleCompiler {
             for (final TableRow valuesRow : examples.getTableBody()) {
                 List<PickleStep> steps = compilePickleSteps(backgroundSteps, scenario.getSteps(), variableCells, valuesRow);
                 List<Tag> tags = compileTags(scenarioTags, examples.getTags());
-                List<String> sourceIds = asList(scenario.getId(), valuesRow.getId());
+                List<String> sourceIds = List.of(scenario.getId(), valuesRow.getId());
                 Pickle pickle = new Pickle(
                         idGenerator.newId(),
                         uri,
+                        valuesRow.getLocation(),
                         interpolate(scenario.getName(), variableCells, valuesRow.getCells()),
                         language,
                         steps,
@@ -176,12 +175,13 @@ final class PickleCompiler {
             }
         }
     }
-
-    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
+    
+    @SuppressWarnings("ForLoopReplaceableByForEach") 
     private PickleTable pickleDataTable(DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
         List<TableRow> rows = dataTable.getRows();
         int rowCount = rows.size();
         List<PickleTableRow> newRows = new ArrayList<>(rowCount);
+        // classic 'for' loop is ~2x faster than 'for-each'
         for (int i = 0; i < rowCount; i++) {
             TableRow row = rows.get(i);
             List<TableCell> cells = row.getCells();
@@ -203,7 +203,7 @@ final class PickleCompiler {
         );
     }
 
-    private PickleStep pickleStep(Step step, List<TableCell> variableCells, TableRow valuesRow, StepKeywordType keywordType) {
+    private PickleStep pickleStep(Step step, List<TableCell> variableCells, @Nullable TableRow valuesRow, StepKeywordType keywordType) {
         List<TableCell> valueCells = valuesRow == null ? emptyList() : valuesRow.getCells();
         String stepText = interpolate(step.getText(), variableCells, valueCells);
 
@@ -219,10 +219,10 @@ final class PickleCompiler {
 
         List<String> astNodeIds;
         if (valuesRow != null) {
-            astNodeIds = Arrays.asList(step.getId(), valuesRow.getId());
+            astNodeIds = List.of(step.getId(), valuesRow.getId());
 
         } else {
-            astNodeIds = singletonList(step.getId());
+            astNodeIds = List.of(step.getId());
         }
 
         return new PickleStep(
@@ -235,16 +235,12 @@ final class PickleCompiler {
     }
 
     private static PickleStepType pickleStepType(StepKeywordType keywordType) {
-        switch (keywordType) {
-            case CONTEXT:
-                return PickleStepType.CONTEXT;
-            case ACTION:
-                return PickleStepType.ACTION;
-            case OUTCOME:
-                return PickleStepType.OUTCOME;
-            default:
-                return PickleStepType.UNKNOWN;
-        }
+        return switch (keywordType) {
+            case CONTEXT -> PickleStepType.CONTEXT;
+            case ACTION -> PickleStepType.ACTION;
+            case OUTCOME -> PickleStepType.OUTCOME;
+            default -> PickleStepType.UNKNOWN;
+        };
     }
 
     private PickleStep pickleBackgroundStep(Step step, StepKeywordType keywordType) {
@@ -265,7 +261,7 @@ final class PickleCompiler {
 
     private List<PickleTag> pickleTags(List<Tag> tags) {
         if (tags.isEmpty()) {
-            return emptyList();
+            return new ArrayList<>(0);
         }
         List<PickleTag> result = new ArrayList<>();
         for (Tag tag : tags) {
