@@ -13,7 +13,7 @@ class LocationsTest {
     void atLine() {
         // random integer conversion that is far after the cache upper bound works
         Location location = Locations.atLine(12000);
-        assertEquals(Long.valueOf(12000), location.getLine());
+        assertEquals(Long.valueOf(12000L), location.getLine());
         // sequential integer conversion works (the cache has no hole)
         for (int i = 0; i < 12000; i++) {
             Long expectedLine = (long) i;
