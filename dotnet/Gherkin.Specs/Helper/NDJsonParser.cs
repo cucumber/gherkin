@@ -1,3 +1,4 @@
+using MessageTypes = Io.Cucumber.Messages.Types;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -5,20 +6,24 @@ namespace Gherkin.Specs.Helper;
 
 public class NDJsonParser
 {
-    static readonly JsonSerializerOptions s_SerializerOptions = new(JsonSerializerDefaults.Web)
+    private static readonly Lazy<JsonSerializerOptions> _serializerOptions = new(() =>
     {
-        Converters =
-        {
-            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-        }
-    };
+        var options = new JsonSerializerOptions();
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.Converters.Add(new CucumberMessagesEnumConverterFactory());
+        options.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        return options;
+    });
+
+    public static JsonSerializerOptions SerializerOptions => _serializerOptions.Value;
 
     public static async Task<List<T>> DeserializeAsync<T>(string expectedFile)
     {
         var result = new List<T>();
         using var contentStream = File.OpenRead(expectedFile);
 
-        await foreach (var deserializedObject in JsonSerializer.DeserializeAsyncEnumerable<T>(contentStream, true, s_SerializerOptions))
+        await foreach (var deserializedObject in JsonSerializer.DeserializeAsyncEnumerable<T>(contentStream, true, SerializerOptions))
         {
             result.Add(deserializedObject);
         }

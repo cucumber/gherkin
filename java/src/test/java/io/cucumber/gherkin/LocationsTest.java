@@ -13,10 +13,10 @@ class LocationsTest {
     void atLine() {
         // random integer conversion that is far after the cache upper bound works
         Location location = Locations.atLine(12000);
-        assertEquals(Integer.valueOf(12000), location.getLine());
+        assertEquals(Long.valueOf(12000), location.getLine());
         // sequential integer conversion works (the cache has no hole)
         for (int i = 0; i < 12000; i++) {
-            Integer expectedLine = i;
+            Long expectedLine = (long) i;
             Location actual = Locations.atLine(i);
             assertEquals(expectedLine, actual.getLine());
         }
@@ -24,7 +24,7 @@ class LocationsTest {
 
     @Test
     void atLine_negative_number_not_supported() {
-        assertThrows(IllegalArgumentException.class, () -> Locations.atLine(-1));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Locations.atLine(-1));
     }
 
     @Test
@@ -37,7 +37,7 @@ class LocationsTest {
         for (int i = 0; i < numberOfThreads; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 500; j < numberOfIterations; j *= 2) {
-                    Integer expectedLine = j;
+                    Long expectedLine = (long) j;
                     Location actual = Locations.atLine(j);
                     assertEquals(expectedLine, actual.getLine());
                 }

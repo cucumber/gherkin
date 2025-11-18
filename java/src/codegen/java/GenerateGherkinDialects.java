@@ -25,16 +25,9 @@ import static java.util.Comparator.naturalOrder;
  * This class generates the GherkinDialects class using the FreeMarker
  * template engine and provided templates.
  */
-public class GenerateGherkinDialects {
+class GenerateGherkinDialects {
 
-    public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
-            throw new IllegalArgumentException("Usage: <baseDirectory> <packagePath>");
-        }
-
-        String baseDirectory = args[0];
-        String packagePath = args[1];
-
+    static void generate(String baseDirectory, String packagePath) throws Exception {
         Path path = Paths.get(baseDirectory, packagePath,  "GherkinDialects.java");
 
         Template dialectsSource = readTemplate();

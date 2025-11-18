@@ -29,7 +29,7 @@ import static io.cucumber.gherkin.Parser.Builder;
 import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 
-class GherkinDocumentBuilder implements Builder<GherkinDocument> {
+final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     private final List<Comment> comments = new ArrayList<>();
     private final IdGenerator idGenerator;
     private String uri;
@@ -83,8 +83,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                         stepLine.matchedKeyword,
                         stepLine.keywordType,
                         stepLine.matchedText,
-                        node.getSingle(RuleType.DocString, null),
-                        node.getSingle(RuleType.DataTable, null),
+                        node.getSingle(RuleType.DocString),
+                        node.getSingle(RuleType.DataTable),
                         idGenerator.newId()
                 );
             }
@@ -92,7 +92,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 Token separatorToken = node.getTokens(TokenType.DocStringSeparator).get(0);
                 String mediaType = separatorToken.matchedText.isEmpty() ? null : separatorToken.matchedText;
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
-                String content = joinMatchedText(lineTokens);
+                String content = joinMatchedText(lineTokens, lineTokens.size());
                 return new DocString(
                         separatorToken.location,
                         mediaType,
@@ -116,7 +116,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case ScenarioDefinition: {
-                AstNode scenarioNode = node.getSingle(RuleType.Scenario, null);
+                AstNode scenarioNode = node.getRequiredSingle(RuleType.Scenario);
                 Token scenarioLine = scenarioNode.getToken(TokenType.ScenarioLine);
 
                 return new Scenario(
@@ -131,11 +131,19 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 );
             }
             case ExamplesDefinition: {
-                AstNode examplesNode = node.getSingle(RuleType.Examples, null);
+                AstNode examplesNode = node.getRequiredSingle(RuleType.Examples);
                 Token examplesLine = examplesNode.getToken(TokenType.ExamplesLine);
-                List<TableRow> rows = examplesNode.getSingle(RuleType.ExamplesTable, null);
-                TableRow tableHeader = rows != null && !rows.isEmpty() ? rows.get(0) : null;
-                List<TableRow> tableBody = rows != null && !rows.isEmpty() ? rows.subList(1, rows.size()) : Collections.emptyList();
+                // rows is null when a Scenario Outline has no Examples table
+                List<TableRow> rows = examplesNode.getSingle(RuleType.ExamplesTable);
+                TableRow tableHeader;
+                List<TableRow> tableBody;
+                if (rows != null && !rows.isEmpty()) {
+                    tableHeader = rows.get(0);
+                    tableBody = rows.subList(1, rows.size());
+                } else {
+                    tableHeader = null;
+                    tableBody = Collections.emptyList();
+                }
 
                 return new Examples(
                         examplesLine.location,
@@ -146,7 +154,6 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                         tableHeader,
                         tableBody,
                         idGenerator.newId()
-
                 );
             }
             case ExamplesTable: {
@@ -155,22 +162,20 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             case Description: {
                 List<Token> lineTokens = node.getTokens(TokenType.Other);
                 // Trim trailing empty lines
-                int end = lineTokens.size();
-                while (end > 0 && lineTokens.get(end - 1).line.isEmpty()) {
-                    end--;
+                int toIndex = lineTokens.size();
+                while (toIndex > 0 && lineTokens.get(toIndex - 1).line.isEmpty()) {
+                    toIndex--;
                 }
-                lineTokens = lineTokens.subList(0, end);
-                return joinMatchedText(lineTokens);
+                return joinMatchedText(lineTokens, toIndex);
             }
             case Feature: {
-                AstNode header = node.getSingle(RuleType.FeatureHeader, new AstNode(RuleType.FeatureHeader));
-                if (header == null) return null;
+                AstNode header = node.getRequiredSingle(RuleType.FeatureHeader);
                 List<Tag> tags = getTags(header);
                 Token featureLine = header.getToken(TokenType.FeatureLine);
-                if (featureLine == null) return null;
 
                 List<FeatureChild> children = new ArrayList<>();
-                Background background = node.getSingle(RuleType.Background, null);
+                // Background is an optional element of a Feature, so can be null
+                Background background = node.getSingle(RuleType.Background);
                 if (background != null) {
                     children.add(new FeatureChild(null, background, null));
                 }
@@ -180,31 +185,26 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
                 for (Rule rule : node.<Rule>getItems(RuleType.Rule)) {
                     children.add(new FeatureChild(rule, null, null));
                 }
-                String description = getDescription(header);
-                if (featureLine.matchedGherkinDialect == null)
-                    return null;
-                String language = featureLine.matchedGherkinDialect.getLanguage();
 
                 return new Feature(
                         featureLine.location,
                         tags,
-                        language,
+                        featureLine.matchedLanguage,
                         featureLine.matchedKeyword,
                         featureLine.matchedText,
-                        description,
+                        getDescription(header),
                         children
                 );
             }
             case Rule: {
-                AstNode header = node.getSingle(RuleType.RuleHeader, new AstNode(RuleType.RuleHeader));
-                if (header == null) return null;
+                AstNode header = node.getRequiredSingle(RuleType.RuleHeader);
                 Token ruleLine = header.getToken(TokenType.RuleLine);
-                if (ruleLine == null) return null;
 
                 List<RuleChild> children = new ArrayList<>();
                 List<Tag> tags = getTags(header);
 
-                Background background = node.getSingle(RuleType.Background, null);
+                // Background is an optional element of a Feature, so can be null
+                Background background = node.getSingle(RuleType.Background);
                 if (background != null) {
                     children.add(new RuleChild(background, null));
                 }
@@ -225,7 +225,8 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
             }
             case GherkinDocument: {
-                Feature feature = node.getSingle(RuleType.Feature, null);
+                Feature feature = node.getSingle(RuleType.Feature);
+                // feature is null when the file is empty or contains only comments/whitespace, or no Cucumber feature
                 return new GherkinDocument(uri, feature, comments);
             }
 
@@ -233,10 +234,11 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return node;
     }
 
-    private static String joinMatchedText(List<Token> lineTokens) {
+    private static String joinMatchedText(List<Token> lineTokens, int toIndex) {
         StringBuilder content = new StringBuilder(FEATURE_FILE_AVERAGE_LINE_LENGTH * lineTokens.size());
-        for (Token lineToken : lineTokens) {
-            content.append(lineToken.matchedText).append("\n");
+        for (int i = 0; i < toIndex; i++) {
+            Token lineToken = lineTokens.get(i);
+            content.append(lineToken.matchedText).append('\n');
         }
         int contentLength = content.length();
         if (contentLength > 0) {
@@ -245,32 +247,40 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         return content.toString();
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableRow> getTableRows(AstNode node) {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
-        List<TableRow> rows = new ArrayList<>(tokens.size());
-
-        for (Token token : tokens) {
+        int tokenSize = tokens.size();
+        List<TableRow> rows = new ArrayList<>(tokenSize);
+        for (int i = 0; i < tokenSize; i++) {
+            Token token = tokens.get(i);
             rows.add(new TableRow(token.location, getCells(token), idGenerator.newId()));
         }
         ensureCellCount(rows);
         return rows;
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private void ensureCellCount(List<TableRow> rows) {
         if (rows.isEmpty())
             return;
 
-        int cellCount = rows.get(0).getCells().size();
-        for (TableRow row : rows) {
-            if (row.getCells().size() != cellCount) {
+        int firstRowCellsSize = rows.get(0).getCells().size();
+        for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
+            TableRow row = rows.get(i);
+            if (row.getCells().size() != firstRowCellsSize) {
                 throw new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
             }
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach") // classic 'for' loop is ~2x faster than 'for-each'
     private List<TableCell> getCells(Token token) {
-        List<TableCell> cells = new ArrayList<>(token.matchedItems.size());
-        for (GherkinLineSpan cellItem : token.matchedItems) {
+        List<LineSpan> matchedItems = token.matchedItems;
+        int itemSize = matchedItems.size();
+        List<TableCell> cells = new ArrayList<>(itemSize);
+        for (int i = 0; i < itemSize; i++) {
+            LineSpan cellItem = matchedItems.get(i);
             TableCell tableCell = new TableCell(
                     atColumn(token.location, cellItem.column),
                     cellItem.text
@@ -289,14 +299,15 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     private List<Tag> getTags(AstNode node) {
-        AstNode tagsNode = node.getSingle(RuleType.Tags, new AstNode(RuleType.None));
-        if (tagsNode == null)
+        AstNode tagsNode = node.getSingle(RuleType.Tags);
+        if (tagsNode == null) {// tags are optional
             return Collections.emptyList();
+        }
 
         List<Token> tokens = tagsNode.getTokens(TokenType.TagLine);
         List<Tag> tags = new ArrayList<>();
         for (Token token : tokens) {
-            for (GherkinLineSpan tagItem : token.matchedItems) {
+            for (LineSpan tagItem : token.matchedItems) {
                 tags.add(new Tag(atColumn(token.location, tagItem.column), tagItem.text, idGenerator.newId()));
             }
         }
@@ -305,7 +316,7 @@ class GherkinDocumentBuilder implements Builder<GherkinDocument> {
 
     @Override
     public GherkinDocument getResult() {
-        return currentNode().getSingle(RuleType.GherkinDocument, null);
+        return currentNode().getSingle(RuleType.GherkinDocument);
     }
 
 }

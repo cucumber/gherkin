@@ -10,7 +10,7 @@ import static io.cucumber.gherkin.Parser.RuleType;
 import static io.cucumber.gherkin.Parser.TokenType;
 import static java.util.Objects.requireNonNull;
 
-class AstNode {
+final class AstNode {
     // subItems is relatively sparse, so pre-initializing all values with empty
     // lists is not efficient
     private final Map<RuleType, List<Object>> subItems = new EnumMap<>(RuleType.class);
@@ -39,6 +39,18 @@ class AstNode {
     }
 
     @SuppressWarnings("unchecked")
+    <T> T getSingle(RuleType ruleType) {
+        // if not null, then at least one item is present because
+        // the list was created in add(), so no need to check isEmpty()
+        List<T> items = (List<T>) subItems.get(ruleType);
+        return items == null ? null : items.get(0);
+    }
+
+    <T> T getRequiredSingle(RuleType ruleType) {
+        return requireNonNull(getSingle(ruleType));
+    }
+
+    @SuppressWarnings("unchecked")
     <T> List<T> getItems(RuleType ruleType) {
         List<T> items = (List<T>) subItems.get(ruleType);
         if (items == null) {
@@ -48,7 +60,7 @@ class AstNode {
     }
 
     Token getToken(TokenType tokenType) {
-        return requireNonNull(getSingle(tokenType.ruleType, null));
+        return getRequiredSingle(tokenType.ruleType);
     }
 
     List<Token> getTokens(TokenType tokenType) {

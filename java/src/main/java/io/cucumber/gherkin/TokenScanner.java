@@ -14,12 +14,13 @@ import static io.cucumber.gherkin.Token.createGherkinLine;
  * creates a token for each line. The tokens are passed to the parser, which
  * outputs an AST (Abstract Syntax Tree).</p>
  */
-class TokenScanner {
+final class TokenScanner {
 
     private final BufferedReader reader;
     private int lineNumber;
 
     TokenScanner(String source) {
+        // TODO performance: replace BufferedReader by Java 11 String.lines(source).iterator() : 25-50% faster
         this.reader = new BufferedReader(new StringReader(source));
     }
 

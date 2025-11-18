@@ -26,24 +26,24 @@ class ParserException extends RuntimeException {
         if (location == null) {
             return String.format("(-1,0): %s", message);
         }
-        Integer line = location.getLine();
-        Integer column = location.getColumn().orElse(0);
+        Long line = location.getLine();
+        Long column = location.getColumn().orElse(0L);
         return String.format("(%s:%s): %s", line, column, message);
     }
 
-    static class AstBuilderException extends ParserException {
+    static final class AstBuilderException extends ParserException {
         AstBuilderException(String message, Location location) {
             super(message, location);
         }
     }
 
-    static class NoSuchLanguageException extends ParserException {
+    static final class NoSuchLanguageException extends ParserException {
         NoSuchLanguageException(String language, Location location) {
             super("Language not supported: " + language, location);
         }
     }
 
-    static class UnexpectedTokenException extends ParserException {
+    static final class UnexpectedTokenException extends ParserException {
         String stateComment;
 
         final Token receivedToken;
@@ -72,7 +72,7 @@ class ParserException extends RuntimeException {
         }
     }
 
-    static class UnexpectedEOFException extends ParserException {
+    static final class UnexpectedEOFException extends ParserException {
         final String stateComment;
         final List<String> expectedTokenTypes;
 
@@ -88,7 +88,7 @@ class ParserException extends RuntimeException {
         }
     }
 
-    static class CompositeParserException extends ParserException {
+    static final class CompositeParserException extends ParserException {
         final List<ParserException> errors;
 
         CompositeParserException(List<ParserException> errors) {

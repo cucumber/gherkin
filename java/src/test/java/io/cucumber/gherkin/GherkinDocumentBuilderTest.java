@@ -52,7 +52,7 @@ class GherkinDocumentBuilderTest {
                 "    The rule B description\n" +
                 "\n" +
                 "    Example: Example B\n" +
-                "      Given b";
+                "      Given b\n";
         GherkinDocument doc = parser.parse(data, "test.feature");
 
         List<FeatureChild> children = doc.getFeature().get().getChildren();
@@ -66,6 +66,7 @@ class GherkinDocumentBuilderTest {
         assertEquals(3, pickles.get(0).getSteps().size());
 
         assertEquals(2, pickles.get(1).getSteps().size());
+
     }
 
     @Test
@@ -86,7 +87,9 @@ class GherkinDocumentBuilderTest {
                 "      |a||b|",
                 "test.feature"
         );
-        TableRow row = doc.getFeature().get().getChildren().get(0).getScenario().get().getSteps().get(0).getDataTable().get().getRows().get(0);
+        List<FeatureChild> children = doc.getFeature().get().getChildren();
+        assertEquals(1, children.size());
+        TableRow row = children.get(0).getScenario().get().getSteps().get(0).getDataTable().get().getRows().get(0);
         assertEquals("a", row.getCells().get(0).getValue());
         assertEquals("", row.getCells().get(1).getValue());
         assertEquals("b", row.getCells().get(2).getValue());

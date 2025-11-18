@@ -7,6 +7,77 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder` ([#497](https://github.com/cucumber/gherkin/pull/497)).
+
+
+## [30.1.3] - 2025-11-05
+### Fixed
+- Update Java release process
+
+## [30.1.2] - 2025-11-05
+### Fixed
+- Update Java release process
+
+## [30.1.1] - 2025-11-05
+### Fixed
+- Release v30.1.1 as a copy of v30.0.4 to cover v36.1.0 that was accidentally released as v30.1.0
+
+## [36.1.0] - 2025-11-05
+### Added
+- [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
+
+## [30.1.0] - 2025-11-05
+### Added
+- [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
+
+## [36.0.0] - 2025-10-09
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v30
+
+### Fixed
+- [Java] Only use `org.assertj:assertj-core` in `test` scope.
+
+## [35.1.0] - 2025-09-20
+### Added
+- (I18n) ru: Added word "Значения" as a synonym for examples ([#479](https://github.com/cucumber/gherkin/pull/479)
+
+### Fixed
+- [Java] Optimize `StrinUtils.isWhitespace` ([#468](https://github.com/cucumber/gherkin/pull/468))
+
+## [35.0.0] - 2025-09-11
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v29
+
+### Fixed
+- [.NET] Don't trim whitespaces before escape character ([#467](https://github.com/cucumber/gherkin/pull/467))
+
+### Removed
+- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
+
+## [34.0.0] - 2025-08-17
+### Changed
+- Fixed Afrikaans translation for "rule" ([#428](https://github.com/cucumber/gherkin/pull/428))
+- [.NET] Migrated to the use of Cucumber/Messages. Eliminated the built-in Gherkin.CucumberMessages.Types ([#426](https://github.com/cucumber/gherkin/pull/426))
+
+### Deprecated
+- [Java] Deprecate `GherkinDialectProvider` in favour of `GherkinDialects` ([#448](https://github.com/cucumber/gherkin/pull/448))
+
+### Fixed
+- [.Net] Handle all ambiguous keywords properly ([#435](https://github.com/cucumber/gherkin/pull/435))
+- [Java] Optimize `GherkinLine.substringTrimmed` ([#444](https://github.com/cucumber/gherkin/pull/444))
+- [Java] Improve performance with a generated keyword matcher ([#445](https://github.com/cucumber/gherkin/pull/445))
+
+### Removed
+- [Python] Dropped legacy `.egg-info` metadata distribution artifacts
+
+## [33.1.0] - 2025-07-27
+### Changed
+- [Java] Optimize GherkinParser performance ([#436](https://github.com/cucumber/gherkin/pull/436))
+
+### Fixed
+- [Go] Trim trailing tab characters from title and step lines ([#441](https://github.com/cucumber/gherkin/pull/441))
+- [Java] Use a more consistent definition of whitespace ([#442](https://github.com/cucumber/gherkin/pull/442))
 
 ## [33.0.0] - 2025-07-07
 ### Changed
@@ -790,7 +861,14 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v33.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v36.1.0...HEAD
+[36.1.0]: https://github.com/cucumber/gherkin/compare/v30.1.0...v36.1.0
+[30.1.0]: https://github.com/cucumber/gherkin/compare/v36.0.0...v30.1.0
+[36.0.0]: https://github.com/cucumber/gherkin/compare/v35.1.0...v36.0.0
+[35.1.0]: https://github.com/cucumber/gherkin/compare/v35.0.0...v35.1.0
+[35.0.0]: https://github.com/cucumber/gherkin/compare/v34.0.0...v35.0.0
+[34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
+[33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
 [33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
 [32.2.0]: https://github.com/cucumber/gherkin/compare/v32.1.2...v32.2.0
 [32.1.2]: https://github.com/cucumber/gherkin/compare/v32.1.1...v32.1.2
@@ -798,7 +876,12 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 [32.1.0]: https://github.com/cucumber/gherkin/compare/v32.0.1...v32.1.0
 [32.0.1]: https://github.com/cucumber/gherkin/compare/v32.0.0...v32.0.1
 [32.0.0]: https://github.com/cucumber/gherkin/compare/v31.0.0...v32.0.0
+[30.1.1]: https://github.com/cucumber/gherkin/compare/v30.0.4...v30.1.1
 [31.0.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v31.0.0
+[30.1.1]: https://github.com/cucumber/gherkin/compare/v30.1.1...v30.1.2
+[30.1.3]: https://github.com/cucumber/gherkin/compare/v30.1.2...v30.1.3
+[30.1.2]: https://github.com/cucumber/gherkin/compare/v30.1.1...v30.1.2
+[30.1.1]: https://github.com/cucumber/gherkin/compare/v30.0.4...v30.1.1
 [30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
 [30.0.2]: https://github.com/cucumber/gherkin/compare/v30.0.1...v30.0.2

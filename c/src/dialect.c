@@ -18,8 +18,8 @@ static const Keywords af_feature_keywords = { 3, af_feature_KEYWORDS };
 static const wchar_t* const af_given_KEYWORDS[] = { L"* ", L"Gegewe " };
 static const Keywords af_given_keywords = { 2, af_given_KEYWORDS };
 
-static const wchar_t* const af_rule_KEYWORDS[] = { L"Regel" };
-static const Keywords af_rule_keywords = { 1, af_rule_KEYWORDS };
+static const wchar_t* const af_rule_KEYWORDS[] = { L"Reël", L"Reel" };
+static const Keywords af_rule_keywords = { 2, af_rule_KEYWORDS };
 
 static const wchar_t* const af_scenario_KEYWORDS[] = { L"Voorbeeld", L"Situasie" };
 static const Keywords af_scenario_keywords = { 2, af_scenario_KEYWORDS };
@@ -2782,8 +2782,8 @@ static const Keywords ru_background_keywords = { 2, ru_background_KEYWORDS };
 static const wchar_t* const ru_but_KEYWORDS[] = { L"* ", L"Но ", L"А ", L"Иначе " };
 static const Keywords ru_but_keywords = { 4, ru_but_KEYWORDS };
 
-static const wchar_t* const ru_examples_KEYWORDS[] = { L"Примеры" };
-static const Keywords ru_examples_keywords = { 1, ru_examples_KEYWORDS };
+static const wchar_t* const ru_examples_KEYWORDS[] = { L"Примеры", L"Значения" };
+static const Keywords ru_examples_keywords = { 2, ru_examples_KEYWORDS };
 
 static const wchar_t* const ru_feature_KEYWORDS[] = { L"Функция", L"Функциональность", L"Функционал", L"Свойство", L"Фича" };
 static const Keywords ru_feature_keywords = { 5, ru_feature_KEYWORDS };

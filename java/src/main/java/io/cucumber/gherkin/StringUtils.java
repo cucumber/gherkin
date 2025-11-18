@@ -1,117 +1,164 @@
 package io.cucumber.gherkin;
 
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-
-import static io.cucumber.gherkin.GherkinLanguageConstants.COMMENT_PREFIX_CHAR;
-
-class StringUtils {
+final class StringUtils {
 
     /**
-     * Matches regex pattern for whitespace.
+     * An extended definition of Whitespace minus new lines.
+     *
+     * @param c character to test
+     * @return true iff the {@code c} is whitespace and not new line.
+     * @see #isWhitespace(char)
      */
-    private static final char[] WHITESPACE_CHARS = new char[]{' ', '\t', '\n', '\u000B', '\f', '\r'};
+    static boolean isWhitespaceExcludingNewLine(char c) {
+        return c != '\n' && isWhitespace(c);
+    }
 
     /**
-     * Matches regex pattern whitespace + NEL + NBSP.
+     * An extended definition of Whitespace.
+     * <p>
+     * Characters in Unicode general category {@code Zs} and directionality
+     * categories {@code WS}, {@code B}, and {@code S} are considered whitespace
+     * for this definition.
+     *
+     * @param c character to test
+     * @return true iff the {@code c} is whitespace.
      */
-    private static final char[] WHITESPACE_CHARS_EXTENDED = new char[]{' ', '\t', '\n', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
-    
-    /**
-     * Matches regex pattern whitespace + NEL + NBSP - new line.
-     */
-    private static final char[] WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES = new char[]{' ', '\t', '\u000B', '\f', '\r', '\u0085', '\u00A0'};
+    static boolean isWhitespace(char c) {
+        // This method is about twice faster than `isWhiteSpaceSlow(c)`.
+        // It has been optimized based on the expected use-case of
+        // left-trimming lines in valid feature files. 
+        //
+        // * There are 29 whitespace characters. However, we only expect spaces
+        //   or tabs to be used.
+        // * Valid feature files start each line with sequences of one or more
+        //   spaces followed by a keyword character.
+        // 
+        // | category           | 0     | 1    | 2                        | 3          | 4             |
+        // |                    | c --->                                                               |
+        // | whitespace         | 10-31 | 32   |     | 133 || 160 |       | 5760-12288 |               |
+        // | keyword characters |              || 39----------------4877 ||            || 12363-55357 ||
+        // | occurrences        | 0     | 1036 ||          215           |              | 44          ||
+        //
+        // Plotting this information for a hypothetical feature that uses every
+        // keyword indented with 4 spaces we can see that there are only a few
+        // ranges that have to be checked.
+        // 
+        // Category 0: Control symbols
+        // Category 1: Spaces (and tabs)
+        // Category 2: Latin block to Unified Canadian Aboriginal Syllabics block
+        // Category 3: Ogham block to the space in CJK Symbols and Punctuation
+        // Category 4: CJK Symbols and Punctuation block minus space and onwards
 
-    static String rtrim(String s) {
-        if (s.isEmpty()) {
-            return s;
+        // Fast path, common whitespace
+        // Note: Single boolean expression is faster than if-else
+        return (c == ' ' || c == '\t')
+                // Slow path here is okay because:
+                // * Characters before space are not expected to be used
+                // * No Gherkin keyword starts with these characters
+                || ((c < ' ' || (c >= '\u1680' && c <= '\u3000')) && isWhiteSpaceSlow(c))
+                // Test only two remaining whitespace characters in the range (32, 5760).
+                || (c == '\u0085' || c == '\u00a0');
+    }
+
+    static boolean isWhiteSpaceSlow(char c) {
+        return isCharacterTypeSpace(c) || isDirectionalitySpace(c);
+    }
+
+    private static boolean isCharacterTypeSpace(char c) {
+        return (((
+                (1 << Character.SPACE_SEPARATOR)
+                        // Not in the definition, but a subset of isDirectionalitySpace
+                        | (1 << Character.LINE_SEPARATOR)
+                        // Not in the definition, but a subset of isDirectionalitySpace
+                        | (1 << Character.PARAGRAPH_SEPARATOR)
+        ) >> Character.getType(c)) & 1) != 0;
+    }
+
+    private static boolean isDirectionalitySpace(char c) {
+        return (
+                (((1 << Character.DIRECTIONALITY_WHITESPACE)
+                        | (1 << Character.DIRECTIONALITY_PARAGRAPH_SEPARATOR)
+                        | (1 << Character.DIRECTIONALITY_SEGMENT_SEPARATOR)
+                ) >> Character.getDirectionality(c)) & 1) != 0;
+    }
+
+    private static final IndentedText NO_INDENT_ENTRY = new IndentedText(0, "");
+
+    static IndentedText trimAndIndentKeepNewLines(StringBuilder input) {
+        int length = input.length();
+        if (length == 0) {
+            return NO_INDENT_ENTRY;
         }
 
-        int length = s.length();
-
-        int end = length - 1;
-        while (end >= 0 && contains(WHITESPACE_CHARS_EXTENDED, s.charAt(end))) {
+        int start = 0;
+        while (start < length && isWhitespaceExcludingNewLine(input.charAt(start))) {
+            start++;
+        }
+        int end = length;
+        while (end > start && isWhitespaceExcludingNewLine(input.charAt(end - 1))) {
             end--;
         }
-
-        return s.substring(0, end + 1);
-    }
-
-    static Entry<String, Integer> trimAndIndentKeepNewLines(String input) {
-        return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED_KEEP_NEW_LINES);
-    }
-
-    static Entry<String, Integer> trimAndIndent(String input) {
-        return trimAndIndent(input, WHITESPACE_CHARS_EXTENDED);
-    }
-
-    private static Entry<String, Integer> trimAndIndent(String input, char[] whitespaceChars) {
-        if (input.isEmpty()) {
-            return new SimpleEntry<>("", 0);
-        }
-
-        int start = findFirstIndexNotIn(input, input.length(), whitespaceChars);
-        int end = findLastIndexNotIn(input, start, whitespaceChars);
-
         String trimmed = input.substring(start, end);
-        int indent = input.codePointCount(0, start);
-        return new SimpleEntry<>(trimmed, indent);
+        // the object instance is not truly created because
+        // the code is inlined by the hotspot compiler
+        // (as "-XX:+EliminateAllocations" is enabled by default).
+        return new IndentedText(start, trimmed);
     }
 
-    static String removeComments(String input) {
-        if (input.isEmpty()) {
-            return input;
-        }
-        int start = 0;
+    static IndentedText trimAndIndent(String input) {
         int length = input.length();
-
-        while (start < length - 1 
-                && !(contains(WHITESPACE_CHARS, input.charAt(start)) 
-                && input.charAt(start + 1) == COMMENT_PREFIX_CHAR)
-        ) {
-            start++;
+        if (length == 0) {
+            return NO_INDENT_ENTRY;
         }
-        return input.substring(0, start < length - 1 ? start : start + 1);
-    }
-
-    static boolean containsWhiteSpace(String input) {
-        return findFirstIndexIn(input, WHITESPACE_CHARS) != -1;
-    }
-
-    private static int findFirstIndexNotIn(String input, int endIndex, char[] characters) {
         int start = 0;
-        while (start < endIndex && contains(characters, input.charAt(start))) {
+        while (start < length && isWhitespace(input.charAt(start))) {
             start++;
         }
-        return start;
-    }
-    
-    private static int findLastIndexNotIn(String input, int beginIndex, char[] characters) {
-        int end = input.length();
-        while (end > beginIndex && contains(characters, input.charAt(end - 1))) {
+        int end = length;
+        while (end > start && isWhitespace(input.charAt(end - 1))) {
             end--;
         }
-        return end;
+        String trimmed = input.substring(start, end);
+        // the object instance is not truly created because
+        // the code is inlined by the hotspot compiler
+        // (as "-XX:+EliminateAllocations" is enabled by default).
+        return new IndentedText(start, trimmed);
     }
 
-    private static int findFirstIndexIn(String input, char[] characters) {
-        int length = input.length();
-        for (int i = 0; i < length; i++) {
-            if (contains(characters, input.charAt(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    
-    private static boolean contains(char[] characters, char c) {
-        for (char candidate : characters) {
-            if (candidate == c) {
+    static boolean containsWhitespace(String input, int fromIndex, int toIndex) {
+        for (int i = fromIndex; i < toIndex; i++) {
+            if (isWhitespace(input.charAt(i))) {
                 return true;
             }
         }
         return false;
     }
 
+    static String substringAndLeftTrim(String input, int beginIndex, int endIndex) {
+        int start = beginIndex;
+        while (start < endIndex && isWhitespace(input.charAt(start))) {
+            start++;
+        }
+        return input.substring(start);
+    }
+
+    static final class IndentedText {
+        private final int indent;
+        private final String text;
+
+        IndentedText(int indent, String text) {
+            this.text = text;
+            this.indent = indent;
+        }
+
+        int getIndent() {
+            return indent;
+        }
+
+        String getText() {
+            return text;
+        }
+
+    }
 }

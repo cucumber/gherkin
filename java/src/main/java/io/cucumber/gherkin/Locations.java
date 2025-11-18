@@ -2,9 +2,7 @@ package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.Location;
 
-import static java.util.Objects.requireNonNull;
-
-class Locations {
+final class Locations {
 
     /**
      * Columns are index-1 based.
@@ -17,15 +15,15 @@ class Locations {
      * We can't use Long.valueOf() because it caches only the first 128
      * values, and typical feature files have much more lines.
      */
-    private static final Integer[] ints = new Integer[4096];
+    private static final Long[] longs = new Long[4096];
 
     static {
-        for (int i = 0; i < ints.length; i++) {
-            ints[i] = i;
+        for (int i = 0; i < longs.length; i++) {
+            longs[i] = (long) i;
         }
     }
 
-    private static Integer getInteger(int i) {
+    private static Long getLong(long i) {
         // JMH benchmark shows that this implementation is the
         // fastest when i<4096 (and about 20% slower than
         // Long.valueOf() when i>=4096).
@@ -39,25 +37,21 @@ class Locations {
         //   1024/2048/4096 initial size
         // - dynamic lazy initialized cache with 256
         //   initialized size
-        if (i >= ints.length) {
+        if (i >= longs.length) {
             return i;
         }
-        return ints[i];
+        return longs[(int) i];
     }
 
-    static Location atColumn(Location location, int column) {
-        requireNonNull(location);
-        if (column <= 0) {
-            throw new IllegalArgumentException("Columns are index-1 based");
-        }
-        return new Location(location.getLine(), getInteger(column));
+    static Location atColumn(Location location, long column) {
+        // By design, the location cannot be null (it comes from the Token)
+        // By design, the column cannot be less than 1
+        return new Location(location.getLine(), getLong(column));
     }
 
-    static Location atLine(int line) {
-        if (line < 0) {
-            throw new IllegalArgumentException("Lines are index-0 based");
-        }
-        return new Location(getInteger(line), null);
+    static Location atLine(long line) {
+        // By design, the column cannot be less than 1 (it comes from TokenScanner)
+        return new Location(getLong(line), null);
     }
 
 }

@@ -26,7 +26,8 @@
     "name": "Afrikaans",
     "native": "Afrikaans",
     "rule": [
-      "Regel"
+      "Reël",
+      "Reel"
     ],
     "scenario": [
       "Voorbeeld",
@@ -2826,7 +2827,8 @@
       "Иначе "
     ],
     "examples": [
-      "Примеры"
+      "Примеры",
+      "Значения"
     ],
     "feature": [
       "Функция",

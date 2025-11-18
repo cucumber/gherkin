@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: Release
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4'
+          ruby-version: '3.4.7'
           bundler-cache: true
       - uses: cucumber/action-publish-rubygem@v1.0.0
         with:
