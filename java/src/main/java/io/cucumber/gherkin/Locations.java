@@ -23,7 +23,7 @@ final class Locations {
         }
     }
 
-    private static Long getLong(long i) {
+    private static Long getLong(int i) {
         // JMH benchmark shows that this implementation is the
         // fastest when i<4096 (and about 20% slower than
         // Long.valueOf() when i>=4096).
@@ -38,18 +38,18 @@ final class Locations {
         // - dynamic lazy initialized cache with 256
         //   initialized size
         if (i >= longs.length) {
-            return i;
+            return (long) i;
         }
-        return longs[(int) i];
+        return longs[i];
     }
 
-    static Location atColumn(Location location, long column) {
+    static Location atColumn(Location location, int column) {
         // By design, the location cannot be null (it comes from the Token)
         // By design, the column cannot be less than 1
         return new Location(location.getLine(), getLong(column));
     }
 
-    static Location atLine(long line) {
+    static Location atLine(int line) {
         // By design, the column cannot be less than 1 (it comes from TokenScanner)
         return new Location(getLong(line), null);
     }
