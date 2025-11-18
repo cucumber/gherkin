@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	messages "github.com/cucumber/messages/go/v30"
+	messages "github.com/cucumber/messages/go/v31"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
