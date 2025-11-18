@@ -34,5 +34,5 @@ func ExamplePickles() {
 
 	// Output:
 	//
-	// [{"id":"1","uri":"test.feature","name":"test","language":"en","steps":[{"astNodeIds":["0","2"],"id":"0","type":"Context","text":"a red ball"}],"tags":[],"astNodeIds":["4","2"]}]
+	// [{"id":"1","uri":"test.feature","location":{"line":8,"column":7},"name":"test","language":"en","steps":[{"astNodeIds":["0","2"],"id":"0","type":"Context","text":"a red ball"}],"tags":[],"astNodeIds":["4","2"]}]
 }
