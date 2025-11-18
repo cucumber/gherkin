@@ -80,6 +80,7 @@ module Gherkin
         pickle = Cucumber::Messages::Pickle.new(
           uri: source.uri,
           id: @id_generator.new_id,
+          location: scenario.location,
           tags: pickle_tags(tags),
           name: scenario.name,
           language: language,
@@ -124,6 +125,7 @@ module Gherkin
             pickle = Cucumber::Messages::Pickle.new(
               uri: source.uri,
               id: @id_generator.new_id,
+              location: values_row.location,
               name: interpolate(scenario.name, variable_cells, value_cells),
               language: language,
               steps: steps,
