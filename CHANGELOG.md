@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
+
+### Changed
+- BREAKING CHANGE: Require messages v31 or greater
+
 ### Fixed
 - [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder` ([#497](https://github.com/cucumber/gherkin/pull/497)).
 
