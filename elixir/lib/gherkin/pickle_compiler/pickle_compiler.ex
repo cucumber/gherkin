@@ -88,7 +88,6 @@ defmodule CucumberGherkin.PickleCompiler do
     new_msg = %PickleMessage{
       id: id,
       uri: m.compiler_acc.uri,
-      location: s.location,
       name: s.name,
       language: m.compiler_acc.language,
       steps: steps,
@@ -138,7 +137,6 @@ defmodule CucumberGherkin.PickleCompiler do
       new_msg = %PickleMessage{
         id: id,
         uri: m_acc.compiler_acc.uri,
-        location: value_row.location,
         name: interpolate(s.name, table_header.cells, value_row.cells),
         language: m_acc.compiler_acc.language,
         steps: updated_steps,
