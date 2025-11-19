@@ -1,7 +1,7 @@
 import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/pickles.dart';
-import 'package:gherkin/messages.dart';
+import 'package:gherkin/language.dart';
 
 class Pickle implements INullSafetyObject
 {
