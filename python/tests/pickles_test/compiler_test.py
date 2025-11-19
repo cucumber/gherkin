@@ -25,6 +25,7 @@ def test_compiles_a_scenario():
           {
             "id": "3",
             "astNodeIds": ["1"],
+            "location": {"line": 2, "column": 3},
             "name": "s",
             "language": "en",
             "steps": [
@@ -66,6 +67,7 @@ def test_compiles_a_scenario_outline_with_i18n_characters():
           {
             "id": "6",
             "astNodeIds": ["4", "2"],
+            "location": {"line": 6, "column": 5},
             "name": "with 'é' in title",
             "language": "en",
             "steps": [

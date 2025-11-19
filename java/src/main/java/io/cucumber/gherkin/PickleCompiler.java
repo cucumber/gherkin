@@ -27,9 +27,7 @@ import io.cucumber.messages.types.Tag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
@@ -105,6 +103,7 @@ final class PickleCompiler {
         Pickle pickle = new Pickle(
                 idGenerator.newId(),
                 uri,
+                scenario.getLocation(),
                 scenario.getName(),
                 language,
                 steps,
@@ -165,6 +164,7 @@ final class PickleCompiler {
                 Pickle pickle = new Pickle(
                         idGenerator.newId(),
                         uri,
+                        valuesRow.getLocation(),
                         interpolate(scenario.getName(), variableCells, valuesRow.getCells()),
                         language,
                         steps,

@@ -11,6 +11,7 @@ from gherkin.parser_types import (
     Cell,
     Envelope,
     GherkinDocument,
+    Location,
     Rule,
     RuleEnvelope,
     Scenario,
@@ -70,6 +71,7 @@ class PickleStep(TypedDict):
 class Pickle(TypedDict):
     astNodeIds: list[str]
     id: str
+    location: Location
     tags: list[PickleTag]
     name: str
     language: str
@@ -190,6 +192,7 @@ class Compiler:
         pickle: Pickle = {
             "astNodeIds": [scenario["id"]],
             "id": self.id_generator.get_next_id(),
+            "location": scenario["location"],
             "tags": self._pickle_tags(tags),
             "name": cast(str, scenario["name"]),
             "language": language,
@@ -262,6 +265,7 @@ class Compiler:
                 pickle: Pickle = {
                     "astNodeIds": [scenario["id"], values["id"]],
                     "id": self.id_generator.get_next_id(),
+                    "location": values["location"],
                     "name": self._interpolate(
                         scenario["name"],
                         variable_cells,

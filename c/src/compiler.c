@@ -126,7 +126,7 @@ static void compile_scenario_container(Compiler* compiler, const ChildDefinition
 			copy_step(compiler->id_generator, last_keyword_type, &steps->steps[context_background_step_count + background_step_count + j], &scenario->steps->steps[j]); 
 		    }
                 }
-                ItemQueue_add(compiler->pickle_list, (Item*)Pickle_new(compiler->id_generator, uri, language, ast_node_ids, tags, scenario->name, steps));
+                ItemQueue_add(compiler->pickle_list, (Item*)Pickle_new(compiler->id_generator, uri, scenario->location, language, ast_node_ids, tags, scenario->name, steps));
             }
             else {
                 int k;
@@ -177,7 +177,7 @@ static void compile_scenario_container(Compiler* compiler, const ChildDefinition
                             }
                         }
                         const wchar_t* new_name = create_expanded_text(scenario->name, example_table->table_header, table_row);
-                        ItemQueue_add(compiler->pickle_list, (Item*)Pickle_new(compiler->id_generator, uri, language, ast_node_ids, tags, new_name, steps));
+                        ItemQueue_add(compiler->pickle_list, (Item*)Pickle_new(compiler->id_generator, uri, table_row->location, language, ast_node_ids, tags, new_name, steps));
                         free((void*)new_name);
                     }
                 }
