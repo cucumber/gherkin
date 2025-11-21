@@ -134,6 +134,7 @@ function compileScenario(
   const pickle: messages.Pickle = {
     id: newId(),
     uri,
+    location: scenario.location,
     astNodeIds: [scenario.id],
     tags: pickleTags(tags),
     name: scenario.name,
@@ -182,6 +183,7 @@ function compileScenarioOutline(
         pickles.push({
           id,
           uri,
+          location: valuesRow.location,
           astNodeIds: [scenario.id, valuesRow.id],
           name: interpolate(scenario.name, variableCells, valuesRow.cells),
           language,

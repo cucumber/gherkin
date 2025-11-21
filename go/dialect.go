@@ -3,7 +3,7 @@ package gherkin
 import (
 	"sort"
 
-	messages "github.com/cucumber/messages/go/v30"
+	messages "github.com/cucumber/messages/go/v31"
 )
 
 func init() {

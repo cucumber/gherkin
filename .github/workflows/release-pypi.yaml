@@ -15,14 +15,14 @@ jobs:
       run:
         working-directory: python
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
           python-version: "3.13"
-          version: "0.9.8"
+          version: "0.9.11"
 
       - name: Build package
         run: uv build

@@ -33,7 +33,7 @@ jobs:
             cc: cl
     runs-on: ${{ matrix.config.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ilammy/msvc-dev-cmd@v1
       - name: install dependencies
         working-directory: cpp
@@ -60,7 +60,7 @@ jobs:
           #  cc: cl
     runs-on: ${{ matrix.config.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ilammy/msvc-dev-cmd@v1
       - name: run acceptance tests
         working-directory: cpp

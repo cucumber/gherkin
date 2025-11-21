@@ -104,6 +104,10 @@ static void print_tags(FILE* file, const PickleTags* tags) {
     fprintf(file, "]");
 }
 
+static void print_location(FILE* file, const Location location) {
+    fprintf(file, "\"location\":{\"line\":%d,\"column\":%d}", location.line, location.column);
+}
+
 static void print_ast_node_ids(FILE* file, const PickleAstNodeIds* ast_node_ids) {
     fprintf(file, "\"astNodeIds\":[");
     if (ast_node_ids && ast_node_ids->ast_node_id_count > 0) {
@@ -145,7 +149,9 @@ void PicklePrinter_print_pickle(FILE* file, const Pickle* pickle) {
     fprintf(file, "{");
     fprintf(file, "\"uri\":\"");
     PrintUtilities_print_json_string(file, pickle->uri);
-    fprintf(file, "\",\"language\":\"");
+    fprintf(file, "\",");
+    print_location(file, pickle->location);
+    fprintf(file, ",\"language\":\"");
     PrintUtilities_print_json_string(file, pickle->language);
     fprintf(file, "\",");
     print_id(file, pickle->id);

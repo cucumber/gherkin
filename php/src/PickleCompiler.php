@@ -121,6 +121,7 @@ final class PickleCompiler
         yield new Pickle(
             id: $this->idGenerator->newId(),
             uri: $uri,
+            location: $scenario->location,
             name: $scenario->name,
             language: $language,
             steps: $steps,
@@ -158,6 +159,7 @@ final class PickleCompiler
                 yield new Pickle(
                     id: $this->idGenerator->newId(),
                     uri: $uri,
+                    location: $valuesRow->location,
                     name: $this->interpolate($scenario->name, $variableCells, $valueCells),
                     language: $language,
                     steps: $steps,

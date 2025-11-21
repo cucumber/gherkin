@@ -107,6 +107,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
         Pickle pickle = new Pickle(
                 idGenerator.GetNewId(),
                 gherkinDocumentUri,
+                scenario.Location,
                 scenario.Name,
                 language,
                 steps,
@@ -153,6 +154,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
                 Pickle pickle = new Pickle(
                         idGenerator.GetNewId(),
                         gherkinDocumentUri,
+                        values.Location,
                         Interpolate(scenarioOutline.Name, variableCells, valueCells),
                         language,
                         steps,
