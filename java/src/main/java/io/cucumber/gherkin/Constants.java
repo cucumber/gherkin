@@ -3,7 +3,7 @@ package io.cucumber.gherkin;
 final class Constants {
     
     private Constants(){
-        // utility class
+        /* no-op */
     }
     
     static final char TAG_PREFIX_CHAR = '@';

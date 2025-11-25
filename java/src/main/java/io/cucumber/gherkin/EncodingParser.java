@@ -20,7 +20,7 @@ final class EncodingParser {
             CASE_INSENSITIVE);
     
     private EncodingParser(){
-        // utility class
+        /* no-op */
     }
 
     static String readWithEncodingFromSource(byte[] source) {

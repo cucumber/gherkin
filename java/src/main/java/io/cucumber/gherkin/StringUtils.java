@@ -4,7 +4,7 @@ package io.cucumber.gherkin;
 final class StringUtils {
 
     private StringUtils(){
-        // utility class
+        /* no-op */
     }
     
     /**

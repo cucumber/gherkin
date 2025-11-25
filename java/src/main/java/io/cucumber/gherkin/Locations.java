@@ -24,7 +24,7 @@ final class Locations {
     }
     
     private Locations(){
-        // utility class
+        /* no-op */
     }
 
     private static Integer getInteger(int i) {

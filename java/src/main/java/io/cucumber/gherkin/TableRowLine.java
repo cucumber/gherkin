@@ -10,7 +10,7 @@ import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 final class TableRowLine {
 
     private TableRowLine(){
-        // utility class
+        /* no-op */
     }
     
     static List<LineSpan> parse(int indent, String text) {
