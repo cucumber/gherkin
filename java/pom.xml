@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>io.cucumber</groupId>
         <artifactId>cucumber-parent</artifactId>
-        <version>4.5.0</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>gherkin</artifactId>
-    <version>37.0.1-SNAPSHOT</version>
+    <version>38.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Gherkin</name>
     <description>Gherkin parser</description>
@@ -56,7 +57,7 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>messages</artifactId>
-            <version>[31.0.0,32.0.0)</version>
+            <version>[32.0.0-SNAPSHOT,33.0.0)</version>
         </dependency>
 
         <dependency>
@@ -102,7 +103,7 @@
             <version>1.37</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
@@ -191,7 +192,7 @@
                             <additionalClasspathElements>
                                 ${project.build.directory}/codegen-classes
                             </additionalClasspathElements>
-                            <mainClass>Generate</mainClass>
+                            <mainClass>io.cucumber.gherkin.dialects.Generate</mainClass>
                             <arguments>
                                 <argument>${project.build.directory}/generated-sources/gherkin</argument>
                                 <argument>io/cucumber/gherkin</argument>
@@ -214,6 +215,22 @@
                             <sources>
                                 <source>${project.build.directory}/generated-sources/gherkin</source>
                             </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
                         </configuration>
                     </execution>
                 </executions>

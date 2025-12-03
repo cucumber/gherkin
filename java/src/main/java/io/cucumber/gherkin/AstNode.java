@@ -1,5 +1,7 @@
 package io.cucumber.gherkin;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -38,14 +40,15 @@ final class AstNode {
         return items == null ? defaultResult : items.get(0);
     }
 
-    @SuppressWarnings("unchecked")
-    <T> T getSingle(RuleType ruleType) {
+    @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
+    <T> @Nullable T getSingle(RuleType ruleType) {
         // if not null, then at least one item is present because
         // the list was created in add(), so no need to check isEmpty()
         List<T> items = (List<T>) subItems.get(ruleType);
         return items == null ? null : items.get(0);
     }
 
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     <T> T getRequiredSingle(RuleType ruleType) {
         return requireNonNull(getSingle(ruleType));
     }
