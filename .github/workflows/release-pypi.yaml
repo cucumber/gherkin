@@ -22,7 +22,7 @@ jobs:
         with:
           enable-cache: true
           python-version: "3.13"
-          version: "0.9.14"
+          version: "0.9.15"
 
       - name: Build package
         run: uv build
