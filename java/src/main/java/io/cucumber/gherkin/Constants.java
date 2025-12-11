@@ -2,6 +2,10 @@ package io.cucumber.gherkin;
 
 final class Constants {
     
+    private Constants(){
+        /* no-op */
+    }
+    
     static final char TAG_PREFIX_CHAR = '@';
     static final char COMMENT_PREFIX_CHAR = '#';
     static final char TITLE_KEYWORD_SEPARATOR = ':';
