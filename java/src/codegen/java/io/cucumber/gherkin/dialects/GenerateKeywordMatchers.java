@@ -69,7 +69,7 @@ class GenerateKeywordMatchers {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
         cfg.setClassForTemplateLoading(GenerateKeywordMatchers.class, "templates");
         cfg.setDefaultEncoding("UTF-8");
-        cfg.setLocale(Locale.US);
+        cfg.setLocale(Locale.ROOT);
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         return cfg.getTemplate("keyword-matchers.java.ftl");
     }
@@ -186,11 +186,11 @@ class GenerateKeywordMatchers {
     }
 
     private static String capitalize(String str) {
-        return str.substring(0, 1).toUpperCase(Locale.US) + str.substring(1);
+        return str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1);
     }
 
     private static String getNormalizedLanguage(String language) {
-        return language.replaceAll("[\\s-]", "_").toLowerCase(Locale.US);
+        return language.replaceAll("[\\s-]", "_").toLowerCase(Locale.ROOT);
     }
 
     @SafeVarargs
