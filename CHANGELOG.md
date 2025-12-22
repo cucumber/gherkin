@@ -8,6 +8,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [37.0.1] - 2025-12-22
+
 ## [37.0.0] - 2025-11-19
 ### Added
 - Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
@@ -871,7 +873,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v37.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v37.0.1...HEAD
+[37.0.1]: https://github.com/cucumber/gherkin/compare/v37.0.0...v37.0.1
 [37.0.0]: https://github.com/cucumber/gherkin/compare/v36.1.0...v37.0.0
 [36.1.0]: https://github.com/cucumber/gherkin/compare/v36.0.0...v36.1.0
 [36.0.0]: https://github.com/cucumber/gherkin/compare/v35.1.0...v36.0.0
