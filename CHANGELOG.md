@@ -9,7 +9,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 
 ## [37.0.1] - 2025-12-22
-
+### Fixed
+- Build process / changelog fixes. No front-facing code changes
+  
 ## [37.0.0] - 2025-11-19
 ### Added
 - Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
