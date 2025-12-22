@@ -10,7 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [37.0.1] - 2025-12-22
 ### Fixed
-- Build process / changelog fixes. No front-facing code changes
+- [.NET] Support calling Methods in GherkinLine on default value ([#503](https://github.com/cucumber/gherkin/pull/503)).
   
 ## [37.0.0] - 2025-11-19
 ### Added
