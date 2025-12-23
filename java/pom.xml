@@ -17,7 +17,7 @@
 
     <properties>
         <project.build.outputTimestamp>1763579193</project.build.outputTimestamp>
-        <project.Automatic-Module-Name>io.cucumber.gherkin</project.Automatic-Module-Name>
+        <osgi.bundle-symbolic-name>io.cucumber.gherkin</osgi.bundle-symbolic-name>
     </properties>
 
     <scm>
