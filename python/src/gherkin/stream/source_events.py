@@ -26,7 +26,7 @@ def source_event(path: str) -> Event:
     event: Event = {
         "source": {
             "uri": path,
-            "data": open(path, encoding="utf8", newline="").read(),
+            "data": open(path, encoding="utf8", newline="").read(),  # noqa: PTH123
             "mediaType": _media_type(path),
         },
     }
