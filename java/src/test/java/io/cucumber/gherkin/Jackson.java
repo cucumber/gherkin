@@ -2,31 +2,26 @@ package io.cucumber.gherkin;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.cfg.ConstructorDetector;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_ABSENT;
-import static com.fasterxml.jackson.annotation.JsonInclude.Value.construct;
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
+import static com.fasterxml.jackson.databind.DeserializationFeature.READ_ENUMS_USING_TO_STRING;
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING;
+import static com.fasterxml.jackson.databind.cfg.ConstructorDetector.USE_PROPERTIES_BASED;
 
 final class Jackson {
-    public static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
-            .addModule(new Jdk8Module())
-            .addModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
-            .defaultPropertyInclusion(construct(NON_ABSENT, NON_ABSENT))
-            .constructorDetector(ConstructorDetector.USE_PROPERTIES_BASED)
-            .enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
-            .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
-            .enable(DeserializationFeature.USE_LONG_FOR_INTS)
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
-            .disable(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS)
-            .build();
+    static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
+            .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
+            .registerModule(new Jdk8Module())
+            .setDefaultPropertyInclusion(NON_ABSENT)
+            .setConstructorDetector(USE_PROPERTIES_BASED)
+            .enable(WRITE_ENUMS_USING_TO_STRING)
+            .enable(READ_ENUMS_USING_TO_STRING)
+            .disable(FAIL_ON_UNKNOWN_PROPERTIES)
+            .disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
 
     private Jackson() {
     }
