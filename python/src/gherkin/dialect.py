@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import json
-import os
+from pathlib import Path
 from typing import TypedDict
 
 from typing_extensions import Self
 
-DIALECT_FILE_PATH = os.path.join(
-    os.path.dirname(__file__),
-    "gherkin-languages.json",
-)
+DIALECT_FILE_PATH = str(Path(__file__).parent / "gherkin-languages.json")
 
 DialectSpec = TypedDict(
     "DialectSpec",
@@ -28,7 +25,7 @@ DialectSpec = TypedDict(
     },
 )
 
-with open(DIALECT_FILE_PATH, encoding="utf-8") as file:
+with open(DIALECT_FILE_PATH, encoding="utf-8") as file:  # noqa: PTH123
     DIALECTS: dict[str, DialectSpec] = json.load(file)
 
 
