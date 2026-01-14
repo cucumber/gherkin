@@ -25,11 +25,11 @@ class ParserException extends RuntimeException {
 
     private static String createMessage(String message, @Nullable Location location) {
         if (location == null) {
-            return String.format("(-1,0): %s", message);
+            return "(-1,0): %s".formatted(message);
         }
         Integer line = location.getLine();
         Integer column = location.getColumn().orElse(0);
-        return String.format("(%s:%s): %s", line, column, message);
+        return "(%s:%s): %s".formatted(line, column, message);
     }
 
     static final class AstBuilderException extends ParserException {
@@ -58,8 +58,8 @@ class ParserException extends RuntimeException {
         }
 
         private static String getMessage(Token receivedToken, List<String> expectedTokenTypes) {
-            return String.format("expected: %s, got '%s'",
-                    String.join(", ", expectedTokenTypes),
+            return "expected: %s, got '%s'".formatted(
+                    String.join(", ", expectedTokenTypes), 
                     receivedToken.getTokenValue()
             );
         }
@@ -84,7 +84,7 @@ class ParserException extends RuntimeException {
         }
 
         private static String getMessage(List<String> expectedTokenTypes) {
-            return String.format("unexpected end of file, expected: %s",
+            return "unexpected end of file, expected: %s".formatted(
                     String.join(", ", expectedTokenTypes));
         }
     }

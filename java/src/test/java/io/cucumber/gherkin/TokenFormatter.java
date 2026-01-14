@@ -10,11 +10,11 @@ class TokenFormatter {
         if (token.isEOF())
             return "EOF";
 
-        return String.format("(%s:%s)%s:%s/%s/%s",
+        return "(%s:%s)%s:%s/%s/%s".formatted(
                 toString(token.location.getLine()),
                 toString(token.location.getColumn().orElse(0)),
                 toString(token.matchedType),
-                token.matchedKeyword == null ? "" : String.format("(%s)%s",
+                token.matchedKeyword == null ? "" : "(%s)%s".formatted(
                                                                   toString(token.keywordType),
                                                                   toString(token.matchedKeyword)),
                 toString(token.matchedText),

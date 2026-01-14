@@ -47,7 +47,7 @@ final class Token {
 
     @Override
     public String toString() {
-        return String.format("%s: %s/%s", matchedType, matchedKeyword, matchedText);
+        return "%s: %s/%s".formatted(matchedType, matchedKeyword, matchedText);
     }
 
     String getRequiredMatchedKeyword() {
