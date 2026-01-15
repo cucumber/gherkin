@@ -1,5 +1,5 @@
 module io.cucumber.gherkin {
-    requires transitive  org.jspecify;
+    requires org.jspecify;
 
     requires transitive io.cucumber.messages;
 
