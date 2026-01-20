@@ -63,7 +63,7 @@
             <groupId>io.cucumber</groupId>
             <artifactId>messages-ndjson</artifactId>
             <scope>test</scope>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
         
         <dependency>
