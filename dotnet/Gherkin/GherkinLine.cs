@@ -18,15 +18,20 @@ public readonly struct GherkinLine
     /// </summary>
     public int LineNumber { get; }
 
+    /// <summary>
+    /// The raw text of the current <see cref="GherkinLine"/>
+    /// </summary>
+    readonly string LineText => lineText ?? string.Empty;
+
     public GherkinLine(string line, int lineNumber)
     {
         LineNumber = lineNumber;
 
         lineText = line;
         int start;
-        for (start = 0; start < lineText.Length; start++)
+        for (start = 0; start < line.Length; start++)
         {
-            if (!char.IsWhiteSpace(lineText[start]))
+            if (!char.IsWhiteSpace(line[start]))
                 break;
         }
         trimmedStartIndex = start;
@@ -46,7 +51,7 @@ public readonly struct GherkinLine
     /// <returns>true, if empty or contains whitespaces only; otherwise, false.</returns>
     public bool IsEmpty()
     {
-        return lineText.Length == trimmedStartIndex;
+        return LineText.Length == trimmedStartIndex;
     }
 
     /// <summary>
@@ -56,7 +61,7 @@ public readonly struct GherkinLine
     /// <returns>true if text matches the beginning of this line; otherwise, false.</returns>
     public bool StartsWith(string text)
     {
-        return string.CompareOrdinal(lineText, trimmedStartIndex, text, 0, text.Length) == 0;
+        return string.CompareOrdinal(LineText, trimmedStartIndex, text, 0, text.Length) == 0;
     }
 
     /// <summary>
@@ -67,7 +72,7 @@ public readonly struct GherkinLine
     public bool StartsWithTitleKeyword(string text)
     {
         return StartsWith(text) &&
-            StartsWithFrom(lineText, trimmedStartIndex + text.Length, GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR);
+            StartsWithFrom(LineText, trimmedStartIndex + text.Length, GherkinLanguageConstants.TITLE_KEYWORD_SEPARATOR);
     }
 
     private static bool StartsWithFrom(string text, int textIndex, string value)
@@ -83,9 +88,9 @@ public readonly struct GherkinLine
     public string GetLineText(int indentToRemove = 0)
     {
         if (indentToRemove < 0 || indentToRemove > Indent)
-            return lineText.Substring(trimmedStartIndex);
+            return LineText.Substring(trimmedStartIndex);
 
-        return lineText.Substring(indentToRemove);
+        return LineText.Substring(indentToRemove);
     }
 
     /// <summary>
@@ -95,7 +100,7 @@ public readonly struct GherkinLine
     /// <returns></returns>
     public string GetRestTrimmed(int length)
     {
-        return lineText.Substring(trimmedStartIndex + length).Trim();
+        return LineText.Substring(trimmedStartIndex + length).Trim();
     }
 
     public readonly struct TagsEnumerable : IEnumerable<GherkinLineSpan>
@@ -194,7 +199,7 @@ public readonly struct GherkinLine
     /// Tries parsing the line as a tag list, and returns the tags wihtout the leading '@' characters.
     /// </summary>
     /// <returns>(position,text) pairs, position is 0-based index</returns>
-    public TagsEnumerable GetTags() => new TagsEnumerable(LineNumber, lineText, trimmedStartIndex);
+    public TagsEnumerable GetTags() => new TagsEnumerable(LineNumber, LineText, trimmedStartIndex);
 
     public readonly struct TableCellsEnumerable(string lineText, int startPos) : IEnumerable<GherkinLineSpan>
     {
@@ -315,5 +320,5 @@ public readonly struct GherkinLine
     /// Tries parsing the line as table row and returns the trimmed cell values.
     /// </summary>
     /// <returns>(position,text) pairs, position is 0-based index</returns>
-    public TableCellsEnumerable GetTableCells() => new TableCellsEnumerable(lineText, trimmedStartIndex);
+    public TableCellsEnumerable GetTableCells() => new TableCellsEnumerable(LineText, trimmedStartIndex);
 }

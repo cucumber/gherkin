@@ -1,5 +1,6 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.ndjson.Serializer;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.MessageToNdjsonWriter;
 
@@ -11,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.cucumber.gherkin.Jackson.OBJECT_MAPPER;
 import static java.util.Arrays.asList;
 
 public final class Main {
@@ -19,7 +19,7 @@ public final class Main {
     private Main(){
         // main class
     }
-    
+
     public static void main(String[] argv) throws IOException {
         List<String> args = new ArrayList<>(asList(argv));
         List<String> paths = new ArrayList<>();
@@ -41,7 +41,7 @@ public final class Main {
         GherkinParser parser = builder.build();
 
         OutputStream out = new NonClosableOutputStream(System.out);
-        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(out, OBJECT_MAPPER::writeValue)) {
+        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(out, new Serializer())) {
             for (String path : paths) {
                 try (InputStream fis  = Files.newInputStream(Paths.get(path))) {
                     // Don't use parser.parse(Path). The test suite uses relative paths.
