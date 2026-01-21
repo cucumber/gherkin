@@ -1,5 +1,5 @@
 %{
-  "cucumber_messages": {:hex, :cucumber_messages, "30.0.0", "220ed91cf3ff5c57ba2770ef9ad8ec8091c086a23a16f734830eea82ebe02af5", [:make, :mix], [{:jason, "~> 1.4", [hex: :jason, repo: "hexpm", optional: false]}, {:protox, "~> 2.0", [hex: :protox, repo: "hexpm", optional: false]}], "hexpm", "11071a6c41425babd319fe42e22c761148a777bb8b5703ffd470768fbb6fdaab"},
+  "cucumber_messages": {:hex, :cucumber_messages, "32.0.0", "85b38e0e651aef5a434a65b91cc271891415dd14ae8fefa3c70cedf77dc33f25", [:make, :mix], [{:jason, "~> 1.4", [hex: :jason, repo: "hexpm", optional: false]}, {:protox, "~> 2.0", [hex: :protox, repo: "hexpm", optional: false]}], "hexpm", "f7730d7faf098d9ec9b1a60072a8479200d65d2fa8a2603ab5ae41e402b9138f"},
   "decimal": {:hex, :decimal, "2.2.0", "df3d06bb9517e302b1bd265c1e7f16cda51547ad9d99892049340841f3e15836", [:mix], [], "hexpm", "af8daf87384b51b7e611fb1a1f2c4d4876b65ef968fa8bd3adf44cff401c7f21"},
   "earmark_parser": {:hex, :earmark_parser, "1.4.44", "f20830dd6b5c77afe2b063777ddbbff09f9759396500cdbe7523efd58d7a339c", [:mix], [], "hexpm", "4778ac752b4701a5599215f7030989c989ffdc4f6df457c5f36938cc2d2a2750"},
   "elixir_uuid": {:hex, :elixir_uuid, "1.2.1", "dce506597acb7e6b0daeaff52ff6a9043f5919a4c3315abb4143f0b00378c097", [:mix], [], "hexpm", "f7eba2ea6c3555cea09706492716b0d87397b88946e6380898c2889d68585752"},
