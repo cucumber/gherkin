@@ -32,7 +32,7 @@
     "@types/mocha": "10.0.10",
     "@types/node": "22.19.7",
     "commander": "^14.0.0",
-    "core-js": "3.47.0",
+    "core-js": "3.48.0",
     "mocha": "11.7.5",
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
