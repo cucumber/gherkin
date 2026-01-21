@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IsWhiteSpaceBenchmarkTest {
+public final class IsWhiteSpaceBenchmarkTest {
 
     private static final char[] featureFileLinePrefixes = createLinePrefixes();
 
@@ -48,6 +48,7 @@ public class IsWhiteSpaceBenchmarkTest {
     }
 
     @Benchmark
+    @SuppressWarnings("UnusedReturnValue")
     public boolean benchmarkIsWhiteSpace() {
         boolean hasWhitespace = false;
         for (char c : featureFileLinePrefixes) {
@@ -57,6 +58,7 @@ public class IsWhiteSpaceBenchmarkTest {
     }
 
     @Benchmark
+    @SuppressWarnings("UnusedReturnValue")
     public boolean benchmarkIsWhiteSpaceSlow() {
         boolean hasWhitespace = false;
         for (char c : featureFileLinePrefixes) {

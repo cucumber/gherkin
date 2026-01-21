@@ -6,6 +6,7 @@ import io.cucumber.messages.MessageToNdjsonWriter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,7 +14,11 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class Main {
+public final class Main {
+
+    private Main(){
+        // main class
+    }
 
     public static void main(String[] argv) throws IOException {
         List<String> args = new ArrayList<>(asList(argv));
@@ -25,26 +30,18 @@ public class Main {
             String arg = args.remove(0).trim();
 
             switch (arg) {
-                case "--no-source":
-                    builder.includeSource(false);
-                    break;
-                case "--no-ast":
-                    builder.includeGherkinDocument(false);
-                    break;
-                case "--no-pickles":
-                    builder.includePickles(false);
-                    break;
-                case "--predictable-ids":
-                    builder.idGenerator(new IncrementingIdGenerator());
-                    break;
-                default:
-                    paths.add(arg);
+                case "--no-source" -> builder.includeSource(false);
+                case "--no-ast" -> builder.includeGherkinDocument(false);
+                case "--no-pickles" -> builder.includePickles(false);
+                case "--predictable-ids" -> builder.idGenerator(new IncrementingIdGenerator());
+                default -> paths.add(arg);
             }
         }
 
         GherkinParser parser = builder.build();
 
-        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(System.out, new Serializer())) {
+        OutputStream out = new NonClosableOutputStream(System.out);
+        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(out, new Serializer())) {
             for (String path : paths) {
                 try (InputStream fis  = Files.newInputStream(Paths.get(path))) {
                     // Don't use parser.parse(Path). The test suite uses relative paths.
@@ -63,4 +60,21 @@ public class Main {
         }
     }
 
+    private static final class NonClosableOutputStream extends OutputStream {
+        private final OutputStream delegate;
+
+        private NonClosableOutputStream(OutputStream delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            delegate.write(b);
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            delegate.write(b, off, len);
+        }
+    }
 }

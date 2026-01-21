@@ -9,6 +9,10 @@ import static io.cucumber.gherkin.StringUtils.trimAndIndentKeepNewLines;
 
 final class TableRowLine {
 
+    private TableRowLine(){
+        /* no-op */
+    }
+    
     static List<LineSpan> parse(int indent, String text) {
         List<LineSpan> lineSpans = new ArrayList<>();
         StringBuilder cellBuilder = new StringBuilder();
@@ -21,20 +25,11 @@ final class TableRowLine {
             int c = iterator.next();
             if (escape) {
                 switch (c) {
-                    case 'n':
-                        cellBuilder.append('\n');
-                        break;
-                    case '\\':
-                        cellBuilder.append('\\');
-                        break;
-                    case '|':
-                        cellBuilder.append('|');
-                        break;
-                    default:
-                        // Invalid escape. We'll just ignore it.
-                        cellBuilder.append("\\");
-                        cellBuilder.appendCodePoint(c);
-                        break;
+                    case 'n' -> cellBuilder.append('\n');
+                    case '\\' -> cellBuilder.append('\\');
+                    case '|' -> cellBuilder.append('|');
+                    // Invalid escape. We'll just ignore it.
+                    default -> cellBuilder.append("\\").appendCodePoint(c);
                 }
                 escape = false;
             } else {
@@ -49,7 +44,8 @@ final class TableRowLine {
                         int column = indent + cellStart + trimmedCellIndent.getIndent() + COLUMN_OFFSET;
                         lineSpans.add(new LineSpan(column, trimmedCellIndent.getText()));
                     }
-                    cellBuilder.setLength(0);// reuse instance rather than creating a new one is faster
+                    // reuse instance rather than creating a new one is faster
+                    cellBuilder.setLength(0);
                     cellStart = col + 1;
                 } else {
                     cellBuilder.appendCodePoint(c);

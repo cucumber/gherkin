@@ -19,7 +19,7 @@ public final class GherkinDialects {
     private static final Map<String, GherkinDialect> DIALECTS;
 
     private GherkinDialects() {
-        // Utility class
+        /* no-op */
     }
 
     public static Set<String> getLanguages() {

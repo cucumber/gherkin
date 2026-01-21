@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Java] Set release version to 17 ([#507](https://github.com/cucumber/gherkin/pull/507)).
 
 ## [37.0.1] - 2025-12-22
 ### Fixed

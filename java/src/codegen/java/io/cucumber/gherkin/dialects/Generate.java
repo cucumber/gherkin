@@ -1,3 +1,5 @@
+package io.cucumber.gherkin.dialects;
+
 public class Generate {
 
     public static void main(String[] args) throws Exception {

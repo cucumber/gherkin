@@ -15,7 +15,7 @@ class InputStreamsTest {
     void readsAllBytes() throws IOException {
         byte[] input = "# sample comment".getBytes(StandardCharsets.UTF_8);
         try (InputStream is = new ByteArrayInputStream(input)) {
-            assertArrayEquals(input, InputStreams.readAllBytes(is));
+            assertArrayEquals(input, is.readAllBytes());
         }
     }
 
@@ -27,7 +27,7 @@ class InputStreamsTest {
         }
         byte[] input = builder.toString().getBytes(StandardCharsets.UTF_8);
         try (InputStream is = new ByteArrayInputStream(input)) {
-            assertArrayEquals(input, InputStreams.readAllBytes(is));
+            assertArrayEquals(input, is.readAllBytes());
         }
     }
 
