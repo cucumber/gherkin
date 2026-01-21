@@ -28,13 +28,13 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        java: ['17', '21']
+        java: ['21']
         include:
 # Integration tests don't work on windows, classpath must be seperated with a ';' instead.
 #          - os: windows-latest
-#            java: "17"
+#            java: '21'
           - os: macos-latest
-            java: "17"
+            java: '21'
 
     steps:
       - uses: actions/checkout@v6
