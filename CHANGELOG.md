@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [Java] Set release version to 17 ([#507](https://github.com/cucumber/gherkin/pull/507)).
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v32
 
 ## [37.0.1] - 2025-12-22
 ### Fixed
