@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"os"
 
-	gherkin "github.com/cucumber/gherkin/go/v37"
+	gherkin "github.com/cucumber/gherkin/go/v38"
 	"github.com/cucumber/messages/go/v32"
 )
 

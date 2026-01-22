@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [38.0.0] - 2026-01-22
 ### Changed
 - [Java] Set release version to 17 ([#507](https://github.com/cucumber/gherkin/pull/507)).
 - [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v32
@@ -14,7 +16,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [37.0.1] - 2025-12-22
 ### Fixed
 - [.NET] Support calling Methods in GherkinLine on default value ([#503](https://github.com/cucumber/gherkin/pull/503)).
-  
+
 ## [37.0.0] - 2025-11-19
 ### Added
 - Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
@@ -878,7 +880,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v37.0.1...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v38.0.0...HEAD
+[38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0
 [37.0.1]: https://github.com/cucumber/gherkin/compare/v37.0.0...v37.0.1
 [37.0.0]: https://github.com/cucumber/gherkin/compare/v36.1.0...v37.0.0
 [36.1.0]: https://github.com/cucumber/gherkin/compare/v36.0.0...v36.1.0

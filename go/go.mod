@@ -1,4 +1,4 @@
-module github.com/cucumber/gherkin/go/v37
+module github.com/cucumber/gherkin/go/v38
 
 require (
 	github.com/cucumber/messages/go/v32 v32.0.0
