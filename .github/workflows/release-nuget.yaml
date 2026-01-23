@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-22.04
     environment: Release
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@baa11fbfe1d6520db94683bd5c7a3818018e4309 # v5
         with:
           dotnet-version: 9.0.x
-      - uses: cucumber/action-publish-nuget@v1.0.0
+      - uses: cucumber/action-publish-nuget@f059d15b2dbcd962afc0d29424f4f083177255aa # v1.0.0
         with:
           nuget-api-key: ${{ secrets.NUGET_API_KEY }}
           working-directory: "dotnet"

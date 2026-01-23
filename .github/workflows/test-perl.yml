@@ -28,10 +28,10 @@ jobs:
           - "5.36"
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
       - name: Setup Perl environment
-        uses: shogo82148/actions-setup-perl@v1
+        uses: shogo82148/actions-setup-perl@fa3bdcb0144a50651e317f30949bb4491e74a6e4 # v1
         with:
           perl-version: ${{ matrix.perl }}
           install-modules-with: cpanm

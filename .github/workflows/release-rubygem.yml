@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: Release
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.4.8'
           bundler-cache: true
-      - uses: cucumber/action-publish-rubygem@v1.0.0
+      - uses: cucumber/action-publish-rubygem@d8918cbdee789cfc78f346a96a59596b87795be1 # v1.0.0
         with:
           rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}
           working_directory: ruby
