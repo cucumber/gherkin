@@ -88,6 +88,7 @@ extend-select = [
   "N",
   "PERF",
   "PIE",
+  "PTH",
   "RET",
   "TID",
   "UP",
