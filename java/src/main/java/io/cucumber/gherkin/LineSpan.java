@@ -3,11 +3,11 @@ package io.cucumber.gherkin;
 final class LineSpan {
     /**
      * Index-1 based position in codepoints.
-      */ 
+     */
     final int column;
 
     /**
-     * Text part of the line 
+     * Text part of the line
      */
     final String text;
 

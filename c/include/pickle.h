@@ -8,6 +8,7 @@
 #include "pickle_tag.h"
 #include "pickle_step.h"
 #include "id_generator.h"
+#include "location.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,6 +17,7 @@ extern "C" {
 typedef struct Pickle {
     item_delete_function pickle_delete;
     wchar_t* uri;
+    Location location;
     wchar_t* language;
     const PickleAstNodeIds* ast_node_ids;
     const PickleTags* tags;
@@ -24,7 +26,7 @@ typedef struct Pickle {
     const PickleSteps* steps;
 } Pickle;
 
-const Pickle* Pickle_new(IdGenerator* id_generator, const wchar_t* uri, const wchar_t* language, const PickleAstNodeIds* ast_node_ids, const PickleTags* tags, const wchar_t* name, const PickleSteps* steps);
+const Pickle* Pickle_new(IdGenerator* id_generator, const wchar_t* uri, Location location, const wchar_t* language, const PickleAstNodeIds* ast_node_ids, const PickleTags* tags, const wchar_t* name, const PickleSteps* steps);
 
 void Pickle_delete(const Pickle* pickle);
 

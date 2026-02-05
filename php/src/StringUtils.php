@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cucumber\Gherkin;
 
+use RuntimeException;
+
 /**
  * Keeps common string operations in one place using correct unicode functions
  * (and normalises naming with other implementations)
@@ -33,26 +35,46 @@ final class StringUtils
 
     public static function rtrim(string $string): string
     {
-        $pattern = '/' . self::WHITESPACE_PATTERN . '$/u';
-        return (string) preg_replace($pattern, '', $string);
+        $trimmed = preg_replace('/' . self::WHITESPACE_PATTERN . '$/u', '', $string);
+
+        if ($trimmed === null) {
+            throw new RuntimeException('Failed to trim the string: ' . preg_last_error_msg());
+        }
+
+        return $trimmed;
     }
 
     public static function rtrimKeepNewLines(string $string): string
     {
-        $pattern = '/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u';
-        return (string) preg_replace($pattern, '', $string);
+        $trimmed = preg_replace('/' . self::WHITESPACE_PATTERN_NO_NEWLINE . '$/u', '', $string);
+
+        if ($trimmed === null) {
+            throw new RuntimeException('Failed to trim the string: ' . preg_last_error_msg());
+        }
+
+        return $trimmed;
     }
 
     public static function ltrim(string $string): string
     {
-        $pattern = '/^' . self::WHITESPACE_PATTERN . '/u';
-        return (string) preg_replace($pattern, '', $string);
+        $trimmed = preg_replace('/^'. self::WHITESPACE_PATTERN . '/u', '', $string);
+
+        if ($trimmed === null) {
+            throw new RuntimeException('Failed to trim the string: ' . preg_last_error_msg());
+        }
+
+        return $trimmed;
     }
 
     public static function ltrimKeepNewLines(string $string): string
     {
-        $pattern = '/^' . self::WHITESPACE_PATTERN_NO_NEWLINE . '/u';
-        return (string) preg_replace($pattern, '', $string);
+        $trimmed = preg_replace('/^'. self::WHITESPACE_PATTERN_NO_NEWLINE . '/u', '', $string);
+
+        if ($trimmed === null) {
+            throw new RuntimeException('Failed to trim the string: ' . preg_last_error_msg());
+        }
+
+        return $trimmed;
     }
 
     public static function trim(string $string): string
@@ -64,7 +86,14 @@ final class StringUtils
     public static function replace(string $string, array $replacements): string
     {
         $patterns = array_map(fn ($p) => '/' . preg_quote($p) . '/u', array_keys($replacements));
-        return (string) preg_replace($patterns, array_values($replacements), $string);
+
+        $replaced = preg_replace($patterns, array_values($replacements), $string);
+
+        if ($replaced === null) {
+            throw new RuntimeException('Failed to replace patterns in string: ' . preg_last_error_msg());
+        }
+
+        return $replaced;
     }
 
     /** @return array<non-empty-string> */

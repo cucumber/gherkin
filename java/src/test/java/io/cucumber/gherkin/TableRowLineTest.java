@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.cucumber.gherkin.TableRowLine.parse;
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GherkinTableRowLineTest {
+class TableRowLineTest {
 
+    @SuppressWarnings({"UnnecessaryUnicodeEscape", "UnicodeEscape"})
     @Test
     void finds_table_cells() {
         // The cells below has the following whitespace characters on each side:
@@ -42,18 +42,19 @@ class GherkinTableRowLineTest {
     void finds_escaped_table_cells() {
         List<LineSpan> tableCells = parse(6, "| \\|æ\\\\n     | \\o\\no\\  | \\\\\\|a\\\\\\\\n | ø\\\\\\nø\\\\|");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("|æ\\n", "\\o\no\\", "\\|a\\\\n", "ø\\\nø\\"), texts);
+        assertEquals(List.of("|æ\\n", "\\o\no\\", "\\|a\\\\n", "ø\\\nø\\"), texts);
     }
 
     @Test
     void preserve_escaped_new_lines_at_start_and_end() {
         List<LineSpan> tableCells = parse(6, "|  \nraindrops--\nher last kiss\ngoodbye.\n  |");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("" +
-                "\n" +
-                "raindrops--\n" +
-                "her last kiss\n" +
-                "goodbye.\n"
+        assertEquals(List.of("""
+                
+                raindrops--
+                her last kiss
+                goodbye.
+                """
         ), texts);
     }
 
@@ -61,41 +62,41 @@ class GherkinTableRowLineTest {
     void escapes_backslash() {
         List<LineSpan> tableCells = parse(0, "|\\\\o\\no\\||");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("\\o\no|"), texts);
+        assertEquals(List.of("\\o\no|"), texts);
     }
 
     @Test
     void throws_on_illegal_escapes_backslash() {
         List<LineSpan> tableCells = parse(0, "|\\o\\no\\||");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("\\o\no|"), texts);
+        assertEquals(List.of("\\o\no|"), texts);
     }
 
     @Test
     void correctly_trims_white_spaces_before_cell_content() {
         List<LineSpan> tableCells = parse(0, "|   \t spaces before|");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("spaces before"), texts);
+        assertEquals(List.of("spaces before"), texts);
     }
 
     @Test
     void correctly_trims_white_spaces_after_cell_content() {
         List<LineSpan> tableCells = parse(0, "|spaces after   |");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("spaces after"), texts);
+        assertEquals(List.of("spaces after"), texts);
     }
 
     @Test
     void correctly_trims_white_spaces_around_cell_content() {
         List<LineSpan> tableCells = parse(0, "|   \t spaces everywhere   \t|");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("spaces everywhere"), texts);
+        assertEquals(List.of("spaces everywhere"), texts);
     }
 
     @Test
     void does_not_drop_white_spaces_inside_a_cell() {
         List<LineSpan> tableCells = parse(0, "| foo()\n  bar\nbaz |");
         List<String> texts = tableCells.stream().map(span -> span.text).collect(Collectors.toList());
-        assertEquals(asList("foo()\n  bar\nbaz"), texts);
+        assertEquals(List.of("foo()\n  bar\nbaz"), texts);
     }
 }

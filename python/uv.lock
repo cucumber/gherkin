@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 9
 requires-python = ">=3.9"
 
 [[package]]
@@ -147,7 +147,7 @@ wheels = [
 
 [[package]]
 name = "gherkin-official"
-version = "34.0.0"
+version = "38.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "typing-extensions" },

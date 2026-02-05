@@ -185,6 +185,7 @@ pickle_compiler::compile_scenario(
     cms::pickle p{
         .id = ctx.next_id(),
         .uri = uri,
+        .location = s.location,
         .name = s.name,
         .language = language,
         .steps = steps,
@@ -255,6 +256,7 @@ pickle_compiler::compile_scenario_outline(
             cms::pickle p{
                 .id = ctx.next_id(),
                 .uri = uri,
+                .location = values_row.location,
                 .name = interpolate(s.name, variable_cells, value_cells),
                 .language = language,
                 .steps = steps,

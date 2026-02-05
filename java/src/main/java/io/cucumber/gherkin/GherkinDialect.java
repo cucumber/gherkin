@@ -1,6 +1,7 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.types.StepKeywordType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,8 +17,6 @@ import static io.cucumber.messages.types.StepKeywordType.ACTION;
 import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
 import static io.cucumber.messages.types.StepKeywordType.CONTEXT;
 import static io.cucumber.messages.types.StepKeywordType.OUTCOME;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -87,7 +86,7 @@ public final class GherkinDialect {
         }
         List<String> sortedKeywords = new ArrayList<>(uniqueKeywords);
         sortedKeywords.sort(LONGEST_TO_SHORTEST_COMPARATOR);
-        return unmodifiableList(sortedKeywords);
+        return List.copyOf(sortedKeywords);
     }
 
     private static Map<String, Set<StepKeywordType>> aggregateKeywordTypes(
@@ -102,7 +101,7 @@ public final class GherkinDialect {
         addStepKeywordsTypes(stepKeywordsTypes, ACTION, whenKeywords);
         addStepKeywordsTypes(stepKeywordsTypes, OUTCOME, thenKeywords);
         addStepKeywordsTypes(stepKeywordsTypes, CONJUNCTION, distinctKeywords(andKeywords, butKeywords));
-        stepKeywordsTypes.replaceAll((keyword, stepKeywordTypes) -> unmodifiableSet(stepKeywordTypes));
+        stepKeywordsTypes.replaceAll((keyword, stepKeywordTypes) -> Set.copyOf(stepKeywordTypes));
         return stepKeywordsTypes;
     }
 
@@ -154,7 +153,7 @@ public final class GherkinDialect {
      * @deprecated use {{@link #getStepKeywordTypesSet(String)}} instead.
      */
     @Deprecated
-    public List<StepKeywordType> getStepKeywordTypes(String keyword) {
+    public @Nullable List<StepKeywordType> getStepKeywordTypes(String keyword) {
         Set<StepKeywordType> stepKeywordTypes = stepKeywordsTypes.get(keyword);
         if (stepKeywordTypes == null) {
             return null;
@@ -172,7 +171,7 @@ public final class GherkinDialect {
         requireNonNull(keyword);
         Set<StepKeywordType> stepKeywordTypes = stepKeywordsTypes.get(keyword);
         if (stepKeywordTypes == null) {
-            throw new NoSuchElementException(String.format("'%s' is not part of this dialect", keyword));
+            throw new NoSuchElementException("'%s' is not part of this dialect".formatted(keyword));
         }
         return stepKeywordTypes;
     }

@@ -11,7 +11,7 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class GherkinTagLineTest {
+class TagLineTest {
     final Location line = Locations.atLine(12);
 
     @Test
@@ -126,4 +126,14 @@ class GherkinTagLineTest {
         List<LineSpan> gherkinLineSpans = parse(0, "", line);
         assertEquals(Collections.emptyList(), gherkinLineSpans);
     }
+
+    @Test
+    void parse_computes_codepoint_column_properly() {
+        // each emoji here is two chars in UTF-16, but one column in Gherkin
+        List<LineSpan> gherkinLineSpans = parse(0, " @😭 @😁 @💺🙄", line);
+        assertEquals(2, gherkinLineSpans.get(0).column);
+        assertEquals(5, gherkinLineSpans.get(1).column);
+        assertEquals(8, gherkinLineSpans.get(2).column);
+    }
+
 }

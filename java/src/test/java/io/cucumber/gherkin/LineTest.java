@@ -25,9 +25,12 @@ class LineTest {
         Line gherkinLine = new Line("Rule: X");
 
         // When/Then
-        assertFalse(gherkinLine.startsWithTitleKeyword("Background")); // not the same keyword
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rule: X")); // same keyword but with colon
-        assertFalse(gherkinLine.startsWithTitleKeyword("Rul")); // shorter than keyword
+        // not the same keyword
+        assertFalse(gherkinLine.startsWithTitleKeyword("Background"));
+        // same keyword but with colon
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rule: X"));
+        // shorter than keyword
+        assertFalse(gherkinLine.startsWithTitleKeyword("Rul")); 
     }
 
     @Test

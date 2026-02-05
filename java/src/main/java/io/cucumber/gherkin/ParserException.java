@@ -1,34 +1,35 @@
 package io.cucumber.gherkin;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import io.cucumber.messages.types.Location;
+import org.jspecify.annotations.Nullable;
 
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
+import static java.util.Objects.requireNonNull;
 
 class ParserException extends RuntimeException {
-    final Location location;
+    final @Nullable Location location;
 
     protected ParserException(String message) {
         super(message);
         location = null;
     }
 
-    protected ParserException(String message, Location location) {
+    protected ParserException(String message, @Nullable Location location) {
         super(createMessage(message, location));
         this.location = location;
     }
 
-    private static String createMessage(String message, Location location) {
+    private static String createMessage(String message, @Nullable Location location) {
         if (location == null) {
-            return String.format("(-1,0): %s", message);
+            return "(-1,0): %s".formatted(message);
         }
-        Long line = location.getLine();
-        Long column = location.getColumn().orElse(0L);
-        return String.format("(%s:%s): %s", line, column, message);
+        Integer line = location.getLine();
+        Integer column = location.getColumn().orElse(0);
+        return "(%s:%s): %s".formatted(line, column, message);
     }
 
     static final class AstBuilderException extends ParserException {
@@ -38,16 +39,16 @@ class ParserException extends RuntimeException {
     }
 
     static final class NoSuchLanguageException extends ParserException {
-        NoSuchLanguageException(String language, Location location) {
+        NoSuchLanguageException(String language, @Nullable Location location) {
             super("Language not supported: " + language, location);
         }
     }
 
     static final class UnexpectedTokenException extends ParserException {
-        String stateComment;
 
         final Token receivedToken;
         final List<String> expectedTokenTypes;
+        final String stateComment;
 
         UnexpectedTokenException(Token receivedToken, List<String> expectedTokenTypes, String stateComment) {
             super(getMessage(receivedToken, expectedTokenTypes), getLocation(receivedToken));
@@ -57,8 +58,8 @@ class ParserException extends RuntimeException {
         }
 
         private static String getMessage(Token receivedToken, List<String> expectedTokenTypes) {
-            return String.format("expected: %s, got '%s'",
-                    String.join(", ", expectedTokenTypes),
+            return "expected: %s, got '%s'".formatted(
+                    String.join(", ", expectedTokenTypes), 
                     receivedToken.getTokenValue()
             );
         }
@@ -67,7 +68,7 @@ class ParserException extends RuntimeException {
             if (receivedToken.location.getColumn().isPresent()) {
                 return receivedToken.location;
             }
-            int column = COLUMN_OFFSET + receivedToken.line.getIndent();
+            int column = COLUMN_OFFSET + requireNonNull(receivedToken.line).getIndent();
             return atColumn(receivedToken.location, column);
         }
     }
@@ -83,7 +84,7 @@ class ParserException extends RuntimeException {
         }
 
         private static String getMessage(List<String> expectedTokenTypes) {
-            return String.format("unexpected end of file, expected: %s",
+            return "unexpected end of file, expected: %s".formatted(
                     String.join(", ", expectedTokenTypes));
         }
     }
@@ -93,11 +94,10 @@ class ParserException extends RuntimeException {
 
         CompositeParserException(List<ParserException> errors) {
             super(getMessage(errors));
-            this.errors = Collections.unmodifiableList(errors);
+            this.errors = List.copyOf(errors);
         }
 
         private static String getMessage(List<ParserException> errors) {
-            if (errors == null) throw new NullPointerException("errors");
             return "Parser errors:\n" + errors.stream()
                     .map(Throwable::getMessage)
                     .collect(Collectors.joining("\n"));

@@ -13,6 +13,10 @@ import static io.cucumber.gherkin.StringUtils.isWhitespace;
 
 final class TagLine {
 
+    private TagLine() {
+
+    }
+
     static List<LineSpan> parse(int indent, String text, Location location) {
         int textLength = text.length();
         // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
@@ -26,6 +30,8 @@ final class TagLine {
 
         List<LineSpan> tags = new ArrayList<>();
         int indexEndCurrentTag;
+        int indexStartPreviousTag = 0;
+        int totalCodePointCount = 0;
         while (indexStartCurrentTag < indexEndOfLine) {
             // look for the next tag
             int indexStartNextTag = indexStartCurrentTag + 1;
@@ -41,11 +47,13 @@ final class TagLine {
             indexEndCurrentTag++;
 
             if (indexEndCurrentTag > indexStartCurrentTag + 1) {
-                // non-empty tag found
-                // check that the tag does not contain whitespace characters
-                int symbolLength = text.codePointCount(0, indexStartCurrentTag);
-                int column = indent + symbolLength + COLUMN_OFFSET;
-                if(containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)){
+                // non-empty tag found, check that the tag does not contain whitespace characters
+
+                // totalCodePointCount is updated incrementally
+                totalCodePointCount += text.codePointCount(indexStartPreviousTag, indexStartCurrentTag);
+                indexStartPreviousTag = indexStartCurrentTag;
+                int column = indent + totalCodePointCount + COLUMN_OFFSET;
+                if (containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)) {
                     throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
                 }
                 // build the line span

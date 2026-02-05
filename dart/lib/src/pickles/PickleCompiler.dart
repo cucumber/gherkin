@@ -87,6 +87,7 @@ class PickleCompiler
     var pickle = Pickle(
         _idGenerator.newId(),
         uri,
+        scenario.location,
         scenario.name,
         language,
         steps,
@@ -138,12 +139,13 @@ class PickleCompiler
         var pickle = Pickle(
           _idGenerator.newId(),
           uri,
+          valuesRow.location,
           name,
           language,
           steps,
           pickleTags,
           sourceIds);
-  
+
         pickles.add(pickle);
       }
     }

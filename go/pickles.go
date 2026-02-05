@@ -1,7 +1,7 @@
 package gherkin
 
 import (
-	"github.com/cucumber/messages/go/v28"
+	"github.com/cucumber/messages/go/v32"
 	"strings"
 )
 
@@ -119,6 +119,7 @@ func compileScenarioOutline(
 			pickles = append(pickles, &messages.Pickle{
 				Id:         id,
 				Uri:        uri,
+				Location:   valuesRow.Location,
 				Steps:      computedPickleSteps,
 				Tags:       tags,
 				Name:       name,
@@ -149,6 +150,7 @@ func compileScenario(
 	pickles = append(pickles, &messages.Pickle{
 		Id:         id,
 		Uri:        uri,
+		Location:   scenario.Location,
 		Steps:      steps,
 		Tags:       tags,
 		Name:       scenario.Name,

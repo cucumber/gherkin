@@ -12,9 +12,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: erlef/setup-beam@v1
+      - uses: erlef/setup-beam@e6d7c94229049569db56a7ad5a540c051a010af9 # v1.20.4
         with:
           otp-version: '27.1'
           elixir-version: '1.17'
@@ -22,7 +22,7 @@ jobs:
       - name: Install Protoc
         uses: arduino/setup-protoc@v1
 
-      - uses: cucumber/action-publish-hex@v1.0.0
+      - uses: cucumber/action-publish-hex@ea3883bd0b3d07d9144cbd26274d7e2a0c619780 # v1.0.0
         with:
           hex-api-key: ${{ secrets.HEX_API_KEY }}
           working-directory: 'elixir'

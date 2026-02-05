@@ -1,26 +1,26 @@
 {
-  "name": "cucumber/gherkin",
-  "description": "Gherkin parser",
-  "author": "Cucumber Limited <cukes@googlegroups.com>",
-  "license": "MIT",
-  "type": "library",
-  "autoload": {
-    "psr-4": {
-      "Cucumber\\Gherkin\\": [
-        "src/",
-        "src-generated/"
-      ]
+    "name": "cucumber/gherkin",
+    "description": "Gherkin parser",
+    "author": "Cucumber Limited <cukes@googlegroups.com>",
+    "license": "MIT",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Cucumber\\Gherkin\\": [
+                "src/",
+                "src-generated/"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-mbstring": "*",
+        "cucumber/messages": ">=31.0.0 <34"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0",
+        "vimeo/psalm": "6.14.3",
+        "friendsofphp/php-cs-fixer": "^3.51",
+        "psalm/plugin-phpunit": "^0.19.5"
     }
-  },
-  "require": {
-    "php": "^8.3",
-    "ext-mbstring": "*",
-    "cucumber/messages": ">=19.1.4 <=29"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "11.5.25",
-    "vimeo/psalm": "^6.5.0",
-    "friendsofphp/php-cs-fixer": "3.51",
-    "psalm/plugin-phpunit": "^0.19.3"
-  }
 }

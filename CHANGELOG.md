@@ -7,11 +7,53 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Removed
-- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
+
+## [38.0.0] - 2026-01-22
+### Changed
+- [Java] Set release version to 17 ([#507](https://github.com/cucumber/gherkin/pull/507)).
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v32
+
+## [37.0.1] - 2025-12-22
+### Fixed
+- [.NET] Support calling Methods in GherkinLine on default value ([#503](https://github.com/cucumber/gherkin/pull/503)).
+
+## [37.0.0] - 2025-11-19
+### Added
+- Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
+
+### Changed
+- BREAKING CHANGE: Require messages v31 or greater
 
 ### Fixed
-- [.NET] Don't trim whitespaces before escape character
+- [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder` ([#497](https://github.com/cucumber/gherkin/pull/497)).
+
+## [36.1.0] - 2025-11-05
+### Added
+- [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
+
+## [36.0.0] - 2025-10-09
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v30
+
+### Fixed
+- [Java] Only use `org.assertj:assertj-core` in `test` scope.
+
+## [35.1.0] - 2025-09-20
+### Added
+- (I18n) ru: Added word "Значения" as a synonym for examples ([#479](https://github.com/cucumber/gherkin/pull/479)
+
+### Fixed
+- [Java] Optimize `StrinUtils.isWhitespace` ([#468](https://github.com/cucumber/gherkin/pull/468))
+
+## [35.0.0] - 2025-09-11
+### Changed
+- [.NET, Elixir, Go, JavaScript, Java, Perl, Php, Ruby] Update dependency messages to v29
+
+### Fixed
+- [.NET] Don't trim whitespaces before escape character ([#467](https://github.com/cucumber/gherkin/pull/467))
+
+### Removed
+- [Python] Dropped legacy input-output processor ([#459](https://github.com/cucumber/gherkin/pull/459))
 
 ## [34.0.0] - 2025-08-17
 ### Changed
@@ -115,6 +157,25 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Removed
 - [Python] Dropped support for Python 3.8
+
+## [30.1.3] - 2025-11-05
+### Fixed
+- Update Java release process
+
+## [30.1.2] - 2025-11-05
+### Fixed
+- Update Java release process
+
+## [30.1.1] - 2025-11-05
+### Fixed
+- Release v30.1.1 as a copy of v30.0.4 to cover v36.1.0 that was accidentally released as v30.1.0
+
+## [30.1.0] - 2025-11-05
+### Added
+- [Java] Add OSGi metadata ([#485](https://github.com/cucumber/gherkin/pull/485))
+
+### Fixed
+- [.NET] Support calling Methods in GherkinLine on default value
 
 ## [30.0.4] - 2024-11-15
 ### Fixed
@@ -822,7 +883,14 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v34.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v38.0.0...HEAD
+[38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0
+[37.0.1]: https://github.com/cucumber/gherkin/compare/v37.0.0...v37.0.1
+[37.0.0]: https://github.com/cucumber/gherkin/compare/v36.1.0...v37.0.0
+[36.1.0]: https://github.com/cucumber/gherkin/compare/v36.0.0...v36.1.0
+[36.0.0]: https://github.com/cucumber/gherkin/compare/v35.1.0...v36.0.0
+[35.1.0]: https://github.com/cucumber/gherkin/compare/v35.0.0...v35.1.0
+[35.0.0]: https://github.com/cucumber/gherkin/compare/v34.0.0...v35.0.0
 [34.0.0]: https://github.com/cucumber/gherkin/compare/v33.1.0...v34.0.0
 [33.1.0]: https://github.com/cucumber/gherkin/compare/v33.0.0...v33.1.0
 [33.0.0]: https://github.com/cucumber/gherkin/compare/v32.2.0...v33.0.0
@@ -832,7 +900,11 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 [32.1.0]: https://github.com/cucumber/gherkin/compare/v32.0.1...v32.1.0
 [32.0.1]: https://github.com/cucumber/gherkin/compare/v32.0.0...v32.0.1
 [32.0.0]: https://github.com/cucumber/gherkin/compare/v31.0.0...v32.0.0
-[31.0.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v31.0.0
+[31.0.0]: https://github.com/cucumber/gherkin/compare/v30.1.3...v31.0.0
+[30.1.3]: https://github.com/cucumber/gherkin/compare/v30.1.2...v30.1.3
+[30.1.2]: https://github.com/cucumber/gherkin/compare/v30.1.1...v30.1.2
+[30.1.1]: https://github.com/cucumber/gherkin/compare/v30.1.0...v30.1.1
+[30.1.0]: https://github.com/cucumber/gherkin/compare/v30.0.4...v30.1.0
 [30.0.4]: https://github.com/cucumber/gherkin/compare/v30.0.3...v30.0.4
 [30.0.3]: https://github.com/cucumber/gherkin/compare/v30.0.2...v30.0.3
 [30.0.2]: https://github.com/cucumber/gherkin/compare/v30.0.1...v30.0.2

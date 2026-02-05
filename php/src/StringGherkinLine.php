@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cucumber\Gherkin;
 
+use RuntimeException;
+
 final class StringGherkinLine implements GherkinLine
 {
     // TODO: set this to 0 when/if we change to 0-indexed columns
@@ -100,7 +102,7 @@ final class StringGherkinLine implements GherkinLine
                 // done this way so that \\n => \n once and isn't then recursively replaced again (or similar)
                 $unescaped = (string) preg_replace_callback(
                     '/(\\\\.)/u',
-                    function ($groups) {
+                    function (array $groups) {
                         return match ($groups[0]) {
                             '\\n' => "\n",
                             '\\\\' => '\\',
@@ -110,6 +112,10 @@ final class StringGherkinLine implements GherkinLine
                     },
                     $trimmedCell,
                 );
+
+                if ($unescaped === null) {
+                    throw new \RuntimeException('Failed to decode escape sequences in doc string: ' . preg_last_error_msg());
+                }
 
                 return new GherkinLineSpan($cellStart + $cellIndent + self::OFFSET, $unescaped);
             },
@@ -122,6 +128,10 @@ final class StringGherkinLine implements GherkinLine
     public function getTags(): array
     {
         $uncommentedLine = (string) preg_replace('/\s' . preg_quote(GherkinLanguageConstants::COMMENT_PREFIX) . '.*$/u', '', $this->trimmedLineText);
+
+        if ($uncommentedLine === null) {
+            throw new RuntimeException('Failed to strip comments: ' . preg_last_error_msg());
+        }
 
         /**
          * @var list<array{0:string, 1:int}> $elements guaranteed by PREG_SPLIT_OFFSET_CAPTURE

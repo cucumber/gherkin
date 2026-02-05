@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Version">
-    <VersionNumber>34.0.0</VersionNumber>
+    <VersionNumber>38.0.0</VersionNumber>
     <Version Condition="'$(SnapshotSuffix)' != ''">$(VersionNumber)-$(SnapshotSuffix)</Version>
     <Version Condition="'$(SnapshotSuffix)' == ''">$(VersionNumber)</Version>
   </PropertyGroup>
@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cucumber.Messages" Version="29.0.1"/>
+    <PackageReference Include="Cucumber.Messages" Version="32.0.1"/>
   </ItemGroup>
 
 </Project>

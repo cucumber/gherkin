@@ -1,6 +1,7 @@
 import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/pickles.dart';
+import 'package:gherkin/language.dart';
 
 class Pickle implements INullSafetyObject
 {
@@ -9,6 +10,8 @@ class Pickle implements INullSafetyObject
   final String id;
 
   final String uri;
+
+  final Location location;
 
   final String name;
 
@@ -20,7 +23,7 @@ class Pickle implements INullSafetyObject
 
   final List<String> astNodeIds;
 
-  const Pickle(this.id, this.uri, this.name, this.language
+  const Pickle(this.id, this.uri, this.location, this.name, this.language
     ,this.steps, this.tags, this.astNodeIds);
 
   @override
@@ -45,6 +48,10 @@ class Pickle implements INullSafetyObject
       ..write('uri')
       ..write('=')
       ..write(uri.isEmpty ? '<null>' : uri)
+      ..write(',')
+      ..write('location')
+      ..write('=')
+      ..write(location.isEmpty ? '<null>' : location)
       ..write(',')
       ..write('name')
       ..write('=')
@@ -75,6 +82,7 @@ class Pickle implements INullSafetyObject
     return (other is Pickle)
         && other.id == id
         && other.uri == uri
+        && other.location == location
         && other.name == name
         && other.language == language
         && other.steps == steps
@@ -87,6 +95,7 @@ class Pickle implements INullSafetyObject
   int get hashCode =>
     id.hashCode
     ^ uri.hashCode
+    ^ location.hashCode
     ^ name.hashCode
     ^ language.hashCode
     ^ steps.hashCode
@@ -100,7 +109,7 @@ class _InvalidPickle
     extends Pickle
 {
   const _InvalidPickle()
-      : super(Strings.empty, Strings.empty, Strings.empty, Strings.empty
+      : super(Strings.empty, Strings.empty, Location.empty, Strings.empty, Strings.empty
     , const <PickleStep>[], const <PickleTag>[], const <String>[] );
 
   @override

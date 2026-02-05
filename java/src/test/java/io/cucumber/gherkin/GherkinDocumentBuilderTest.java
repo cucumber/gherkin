@@ -7,20 +7,20 @@ import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.Pickle;
 import io.cucumber.messages.types.TableRow;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GherkinDocumentBuilderTest {
     private final IdGenerator idGenerator = new IncrementingIdGenerator();
 
     @Test
     void is_reusable() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinTokenMatcher matcher = new GherkinTokenMatcher();
 
         GherkinDocument d1 = parser.parse("Feature: 1", matcher, "1.feature");
@@ -32,27 +32,28 @@ class GherkinDocumentBuilderTest {
 
     @Test
     void parses_rules() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
-        String data = "" +
-                "Feature: Some rules\n" +
-                "\n" +
-                "  Background:\n" +
-                "    Given fb\n" +
-                "\n" +
-                "  Rule: A\n" +
-                "    The rule A description\n" +
-                "\n" +
-                "    Background:\n" +
-                "      Given ab\n" +
-                "\n" +
-                "    Example: Example A\n" +
-                "      Given a\n" +
-                "\n" +
-                "  Rule: B\n" +
-                "    The rule B description\n" +
-                "\n" +
-                "    Example: Example B\n" +
-                "      Given b\n";
+        var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        String data = """
+                Feature: Some rules
+                
+                  Background:
+                    Given fb
+                
+                  Rule: A
+                    The rule A description
+                
+                    Background:
+                      Given ab
+                
+                    Example: Example A
+                      Given a
+                
+                  Rule: B
+                    The rule B description
+                
+                    Example: Example B
+                      Given b
+                """;
         GherkinDocument doc = parser.parse(data, "test.feature");
 
         List<FeatureChild> children = doc.getFeature().get().getChildren();
@@ -71,7 +72,7 @@ class GherkinDocumentBuilderTest {
 
     @Test
     void parses_just_comments() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinDocument doc = parser.parse("# Just a comment", "test.feature");
         List<Comment> children = doc.getComments();
         assertEquals(1, children.size());
@@ -79,15 +80,18 @@ class GherkinDocumentBuilderTest {
 
     @Test
     void sets_empty_table_cells() {
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
-        GherkinDocument doc = parser.parse("" +
-                "Feature:\n" +
-                "  Scenario:\n" +
-                "    Given a table\n" +
-                "      |a||b|",
+        var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        GherkinDocument doc = parser.parse("""
+                        Feature:
+                          Scenario:
+                            Given a table
+                              |a||b|
+                        """,
                 "test.feature"
         );
-        TableRow row = doc.getFeature().get().getChildren().get(0).getScenario().get().getSteps().get(0).getDataTable().get().getRows().get(0);
+        List<FeatureChild> children = doc.getFeature().get().getChildren();
+        assertEquals(1, children.size());
+        TableRow row = children.get(0).getScenario().get().getSteps().get(0).getDataTable().get().getRows().get(0);
         assertEquals("a", row.getCells().get(0).getValue());
         assertEquals("", row.getCells().get(1).getValue());
         assertEquals("b", row.getCells().get(2).getValue());
@@ -96,23 +100,25 @@ class GherkinDocumentBuilderTest {
     @Test
     void table_cells_with_different_size_throws_exception() {
         // Given
-        Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
+        var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
 
         // When
-        ParserException.CompositeParserException compositeParserException = assertThrows(ParserException.CompositeParserException.class, () -> parser.parse("" +
-                        "Feature:\n" +
-                        "  Scenario:\n" +
-                        "    Given a table\n" +
-                        "      |a|b|\n" +
-                        "      |c|d|e|",
+        ParserException.CompositeParserException compositeParserException = assertThrows(ParserException.CompositeParserException.class, () -> parser.parse("""
+                        Feature:
+                          Scenario:
+                            Given a table
+                              |a|b|
+                              |c|d|e|
+                        """,
                 "test.feature"
         ));
 
         // Then
-        assertTrue(compositeParserException.getMessage().contains("inconsistent cell count within the table"));
-        Location location = compositeParserException.errors.get(0).location;
-        assertEquals(5, location.getLine());
-        assertEquals(7, location.getColumn().get());
+        Assertions.assertThat(compositeParserException).hasMessageContaining("inconsistent cell count within the table");
+        Assertions.assertThat(compositeParserException.errors)
+                .singleElement()
+                .extracting(e -> e.location)
+                        .isEqualTo(new Location(5, 7));
     }
 
 }
