@@ -26,7 +26,7 @@ final class GherkinDialectProvider
     ) {
         try {
             $contents = file_get_contents(self::JSON_PATH);
-            if($contents === false){
+            if($contents === false) {
                 throw new RuntimeException("Could not read " . self::JSON_PATH);
             }
             /**
