@@ -14,6 +14,7 @@ final class AstNodeTest extends TestCase
 {
     private AstNode $astNode;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->astNode = new AstNode(RuleType::None);

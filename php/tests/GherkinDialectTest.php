@@ -10,6 +10,7 @@ final class GherkinDialectTest extends TestCase
 {
     private GherkinDialect $dialect;
 
+    #[\Override]
     public function setUp(): void
     {
         $data = [

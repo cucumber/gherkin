@@ -25,6 +25,10 @@ final class GherkinDialectProvider
         private readonly string $defaultDialectName = 'en',
     ) {
         try {
+            $contents = file_get_contents(self::JSON_PATH);
+            if ($contents === false) {
+                throw new RuntimeException("Could not read " . self::JSON_PATH);
+            }
             /**
              * Here we force the type checker to assume the decoded JSON has the correct
              * structure, rather than validating it. This is safe because it's not dynamic.
@@ -34,7 +38,7 @@ final class GherkinDialectProvider
              * @var non-empty-array<non-empty-string, Dialect> $data
              * @psalm-suppress PossiblyFalseArgument
              */
-            $data = json_decode(file_get_contents(self::JSON_PATH), true, flags: JSON_THROW_ON_ERROR);
+            $data = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
             $this->DIALECTS = $data;
         } catch (JsonException $e) {
             throw new RuntimeException("Unable to parse " . self::JSON_PATH, previous: $e);

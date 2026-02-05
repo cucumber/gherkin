@@ -14,6 +14,7 @@ final class TokenMatcherTest extends TestCase
 {
     private TokenMatcherInterface $tokenMatcher;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->tokenMatcher = new TokenMatcher();
