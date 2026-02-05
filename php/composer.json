@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-mbstring": "*",
         "cucumber/messages": ">=31.0.0 <34"
     },
