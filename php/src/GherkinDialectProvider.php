@@ -26,7 +26,9 @@ final class GherkinDialectProvider
     ) {
         try {
             $contents = file_get_contents(self::JSON_PATH);
-            assert(is_string($contents), "Could not read " . self::JSON_PATH);
+            if($contents === false){
+                throw new RuntimeException("Could not read " . self::JSON_PATH);
+            }
             /**
              * Here we force the type checker to assume the decoded JSON has the correct
              * structure, rather than validating it. This is safe because it's not dynamic.
