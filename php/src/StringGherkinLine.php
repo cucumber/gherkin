@@ -100,7 +100,7 @@ final class StringGherkinLine implements GherkinLine
 
                 // Match \N and then replace based on what X is
                 // done this way so that \\n => \n once and isn't then recursively replaced again (or similar)
-                $unescaped = (string) preg_replace_callback(
+                $unescaped = preg_replace_callback(
                     '/(\\\\.)/u',
                     function (array $groups) {
                         return match ($groups[0]) {
@@ -127,7 +127,7 @@ final class StringGherkinLine implements GherkinLine
     #[\Override]
     public function getTags(): array
     {
-        $uncommentedLine = (string) preg_replace('/\s' . preg_quote(GherkinLanguageConstants::COMMENT_PREFIX) . '.*$/u', '', $this->trimmedLineText);
+        $uncommentedLine = preg_replace('/\s' . preg_quote(GherkinLanguageConstants::COMMENT_PREFIX) . '.*$/u', '', $this->trimmedLineText);
 
         if ($uncommentedLine === null) {
             throw new RuntimeException('Failed to strip comments: ' . preg_last_error_msg());

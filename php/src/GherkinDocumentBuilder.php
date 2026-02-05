@@ -316,7 +316,7 @@ final class GherkinDocumentBuilder implements Builder
     {
         $lineTokens = $node->getTokenMatches(TokenType::Other);
 
-        $lineText = (string) preg_replace(
+        $lineText = preg_replace(
             '/(\\n\\s*)*$/u',
             '',
             $this->joinMatchedTextWithLinebreaks($lineTokens),
