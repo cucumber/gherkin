@@ -22,11 +22,8 @@ class TokenScanner:
     :file:`gherkin-languages.json`.
     """
 
-    def __init__(self, path_or_str: str | Path) -> None:
-        if os.path.exists(path_or_str):  # noqa: PTH110
-            self.io = open(path_or_str, encoding="utf8")  # noqa: PTH123
-        else:
-            self.io = io.StringIO(path_or_str)
+    def __init__(self, source: str) -> None:
+        self.io = io.StringIO(source)
         self.line_number = 0
 
     def read(self) -> Token:
