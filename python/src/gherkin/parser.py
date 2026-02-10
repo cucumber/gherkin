@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from collections import deque
 from collections.abc import Callable
-from pathlib import Path
 from typing import TypeVar, cast
 
 from .ast_builder import AstBuilder
@@ -80,13 +79,13 @@ class Parser:
 
     def parse(
         self,
-        token_scanner_or_str_or_path: TokenScanner | str | Path,
+        token_scanner_or_str: TokenScanner | str,
         token_matcher: TokenMatcher | None = None,
     ) -> GherkinDocument:
         token_scanner = (
-            TokenScanner(token_scanner_or_str_or_path)
-            if isinstance(token_scanner_or_str_or_path, str)
-            else token_scanner_or_str_or_path
+            TokenScanner(token_scanner_or_str)
+            if isinstance(token_scanner_or_str, str)
+            else token_scanner_or_str
         )
         self.ast_builder.reset()
         if token_matcher is None:
