@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from pathlib import Path
 from typing import TypedDict
 
 
@@ -14,18 +15,18 @@ class Event(TypedDict):
     source: Source
 
 
-def _media_type(path: str) -> str | None:
-    if path.endswith(".feature"):
+def _media_type(path: Path) -> str | None:
+    if path.name.endswith(".feature"):
         return "text/x.cucumber.gherkin+plain"
-    if path.endswith(".feature.md"):
+    if path.name.endswith(".feature.md"):
         return "text/x.cucumber.gherkin+markdown"
     return None
 
 
-def source_event(path: str) -> Event:
+def source_event(path: Path) -> Event:
     event: Event = {
         "source": {
-            "uri": path,
+            "uri": str(path),
             "data": open(path, encoding="utf8", newline="").read(),  # noqa: PTH123
             "mediaType": _media_type(path),
         },
@@ -34,7 +35,7 @@ def source_event(path: str) -> Event:
 
 
 class SourceEvents:
-    def __init__(self, paths: list[str]) -> None:
+    def __init__(self, paths: list[Path]) -> None:
         self.paths = paths
 
     def enum(self) -> Iterable[Event]:
