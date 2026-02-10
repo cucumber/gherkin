@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import contextlib
 import io
-import os
-from pathlib import Path
 
 from .gherkin_line import GherkinLine
 from .parser_types import Location

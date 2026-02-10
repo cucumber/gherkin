@@ -10,7 +10,7 @@ def main() -> None:
     files = sys.argv[1:]
     parser = Parser(TokenFormatterBuilder())
     for file in files:
-        source = open(file, encoding="utf8", newline="").read() # noqa: PTH123
+        source = open(file, encoding="utf8", newline="").read()  # noqa: PTH123
         scanner = TokenScanner(source)
 
         if file.endswith(".md"):
