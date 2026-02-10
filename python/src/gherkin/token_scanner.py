@@ -23,8 +23,8 @@ class TokenScanner:
     """
 
     def __init__(self, path_or_str: str | Path) -> None:
-        if os.path.exists(path_or_str):  # noqa: PTH110
-            self.io = open(path_or_str, encoding="utf8")  # noqa: PTH123
+        if isinstance(path_or_str, Path):
+            self.io = open(path_or_str, encoding="utf8")
         else:
             self.io = io.StringIO(path_or_str)
         self.line_number = 0
