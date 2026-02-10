@@ -6,7 +6,7 @@ from typing import TypedDict
 
 from typing_extensions import Self
 
-DIALECT_FILE_PATH = str(Path(__file__).parent / "gherkin-languages.json")
+DIALECT_FILE_PATH = Path(__file__).parent / "gherkin-languages.json"
 
 DialectSpec = TypedDict(
     "DialectSpec",
