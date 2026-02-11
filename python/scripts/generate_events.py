@@ -1,5 +1,6 @@
 import json
 from optparse import OptionParser
+from pathlib import Path
 
 from gherkin.stream.gherkin_events import GherkinEvents
 from gherkin.stream.source_events import SourceEvents
@@ -35,8 +36,9 @@ def main() -> None:
     arg_parser = create_arg_parser()
 
     options, args = arg_parser.parse_args()
+    paths = [Path(a) for a in args]
 
-    source_events = SourceEvents(args)
+    source_events = SourceEvents(paths)
     gherkin_events = GherkinEvents(
         GherkinEvents.Options(
             print_source=options.print_source,

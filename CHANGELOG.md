@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Changed
 - [PHP] Require PHP 8.2+ in CI and in composer.json.
+- [Python] Handle paths through pathlib ([#541](https://github.com/cucumber/gherkin/pull/541)).
 
 ## [38.0.0] - 2026-01-22
 ### Changed
