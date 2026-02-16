@@ -25,7 +25,7 @@ DialectSpec = TypedDict(
     },
 )
 
-with open(DIALECT_FILE_PATH, encoding="utf-8") as file:  # noqa: PTH123
+with DIALECT_FILE_PATH.open(encoding="utf-8") as file:
     DIALECTS: dict[str, DialectSpec] = json.load(file)
 
 

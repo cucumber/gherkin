@@ -16,7 +16,7 @@ class Event(TypedDict):
 
 
 def _media_type(path: Path) -> str | None:
-    if path.name.endswith(".feature"):
+    if path.suffix == ".feature":
         return "text/x.cucumber.gherkin+plain"
     if path.name.endswith(".feature.md"):
         return "text/x.cucumber.gherkin+markdown"
@@ -27,7 +27,7 @@ def source_event(path: Path) -> Event:
     event: Event = {
         "source": {
             "uri": str(path),
-            "data": open(path, encoding="utf8", newline="").read(),  # noqa: PTH123
+            "data": path.open(encoding="utf8", newline="").read(),
             "mediaType": _media_type(path),
         },
     }
