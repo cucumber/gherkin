@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import contextlib
 import io
-import os
 
 from .gherkin_line import GherkinLine
 from .parser_types import Location
@@ -19,11 +20,8 @@ class TokenScanner:
     :file:`gherkin-languages.json`.
     """
 
-    def __init__(self, path_or_str: str) -> None:
-        if os.path.exists(path_or_str):
-            self.io = open(path_or_str, encoding="utf8")
-        else:
-            self.io = io.StringIO(path_or_str)
+    def __init__(self, source: str) -> None:
+        self.io = io.StringIO(source)
         self.line_number = 0
 
     def read(self) -> Token:
