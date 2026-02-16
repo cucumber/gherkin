@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Perl environment
-        uses: shogo82148/actions-setup-perl@fa3bdcb0144a50651e317f30949bb4491e74a6e4 # v1.37.0
+        uses: shogo82148/actions-setup-perl@b6cfc127f1b0a63ac98797800f641494d80f42f8 # v1.37.1
         with:
           perl-version: ${{ matrix.perl }}
           install-modules-with: cpanm
