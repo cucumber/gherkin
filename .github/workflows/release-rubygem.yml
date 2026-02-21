@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.8'
+          ruby-version: '4.0.1'
           bundler-cache: true
       - uses: cucumber/action-publish-rubygem@d8918cbdee789cfc78f346a96a59596b87795be1 # v1.0.0
         with:
