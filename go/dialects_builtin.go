@@ -3155,7 +3155,7 @@ var builtinDialects = gherkinDialectMap{
 				"기능",
 			},
 			rule: {
-				"Rule",
+				"규칙",
 			},
 			background: {
 				"배경",
