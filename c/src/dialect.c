@@ -2133,7 +2133,7 @@ static const Keywords ko_feature_keywords = { 1, ko_feature_KEYWORDS };
 static const wchar_t* const ko_given_KEYWORDS[] = { L"* ", L"조건 ", L"먼저 " };
 static const Keywords ko_given_keywords = { 3, ko_given_KEYWORDS };
 
-static const wchar_t* const ko_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const ko_rule_KEYWORDS[] = { L"규칙" };
 static const Keywords ko_rule_keywords = { 1, ko_rule_KEYWORDS };
 
 static const wchar_t* const ko_scenario_KEYWORDS[] = { L"시나리오" };
