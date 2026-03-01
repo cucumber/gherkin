@@ -14,7 +14,7 @@ else()
     message(FATAL_ERROR "unable to parse version: ${VERSION}")
 endif()
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.12)
 PROJECT(gherkin VERSION ${VERSION} LANGUAGES C)
 enable_testing()
 
