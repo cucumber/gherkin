@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [39.0.0] - 2026-03-01
 ### Added
 - (i18n) Added Korean translation of "Rule" ([#544](https://github.com/cucumber/gherkin/pull/544))
 
@@ -888,7 +890,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v38.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v39.0.0...HEAD
+[39.0.0]: https://github.com/cucumber/gherkin/compare/v38.0.0...v39.0.0
 [38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0
 [37.0.1]: https://github.com/cucumber/gherkin/compare/v37.0.0...v37.0.1
 [37.0.0]: https://github.com/cucumber/gherkin/compare/v36.1.0...v37.0.0
