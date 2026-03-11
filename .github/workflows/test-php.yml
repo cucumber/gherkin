@@ -19,9 +19,6 @@ on:
       - testdata/**
       - .github/**
 
-permissions:
-  contents: read
-
 jobs:
   test-php:
     runs-on: ubuntu-latest
@@ -29,7 +26,8 @@ jobs:
       matrix:
         php: ['8.2']
         composer-mode: ['low-deps', 'high-deps']
-
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
