@@ -1,5 +1,7 @@
 name: Release NuGet
 
+permissions: {}
+
 on:
   push:
     branches: [ release/* ]

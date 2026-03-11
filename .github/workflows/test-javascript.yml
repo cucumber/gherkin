@@ -1,5 +1,7 @@
 name: test-javascript
 
+permissions: {}
+
 on:
   push:
     branches:

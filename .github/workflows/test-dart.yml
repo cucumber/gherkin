@@ -1,5 +1,7 @@
 name: test-dart
 
+permissions: {}
+
 on:
   push:
     branches:

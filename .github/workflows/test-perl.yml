@@ -1,5 +1,7 @@
 name: test-perl
 
+permissions: {}
+
 on:
   push:
     branches:
