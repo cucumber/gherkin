@@ -17,7 +17,7 @@ jobs:
           persist-credentials: false
       - uses: ruby/setup-ruby@6ca151fd1bfcfd6fe0c4eb6837eb0584d0134a0c # v1.290.0
         with:
-          ruby-version: '3.4.8'
+          ruby-version: '3.4.9'
       - uses: cucumber/action-publish-rubygem@d8918cbdee789cfc78f346a96a59596b87795be1 # v1.0.0
         with:
           rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}
