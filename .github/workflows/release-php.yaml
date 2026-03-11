@@ -1,5 +1,7 @@
 name: Release PHP
 
+permissions: {}
+
 on:
   push:
     branches: [release/*]

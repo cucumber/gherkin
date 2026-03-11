@@ -1,5 +1,7 @@
 name: test-php
 
+permissions: {}
+
 on:
   push:
     branches:

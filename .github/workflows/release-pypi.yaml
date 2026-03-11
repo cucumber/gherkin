@@ -1,5 +1,7 @@
 name: Release Python
 
+permissions: {}
+
 on:
   push:
     branches: [release/*]
@@ -22,7 +24,7 @@ jobs:
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
         with:
-          enable-cache: true
+          enable-cache: false
           python-version: "3.13"
           version: "0.10.9"
 

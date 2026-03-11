@@ -1,4 +1,7 @@
 name: test-python
+
+permissions: {}
+
 defaults:
   run:
     working-directory: python

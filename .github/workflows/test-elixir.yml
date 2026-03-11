@@ -1,5 +1,7 @@
 name: test-elixir
 
+permissions: {}
+
 on:
   push:
     branches:

@@ -1,5 +1,7 @@
 name: test-dotnet
 
+permissions: {}
+
 on:
   push:
     branches:

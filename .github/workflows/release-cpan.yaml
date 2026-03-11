@@ -1,5 +1,7 @@
 name: Release Perl/CPAN
 
+permissions: {}
+
 on:
   push:
     branches: [release/*]

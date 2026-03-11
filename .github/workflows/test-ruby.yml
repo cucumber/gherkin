@@ -1,5 +1,7 @@
 name: test-ruby
 
+permissions: {}
+
 on:
   push:
     branches:

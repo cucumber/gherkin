@@ -1,5 +1,7 @@
 name: test-cpp
 
+permissions: {}
+
 on:
   push:
     branches:
