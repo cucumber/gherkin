@@ -16,7 +16,6 @@ on:
       - php/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 permissions:
   contents: read

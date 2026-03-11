@@ -16,7 +16,6 @@ on:
       - c/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-c:

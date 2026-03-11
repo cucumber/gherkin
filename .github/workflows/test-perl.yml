@@ -16,7 +16,6 @@ on:
       - perl/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-perl:

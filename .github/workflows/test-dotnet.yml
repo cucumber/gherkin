@@ -16,7 +16,6 @@ on:
       - dotnet/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-dotnet:

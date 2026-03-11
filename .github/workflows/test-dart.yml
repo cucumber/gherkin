@@ -16,7 +16,6 @@ on:
       - dart/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-dart:

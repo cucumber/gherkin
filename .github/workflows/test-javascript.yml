@@ -16,7 +16,6 @@ on:
       - javascript/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-javascript:

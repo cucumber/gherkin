@@ -16,7 +16,6 @@ on:
       - ruby/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-ruby:
