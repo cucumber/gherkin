@@ -18,6 +18,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Security
 - [Python] Fixed hidden file reading behavior in `Parser.parse` ([#541](https://github.com/cucumber/gherkin/pull/541)).
 
+### Fixed
+- [cpp] Removed unused vector_type definition ([#549](https://github.com/cucumber/gherkin/pull/549)).
+
 ## [38.0.0] - 2026-01-22
 ### Changed
 - [Java] Set release version to 17 ([#507](https://github.com/cucumber/gherkin/pull/507)).
