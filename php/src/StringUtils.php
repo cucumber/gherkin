@@ -28,7 +28,7 @@ final class StringUtils
         return 0 === mb_strpos($string, $subString, encoding: self::DEFAULT_ENCODING);
     }
 
-    public static function substring(string $string, int $start, int $length = null): string
+    public static function substring(string $string, int $start, ?int $length = null): string
     {
         return mb_substr($string, $start, $length ?? PHP_INT_MAX);
     }
