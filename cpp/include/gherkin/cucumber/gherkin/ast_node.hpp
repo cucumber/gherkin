@@ -122,7 +122,6 @@ public:
 
         if constexpr (is_specialization_of_v<type, std::vector>) {
             using value_type = typename type::value_type;
-            using vector_type = std::vector<value_type>;
 
             auto opt_items = get_items<value_type>(rule_type);
 
