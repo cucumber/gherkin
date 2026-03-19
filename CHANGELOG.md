@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- [PHP] Fix PHP 8.4 deprecation warnings.
+
 ## [39.0.0] - 2026-03-01
 ### Added
 - (i18n) Added Korean translation of "Rule" ([#544](https://github.com/cucumber/gherkin/pull/544))
