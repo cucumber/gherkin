@@ -1,4 +1,6 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
+#pragma once
+
 #include <cucumber/gherkin/parser_base.hpp>
 #include <cucumber/gherkin/rule_type.hpp>
 
@@ -4012,8 +4014,6 @@ protected:
                 std::runtime_error(
                     "invalid operation: " + std::to_string(state)
                 );
-
-            return -1;
         }
     }
 };
