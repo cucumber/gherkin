@@ -10,8 +10,6 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ### Fixed
 - [PHP] Fix PHP 8.4 deprecation warnings.
-- [cpp] Added missing include guard in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
-- [cpp] Removed unreachable code in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 
 ## [39.0.0] - 2026-03-01
 ### Added
