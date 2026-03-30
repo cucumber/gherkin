@@ -78,7 +78,7 @@ void ErrorList_add_unexpected_eof_error(ErrorList* error_list, Token* received_t
     const int line_width = calculate_string_length_for_number(received_token->location.line);
     const int column_width = calculate_string_length_for_number(received_token->location.column);
     const int total_length = calculate_string_length_for_location(line_width, column_width) + message_length + wcslen(expected_tokens);
-    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t*));
+    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t));
     int pos = 0;
     pos = print_location_to_string(text, pos, received_token->location.line, line_width, received_token->location.column, column_width);
     wcscpy(text + pos, message);
@@ -98,7 +98,7 @@ void ErrorList_add_unexpected_token_error(ErrorList* error_list, Token* received
     const int line_width = calculate_string_length_for_number(received_token->location.line);
     const int column_width = calculate_string_length_for_number(received_token->location.column);
     const int total_length = calculate_string_length_for_location(line_width, column_width) + expected_length + expected_tokens_length + got_length + received_tokens_length + 2;
-    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t*));
+    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t));
     int column = received_token->location.column;
     if (column == 0) {
         column = received_token->line->indent + 1;
@@ -132,7 +132,7 @@ void ErrorList_add_no_such_language_error(ErrorList* error_list, Location* locat
     const int line_width = calculate_string_length_for_number(used_location.line);
     const int column_width = calculate_string_length_for_number(used_location.column);
     const int total_length = calculate_string_length_for_location(line_width, column_width) + message_length + language_length;
-    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t*));
+    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t));
     int pos = 0;
     pos = print_location_to_string(text, pos, used_location.line, line_width, used_location.column, column_width);
     wcscpy(text + pos, message);
@@ -149,7 +149,7 @@ void ErrorList_add_inconsisten_cell_count_error(ErrorList* error_list, Location 
     const int line_width = calculate_string_length_for_number(location.line);
     const int column_width = calculate_string_length_for_number(location.column);
     const int total_length = calculate_string_length_for_location(line_width, column_width) + message_length;
-    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t*));
+    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t));
     int pos = 0;
     pos = print_location_to_string(text, pos, location.line, line_width, location.column, column_width);
     wcscpy(text + pos, message);
@@ -161,7 +161,7 @@ void ErrorList_add_inconsisten_cell_count_error(ErrorList* error_list, Location 
 void ErrorList_internal_grammar_error(ErrorList* error_list) {
     const wchar_t* const message = L"Internal grammar error";
     const int message_length = wcslen(message);
-    wchar_t* text = (wchar_t*)malloc((message_length + 1) * sizeof(wchar_t*));
+    wchar_t* text = (wchar_t*)malloc((message_length + 1) * sizeof(wchar_t));
     wcscpy(text, message);
     Location location = {-1, -1};
     ErrorList_add(error_list, text, location);
@@ -173,7 +173,7 @@ void ErrorList_add_invalid_operation_error(ErrorList* error_list, int state) {
     const int message_length = wcslen(message);
     const int state_width = calculate_string_length_for_number(state);
     const int total_length = message_length + state_width;
-    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t*));
+    wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t));
     int pos = 0;
     wcscpy(text + pos, message);
     pos += message_length;
@@ -194,7 +194,7 @@ bool ErrorList_check_token_tags_for_whitespace(ErrorList* error_list, Token* rec
                 const int line_width = calculate_string_length_for_number(received_token->location.line);
                 const int column_width = calculate_string_length_for_number(received_token->location.column);
                 const int total_length = calculate_string_length_for_location(line_width, column_width) + message_length;
-                wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t*));
+                wchar_t* text = (wchar_t*)malloc((total_length + 1) * sizeof(wchar_t));
                 int pos = 0;
                 pos = print_location_to_string(text, pos, received_token->location.line, line_width, received_token->location.column, column_width);
                 wcscpy(text + pos, message);
