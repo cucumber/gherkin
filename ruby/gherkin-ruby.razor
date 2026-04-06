@@ -17,7 +17,6 @@
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
       state_comment = "State: @state.Id - @Raw(state.Comment)"
-      token.detach
       expected_tokens = ["@Raw(string.Join("\", \"", expectedTokens))"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -176,13 +175,11 @@ module Gherkin
 {
 <text>
     def lookahead@(lookAheadHint.Id)(context, current_token)
-      current_token.detach
       token = nil
       queue = []
       match = false
       loop do
         token = read_token(context)
-        token.detach
         queue.push(token)
 
         if (false @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>|| @MatchToken(tokenType)</text>})

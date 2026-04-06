@@ -9,10 +9,6 @@ module Gherkin
       line.nil?
     end
 
-    def detach
-      # TODO: detach line - is this needed?
-    end
-
     def token_value
       eof? ? "EOF" : line.get_line_text(-1)
     end
