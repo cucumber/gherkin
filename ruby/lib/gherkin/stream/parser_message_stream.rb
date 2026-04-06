@@ -88,14 +88,14 @@ module Gherkin
       def build_gherkin_document(source)
         if @options[:default_dialect]
           token_matcher = TokenMatcher.new(@options[:default_dialect])
-          gd = @parser.parse(source.data, token_matcher)
+          gherkin_document = @parser.parse(source.data, token_matcher)
         else
-          gd = @parser.parse(source.data)
+          gherkin_document = @parser.parse(source.data)
         end
         Cucumber::Messages::GherkinDocument.new(
           uri: source.uri,
-          feature: gd.feature,
-          comments: gd.comments
+          feature: gherkin_document.feature,
+          comments: gherkin_document.comments
         )
       end
     end
