@@ -7,7 +7,7 @@ name = "gherkin-official"
 version = "39.0.0"
 description = "Gherkin parser (official, by Cucumber team)"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     { name = "Cucumber Ltd and Björn Rasmusson", email = "cukes@googlegroups.com" }
 ]
@@ -22,11 +22,11 @@ license-files = [
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
 [project.urls]
@@ -51,7 +51,7 @@ module-name = "gherkin"
 
 [tool.tox]
 requires = ["tox>=4.22"]
-env_list = ["3.13", "3.12", "3.11", "3.10", "3.9"]
+env_list = ["3.14", "3.13", "3.12", "3.11", "3.10"]
 
 [tool.tox.env_run_base]
 dependency_groups = [
