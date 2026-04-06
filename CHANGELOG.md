@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 
 ### Fixed
+- [c] Fixed memory leak with respekt to the pickle ast ids.
 - [c] Fixed potential read past null terminator. Fixed allocation of more memoroy than necessary ([#559](https://github.com/cucumber/gherkin/pull/559)).
 - [PHP] Fix PHP 8.4 deprecation warnings.
 - [cpp] Added missing include guard in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))

@@ -50,6 +50,12 @@ void PickleAstNodeIds_delete(const PickleAstNodeIds* ast_node_ids) {
         return;
     }
     if (ast_node_ids->ast_node_ids) {
+        int i;
+        for (i = 0; i < ast_node_ids->ast_node_id_count; ++i) {
+            if (ast_node_ids->ast_node_ids[i].id) {
+                free((void*) ast_node_ids->ast_node_ids[i].id);
+	    }
+        }
         free((void*) ast_node_ids->ast_node_ids);
     }
     free((void*) ast_node_ids);
