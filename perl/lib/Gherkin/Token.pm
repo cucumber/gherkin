@@ -13,7 +13,6 @@ use Class::XSAccessor
   ;
 
 sub is_eof { my $self = shift; return !$self->line }
-sub detach { }
 
 sub token_value {
     my $self = shift;
