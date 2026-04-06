@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'cucumber/messages'
+
 require_relative '../parser'
 require_relative '../token_matcher'
 require_relative '../pickles/compiler'
@@ -8,7 +9,7 @@ require_relative '../pickles/compiler'
 module Gherkin
   module Stream
     class ParserMessageStream
-      def initialize(paths, sources, options)
+      def initialize(paths: [], sources: [], options: {})
         @paths = paths
         @sources = sources
         @options = options
