@@ -344,7 +344,6 @@ module Gherkin
       end
 
       state_comment = "State: 0 - Start"
-      token.detach
       expected_tokens = ["#EOF", "#Language", "#TagLine", "#FeatureLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -372,7 +371,6 @@ module Gherkin
       end
 
       state_comment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0"
-      token.detach
       expected_tokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -400,7 +398,6 @@ module Gherkin
       end
 
       state_comment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0"
-      token.detach
       expected_tokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -468,7 +465,6 @@ module Gherkin
       end
 
       state_comment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -536,7 +532,6 @@ module Gherkin
       end
 
       state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -603,7 +598,6 @@ module Gherkin
       end
 
       state_comment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -670,7 +664,6 @@ module Gherkin
       end
 
       state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -747,7 +740,6 @@ module Gherkin
       end
 
       state_comment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -824,7 +816,6 @@ module Gherkin
       end
 
       state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -853,7 +844,6 @@ module Gherkin
       end
 
       state_comment = "State: 9 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0"
-      token.detach
       expected_tokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -939,7 +929,6 @@ module Gherkin
       end
 
       state_comment = "State: 10 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1027,7 +1016,6 @@ module Gherkin
       end
 
       state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1125,7 +1113,6 @@ module Gherkin
       end
 
       state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1225,7 +1212,6 @@ module Gherkin
       end
 
       state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1254,7 +1240,6 @@ module Gherkin
       end
 
       state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"
-      token.detach
       expected_tokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1354,7 +1339,6 @@ module Gherkin
       end
 
       state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1456,7 +1440,6 @@ module Gherkin
       end
 
       state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1556,7 +1539,6 @@ module Gherkin
       end
 
       state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1584,7 +1566,6 @@ module Gherkin
       end
 
       state_comment = "State: 18 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0"
-      token.detach
       expected_tokens = ["#TagLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1655,7 +1636,6 @@ module Gherkin
       end
 
       state_comment = "State: 19 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1726,7 +1706,6 @@ module Gherkin
       end
 
       state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1796,7 +1775,6 @@ module Gherkin
       end
 
       state_comment = "State: 21 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1866,7 +1844,6 @@ module Gherkin
       end
 
       state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -1946,7 +1923,6 @@ module Gherkin
       end
 
       state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2026,7 +2002,6 @@ module Gherkin
       end
 
       state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2055,7 +2030,6 @@ module Gherkin
       end
 
       state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0"
-      token.detach
       expected_tokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2144,7 +2118,6 @@ module Gherkin
       end
 
       state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2235,7 +2208,6 @@ module Gherkin
       end
 
       state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2336,7 +2308,6 @@ module Gherkin
       end
 
       state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2439,7 +2410,6 @@ module Gherkin
       end
 
       state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2468,7 +2438,6 @@ module Gherkin
       end
 
       state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"
-      token.detach
       expected_tokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2571,7 +2540,6 @@ module Gherkin
       end
 
       state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"
-      token.detach
       expected_tokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2676,7 +2644,6 @@ module Gherkin
       end
 
       state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"
-      token.detach
       expected_tokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2779,7 +2746,6 @@ module Gherkin
       end
 
       state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"
-      token.detach
       expected_tokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2798,7 +2764,6 @@ module Gherkin
       end
 
       state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2897,7 +2862,6 @@ module Gherkin
       end
 
       state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2916,7 +2880,6 @@ module Gherkin
       end
 
       state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -2992,7 +2955,6 @@ module Gherkin
       end
 
       state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -3011,7 +2973,6 @@ module Gherkin
       end
 
       state_comment = "State: 39 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -3107,7 +3068,6 @@ module Gherkin
       end
 
       state_comment = "State: 40 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -3126,7 +3086,6 @@ module Gherkin
       end
 
       state_comment = "State: 41 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#DocStringSeparator", "#Other"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -3199,7 +3158,6 @@ module Gherkin
       end
 
       state_comment = "State: 42 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"
-      token.detach
       expected_tokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"]
       error = token.eof? ? UnexpectedEOFException.new(token, expected_tokens, state_comment) : UnexpectedTokenException.new(token, expected_tokens, state_comment)
       raise error if (stop_at_first_error)
@@ -3208,13 +3166,11 @@ module Gherkin
     end
 
     def lookahead0(context, current_token)
-      current_token.detach
       token = nil
       queue = []
       match = false
       loop do
         token = read_token(context)
-        token.detach
         queue.push(token)
 
         if (false || match_ScenarioLine(context, token))
@@ -3231,13 +3187,11 @@ module Gherkin
     end
 
     def lookahead1(context, current_token)
-      current_token.detach
       token = nil
       queue = []
       match = false
       loop do
         token = read_token(context)
-        token.detach
         queue.push(token)
 
         if (false || match_ExamplesLine(context, token))
