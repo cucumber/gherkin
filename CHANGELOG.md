@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 
 ### Fixed
+- [c] Fixed potential read past null terminator. Fixed allocation of more memoroy than necessary ([#559](https://github.com/cucumber/gherkin/pull/559)).
 - [PHP] Fix PHP 8.4 deprecation warnings.
 - [cpp] Added missing include guard in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 - [cpp] Removed unreachable code in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
