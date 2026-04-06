@@ -170,8 +170,11 @@ static const wchar_t* find_cell_delimiter(const wchar_t* start_pos) {
     while (*current_pos != L'\0') {
         if (*current_pos == L'|')
             return current_pos;
-        if (*current_pos == L'\\')
+        if (*current_pos == L'\\') {
             ++current_pos;
+            if (*current_pos == L'\0')
+                return 0;
+        }
         ++current_pos;
     }
     return 0;
