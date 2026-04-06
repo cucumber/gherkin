@@ -193,14 +193,12 @@ protected:
 <text>
     bool lookahead_@(lookAheadHint.Id)(context_type& context, token& current_token)
     {
-        current_token.detach();
         token token;
         token_queue queue;
         bool match = false;
 
         while (true) {
             token = context.read_token();
-            token.detach();
             queue.push_back(token);
 
             if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>@MatchToken(tokenType) || </text>}false) {
