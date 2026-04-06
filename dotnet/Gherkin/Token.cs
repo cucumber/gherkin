@@ -24,10 +24,6 @@ public class Token
     public GherkinDialect MatchedGherkinDialect { get; set; }
     public Location Location { get; set; }
 
-    public void Detach()
-    {
-    }
-
     public string GetTokenValue()
     {
         return IsEOF ? "EOF" : Line.GetLineText(-1);
