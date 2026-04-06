@@ -37,10 +37,6 @@ export class Token implements IToken<TokenType> {
   public getTokenValue(): string {
     return this.isEof ? 'EOF' : this.line.getLineText(-1)
   }
-
-  public detach() {
-    // TODO: Detach line, but is this really needed?
-  }
 }
 
 export enum TokenType {
@@ -333,7 +329,6 @@ export default class Parser<AstNode> {
       return 0;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Language", "#TagLine", "#FeatureLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -362,7 +357,6 @@ export default class Parser<AstNode> {
       return 1;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -391,7 +385,6 @@ export default class Parser<AstNode> {
       return 2;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#FeatureLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -460,7 +453,6 @@ export default class Parser<AstNode> {
       return 4;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -529,7 +521,6 @@ export default class Parser<AstNode> {
       return 4;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -597,7 +588,6 @@ export default class Parser<AstNode> {
       return 6;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -665,7 +655,6 @@ export default class Parser<AstNode> {
       return 6;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -743,7 +732,6 @@ export default class Parser<AstNode> {
       return 7;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -821,7 +809,6 @@ export default class Parser<AstNode> {
       return 8;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -851,7 +838,6 @@ export default class Parser<AstNode> {
       return 9;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -938,7 +924,6 @@ export default class Parser<AstNode> {
       return 11;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1027,7 +1012,6 @@ export default class Parser<AstNode> {
       return 11;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1126,7 +1110,6 @@ export default class Parser<AstNode> {
       return 12;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1227,7 +1210,6 @@ export default class Parser<AstNode> {
       return 13;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1257,7 +1239,6 @@ export default class Parser<AstNode> {
       return 14;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1358,7 +1339,6 @@ export default class Parser<AstNode> {
       return 16;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1461,7 +1441,6 @@ export default class Parser<AstNode> {
       return 16;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1562,7 +1541,6 @@ export default class Parser<AstNode> {
       return 17;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1591,7 +1569,6 @@ export default class Parser<AstNode> {
       return 18;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1663,7 +1640,6 @@ export default class Parser<AstNode> {
       return 20;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1735,7 +1711,6 @@ export default class Parser<AstNode> {
       return 20;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1806,7 +1781,6 @@ export default class Parser<AstNode> {
       return 22;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1877,7 +1851,6 @@ export default class Parser<AstNode> {
       return 22;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -1958,7 +1931,6 @@ export default class Parser<AstNode> {
       return 23;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2039,7 +2011,6 @@ export default class Parser<AstNode> {
       return 24;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2069,7 +2040,6 @@ export default class Parser<AstNode> {
       return 25;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2159,7 +2129,6 @@ export default class Parser<AstNode> {
       return 27;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2251,7 +2220,6 @@ export default class Parser<AstNode> {
       return 27;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2353,7 +2321,6 @@ export default class Parser<AstNode> {
       return 28;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2457,7 +2424,6 @@ export default class Parser<AstNode> {
       return 29;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2487,7 +2453,6 @@ export default class Parser<AstNode> {
       return 30;
     }
 
-    token.detach();
     const expectedTokens = ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2591,7 +2556,6 @@ export default class Parser<AstNode> {
       return 32;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2697,7 +2661,6 @@ export default class Parser<AstNode> {
       return 32;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2801,7 +2764,6 @@ export default class Parser<AstNode> {
       return 33;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2821,7 +2783,6 @@ export default class Parser<AstNode> {
       return 35;
     }
 
-    token.detach();
     const expectedTokens = ["#DocStringSeparator", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2921,7 +2882,6 @@ export default class Parser<AstNode> {
       return 36;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -2941,7 +2901,6 @@ export default class Parser<AstNode> {
       return 37;
     }
 
-    token.detach();
     const expectedTokens = ["#DocStringSeparator", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -3018,7 +2977,6 @@ export default class Parser<AstNode> {
       return 38;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -3038,7 +2996,6 @@ export default class Parser<AstNode> {
       return 39;
     }
 
-    token.detach();
     const expectedTokens = ["#DocStringSeparator", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -3135,7 +3092,6 @@ export default class Parser<AstNode> {
       return 40;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -3155,7 +3111,6 @@ export default class Parser<AstNode> {
       return 41;
     }
 
-    token.detach();
     const expectedTokens = ["#DocStringSeparator", "#Other"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -3229,7 +3184,6 @@ export default class Parser<AstNode> {
       return 42;
     }
 
-    token.detach();
     const expectedTokens = ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -3310,13 +3264,11 @@ export default class Parser<AstNode> {
 
 
   private lookahead_0(context: Context, currentToken: IToken<TokenType>) {
-    currentToken.detach();
     let token;
     const queue: IToken<TokenType>[] = [];
     let match = false;
     do {
       token = this.readToken(this.context);
-      token.detach();
       queue.push(token);
 
       if (false || this.match_ScenarioLine(context, token)) {
@@ -3331,13 +3283,11 @@ export default class Parser<AstNode> {
   }
 
   private lookahead_1(context: Context, currentToken: IToken<TokenType>) {
-    currentToken.detach();
     let token;
     const queue: IToken<TokenType>[] = [];
     let match = false;
     do {
       token = this.readToken(this.context);
-      token.detach();
       queue.push(token);
 
       if (false || this.match_ExamplesLine(context, token)) {

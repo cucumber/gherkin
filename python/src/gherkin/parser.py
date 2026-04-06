@@ -350,7 +350,6 @@ class Parser:
             return 0
 
         state_comment = "State: 0 - Start"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Language",
@@ -386,7 +385,6 @@ class Parser:
             return 1
 
         state_comment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#FeatureLine",
@@ -420,7 +418,6 @@ class Parser:
             return 2
 
         state_comment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#FeatureLine",
@@ -488,7 +485,6 @@ class Parser:
             return 4
 
         state_comment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -561,7 +557,6 @@ class Parser:
             return 4
 
         state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -631,7 +626,6 @@ class Parser:
             return 6
 
         state_comment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -703,7 +697,6 @@ class Parser:
             return 6
 
         state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -782,7 +775,6 @@ class Parser:
             return 7
 
         state_comment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -864,7 +856,6 @@ class Parser:
             return 8
 
         state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -903,7 +894,6 @@ class Parser:
             return 9
 
         state_comment = "State: 9 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#ScenarioLine",
@@ -986,7 +976,6 @@ class Parser:
             return 11
 
         state_comment = "State: 10 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -1077,7 +1066,6 @@ class Parser:
             return 11
 
         state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -1175,7 +1163,6 @@ class Parser:
             return 12
 
         state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -1278,7 +1265,6 @@ class Parser:
             return 13
 
         state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -1318,7 +1304,6 @@ class Parser:
             return 14
 
         state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#ExamplesLine",
@@ -1415,7 +1400,6 @@ class Parser:
             return 16
 
         state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -1520,7 +1504,6 @@ class Parser:
             return 16
 
         state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -1622,7 +1605,6 @@ class Parser:
             return 17
 
         state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -1660,7 +1642,6 @@ class Parser:
             return 18
 
         state_comment = "State: 18 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#RuleLine",
@@ -1731,7 +1712,6 @@ class Parser:
             return 20
 
         state_comment = "State: 19 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -1807,7 +1787,6 @@ class Parser:
             return 20
 
         state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -1880,7 +1859,6 @@ class Parser:
             return 22
 
         state_comment = "State: 21 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -1955,7 +1933,6 @@ class Parser:
             return 22
 
         state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -2037,7 +2014,6 @@ class Parser:
             return 23
 
         state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -2122,7 +2098,6 @@ class Parser:
             return 24
 
         state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -2161,7 +2136,6 @@ class Parser:
             return 25
 
         state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#ScenarioLine",
@@ -2247,7 +2221,6 @@ class Parser:
             return 27
 
         state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -2341,7 +2314,6 @@ class Parser:
             return 27
 
         state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -2442,7 +2414,6 @@ class Parser:
             return 28
 
         state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -2548,7 +2519,6 @@ class Parser:
             return 29
 
         state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -2588,7 +2558,6 @@ class Parser:
             return 30
 
         state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#TagLine",
             "#ExamplesLine",
@@ -2688,7 +2657,6 @@ class Parser:
             return 32
 
         state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -2796,7 +2764,6 @@ class Parser:
             return 32
 
         state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -2901,7 +2868,6 @@ class Parser:
             return 33
 
         state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -2932,7 +2898,6 @@ class Parser:
             return 35
 
         state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3027,7 +2992,6 @@ class Parser:
             return 36
 
         state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#StepLine",
@@ -3058,7 +3022,6 @@ class Parser:
             return 37
 
         state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3133,7 +3096,6 @@ class Parser:
             return 38
 
         state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#StepLine",
@@ -3163,7 +3125,6 @@ class Parser:
             return 39
 
         state_comment = "State: 39 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3255,7 +3216,6 @@ class Parser:
             return 40
 
         state_comment = "State: 40 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#StepLine",
@@ -3286,7 +3246,6 @@ class Parser:
             return 41
 
         state_comment = "State: 41 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3358,7 +3317,6 @@ class Parser:
             return 42
 
         state_comment = "State: 42 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
-        token.detach()
         expected_tokens = [
             "#EOF",
             "#StepLine",
@@ -3379,7 +3337,6 @@ class Parser:
         return 42
 
     def lookahead_0(self, context: ParserContext, currentToken: Token) -> bool:
-        currentToken.detach()
         token = None
         queue = []
         match = False
@@ -3387,7 +3344,6 @@ class Parser:
         continue_lookahead = True
         while continue_lookahead:
             token = self.read_token(context)
-            token.detach()
             queue.append(token)
 
             if self.match_ScenarioLine(context, token):
@@ -3411,7 +3367,6 @@ class Parser:
         return match
 
     def lookahead_1(self, context: ParserContext, currentToken: Token) -> bool:
-        currentToken.detach()
         token = None
         queue = []
         match = False
@@ -3419,7 +3374,6 @@ class Parser:
         continue_lookahead = True
         while continue_lookahead:
             token = self.read_token(context)
-            token.detach()
             queue.append(token)
 
             if self.match_ExamplesLine(context, token):
