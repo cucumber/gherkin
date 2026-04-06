@@ -3,7 +3,7 @@
 describe Gherkin::Stream::ParserMessageStream do
   subject(:gherkin_document) { messages.first.gherkin_document }
 
-  let(:messages) { ParserMessageStream.from_sources([source_feature], options).messages }
+  let(:messages) { described_class.new(sources: [source_feature], options: options).messages }
   let(:source_feature) do
     Cucumber::Messages::Source.new(
       uri: '//whatever/uri',
