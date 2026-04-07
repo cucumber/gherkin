@@ -1,6 +1,7 @@
 from .gherkin_line import GherkinLine
 from .parser_types import Location
 
+
 class Token:
     def __init__(self, gherkin_line: GherkinLine, location: Location):
         self.line = gherkin_line
