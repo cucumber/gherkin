@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-- [Ruby, Python, JavaScript, Perl, C++, .NET] Remove redundant null `#detach` method from several parsers
+- [Ruby, Python, JavaScript, Perl, C++, .NET] Optimise parser class/speed by removing redundant null `#detach` method
 
 ### Fixed
 - [c] Fixed memory leak with respekt to the pickle ast ids.
