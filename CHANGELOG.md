@@ -15,6 +15,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Added missing include guard in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 - [cpp] Removed unreachable code in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 
+### Removed
+- [Python] Drop support for python 3.9.
+
 ## [39.0.0] - 2026-03-01
 ### Added
 - (i18n) Added Korean translation of "Rule" ([#544](https://github.com/cucumber/gherkin/pull/544))
