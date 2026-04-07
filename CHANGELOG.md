@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [Ruby, Python, JavaScript, Perl, C++, .NET] Remove redundant null `#detach` method from several parsers
 
 ### Fixed
 - [c] Fixed memory leak with respekt to the pickle ast ids.
