@@ -342,14 +342,12 @@ protected:
 
     bool lookahead_0(context_type& context, token& current_token)
     {
-        current_token.detach();
         token token;
         token_queue queue;
         bool match = false;
 
         while (true) {
             token = context.read_token();
-            token.detach();
             queue.push_back(token);
 
             if (match_scenario_line(context, token) || false) {
@@ -369,14 +367,12 @@ protected:
 
     bool lookahead_1(context_type& context, token& current_token)
     {
-        current_token.detach();
         token token;
         token_queue queue;
         bool match = false;
 
         while (true) {
             token = context.read_token();
-            token.detach();
             queue.push_back(token);
 
             if (match_examples_line(context, token) || false) {

@@ -16,7 +16,6 @@
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
-    token.detach();
     const expectedTokens = ["@Raw(string.Join("\", \"", expectedTokens))"];
     const error = token.isEof ?
       UnexpectedEOFException.create(token, expectedTokens) :
@@ -64,10 +63,6 @@ export class Token implements IToken<TokenType> {
 
   public getTokenValue(): string {
     return this.isEof ? 'EOF' : this.line.getLineText(-1)
-  }
-
-  public detach() {
-    // TODO: Detach line, but is this really needed?
   }
 }
 
@@ -252,13 +247,11 @@ export default class Parser<AstNode> {
 {
 <text>
   private lookahead_@(lookAheadHint.Id)(context: Context, currentToken: IToken<TokenType>) {
-    currentToken.detach();
     let token;
     const queue: IToken<TokenType>[] = [];
     let match = false;
     do {
       token = this.readToken(this.context);
-      token.detach();
       queue.push(token);
 
       if (false @foreach(var tokenType in lookAheadHint.ExpectedTokens) { <text>|| this.@MatchToken(tokenType)</text>}) {

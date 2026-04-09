@@ -8,6 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
+- [Ruby, Python, JavaScript, Perl, C++, .NET] Optimise parser class/speed by removing redundant null `#detach` method
 - [Ruby] Changed `ParserMessageStream` to accept keyword arguments allowing the `Gherkin` class methods to be slightly more optimal
 
 ### Fixed
