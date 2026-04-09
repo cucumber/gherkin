@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'cucumber/messages'
+
 require_relative '../parser'
 require_relative '../token_matcher'
 require_relative '../pickles/compiler'
@@ -8,12 +9,12 @@ require_relative '../pickles/compiler'
 module Gherkin
   module Stream
     class ParserMessageStream
-      def initialize(paths, sources, options)
+      def initialize(paths: [], sources: [], options: {})
         @paths = paths
         @sources = sources
         @options = options
 
-        id_generator = options[:id_generator] || Cucumber::Messages::Helpers::IdGenerator::UUID.new
+        id_generator = options.fetch(:id_generator, Cucumber::Messages::Helpers::IdGenerator::UUID.new)
         @parser = Parser.new(AstBuilder.new(id_generator))
         @compiler = Pickles::Compiler.new(id_generator)
       end
@@ -87,14 +88,14 @@ module Gherkin
       def build_gherkin_document(source)
         if @options[:default_dialect]
           token_matcher = TokenMatcher.new(@options[:default_dialect])
-          gd = @parser.parse(source.data, token_matcher)
+          gherkin_document = @parser.parse(source.data, token_matcher)
         else
-          gd = @parser.parse(source.data)
+          gherkin_document = @parser.parse(source.data)
         end
         Cucumber::Messages::GherkinDocument.new(
           uri: source.uri,
-          feature: gd.feature,
-          comments: gd.comments
+          feature: gherkin_document.feature,
+          comments: gherkin_document.comments
         )
       end
     end

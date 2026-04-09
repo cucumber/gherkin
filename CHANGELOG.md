@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [Ruby, Python, JavaScript, Perl, C++, .NET] Optimise parser class/speed by removing redundant null `#detach` method
+- [Ruby] Changed `ParserMessageStream` to accept keyword arguments allowing the `Gherkin` class methods to be slightly more optimal
 
 ### Fixed
 - [c] Fixed memory leak with respekt to the pickle ast ids.
@@ -16,6 +17,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [PHP] Fix PHP 8.4 deprecation warnings.
 - [cpp] Added missing include guard in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 - [cpp] Removed unreachable code in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
+
+### Removed
+- [Python] Drop support for python 3.9.
 
 ## [39.0.0] - 2026-03-01
 ### Added
