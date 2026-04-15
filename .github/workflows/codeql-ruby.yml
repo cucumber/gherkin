@@ -1,6 +1,6 @@
 name: codeql-ruby
 
-permissions: {}
+permissions: { }
 
 on:
   push:
