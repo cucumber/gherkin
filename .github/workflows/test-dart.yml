@@ -29,7 +29,7 @@ jobs:
           persist-credentials: false
 
       - name: install dart
-        uses: dart-lang/setup-dart@a57a6c04cf7d4840e88432aad6281d1e125f0d46 # v1.4
+        uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
 
       - name: run tests
         run: dart test
