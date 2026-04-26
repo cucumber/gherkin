@@ -140,20 +140,6 @@ gherkin_document["uri"] = "uri_of_the_feature.feature"
 pickles = Compiler().compile(gherkin_document)
 ```
 
-#### Objective-C
-
-```Objective-C
-#import "GHParser+Extensions.h"
-
-GHParser * parser = [[GHParser alloc] init];
-NSString * featureFilePath; // Should refer to the place where we can get the content of the feature
-NSString * content = [NSString stringWithContentsOfURL:featureFilePath encoding:NSUTF8StringEncoding error:nil];
-if([content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0){
-      // GHParser will throw an error if you passed empty content... handle this issue first.
-}
-GHGherkinDocument * result = [parser parseContent:content];
-```
-
 #### Perl
 
 ```perl
