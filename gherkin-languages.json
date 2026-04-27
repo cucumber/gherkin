@@ -3323,45 +3323,79 @@
   "tr": {
     "and": [
       "* ",
-      "Ve "
+      "Ve ",
+      "Hem de ",
+      "Bir de ",
+      "Ayrıca "
     ],
     "background": [
-      "Geçmiş"
+      "Geçmiş",
+      "Arka Plan",
+      "Ön Koşul",
+      "Önkoşul",
+      "Önceki Durum"
     ],
     "but": [
       "* ",
       "Fakat ",
-      "Ama "
+      "Ama ",
+      "Ancak ",
+      "Yalnız ",
+      "Lakin ",
+      "Ne var ki "
     ],
     "examples": [
-      "Örnekler"
+      "Örnekler",
+      "Değerler"
     ],
     "feature": [
-      "Özellik"
+      "Özellik",
+      "İş Gereksinimi",
+      "Gereksinim",
+      "İşlev",
+      "Kullanıcı Hikayesi",
+      "Yetenek"
     ],
     "given": [
       "* ",
-      "Diyelim ki "
+      "Diyelim ki ",
+      "Mevcut durumda ",
+      "Varsayalım ki ",
+      "Zaten ",
+      "Halihazırda ",
+      "Önceden ",
+      "Biliniyor ki ",
+      "Biliyoruz ki "
     ],
     "name": "Turkish",
     "native": "Türkçe",
     "rule": [
-      "Kural"
+      "Kural",
+      "İş Kuralı",
+      "Kaide"
     ],
     "scenario": [
       "Örnek",
-      "Senaryo"
+      "Senaryo",
+      "Durum"
     ],
     "scenarioOutline": [
-      "Senaryo taslağı"
+      "Senaryo taslağı",
+      "Senaryo şablonu"
     ],
     "then": [
       "* ",
-      "O zaman "
+      "O zaman ",
+      "Sonuç olarak ",
+      "Böylece ",
+      "Dolayısıyla "
     ],
     "when": [
       "* ",
-      "Eğer ki "
+      "Eğer ki ",
+      "Eğer ",
+      "Ne zaman ki ",
+      "Şayet "
     ]
   },
   "tt": {

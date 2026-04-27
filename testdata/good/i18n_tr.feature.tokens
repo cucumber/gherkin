@@ -1,0 +1,194 @@
+(1:1)Language:/tr/
+(2:1)Comment:/# ══════════════════════════════════════════════════════/
+(3:1)Comment:/# Türkçe Gherkin — Tam Anahtar Kelime Rehberi/
+(4:1)Comment:/# Cucumber BDD ile Davranış Odaklı Geliştirme/
+(5:1)Comment:/# ══════════════════════════════════════════════════════/
+(6:1)Empty://
+(7:1)FeatureLine:()İş Gereksinimi/Türkçe anahtar kelime doğrulama/
+(8:1)Other:/  Bu özellik dosyası tüm Türkçe Gherkin anahtar/
+(9:1)Other:/  kelimelerini test eder./
+(10:1)Other://
+(11:1)Comment:/  # ── 1. E-TİCARET: Sipariş Yaşam Döngüsü ──────────/
+(12:1)Other://
+(13:3)BackgroundLine:()Arka Plan//
+(14:5)StepLine:(Context)Diyelim ki /mağaza açık ve stokta ürünler var/
+(15:5)StepLine:(Conjunction)Ve /ödeme sistemi aktif/
+(16:1)Empty://
+(17:3)RuleLine:()Kural/Sipariş tamamlama kuralları/
+(18:1)Empty://
+(19:5)ScenarioLine:()Senaryo/Başarılı sipariş tamamlama/
+(20:7)StepLine:(Context)Zaten /müşteri giriş yapmış/
+(21:7)StepLine:(Conjunction)Ve /sepetinde 2 ürün var/
+(22:7)StepLine:(Action)Eğer /müşteri ödeme sayfasına geçerse/
+(23:7)StepLine:(Conjunction)Ve /kredi kartı bilgilerini girerse/
+(24:7)StepLine:(Outcome)O zaman /sipariş onaylanmalı/
+(25:7)StepLine:(Conjunction)Ve /müşteriye e-posta ile bildirim gitmeli/
+(26:1)Empty://
+(27:5)ScenarioLine:()Senaryo/Stokta olmayan ürün uyarısı/
+(28:7)StepLine:(Context)Diyelim ki /müşteri bir ürünü sepete eklemiş/
+(29:7)StepLine:(Conjunction)Ama /ürün stoktan düşmüş/
+(30:7)StepLine:(Action)Şayet /müşteri ödeme yapmaya çalışırsa/
+(31:7)StepLine:(Outcome)O zaman /"Ürün stokta kalmadı" uyarısı gösterilmeli/
+(32:7)StepLine:(Conjunction)Ve /sepet otomatik güncellenmeli/
+(33:1)Empty://
+(34:5)ScenarioLine:()Senaryo şablonu/Kargo ücreti hesaplama/
+(35:7)StepLine:(Context)Diyelim ki /sepet tutarı <tutar> TL/
+(36:7)StepLine:(Action)Eğer /müşteri <şehir> adresine teslimat seçerse/
+(37:7)StepLine:(Outcome)O zaman /kargo ücreti <kargo> TL olmalı/
+(38:1)Empty://
+(39:7)ExamplesLine:()Örnekler//
+(40:9)TableRow://11:tutar,19:şehir,30:kargo
+(41:9)TableRow://11:50,19:İstanbul,30:29
+(42:9)TableRow://11:200,19:Ankara,30:0
+(43:9)TableRow://11:75,19:Trabzon,30:19
+(44:1)Empty://
+(45:1)Comment:/  # ── 2. FİNANS: Banka Hesap İşlemleri ─────────────/
+(46:1)Empty://
+(47:3)RuleLine:()Kural/Transfer güvenlik kontrolleri/
+(48:1)Empty://
+(49:5)BackgroundLine:()Önkoşul//
+(50:7)StepLine:(Context)Halihazırda /müşteri internet bankacılığına giriş yapmış/
+(51:1)Empty://
+(52:5)ScenarioLine:()Senaryo/Günlük transfer limiti aşımı/
+(53:7)StepLine:(Context)Mevcut durumda /hesapta 10.000 TL bakiye var/
+(54:7)StepLine:(Conjunction)Ve /günlük transfer limiti 5.000 TL/
+(55:7)StepLine:(Action)Eğer /hesap sahibi 6.000 TL transfer yapmaya çalışırsa/
+(56:7)StepLine:(Outcome)O zaman /işlem reddedilmeli/
+(57:7)StepLine:(Conjunction)Ve /"Günlük limitiniz aşıldı" mesajı gösterilmeli/
+(58:1)Empty://
+(59:5)ScenarioLine:()Senaryo/Şüpheli işlem tespiti/
+(60:7)StepLine:(Context)Varsayalım ki /hesap sahibi her gün ortalama 500 TL harcıyor/
+(61:7)StepLine:(Action)Eğer ki /aynı gün içinde 5 farklı ülkeden işlem gelirse/
+(62:7)StepLine:(Outcome)O zaman /hesap geçici olarak dondurulmalı/
+(63:7)StepLine:(Conjunction)Ve /güvenlik ekibine otomatik bildirim gitmeli/
+(64:1)Empty://
+(65:1)Comment:/  # ── 3. SAĞLIK: Hasta Randevu Sistemi ─────────────/
+(66:1)Empty://
+(67:3)RuleLine:()Kural/Randevu yönetim kuralları/
+(68:1)Empty://
+(69:5)BackgroundLine:()Önceki Durum//
+(70:7)StepLine:(Context)Önceden /hastane randevu sistemi açılmış/
+(71:7)StepLine:(Conjunction)Ve /doktor müsaitlik bilgileri güncellenmiş/
+(72:1)Empty://
+(73:5)ScenarioLine:()Örnek/Acil durum randevusu/
+(74:7)StepLine:(Context)Diyelim ki /hasta acil servise başvurdu/
+(75:7)StepLine:(Conjunction)Ve /triaj puanı kırmızı/
+(76:7)StepLine:(Action)Şayet /hastaya doktor atanırsa/
+(77:7)StepLine:(Outcome)O zaman /muayene süresi 5 dakika içinde başlamalı/
+(78:7)StepLine:(Conjunction)Fakat /normal sıra bekleyen hastalar etkilenmemeli/
+(79:1)Empty://
+(80:5)ScenarioLine:()Örnek/Randevu çakışması kontrolü/
+(81:7)StepLine:(Context)Mevcut durumda /doktorun 14:00 randevusu dolu/
+(82:7)StepLine:(Action)Eğer /başka bir hasta 14:00 için randevu almaya çalışırsa/
+(83:7)StepLine:(Outcome)Sonuç olarak /en yakın boş saat önerilmeli/
+(84:7)StepLine:(Conjunction)Ancak /acil durumlar bu kuraldan muaf olmalı/
+(85:1)Empty://
+(86:1)Comment:/  # ── 4. GÜVENLİK: Erişim Kontrolü ──────────────/
+(87:1)Empty://
+(88:3)RuleLine:()Kural/Gizli belgelere yalnızca yetki seviyesi yeterli personel erişebilir/
+(89:1)Empty://
+(90:5)BackgroundLine:()Ön Koşul//
+(91:7)StepLine:(Context)Halihazırda /güvenlik sistemi aktif/
+(92:7)StepLine:(Conjunction)Ve /erişim logları kayıt altında/
+(93:1)Empty://
+(94:5)ScenarioLine:()Senaryo/Yetkisiz erişim denemesi/
+(95:7)StepLine:(Context)Diyelim ki /personelin güvenlik seviyesi "gizli"/
+(96:7)StepLine:(Conjunction)Ve /belgenin gizlilik seviyesi "çok gizli"/
+(97:7)StepLine:(Action)Eğer /personel belgeyi açmaya çalışırsa/
+(98:7)StepLine:(Outcome)O zaman /erişim engellenmelidir/
+(99:7)StepLine:(Conjunction)Ve /güvenlik loguna kayıt düşmelidir/
+(100:1)Empty://
+(101:5)ScenarioLine:()Senaryo/Yetkili erişim ile denetim izi/
+(102:7)StepLine:(Context)Mevcut durumda /personelin güvenlik seviyesi "çok gizli"/
+(103:7)StepLine:(Conjunction)Ve /belgenin gizlilik seviyesi "çok gizli"/
+(104:7)StepLine:(Action)Eğer /personel belgeyi açarsa/
+(105:7)StepLine:(Outcome)O zaman /belge görüntülenmelidir/
+(106:7)StepLine:(Conjunction)Ve /erişim kaydı tarih ve saat ile loglanmalıdır/
+(107:1)Empty://
+(108:1)Comment:/  # ── 5. ENERJİ: SCADA İzleme ─────────────────────/
+(109:1)Empty://
+(110:3)RuleLine:()Kural/Enerji santrali kritik eşik izleme/
+(111:1)Empty://
+(112:5)ScenarioLine:()Senaryo/Sıcaklık eşiği aşımı/
+(113:7)StepLine:(Context)Diyelim ki /reaktör sıcaklığı normal aralıkta/
+(114:7)StepLine:(Action)Ne zaman ki /sıcaklık 85 derece değerine ulaşır/
+(115:7)StepLine:(Outcome)O zaman /sarı alarm tetiklenmeli/
+(116:7)StepLine:(Conjunction)Ve /operatöre anlık bildirim gitmeli/
+(117:1)Empty://
+(118:5)ScenarioLine:()Senaryo/Kritik seviye operatör müdahalesiz kalırsa/
+(119:7)StepLine:(Context)Diyelim ki /reaktör sıcaklığı 95 derece eşiğini aştı/
+(120:7)StepLine:(Conjunction)Ve /sarı alarm 30 saniyedir yanıyor/
+(121:7)StepLine:(Action)Eğer /operatör bu süre içinde onay vermezse/
+(122:7)StepLine:(Outcome)O zaman /otomatik soğutma sistemi devreye girmeli/
+(123:7)StepLine:(Conjunction)Ve /olay raporu tarih ve operatör kimliğiyle oluşturulmalı/
+(124:1)Empty://
+(125:1)Comment:/  # ── 6. GÜNLÜK HAYAT: Market Alışverişi ─────────/
+(126:1)Empty://
+(127:3)RuleLine:()İş Kuralı/Market kasa işlemleri/
+(128:1)Empty://
+(129:5)ScenarioLine:()Senaryo/Sadakat kartı ile indirim/
+(130:7)StepLine:(Context)Zaten /müşteri sadakat kartına sahip/
+(131:7)StepLine:(Conjunction)Ve /sepette 3 kalem ürün var/
+(132:7)StepLine:(Action)Eğer /müşteri kasada sadakat kartını okuttursa/
+(133:7)StepLine:(Outcome)Böylece /toplam tutardan yüzde 5 indirim uygulanmalı/
+(134:7)StepLine:(Conjunction)Ayrıca /kalan puan bakiyesi fiş üzerinde gösterilmeli/
+(135:1)Empty://
+(136:5)ScenarioLine:()Senaryo/Bozuk para üstü hesaplama/
+(137:7)StepLine:(Context)Halihazırda /kasada yeterli bozuk para var/
+(138:7)StepLine:(Action)Eğer /müşteri 47 TL tutarında alışveriş yapıp 50 TL verirse/
+(139:7)StepLine:(Outcome)O zaman /3 TL para üstü verilmeli/
+(140:1)Empty://
+(141:1)Comment:/  # ── 7. EĞİTİM: Öğrenci Kayıt Sistemi ──────────/
+(142:1)Empty://
+(143:3)RuleLine:()Kural/Ders kayıt kuralları/
+(144:1)Empty://
+(145:5)ScenarioLine:()Senaryo/Kontenjan dolu ders kaydı/
+(146:7)StepLine:(Context)Önceden /öğrenci ders seçim dönemine giriş yapmış/
+(147:7)StepLine:(Conjunction)Ve /seçmek istediği dersin kontenjanı dolmuş/
+(148:7)StepLine:(Action)Şayet /öğrenci bu derse kayıt olmaya çalışırsa/
+(149:7)StepLine:(Outcome)O zaman /"Kontenjan dolmuştur" uyarısı gösterilmeli/
+(150:7)StepLine:(Conjunction)Ama /öğrenci bekleme listesine eklenebilmeli/
+(151:1)Empty://
+(152:5)ScenarioLine:()Senaryo şablonu/Not ortalaması hesaplama/
+(153:7)StepLine:(Context)Varsayalım ki /öğrencinin <ders> dersinden notu <not>/
+(154:7)StepLine:(Action)Eğer /dönem sonu ortalaması hesaplanırsa/
+(155:7)StepLine:(Outcome)Böylece /genel ortalama <ortalama> olmalı/
+(156:1)Empty://
+(157:7)ExamplesLine:()Değerler//
+(158:9)TableRow://11:ders,24:not,30:ortalama
+(159:9)TableRow://11:Matematik,24:85,30:82
+(160:9)TableRow://11:Fizik,24:90,30:87
+(161:9)TableRow://11:Kimya,24:75,30:83
+(162:1)Empty://
+(163:1)Comment:/  # ── 8. ULAŞIM: Toplu Taşıma Kartı ─────────────/
+(164:1)Empty://
+(165:3)RuleLine:()Kural/Toplu taşıma kart işlemleri/
+(166:1)Empty://
+(167:5)ScenarioLine:()Senaryo/Aktarmalı biniş hakkı/
+(168:7)StepLine:(Context)Diyelim ki /yolcu otobüsten inmiş/
+(169:7)StepLine:(Conjunction)Ve /kartında aktarma hakkı var/
+(170:7)StepLine:(Conjunction)Hem de /son binişten 45 dakika geçmemiş/
+(171:7)StepLine:(Conjunction)Bir de /aktarma yapılacak hat tanımlı/
+(172:7)StepLine:(Action)Eğer /yolcu metroya binmek için kartını okuttursa/
+(173:7)StepLine:(Outcome)O zaman /biniş ücretsiz olmalı/
+(174:7)StepLine:(Conjunction)Ayrıca /kalan aktarma süresi ekranda gösterilmeli/
+(175:1)Empty://
+(176:1)Comment:/  # ── 9. HUKUK: Sözleşme Yönetimi ───────────────/
+(177:1)Empty://
+(178:3)RuleLine:()Kaide/Sözleşme imza süreçleri/
+(179:1)Empty://
+(180:5)ScenarioLine:()Durum/Süresi dolmuş sözleşme yenileme/
+(181:7)StepLine:(Context)Biliniyor ki /sözleşmenin bitiş tarihi geçmiş/
+(182:7)StepLine:(Conjunction)Ve /taraflar yenileme konusunda anlaşmış/
+(183:7)StepLine:(Action)Şayet /yeni sözleşme sisteme yüklenirse/
+(184:7)StepLine:(Outcome)Dolayısıyla /eski sözleşme arşive taşınmalı/
+(185:7)StepLine:(Conjunction)Yalnız /arşivlenen sözleşme salt okunur olmalı/
+(186:1)Empty://
+(187:5)ScenarioLine:()Durum/Yetkisiz sözleşme değişikliği/
+(188:7)StepLine:(Context)Biliyoruz ki /sözleşme onay sürecinde/
+(189:7)StepLine:(Conjunction)Ve /sadece hukuk birimi değişiklik yapabilir/
+(190:7)StepLine:(Action)Eğer /yetkisiz bir kullanıcı düzenleme yapmaya çalışırsa/
+(191:7)StepLine:(Outcome)O zaman /değişiklik engellenmelidir/
+(192:7)StepLine:(Conjunction)Lakin /kullanıcıya yetki talebi formu gösterilmeli/
+(193:7)StepLine:(Conjunction)Ne var ki /mevcut sözleşme içeriği değişmemeli/
+EOF

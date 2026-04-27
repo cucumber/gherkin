@@ -4870,12 +4870,22 @@ var builtinDialects = gherkinDialectMap{
 		Keywords: map[string][]string{
 			feature: {
 				"Özellik",
+				"İş Gereksinimi",
+				"Gereksinim",
+				"İşlev",
+				"Kullanıcı Hikayesi",
+				"Yetenek",
 			},
 			rule: {
 				"Kural",
+				"İş Kuralı",
 			},
 			background: {
 				"Geçmiş",
+				"Arka Plan",
+				"Ön Koşul",
+				"Önkoşul",
+				"Önceki Durum",
 			},
 			scenario: {
 				"Örnek",
@@ -4883,44 +4893,85 @@ var builtinDialects = gherkinDialectMap{
 			},
 			scenarioOutline: {
 				"Senaryo taslağı",
+				"Senaryo şablonu",
 			},
 			examples: {
 				"Örnekler",
+				"Değerler",
 			},
 			given: {
 				"* ",
 				"Diyelim ki ",
+				"Mevcut durumda ",
+				"Varsayalım ki ",
+				"Zaten ",
+				"Halihazırda ",
+				"Önceden ",
 			},
 			when: {
 				"* ",
 				"Eğer ki ",
+				"Eğer ",
+				"Ne zaman ki ",
+				"Şayet ",
 			},
 			then: {
 				"* ",
 				"O zaman ",
+				"Sonuç olarak ",
+				"Böylece ",
 			},
 			and: {
 				"* ",
 				"Ve ",
+				"Hem ",
+				"Ayrıca ",
 			},
 			but: {
 				"* ",
 				"Fakat ",
 				"Ama ",
+				"Ancak ",
 			},
 		},
 		KeywordTypes: map[string]messages.StepKeywordType{
 			"Diyelim ki ": messages.StepKeywordType_CONTEXT,
 
+			"Mevcut durumda ": messages.StepKeywordType_CONTEXT,
+
+			"Varsayalım ki ": messages.StepKeywordType_CONTEXT,
+
+			"Zaten ": messages.StepKeywordType_CONTEXT,
+
+			"Halihazırda ": messages.StepKeywordType_CONTEXT,
+
+			"Önceden ": messages.StepKeywordType_CONTEXT,
+
 			"Eğer ki ": messages.StepKeywordType_ACTION,
+
+			"Eğer ": messages.StepKeywordType_ACTION,
+
+			"Ne zaman ki ": messages.StepKeywordType_ACTION,
+
+			"Şayet ": messages.StepKeywordType_ACTION,
 
 			"O zaman ": messages.StepKeywordType_OUTCOME,
 
+			"Sonuç olarak ": messages.StepKeywordType_OUTCOME,
+
+			"Böylece ": messages.StepKeywordType_OUTCOME,
+
 			"Ve ": messages.StepKeywordType_CONJUNCTION,
+
+			"Hem ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ayrıca ": messages.StepKeywordType_CONJUNCTION,
 
 			"Fakat ": messages.StepKeywordType_CONJUNCTION,
 
 			"Ama ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ancak ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		},

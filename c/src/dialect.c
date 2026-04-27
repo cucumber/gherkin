@@ -3243,38 +3243,38 @@ static const Dialect tlh_dialect = {
         &tlh_then_keywords,
         &tlh_when_keywords };
 
-static const wchar_t* const tr_and_KEYWORDS[] = { L"* ", L"Ve " };
-static const Keywords tr_and_keywords = { 2, tr_and_KEYWORDS };
+static const wchar_t* const tr_and_KEYWORDS[] = { L"* ", L"Ve ", L"Hem ", L"Ayrıca " };
+static const Keywords tr_and_keywords = { 4, tr_and_KEYWORDS };
 
-static const wchar_t* const tr_background_KEYWORDS[] = { L"Geçmiş" };
-static const Keywords tr_background_keywords = { 1, tr_background_KEYWORDS };
+static const wchar_t* const tr_background_KEYWORDS[] = { L"Geçmiş", L"Arka Plan", L"Ön Koşul", L"Önkoşul", L"Önceki Durum" };
+static const Keywords tr_background_keywords = { 5, tr_background_KEYWORDS };
 
-static const wchar_t* const tr_but_KEYWORDS[] = { L"* ", L"Fakat ", L"Ama " };
-static const Keywords tr_but_keywords = { 3, tr_but_KEYWORDS };
+static const wchar_t* const tr_but_KEYWORDS[] = { L"* ", L"Fakat ", L"Ama ", L"Ancak " };
+static const Keywords tr_but_keywords = { 4, tr_but_KEYWORDS };
 
-static const wchar_t* const tr_examples_KEYWORDS[] = { L"Örnekler" };
-static const Keywords tr_examples_keywords = { 1, tr_examples_KEYWORDS };
+static const wchar_t* const tr_examples_KEYWORDS[] = { L"Örnekler", L"Değerler" };
+static const Keywords tr_examples_keywords = { 2, tr_examples_KEYWORDS };
 
-static const wchar_t* const tr_feature_KEYWORDS[] = { L"Özellik" };
-static const Keywords tr_feature_keywords = { 1, tr_feature_KEYWORDS };
+static const wchar_t* const tr_feature_KEYWORDS[] = { L"Özellik", L"İş Gereksinimi", L"Gereksinim", L"İşlev", L"Kullanıcı Hikayesi", L"Yetenek" };
+static const Keywords tr_feature_keywords = { 6, tr_feature_KEYWORDS };
 
-static const wchar_t* const tr_given_KEYWORDS[] = { L"* ", L"Diyelim ki " };
-static const Keywords tr_given_keywords = { 2, tr_given_KEYWORDS };
+static const wchar_t* const tr_given_KEYWORDS[] = { L"* ", L"Diyelim ki ", L"Mevcut durumda ", L"Varsayalım ki ", L"Zaten ", L"Halihazırda ", L"Önceden " };
+static const Keywords tr_given_keywords = { 7, tr_given_KEYWORDS };
 
-static const wchar_t* const tr_rule_KEYWORDS[] = { L"Kural" };
-static const Keywords tr_rule_keywords = { 1, tr_rule_KEYWORDS };
+static const wchar_t* const tr_rule_KEYWORDS[] = { L"Kural", L"İş Kuralı" };
+static const Keywords tr_rule_keywords = { 2, tr_rule_KEYWORDS };
 
 static const wchar_t* const tr_scenario_KEYWORDS[] = { L"Örnek", L"Senaryo" };
 static const Keywords tr_scenario_keywords = { 2, tr_scenario_KEYWORDS };
 
-static const wchar_t* const tr_scenarioOutline_KEYWORDS[] = { L"Senaryo taslağı" };
-static const Keywords tr_scenarioOutline_keywords = { 1, tr_scenarioOutline_KEYWORDS };
+static const wchar_t* const tr_scenarioOutline_KEYWORDS[] = { L"Senaryo taslağı", L"Senaryo şablonu" };
+static const Keywords tr_scenarioOutline_keywords = { 2, tr_scenarioOutline_KEYWORDS };
 
-static const wchar_t* const tr_then_KEYWORDS[] = { L"* ", L"O zaman " };
-static const Keywords tr_then_keywords = { 2, tr_then_KEYWORDS };
+static const wchar_t* const tr_then_KEYWORDS[] = { L"* ", L"O zaman ", L"Sonuç olarak ", L"Böylece " };
+static const Keywords tr_then_keywords = { 4, tr_then_KEYWORDS };
 
-static const wchar_t* const tr_when_KEYWORDS[] = { L"* ", L"Eğer ki " };
-static const Keywords tr_when_keywords = { 2, tr_when_KEYWORDS };
+static const wchar_t* const tr_when_KEYWORDS[] = { L"* ", L"Eğer ki ", L"Eğer ", L"Ne zaman ki ", L"Şayet " };
+static const Keywords tr_when_keywords = { 5, tr_when_KEYWORDS };
 
 static const Dialect tr_dialect = {
         L"tr",
