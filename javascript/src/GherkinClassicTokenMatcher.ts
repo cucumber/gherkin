@@ -1,17 +1,22 @@
-import DIALECTS from './gherkin-languages.json'
-import Dialect from './Dialect'
-import { NoSuchLanguageException, ParserException } from './Errors'
-import IToken, { IGherkinLine, Item } from './IToken'
 import * as messages from '@cucumber/messages'
-import { TokenType } from './Parser'
-import ITokenMatcher from './ITokenMatcher'
-import countSymbols from './countSymbols'
 import { compareStepKeywords } from './compareStepKeywords'
+import countSymbols from './countSymbols'
+import type Dialect from './Dialect'
+import { NoSuchLanguageException, ParserException } from './Errors'
+import DIALECTS from './gherkin-languages.json'
+import type IToken from './IToken'
+import type { IGherkinLine, Item } from './IToken'
+import type ITokenMatcher from './ITokenMatcher'
+import { TokenType } from './Parser'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const LANGUAGE_PATTERN = /^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/
 
-function addKeywordTypeMappings(h: { [key: string]: messages.StepKeywordType[] }, keywords: readonly string[], keywordType: messages.StepKeywordType) {
+function addKeywordTypeMappings(
+  h: { [key: string]: messages.StepKeywordType[] },
+  keywords: readonly string[],
+  keywordType: messages.StepKeywordType
+) {
   for (const k of keywords) {
     if (!(k in h)) {
       h[k] = [] as messages.StepKeywordType[]
@@ -54,12 +59,22 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
 
   initializeKeywordTypes() {
     this.keywordTypesMap = {}
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.given, messages.StepKeywordType.CONTEXT)
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      this.dialect.given,
+      messages.StepKeywordType.CONTEXT
+    )
     addKeywordTypeMappings(this.keywordTypesMap, this.dialect.when, messages.StepKeywordType.ACTION)
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.then, messages.StepKeywordType.OUTCOME)
-    addKeywordTypeMappings(this.keywordTypesMap,
-                           [].concat(this.dialect.and).concat(this.dialect.but),
-                           messages.StepKeywordType.CONJUNCTION)
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      this.dialect.then,
+      messages.StepKeywordType.OUTCOME
+    )
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      [].concat(this.dialect.and).concat(this.dialect.but),
+      messages.StepKeywordType.CONJUNCTION
+    )
   }
 
   initializeSortedStepKeywords() {
@@ -74,7 +89,15 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
 
   match_TagLine(token: IToken<TokenType>) {
     if (token.line.startsWith('@')) {
-      this.setTokenMatched(token, TokenType.TagLine, null, null, null, null, this.getTags(token.line))
+      this.setTokenMatched(
+        token,
+        TokenType.TagLine,
+        null,
+        null,
+        null,
+        null,
+        this.getTags(token.line)
+      )
       return true
     }
     return false
@@ -106,7 +129,15 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
   match_TableRow(token: IToken<TokenType>) {
     if (token.line.startsWith('|')) {
       // TODO: indent
-      this.setTokenMatched(token, TokenType.TableRow, null, null, null, null, token.line.getTableCells())
+      this.setTokenMatched(
+        token,
+        TokenType.TableRow,
+        null,
+        null,
+        null,
+        null,
+        token.line.getTableCells()
+      )
       return true
     }
     return false
@@ -204,16 +235,16 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
     const uncommentedLine = line.trimmedLineText.split(/\s#/g, 2)[0]
     let column = line.indent + 1
     const items = uncommentedLine.split('@')
-    const tags: any[] = []
+    const tags: Item[] = []
     for (let i = 0; i < items.length; i++) {
       const item = items[i].trimRight()
-      if (item.length == 0) {
+      if (item.length === 0) {
         continue
       }
       if (!item.match(/^\S+$/)) {
         throw ParserException.create('A tag may not contain whitespace', line.lineNumber, column)
       }
-      const span = { column, text: '@' + item }
+      const span = { column, text: `@${item}` }
       tags.push(span)
       column += countSymbols(items[i]) + 1
     }

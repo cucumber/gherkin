@@ -3,9 +3,7 @@
   "ts-node": {
     "compilerOptions": {
       "module": "esnext",
-      "lib": [
-        "es6"
-      ],
+      "lib": ["es6"],
       "target": "ESNext",
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true

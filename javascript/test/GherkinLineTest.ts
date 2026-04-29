@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import GherkinLine from '../src/GherkinLine'
 
 describe('GherkinLine', () => {

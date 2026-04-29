@@ -1,5 +1,5 @@
-import * as messages from '@cucumber/messages'
-import IToken from './IToken'
+import type * as messages from '@cucumber/messages'
+import type IToken from './IToken'
 
 export default interface ITokenMatcher<TokenType> {
   changeDialect(newDialectName: string, location?: messages.Location): void

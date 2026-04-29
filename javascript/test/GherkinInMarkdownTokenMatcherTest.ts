@@ -1,12 +1,12 @@
-import assert from 'assert'
-import GherkinLine from '../src/GherkinLine'
-import * as messages from '@cucumber/messages'
-import { Token, TokenType } from '../src/Parser'
+import assert from 'node:assert'
+import type * as messages from '@cucumber/messages'
 import GherkinInMarkdownTokenMatcher from '../src/GherkinInMarkdownTokenMatcher'
-import ITokenMatcher from '../src/ITokenMatcher'
-import { Item } from '../src/IToken'
+import GherkinLine from '../src/GherkinLine'
+import type { Item } from '../src/IToken'
+import type ITokenMatcher from '../src/ITokenMatcher'
+import { Token, TokenType } from '../src/Parser'
 
-describe('GherkinInMarkdownTokenMatcher', function () {
+describe('GherkinInMarkdownTokenMatcher', () => {
   let tm: ITokenMatcher<TokenType>
   let location: messages.Location
 

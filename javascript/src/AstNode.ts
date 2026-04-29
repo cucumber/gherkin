@@ -1,13 +1,13 @@
-import { RuleType, TokenType } from './Parser'
-import IToken from './IToken'
+import type IToken from './IToken'
+import type { RuleType, TokenType } from './Parser'
 
 export default class AstNode {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: keys and values are heterogeneous AST entries
   private readonly subItems = new Map<any, any[]>()
 
   constructor(public readonly ruleType: RuleType) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: keys and values are heterogeneous AST entries
   public add(type: any, obj: any) {
     let items = this.subItems.get(type)
     if (items === undefined) {

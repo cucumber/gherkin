@@ -1,12 +1,13 @@
 import * as messages from '@cucumber/messages'
+
 import IGherkinDocument = messages.GherkinDocument
 
 const pickleStepTypeFromKeyword: { [key in messages.StepKeywordType]: messages.PickleStepType } = {
-    [messages.StepKeywordType.UNKNOWN]: messages.PickleStepType.UNKNOWN,
-    [messages.StepKeywordType.CONTEXT]: messages.PickleStepType.CONTEXT,
-    [messages.StepKeywordType.ACTION]: messages.PickleStepType.ACTION,
-    [messages.StepKeywordType.OUTCOME]: messages.PickleStepType.OUTCOME,
-    [messages.StepKeywordType.CONJUNCTION]: null
+  [messages.StepKeywordType.UNKNOWN]: messages.PickleStepType.UNKNOWN,
+  [messages.StepKeywordType.CONTEXT]: messages.PickleStepType.CONTEXT,
+  [messages.StepKeywordType.ACTION]: messages.PickleStepType.ACTION,
+  [messages.StepKeywordType.OUTCOME]: messages.PickleStepType.OUTCOME,
+  [messages.StepKeywordType.CONJUNCTION]: null,
 }
 
 export default function compile(
@@ -117,18 +118,20 @@ function compileScenario(
 
   if (scenario.steps.length !== 0) {
     backgroundSteps.forEach((step) => {
-       lastKeywordType = (step.keywordType === messages.StepKeywordType.CONJUNCTION) ?
-         lastKeywordType : step.keywordType
-       steps.push(pickleStep(step, [], null, newId, lastKeywordType))
+      lastKeywordType =
+        step.keywordType === messages.StepKeywordType.CONJUNCTION
+          ? lastKeywordType
+          : step.keywordType
+      steps.push(pickleStep(step, [], null, newId, lastKeywordType))
     })
   }
 
   const tags = [].concat(inheritedTags).concat(scenario.tags)
 
   scenario.steps.forEach((step) => {
-    lastKeywordType = (step.keywordType === messages.StepKeywordType.CONJUNCTION) ?
-      lastKeywordType : step.keywordType
-     steps.push(pickleStep(step, [], null, newId, lastKeywordType))
+    lastKeywordType =
+      step.keywordType === messages.StepKeywordType.CONJUNCTION ? lastKeywordType : step.keywordType
+    steps.push(pickleStep(step, [], null, newId, lastKeywordType))
   })
 
   const pickle: messages.Pickle = {
@@ -162,16 +165,26 @@ function compileScenarioOutline(
         const steps = [] as messages.PickleStep[]
         if (scenario.steps.length !== 0) {
           backgroundSteps.forEach((step) => {
-            lastKeywordType = (step.keywordType === messages.StepKeywordType.CONJUNCTION) ?
-              lastKeywordType : step.keywordType
+            lastKeywordType =
+              step.keywordType === messages.StepKeywordType.CONJUNCTION
+                ? lastKeywordType
+                : step.keywordType
             steps.push(pickleStep(step, [], null, newId, lastKeywordType))
           })
         }
 
         scenario.steps.forEach((scenarioOutlineStep) => {
-          lastKeywordType = (scenarioOutlineStep.keywordType === messages.StepKeywordType.CONJUNCTION) ?
-            lastKeywordType : scenarioOutlineStep.keywordType
-          const step = pickleStep(scenarioOutlineStep, variableCells, valuesRow, newId, lastKeywordType)
+          lastKeywordType =
+            scenarioOutlineStep.keywordType === messages.StepKeywordType.CONJUNCTION
+              ? lastKeywordType
+              : scenarioOutlineStep.keywordType
+          const step = pickleStep(
+            scenarioOutlineStep,
+            variableCells,
+            valuesRow,
+            newId,
+            lastKeywordType
+          )
           steps.push(step)
         })
 
@@ -232,12 +245,12 @@ function interpolate(
 ) {
   variableCells.forEach((variableCell, n) => {
     const valueCell = valueCells[n]
-    const valuePattern = '<' + variableCell.value + '>'
+    const valuePattern = `<${variableCell.value}>`
     const escapedPattern = valuePattern.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
     const regexp = new RegExp(escapedPattern, 'g')
     // JS Specific - dollar sign needs to be escaped with another dollar sign
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter
-    const replacement = valueCell.value.replace(new RegExp('\\$', 'g'), '$$$$')
+    const replacement = valueCell.value.replace(/\$/g, '$$$$')
     name = name.replace(regexp, replacement)
   })
   return name
