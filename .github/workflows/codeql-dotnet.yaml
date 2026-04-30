@@ -1,0 +1,53 @@
+name: codeql-dotnet
+
+permissions: { }
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - dotnet/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - dotnet/**
+      - testdata/**
+      - .github/**
+  schedule:
+    - cron: '7 5 * * 3'
+
+concurrency:
+  # Cancels in-progress runs only for pull requests
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze .Net
+    runs-on: 'ubuntu-latest'
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
+        with:
+          languages: csharp
+          build-mode: manual
+          tools: linked
+      - uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+      - name: Build
+        run: dotnet build
+        working-directory: dotnet
+      - uses: github/codeql-action/analyze@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
+        with:
+          category: "/language:csharp"
