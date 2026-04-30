@@ -18,7 +18,7 @@ on:
       - testdata/**
       - .github/**
   schedule:
-    - cron: '36 5 * * 1'
+    - cron: '26 5 * * 1'
 
 concurrency:
   # Cancels in-progress runs only for pull requests
@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   analyze:
-    name: Analyze Javascript
+    name: Analyze JavaScript
     runs-on: 'ubuntu-latest'
     permissions:
       security-events: write
