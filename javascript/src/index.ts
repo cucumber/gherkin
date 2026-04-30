@@ -1,29 +1,29 @@
-import generateMessages from './generateMessages'
-import makeSourceEnvelope from './makeSourceEnvelope'
-import IGherkinOptions from './IGherkinOptions'
-import Dialect from './Dialect'
-import Parser from './Parser'
 import AstBuilder from './AstBuilder'
-import TokenScanner from './TokenScanner'
+import Dialect from './Dialect'
 import * as Errors from './Errors'
-import compile from './pickles/compile'
-import DIALECTS from './gherkin-languages.json'
 import GherkinClassicTokenMatcher from './GherkinClassicTokenMatcher'
 import GherkinInMarkdownTokenMatcher from './GherkinInMarkdownTokenMatcher'
+import generateMessages from './generateMessages'
+import DIALECTS from './gherkin-languages.json'
+import IGherkinOptions from './IGherkinOptions'
+import makeSourceEnvelope from './makeSourceEnvelope'
+import Parser from './Parser'
+import compile from './pickles/compile'
+import TokenScanner from './TokenScanner'
 
 const dialects = DIALECTS as Readonly<{ [key: string]: Dialect }>
 
 export {
-  generateMessages,
-  makeSourceEnvelope,
-  IGherkinOptions,
-  dialects,
-  Dialect,
-  Parser,
   AstBuilder,
-  TokenScanner,
+  compile,
+  Dialect,
+  dialects,
   Errors,
   GherkinClassicTokenMatcher,
   GherkinInMarkdownTokenMatcher,
-  compile,
+  generateMessages,
+  IGherkinOptions,
+  makeSourceEnvelope,
+  Parser,
+  TokenScanner,
 }

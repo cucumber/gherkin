@@ -1,13 +1,13 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import * as messages from '@cucumber/messages'
 import AstBuilder from '../src/AstBuilder'
-import Parser from '../src/Parser'
+import type AstNode from '../src/AstNode'
 import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher'
-import AstNode from '../src/AstNode'
-import generateMessages from '../src/generateMessages'
 import GherkinInMarkdownTokenMatcher from '../src/GherkinInMarkdownTokenMatcher'
+import generateMessages from '../src/generateMessages'
+import Parser from '../src/Parser'
 
-describe('Parser', function () {
+describe('Parser', () => {
   describe('with Gherkin Classic', () => {
     let parser: Parser<AstNode>
     beforeEach(
@@ -18,7 +18,7 @@ describe('Parser', function () {
         ))
     )
 
-    it('parses a simple feature', function () {
+    it('parses a simple feature', () => {
       const ast = parser.parse('Feature: hello')
       const gherkinDocument: messages.GherkinDocument = {
         feature: {
@@ -35,7 +35,7 @@ describe('Parser', function () {
       assert.deepStrictEqual(ast, gherkinDocument)
     })
 
-    it('parses multiple features', function () {
+    it('parses multiple features', () => {
       const ast1 = parser.parse('Feature: hello')
       const ast2 = parser.parse('Feature: hello again')
 
@@ -67,7 +67,7 @@ describe('Parser', function () {
       assert.deepStrictEqual(ast2, gherkinDocument2)
     })
 
-    it('parses a feature description', function () {
+    it('parses a feature description', () => {
       const ast = parser.parse(`Feature: hello
   This is the
   description
@@ -88,7 +88,7 @@ describe('Parser', function () {
       assert.deepStrictEqual(ast, gherkinDocument)
     })
 
-    it('parses feature after parse error', function () {
+    it('parses feature after parse error', () => {
       let ast: messages.GherkinDocument
       try {
         parser.parse(
@@ -99,7 +99,7 @@ describe('Parser', function () {
             '      ```\n' +
             '      unclosed docstring\n'
         )
-      } catch (expected) {
+      } catch (_expected) {
         ast = parser.parse(
           'Feature: Foo\n' +
             '  Scenario: Bar\n' +
@@ -152,7 +152,7 @@ describe('Parser', function () {
       assert.deepStrictEqual(ast, gherkinDocument)
     })
 
-    it('interpolates data tables', function () {
+    it('interpolates data tables', () => {
       const envelopes = generateMessages(
         'Feature: Foo\n' +
           '  Scenario Outline: Parenthesis\n' +
@@ -170,7 +170,7 @@ describe('Parser', function () {
       assert.strictEqual(pickle.steps[0].text, 'the thing is triggered and has foo')
     })
 
-    it('can change the default language', function () {
+    it('can change the default language', () => {
       const matcher = new GherkinClassicTokenMatcher('no')
       const parser = new Parser(new AstBuilder(messages.IdGenerator.incrementing()), matcher)
       const ast = parser.parse('Egenskap: i18n support')
@@ -200,7 +200,7 @@ describe('Parser', function () {
         ))
     )
 
-    it('does not parse a feature description', function () {
+    it('does not parse a feature description', () => {
       const ast = parser.parse(`# Feature: hello
 This is the
 description
@@ -221,7 +221,7 @@ description
       assert.deepStrictEqual(ast, gherkinDocument)
     })
 
-    it('parses a feature without a # Feature header', function () {
+    it('parses a feature without a # Feature header', () => {
       const ast = parser.parse(`# Hello
 This is the
 description
@@ -279,7 +279,7 @@ description
       assert.deepStrictEqual(ast, gherkinDocument)
     })
 
-    it('parses DocString', function () {
+    it('parses DocString', () => {
       const markdown = `
 # Feature: DocString variations
 ## Scenario: minimalistic

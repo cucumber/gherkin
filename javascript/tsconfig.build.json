@@ -8,11 +8,6 @@
     "rootDir": ".",
     "noEmit": false
   },
-  "files": [
-    "src/gherkin-languages.json"
-  ],
-  "include": [
-    "src",
-    "test"
-  ]
+  "files": ["src/gherkin-languages.json"],
+  "include": ["src", "test"]
 }

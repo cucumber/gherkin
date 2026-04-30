@@ -1,4 +1,4 @@
-import * as messages from '@cucumber/messages'
+import type * as messages from '@cucumber/messages'
 
 export class GherkinException extends Error {
   public errors: Error[]
@@ -13,7 +13,7 @@ export class GherkinException extends Error {
     if (Object.setPrototypeOf) {
       Object.setPrototypeOf(this, actualProto)
     } else {
-      // @ts-ignore
+      // @ts-expect-error
       this.__proto__ = actualProto
     }
   }
@@ -22,6 +22,7 @@ export class GherkinException extends Error {
     const column = location != null ? location.column || 0 : -1
     const line = location != null ? location.line || 0 : -1
     const m = `(${line}:${column}): ${message}`
+    // biome-ignore lint/complexity/noThisInStatic: subclasses rely on `this` resolving to the calling constructor
     const err = new this(m)
     err.location = location
     return err
@@ -30,7 +31,7 @@ export class GherkinException extends Error {
 
 export class ParserException extends GherkinException {
   public static create(message: string, line: number, column: number) {
-    const err = new this(`(${line}:${column}): ${message}`)
+    const err = new ParserException(`(${line}:${column}): ${message}`)
     err.location = { line, column }
     return err
   }
@@ -38,8 +39,8 @@ export class ParserException extends GherkinException {
 
 export class CompositeParserException extends GherkinException {
   public static create(errors: Error[]) {
-    const message = 'Parser errors:\n' + errors.map((e) => e.message).join('\n')
-    const err = new this(message)
+    const message = `Parser errors:\n${errors.map((e) => e.message).join('\n')}`
+    const err = new CompositeParserException(message)
     err.errors = errors
     return err
   }
@@ -47,13 +48,13 @@ export class CompositeParserException extends GherkinException {
 
 export class AstBuilderException extends GherkinException {
   public static create(message: string, location: messages.Location) {
-    return this._create(message, location)
+    return AstBuilderException._create(message, location)
   }
 }
 
 export class NoSuchLanguageException extends GherkinException {
   public static create(language: string, location?: messages.Location) {
-    const message = 'Language not supported: ' + language
-    return this._create(message, location)
+    const message = `Language not supported: ${language}`
+    return NoSuchLanguageException._create(message, location)
   }
 }

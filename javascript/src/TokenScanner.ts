@@ -1,5 +1,5 @@
-import IToken from './IToken'
-import * as messages from '@cucumber/messages'
+import type * as messages from '@cucumber/messages'
+import type IToken from './IToken'
 
 /**
  * The scanner reads a gherkin doc (typically read from a .feature file) and creates a token for each line.

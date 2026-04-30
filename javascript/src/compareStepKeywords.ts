@@ -6,5 +6,5 @@
  * @param b - the second step keyword
  */
 export function compareStepKeywords(a: string, b: string): number {
-    return b.length - a.length
+  return b.length - a.length
 }

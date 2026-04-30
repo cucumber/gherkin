@@ -1,4 +1,4 @@
-import * as messages from '@cucumber/messages'
+import type * as messages from '@cucumber/messages'
 
 export interface IGherkinLine {
   readonly lineNumber: number

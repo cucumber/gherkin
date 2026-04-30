@@ -12,6 +12,8 @@
     "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
     "clean-tsc": "rm -rf dist",
     "test": "mocha",
+    "fix": "biome check --fix --error-on-warnings",
+    "lint": "biome check --error-on-warnings",
     "prepublishOnly": "tsc --build tsconfig.build.json"
   },
   "repository": {
@@ -29,6 +31,8 @@
   },
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
+    "@biomejs/biome": "^2.4.13",
+    "@cucumber/biome-config": "github:cucumber/biome-config#v0.1.0",
     "@types/mocha": "10.0.10",
     "@types/node": "22.19.17",
     "commander": "^14.0.0",

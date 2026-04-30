@@ -1,12 +1,12 @@
-import Parser, { TokenType } from './Parser'
-import GherkinClassicTokenMatcher from './GherkinClassicTokenMatcher'
 import * as messages from '@cucumber/messages'
-import compile from './pickles/compile'
 import AstBuilder from './AstBuilder'
-import IGherkinOptions from './IGherkinOptions'
-import makeSourceEnvelope from './makeSourceEnvelope'
-import ITokenMatcher from './ITokenMatcher'
+import GherkinClassicTokenMatcher from './GherkinClassicTokenMatcher'
 import GherkinInMarkdownTokenMatcher from './GherkinInMarkdownTokenMatcher'
+import type IGherkinOptions from './IGherkinOptions'
+import type ITokenMatcher from './ITokenMatcher'
+import makeSourceEnvelope from './makeSourceEnvelope'
+import Parser, { type TokenType } from './Parser'
+import compile from './pickles/compile'
 
 export default function generateMessages(
   data: string,

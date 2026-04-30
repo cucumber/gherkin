@@ -1,16 +1,20 @@
-import ITokenMatcher from './ITokenMatcher'
-import Dialect from './Dialect'
-import { Token, TokenType } from './Parser'
-import DIALECTS from './gherkin-languages.json'
-import { Item } from './IToken'
 import * as messages from '@cucumber/messages'
-import { NoSuchLanguageException } from './Errors'
 import { compareStepKeywords } from './compareStepKeywords'
+import type Dialect from './Dialect'
+import { NoSuchLanguageException } from './Errors'
+import DIALECTS from './gherkin-languages.json'
+import type { Item } from './IToken'
+import type ITokenMatcher from './ITokenMatcher'
+import { type Token, TokenType } from './Parser'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const DEFAULT_DOC_STRING_SEPARATOR = /^(```[`]*)(.*)/
 
-function addKeywordTypeMappings(h: { [key: string]: messages.StepKeywordType[] }, keywords: readonly string[], keywordType: messages.StepKeywordType) {
+function addKeywordTypeMappings(
+  h: { [key: string]: messages.StepKeywordType[] },
+  keywords: readonly string[],
+  keywordType: messages.StepKeywordType
+) {
   for (const k of keywords) {
     if (!(k in h)) {
       h[k] = [] as messages.StepKeywordType[]
@@ -75,12 +79,22 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
 
   initializeKeywordTypes() {
     this.keywordTypesMap = {}
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.given, messages.StepKeywordType.CONTEXT)
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      this.dialect.given,
+      messages.StepKeywordType.CONTEXT
+    )
     addKeywordTypeMappings(this.keywordTypesMap, this.dialect.when, messages.StepKeywordType.ACTION)
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.then, messages.StepKeywordType.OUTCOME)
-    addKeywordTypeMappings(this.keywordTypesMap,
-                           [].concat(this.dialect.and).concat(this.dialect.but),
-                           messages.StepKeywordType.CONJUNCTION)
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      this.dialect.then,
+      messages.StepKeywordType.OUTCOME
+    )
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      [].concat(this.dialect.and).concat(this.dialect.but),
+      messages.StepKeywordType.CONJUNCTION
+    )
   }
 
   // We've made a deliberate choice not to support `# language: [ISO 639-1]` headers or similar
@@ -271,8 +285,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
         // only set the keyword type if this is a step keyword
         if (this.keywordTypesMap[match[2]].length > 1) {
           token.matchedKeywordType = messages.StepKeywordType.UNKNOWN
-        }
-        else {
+        } else {
           token.matchedKeywordType = this.keywordTypesMap[match[2]][0]
         }
       }

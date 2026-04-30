@@ -1,5 +1,5 @@
 import countSymbols from './countSymbols'
-import { IGherkinLine, Item } from './IToken'
+import type { IGherkinLine, Item } from './IToken'
 
 export default class GherkinLine implements IGherkinLine {
   public trimmedLineText: string
@@ -8,7 +8,10 @@ export default class GherkinLine implements IGherkinLine {
   public column: number
   public text: string
 
-  constructor(public readonly lineText: string, public readonly lineNumber: number) {
+  constructor(
+    public readonly lineText: string,
+    public readonly lineNumber: number
+  ) {
     this.trimmedLineText = lineText.replace(/^\s+/g, '') // ltrim
     this.isEmpty = this.trimmedLineText.length === 0
     this.indent = countSymbols(lineText) - countSymbols(this.trimmedLineText)
@@ -19,7 +22,7 @@ export default class GherkinLine implements IGherkinLine {
   }
 
   public startsWithTitleKeyword(keyword: string) {
-    return this.startsWith(keyword + ':') // The C# impl is more complicated. Find out why.
+    return this.startsWith(`${keyword}:`) // The C# impl is more complicated. Find out why.
   }
 
   public match(regexp: RegExp) {
