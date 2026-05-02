@@ -18,7 +18,7 @@ on:
       - testdata/**
       - .github/**
   schedule:
-    - cron: '26 5 * * 1'
+    - cron: '25 5 * * 4'
 
 concurrency:
   # Cancels in-progress runs only for pull requests
