@@ -1,0 +1,255 @@
+(1:1)Language:/tr/
+(2:1)Comment:/# ══════════════════════════════════════════════════════════════/
+(3:1)Comment:/# Türkçe Gherkin — Kapsamlı Anahtar Kelime Doğrulama/
+(4:1)Comment:/#/
+(5:1)Comment:/# AMAÇ: Türkçe anahtar kelime çeşitliliğini doğrulama (parser testi)./
+(6:1)Comment:/# Her bölüm kendi alanının doğal dilini kullanır./
+(7:1)Comment:/#/
+(8:1)Comment:/# Best Practice Prensipleri:/
+(9:1)Comment:/#   - Bildirimsel (NE, NASIL değil)/
+(10:1)Comment:/#   - Senaryo başına tek davranış/
+(11:1)Comment:/#   - Adım başına tek eylem, max 5 adım/
+(12:1)Comment:/#   - Tutarlı zaman kipi/
+(13:1)Comment:/#   - Davranış odaklı, implementasyon bağımsız/
+(14:1)Comment:/# ══════════════════════════════════════════════════════════════/
+(15:1)Empty://
+(16:1)FeatureLine:()İş Gereksinimi/Türkçe anahtar kelime doğrulama/
+(17:1)Other:/  Bu dosya Türkçe Gherkin anahtar kelimelerinin/
+(18:1)Other:/  farklı sektör ve bağlamlarda doğal kullanımını/
+(19:1)Other:/  doğrular./
+(20:1)Other://
+(21:3)BackgroundLine:()Arka Plan//
+(22:5)StepLine:(Context)Diyelim ki /kullanıcı sisteme giriş yapmıştır/
+(23:5)StepLine:(Conjunction)Ve /kullanıcının rolü tanımlıdır/
+(24:1)Empty://
+(25:1)Comment:/  # ── 1. E-TİCARET ──────────────────────────────/
+(26:1)Empty://
+(27:3)RuleLine:()Kural/Sepet ve sipariş kuralları/
+(28:1)Empty://
+(29:5)ScenarioLine:()Senaryo/Sepete ürün ekleme/
+(30:7)StepLine:(Context)Mevcut /kullanıcının sepeti boştur/
+(31:7)StepLine:(Action)Eğer /kullanıcı bir ürünü sepetine eklerse/
+(32:7)StepLine:(Outcome)O zaman /sepet tutarı ürün fiyatı kadar artar/
+(33:7)StepLine:(Conjunction)Ve /sepetteki ürün sayısı 1 olur/
+(34:1)Empty://
+(35:5)ScenarioLine:()Senaryo şablonu/Kargo ücreti hesaplama/
+(36:7)StepLine:(Context)Mevcut /sepet toplamı <tutar> TL tutarındadır/
+(37:7)StepLine:(Action)Eğer /kullanıcı teslimat adresini seçerse/
+(38:7)StepLine:(Outcome)O zaman /kargo ücreti <kargo> TL olarak hesaplanır/
+(39:1)Empty://
+(40:7)ExamplesLine:()Örnekler//
+(41:9)TableRow://11:tutar,19:kargo
+(42:9)TableRow://11:100,19:35
+(43:9)TableRow://11:249,19:35
+(44:9)TableRow://11:300,19:0
+(45:1)Empty://
+(46:1)Comment:/  # ── 2. ŞİRKET: Çalışan İşlemleri ─────────────/
+(47:1)Empty://
+(48:3)RuleLine:()İş Kuralı/Çalışan izin ve performans yönetimi/
+(49:1)Empty://
+(50:5)BackgroundLine:()Mevcut Durum//
+(51:7)StepLine:(Context)Halihazırda /çalışan deneme süresini tamamlamıştır/
+(52:7)StepLine:(Conjunction)Ve /çalışanın 15 gün yıllık izin hakkı bulunmaktadır/
+(53:1)Empty://
+(54:5)ScenarioLine:()Örnek/İzin talebi onay akışı/
+(55:7)StepLine:(Context)Zaten /çalışan sistem üzerinden izin talebi oluşturmuştur/
+(56:7)StepLine:(Action)Eğer ki /yönetici bu talebi onaylarsa/
+(57:7)StepLine:(Outcome)O zaman /izin durumu "Onaylandı" statüsüne geçer/
+(58:7)StepLine:(Conjunction)Ve /sistem çalışana bildirim gönderir/
+(59:1)Empty://
+(60:5)ScenarioLine:()Örnek/Onaylanan izin bordro entegrasyonu/
+(61:7)StepLine:(Context)Zaten /çalışanın izin talebi onaylanmıştır/
+(62:7)StepLine:(Action)Ne zaman /bordro sistemi günlük senkronizasyonu çalıştırırsa/
+(63:7)StepLine:(Outcome)O zaman /izin bilgisi bordro kaydına yansır/
+(64:7)StepLine:(Conjunction)Ayrıca /İK raporlama paneli güncellenir/
+(65:1)Empty://
+(66:5)ScenarioLine:()Örnek/Kritik proje döneminde izin kısıtlaması/
+(67:7)StepLine:(Context)Mevcut /aktif bir kritik proje dönemi tanımlıdır/
+(68:7)StepLine:(Action)Eğer /çalışan bu dönemde izin talebi oluşturursa/
+(69:7)StepLine:(Outcome)O zaman /sistem uyarı mesajı gösterir/
+(70:7)StepLine:(Conjunction)Fakat /çalışan yönetici onayı ile istisnai izin alabilir/
+(71:1)Empty://
+(72:5)ScenarioLine:()Örnek/Performans değerlendirme sonucu/
+(73:7)StepLine:(Context)Biliniyor ki /çalışan tüm hedeflerini tamamlamıştır/
+(74:7)StepLine:(Conjunction)Hem de /müşteri memnuniyet puanı yüzde 92 üzerindedir/
+(75:7)StepLine:(Action)Eğer /dönem sonu değerlendirmesi yapılırsa/
+(76:7)StepLine:(Outcome)Böylece /çalışan terfi havuzuna dahil edilir/
+(77:1)Empty://
+(78:5)ScenarioLine:()Örnek/Disiplin kaydının terfi üzerindeki etkisi/
+(79:7)StepLine:(Context)Mevcut /çalışanın aktif bir disiplin kaydı bulunmaktadır/
+(80:7)StepLine:(Action)Eğer /dönem sonu değerlendirmesi yapılırsa/
+(81:7)StepLine:(Outcome)O zaman /çalışan terfi havuzuna dahil edilmez/
+(82:7)StepLine:(Conjunction)Ancak /çalışan disiplin kararına itiraz edebilir/
+(83:1)Empty://
+(84:1)Comment:/  # ── 3. FABRİKA: Üretim Hattı ─────────────────/
+(85:1)Empty://
+(86:3)RuleLine:()Kural/Üretim hattı kalite ve güvenlik prosedürü/
+(87:1)Empty://
+(88:5)BackgroundLine:()Giriş//
+(89:7)StepLine:(Context)Halihazırda /üretim hattı çalışır durumdadır/
+(90:7)StepLine:(Conjunction)Ve /sensörler kalibre edilmiştir/
+(91:7)StepLine:(Conjunction)Bir de /hata toleransı binde 2 olarak belirlenmiştir/
+(92:1)Empty://
+(93:5)ScenarioLine:()Durum/Hatalı ürün oranı eşik değeri aşımı/
+(94:7)StepLine:(Context)Mevcut /üretim hattı saatte 500 birim üretir/
+(95:7)StepLine:(Action)Ne zaman ki /sensör ardışık 5 hatalı ürün tespit ederse/
+(96:7)StepLine:(Outcome)O zaman /üretim hattı otomatik olarak durur/
+(97:7)StepLine:(Outcome)Bunun üzerine /sistem vardiya amirine ve kalite mühendisine bildirim gönderir/
+(98:1)Empty://
+(99:5)ScenarioLine:()Durum/Planlı bakım sürecinde hat duruşu/
+(100:7)StepLine:(Context)Önceden /planlı bakım penceresi tanımlanmıştır/
+(101:7)StepLine:(Action)Eğer /üretim hattı bakım süresi içinde durursa/
+(102:7)StepLine:(Outcome)O zaman /otomatik alarm tetiklenmez/
+(103:7)StepLine:(Conjunction)Yalnız /bakım süresi aşılırsa sistem uyarı üretir/
+(104:1)Empty://
+(105:5)ScenarioLine:()Durum/Ham madde stok seviyesi kritik eşik altında/
+(106:7)StepLine:(Context)Önceden /belirlenen stok eşiği 2 günlük üretim kapasitesidir/
+(107:7)StepLine:(Conjunction)Ve /mevcut alüminyum stoku bu eşiğin altına düşmüştür/
+(108:7)StepLine:(Action)Eğer /üretim planında 3 günlük sipariş bekliyorsa/
+(109:7)StepLine:(Outcome)O takdirde /satın alma birimine acil tedarik talebi iletilir/
+(110:7)StepLine:(Conjunction)İlaveten /planlama birimi üretim planını yeniden önceliklendirir/
+(111:1)Empty://
+(112:1)Comment:/  # ── 4. DEVLET: Kamu İhale ─────────────────────/
+(113:1)Empty://
+(114:3)RuleLine:()Madde/Kamu ihale değerlendirme usulü/
+(115:1)Empty://
+(116:5)BackgroundLine:()Ön Koşul//
+(117:7)StepLine:(Context)Daha önce /ihale ilanı EKAP üzerinden yayımlanmıştır/
+(118:7)StepLine:(Conjunction)Ve /teklif verme süresi dolmuştur/
+(119:1)Empty://
+(120:5)ScenarioLine:()Durum/Tekliflerin değerlendirilmesi/
+(121:7)StepLine:(Context)Sistemde /komisyon üyeleri giriş yapmıştır/
+(122:7)StepLine:(Action)Eğer /bir istekli belirlenen baraj puanının altında kalırsa/
+(123:7)StepLine:(Outcome)O zaman /komisyon teklifi teknik olarak yetersiz sayar/
+(124:7)StepLine:(Conjunction)Ve /komisyon gerekçeli kararı tutanağa işler/
+(125:1)Empty://
+(126:5)ScenarioLine:()Durum/Yetersiz bulunan isteklinin itiraz süreci/
+(127:7)StepLine:(Context)Zaten /isteklinin teklifi yetersiz bulunmuştur/
+(128:7)StepLine:(Action)Eğer /istekli 10 iş günü içinde itiraz ederse/
+(129:7)StepLine:(Outcome)O zaman /komisyon itirazı değerlendirmeye alır/
+(130:7)StepLine:(Conjunction)Ancak /süresini geçmiş itirazlar işleme alınmaz/
+(131:1)Empty://
+(132:5)ScenarioLine:()Senaryo taslağı/İhale teminat hesaplama/
+(133:7)StepLine:(Context)Diyelim ki /ihale bedeli <bedel> TL olarak belirlenmiştir/
+(134:7)StepLine:(Conjunction)Ve /teminat oranı yüzde <oran> olarak uygulanır/
+(135:7)StepLine:(Action)Eğer /firma geçici teminat yatırırsa/
+(136:7)StepLine:(Outcome)O zaman /teminat tutarı <teminat> TL olmalıdır/
+(137:1)Empty://
+(138:7)ExamplesLine:()Değerler//
+(139:9)TableRow://11:bedel,24:oran,31:teminat
+(140:9)TableRow://11:1000000,24:3,31:30000
+(141:9)TableRow://11:5000000,24:3,31:150000
+(142:9)TableRow://11:10000000,24:3,31:300000
+(143:1)Empty://
+(144:1)Comment:/  # ── 5. GÜMRÜK: İthalat İşlemleri ─────────────/
+(145:1)Empty://
+(146:3)RuleLine:()Kaide/Gümrük beyanname işlem esasları/
+(147:1)Empty://
+(148:5)BackgroundLine:()Önkoşul//
+(149:7)StepLine:(Context)Başlangıçta /gümrük bilgi sistemi çevrimiçidir/
+(150:7)StepLine:(Conjunction)Ve /güncel döviz kurları sisteme yüklenmiştir/
+(151:1)Empty://
+(152:5)ScenarioLine:()Senaryo/Yüksek değerli ithalat kontrolü/
+(153:7)StepLine:(Context)Önceden /ithalatçı firma beyanname düzenlemiştir/
+(154:7)StepLine:(Conjunction)Ve /beyan edilen ürün bedeli 50.000 doların üzerindedir/
+(155:7)StepLine:(Action)Ne zaman ki /gümrük müfettişi inceleme başlatırsa/
+(156:7)StepLine:(Outcome)Buna binaen /müfettiş fatura asılları ve menşe belgesi talep eder/
+(157:1)Empty://
+(158:5)ScenarioLine:()Senaryo/Müfettişin ek süre tanıması/
+(159:7)StepLine:(Context)Kabul edelim ki /müfettiş inceleme sırasında eksik belge tespit etmiştir/
+(160:7)StepLine:(Action)Eğer /ithalatçı ek süre talep ederse/
+(161:7)StepLine:(Outcome)O zaman /müfettiş 5 iş günü ek süre tanıyabilir/
+(162:7)StepLine:(Conjunction)Lakin /bu süre bir defaya mahsus uygulanır/
+(163:1)Empty://
+(164:5)ScenarioLine:()Senaryo/Kısıtlı ürün ithalatı/
+(165:7)StepLine:(Context)Kabul edelim ki /beyan edilen ürün kısıtlı mal listesindedir/
+(166:7)StepLine:(Conjunction)Ve /ithalatçının özel izin belgesi bulunmamaktadır/
+(167:7)StepLine:(Action)Eğer ki /gümrük kontrolünde bu durum tespit edilirse/
+(168:7)StepLine:(Outcome)Sonuç olarak /ürün gümrükten geçiş izni alamaz/
+(169:7)StepLine:(Conjunction)Ama /ithalatçı 10 iş günü içinde gerekli izni sunabilir/
+(170:1)Empty://
+(171:1)Comment:/  # ── 6. HUKUK: Hizmet Sözleşmesi ──────────────/
+(172:1)Empty://
+(173:3)RuleLine:()Hüküm/Hizmet alım sözleşmesi cezai şartları/
+(174:1)Empty://
+(175:5)BackgroundLine:()Mukaddime//
+(176:7)StepLine:(Context)Farz edelim ki /taraflar arasında hizmet sözleşmesi akdedilmiştir/
+(177:7)StepLine:(Conjunction)Ve /hizmet seviyesi taahhüdü yüzde 99.9 olarak belirlenmiştir/
+(178:1)Empty://
+(179:5)ScenarioLine:()Vaka/Gecikme cezası uygulaması/
+(180:7)StepLine:(Context)Varsayalım ki /hizmet sağlayıcı işi teslim edememiştir/
+(181:7)StepLine:(Conjunction)Ve /teslim süresi 15 takvim günü aşılmıştır/
+(182:7)StepLine:(Action)Şayet /gecikme mücbir bir sebebe dayanmıyorsa/
+(183:7)StepLine:(Outcome)Netice itibariyle /günlük yüzde 1 oranında gecikme cezası uygulanır/
+(184:1)Empty://
+(185:5)ScenarioLine:()Vaka/Mücbir sebep istisnası/
+(186:7)StepLine:(Context)Varsayalım ki /teslim gecikmesi mücbir sebepten kaynaklanmıştır/
+(187:7)StepLine:(Action)Eğer /hizmet sağlayıcı belgelendirme sunarsa/
+(188:7)StepLine:(Outcome)O zaman /gecikme cezası uygulanmaz/
+(189:7)StepLine:(Conjunction)Meğer ki /taraflar aksini kararlaştırmışsa/
+(190:1)Empty://
+(191:5)ScenarioLine:()Vaka/Gecikme nedeniyle fesih hakkı/
+(192:7)StepLine:(Context)Zaten /hizmet sağlayıcıya gecikme cezası uygulanmıştır/
+(193:7)StepLine:(Conjunction)Buna ek olarak /gecikme 30 takvim gününü aşmıştır/
+(194:7)StepLine:(Action)Şayet /işveren sözleşmeyi feshetmek isterse/
+(195:7)StepLine:(Outcome)Şu halde /tek taraflı fesih hakkını kullanabilir/
+(196:1)Empty://
+(197:5)ScenarioLine:()Vaka/Sözleşme yenileme müzakeresi/
+(198:7)StepLine:(Context)Geçmişte /taraflar sözleşmeyi karşılıklı memnuniyetle yürütmüştür/
+(199:7)StepLine:(Conjunction)Ve /sözleşmenin bitimine 60 gün kalmıştır/
+(200:7)StepLine:(Action)Şayet /yeni dönem koşulları üzerinde uzlaşma sağlanırsa/
+(201:7)StepLine:(Outcome)Bu durumda /sözleşme aynı koşullarla 1 yıl uzatılır/
+(202:1)Empty://
+(203:5)ScenarioLine:()Vaka/Uzlaşma sağlanamaması durumu/
+(204:7)StepLine:(Context)Geçmişte /sözleşme yenileme müzakeresi başlatılmıştır/
+(205:7)StepLine:(Conjunction)Ve /taraflar yeni koşullarda uzlaşma sağlayamamıştır/
+(206:7)StepLine:(Action)Eğer /sözleşme süresi sona ererse/
+(207:7)StepLine:(Conjunction)Buna mukabil /tasfiye süreci başlar/
+(208:1)Empty://
+(209:1)Comment:/  # ── 7. SAĞLIK: Acil Servis ────────────────────/
+(210:1)Empty://
+(211:3)RuleLine:()Kural/Acil servis triaj ve sevk prosedürü/
+(212:1)Empty://
+(213:5)BackgroundLine:()Geçmiş//
+(214:7)StepLine:(Context)Diyelim ki /hastane acil servisi 7/24 hizmet vermektedir/
+(215:7)StepLine:(Conjunction)Ve /triaj sistemi aktiftir/
+(216:1)Empty://
+(217:5)ScenarioLine:()Senaryo/Kritik hasta müdahalesi/
+(218:7)StepLine:(Context)Diyelim ki /hasta acil servise başvurmuştur/
+(219:7)StepLine:(Conjunction)Ve /triaj hemşiresi kırmızı kod belirlemiştir/
+(220:7)StepLine:(Action)Eğer /müdahale odası müsaitse/
+(221:7)StepLine:(Outcome)O zaman /hasta derhal müdahale odasına alınır/
+(222:1)Empty://
+(223:5)ScenarioLine:()Senaryo/Yoğun bakım kapasitesi dolu iken sevk/
+(224:7)StepLine:(Context)Varsayılan olarak /hastanenin yoğun bakım kapasitesi 20 yataktır/
+(225:7)StepLine:(Conjunction)Ve /mevcut doluluk oranı yüzde 100'dür/
+(226:7)StepLine:(Action)Şayet /en yakın uygun hastane belirlenirse/
+(227:7)StepLine:(Outcome)Bunun üzerine /hastane nakil işlemini başlatır/
+(228:7)StepLine:(Conjunction)Ve /sistem hasta dosyasını karşı hastaneye aktarır/
+(229:1)Empty://
+(230:1)Comment:/  # ── 8. PERAKENDE: Sadakat Sistemi ─────────────/
+(231:1)Empty://
+(232:3)RuleLine:()İş Kuralı/Sadakat kartı ve puan kullanımı/
+(233:1)Empty://
+(234:5)BackgroundLine:()Önceki Durum//
+(235:7)StepLine:(Context)Zaten /müşteri sadakat programına kayıtlıdır/
+(236:7)StepLine:(Conjunction)Ve /kartında 500 puan birikmiştir/
+(237:1)Empty://
+(238:5)ScenarioLine:()Senaryo/Puan ile kısmi ödeme/
+(239:7)StepLine:(Context)Mevcut /müşteri kasada ödeme aşamasındadır/
+(240:7)StepLine:(Action)Eğer /müşteri ödemenin bir kısmını puanla yapmak isterse/
+(241:7)StepLine:(Outcome)O zaman /puanlar toplam tutardan düşülür/
+(242:7)StepLine:(Conjunction)Ve /kalan tutar diğer ödeme yöntemiyle tahsil edilir/
+(243:7)StepLine:(Outcome)Beklenen /işlem fişinde puan indiriminin görülmesidir/
+(244:1)Empty://
+(245:5)ScenarioLine:()Senaryo/Yetersiz puan ile ödeme denemesi/
+(246:7)StepLine:(Context)Mevcut /müşterinin puan bakiyesi sıfırdır/
+(247:7)StepLine:(Action)Eğer /müşteri puanla ödeme yapmaya çalışırsa/
+(248:7)StepLine:(Outcome)O zaman /sistem yetersiz puan uyarısı gösterir/
+(249:1)Empty://
+(250:5)ScenarioLine:()Senaryo/Yetersiz puan sonrası alternatif ödeme yönlendirmesi/
+(251:7)StepLine:(Context)Zaten /müşterinin puan ile ödeme denemesi başarısız olmuştur/
+(252:7)StepLine:(Action)Eğer /müşteri ödeme ekranında kalırsa/
+(253:7)StepLine:(Outcome)O zaman /sistem müşteriyi farklı ödeme yöntemine yönlendirir/
+(254:7)StepLine:(Conjunction)Aksi halde /müşteri sepet sayfasına geri döner/
+EOF

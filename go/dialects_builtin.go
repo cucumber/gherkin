@@ -4870,57 +4870,317 @@ var builtinDialects = gherkinDialectMap{
 		Keywords: map[string][]string{
 			feature: {
 				"Özellik",
+				"İş Gereksinimi",
+				"Gereksinim",
+				"İşlev",
+				"Kullanıcı Hikayesi",
+				"Yetenek",
+				"Husus",
+				"Konu",
+				"Teknik Gereksinim",
 			},
 			rule: {
 				"Kural",
+				"İş Kuralı",
+				"Kaide",
+				"Hüküm",
+				"Madde",
 			},
 			background: {
 				"Geçmiş",
+				"Arka Plan",
+				"Ön Koşul",
+				"Önkoşul",
+				"Önceki Durum",
+				"Giriş",
+				"Mukaddime",
+				"Mevcut Durum",
 			},
 			scenario: {
 				"Örnek",
 				"Senaryo",
+				"Durum",
+				"Vaka",
 			},
 			scenarioOutline: {
 				"Senaryo taslağı",
+				"Senaryo şablonu",
 			},
 			examples: {
 				"Örnekler",
+				"Değerler",
 			},
 			given: {
 				"* ",
 				"Diyelim ki ",
+				"Mevcut durumda ",
+				"Varsayalım ki ",
+				"Zaten ",
+				"Halihazırda ",
+				"Önceden ",
+				"Biliniyor ki ",
+				"Biliyoruz ki ",
+				"Farz edelim ki ",
+				"Kabul edelim ki ",
+				"Görüldüğü üzere",
+				"Varsayılan olarak",
+				"Sabittir ki",
+				"Geçmişte ",
+				"Daha önce ",
+				"Şu aşamada ",
+				"Verili durumda ",
+				"Şu an ",
+				"Söz konusu ",
+				"Genel çerçevede ",
+				"Sistemde ",
 			},
 			when: {
 				"* ",
 				"Eğer ki ",
+				"Eğer ",
+				"Ne zaman ki ",
+				"Şayet ",
+				"Diyelim ki",
+				"Şu şartla ki",
+				"Olur da ",
+				"Ola ki ",
+				"Olası bir durumda ",
+				"Tam o sırada ",
+				"O esnada ",
+				"Her ",
 			},
 			then: {
 				"* ",
 				"O zaman ",
+				"Sonuç olarak ",
+				"Böylece ",
+				"Dolayısıyla ",
+				"O takdirde ",
+				"O halde ",
+				"Şu halde ",
+				"Bu itibarla ",
+				"Netice itibariyle ",
+				"Bunun üzerine ",
+				"Buna binaen ",
+				"Buna istinaden",
+				"Otomatikman",
+				"Bu durumda",
+				"Bu minvalde",
+				"Beklenen durum ",
+				"Beklenen çıktı ",
+				"Beklenen sonuç ",
+				"Beklenen ",
+				"Gereken ",
+				"Öngörülen ",
+				"Görüyoruz ki ",
+				"Görülüyor ki ",
+				"Haliyle ",
+				"Doğal olarak ",
 			},
 			and: {
 				"* ",
 				"Ve ",
+				"Hem de ",
+				"Bir de ",
+				"Ayrıca ",
+				"İlaveten ",
+				"Bu sırada ",
+				"Aynı zamanda ",
+				"Eşzamanlı olarak ",
+				"Eşzamanlı ",
+				"Buna ek olarak ",
+				"Bunun ardından ",
+				"Müteakiben ",
+				"Sonrasında ",
 			},
 			but: {
 				"* ",
 				"Fakat ",
 				"Ama ",
+				"Ancak ",
+				"Yalnız ",
+				"Lakin ",
+				"Ne var ki ",
+				"Meğer ki ",
+				"Buna mukabil ",
+				"Aksi halde ",
+				"Aksi takdirde ",
+				"Yine de ",
+				"Buna karşın ",
+				"Buna rağmen ",
+				"Gelgelelim ",
 			},
 		},
 		KeywordTypes: map[string]messages.StepKeywordType{
 			"Diyelim ki ": messages.StepKeywordType_CONTEXT,
 
+			"Mevcut durumda ": messages.StepKeywordType_CONTEXT,
+
+			"Varsayalım ki ": messages.StepKeywordType_CONTEXT,
+
+			"Zaten ": messages.StepKeywordType_CONTEXT,
+
+			"Halihazırda ": messages.StepKeywordType_CONTEXT,
+
+			"Önceden ": messages.StepKeywordType_CONTEXT,
+
+			"Biliniyor ki ": messages.StepKeywordType_CONTEXT,
+
+			"Biliyoruz ki ": messages.StepKeywordType_CONTEXT,
+
+			"Farz edelim ki ": messages.StepKeywordType_CONTEXT,
+
+			"Kabul edelim ki ": messages.StepKeywordType_CONTEXT,
+
+			"Görüldüğü üzere": messages.StepKeywordType_CONTEXT,
+
+			"Varsayılan olarak": messages.StepKeywordType_CONTEXT,
+
+			"Sabittir ki": messages.StepKeywordType_CONTEXT,
+
+			"Geçmişte ": messages.StepKeywordType_CONTEXT,
+
+			"Daha önce ": messages.StepKeywordType_CONTEXT,
+
+			"Şu aşamada ": messages.StepKeywordType_CONTEXT,
+
+			"Verili durumda ": messages.StepKeywordType_CONTEXT,
+
+			"Şu an ": messages.StepKeywordType_CONTEXT,
+
+			"Söz konusu ": messages.StepKeywordType_CONTEXT,
+
+			"Genel çerçevede ": messages.StepKeywordType_CONTEXT,
+
+			"Sistemde ": messages.StepKeywordType_CONTEXT,
+
 			"Eğer ki ": messages.StepKeywordType_ACTION,
+
+			"Eğer ": messages.StepKeywordType_ACTION,
+
+			"Ne zaman ki ": messages.StepKeywordType_ACTION,
+
+			"Şayet ": messages.StepKeywordType_ACTION,
+
+			"Diyelim ki": messages.StepKeywordType_ACTION,
+
+			"Şu şartla ki": messages.StepKeywordType_ACTION,
+
+			"Olur da ": messages.StepKeywordType_ACTION,
+
+			"Ola ki ": messages.StepKeywordType_ACTION,
+
+			"Olası bir durumda ": messages.StepKeywordType_ACTION,
+
+			"Tam o sırada ": messages.StepKeywordType_ACTION,
+
+			"O esnada ": messages.StepKeywordType_ACTION,
+
+			"Her ": messages.StepKeywordType_ACTION,
 
 			"O zaman ": messages.StepKeywordType_OUTCOME,
 
+			"Sonuç olarak ": messages.StepKeywordType_OUTCOME,
+
+			"Böylece ": messages.StepKeywordType_OUTCOME,
+
+			"Dolayısıyla ": messages.StepKeywordType_OUTCOME,
+
+			"O takdirde ": messages.StepKeywordType_OUTCOME,
+
+			"O halde ": messages.StepKeywordType_OUTCOME,
+
+			"Şu halde ": messages.StepKeywordType_OUTCOME,
+
+			"Bu itibarla ": messages.StepKeywordType_OUTCOME,
+
+			"Netice itibariyle ": messages.StepKeywordType_OUTCOME,
+
+			"Bunun üzerine ": messages.StepKeywordType_OUTCOME,
+
+			"Buna binaen ": messages.StepKeywordType_OUTCOME,
+
+			"Buna istinaden": messages.StepKeywordType_OUTCOME,
+
+			"Otomatikman": messages.StepKeywordType_OUTCOME,
+
+			"Bu durumda": messages.StepKeywordType_OUTCOME,
+
+			"Bu minvalde": messages.StepKeywordType_OUTCOME,
+
+			"Beklenen durum ": messages.StepKeywordType_OUTCOME,
+
+			"Beklenen çıktı ": messages.StepKeywordType_OUTCOME,
+
+			"Beklenen sonuç ": messages.StepKeywordType_OUTCOME,
+
+			"Beklenen ": messages.StepKeywordType_OUTCOME,
+
+			"Gereken ": messages.StepKeywordType_OUTCOME,
+
+			"Öngörülen ": messages.StepKeywordType_OUTCOME,
+
+			"Görüyoruz ki ": messages.StepKeywordType_OUTCOME,
+
+			"Görülüyor ki ": messages.StepKeywordType_OUTCOME,
+
+			"Haliyle ": messages.StepKeywordType_OUTCOME,
+
+			"Doğal olarak ": messages.StepKeywordType_OUTCOME,
+
 			"Ve ": messages.StepKeywordType_CONJUNCTION,
+
+			"Hem de ": messages.StepKeywordType_CONJUNCTION,
+
+			"Bir de ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ayrıca ": messages.StepKeywordType_CONJUNCTION,
+
+			"İlaveten ": messages.StepKeywordType_CONJUNCTION,
+
+			"Bu sırada ": messages.StepKeywordType_CONJUNCTION,
+
+			"Aynı zamanda ": messages.StepKeywordType_CONJUNCTION,
+
+			"Eşzamanlı olarak ": messages.StepKeywordType_CONJUNCTION,
+
+			"Eşzamanlı ": messages.StepKeywordType_CONJUNCTION,
+
+			"Buna ek olarak ": messages.StepKeywordType_CONJUNCTION,
+
+			"Bunun ardından ": messages.StepKeywordType_CONJUNCTION,
+
+			"Müteakiben ": messages.StepKeywordType_CONJUNCTION,
+
+			"Sonrasında ": messages.StepKeywordType_CONJUNCTION,
 
 			"Fakat ": messages.StepKeywordType_CONJUNCTION,
 
 			"Ama ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ancak ": messages.StepKeywordType_CONJUNCTION,
+
+			"Yalnız ": messages.StepKeywordType_CONJUNCTION,
+
+			"Lakin ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ne var ki ": messages.StepKeywordType_CONJUNCTION,
+
+			"Meğer ki ": messages.StepKeywordType_CONJUNCTION,
+
+			"Buna mukabil ": messages.StepKeywordType_CONJUNCTION,
+
+			"Aksi halde ": messages.StepKeywordType_CONJUNCTION,
+
+			"Aksi takdirde ": messages.StepKeywordType_CONJUNCTION,
+
+			"Yine de ": messages.StepKeywordType_CONJUNCTION,
+
+			"Buna karşın ": messages.StepKeywordType_CONJUNCTION,
+
+			"Buna rağmen ": messages.StepKeywordType_CONJUNCTION,
+
+			"Gelgelelim ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		},

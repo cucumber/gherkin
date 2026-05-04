@@ -3243,38 +3243,38 @@ static const Dialect tlh_dialect = {
         &tlh_then_keywords,
         &tlh_when_keywords };
 
-static const wchar_t* const tr_and_KEYWORDS[] = { L"* ", L"Ve " };
-static const Keywords tr_and_keywords = { 2, tr_and_KEYWORDS };
+static const wchar_t* const tr_and_KEYWORDS[] = { L"* ", L"Ve ", L"Hem de ", L"Bir de ", L"Ayrıca ", L"İlaveten ", L"Bu sırada ", L"Aynı zamanda ", L"Eşzamanlı olarak ", L"Eşzamanlı ", L"Buna ek olarak ", L"Bunun ardından ", L"Müteakiben ", L"Sonrasında " };
+static const Keywords tr_and_keywords = { 14, tr_and_KEYWORDS };
 
-static const wchar_t* const tr_background_KEYWORDS[] = { L"Geçmiş" };
-static const Keywords tr_background_keywords = { 1, tr_background_KEYWORDS };
+static const wchar_t* const tr_background_KEYWORDS[] = { L"Geçmiş", L"Arka Plan", L"Ön Koşul", L"Önkoşul", L"Önceki Durum", L"Giriş", L"Mukaddime", L"Mevcut Durum" };
+static const Keywords tr_background_keywords = { 8, tr_background_KEYWORDS };
 
-static const wchar_t* const tr_but_KEYWORDS[] = { L"* ", L"Fakat ", L"Ama " };
-static const Keywords tr_but_keywords = { 3, tr_but_KEYWORDS };
+static const wchar_t* const tr_but_KEYWORDS[] = { L"* ", L"Fakat ", L"Ama ", L"Ancak ", L"Yalnız ", L"Lakin ", L"Ne var ki ", L"Meğer ki ", L"Buna mukabil ", L"Aksi halde ", L"Aksi takdirde ", L"Yine de ", L"Buna karşın ", L"Buna rağmen ", L"Gelgelelim " };
+static const Keywords tr_but_keywords = { 15, tr_but_KEYWORDS };
 
-static const wchar_t* const tr_examples_KEYWORDS[] = { L"Örnekler" };
-static const Keywords tr_examples_keywords = { 1, tr_examples_KEYWORDS };
+static const wchar_t* const tr_examples_KEYWORDS[] = { L"Örnekler", L"Değerler" };
+static const Keywords tr_examples_keywords = { 2, tr_examples_KEYWORDS };
 
-static const wchar_t* const tr_feature_KEYWORDS[] = { L"Özellik" };
-static const Keywords tr_feature_keywords = { 1, tr_feature_KEYWORDS };
+static const wchar_t* const tr_feature_KEYWORDS[] = { L"Özellik", L"İş Gereksinimi", L"Gereksinim", L"İşlev", L"Kullanıcı Hikayesi", L"Yetenek", L"Husus", L"Konu", L"Teknik Gereksinim" };
+static const Keywords tr_feature_keywords = { 9, tr_feature_KEYWORDS };
 
-static const wchar_t* const tr_given_KEYWORDS[] = { L"* ", L"Diyelim ki " };
-static const Keywords tr_given_keywords = { 2, tr_given_KEYWORDS };
+static const wchar_t* const tr_given_KEYWORDS[] = { L"* ", L"Diyelim ki ", L"Mevcut durumda ", L"Varsayalım ki ", L"Zaten ", L"Halihazırda ", L"Önceden ", L"Biliniyor ki ", L"Biliyoruz ki ", L"Farz edelim ki ", L"Kabul edelim ki ", L"Görüldüğü üzere", L"Varsayılan olarak", L"Sabittir ki", L"Geçmişte ", L"Daha önce ", L"Şu aşamada ", L"Verili durumda ", L"Şu an ", L"Söz konusu ", L"Genel çerçevede ", L"Sistemde " };
+static const Keywords tr_given_keywords = { 22, tr_given_KEYWORDS };
 
-static const wchar_t* const tr_rule_KEYWORDS[] = { L"Kural" };
-static const Keywords tr_rule_keywords = { 1, tr_rule_KEYWORDS };
+static const wchar_t* const tr_rule_KEYWORDS[] = { L"Kural", L"İş Kuralı", L"Kaide", L"Hüküm", L"Madde" };
+static const Keywords tr_rule_keywords = { 5, tr_rule_KEYWORDS };
 
-static const wchar_t* const tr_scenario_KEYWORDS[] = { L"Örnek", L"Senaryo" };
-static const Keywords tr_scenario_keywords = { 2, tr_scenario_KEYWORDS };
+static const wchar_t* const tr_scenario_KEYWORDS[] = { L"Örnek", L"Senaryo", L"Durum", L"Vaka" };
+static const Keywords tr_scenario_keywords = { 4, tr_scenario_KEYWORDS };
 
-static const wchar_t* const tr_scenarioOutline_KEYWORDS[] = { L"Senaryo taslağı" };
-static const Keywords tr_scenarioOutline_keywords = { 1, tr_scenarioOutline_KEYWORDS };
+static const wchar_t* const tr_scenarioOutline_KEYWORDS[] = { L"Senaryo taslağı", L"Senaryo şablonu" };
+static const Keywords tr_scenarioOutline_keywords = { 2, tr_scenarioOutline_KEYWORDS };
 
-static const wchar_t* const tr_then_KEYWORDS[] = { L"* ", L"O zaman " };
-static const Keywords tr_then_keywords = { 2, tr_then_KEYWORDS };
+static const wchar_t* const tr_then_KEYWORDS[] = { L"* ", L"O zaman ", L"Sonuç olarak ", L"Böylece ", L"Dolayısıyla ", L"O takdirde ", L"O halde ", L"Şu halde ", L"Bu itibarla ", L"Netice itibariyle ", L"Bunun üzerine ", L"Buna binaen ", L"Buna istinaden", L"Otomatikman", L"Bu durumda", L"Bu minvalde", L"Beklenen durum ", L"Beklenen çıktı ", L"Beklenen sonuç ", L"Beklenen ", L"Gereken ", L"Öngörülen ", L"Görüyoruz ki ", L"Görülüyor ki ", L"Haliyle ", L"Doğal olarak " };
+static const Keywords tr_then_keywords = { 26, tr_then_KEYWORDS };
 
-static const wchar_t* const tr_when_KEYWORDS[] = { L"* ", L"Eğer ki " };
-static const Keywords tr_when_keywords = { 2, tr_when_KEYWORDS };
+static const wchar_t* const tr_when_KEYWORDS[] = { L"* ", L"Eğer ki ", L"Eğer ", L"Ne zaman ki ", L"Şayet ", L"Diyelim ki", L"Şu şartla ki", L"Olur da ", L"Ola ki ", L"Olası bir durumda ", L"Tam o sırada ", L"O esnada ", L"Her " };
+static const Keywords tr_when_keywords = { 13, tr_when_KEYWORDS };
 
 static const Dialect tr_dialect = {
         L"tr",
