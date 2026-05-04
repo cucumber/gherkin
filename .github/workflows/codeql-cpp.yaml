@@ -1,0 +1,54 @@
+name: codeql-cpp
+
+permissions: { }
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - cpp/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - cpp/**
+      - testdata/**
+      - .github/**
+  schedule:
+    - cron: '48 5 * * 0'
+
+concurrency:
+  # Cancels in-progress runs only for pull requests
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze C++
+    runs-on: 'ubuntu-latest'
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+        with:
+          languages: c-cpp
+          build-mode: manual
+          tools: linked
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+      - name: install dependencies
+        working-directory: cpp
+        run: |
+          cmake -P cmake/cmate --cc=gcc install
+      - name: configure and build
+        working-directory: cpp
+        run: |
+          cmake -P cmake/cmate --cc=gcc build --release
+      - uses: github/codeql-action/analyze@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+        with:
+          category: "/language:c"
