@@ -65,6 +65,12 @@
             <artifactId>messages-ndjson</artifactId>
             <scope>test</scope>
             <version>0.4.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.cucumber</groupId>
+                    <artifactId>messages</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
