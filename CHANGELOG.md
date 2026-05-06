@@ -11,13 +11,13 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Expanded Turkish keywords ([#567](https://github.com/cucumber/gherkin/pull/567))
 
 ### Changed
-- [Ruby, Python, JavaScript, Perl, C++, .NET] Optimise parser class/speed by removing redundant null `#detach` method
-- [Ruby] Changed `ParserMessageStream` to accept keyword arguments allowing the `Gherkin` class methods to be slightly more optimal
+- [Ruby, Python, JavaScript, Perl, C++, .NET] Optimise parser class/speed by removing redundant null `#detach` method ([#561](https://github.com/cucumber/gherkin/pull/561)).
+- [Ruby] Changed `ParserMessageStream` to accept keyword arguments allowing the `Gherkin` class methods to be slightly more optimal ([#560](https://github.com/cucumber/gherkin/pull/560)).
 
 ### Fixed
-- [c] Fixed memory leak with respekt to the pickle ast ids.
-- [c] Fixed potential read past null terminator. Fixed allocation of more memoroy than necessary ([#559](https://github.com/cucumber/gherkin/pull/559)).
-- [PHP] Fix PHP 8.4 deprecation warnings.
+- [c] Fixed memory leak with respect to the pickle ast ids.
+- [c] Fixed potential read past null terminator. Fixed allocation of more memory than necessary ([#559](https://github.com/cucumber/gherkin/pull/559)).
+- [PHP] Fix PHP 8.4 deprecation warnings ([#550](https://github.com/cucumber/gherkin/pull/550)).
 - [cpp] Added missing include guard in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 - [cpp] Removed unreachable code in parser.hpp ([#554](https://github.com/cucumber/gherkin/pull/554))
 
