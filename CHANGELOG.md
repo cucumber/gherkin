@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [39.1.0] - 2026-05-06
 ### Added
 - (i18n) Expanded Turkish keywords ([#567](https://github.com/cucumber/gherkin/pull/567))
 
@@ -31,11 +33,11 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [PHP] Require PHP 8.2+ in CI and in composer.json.
 
-### Security
-- [Python] Fixed hidden file reading behavior in `Parser.parse` ([#541](https://github.com/cucumber/gherkin/pull/541)).
-
 ### Fixed
 - [cpp] Removed unused vector_type definition ([#549](https://github.com/cucumber/gherkin/pull/549)).
+
+### Security
+- [Python] Fixed hidden file reading behavior in `Parser.parse` ([#541](https://github.com/cucumber/gherkin/pull/541)).
 
 ## [38.0.0] - 2026-01-22
 ### Changed
@@ -909,7 +911,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v39.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v39.1.0...HEAD
+[39.1.0]: https://github.com/cucumber/gherkin/compare/v39.0.0...v39.1.0
 [39.0.0]: https://github.com/cucumber/gherkin/compare/v38.0.0...v39.0.0
 [38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0
 [37.0.1]: https://github.com/cucumber/gherkin/compare/v37.0.0...v37.0.1
