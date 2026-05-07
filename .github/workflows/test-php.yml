@@ -26,6 +26,8 @@ jobs:
       fail-fast: false
       matrix:
         php:
+          - '8.2'
+          - '8.3'
           - '8.4'
           - '8.5'
         composer-mode: ['low-deps', 'high-deps']
@@ -66,10 +68,39 @@ jobs:
       - name: Run tests
         working-directory: php
         run: |
-          vendor/bin/php-cs-fixer --show-progress=none --dry-run --diff fix
-          vendor/bin/psalm --no-cache
           vendor/bin/phpunit
 
       - name: run acceptance tests
         run: make acceptance
         working-directory: php
+  lint-php:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up PHP
+        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # 2.37.0
+        with:
+          php-version: "8.2"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Discover composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+        working-directory: php
+      - name: Cache composer
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: "${{ steps.composer-cache.outputs.dir }}"
+          key: composer
+      - name: Install dependencies
+        working-directory: php
+        run: composer update
+      - name: Lint and Fix
+        working-directory: php
+        run: |
+          vendor/bin/php-cs-fixer --show-progress=none --dry-run --diff fix
+          vendor/bin/psalm --no-cache
