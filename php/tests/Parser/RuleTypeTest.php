@@ -9,19 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 final class RuleTypeTest extends TestCase
 {
-    /** @dataProvider tokenCaseProvider */
-    public function testItCanCastFromTokens(TokenType $tokenType): void
+    public function testItCanCastFromTokens(): void
     {
-        self::assertInstanceOf(RuleType::class, RuleType::cast($tokenType));
-    }
-
-    /**
-     * @return Generator<string,array{0:TokenType}>
-     */
-    public static function tokenCaseProvider(): Generator
-    {
-        foreach (TokenType::cases() as $case) {
-            yield $case->name => [$case];
+        foreach (TokenType::cases() as $tokenType) {
+            self::assertInstanceOf(RuleType::class, RuleType::cast($tokenType));
         }
     }
 }
