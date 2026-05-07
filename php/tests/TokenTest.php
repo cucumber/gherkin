@@ -52,10 +52,7 @@ final class TokenTest extends TestCase
     public function testItPopulatesMatchFieldsWhenMatched(): void
     {
         $line = $this->createMock(GherkinLine::class);
-        $line->expects(self::atLeastOnce())->method('getLineText')->with(-1)->willReturn('TOKENVALUE');
-
-        $token1 = new Token($line, new Location(1, 2));
-        $token = $token1;
+        $token = new Token($line, new Location(1, 2));
 
         $token->match(
             TokenType::Other,
@@ -79,10 +76,7 @@ final class TokenTest extends TestCase
     public function testItPopulatesMatchedLocationWithIndentColumnWhenMatched(): void
     {
         $line = $this->createMock(GherkinLine::class);
-        $line->expects(self::atLeastOnce())->method('getLineText')->with(-1)->willReturn('TOKENVALUE');
-
-        $token1 = new Token($line, new Location(1, 100));
-        $token = $token1;
+        $token = new Token($line, new Location(1, 100));
 
         $token->match(
             TokenType::Other,
