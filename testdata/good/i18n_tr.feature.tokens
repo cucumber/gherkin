@@ -1,0 +1,241 @@
+(1:1)Language:/tr/
+(2:1)FeatureLine:()Özellik/E-ticaret platformu uçtan uca sipariş akışı/
+(3:1)Other:/  Bir e-ticaret mobil uygulamasının altyapı kurulumundan/
+(4:1)Other:/  ödeme tamamlanmasına kadar tüm akışını doğrular./
+(5:1)Other://
+(6:1)Comment:/  # -- 1. ALTYAPI -- Sistem Ayağa Kalkma -----------/
+(7:1)Other://
+(8:3)RuleLine:()Kural/Konteyner ortamı hazırlığı/
+(9:1)Empty://
+(10:5)BackgroundLine:()Ön Koşul//
+(11:7)StepLine:(Context)Mevcut /Docker Engine çalışıyor/
+(12:7)StepLine:(Context)Sistemde /docker-compose.yml dosyası tanımlı/
+(13:1)Empty://
+(14:5)ScenarioLine:()Senaryo/Uygulama konteynerlerinin başlatılması/
+(15:7)StepLine:(Context)Mevcut /tüm konteynerler durdurulmuştur/
+(16:7)StepLine:(Action)Ne zaman /docker-compose up komutu çalıştırılırsa/
+(17:7)StepLine:(Outcome)Beklenen /veritabanı konteyneri 10 saniye içinde hazır olur/
+(18:7)StepLine:(Conjunction)Ve /API konteyneri 15 saniye içinde hazır olur/
+(19:7)StepLine:(Conjunction)Ayrıca /Redis önbellek konteyneri başlatılır/
+(20:1)Empty://
+(21:5)ScenarioLine:()Senaryo/Veritabanı bağlantı havuzu oluşturma/
+(22:7)StepLine:(Context)Mevcut /PostgreSQL konteyneri çalışıyor/
+(23:7)StepLine:(Action)Ne zaman /API servisi ilk bağlantı talebini gönderirse/
+(24:7)StepLine:(Outcome)Beklenen /20 bağlantılık havuz oluşturulur/
+(25:7)StepLine:(Outcome)Gerekli /servis veritabanı sorgularını kabul etmeye başlar/
+(26:1)Empty://
+(27:5)ScenarioLine:()Senaryo/Servis sağlık kontrolü/
+(28:7)StepLine:(Context)Mevcut /tüm konteynerler ayakta çalışıyorlar/
+(29:7)StepLine:(Action)Ne zaman /yük dengeleyici sağlık kontrolü yaparsa/
+(30:7)StepLine:(Outcome)Gereken /tüm servisler 200 OK yanıtı döner/
+(31:7)StepLine:(Conjunction)Ancak /yanıt süresi 500 milisaniyeyi aşarsa uyarı üretilir/
+(32:1)Empty://
+(33:1)Comment:/  # -- 2. KİMLİK DOĞRULAMA -- Kayıt ve Giriş ------/
+(34:1)Empty://
+(35:3)RuleLine:()İş Kuralı/Kullanıcı kimlik doğrulama akışı/
+(36:1)Empty://
+(37:5)ScenarioLine:()Senaryo/Yeni kullanıcı kaydı/
+(38:7)StepLine:(Context)Mevcut /mobil uygulama açıktır/
+(39:7)StepLine:(Context)Sistemde /bu e-posta adresi ile kayıtlı kullanıcı yoktur/
+(40:7)StepLine:(Action)Ne zaman /kullanıcı geçerli bilgilerle kayıt formunu gönderirse/
+(41:7)StepLine:(Outcome)Beklenen /hesap oluşturulur/
+(42:7)StepLine:(Conjunction)Ve /doğrulama e-postası gönderilir/
+(43:7)StepLine:(Conjunction)Aynı zamanda /hoş geldin bildirimi mobil cihaza iletilir/
+(44:1)Empty://
+(45:5)ScenarioLine:()Senaryo/E-posta doğrulama/
+(46:7)StepLine:(Context)Önceden /kullanıcı kayıt olmuştur/
+(47:7)StepLine:(Context)Zaten /doğrulama e-postası gönderilmiştir/
+(48:7)StepLine:(Action)Ne zaman /kullanıcı e-postadaki bağlantıya tıklarsa/
+(49:7)StepLine:(Outcome)Beklenen /hesap durumu doğrulanmış olarak güncellenir/
+(50:7)StepLine:(Outcome)Böylece /kullanıcı alışverişe başlayabilir/
+(51:1)Empty://
+(52:5)ScenarioLine:()Senaryo/Mobil uygulama ile oturum açma/
+(53:7)StepLine:(Context)Mevcut /kullanıcı hesabı doğrulanmıştır/
+(54:7)StepLine:(Action)Ne zaman /kullanıcı doğru e-posta ve şifre ile giriş yaptıysa/
+(55:7)StepLine:(Outcome)Gereken /JWT oturum belirteci oluşturulur/
+(56:7)StepLine:(Conjunction)Ve /oturum belirteci güvenli depolamaya kaydedilir/
+(57:7)StepLine:(Outcome)Bunun üzerine /kullanıcı ana sayfaya yönlendirilir/
+(58:1)Empty://
+(59:5)ScenarioLine:()Senaryo/Üç başarısız giriş denemesi sonrası kilitleme/
+(60:7)StepLine:(Context)Mevcut /kullanıcı 2 kez yanlış şifre girmiştir/
+(61:7)StepLine:(Action)Ne zaman /üçüncü kez yanlış şifre girilirse/
+(62:7)StepLine:(Outcome)Gerekli /hesap 15 dakika süreyle kilitlenir/
+(63:7)StepLine:(Conjunction)Aynı zamanda /kullanıcıya e-posta ile bilgilendirme gönderilir/
+(64:1)Empty://
+(65:5)ScenarioLine:()Senaryo/Biyometrik giriş/
+(66:7)StepLine:(Context)Halihazırda /kullanıcı biyometrik girişi etkinleştirmiştir/
+(67:7)StepLine:(Context)Mevcut /cihazda kayıtlı parmak izi vardır/
+(68:7)StepLine:(Action)Eğer /kullanıcı parmak izini okutursa/
+(69:7)StepLine:(Outcome)Gerekli /oturum açılır/
+(70:7)StepLine:(Conjunction)Ancak /biyometrik doğrulama başarısız olursa şifre ekranı gösterilir/
+(71:1)Empty://
+(72:1)Comment:/  # -- 3. ÜRÜN -- Listeleme ve Arama ---------------/
+(73:1)Empty://
+(74:3)RuleLine:()Kural/Ürün kataloğu ve arama işlevleri/
+(75:1)Empty://
+(76:5)ScenarioLine:()Senaryo/Ana sayfa ürün listeleme/
+(77:7)StepLine:(Context)Mevcut /kullanıcı oturum açmıştır/
+(78:7)StepLine:(Context)Sistemde /150 aktif ürün kayıtlıdır/
+(79:7)StepLine:(Action)Ne zaman /kullanıcı ana sayfayı açarsa/
+(80:7)StepLine:(Outcome)Beklenen /ilk 20 ürün listelenir/
+(81:7)StepLine:(Conjunction)Ve /her üründe ad, fiyat ve görsel gösterilir/
+(82:1)Empty://
+(83:5)ScenarioLine:()Senaryo/Kategoriye göre filtreleme/
+(84:7)StepLine:(Context)Mevcut /kullanıcı ürün listesinde/
+(85:7)StepLine:(Context)Sistemde /elektronik kategorisinde 45 ürün var/
+(86:7)StepLine:(Action)Eğer /kullanıcı elektronik kategorisini seçerse/
+(87:7)StepLine:(Outcome)Beklenen /yalnızca elektronik kategorisi ürünlerin listelenmesidir/
+(88:7)StepLine:(Outcome)Bu durumda /sayfa başlığı elektronik olarak güncellenir/
+(89:1)Empty://
+(90:5)ScenarioLine:()Senaryo/Stokta olmayan ürünün görüntülenmesi/
+(91:7)StepLine:(Context)Mevcut /ürün stok adedi sıfır/
+(92:7)StepLine:(Action)Eğer /kullanıcı bu ürünün detay sayfasını açarsa/
+(93:7)StepLine:(Outcome)Beklenen /ürün bilgileri görüntülenir/
+(94:7)StepLine:(Conjunction)Ancak /sepete ekle düğmesi pasif olur/
+(95:7)StepLine:(Conjunction)Buna rağmen /stok bildirimi almak için e-posta kaydı yapılabilir/
+(96:1)Empty://
+(97:5)ScenarioLine:()Senaryo taslağı/Fiyat aralığına göre filtreleme/
+(98:7)StepLine:(Context)Mevcut /kullanıcı ürün listesinde/
+(99:7)StepLine:(Action)Ne zaman /<min> TL ile <maks> TL arasındaki fiyat filtrelerini seçerse/
+(100:7)StepLine:(Outcome)Beklenen /yalnızca bu aralıktaki ürünlerin gösterilmesidir/
+(101:1)Empty://
+(102:7)ExamplesLine:()Örnekler//
+(103:9)TableRow://11:min,18:maks
+(104:9)TableRow://11:0,18:100
+(105:9)TableRow://11:100,18:500
+(106:9)TableRow://11:500,18:2000
+(107:1)Empty://
+(108:1)Comment:/  # -- 4. SEPET -- Ürün Ekleme ve Yönetim ----------/
+(109:1)Empty://
+(110:3)RuleLine:()Kural/Alışveriş sepeti yönetimi/
+(111:1)Empty://
+(112:5)ScenarioLine:()Senaryo/Sepete ilk ürün ekleme/
+(113:7)StepLine:(Context)Mevcut /sepet boş/
+(114:7)StepLine:(Context)Sistemde /ürün stokta var/
+(115:7)StepLine:(Action)Ne zaman /kullanıcı ürünü sepete eklerse/
+(116:7)StepLine:(Outcome)O zaman /sepette 1 ürün görünür/
+(117:7)StepLine:(Conjunction)Ve /sepet simgesinde adet göstergesi güncellenir/
+(118:7)StepLine:(Conjunction)Aynı zamanda /sepet toplam tutarı hesaplanır/
+(119:1)Empty://
+(120:5)ScenarioLine:()Senaryo/Aynı üründen birden fazla ekleme/
+(121:7)StepLine:(Context)Mevcut /sepette 1 adet kalem var/
+(122:7)StepLine:(Context)Sistemde /bu üründen 50 adet stokta var/
+(123:7)StepLine:(Action)Şayet /kullanıcı aynı ürünü tekrar sepete eklerse/
+(124:7)StepLine:(Outcome)Beklenen /kalem adedi 2 olarak güncellenir/
+(125:7)StepLine:(Outcome)Dolayısıyla /toplam tutar birim fiyatın 2 katı olur/
+(126:7)StepLine:(Conjunction)Ancak /sepete ayrı satır olarak eklenmez/
+(127:1)Empty://
+(128:5)ScenarioLine:()Senaryo/Stok sınırını aşan adet girişi/
+(129:7)StepLine:(Context)Mevcut /sepette 1 adet ürün var/
+(130:7)StepLine:(Context)Sistemde /bu üründen 3 adet stokta kaldı/
+(131:7)StepLine:(Action)Şayet /kullanıcı adedi 5 olarak güncellemeye çalışırsa/
+(132:7)StepLine:(Outcome)Gerekli /sistem maksimum stok uyarısı gösterir/
+(133:7)StepLine:(Outcome)Bu durumda /adet otomatik olarak 3 ile sınırlandırılır/
+(134:1)Empty://
+(135:5)ScenarioLine:()Senaryo/Sepetten ürün çıkarma/
+(136:7)StepLine:(Context)Mevcut /sepette 3 farklı ürün var/
+(137:7)StepLine:(Action)Eğer /kullanıcı bir ürünü sepetten çıkardıysa/
+(138:7)StepLine:(Outcome)O zaman /sepette 2 ürün kalır/
+(139:7)StepLine:(Outcome)Bunun üzerine /toplam tutar yeniden hesaplanır/
+(140:1)Empty://
+(141:5)ScenarioLine:()Senaryo/Sepet zaman aşımı ve kurtarma/
+(142:7)StepLine:(Context)Daha önce /kullanıcı sepete ürün eklemiştir/
+(143:7)StepLine:(Context)Halihazırda /son işlemden bu yana 30 dakika geçmiştir/
+(144:7)StepLine:(Action)Ne zaman /kullanıcı sepet sayfasını açarsa/
+(145:7)StepLine:(Outcome)Beklenen /sepet içeriği korunur/
+(146:7)StepLine:(Conjunction)Ancak /fiyatlar güncel duruma göre yeniden hesaplanır/
+(147:1)Empty://
+(148:1)Comment:/  # -- 5. ÖDEME -- Mobil Ödeme Akışı ---------------/
+(149:1)Empty://
+(150:3)RuleLine:()İş Kuralı/Mobil ödeme işleme kuralları/
+(151:1)Empty://
+(152:5)BackgroundLine:()Ön Koşul//
+(153:7)StepLine:(Context)Sistemde /ödeme altyapısı aktiftir/
+(154:7)StepLine:(Context)Mevcut /kullanıcı oturum açmıştır/
+(155:7)StepLine:(Context)Zaten /sepette en az 1 ürün vardır/
+(156:1)Empty://
+(157:5)ScenarioLine:()Senaryo/Teslimat adresi seçimi/
+(158:7)StepLine:(Context)Mevcut /kullanıcının 2 kayıtlı adresi var/
+(159:7)StepLine:(Action)Ne zaman /kullanıcı ödeme sayfasına geçerse/
+(160:7)StepLine:(Outcome)Beklenen /kayıtlı adresler listelenir/
+(161:7)StepLine:(Conjunction)Ve /varsayılan adres seçili olarak gösterilir/
+(162:1)Empty://
+(163:5)ScenarioLine:()Senaryo/Kredi kartı ile başarılı ödeme/
+(164:7)StepLine:(Context)Mevcut /sepet tutarı 750 TL/
+(165:7)StepLine:(Context)Önceden /kullanıcı teslimat adresini seçmiştir/
+(166:7)StepLine:(Action)Ne zaman /kullanıcı geçerli kredi kartı bilgilerini girip ödemeyi onaylarsa/
+(167:7)StepLine:(Outcome)Beklenen /ödeme başarılı olarak işlenir/
+(168:7)StepLine:(Outcome)Gereken /sipariş numarası oluşturulur/
+(169:7)StepLine:(Conjunction)Ve /sipariş onay e-postası gönderilir/
+(170:7)StepLine:(Conjunction)Aynı zamanda /mobil bildirim iletilir/
+(171:7)StepLine:(Outcome)Bunun ardından /sepet temizlenir/
+(172:1)Empty://
+(173:5)ScenarioLine:()Senaryo/Yetersiz bakiye ile ödeme reddi/
+(174:7)StepLine:(Context)Mevcut /sepet tutarı 2500 TL/
+(175:7)StepLine:(Action)Eğer /kullanıcı yetersiz bakiyeli kart ile ödeme yapmaya çalışırsa/
+(176:7)StepLine:(Outcome)Beklenen /sonuç ödemenin reddedilmesidir/
+(177:7)StepLine:(Conjunction)Fakat /kullanıcının sepet içeriği korunur/
+(178:7)StepLine:(Conjunction)Ve /farklı ödeme yöntemi seçeneği sunulur/
+(179:1)Empty://
+(180:5)ScenarioLine:()Senaryo/3D Secure doğrulama/
+(181:7)StepLine:(Context)Mevcut /sepet tutarı 1500 TL/
+(182:7)StepLine:(Action)Ne zaman /kullanıcı ödemeyi onaylarsa/
+(183:7)StepLine:(Outcome)Gerekli /3D Secure doğrulama sayfası açılır/
+(184:7)StepLine:(Action)Ne zaman /kullanıcı SMS kodunu doğru girerse/
+(185:7)StepLine:(Outcome)Beklenen /ödeme onaylanır/
+(186:7)StepLine:(Outcome)Böylece /sipariş oluşturulur/
+(187:1)Empty://
+(188:5)ScenarioLine:()Senaryo/3D Secure zaman aşımı/
+(189:7)StepLine:(Context)Mevcut /3D Secure doğrulama sayfası açılmıştır/
+(190:7)StepLine:(Context)Halihazırda /5 dakika geçmiştir ve kod girilmemiştir/
+(191:7)StepLine:(Action)Eğer /doğrulama süresi dolarsa/
+(192:7)StepLine:(Outcome)Beklenen /işlem iptal edilir/
+(193:7)StepLine:(Conjunction)Ancak /kullanıcı ödemeyi tekrar deneyebilir/
+(194:7)StepLine:(Conjunction)Aynı zamanda /sepet içeriği ve adres bilgisi korunur/
+(195:1)Empty://
+(196:5)ScenarioLine:()Senaryo şablonu/Taksitli ödeme hesaplama/
+(197:7)StepLine:(Context)Mevcut /sepet tutarı <tutar> TL/
+(198:7)StepLine:(Action)Eğer /kullanıcı <taksit> taksit seçeneğini tercih ederse/
+(199:7)StepLine:(Outcome)Beklenen /aylık taksit tutarı <aylik> TL olarak gösterilir/
+(200:7)StepLine:(Outcome)Böylece /toplam ödenecek tutar <toplam> TL olarak gösterilir/
+(201:1)Empty://
+(202:7)ExamplesLine:()Değerler//
+(203:9)TableRow://11:tutar,19:taksit,28:aylik,37:toplam
+(204:9)TableRow://11:3000,19:3,28:1000,37:3000
+(205:9)TableRow://11:3000,19:6,28:530,37:3180
+(206:9)TableRow://11:3000,19:9,28:367,37:3303
+(207:9)TableRow://11:3000,19:12,28:290,37:3480
+(208:1)Empty://
+(209:5)ScenarioLine:()Senaryo/Mobil cüzdan ile hızlı ödeme/
+(210:7)StepLine:(Context)Mevcut /kullanıcının mobil cüzdanı tanımlıdır/
+(211:7)StepLine:(Context)Zaten /cüzdanda kayıtlı kart vardır/
+(212:7)StepLine:(Action)Ne zaman /kullanıcı tek dokunuşla öde seçeneğini kullanırsa/
+(213:7)StepLine:(Outcome)Gerekli /biyometrik doğrulama istenir/
+(214:7)StepLine:(Action)Şayet /kullanıcı parmak izini onayladıysa/
+(215:7)StepLine:(Outcome)Gereken /ödeme işlenir/
+(216:7)StepLine:(Outcome)Böylece /sipariş anında oluşturulur/
+(217:1)Empty://
+(218:1)Comment:/  # -- 6. SİPARİŞ SONRASI -- Kargo ve Bildirim ----/
+(219:1)Empty://
+(220:3)RuleLine:()Kural/Sipariş sonrası süreç yönetimi/
+(221:1)Empty://
+(222:5)ScenarioLine:()Senaryo/Sipariş durum bildirimi/
+(223:7)StepLine:(Context)Önceden /sipariş başarıyla oluşturulmuştur/
+(224:7)StepLine:(Action)Ne zaman /sipariş durumu hazırlanıyor olarak güncellenirse/
+(225:7)StepLine:(Outcome)O zaman /kullanıcıya mobil bildirim gönderilir/
+(226:7)StepLine:(Conjunction)Ayrıca /sipariş takip sayfasında durum güncellenir/
+(227:1)Empty://
+(228:5)ScenarioLine:()Senaryo/Kargoya teslim bildirimi/
+(229:7)StepLine:(Context)Önceden /sipariş hazırlanmıştır/
+(230:7)StepLine:(Action)Ne zaman /kargo firması siparişi teslim alırsa/
+(231:7)StepLine:(Outcome)Beklenen /kargo takip numarası oluşturulur/
+(232:7)StepLine:(Conjunction)Ve /kullanıcıya takip bağlantısı bildirimi gönderilir/
+(233:7)StepLine:(Outcome)Bunun üzerine /tahmini teslimat tarihi hesaplanır/
+(234:1)Empty://
+(235:5)ScenarioLine:()Senaryo/Başarılı teslimat onayı/
+(236:7)StepLine:(Context)Mevcut /sipariş kargoda/
+(237:7)StepLine:(Action)Ne zaman /kargo firması teslim edildi bilgisini gönderdiyse/
+(238:7)StepLine:(Outcome)Beklenen /sipariş durumu teslim edildi olarak güncellenir/
+(239:7)StepLine:(Conjunction)Aynı zamanda /iade süresi başlangıç tarihi kaydedilir/
+(240:7)StepLine:(Outcome)Bunun üzerine /kullanıcıya değerlendirme daveti gönderilir/
+EOF
