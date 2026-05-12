@@ -1,0 +1,10 @@
+(1:1)FeatureLine:()Feature/Scenario outline with prefix placeholder/
+(2:1)Empty://
+(3:3)ScenarioLine:()Scenario Outline/scenario/
+(4:5)StepLine:(Context)Given /the <parentflag>/
+(5:1)Empty://
+(6:5)ExamplesLine:()Examples//
+(7:1)Empty://
+(8:7)TableRow://9:parent,18:parentflag
+(9:7)TableRow://9:v,18:v
+EOF

@@ -1,0 +1,1 @@
+{"source":{"data":"Feature: Scenario outline with prefix placeholder\n\n  Scenario Outline: scenario\n    Given the <parentflag>\n\n    Examples:\n\n      | parent | parentflag |\n      | v      | v          |\n","mediaType":"text/x.cucumber.gherkin+plain","uri":"../testdata/good/scenario_outline_prefix_placeholder.feature"}}
