@@ -325,6 +325,8 @@ static const wchar_t* create_expanded_text(const wchar_t* original_text, const T
             for (closer = i + 1; closer < length; ++closer)
                 if (original_text[closer] == L'>')
                     break;
+            if (closer >= length)
+                continue;
             for (j = 0; j < example_header->table_cells->cell_count; ++j) {
                 int cell_text_length = wcslen(example_header->table_cells->table_cells[j].value);
                 if (cell_text_length == closer - i - 1 &&
