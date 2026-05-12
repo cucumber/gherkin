@@ -321,15 +321,11 @@ static const wchar_t* create_expanded_text(const wchar_t* original_text, const T
     int i;
     for (i = 0; i < length; ++i) {
         if (original_text[i] == L'<') {
-            int j, closer;
-            for (closer = i + 1; closer < length; ++closer)
-                if (original_text[closer] == L'>')
-                    break;
-            if (closer >= length)
-                continue;
+            int j;
             for (j = 0; j < example_header->table_cells->cell_count; ++j) {
                 int cell_text_length = wcslen(example_header->table_cells->table_cells[j].value);
-                if (cell_text_length == closer - i - 1 &&
+                if (i + cell_text_length + 1 < length &&
+                        original_text[i + 1 + cell_text_length] == L'>' &&
                         wcsncmp(original_text + i + 1, example_header->table_cells->table_cells[j].value, cell_text_length) == 0) {
                     ReplacementItem* item = (ReplacementItem*)malloc(sizeof(ReplacementItem));
                     item->item_delete = (item_delete_function)ReplacementItem_delete;
