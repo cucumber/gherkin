@@ -18,7 +18,7 @@ jobs:
       - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
         with:
           ruby-version: '4.0.4'
-      - uses: cucumber/action-publish-rubygem@d8918cbdee789cfc78f346a96a59596b87795be1 # v1.0.0
+      - uses: cucumber/action-publish-rubygem@4e79bb9aed597c835e8438f57c04d0996ab80d72 # v2.0.0
         with:
           rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}
           working_directory: ruby
