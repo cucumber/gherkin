@@ -44,7 +44,8 @@ static const ChildDefinitions* get_child_definitions(AstNode* ast_node);
 
 static const Steps* get_steps(AstNode* ast_node);
 
-static const StepArgument* get_step_argument(AstNode* ast_node);
+static const DataTable* get_step_data_table(AstNode* ast_node);
+static const DocString* get_step_doc_string(AstNode* ast_node);
 
 static const Examples* get_examples(AstNode* ast_node);
 
@@ -157,7 +158,7 @@ static void* transform_node(AstNode* ast_node, AstBuilder* ast_builder) {
     switch (ast_node->rule_type) {
     case Rule_Step: {
         token = AstNode_get_token(ast_node, Token_StepLine);
-        const Step* step = Step_new(token->location, ast_builder->id_generator, token->matched_keyword, token->matched_keyword_type, token->matched_text, get_step_argument(ast_node));
+        const Step* step = Step_new_with_arguments(token->location, ast_builder->id_generator, token->matched_keyword, token->matched_keyword_type, token->matched_text, get_step_data_table(ast_node), get_step_doc_string(ast_node));
         Token_delete(token);
         AstNode_delete(ast_node);
         return (void*)step;
@@ -303,12 +304,12 @@ static const Steps* get_steps(AstNode* ast_node) {
     return steps;
 }
 
-static const StepArgument* get_step_argument(AstNode* ast_node) {
-    StepArgument* argument = AstNode_get_single(ast_node, Rule_DataTable);
-    if (!argument) {
-        argument = AstNode_get_single(ast_node, Rule_DocString);
-    }
-    return argument;
+static const DataTable* get_step_data_table(AstNode* ast_node) {
+    return AstNode_get_single(ast_node, Rule_DataTable);
+}
+
+static const DocString* get_step_doc_string(AstNode* ast_node) {
+    return AstNode_get_single(ast_node, Rule_DocString);
 }
 
 static const Examples* get_examples(AstNode* ast_node) {

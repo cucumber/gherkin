@@ -128,13 +128,16 @@ static void print_pickle_step(FILE* file, const PickleStep* step) {
     fprintf(file, "{");
     print_id(file, step->id);
     print_ast_node_ids(file, step->ast_node_ids);
-    if (step->argument) {
+    if (step->doc_string || step->data_table) {
         fprintf(file, ",\"argument\":{");
-        if (step->argument->type == Argument_String) {
-            print_pickle_string(file, (const PickleString*)step->argument);
+        if (step->doc_string) {
+            print_pickle_string(file, step->doc_string);
         }
-        if (step->argument->type == Argument_Table) {
-            print_pickle_table(file, (const PickleTable*)step->argument);
+        if (step->data_table) {
+            if (step->doc_string) {
+                fprintf(file, ",");
+            }
+            print_pickle_table(file, step->data_table);
         }
         fprintf(file, "}");
     }

@@ -164,15 +164,6 @@ class AstBuilder:
     ):
         if node.rule_type == "Step":
             step_line = node.get_token("StepLine")
-            step_argument_type = "dummy_type"
-            step_argument = None
-            if node.get_single("DataTable"):
-                step_argument_type = "dataTable"
-                step_argument = node.get_single("DataTable")
-            elif node.get_single("DocString"):
-                step_argument_type = "docString"
-                step_argument = node.get_single("DocString")
-
             return self.reject_nones(
                 {
                     "id": self.id_generator.get_next_id(),
@@ -180,7 +171,8 @@ class AstBuilder:
                     "keyword": step_line.matched_keyword,
                     "keywordType": step_line.matched_keyword_type,
                     "text": step_line.matched_text,
-                    step_argument_type: step_argument,
+                    "dataTable": node.get_single("DataTable"),
+                    "docString": node.get_single("DocString"),
                 },
             )
         if node.rule_type == "DocString":

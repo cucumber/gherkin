@@ -393,10 +393,10 @@ defmodule CucumberGherkin.AstBuilder do
   defp add_mediatype_to(%DocStringMessage{} = m, d), do: %{m | media_type: d}
 
   defp add_datatable_to(%StepMessage{} = m, nil), do: m
-  defp add_datatable_to(%StepMessage{} = m, d), do: %{m | argument: {:data_table, d}}
+  defp add_datatable_to(%StepMessage{} = m, d), do: %{m | data_table: d}
 
   defp add_docstring_to(%StepMessage{} = m, nil), do: m
-  defp add_docstring_to(%StepMessage{} = m, d), do: %{m | argument: {:doc_string, d}}
+  defp add_docstring_to(%StepMessage{} = m, d), do: %{m | doc_string: d}
 
   defp add_background_to(m, nil), do: m
 

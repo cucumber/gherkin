@@ -189,13 +189,12 @@ final class PickleCompiler
 
         $astNodeIds = $valuesRow ? [$step->id, $valuesRow->id] : [$step->id];
 
-        if ($step->dataTable) {
-            $argument = new PickleStepArgument(dataTable: $this->pickleDataTable($step->dataTable, $variableCells, $valueCells));
-        } elseif ($step->docString) {
-            $argument = new PickleStepArgument(docString: $this->pickleDocString($step->docString, $variableCells, $valueCells));
-        } else {
-            $argument = null;
-        }
+        $argument = ($step->dataTable || $step->docString)
+            ? new PickleStepArgument(
+                docString: $step->docString ? $this->pickleDocString($step->docString, $variableCells, $valueCells) : null,
+                dataTable: $step->dataTable ? $this->pickleDataTable($step->dataTable, $variableCells, $valueCells) : null,
+            )
+            : null;
 
         $this->lastKeywordType =
             $step->keywordType === Step\KeywordType::CONJUNCTION

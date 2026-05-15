@@ -169,16 +169,20 @@ class PickleCompiler
 
     PickleStepArgument argument = PickleStepArgument.empty;
 
-    if (step.dataTable.isNotEmpty) {
-      final dataTable = _buildPickleDataTable(step.dataTable, variableCells
-          , valueCells);
-      argument = PickleStepArgument(dataTable: dataTable);
-    }
+    var dataTable = PickleTable.empty;
+    var pickleDocString = PickleDocString.empty;
 
+    if (step.dataTable.isNotEmpty) {
+      dataTable = _buildPickleDataTable(step.dataTable, variableCells
+          , valueCells);
+    }
     if (step.docString.isNotEmpty) {
-      final pickleDocString = _buildPickleDocString(step.docString
+      pickleDocString = _buildPickleDocString(step.docString
           , variableCells, valueCells);
-      argument = PickleStepArgument(docString: pickleDocString);
+    }
+    if (dataTable.isNotEmpty || pickleDocString.isNotEmpty) {
+      argument = PickleStepArgument(dataTable: dataTable
+          , docString: pickleDocString);
     }
 
     var pickleStep = PickleStep(_idGenerator.newId(), stepText, argument);
@@ -253,4 +257,3 @@ class PickleCompiler
     return name;
   }
 }
-
