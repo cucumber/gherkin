@@ -16,14 +16,23 @@ class Step implements IHasLocation, INullSafetyObject
   final String text;
 
   final StepArgument argument;
+  final DataTable _dataTable;
+  final DocString _docString;
 
   const Step(this._location, this.keyword, this.text, this.argument,
-      {this.id=Strings.empty} );
+      {this.id=Strings.empty
+      , DataTable dataTable = DataTable.empty
+      , DocString docString = DocString.empty} )
+      : _dataTable = dataTable
+      , _docString = docString;
 
   @override
   Location get location => _location;
 
   DataTable get dataTable {
+    if( _dataTable.isNotEmpty ) {
+      return _dataTable;
+    }
     if( argument is DataTable ) {
       return argument as DataTable;
     }
@@ -31,6 +40,9 @@ class Step implements IHasLocation, INullSafetyObject
   }
 
   DocString get docString {
+    if( _docString.isNotEmpty ) {
+      return _docString;
+    }
     if( argument is DocString ) {
       return argument as DocString;
     }

@@ -209,12 +209,12 @@ final class PickleCompiler {
 
         PickleStepArgument argument = null;
         Optional<DataTable> dataTable = step.getDataTable();
-        if (dataTable.isPresent()) {
-            argument = new PickleStepArgument(null, pickleDataTable(dataTable.get(), variableCells, valueCells));
-        }
         Optional<DocString> docString = step.getDocString();
-        if (docString.isPresent()) {
-            argument = new PickleStepArgument(pickleDocString(docString.get(), variableCells, valueCells), null);
+        if (dataTable.isPresent() || docString.isPresent()) {
+            argument = new PickleStepArgument(
+                    docString.map(value -> pickleDocString(value, variableCells, valueCells)).orElse(null),
+                    dataTable.map(value -> pickleDataTable(value, variableCells, valueCells)).orElse(null)
+            );
         }
 
         List<String> astNodeIds;

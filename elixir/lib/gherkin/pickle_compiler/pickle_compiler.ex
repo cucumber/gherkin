@@ -9,6 +9,7 @@ defmodule CucumberGherkin.PickleCompiler do
   alias CucumberMessages.Pickle, as: PickleMessage
   alias CucumberMessages.Pickle.PickleStep, as: PickleStepMessage
   alias CucumberMessages.Pickle.PickleTag, as: PickleTagMessage
+  alias CucumberMessages.PickleStepArgument, as: PickleStepArgumentMessage
   alias CucumberMessages.GherkinDocument.Feature.Tag, as: TagMessage
   alias CucumberMessages.GherkinDocument.Feature.FeatureChild, as: FeatureChildMessage
   alias CucumberMessages.GherkinDocument.Feature.FeatureChild.Rule, as: RuleMessage
@@ -237,34 +238,32 @@ defmodule CucumberGherkin.PickleCompiler do
   defp add_ast_node_id(%PickleStepMessage{ast_node_ids: ids} = m, %TableRowMessage{} = row),
     do: %{m | ast_node_ids: ids ++ [row.id]}
 
-  defp add_datatable(%PickleStepMessage{} = m, %StepMessage{argument: nil}, _, _), do: m
-
-  defp add_datatable(%PickleStepMessage{} = m, %StepMessage{argument: {:doc_string, _}}, _, _),
+  defp add_datatable(%PickleStepMessage{} = m, %StepMessage{data_table: nil}, _, _),
     do: m
 
   defp add_datatable(
          %PickleStepMessage{} = m,
-         %StepMessage{argument: {:data_table, d}},
+         %StepMessage{data_table: d},
          variable_cells,
          value_cells
        ) do
     result = pickle_data_table_creator(d, variable_cells, value_cells)
-    %{m | argument: result}
+    argument = m.argument || %PickleStepArgumentMessage{}
+    %{m | argument: %{argument | data_table: result}}
   end
 
-  defp add_doc_string(%PickleStepMessage{} = m, %StepMessage{argument: nil}, _, _), do: m
-
-  defp add_doc_string(%PickleStepMessage{} = m, %StepMessage{argument: {:data_table, _}}, _, _),
+  defp add_doc_string(%PickleStepMessage{} = m, %StepMessage{doc_string: nil}, _, _),
     do: m
 
   defp add_doc_string(
          %PickleStepMessage{} = m,
-         %StepMessage{argument: {:doc_string, d}},
+         %StepMessage{doc_string: d},
          variable_cells,
          value_cells
        ) do
     result = pickle_doc_string_creator(d, variable_cells, value_cells)
-    %{m | argument: result}
+    argument = m.argument || %PickleStepArgumentMessage{}
+    %{m | argument: %{argument | doc_string: result}}
   end
 
   defp get_id_and_update_compiler_acc(%@me{id_gen: gen} = compiler_acc) do

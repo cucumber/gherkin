@@ -158,17 +158,11 @@ module Gherkin
         }
         props[:ast_node_ids].push(values_row.id) if values_row
 
-        if step.data_table
-          data_table = Cucumber::Messages::PickleStepArgument.new(
-            data_table: pickle_data_table(step.data_table, variable_cells, value_cells)
+        if step.data_table || step.doc_string
+          props[:argument] = Cucumber::Messages::PickleStepArgument.new(
+            data_table: step.data_table ? pickle_data_table(step.data_table, variable_cells, value_cells) : nil,
+            doc_string: step.doc_string ? pickle_doc_string(step.doc_string, variable_cells, value_cells) : nil
           )
-          props[:argument] = data_table
-        end
-        if step.doc_string
-          doc_string = Cucumber::Messages::PickleStepArgument.new(
-            doc_string: pickle_doc_string(step.doc_string, variable_cells, value_cells)
-          )
-          props[:argument] = doc_string
         end
         props
       end

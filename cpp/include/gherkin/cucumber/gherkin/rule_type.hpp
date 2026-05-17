@@ -36,6 +36,8 @@ enum class rule_type
     examples_table,
     step,
     step_arg,
+    data_table_and_maybe_doc_string,
+    doc_string_and_maybe_data_table,
     data_table,
     doc_string,
     tags,

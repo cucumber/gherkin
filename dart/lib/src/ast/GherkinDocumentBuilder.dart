@@ -103,14 +103,13 @@ abstract class AstRulesBuilder
 
   Step _createStep(AstNode node) {
     var stepLine = node.getToken(TokenType.StepLine);
-    var stepArg = node.singleOrDefault<StepArgument>(RuleType.DataTable
-        , StepArgument.empty);
-    if( stepArg.isEmpty ) {
-      stepArg = node.singleOrDefault<StepArgument>(RuleType.DocString
-          , StepArgument.empty);
-    }
+    var dataTable = node.singleOrDefault<DataTable>(RuleType.DataTable
+        , DataTable.empty);
+    var docString = node.singleOrDefault<DocString>(RuleType.DocString
+        , DocString.empty);
     return Step(_getLocation(stepLine), stepLine.matchedKeyword
-        , stepLine.matchedText, stepArg );
+        , stepLine.matchedText, StepArgument.empty
+        , dataTable: dataTable, docString: docString );
   }
 
   Location _getLocation(Token token, [int column=0])
