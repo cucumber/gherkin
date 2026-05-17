@@ -53,7 +53,7 @@ acceptance: .built $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance t
 	touch $@
 
 node_modules:
-	npm install
+	npm ci
 
 dist:
 	npm run build
