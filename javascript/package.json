@@ -2,8 +2,8 @@
   "name": "@cucumber/gherkin",
   "version": "39.1.0",
   "description": "Gherkin parser",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
