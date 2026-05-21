@@ -2,8 +2,8 @@
   "extends": "@tsconfig/recommended/tsconfig.json",
   "include": ["src", "test"],
   "compilerOptions": {
-    "lib": ["es2023"],
-    "target": "es2022",
+    "lib": ["es2024"],
+    "target": "es2024",
     "types": ["node", "mocha"],
     "resolveJsonModule": true,
     "declaration": true,
