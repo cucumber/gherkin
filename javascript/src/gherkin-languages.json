@@ -3324,32 +3324,36 @@
     "and": [
       "* ",
       "Ve ",
+      "Aynı zamanda ",
+      "Ayrıca ",
       "Hem de ",
       "Bir de ",
-      "Ayrıca ",
       "İlaveten ",
       "Buna ek olarak "
     ],
     "background": [
-      "Geçmiş",
-      "Arka Plan",
       "Ön Koşul",
       "Önkoşul",
+      "Arka Plan",
+      "Mevcut Durum",
       "Önceki Durum",
       "Giriş",
-      "Mukaddime",
-      "Mevcut Durum"
+      "Geçmiş",
+      "Mukaddime"
     ],
     "but": [
       "* ",
-      "Fakat ",
-      "Ama ",
       "Ancak ",
+      "Ama ",
+      "Fakat ",
       "Yalnız ",
+      "Buna rağmen ",
+      "Gelgelelim ",
       "Lakin ",
+      "Aksi halde ",
+      "Ne var ki ",
       "Meğer ki ",
-      "Buna mukabil ",
-      "Aksi halde "
+      "Buna mukabil "
     ],
     "examples": [
       "Örnekler",
@@ -3357,8 +3361,8 @@
     ],
     "feature": [
       "Özellik",
-      "İş Gereksinimi",
       "Gereksinim",
+      "İş Gereksinimi",
       "İşlev",
       "Kullanıcı Hikayesi",
       "Yetenek",
@@ -3367,32 +3371,32 @@
     "given": [
       "* ",
       "Mevcut ",
-      "Önceden ",
-      "Geçmişte ",
-      "Daha önce ",
-      "Halihazırda ",
-      "Zaten ",
       "Sistemde ",
+      "Zaten ",
+      "Halihazırda ",
+      "Önceden ",
+      "Daha önce ",
+      "Başlangıçta ",
+      "Geçmişte ",
+      "Biliniyor ki ",
+      "Varsayılan olarak ",
       "Diyelim ki ",
       "Varsayalım ki ",
       "Farz edelim ki ",
-      "Kabul edelim ki ",
-      "Başlangıçta ",
-      "Varsayılan olarak ",
-      "Biliniyor ki "
+      "Kabul edelim ki "
     ],
     "name": "Turkish",
     "native": "Türkçe",
     "rule": [
       "Kural",
       "İş Kuralı",
+      "Madde",
       "Kaide",
-      "Hüküm",
-      "Madde"
+      "Hüküm"
     ],
     "scenario": [
-      "Örnek",
       "Senaryo",
+      "Örnek",
       "Durum",
       "Vaka"
     ],
@@ -3403,22 +3407,28 @@
     "then": [
       "* ",
       "Beklenen ",
-      "O zaman ",
+      "Gereken ",
+      "Gerekli ",
       "Sonuç olarak ",
+      "Sonuçta ",
+      "Dolayısıyla ",
+      "Haliyle ",
       "Böylece ",
-      "Bunun üzerine ",
-      "Bu durumda ",
+      "O zaman ",
       "O takdirde ",
       "Şu halde ",
+      "Bu durumda ",
+      "Bunun üzerine ",
       "Netice itibariyle ",
-      "Buna binaen "
+      "Buna binaen ",
+      "Bunun ardından "
     ],
     "when": [
       "* ",
-      "Eğer ",
-      "Eğer ki ",
       "Ne zaman ",
+      "Eğer ",
       "Ne zaman ki ",
+      "Eğer ki ",
       "Şayet "
     ]
   },

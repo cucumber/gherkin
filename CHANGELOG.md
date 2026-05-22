@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- (i18n) Additional Turkish (tr) keyword alternatives for and/but/then categories
 
 ## [39.1.0] - 2026-05-06
 ### Added

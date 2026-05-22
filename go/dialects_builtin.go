@@ -4870,8 +4870,8 @@ var builtinDialects = gherkinDialectMap{
 		Keywords: map[string][]string{
 			feature: {
 				"Özellik",
-				"İş Gereksinimi",
 				"Gereksinim",
+				"İş Gereksinimi",
 				"İşlev",
 				"Kullanıcı Hikayesi",
 				"Yetenek",
@@ -4880,23 +4880,23 @@ var builtinDialects = gherkinDialectMap{
 			rule: {
 				"Kural",
 				"İş Kuralı",
+				"Madde",
 				"Kaide",
 				"Hüküm",
-				"Madde",
 			},
 			background: {
-				"Geçmiş",
-				"Arka Plan",
 				"Ön Koşul",
 				"Önkoşul",
+				"Arka Plan",
+				"Mevcut Durum",
 				"Önceki Durum",
 				"Giriş",
+				"Geçmiş",
 				"Mukaddime",
-				"Mevcut Durum",
 			},
 			scenario: {
-				"Örnek",
 				"Senaryo",
+				"Örnek",
 				"Durum",
 				"Vaka",
 			},
@@ -4911,76 +4911,92 @@ var builtinDialects = gherkinDialectMap{
 			given: {
 				"* ",
 				"Mevcut ",
-				"Önceden ",
-				"Geçmişte ",
-				"Daha önce ",
-				"Halihazırda ",
-				"Zaten ",
 				"Sistemde ",
+				"Zaten ",
+				"Halihazırda ",
+				"Önceden ",
+				"Daha önce ",
+				"Başlangıçta ",
+				"Geçmişte ",
+				"Biliniyor ki ",
+				"Varsayılan olarak ",
 				"Diyelim ki ",
 				"Varsayalım ki ",
 				"Farz edelim ki ",
 				"Kabul edelim ki ",
-				"Başlangıçta ",
-				"Varsayılan olarak ",
-				"Biliniyor ki ",
 			},
 			when: {
 				"* ",
-				"Eğer ",
-				"Eğer ki ",
 				"Ne zaman ",
+				"Eğer ",
 				"Ne zaman ki ",
+				"Eğer ki ",
 				"Şayet ",
 			},
 			then: {
 				"* ",
 				"Beklenen ",
-				"O zaman ",
+				"Gereken ",
+				"Gerekli ",
 				"Sonuç olarak ",
+				"Sonuçta ",
+				"Dolayısıyla ",
+				"Haliyle ",
 				"Böylece ",
-				"Bunun üzerine ",
-				"Bu durumda ",
+				"O zaman ",
 				"O takdirde ",
 				"Şu halde ",
+				"Bu durumda ",
+				"Bunun üzerine ",
 				"Netice itibariyle ",
 				"Buna binaen ",
+				"Bunun ardından ",
 			},
 			and: {
 				"* ",
 				"Ve ",
+				"Aynı zamanda ",
+				"Ayrıca ",
 				"Hem de ",
 				"Bir de ",
-				"Ayrıca ",
 				"İlaveten ",
 				"Buna ek olarak ",
 			},
 			but: {
 				"* ",
-				"Fakat ",
-				"Ama ",
 				"Ancak ",
+				"Ama ",
+				"Fakat ",
 				"Yalnız ",
+				"Buna rağmen ",
+				"Gelgelelim ",
 				"Lakin ",
+				"Aksi halde ",
+				"Ne var ki ",
 				"Meğer ki ",
 				"Buna mukabil ",
-				"Aksi halde ",
 			},
 		},
 		KeywordTypes: map[string]messages.StepKeywordType{
 			"Mevcut ": messages.StepKeywordType_CONTEXT,
 
-			"Önceden ": messages.StepKeywordType_CONTEXT,
-
-			"Geçmişte ": messages.StepKeywordType_CONTEXT,
-
-			"Daha önce ": messages.StepKeywordType_CONTEXT,
-
-			"Halihazırda ": messages.StepKeywordType_CONTEXT,
+			"Sistemde ": messages.StepKeywordType_CONTEXT,
 
 			"Zaten ": messages.StepKeywordType_CONTEXT,
 
-			"Sistemde ": messages.StepKeywordType_CONTEXT,
+			"Halihazırda ": messages.StepKeywordType_CONTEXT,
+
+			"Önceden ": messages.StepKeywordType_CONTEXT,
+
+			"Daha önce ": messages.StepKeywordType_CONTEXT,
+
+			"Başlangıçta ": messages.StepKeywordType_CONTEXT,
+
+			"Geçmişte ": messages.StepKeywordType_CONTEXT,
+
+			"Biliniyor ki ": messages.StepKeywordType_CONTEXT,
+
+			"Varsayılan olarak ": messages.StepKeywordType_CONTEXT,
 
 			"Diyelim ki ": messages.StepKeywordType_CONTEXT,
 
@@ -4990,69 +5006,83 @@ var builtinDialects = gherkinDialectMap{
 
 			"Kabul edelim ki ": messages.StepKeywordType_CONTEXT,
 
-			"Başlangıçta ": messages.StepKeywordType_CONTEXT,
-
-			"Varsayılan olarak ": messages.StepKeywordType_CONTEXT,
-
-			"Biliniyor ki ": messages.StepKeywordType_CONTEXT,
+			"Ne zaman ": messages.StepKeywordType_ACTION,
 
 			"Eğer ": messages.StepKeywordType_ACTION,
 
-			"Eğer ki ": messages.StepKeywordType_ACTION,
-
-			"Ne zaman ": messages.StepKeywordType_ACTION,
-
 			"Ne zaman ki ": messages.StepKeywordType_ACTION,
+
+			"Eğer ki ": messages.StepKeywordType_ACTION,
 
 			"Şayet ": messages.StepKeywordType_ACTION,
 
 			"Beklenen ": messages.StepKeywordType_OUTCOME,
 
-			"O zaman ": messages.StepKeywordType_OUTCOME,
+			"Gereken ": messages.StepKeywordType_OUTCOME,
+
+			"Gerekli ": messages.StepKeywordType_OUTCOME,
 
 			"Sonuç olarak ": messages.StepKeywordType_OUTCOME,
 
+			"Sonuçta ": messages.StepKeywordType_OUTCOME,
+
+			"Dolayısıyla ": messages.StepKeywordType_OUTCOME,
+
+			"Haliyle ": messages.StepKeywordType_OUTCOME,
+
 			"Böylece ": messages.StepKeywordType_OUTCOME,
 
-			"Bunun üzerine ": messages.StepKeywordType_OUTCOME,
-
-			"Bu durumda ": messages.StepKeywordType_OUTCOME,
+			"O zaman ": messages.StepKeywordType_OUTCOME,
 
 			"O takdirde ": messages.StepKeywordType_OUTCOME,
 
 			"Şu halde ": messages.StepKeywordType_OUTCOME,
 
+			"Bu durumda ": messages.StepKeywordType_OUTCOME,
+
+			"Bunun üzerine ": messages.StepKeywordType_OUTCOME,
+
 			"Netice itibariyle ": messages.StepKeywordType_OUTCOME,
 
 			"Buna binaen ": messages.StepKeywordType_OUTCOME,
 
+			"Bunun ardından ": messages.StepKeywordType_OUTCOME,
+
 			"Ve ": messages.StepKeywordType_CONJUNCTION,
+
+			"Aynı zamanda ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ayrıca ": messages.StepKeywordType_CONJUNCTION,
 
 			"Hem de ": messages.StepKeywordType_CONJUNCTION,
 
 			"Bir de ": messages.StepKeywordType_CONJUNCTION,
 
-			"Ayrıca ": messages.StepKeywordType_CONJUNCTION,
-
 			"İlaveten ": messages.StepKeywordType_CONJUNCTION,
 
 			"Buna ek olarak ": messages.StepKeywordType_CONJUNCTION,
 
-			"Fakat ": messages.StepKeywordType_CONJUNCTION,
+			"Ancak ": messages.StepKeywordType_CONJUNCTION,
 
 			"Ama ": messages.StepKeywordType_CONJUNCTION,
 
-			"Ancak ": messages.StepKeywordType_CONJUNCTION,
+			"Fakat ": messages.StepKeywordType_CONJUNCTION,
 
 			"Yalnız ": messages.StepKeywordType_CONJUNCTION,
 
+			"Buna rağmen ": messages.StepKeywordType_CONJUNCTION,
+
+			"Gelgelelim ": messages.StepKeywordType_CONJUNCTION,
+
 			"Lakin ": messages.StepKeywordType_CONJUNCTION,
+
+			"Aksi halde ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ne var ki ": messages.StepKeywordType_CONJUNCTION,
 
 			"Meğer ki ": messages.StepKeywordType_CONJUNCTION,
 
 			"Buna mukabil ": messages.StepKeywordType_CONJUNCTION,
-
-			"Aksi halde ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		},
