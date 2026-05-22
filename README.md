@@ -18,7 +18,7 @@
 [![CPAN Version](https://img.shields.io/cpan/v/Gherkin)](https://metacpan.org/pod/Gherkin)
 [![Packagist Version](https://img.shields.io/packagist/v/cucumber/gherkin)](https://packagist.org/packages/cucumber/gherkin)
 
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cucumber/cucumber-gherkin/badge)](https://scorecard.dev/viewer/?uri=github.com/cucumber/cucumber-gherkin)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cucumber/gherkin/badge)](https://scorecard.dev/viewer/?uri=github.com/cucumber/gherkin)
 
 </div>
 
