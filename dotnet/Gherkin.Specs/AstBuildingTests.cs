@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Io.Cucumber.Messages.Types;
 using Gherkin.Specs.Helper;
 using Xunit;

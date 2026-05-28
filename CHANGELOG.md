@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- [.Net] Replaced FluentAssertions with AwesomeAssertions
 
 ## [39.1.0] - 2026-05-06
 ### Added
