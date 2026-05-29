@@ -4,10 +4,13 @@
   "compilerOptions": {
     "lib": ["es2024"],
     "target": "es2024",
-    "types": ["node", "mocha"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
+    "types": ["node", "mocha"],
     "declaration": true,
     "inlineSourceMap": true,
+    "inlineSources": true,
     "strict": false,
     "noImplicitAny": true
   }
