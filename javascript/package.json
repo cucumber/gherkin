@@ -27,7 +27,7 @@
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
     "@biomejs/biome": "^2.4.13",
-    "@cucumber/biome-config": "github:cucumber/biome-config#v0.1.0",
+    "@cucumber/biome-config": "github:cucumber/biome-config#v0.2.1",
     "@tsconfig/recommended": "^1.0.13",
     "@types/mocha": "10.0.10",
     "@types/node": "^22.19.19",
