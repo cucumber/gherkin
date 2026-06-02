@@ -31,7 +31,7 @@
     "@tsconfig/recommended": "^1.0.13",
     "@types/mocha": "10.0.10",
     "@types/node": "^22.19.19",
-    "commander": "^14.0.0",
+    "commander": "^15.0.0",
     "mocha": "11.7.6",
     "ts-node": "10.9.2",
     "typescript": "6.0.3"
