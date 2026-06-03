@@ -7,7 +7,9 @@ export default function makeSourceEnvelope(data: string, uri: string): messages.
   } else if (uri.endsWith('.md')) {
     mediaType = messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN
   }
-  if (!mediaType) throw new Error(`The uri (${uri}) must end with .feature or .md`)
+  if (!mediaType) {
+    throw new Error(`The uri (${uri}) must end with .feature or .md`)
+  }
   return {
     source: {
       data,
