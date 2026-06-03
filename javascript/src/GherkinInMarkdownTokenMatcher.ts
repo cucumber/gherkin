@@ -101,7 +101,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
   // in Markdown. Users should specify a language globally. This can be done in
   // cucumber-js using the --language [ISO 639-1] option.
   match_Language(token: Token): boolean {
-    if (!token) throw new Error('no token')
+    if (!token) {
+      throw new Error('no token')
+    }
     return false
   }
 
@@ -146,7 +148,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     let result = false
     if (token.line.startsWith('|')) {
       const tableCells = token.line.getTableCells()
-      if (this.isGfmTableSeparator(tableCells)) result = true
+      if (this.isGfmTableSeparator(tableCells)) {
+        result = true
+      }
     }
     return this.setTokenMatched(token, null, result)
   }
@@ -307,7 +311,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     // Gherkin tables must be indented 2-5 spaces in order to be distinguidedn from non-Gherkin tables
     if (token.line.lineText.match(/^\s\s\s?\s?\s?\|/)) {
       const tableCells = token.line.getTableCells()
-      if (this.isGfmTableSeparator(tableCells)) return false
+      if (this.isGfmTableSeparator(tableCells)) {
+        return false
+      }
 
       token.matchedKeyword = '|'
       token.matchedType = TokenType.TableRow
@@ -338,7 +344,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
       }
     } while (m)
 
-    if (tags.length === 0) return false
+    if (tags.length === 0) {
+      return false
+    }
     token.matchedType = TokenType.TagLine
     token.matchedItems = tags
     return true
