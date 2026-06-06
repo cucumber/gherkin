@@ -1,5 +1,5 @@
 {
-  "require": ["ts-node/register", "source-map-support/register"],
+  "node-option": ["loader=ts-node/esm", "no-warnings=ExperimentalWarning"],
   "extension": ["ts", "tsx"],
   "recursive": true,
   "timeout": 10000

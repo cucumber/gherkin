@@ -1,13 +1,13 @@
 import * as messages from '@cucumber/messages'
-import { compareStepKeywords } from './compareStepKeywords'
-import countSymbols from './countSymbols'
-import type Dialect from './Dialect'
-import { NoSuchLanguageException, ParserException } from './Errors'
-import DIALECTS from './gherkin-languages.json'
-import type IToken from './IToken'
-import type { IGherkinLine, Item } from './IToken'
-import type ITokenMatcher from './ITokenMatcher'
-import { TokenType } from './Parser'
+import { compareStepKeywords } from './compareStepKeywords.js'
+import countSymbols from './countSymbols.js'
+import type Dialect from './Dialect.js'
+import { NoSuchLanguageException, ParserException } from './Errors.js'
+import DIALECTS from './gherkin-languages.js'
+import type IToken from './IToken.js'
+import type { IGherkinLine, Item } from './IToken.js'
+import type ITokenMatcher from './ITokenMatcher.js'
+import { TokenType } from './Parser.js'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const LANGUAGE_PATTERN = /^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/

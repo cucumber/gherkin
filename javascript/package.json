@@ -2,11 +2,34 @@
   "name": "@cucumber/gherkin",
   "version": "39.1.0",
   "description": "Gherkin parser",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/cjs/src/index.js",
+  "module": "dist/esm/src/index.js",
+  "types": "dist/cjs/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/src/index.js",
+      "require": "./dist/cjs/src/index.js"
+    }
+  },
+  "files": [
+    "dist/cjs",
+    "dist/esm"
+  ],
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "test": "mocha",
+    "build-dialects": "node scripts/build-dialects.mjs",
+    "prebuild:cjs": "npm run build-dialects",
+    "prebuild:esm": "npm run build-dialects",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --project tsconfig.build-cjs.json",
+    "postbuild:cjs": "shx cp package.cjs.json dist/cjs/package.json",
+    "build:esm": "tsc --project tsconfig.build-esm.json",
+    "pretest": "npm run build-dialects",
+    "test": "mocha && npm run test:esm && npm run test:cjs",
+    "pretest:esm": "npm run build:esm",
+    "test:esm": "node ./scripts/smoke-esm.mjs",
+    "pretest:cjs": "npm run build:cjs",
+    "test:cjs": "node ./scripts/smoke-cjs.cjs",
     "fix": "biome check --fix --error-on-warnings",
     "lint": "biome check --error-on-warnings",
     "prepublishOnly": "npm run build"
@@ -33,6 +56,7 @@
     "@types/node": "^22.19.19",
     "commander": "^15.0.0",
     "mocha": "11.7.6",
+    "shx": "^0.4.0",
     "ts-node": "10.9.2",
     "typescript": "6.0.3"
   },

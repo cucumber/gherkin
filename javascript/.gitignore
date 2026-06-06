@@ -1,4 +1,5 @@
 dist/
+src/gherkin-languages.ts
 .idea/
 .nyc_output/
 coverage/
