@@ -4,7 +4,7 @@ import 'package:gherkin/extensions.dart';
 class PickleDocString
   implements INullSafetyObject
 {
-  static const empty = _InvalidPickleDocString();
+  static const PickleDocString empty = _InvalidPickleDocString();
 
   final String mediaType;
 
