@@ -159,11 +159,34 @@ class TokenMatcher implements ITokenMatcher
     for (var keyword in keywords) {
       if (token.line.startsWith(keyword)) {
         var stepText = token.line.getRestTrimmed(keyword.length);
-        setTokenMatched(token, TokenType.StepLine, keyword:keyword, text:stepText);
+        setTokenMatched(token, TokenType.StepLine,
+            keyword: keyword,
+            text: stepText,
+            keywordType: _stepKeywordType(keyword));
         return true;
       }
     }
     return false;
+  }
+
+  String _stepKeywordType(String keyword) {
+    final types = <String>{};
+
+    if (currentDialect.givenStepKeywords.contains(keyword)) {
+      types.add('Context');
+    }
+    if (currentDialect.whenStepKeywords.contains(keyword)) {
+      types.add('Action');
+    }
+    if (currentDialect.thenStepKeywords.contains(keyword)) {
+      types.add('Outcome');
+    }
+    if (currentDialect.andStepKeywords.contains(keyword)
+        || currentDialect.butStepKeywords.contains(keyword)) {
+      types.add('Conjunction');
+    }
+
+    return types.length == 1 ? types.first : 'Unknown';
   }
 
   @override
@@ -176,10 +199,11 @@ class TokenMatcher implements ITokenMatcher
   }
 
   void setTokenMatched(Token token, TokenType matchedType,
-      {String text=Strings.empty, String keyword=Strings.empty, int indent=Int.min, Iterable<GherkinLineSpan> items=const <GherkinLineSpan>[]})
+      {String text=Strings.empty, String keyword=Strings.empty, String keywordType=Strings.empty, int indent=Int.min, Iterable<GherkinLineSpan> items=const <GherkinLineSpan>[]})
   {
     token.matchedType = matchedType;
     token.matchedKeyword = keyword;
+    token.matchedKeywordType = keywordType;
     token.matchedText = text;
     token.matchedItems = items;
     token.matchedGherkinDialect = currentDialect;
@@ -197,4 +221,3 @@ class TokenMatcher implements ITokenMatcher
     return text;
   }
 }
-

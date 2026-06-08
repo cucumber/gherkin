@@ -72,10 +72,10 @@ class PickleCompiler
   {
     final steps = <PickleStep>[];
     if (scenario.steps.isNotEmpty) {
-      steps.addAll(_buildPickleSteps(backgroundSteps));
+      var lastKeywordType = 'Unknown';
+      lastKeywordType = _appendPickleSteps(steps, backgroundSteps, lastKeywordType);
+      _appendPickleSteps(steps, scenario.steps, lastKeywordType);
     }
-
-    steps.addAll(_buildPickleSteps(scenario.steps));
 
     final scenarioTags = <Tag>[];
     scenarioTags.addAll(parentTags);
@@ -115,22 +115,17 @@ class PickleCompiler
 
         var steps = <PickleStep>[];
 
-        if (scenario.steps.isEmpty) {
-          final steps = _buildPickleSteps(backgroundSteps);
-          steps.addAll(steps);
+        if (scenario.steps.isNotEmpty) {
+          var lastKeywordType = 'Unknown';
+          lastKeywordType = _appendPickleSteps(steps, backgroundSteps, lastKeywordType);
+          _appendPickleSteps(steps, scenario.steps, lastKeywordType
+              , variableCells: variableCells, valuesRow: valuesRow);
         }
 
         var tags = <Tag>[];
         tags.addAll(featureTags);
         tags.addAll(scenario.tags);
         tags.addAll(examples.tags);
-
-        for (var scenarioOutlineStep in scenario.steps) {
-          var pickleStep 
-            = _buildPickleStep(scenarioOutlineStep, variableCells, valuesRow);
-
-          steps.add(pickleStep);
-        }
 
         var sourceIds = <String>[scenario.id, valuesRow.id];
         final name = _interpolate(scenario.name, variableCells, valueCells);
@@ -151,17 +146,30 @@ class PickleCompiler
     }
   }
 
-  List<PickleStep> _buildPickleSteps(Iterable<Step> steps) {
-    final result = <PickleStep>[];
-    for (var step in steps) {
-      result.add(_buildPickleStep(step));
+  String _appendPickleSteps(List<PickleStep> steps, Iterable<Step> sourceSteps
+      , String lastKeywordType
+      , {Iterable<TableCell> variableCells = const <TableCell>[]
+      , TableRow valuesRow = TableRow.empty} )
+  {
+    for (var step in sourceSteps) {
+      var stepKeywordType = step.keywordType.isEmpty
+          ? 'Unknown'
+          : step.keywordType;
+      var pickleStepType = stepKeywordType == 'Conjunction'
+          ? lastKeywordType
+          : stepKeywordType;
+      if (stepKeywordType != 'Conjunction') {
+        lastKeywordType = stepKeywordType;
+      }
+      steps.add(_buildPickleStep(step, variableCells, valuesRow, pickleStepType));
     }
-    return List<PickleStep>.unmodifiable(result);
+    return lastKeywordType;
   }
 
   PickleStep _buildPickleStep(Step step
       , [Iterable<TableCell> variableCells = const <TableCell>[]
-      , TableRow valuesRow = TableRow.empty] )
+      , TableRow valuesRow = TableRow.empty
+      , String type = 'Unknown'] )
   {
     var valueCells = valuesRow.isEmpty ? <TableCell>[] : valuesRow.cells;
     var stepText = _interpolate(step.text, variableCells
@@ -185,7 +193,8 @@ class PickleCompiler
           , docString: pickleDocString);
     }
 
-    var pickleStep = PickleStep(_idGenerator.newId(), stepText, argument);
+    var pickleStep = PickleStep(_idGenerator.newId(), stepText, argument
+        , type: type);
 
     pickleStep.astNodeIds.add(step.id);
 

@@ -4621,45 +4621,45 @@ final class Parser<T> {
 
     interface Builder<T> {
         void build(Token token);
-
+        
         void startRule(RuleType ruleType);
-
+        
         void endRule(RuleType ruleType);
-
+        
         T getResult();
-
+        
         void reset(String uri);
     }
 
     interface TokenMatcher {
         boolean match_EOF(Token token);
-
+        
         boolean match_Empty(Token token);
-
+        
         boolean match_Comment(Token token);
-
+        
         boolean match_TagLine(Token token);
-
+        
         boolean match_FeatureLine(Token token);
-
+        
         boolean match_RuleLine(Token token);
-
+        
         boolean match_BackgroundLine(Token token);
-
+        
         boolean match_ScenarioLine(Token token);
-
+        
         boolean match_ExamplesLine(Token token);
-
+        
         boolean match_StepLine(Token token);
-
+        
         boolean match_DocStringSeparator(Token token);
-
+        
         boolean match_TableRow(Token token);
-
+        
         boolean match_Language(Token token);
-
+        
         boolean match_Other(Token token);
-
+        
         void reset();
     }
 
@@ -4705,72 +4705,72 @@ final class Parser<T> {
     enum RuleType {
         None,
         /** #EOF **/
-        _EOF,
+        _EOF, 
         /** #Empty **/
-        _Empty,
+        _Empty, 
         /** #Comment **/
-        _Comment,
+        _Comment, 
         /** #TagLine **/
-        _TagLine,
+        _TagLine, 
         /** #FeatureLine **/
-        _FeatureLine,
+        _FeatureLine, 
         /** #RuleLine **/
-        _RuleLine,
+        _RuleLine, 
         /** #BackgroundLine **/
-        _BackgroundLine,
+        _BackgroundLine, 
         /** #ScenarioLine **/
-        _ScenarioLine,
+        _ScenarioLine, 
         /** #ExamplesLine **/
-        _ExamplesLine,
+        _ExamplesLine, 
         /** #StepLine **/
-        _StepLine,
+        _StepLine, 
         /** #DocStringSeparator **/
-        _DocStringSeparator,
+        _DocStringSeparator, 
         /** #TableRow **/
-        _TableRow,
+        _TableRow, 
         /** #Language **/
-        _Language,
+        _Language, 
         /** #Other **/
-        _Other,
+        _Other, 
         /** GherkinDocument! := Feature? **/
-        GherkinDocument,
+        GherkinDocument, 
         /** Feature! := FeatureHeader Background? ScenarioDefinition* Rule* **/
-        Feature,
+        Feature, 
         /** FeatureHeader! := #Language? Tags? #FeatureLine DescriptionHelper **/
-        FeatureHeader,
+        FeatureHeader, 
         /** Rule! := RuleHeader Background? ScenarioDefinition* **/
-        Rule,
+        Rule, 
         /** RuleHeader! := Tags? #RuleLine DescriptionHelper **/
-        RuleHeader,
+        RuleHeader, 
         /** Background! := #BackgroundLine DescriptionHelper Step* **/
-        Background,
+        Background, 
         /** ScenarioDefinition! [#Empty|#Comment|#TagLine->#ScenarioLine] := Tags? Scenario **/
-        ScenarioDefinition,
+        ScenarioDefinition, 
         /** Scenario! := #ScenarioLine DescriptionHelper Step* ExamplesDefinition* **/
-        Scenario,
+        Scenario, 
         /** ExamplesDefinition! [#Empty|#Comment|#TagLine->#ExamplesLine] := Tags? Examples **/
-        ExamplesDefinition,
+        ExamplesDefinition, 
         /** Examples! := #ExamplesLine DescriptionHelper ExamplesTable? **/
-        Examples,
+        Examples, 
         /** ExamplesTable! := #TableRow #TableRow* **/
-        ExamplesTable,
+        ExamplesTable, 
         /** Step! := #StepLine StepArg? **/
-        Step,
+        Step, 
         /** StepArg := (DataTableAndMaybeDocString | DocStringAndMaybeDataTable) **/
-        StepArg,
+        StepArg, 
         /** DataTableAndMaybeDocString := DataTable DocString? **/
-        DataTableAndMaybeDocString,
+        DataTableAndMaybeDocString, 
         /** DocStringAndMaybeDataTable := DocString DataTable? **/
-        DocStringAndMaybeDataTable,
+        DocStringAndMaybeDataTable, 
         /** DataTable! := #TableRow+ **/
-        DataTable,
+        DataTable, 
         /** DocString! := #DocStringSeparator #Other* #DocStringSeparator **/
-        DocString,
+        DocString, 
         /** Tags! := #TagLine+ **/
-        Tags,
+        Tags, 
         /** DescriptionHelper := #Empty* Description? **/
-        DescriptionHelper,
+        DescriptionHelper, 
         /** Description! := (#Other | #Comment)+ **/
-        Description,
+        Description, 
     }
 }

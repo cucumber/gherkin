@@ -20,6 +20,12 @@ defmodule CucumberGherkin.TokenWriter do
     "(#{l.index}:#{i})#{mt}:/#{t.matched_text}/"
   end
 
+  defp write_token(%Token{line: l, indent: i, matched_keyword_type: keyword_type, matched_keyword: mk} = t)
+       when not is_nil(keyword_type) do
+    mt = t.matched_type |> Atom.to_string() |> String.trim("Elixir.")
+    "(#{l.index}:#{i})#{mt}:(#{keyword_type})#{mk}/#{t.matched_text}/"
+  end
+
   defp write_token(%Token{line: l, indent: i, matched_keyword: mk} = t) do
     mt = t.matched_type |> Atom.to_string() |> String.trim("Elixir.")
     "(#{l.index}:#{i})#{mt}:#{mk}/#{t.matched_text}/"

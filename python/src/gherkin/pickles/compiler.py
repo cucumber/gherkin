@@ -302,7 +302,9 @@ class Compiler:
         if "docString" in step:
             docstring_argument = step["docString"]
             docstring: PickleArgumentDocString = {
-                "content": self._interpolate(docstring_argument["content"], variables, values),
+                "content": self._interpolate(
+                    docstring_argument["content"], variables, values
+                ),
             }
             if "mediaType" in docstring_argument:
                 docstring["mediaType"] = self._interpolate(

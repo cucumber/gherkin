@@ -4,7 +4,7 @@ defmodule CucumberGherkin.AstBuilder do
   alias CucumberMessages.GherkinDocument.Comment, as: CommentMessage
   alias CucumberMessages.GherkinDocument.Feature.Tag, as: MessageTag
   alias CucumberMessages.GherkinDocument.Feature.Scenario, as: MessageScenario
-  alias CucumberMessages.GherkinDocument.Feature.Step, as: StepMessage
+  alias CucumberGherkin.AstStep, as: StepMessage
   alias CucumberMessages.GherkinDocument.Feature.Step.DataTable, as: DataTableMessage
   alias CucumberMessages.GherkinDocument.Feature.TableRow, as: TableRowMessage
   alias CucumberMessages.GherkinDocument.Feature.TableRow.TableCell, as: TableCellMessage
@@ -76,8 +76,11 @@ defmodule CucumberGherkin.AstBuilder do
     {id, updated_context} = get_id_and_update_context(context)
 
     %StepMessage{
+      data_table: nil,
+      doc_string: nil,
       id: id,
       keyword: token.matched_keyword,
+      keyword_type: token.matched_keyword_type,
       location: Token.get_location(token),
       text: token.matched_text
     }
