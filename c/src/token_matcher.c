@@ -54,6 +54,9 @@ static wchar_t* unescaped_docstring(TokenMatcher* token_matcher, wchar_t* text);
 
 TokenMatcher* TokenMatcher_new(const wchar_t* default_language) {
     TokenMatcher* token_matcher = (TokenMatcher*)malloc(sizeof(TokenMatcher));
+    if (!token_matcher) {
+        return 0;
+    }
     token_matcher->default_language = default_language;
     token_matcher->language = default_language;
     token_matcher->dialect = Dialect_for(default_language);
