@@ -1,11 +1,11 @@
 import * as messages from '@cucumber/messages'
-import { compareStepKeywords } from './compareStepKeywords'
-import type Dialect from './Dialect'
-import { NoSuchLanguageException } from './Errors'
-import DIALECTS from './gherkin-languages.json'
-import type { Item } from './IToken'
-import type ITokenMatcher from './ITokenMatcher'
-import { type Token, TokenType } from './Parser'
+import { compareStepKeywords } from './compareStepKeywords.js'
+import type Dialect from './Dialect.js'
+import { NoSuchLanguageException } from './Errors.js'
+import DIALECTS from './gherkin-languages.json' with { type: 'json' }
+import type { Item } from './IToken.js'
+import type ITokenMatcher from './ITokenMatcher.js'
+import { type Token, TokenType } from './Parser.js'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const DEFAULT_DOC_STRING_SEPARATOR = /^(```[`]*)(.*)/

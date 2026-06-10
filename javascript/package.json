@@ -2,6 +2,7 @@
   "name": "@cucumber/gherkin",
   "version": "39.1.0",
   "description": "Gherkin parser",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -9,6 +10,7 @@
     "test": "mocha",
     "fix": "biome check --fix --error-on-warnings",
     "lint": "biome check --error-on-warnings",
+    "postbuild": "node -e \"require('.')\"",
     "prepublishOnly": "npm run build"
   },
   "repository": {

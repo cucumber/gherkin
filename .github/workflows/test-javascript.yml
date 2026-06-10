@@ -27,7 +27,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        node-version: ["20.x", "22.x", "23.x"]
+        node-version: ["22.x", "24.x", "26.x"]
         include:
           - os: windows-latest
             node-version: "22.x"
