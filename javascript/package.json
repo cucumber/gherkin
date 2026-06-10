@@ -1,6 +1,6 @@
 {
   "name": "@cucumber/gherkin",
-  "version": "39.1.0",
+  "version": "40.0.0",
   "description": "Gherkin parser",
   "type": "module",
   "main": "dist/index.js",
