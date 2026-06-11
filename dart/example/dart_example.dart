@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/gherkin.dart';
 import 'package:gherkin/language.dart';
@@ -8,12 +10,13 @@ import 'package:gherkin/language.dart';
 ///
 ///     dart run example/dart_example.dart ../testdata/good/minimal.feature
 Future<void> main(List<String> args) async {
-  final path = args.isNotEmpty ? args.first : '../testdata/good/minimal.feature';
+  final path =
+      args.isNotEmpty ? args.first : '../testdata/good/minimal.feature';
 
   final parser =
-      GherkinParser.builder()
-          .includeSource(false)
-          .idGenerator(IdGenerator.incrementingGenerator)
+      (GherkinParser.builder()
+            ..includeSource = false
+            ..idGenerator = IdGenerator.incrementingGenerator)
           .build();
 
   final envelopes = await parser.parsePath(path).toList();
@@ -24,6 +27,6 @@ Future<void> main(List<String> args) async {
           .whereType<messages.Pickle>();
 
   for (final pickle in pickles) {
-    print('Pickle: ${pickle.name} (${pickle.steps.length} steps)');
+    stdout.writeln('Pickle: ${pickle.name} (${pickle.steps.length} steps)');
   }
 }

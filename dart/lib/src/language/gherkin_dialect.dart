@@ -1,11 +1,13 @@
-import 'gherkin_language_keywords.dart';
-import 'i_gherkin_dialect.dart';
+import 'package:gherkin/src/language/gherkin_language_keywords.dart';
+import 'package:gherkin/src/language/i_gherkin_dialect.dart';
 
+/// The concrete [IGherkinDialect] backed by a set of
+/// [GherkinLanguageKeywords].
 class GherkinDialect implements IGherkinDialect {
+  /// Creates a dialect for [_language] using the given [_keywords].
+  GherkinDialect(this._language, this._keywords);
   final String _language;
   final GherkinLanguageKeywords _keywords;
-
-  GherkinDialect(this._language, this._keywords);
 
   @override
   GherkinLanguageKeywords get keywords => _keywords;

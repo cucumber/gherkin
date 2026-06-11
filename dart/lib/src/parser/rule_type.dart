@@ -1,49 +1,113 @@
+/// The grammar rules recognized by the Gherkin parser.
+///
+/// The first group mirrors the lexical `TokenType`s one-to-one (so that
+/// `TokenType.index` maps directly onto the corresponding [RuleType] via
+/// `RuleType.values[index]`); the remaining values are the structural
+/// production rules of the Gherkin grammar.
 enum RuleType {
+  /// No rule; the initial/sentinel value.
   none,
-  // ignore: unused_field
-  _eof, // #EOF
-  // ignore: unused_field
-  _empty, // #Empty
-  // ignore: unused_field
-  _comment, // #Comment
-  // ignore: unused_field
-  _tagLine, // #TagLine
-  // ignore: unused_field
-  _featureLine, // #FeatureLine
-  // ignore: unused_field
-  _ruleLine, // #RuleLine
-  // ignore: unused_field
-  _backgroundLine, // #BackgroundLine
-  // ignore: unused_field
-  _scenarioLine, // #ScenarioLine
-  // ignore: unused_field
-  _examplesLine, // #ExamplesLine
-  // ignore: unused_field
-  _stepLine, // #StepLine
-  // ignore: unused_field
-  _docStringSeparator, // #DocStringSeparator
-  // ignore: unused_field
-  _tableRow, // #TableRow
-  // ignore: unused_field
-  _language, // #Language
-  // ignore: unused_field
-  _other, // #Other
-  gherkinDocument, // GherkinDocument! := Feature?
-  feature, // Feature! := FeatureHeader Background? ScenarioDefinition* Rule*
-  featureHeader, // FeatureHeader! := #Language? Tags? #FeatureLine DescriptionHelper
-  rule, // Rule! := RuleHeader Background? ScenarioDefinition*
-  ruleHeader, // RuleHeader! := #RuleLine DescriptionHelper
-  background, // Background! := #BackgroundLine DescriptionHelper Step*
-  scenarioDefinition, // ScenarioDefinition! := Tags? Scenario
-  scenario, // Scenario! := #ScenarioLine DescriptionHelper Step* ExamplesDefinition*
-  examplesDefinition, // ExamplesDefinition! [#Empty|#Comment|#TagLine->#ExamplesLine] := Tags? Examples
-  examples, // Examples! := #ExamplesLine DescriptionHelper ExamplesTable?
-  examplesTable, // ExamplesTable! := #TableRow #TableRow*
-  step, // Step! := #StepLine StepArg?
-  stepArg, // StepArg := (DataTable | DocString)
-  dataTable, // DataTable! := #TableRow+
-  docString, // DocString! := #DocStringSeparator #Other* #DocStringSeparator
-  tags, // Tags! := #TagLine+
-  descriptionHelper, // DescriptionHelper := #Empty* Description? #Comment*
-  description, // Description! := #Other+
+
+  /// End-of-file token rule (`#EOF`).
+  eof,
+
+  /// Blank line token rule (`#Empty`).
+  empty,
+
+  /// Comment line token rule (`#Comment`).
+  comment,
+
+  /// Tag line token rule (`#TagLine`).
+  tagLine,
+
+  /// `Feature:` line token rule (`#FeatureLine`).
+  featureLine,
+
+  /// `Rule:` line token rule (`#RuleLine`).
+  ruleLine,
+
+  /// `Background:` line token rule (`#BackgroundLine`).
+  backgroundLine,
+
+  /// `Scenario:`/`Scenario Outline:` line token rule (`#ScenarioLine`).
+  scenarioLine,
+
+  /// `Examples:` line token rule (`#ExamplesLine`).
+  examplesLine,
+
+  /// Step line token rule (`#StepLine`).
+  stepLine,
+
+  /// Doc string delimiter token rule (`#DocStringSeparator`).
+  docStringSeparator,
+
+  /// Table row token rule (`#TableRow`).
+  tableRow,
+
+  /// `# language:` header token rule (`#Language`).
+  language,
+
+  /// Any other (description/free text) token rule (`#Other`).
+  other,
+
+  /// The whole document: `GherkinDocument := Feature?`.
+  gherkinDocument,
+
+  /// A feature:
+  /// `Feature := FeatureHeader Background? ScenarioDefinition* Rule*`.
+  feature,
+
+  /// A feature header:
+  /// `FeatureHeader := #Language? Tags? #FeatureLine DescriptionHelper`.
+  featureHeader,
+
+  /// A rule: `Rule := RuleHeader Background? ScenarioDefinition*`.
+  rule,
+
+  /// A rule header: `RuleHeader := #RuleLine DescriptionHelper`.
+  ruleHeader,
+
+  /// A background: `Background := #BackgroundLine DescriptionHelper Step*`.
+  background,
+
+  /// A (optionally tagged) scenario: `ScenarioDefinition := Tags? Scenario`.
+  scenarioDefinition,
+
+  /// A scenario:
+  /// `Scenario := #ScenarioLine DescriptionHelper Step* ExamplesDefinition*`.
+  scenario,
+
+  /// A (optionally tagged) examples block:
+  /// `ExamplesDefinition := Tags? Examples`.
+  examplesDefinition,
+
+  /// An examples block:
+  /// `Examples := #ExamplesLine DescriptionHelper ExamplesTable?`.
+  examples,
+
+  /// An examples table: `ExamplesTable := #TableRow #TableRow*`.
+  examplesTable,
+
+  /// A step: `Step := #StepLine StepArg?`.
+  step,
+
+  /// A step argument: `StepArg := (DataTable | DocString)`.
+  stepArg,
+
+  /// A data table: `DataTable := #TableRow+`.
+  dataTable,
+
+  /// A doc string:
+  /// `DocString := #DocStringSeparator #Other* #DocStringSeparator`.
+  docString,
+
+  /// One or more tag lines: `Tags := #TagLine+`.
+  tags,
+
+  /// A description helper:
+  /// `DescriptionHelper := #Empty* Description? #Comment*`.
+  descriptionHelper,
+
+  /// Free-text description: `Description := #Other+`.
+  description,
 }

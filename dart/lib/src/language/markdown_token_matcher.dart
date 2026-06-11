@@ -4,19 +4,10 @@ import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 
+/// The [ITokenMatcher] for Markdown (`.feature.md`) Gherkin sources.
 class MarkdownTokenMatcher implements ITokenMatcher {
-  final IGherkinDialectProvider _dialectProvider;
-  final String _defaultDialectName;
-
-  late IGherkinDialect _currentDialect;
-  late List<String> _nonStarStepKeywords;
-  late List<String> _headerKeywords;
-  late Map<String, List<messages.StepKeywordType>> _keywordTypesMap;
-
-  RegExp _activeDocStringSeparator = RegExp(r'^(```[`]*)(.*)');
-  int _indentToRemove = 0;
-  bool _matchedFeatureLine = false;
-
+  /// Creates a matcher that resolves dialects through [_dialectProvider],
+  /// defaulting to [_defaultDialectName] when no `# language:` header is found.
   MarkdownTokenMatcher(
     this._dialectProvider, [
     this._defaultDialectName = 'en',
@@ -27,6 +18,17 @@ class MarkdownTokenMatcher implements ITokenMatcher {
     );
     _initializeDialectState();
   }
+  final IGherkinDialectProvider _dialectProvider;
+  final String _defaultDialectName;
+
+  late IGherkinDialect _currentDialect;
+  late List<String> _nonStarStepKeywords;
+  late List<String> _headerKeywords;
+  late Map<String, List<messages.StepKeywordType>> _keywordTypesMap;
+
+  RegExp _activeDocStringSeparator = RegExp('^(```[`]*)(.*)');
+  int _indentToRemove = 0;
+  bool _matchedFeatureLine = false;
 
   @override
   void reset() {
@@ -34,7 +36,7 @@ class MarkdownTokenMatcher implements ITokenMatcher {
       _defaultDialectName,
       Location.empty,
     );
-    _activeDocStringSeparator = RegExp(r'^(```[`]*)(.*)');
+    _activeDocStringSeparator = RegExp('^(```[`]*)(.*)');
     _indentToRemove = 0;
     _matchedFeatureLine = false;
     _initializeDialectState();
@@ -104,11 +106,11 @@ class MarkdownTokenMatcher implements ITokenMatcher {
     final separator = match.group(1) ?? Strings.empty;
     final mediaType =
         match.groupCount >= 2 ? match.group(2) ?? Strings.empty : Strings.empty;
-    if (_activeDocStringSeparator.pattern == r'^(```[`]*)(.*)') {
+    if (_activeDocStringSeparator.pattern == '^(```[`]*)(.*)') {
       _activeDocStringSeparator = RegExp('^(${RegExp.escape(separator)})\$');
       _indentToRemove = token.line.indent;
     } else {
-      _activeDocStringSeparator = RegExp(r'^(```[`]*)(.*)');
+      _activeDocStringSeparator = RegExp('^(```[`]*)(.*)');
       _indentToRemove = 0;
     }
 
@@ -231,7 +233,7 @@ class MarkdownTokenMatcher implements ITokenMatcher {
   bool matchTagLine(Token token) {
     final tags = <GherkinLineSpan>[];
     final trimmed = token.line.getLineText(-1);
-    final re = RegExp(r'`(@[^`]+)`');
+    final re = RegExp('`(@[^`]+)`');
     for (final match in re.allMatches(trimmed)) {
       tags.add(
         GherkinLineSpan(
@@ -287,19 +289,20 @@ class MarkdownTokenMatcher implements ITokenMatcher {
     int indent = Int.min,
     Iterable<GherkinLineSpan> items = const <GherkinLineSpan>[],
   }) {
-    token.matchedType = matchedType;
-    token.matchedKeyword = keyword;
-    token.matchedKeywordType = keywordType;
-    token.matchedText = text;
-    token.matchedItems = items;
-    token.matchedGherkinDialect = _currentDialect;
-    token.matchedIndent =
-        matchedType == TokenType.empty
-            ? 0
-            : indent.isNotMin
-            ? indent
-            : (token.line.isEmpty ? 0 : token.line.indent);
-    token.location = Location(token.location.line, token.matchedIndent + 1);
+    token
+      ..matchedType = matchedType
+      ..matchedKeyword = keyword
+      ..matchedKeywordType = keywordType
+      ..matchedText = text
+      ..matchedItems = items
+      ..matchedGherkinDialect = _currentDialect
+      ..matchedIndent =
+          matchedType == TokenType.empty
+              ? 0
+              : indent.isNotMin
+              ? indent
+              : (token.line.isEmpty ? 0 : token.line.indent)
+      ..location = Location(token.location.line, token.matchedIndent + 1);
   }
 
   void _initializeDialectState() {
@@ -324,7 +327,7 @@ class MarkdownTokenMatcher implements ITokenMatcher {
         }.toList();
 
     if (_headerKeywords.isEmpty) {
-      throw NoSuchLanguageException(_defaultDialectName, Location.empty);
+      throw NoSuchLanguageException(_defaultDialectName);
     }
 
     _keywordTypesMap = {};

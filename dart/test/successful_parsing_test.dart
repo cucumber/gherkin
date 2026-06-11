@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 import 'package:gherkin/src/ast/messages_gherkin_document_builder.dart';
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 void main() {
@@ -11,9 +11,9 @@ void main() {
   final languages = loadGherkinLanguagesFromJsonAsset();
 
   test('Test successful parsing', () async {
-    var dialectProvider = GherkinDialectProvider(languages);
+    final dialectProvider = GherkinDialectProvider(languages);
 
-    var matcher = TokenMatcher(dialectProvider);
+    final matcher = TokenMatcher(dialectProvider);
 
     final goodDir = Directory('../testdata/good');
 
@@ -22,14 +22,14 @@ void main() {
           file.path.endsWith('.feature') || file.path.endsWith('.feature.md'),
     );
 
-    var builder = MessagesGherkinDocumentBuilder(idGenerator);
+    final builder = MessagesGherkinDocumentBuilder(idGenerator);
 
-    var parser = Parser<messages.GherkinDocument>(builder);
+    final parser = Parser<messages.GherkinDocument>(builder);
 
-    for (var fileEntity in filesEntities) {
-      print('Validating ${fileEntity.path.replaceAll('\\', '/')} ...');
+    for (final fileEntity in filesEntities) {
+      final normalizedPath = fileEntity.path.replaceAll(r'\', '/');
 
-      var file = File(fileEntity.path);
+      final file = File(fileEntity.path);
 
       final tokenScanner = FileTokenScanner.fromFile(file);
       final matcherForFile =
@@ -37,9 +37,13 @@ void main() {
               ? MarkdownTokenMatcher(dialectProvider)
               : matcher;
 
-      var parsingResult = parser.parse(tokenScanner, matcherForFile);
+      final parsingResult = parser.parse(tokenScanner, matcherForFile);
 
-      expect(parsingResult, isNotNull);
+      expect(
+        parsingResult,
+        isNotNull,
+        reason: 'Failed to parse $normalizedPath',
+      );
     }
   });
 }

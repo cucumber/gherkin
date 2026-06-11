@@ -5,17 +5,21 @@ import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart' as lang;
 import 'package:gherkin/parser.dart';
 
-import 'ast_node.dart';
+import 'package:gherkin/src/ast/ast_node.dart';
 
+/// An [IBuilder] that assembles parser events into a Cucumber Messages
+/// [messages.GherkinDocument].
 class MessagesGherkinDocumentBuilder
     implements IBuilder<messages.GherkinDocument> {
-  final lang.IdGenerator idGenerator;
-  final Stack<AstNode> _stack = Stack<AstNode>();
-  final List<messages.Comment> _comments = <messages.Comment>[];
-
+  /// Creates a builder that assigns ids using [idGenerator].
   MessagesGherkinDocumentBuilder(this.idGenerator) {
     reset();
   }
+
+  /// The generator used to assign ids to the produced messages.
+  final lang.IdGenerator idGenerator;
+  final Stack<AstNode> _stack = Stack<AstNode>();
+  final List<messages.Comment> _comments = <messages.Comment>[];
 
   AstNode get _currentNode => _stack.top;
 
@@ -42,8 +46,9 @@ class MessagesGherkinDocumentBuilder
 
   @override
   void reset() {
-    _stack.clear();
-    _stack.push(AstNode(RuleType.none));
+    _stack
+      ..clear()
+      ..push(AstNode(RuleType.none));
     _comments.clear();
   }
 
@@ -80,6 +85,11 @@ class MessagesGherkinDocumentBuilder
         return _createRule(node);
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
+      // All other rule types are structural/intermediate nodes that are
+      // returned unchanged. An exhaustive switch is not possible because
+      // RuleType also declares library-private token rule types that cannot
+      // be referenced from this library.
+      // ignore: no_default_cases
       default:
         return node;
     }
@@ -244,7 +254,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   String _createDescription(AstNode node) {
-    var lineTokens = node.getTokens(lang.TokenType.other).toList();
+    final lineTokens = node.getTokens(lang.TokenType.other).toList();
     while (lineTokens.isNotEmpty &&
         lineTokens.last.matchedText.isEmptyOrWhiteSpace) {
       lineTokens.removeLast();

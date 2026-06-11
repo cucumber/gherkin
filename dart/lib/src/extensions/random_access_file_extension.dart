@@ -1,9 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+/// Synchronous, line-oriented helpers used by the file-based token scanner.
 extension RandomAccessFileExtension on RandomAccessFile {
+  /// The line-feed byte (`\n`).
   static const lf = 10;
+
+  /// The carriage-return byte (`\r`).
   static const cr = 13;
+
+  /// The sentinel byte returned at end of file.
   static const eof = -1;
 
   /// Synchronously reads a single line from the file. If end-of-file
@@ -12,7 +18,7 @@ extension RandomAccessFileExtension on RandomAccessFile {
   ///
   /// Throws a [FileSystemException] if the operation fails.
   String? readLineSync({Encoding encoding = utf8}) {
-    var line = <int>[];
+    final line = <int>[];
     int chr;
     if ((chr = readByteSync()) == eof) {
       return null;
@@ -28,12 +34,13 @@ extension RandomAccessFileExtension on RandomAccessFile {
     return encoding.decode(line);
   }
 
-  /// Synchronously peeks a single byte from file, without to move position pointer.
+  /// Synchronously peeks a single byte from the file without moving the
+  /// position pointer.
   ///
   /// Throws a [FileSystemException] if the operation fails.
   int peekByteSync() {
-    var position = positionSync();
-    var char = readByteSync();
+    final position = positionSync();
+    final char = readByteSync();
     setPositionSync(position);
     return char;
   }

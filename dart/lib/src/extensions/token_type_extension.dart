@@ -1,6 +1,7 @@
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 
+/// Conversions from [TokenType] to its wire name and corresponding rule type.
 extension TokenTypeExtension on TokenType {
   /// The canonical wire name of this token type, as emitted in the `*.tokens`
   /// acceptance format and shared with the other Gherkin implementations.
@@ -42,5 +43,6 @@ extension TokenTypeExtension on TokenType {
     }
   }
 
+  /// Returns the [RuleType] that corresponds to this token type.
   RuleType toRuleType() => RuleType.values[index];
 }

@@ -1,7 +1,10 @@
+/// String constants used throughout the library.
 class Strings {
+  /// The empty string.
   static const empty = '';
 }
 
+/// Utility string operations used by the Gherkin scanners.
 extension StringExtensions on String {
   /// Indicates whether a specified string is `empty` or consists only
   /// of `white-space` characters.
@@ -16,14 +19,14 @@ extension StringExtensions on String {
     if (limit == 0) {
       return split(pattern);
     }
-    var result = <String>[];
+    final result = <String>[];
     // Positive.
     if (limit > 0) {
-      var parts = split(pattern);
+      final parts = split(pattern);
       if (parts.isNotEmpty) {
-        --limit;
+        final maxParts = limit - 1;
         var index = 0;
-        while (index < limit && index < parts.length) {
+        while (index < maxParts && index < parts.length) {
           result.add(parts[index]);
           index++;
         }
@@ -31,8 +34,8 @@ extension StringExtensions on String {
           result.add(this);
         } else if (index < parts.length) {
           final lastPart = result[result.length - 1];
-          var start = indexOf(lastPart);
-          var complement = substring(start + lastPart.length + 1);
+          final start = indexOf(lastPart);
+          final complement = substring(start + lastPart.length + 1);
           result.add(complement);
         }
       } else {
@@ -44,18 +47,21 @@ extension StringExtensions on String {
     return result;
   }
 
+  /// Removes leading horizontal whitespace while preserving line breaks.
   String ltrimKeepNewLines() {
     // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
     final regexp = RegExp(r'^[ \t\x0B\f\r\x85\xA0]+');
     return replaceAll(regexp, '');
   }
 
+  /// Removes trailing horizontal whitespace while preserving line breaks.
   String rtrimKeepNewLines() {
     // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
     final regexp = RegExp(r'[ \t\x0B\f\r\x85\xA0]+$');
     return replaceAll(regexp, '');
   }
 
+  /// Removes all trailing whitespace, including line breaks.
   String rtrim() {
     final regexp = RegExp(r'[ \t\n\x0B\f\r\x85\xA0]+$');
     return replaceAll(regexp, '');
@@ -75,13 +81,4 @@ extension StringExtensions on String {
     }
     return substring(0, index + 1);
   }
-
-  /*int codePointCount(int beginIndex, int endIndex) {
-    if (beginIndex >= 0 && beginIndex <= endIndex && endIndex <= length) {
-      return isLatin1() ? endIndex - beginIndex : StringUTF16.codePointCount(this, beginIndex, endIndex);
-    }
-    else {
-      throw IndexError(beginIndex, endIndex);
-    }
-  }*/
 }

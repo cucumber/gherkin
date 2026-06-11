@@ -15,17 +15,17 @@ void main() {
 
   test('Is reusable', () {
     var tokenScanner = StringTokenScanner('Feature: 1');
-    var d1 = parser.parse(tokenScanner, matcher);
+    final d1 = parser.parse(tokenScanner, matcher);
 
     tokenScanner = StringTokenScanner('Feature: 2');
-    var d2 = parser.parse(tokenScanner, matcher);
+    final d2 = parser.parse(tokenScanner, matcher);
 
     expect(d1.feature!.name, '1');
     expect(d2.feature!.name, '2');
   });
 
   test('Parses rules', () {
-    var data =
+    const data =
         'Feature: Some rules\n'
         '\n'
         '  Background:\n'
@@ -46,14 +46,14 @@ void main() {
         '    Example: Example B\n'
         '      Given b';
 
-    var tokenScanner = StringTokenScanner(data);
-    var doc = parser.parse(tokenScanner, matcher);
+    final tokenScanner = StringTokenScanner(data);
+    final doc = parser.parse(tokenScanner, matcher);
 
-    var children = doc.feature!.children.toList();
+    final children = doc.feature!.children.toList();
     expect(children.length, 3);
 
-    var pickleCompiler = MessagesPickleCompiler(idGenerator);
-    var pickles = pickleCompiler.compile(doc, 'hello.feature');
+    final pickleCompiler = MessagesPickleCompiler(idGenerator);
+    final pickles = pickleCompiler.compile(doc, 'hello.feature');
     expect(2, pickles.length);
 
     expect(3, pickles.first.steps.length);
@@ -62,23 +62,23 @@ void main() {
   });
 
   test('Parses just comments', () {
-    final data = '# Just a comment';
-    var tokenScanner = StringTokenScanner(data);
-    var doc = parser.parse(tokenScanner, matcher);
-    var children = doc.comments;
+    const data = '# Just a comment';
+    final tokenScanner = StringTokenScanner(data);
+    final doc = parser.parse(tokenScanner, matcher);
+    final children = doc.comments;
     expect(children.length, 1);
   });
 
   test('Sets empty table cells', () {
-    final data =
+    const data =
         'Feature:\n'
         '  Scenario:\n'
         '    Given a table\n'
         '      |a||b|';
-    var tokenScanner = StringTokenScanner(data);
-    var doc = parser.parse(tokenScanner, matcher);
+    final tokenScanner = StringTokenScanner(data);
+    final doc = parser.parse(tokenScanner, matcher);
 
-    var row =
+    final row =
         doc.feature!.children.first.scenario!.steps.first.dataTable!.rows.first;
     expect('a', row.cells.first.value);
     expect('', row.cells.elementAt(1).value);

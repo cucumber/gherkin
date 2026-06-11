@@ -1,17 +1,22 @@
-import 'package:gherkin/parser.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-
-import 'gherkin_language_constants.dart';
-import 'gherkin_line_span.dart';
-import 'i_gherkin_dialect.dart';
-import 'i_gherkin_dialect_provider.dart';
-import 'i_gherkin_line.dart';
-import 'location.dart';
-import 'token.dart';
-import 'token_type.dart';
 import 'package:gherkin/extensions.dart';
+import 'package:gherkin/parser.dart';
+import 'package:gherkin/src/language/gherkin_language_constants.dart';
+import 'package:gherkin/src/language/gherkin_line_span.dart';
+import 'package:gherkin/src/language/i_gherkin_dialect.dart';
+import 'package:gherkin/src/language/i_gherkin_dialect_provider.dart';
+import 'package:gherkin/src/language/i_gherkin_line.dart';
+import 'package:gherkin/src/language/location.dart';
+import 'package:gherkin/src/language/token.dart';
+import 'package:gherkin/src/language/token_type.dart';
 
+/// The [ITokenMatcher] for plain (`.feature`) Gherkin sources.
 class TokenMatcher implements ITokenMatcher {
+  /// Creates a matcher that resolves dialects through [_dialectProvider].
+  TokenMatcher(this._dialectProvider)
+    : _currentDialect = _dialectProvider.defaultDialect {
+    _initializeKeywordTypes();
+  }
   static final RegExp _languagePattern = RegExp(
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
   );
@@ -23,11 +28,7 @@ class TokenMatcher implements ITokenMatcher {
   int _indentToRemove = 0;
   Map<String, List<messages.StepKeywordType>> _keywordTypesMap = {};
 
-  TokenMatcher(this._dialectProvider)
-    : _currentDialect = _dialectProvider.defaultDialect {
-    _initializeKeywordTypes();
-  }
-
+  /// The dialect currently in effect, falling back to the default dialect.
   IGherkinDialect get currentDialect {
     if (_currentDialect.isEmpty) {
       return _dialectProvider.defaultDialect;
@@ -55,7 +56,7 @@ class TokenMatcher implements ITokenMatcher {
   @override
   bool matchOther(Token token) {
     /// take the entire line, except removing DocString indents
-    var text = token.line.getLineText(_indentToRemove);
+    final text = token.line.getLineText(_indentToRemove);
     setTokenMatched(
       token,
       TokenType.other,
@@ -77,7 +78,7 @@ class TokenMatcher implements ITokenMatcher {
   @override
   bool matchComment(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.commentPrefix)) {
-      var text = token.line.getLineText(IGherkinLine.entireLine);
+      final text = token.line.getLineText(IGherkinLine.entireLine);
       setTokenMatched(token, TokenType.comment, text: text, indent: 0);
       return true;
     }
@@ -86,11 +87,11 @@ class TokenMatcher implements ITokenMatcher {
 
   @override
   bool matchLanguage(Token token) {
-    var match = _languagePattern.firstMatch(
+    final match = _languagePattern.firstMatch(
       token.line.getLineText(IGherkinLine.entireLine),
     );
     if (match != null) {
-      var language = match.group(1) ?? Strings.empty;
+      final language = match.group(1) ?? Strings.empty;
       setTokenMatched(token, TokenType.language, text: language);
       _currentDialect = _dialectProvider.getDialect(language, token.location);
       _initializeKeywordTypes();
@@ -151,9 +152,9 @@ class TokenMatcher implements ITokenMatcher {
     TokenType tokenType,
     List<String> keywords,
   ) {
-    for (var keyword in keywords) {
+    for (final keyword in keywords) {
       if (token.line.startsWithTitleKeyword(keyword)) {
-        var title = token.line.getRestTrimmed(
+        final title = token.line.getRestTrimmed(
           keyword.length +
               GherkinLanguageConstants.titleKeywordSeparator.length,
         );
@@ -204,13 +205,13 @@ class TokenMatcher implements ITokenMatcher {
   }
 
   @override
-  bool matchStepLine(token) {
-    var keywords =
+  bool matchStepLine(Token token) {
+    final keywords =
         currentDialect.stepKeywords.toList()
           ..sort((a, b) => b.length - a.length);
-    for (var keyword in keywords) {
+    for (final keyword in keywords) {
       if (token.line.startsWith(keyword)) {
-        var stepText = token.line.getRestTrimmed(keyword.length);
+        final stepText = token.line.getRestTrimmed(keyword.length);
         setTokenMatched(
           token,
           TokenType.stepLine,
@@ -225,7 +226,7 @@ class TokenMatcher implements ITokenMatcher {
   }
 
   @override
-  bool matchTableRow(token) {
+  bool matchTableRow(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.tableCellSeparator)) {
       setTokenMatched(token, TokenType.tableRow, items: token.line.tableCells);
       return true;
@@ -233,6 +234,8 @@ class TokenMatcher implements ITokenMatcher {
     return false;
   }
 
+  /// Records that [token] matched [matchedType], populating its matched
+  /// keyword, text, items, indentation, and location.
   void setTokenMatched(
     Token token,
     TokenType matchedType, {
@@ -242,19 +245,20 @@ class TokenMatcher implements ITokenMatcher {
     int indent = Int.min,
     Iterable<GherkinLineSpan> items = const <GherkinLineSpan>[],
   }) {
-    token.matchedType = matchedType;
-    token.matchedKeyword = keyword;
-    token.matchedKeywordType = keywordType;
-    token.matchedText = text;
-    token.matchedItems = items;
-    token.matchedGherkinDialect = currentDialect;
-    token.matchedIndent =
-        matchedType == TokenType.empty
-            ? 0
-            : indent.isNotMin
-            ? indent
-            : (token.line.isEmpty ? 0 : token.line.indent);
-    token.location = Location(token.location.line, token.matchedIndent + 1);
+    token
+      ..matchedType = matchedType
+      ..matchedKeyword = keyword
+      ..matchedKeywordType = keywordType
+      ..matchedText = text
+      ..matchedItems = items
+      ..matchedGherkinDialect = currentDialect
+      ..matchedIndent =
+          matchedType == TokenType.empty
+              ? 0
+              : indent.isNotMin
+              ? indent
+              : (token.line.isEmpty ? 0 : token.line.indent)
+      ..location = Location(token.location.line, token.matchedIndent + 1);
   }
 
   void _initializeKeywordTypes() {
@@ -304,14 +308,14 @@ class TokenMatcher implements ITokenMatcher {
     if (GherkinLanguageConstants.docStringSeparator ==
         _activeDocStringSeparator) {
       return text.replaceFirst(
-        '\\"\\"\\"',
+        r'\"\"\"',
         GherkinLanguageConstants.docStringSeparator,
       );
     }
     if (GherkinLanguageConstants.docStringAlternativeSeparator ==
         _activeDocStringSeparator) {
       return text.replaceFirst(
-        '\\`\\`\\`',
+        r'\`\`\`',
         GherkinLanguageConstants.docStringAlternativeSeparator,
       );
     }

@@ -1,36 +1,9 @@
 import 'package:gherkin/extensions.dart';
 
+/// The localized Gherkin keywords for a single language, as defined in
+/// `gherkin-languages.json`.
 class GherkinLanguageKeywords {
-  static const GherkinLanguageKeywords empty = GherkinLanguageKeywords(
-    Strings.empty,
-    Strings.empty,
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  );
-
-  final String name;
-  final String native;
-  final List<String> feature;
-  final List<String> rule;
-  final List<String> background;
-  final List<String> scenario;
-  final List<String> scenarioOutline;
-  final List<String> examples;
-  final List<String> given;
-  final List<String> when;
-  final List<String> then;
-  final List<String> and;
-  final List<String> but;
-
+  /// Creates a set of keywords from explicit values.
   const GherkinLanguageKeywords(
     this.name,
     this.native,
@@ -47,18 +20,76 @@ class GherkinLanguageKeywords {
     this.but,
   );
 
+  /// Creates a set of keywords from a `gherkin-languages.json` entry.
   GherkinLanguageKeywords.fromJson(Map<String, dynamic> json)
-    : name = json['name'],
-      native = json['native'],
-      feature = json['feature'].cast<String>(),
-      rule = json['rule'].cast<String>(),
-      background = json['background'].cast<String>(),
-      scenario = json['scenario'].cast<String>(),
-      scenarioOutline = json['scenarioOutline'].cast<String>(),
-      examples = json['examples'].cast<String>(),
-      given = json['given'].cast<String>(),
-      when = json['when'].cast<String>(),
-      then = json['then'].cast<String>(),
-      and = json['and'].cast<String>(),
-      but = json['but'].cast<String>();
+    : name = json['name'] as String,
+      native = json['native'] as String,
+      feature = (json['feature'] as List<dynamic>).cast<String>(),
+      rule = (json['rule'] as List<dynamic>).cast<String>(),
+      background = (json['background'] as List<dynamic>).cast<String>(),
+      scenario = (json['scenario'] as List<dynamic>).cast<String>(),
+      scenarioOutline =
+          (json['scenarioOutline'] as List<dynamic>).cast<String>(),
+      examples = (json['examples'] as List<dynamic>).cast<String>(),
+      given = (json['given'] as List<dynamic>).cast<String>(),
+      when = (json['when'] as List<dynamic>).cast<String>(),
+      then = (json['then'] as List<dynamic>).cast<String>(),
+      and = (json['and'] as List<dynamic>).cast<String>(),
+      but = (json['but'] as List<dynamic>).cast<String>();
+
+  /// A sentinel value with an empty name and no keywords.
+  static const GherkinLanguageKeywords empty = GherkinLanguageKeywords(
+    Strings.empty,
+    Strings.empty,
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+  );
+
+  /// The English name of the language (for example `English`).
+  final String name;
+
+  /// The native name of the language (for example `English`).
+  final String native;
+
+  /// The keywords that introduce a `Feature`.
+  final List<String> feature;
+
+  /// The keywords that introduce a `Rule`.
+  final List<String> rule;
+
+  /// The keywords that introduce a `Background`.
+  final List<String> background;
+
+  /// The keywords that introduce a `Scenario`.
+  final List<String> scenario;
+
+  /// The keywords that introduce a `Scenario Outline`.
+  final List<String> scenarioOutline;
+
+  /// The keywords that introduce an `Examples` block.
+  final List<String> examples;
+
+  /// The keywords that introduce a `Given` step.
+  final List<String> given;
+
+  /// The keywords that introduce a `When` step.
+  final List<String> when;
+
+  /// The keywords that introduce a `Then` step.
+  final List<String> then;
+
+  /// The keywords that introduce an `And` step.
+  final List<String> and;
+
+  /// The keywords that introduce a `But` step.
+  final List<String> but;
 }

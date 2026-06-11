@@ -1,11 +1,17 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/language.dart';
 
+/// Compiles a [messages.GherkinDocument] into the list of executable
+/// [messages.Pickle]s it describes.
 class MessagesPickleCompiler {
-  final IdGenerator _idGenerator;
-
+  /// Creates a compiler that assigns ids using [_idGenerator].
   MessagesPickleCompiler(this._idGenerator);
 
+  final IdGenerator _idGenerator;
+
+  /// Compiles [gherkinDocument] (loaded from [uri]) into pickles.
+  ///
+  /// Returns an empty list when the document has no feature.
   List<messages.Pickle> compile(
     messages.GherkinDocument gherkinDocument,
     String uri,
@@ -297,11 +303,12 @@ class MessagesPickleCompiler {
     List<messages.TableCell> variableCells,
     List<messages.TableCell> valueCells,
   ) {
+    var result = value;
     for (var i = 0; i < variableCells.length; i++) {
       final pattern = '<${variableCells[i].value}>';
-      value = value.replaceAll(pattern, valueCells[i].value);
+      result = result.replaceAll(pattern, valueCells[i].value);
     }
-    return value;
+    return result;
   }
 
   messages.StepKeywordType _effectiveKeywordType(

@@ -3,20 +3,28 @@ import 'dart:collection';
 import 'package:gherkin/exceptions.dart';
 import 'package:gherkin/language.dart';
 
-import 'i_token_matcher.dart';
-import 'i_token_scanner.dart';
+import 'package:gherkin/src/parser/i_token_matcher.dart';
+import 'package:gherkin/src/parser/i_token_scanner.dart';
 
-/// Internal use only.
+/// The mutable state threaded through a single parse run.
 class ParserContext {
-  final ITokenScanner tokenScanner;
-  final ITokenMatcher tokenMatcher;
-  final Queue<Token> tokenQueue;
-  final List<ParserException> errors;
-
+  /// Creates a context from the collaborators used during a parse.
   ParserContext(
     this.tokenScanner,
     this.tokenMatcher,
     this.tokenQueue,
     this.errors,
   );
+
+  /// The scanner the tokens are read from.
+  final ITokenScanner tokenScanner;
+
+  /// The matcher used to classify each token.
+  final ITokenMatcher tokenMatcher;
+
+  /// Tokens that have been read ahead and not yet consumed.
+  final Queue<Token> tokenQueue;
+
+  /// The parse errors collected so far.
+  final List<ParserException> errors;
 }

@@ -7,15 +7,14 @@ import 'package:gherkin/parser.dart';
 import 'package:gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:gherkin/src/pickles/messages_pickle_compiler.dart';
 
+/// Parses Gherkin documents into a stream of Cucumber [messages.Envelope]s.
 class GherkinParser {
-  final bool includeSource;
-  final bool includeGherkinDocument;
-  final bool includePickles;
-  final String defaultDialect;
-  final lang.IdGenerator idGenerator;
-
-  late final lang.IGherkinDialectProvider _dialectProvider;
-
+  /// Creates a parser.
+  ///
+  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
+  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
+  /// the dialect used when a feature has no `# language:` header, and
+  /// [idGenerator] to assign message ids (defaults to UUIDs).
   GherkinParser({
     this.includeSource = true,
     this.includeGherkinDocument = true,
@@ -27,8 +26,27 @@ class GherkinParser {
     _dialectProvider = lang.GherkinDialectProvider(languages, defaultDialect);
   }
 
+  /// Whether `source` envelopes are emitted.
+  final bool includeSource;
+
+  /// Whether `gherkinDocument` envelopes are emitted.
+  final bool includeGherkinDocument;
+
+  /// Whether `pickle` envelopes are emitted.
+  final bool includePickles;
+
+  /// The dialect used when a feature has no `# language:` header.
+  final String defaultDialect;
+
+  /// The [lang.IdGenerator] used to assign ids to emitted messages.
+  final lang.IdGenerator idGenerator;
+
+  late final lang.IGherkinDialectProvider _dialectProvider;
+
+  /// Creates a [GherkinParserBuilder] for fluent configuration.
   static GherkinParserBuilder builder() => GherkinParserBuilder();
 
+  /// Parses the file at [path] and emits the resulting envelopes.
   Stream<messages.Envelope> parsePath(String path) {
     try {
       // Normalize CRLF → LF so source data is consistent across platforms and
@@ -42,10 +60,14 @@ class GherkinParser {
     }
   }
 
+  /// Parses each path in [paths] and emits the resulting envelopes.
   Stream<messages.Envelope> parsePaths(Iterable<String> paths) {
     return Stream.fromIterable(paths).asyncExpand(parsePath);
   }
 
+  /// Parses a single source [envelope] and emits the resulting envelopes.
+  ///
+  /// The incoming [envelope] is re-emitted first when [includeSource] is set.
   Stream<messages.Envelope> parseEnvelope(messages.Envelope envelope) async* {
     if (includeSource) {
       yield envelope;
@@ -57,6 +79,7 @@ class GherkinParser {
     yield* Stream.fromIterable(_parseSource(source));
   }
 
+  /// Parses a stream of source [envelopes] and emits the resulting envelopes.
   Stream<messages.Envelope> parseEnvelopes(
     Stream<messages.Envelope> envelopes,
   ) {
@@ -138,6 +161,10 @@ class GherkinParser {
     );
   }
 
+  /// Builds a `source` [messages.Envelope] from raw Gherkin [data].
+  ///
+  /// The media type is inferred from the [uri] extension (`.feature` or `.md`);
+  /// any other extension throws an [ArgumentError].
   static messages.Envelope makeSourceEnvelope(String data, String uri) {
     messages.SourceMediaType mediaType;
     if (uri.endsWith('.feature')) {
@@ -153,55 +180,55 @@ class GherkinParser {
   }
 }
 
+/// A mutable builder for configuring and creating a [GherkinParser].
+///
+/// Configure the builder with cascades and then call [build]:
+///
+/// ```dart
+/// final parser = (GherkinParser.builder()
+///       ..includeSource = false
+///       ..idGenerator = IdGenerator.incrementingGenerator)
+///     .build();
+/// ```
 class GherkinParserBuilder {
-  bool _includeSource = true;
-  bool _includeGherkinDocument = true;
-  bool _includePickles = true;
-  String _defaultDialect = 'en';
-  lang.IdGenerator _idGenerator = lang.IdGenerator.uuidGenerator;
+  /// Whether the built parser should emit `source` envelopes.
+  bool includeSource = true;
 
-  GherkinParserBuilder includeSource(bool includeSource) {
-    _includeSource = includeSource;
-    return this;
-  }
+  /// Whether the built parser should emit `gherkinDocument` envelopes.
+  bool includeGherkinDocument = true;
 
-  GherkinParserBuilder includeGherkinDocument(bool includeGherkinDocument) {
-    _includeGherkinDocument = includeGherkinDocument;
-    return this;
-  }
+  /// Whether the built parser should emit `pickle` envelopes.
+  bool includePickles = true;
 
-  GherkinParserBuilder includePickles(bool includePickles) {
-    _includePickles = includePickles;
-    return this;
-  }
+  /// The dialect used when a feature has no `# language:` header.
+  String defaultDialect = 'en';
 
-  GherkinParserBuilder defaultDialect(String defaultDialect) {
-    _defaultDialect = defaultDialect;
-    return this;
-  }
+  /// The [lang.IdGenerator] used to assign ids to emitted messages.
+  lang.IdGenerator idGenerator = lang.IdGenerator.uuidGenerator;
 
-  GherkinParserBuilder idGenerator(lang.IdGenerator idGenerator) {
-    _idGenerator = idGenerator;
-    return this;
-  }
-
+  /// Creates a [GherkinParser] using the current configuration.
   GherkinParser build() => GherkinParser(
-    includeSource: _includeSource,
-    includeGherkinDocument: _includeGherkinDocument,
-    includePickles: _includePickles,
-    defaultDialect: _defaultDialect,
-    idGenerator: _idGenerator,
+    includeSource: includeSource,
+    includeGherkinDocument: includeGherkinDocument,
+    includePickles: includePickles,
+    defaultDialect: defaultDialect,
+    idGenerator: idGenerator,
   );
 }
 
+/// Convenience entry points for parsing Gherkin into Cucumber Messages.
 class Gherkin {
+  /// Parses each path in [paths] and emits the resulting [messages.Envelope]s.
+  ///
+  /// Use [includeSource], [includeAst], and [includePickles] to control which
+  /// kinds of envelopes are emitted, and [idGenerator] to assign message ids.
   static Stream<messages.Envelope> fromPaths(
-    List<String> paths,
-    bool includeSource,
-    bool includeAst,
-    bool includePickles,
-    lang.IdGenerator idGenerator,
-  ) {
+    List<String> paths, {
+    required bool includeSource,
+    required bool includeAst,
+    required bool includePickles,
+    required lang.IdGenerator idGenerator,
+  }) {
     return GherkinParser(
       includeSource: includeSource,
       includeGherkinDocument: includeAst,
@@ -210,13 +237,18 @@ class Gherkin {
     ).parsePaths(paths);
   }
 
+  /// Parses the source [envelopes] and emits the resulting
+  /// [messages.Envelope]s.
+  ///
+  /// Use [includeSource], [includeAst], and [includePickles] to control which
+  /// kinds of envelopes are emitted, and [idGenerator] to assign message ids.
   static Stream<messages.Envelope> fromSources(
-    List<messages.Envelope> envelopes,
-    bool includeSource,
-    bool includeAst,
-    bool includePickles,
-    lang.IdGenerator idGenerator,
-  ) {
+    List<messages.Envelope> envelopes, {
+    required bool includeSource,
+    required bool includeAst,
+    required bool includePickles,
+    required lang.IdGenerator idGenerator,
+  }) {
     return GherkinParser(
       includeSource: includeSource,
       includeGherkinDocument: includeAst,
@@ -225,6 +257,9 @@ class Gherkin {
     ).parseEnvelopes(Stream.fromIterable(envelopes));
   }
 
+  /// Builds a `source` [messages.Envelope] from raw Gherkin [data].
+  ///
+  /// The media type is inferred from the [uri] extension (`.feature` or `.md`).
   static messages.Envelope makeSourceEnvelope(String data, String uri) =>
       GherkinParser.makeSourceEnvelope(data, uri);
 }

@@ -79,7 +79,7 @@ List<String> _fixtures(String dir, List<String> exts) {
   return d
       .listSync()
       .whereType<File>()
-      .map((f) => f.path.replaceAll('\\', '/').split('/').last)
+      .map((f) => f.path.replaceAll(r'\', '/').split('/').last)
       .where((name) => exts.any(name.endsWith))
       .toList()
     ..sort();

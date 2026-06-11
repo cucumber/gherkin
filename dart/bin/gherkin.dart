@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/gherkin.dart';
 import 'package:gherkin/exceptions.dart';
+import 'package:gherkin/gherkin.dart';
 import 'package:gherkin/language.dart';
 
 Future<void> main(List<String> args) async {
@@ -19,22 +19,17 @@ Future<void> main(List<String> args) async {
     switch (arg) {
       case '--no-source':
         includeSource = false;
-        break;
       case '--no-ast':
         includeAst = false;
-        break;
       case '--no-pickles':
         includePickles = false;
-        break;
       case '--predictable-ids':
         idGenerator = IdGenerator.incrementingGenerator;
-        break;
       case '--default-dialect':
         if (i + 1 >= args.length) {
           throw ArgumentError('--default-dialect requires a value');
         }
         defaultDialect = args[++i];
-        break;
       default:
         if (arg.startsWith('--default-dialect=')) {
           defaultDialect = arg.substring('--default-dialect='.length);

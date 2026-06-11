@@ -13,9 +13,9 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/gherkin.dart';
 import 'package:gherkin/language.dart';
 
-final parser = GherkinParser.builder()
-    .includeSource(false)
-    .idGenerator(IdGenerator.incrementingGenerator)
+final parser = (GherkinParser.builder()
+      ..includeSource = false
+      ..idGenerator = IdGenerator.incrementingGenerator)
     .build();
 
 final envelopes = await parser

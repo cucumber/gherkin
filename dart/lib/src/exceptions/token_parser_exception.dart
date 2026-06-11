@@ -1,8 +1,10 @@
 import 'package:gherkin/language.dart';
 
-import 'parser_exception.dart';
+import 'package:gherkin/src/exceptions/parser_exception.dart';
 
+/// A [ParserException] whose location is derived from the offending token.
 class TokenParserException extends ParserException {
+  /// Creates an exception with [message], locating it at [receivedToken].
   TokenParserException(String message, Token receivedToken)
     : super(message, _getLocation(receivedToken));
 

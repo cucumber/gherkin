@@ -2,22 +2,29 @@ import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 
+/// A single source line, providing the queries the scanner needs to classify
+/// it.
 abstract class IGherkinLine extends INullSafetyObject {
+  /// A sentinel line representing an invalid/absent line.
   static const empty = _EmptyGherkinLine();
 
+  /// Sentinel passed to [getLineText] to keep the entire line text.
   static const entireLine = 0;
 
   /// The number of whitespace characters in the beginning of the line.
   int get indent;
 
+  /// Whether this line is not the end-of-file marker.
   bool get isNotEof => !isEof;
 
+  /// Whether this line is the end-of-file marker.
   bool get isEof;
 
-  /// Called by the parser to indicate non-streamed reading (e.g. during look-ahead).
+  /// Called by the parser to indicate non-streamed reading (for example during
+  /// look-ahead).
   ///
-  /// If the implementation depends on streamed reading behavior, with this method,
-  /// it can clone itself, so that it will be detached.
+  /// If the implementation depends on streamed reading behavior, it can use
+  /// this method to clone itself so that it becomes detached.
   void detach();
 
   /// Returns the line text.
@@ -45,10 +52,11 @@ abstract class IGherkinLine extends INullSafetyObject {
   Iterable<GherkinLineSpan> get tags;
 
   /// Determines whether the beginning of the line (without whitespaces)
-  /// matches a specified title keyword (ie. a keyword followed by a ':' character).
+  /// matches a specified title keyword (that is, a keyword followed by a `:`
+  /// character).
   /// [keyword] is the keyword to compare.
-  /// Returns true if keyword matches the beginning of this line and followed
-  /// by a ':' character; otherwise, false.
+  /// Returns true if keyword matches the beginning of this line and is followed
+  /// by a `:` character; otherwise, false.
   bool startsWithTitleKeyword(String keyword);
 
   /// Tries parsing the line as table row and returns the trimmed cell values.

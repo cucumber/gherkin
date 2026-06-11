@@ -1,11 +1,15 @@
 import 'package:gherkin/language.dart';
 
+/// An error raised while parsing a Gherkin document.
 class ParserException implements Exception {
+  /// Creates an exception with a [message] and an optional source [location].
+  ParserException(this.message, [this.location = Location.empty]);
+
+  /// A human-readable description of the error.
   final String message;
 
+  /// The source location at which the error occurred, if known.
   final Location location;
-
-  ParserException(this.message, [this.location = Location.empty]);
 
   @override
   String toString() {

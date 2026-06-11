@@ -1,22 +1,22 @@
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/gherkin.dart';
 import 'package:gherkin/language.dart';
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 void main() {
   final idGenerator = IdGenerator.incrementingGenerator;
 
   test('Use this in readme', () async {
-    final paths = const <String>['../testdata/good/minimal.feature'];
-    final includeSource = false;
-    final includeAst = true;
-    final includePickles = true;
+    const paths = <String>['../testdata/good/minimal.feature'];
+    const includeSource = false;
+    const includeAst = true;
+    const includePickles = true;
     final envelopeStream = Gherkin.fromPaths(
       paths,
-      includeSource,
-      includeAst,
-      includePickles,
-      idGenerator,
+      includeSource: includeSource,
+      includeAst: includeAst,
+      includePickles: includePickles,
+      idGenerator: idGenerator,
     );
 
     final pickleStream = envelopeStream.where(
@@ -28,40 +28,40 @@ void main() {
   });
 
   test('Provides access to the ast', () async {
-    final paths = const <String>['../testdata/good/minimal.feature'];
-    final includeSource = false;
-    final includeAst = true;
-    final includePickles = false;
+    const paths = <String>['../testdata/good/minimal.feature'];
+    const includeSource = false;
+    const includeAst = true;
+    const includePickles = false;
     final envelopes =
         await Gherkin.fromPaths(
           paths,
-          includeSource,
-          includeAst,
-          includePickles,
-          idGenerator,
+          includeSource: includeSource,
+          includeAst: includeAst,
+          includePickles: includePickles,
+          idGenerator: idGenerator,
         ).toList();
 
     // Get the AST
-    var gherkinDocument = envelopes.first.gherkinDocument!;
+    final gherkinDocument = envelopes.first.gherkinDocument!;
 
     // Get the Feature node of the AST
-    var feature = gherkinDocument.feature!;
+    final feature = gherkinDocument.feature!;
     expect('Minimal', feature.name);
 
     // Get the first Scenario node of the Feature node
-    var scenario = feature.children.first.scenario!;
+    final scenario = feature.children.first.scenario!;
     expect('minimalistic', scenario.name);
   });
 
   test('Provides access to pickles which are compiled from the ast', () async {
-    final paths = const <String>['../testdata/good/scenario_outline.feature'];
+    const paths = <String>['../testdata/good/scenario_outline.feature'];
     final envelopes =
         await Gherkin.fromPaths(
           paths,
-          false,
-          false,
-          true,
-          idGenerator,
+          includeSource: false,
+          includeAst: false,
+          includePickles: true,
+          idGenerator: idGenerator,
         ).toList();
 
     // Get the first pickle
@@ -86,10 +86,10 @@ void main() {
     final envelopes =
         await Gherkin.fromSources(
           singletonList,
-          false,
-          true,
-          false,
-          idGenerator,
+          includeSource: false,
+          includeAst: true,
+          includePickles: false,
+          idGenerator: idGenerator,
         ).toList();
 
     final gherkinDocument = envelopes.first.gherkinDocument!;

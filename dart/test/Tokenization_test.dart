@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:gherkin/helpers.dart';
@@ -17,24 +16,26 @@ void main() {
 
     final dialectProvider = GherkinDialectProvider(languages);
 
-    for (var file in files) {
-      var fullPathToTestFeatureFile = file.path.replaceAll('\\', '/');
+    for (final file in files) {
+      final fullPathToTestFeatureFile = file.path.replaceAll(r'\', '/');
       final tokenMatcher =
           fullPathToTestFeatureFile.endsWith('.md')
               ? MarkdownTokenMatcher(dialectProvider)
               : TokenMatcher(dialectProvider);
-      var expectedTokensFile = '$fullPathToTestFeatureFile.tokens';
+      final expectedTokensFile = '$fullPathToTestFeatureFile.tokens';
 
-      print('Validating $expectedTokensFile ...');
-
-      var tokensText = TokensGenerator.generateTokens(
+      final tokensText = TokensGenerator.generateTokens(
         fullPathToTestFeatureFile,
         tokenMatcher,
       );
-      var tokens = await File(expectedTokensFile).readAsString(encoding: utf8);
-      var expectedTokensText = LineEndingHelper.normalizeLineEndings(tokens);
+      final tokens = await File(expectedTokensFile).readAsString();
+      final expectedTokensText = LineEndingHelper.normalizeLineEndings(tokens);
 
-      expect(tokensText, expectedTokensText);
+      expect(
+        tokensText,
+        expectedTokensText,
+        reason: 'Tokens mismatch for $expectedTokensFile',
+      );
     }
   });
 }

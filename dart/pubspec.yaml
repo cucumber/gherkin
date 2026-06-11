@@ -11,11 +11,11 @@ dependencies:
   characters: ^1.1.0
   cucumber_messages:
     path: ../../messages/dart
+  meta: ^1.16.0
   path: ^1.8.0
   uuid: ^4.0.0
 
 dev_dependencies:
-  lints: ^5.1.1
   test: ^1.31.0
 
 flutter:
