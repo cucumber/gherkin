@@ -17,6 +17,10 @@ void main(List<String> args) {
         path.endsWith('.md')
             ? MarkdownTokenMatcher(dialectProvider)
             : TokenMatcher(dialectProvider);
-    stdout.write(TokensGenerator.generateTokens(path, tokenMatcher));
+    // Emit a trailing newline so the final `EOF` line is newline-terminated,
+    // matching the reference implementations (e.g. Go uses `Fprintln` for
+    // every token, including EOF). `generateTokens` trims trailing newlines
+    // during normalization, so re-add one here via `writeln`.
+    stdout.writeln(TokensGenerator.generateTokens(path, tokenMatcher));
   }
 }

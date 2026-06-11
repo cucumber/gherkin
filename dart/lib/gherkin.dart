@@ -49,11 +49,11 @@ class GherkinParser {
   /// Parses the file at [path] and emits the resulting envelopes.
   Stream<messages.Envelope> parsePath(String path) {
     try {
-      // Normalize CRLF → LF so source data is consistent across platforms and
-      // matches the line-feed-only reference fixtures.
-      final data = File(
-        path,
-      ).readAsStringSync().replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+      // Read the file verbatim. The `source` envelope's `data` must preserve
+      // the original bytes (including CRLF), matching the other first-party
+      // implementations (e.g. Go sets `Data: string(in)`); the line scanner
+      // tolerates CRLF when classifying tokens.
+      final data = File(path).readAsStringSync();
       return parseEnvelope(makeSourceEnvelope(data, path));
     } on IOException catch (e) {
       throw GherkinException(e.toString(), e);
