@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-GHERKIN_LANGUAGES_JSON = assets/gherkin-languages.json
+GHERKIN_LANGUAGES_JSON = lib/src/assets/gherkin-languages.json
 GHERKIN = dart run bin/gherkin.dart
 GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
 
@@ -80,4 +80,5 @@ acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 .DELETE_ON_ERROR:
 
 $(GHERKIN_LANGUAGES_JSON):
+	mkdir -p $(@D)
 	cp ../gherkin-languages.json $@

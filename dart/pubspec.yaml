@@ -19,7 +19,3 @@ dev_dependencies:
   lints: ^5.0.0
   test: ^1.31.0
 
-flutter:
-  assets:
-    - assets/gherkin-languages.json
-
