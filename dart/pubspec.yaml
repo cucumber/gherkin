@@ -2,24 +2,21 @@ name: gherkin
 description: Gherkin parser/compiler for Dart.
 version: 0.0.1
 homepage: https://github.com/lamkr/cucumber-common
+publish_to: none
 
 environment:
-  sdk: '^3.1.0'
+  sdk: '^3.7.0'
 
 dependencies:
-  #flutter:
-  #  sdk: flutter
-  #cupertino_icons: ^1.0.3
-
   characters: ^1.1.0
-  uuid: ^4.0.0
+  cucumber_messages:
+    path: ../../messages/dart
   path: ^1.8.0
+  uuid: ^4.0.0
 
 dev_dependencies:
-  #flutter_test:
-    #sdk: flutter
-  pedantic: ^1.11.0
-  test: ^1.17.4
+  lints: ^5.1.1
+  test: ^1.31.0
 
 flutter:
   assets:

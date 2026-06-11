@@ -1,0 +1,17 @@
+enum TokenType {
+  none,
+  eof,
+  empty,
+  comment,
+  tagLine,
+  featureLine,
+  ruleLine,
+  backgroundLine,
+  scenarioLine,
+  examplesLine,
+  stepLine,
+  docStringSeparator,
+  tableRow,
+  language,
+  other,
+}

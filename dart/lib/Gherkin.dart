@@ -1,149 +1,230 @@
 import 'dart:io';
 
-import 'package:gherkin/ast.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart' as lang;
-import 'package:gherkin/messages.dart';
 import 'package:gherkin/parser.dart';
-import 'package:gherkin/pickles.dart';
-import 'package:gherkin/src/language/GherkinLanguageKeywords.dart';
+import 'package:gherkin/src/ast/messages_gherkin_document_builder.dart';
+import 'package:gherkin/src/pickles/messages_pickle_compiler.dart';
 
-class Gherkin
-{
-  final List<String> paths;
-  final List<Envelope> envelopes;
+class GherkinParser {
   final bool includeSource;
-  final bool includeAst;
+  final bool includeGherkinDocument;
   final bool includePickles;
+  final String defaultDialect;
   final lang.IdGenerator idGenerator;
 
-  late Map<String, GherkinLanguageKeywords> _languages;
-  late lang.IGherkinDialectProvider _dialectProvider;
-  late ITokenMatcher _tokenMatcher;
+  late final lang.IGherkinDialectProvider _dialectProvider;
 
-  Gherkin(this.paths, this.envelopes, this.includeSource, this.includeAst
-      , this.includePickles, this.idGenerator)
-  {
-    _languages = lang.loadGherkinLanguagesFromJsonAsset();
-    _dialectProvider = lang.GherkinDialectProvider(_languages);
-    _tokenMatcher = lang.TokenMatcher(_dialectProvider);
+  GherkinParser({
+    this.includeSource = true,
+    this.includeGherkinDocument = true,
+    this.includePickles = true,
+    this.defaultDialect = 'en',
+    lang.IdGenerator? idGenerator,
+  }) : idGenerator = idGenerator ?? lang.IdGenerator.uuidGenerator {
+    final languages = lang.loadGherkinLanguagesFromJsonAsset();
+    _dialectProvider = lang.GherkinDialectProvider(languages, defaultDialect);
   }
 
-  static Stream<Envelope> fromPaths(List<String> paths, bool includeSource
-      , bool includeAst, bool includePickles, lang.IdGenerator idGenerator)
-  {
-    return Gherkin(paths, <Envelope>[], includeSource, includeAst
-        , includePickles, idGenerator).messages();
-  }
+  static GherkinParserBuilder builder() => GherkinParserBuilder();
 
-  static Stream<Envelope> fromSources(List<Envelope> envelopes, bool includeSource
-      , bool includeAst, bool includePickles, lang.IdGenerator idGenerator)
-  {
-    return Gherkin(<String>[], envelopes, includeSource, includeAst
-        , includePickles, idGenerator).messages();
-  }
-
-  static Envelope makeSourceEnvelope(String data, String uri) {
-    final source = Source(uri, data, MediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN);
-    var envelope = Envelope();
-    envelope.source = source;
-    return envelope;
-  }
-
-  Stream<Envelope> messages() {
-    var envelopeStream = envelopes.isNotEmpty
-        ? Stream.fromIterable(envelopes)
-        : _envelopeStreamFromPaths(paths);
-    return envelopeStream
-        .expand((envelope)
-          => _parserMessageStream(envelope, includeSource, includeAst
-              , includePickles));
-  }
-
-  Stream<Envelope> _envelopeStreamFromPaths(List<String> paths) {
-    return Stream.fromIterable(paths).map(_envelopeFromPath);
-  }
-
-  Envelope _envelopeFromPath(String path) {
+  Stream<messages.Envelope> parsePath(String path) {
     try {
-      var data = File(path).readAsStringSync();
-      return makeSourceEnvelope(data, path);
-    }
-    on IOException catch (e) {
+      // Normalize CRLF → LF so source data is consistent across platforms and
+      // matches the line-feed-only reference fixtures.
+      final data = File(
+        path,
+      ).readAsStringSync().replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+      return parseEnvelope(makeSourceEnvelope(data, path));
+    } on IOException catch (e) {
       throw GherkinException(e.toString(), e);
     }
   }
 
-  Iterable<Envelope> _parserMessageStream(Envelope envelope, bool includeSource
-      , bool includeGherkinDocument, bool includePickles)
-  {
-    var messages = <Envelope>[];
+  Stream<messages.Envelope> parsePaths(Iterable<String> paths) {
+    return Stream.fromIterable(paths).asyncExpand(parsePath);
+  }
 
+  Stream<messages.Envelope> parseEnvelope(messages.Envelope envelope) async* {
     if (includeSource) {
-      messages.add(envelope);
+      yield envelope;
     }
-
-    if (envelope.source.isNotEmpty) {
-      final builder = GherkinDocumentBuilder(idGenerator);
-      final parser = Parser<GherkinDocument>(builder);
-      var source = envelope.source;
-      var uri = source.uri;
-      var data = source.data;
-
-      final tokenScanner = lang.StringTokenScanner(data);
-
-      try {
-        GherkinDocument gherkinDocument = GherkinDocument.empty;
-
-        if (includeGherkinDocument) {
-          gherkinDocument = parser.parse(tokenScanner, _tokenMatcher);
-          gherkinDocument.uri = uri;
-          var gherkinDocumentEnvelope = Envelope();
-          gherkinDocumentEnvelope.gherkinDocument = gherkinDocument;
-          messages.add(gherkinDocumentEnvelope);
-        }
-        if (includePickles) {
-          if (gherkinDocument.isEmpty) {
-            gherkinDocument = parser.parse(tokenScanner, _tokenMatcher);
-            gherkinDocument.uri = uri;
-          }
-          var pickleCompiler = PickleCompiler(idGenerator);
-          var pickles = pickleCompiler.compile(gherkinDocument, uri);
-          for (var pickle in pickles) {
-            var pickleEnvelope = Envelope();
-            pickleEnvelope.pickle = pickle;
-            messages.add(pickleEnvelope);
-          }
-        }
-      }
-      on CompositeParserException catch (e) {
-        for (var error in e.errors) {
-          _addParseError(messages, error, uri);
-        }
-      }
-      on ParserException catch (e) {
-        _addParseError(messages, e, uri);
-      }
+    final source = envelope.source;
+    if (source == null) {
+      return;
     }
-    return messages;
+    yield* Stream.fromIterable(_parseSource(source));
   }
 
-  void _addParseError(List<Envelope> messages, ParserException e, String uri) {
-    // We want 0 values not to be serialised, which is why we set them to null
-    // This is a legacy requirement brought over from old protobuf behaviour
-    final line = e.location.line == 0 ? Int.min : e.location.line;
-    final column = e.location.column == 0 ? Int.min : e.location.column;
-    final location = Location(line: line, column: column);
+  Stream<messages.Envelope> parseEnvelopes(
+    Stream<messages.Envelope> envelopes,
+  ) {
+    return envelopes.asyncExpand(parseEnvelope);
+  }
 
-    final sourceReference = SourceReference(
-        uri,
-        // TODO null, null,
-        location
+  List<messages.Envelope> _parseSource(messages.Source source) {
+    final result = <messages.Envelope>[];
+    if (!includeGherkinDocument && !includePickles) {
+      return result;
+    }
+
+    final builder = MessagesGherkinDocumentBuilder(idGenerator);
+    final parser = Parser<messages.GherkinDocument>(builder)
+      ..stopAtFirstError = false;
+    final tokenMatcher = _tokenMatcher(source.mediaType);
+    final tokenScanner = lang.StringTokenScanner(source.data);
+
+    try {
+      final gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
+      final gherkinDocumentWithUri = messages.GherkinDocument(
+        uri: source.uri,
+        feature: gherkinDocument.feature,
+        comments: gherkinDocument.comments,
+      );
+
+      if (includeGherkinDocument) {
+        result.add(messages.Envelope(gherkinDocument: gherkinDocumentWithUri));
+      }
+      if (includePickles) {
+        final pickleCompiler = MessagesPickleCompiler(idGenerator);
+        for (final pickle in pickleCompiler.compile(
+          gherkinDocumentWithUri,
+          source.uri,
+        )) {
+          result.add(messages.Envelope(pickle: pickle));
+        }
+      }
+    } on CompositeParserException catch (e) {
+      for (final error in e.errors) {
+        result.add(_parseErrorEnvelope(error, source.uri));
+      }
+    } on ParserException catch (e) {
+      result.add(_parseErrorEnvelope(e, source.uri));
+    }
+
+    return result;
+  }
+
+  ITokenMatcher _tokenMatcher(messages.SourceMediaType mediaType) {
+    switch (mediaType) {
+      case messages.SourceMediaType.textXCucumberGherkinPlain:
+        return lang.TokenMatcher(_dialectProvider);
+      case messages.SourceMediaType.textXCucumberGherkinMarkdown:
+        return lang.MarkdownTokenMatcher(_dialectProvider, defaultDialect);
+    }
+  }
+
+  messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
+    final line = error.location.line;
+    final column = error.location.column;
+    // Prefix the message with "(line:column): " to match the format produced
+    // by the other first-party Gherkin implementations.
+    final prefix = '($line:$column): ';
+    return messages.Envelope(
+      parseError: messages.ParseError(
+        source: messages.SourceReference(
+          uri: uri,
+          location:
+              line == 0
+                  ? null
+                  : messages.Location(
+                    line: line,
+                    column: column == 0 ? null : column,
+                  ),
+        ),
+        message: '$prefix${error.message}',
+      ),
     );
-    var parseError = ParseError(sourceReference, e.message);
-    var envelope = Envelope();
-    envelope.parseError = parseError;
-    messages.add(envelope);
   }
+
+  static messages.Envelope makeSourceEnvelope(String data, String uri) {
+    messages.SourceMediaType mediaType;
+    if (uri.endsWith('.feature')) {
+      mediaType = messages.SourceMediaType.textXCucumberGherkinPlain;
+    } else if (uri.endsWith('.md')) {
+      mediaType = messages.SourceMediaType.textXCucumberGherkinMarkdown;
+    } else {
+      throw ArgumentError('The uri ($uri) must end with .feature or .md');
+    }
+    return messages.Envelope(
+      source: messages.Source(uri: uri, data: data, mediaType: mediaType),
+    );
+  }
+}
+
+class GherkinParserBuilder {
+  bool _includeSource = true;
+  bool _includeGherkinDocument = true;
+  bool _includePickles = true;
+  String _defaultDialect = 'en';
+  lang.IdGenerator _idGenerator = lang.IdGenerator.uuidGenerator;
+
+  GherkinParserBuilder includeSource(bool includeSource) {
+    _includeSource = includeSource;
+    return this;
+  }
+
+  GherkinParserBuilder includeGherkinDocument(bool includeGherkinDocument) {
+    _includeGherkinDocument = includeGherkinDocument;
+    return this;
+  }
+
+  GherkinParserBuilder includePickles(bool includePickles) {
+    _includePickles = includePickles;
+    return this;
+  }
+
+  GherkinParserBuilder defaultDialect(String defaultDialect) {
+    _defaultDialect = defaultDialect;
+    return this;
+  }
+
+  GherkinParserBuilder idGenerator(lang.IdGenerator idGenerator) {
+    _idGenerator = idGenerator;
+    return this;
+  }
+
+  GherkinParser build() => GherkinParser(
+    includeSource: _includeSource,
+    includeGherkinDocument: _includeGherkinDocument,
+    includePickles: _includePickles,
+    defaultDialect: _defaultDialect,
+    idGenerator: _idGenerator,
+  );
+}
+
+class Gherkin {
+  static Stream<messages.Envelope> fromPaths(
+    List<String> paths,
+    bool includeSource,
+    bool includeAst,
+    bool includePickles,
+    lang.IdGenerator idGenerator,
+  ) {
+    return GherkinParser(
+      includeSource: includeSource,
+      includeGherkinDocument: includeAst,
+      includePickles: includePickles,
+      idGenerator: idGenerator,
+    ).parsePaths(paths);
+  }
+
+  static Stream<messages.Envelope> fromSources(
+    List<messages.Envelope> envelopes,
+    bool includeSource,
+    bool includeAst,
+    bool includePickles,
+    lang.IdGenerator idGenerator,
+  ) {
+    return GherkinParser(
+      includeSource: includeSource,
+      includeGherkinDocument: includeAst,
+      includePickles: includePickles,
+      idGenerator: idGenerator,
+    ).parseEnvelopes(Stream.fromIterable(envelopes));
+  }
+
+  static messages.Envelope makeSourceEnvelope(String data, String uri) =>
+      GherkinParser.makeSourceEnvelope(data, uri);
 }

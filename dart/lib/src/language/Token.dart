@@ -1,23 +1,25 @@
 import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-import 'GherkinLineSpan.dart';
-import 'IGherkinDialect.dart';
-import 'IGherkinLine.dart';
-import 'Location.dart';
-import 'TokenType.dart';
+import 'gherkin_line_span.dart';
+import 'i_gherkin_dialect.dart';
+import 'i_gherkin_line.dart';
+import 'location.dart';
+import 'token_type.dart';
 
-class Token implements INullSafetyObject
-{
+class Token implements INullSafetyObject {
   static Token get empty => _InvalidToken();
 
   IGherkinLine line = IGherkinLine.empty;
 
   Location location = Location.empty;
 
-  TokenType matchedType = TokenType.None;
+  TokenType matchedType = TokenType.none;
 
   String matchedKeyword = Strings.empty;
+
+  messages.StepKeywordType? matchedKeywordType;
 
   String matchedText = Strings.empty;
 
@@ -40,11 +42,10 @@ class Token implements INullSafetyObject
   }
 
   @override
-  String toString() =>
-      '${matchedType.name}: $matchedKeyword/$matchedText';
+  String toString() => '${matchedType.wireName}: $matchedKeyword/$matchedText';
 
   @override
-  bool get isEmpty => false;/*line.isEmpty
+  bool get isEmpty => false; /*line.isEmpty
       && location.isEmpty
       && matchedKeyword.isEmpty
       && matchedText.isEmpty
@@ -56,11 +57,10 @@ class Token implements INullSafetyObject
 }
 
 /// Convenience implementation of an invalid [Token] instance.
-class _InvalidToken extends Token
-{
+class _InvalidToken extends Token {
   _InvalidToken() : super(IGherkinLine.empty, Location.empty) {
     matchedGherkinDialect = IGherkinDialect.empty;
-    matchedType = TokenType.None;
+    matchedType = TokenType.none;
     matchedKeyword = Strings.empty;
     matchedText = Strings.empty;
     matchedItems = const <GherkinLineSpan>[];

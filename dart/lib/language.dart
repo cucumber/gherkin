@@ -1,17 +1,17 @@
-library gherkin.language;
+library;
 
-export 'src/language/GherkinDialect.dart';
-export 'src/language/GherkinDialectProvider.dart';
-export 'src/language/GherkinLineSpan.dart';
-export 'src/language/GherkinLine.dart';
-export 'src/language/IGherkinDialectProvider.dart';
-export 'src/language/IdGenerator.dart';
-export 'src/language/IGherkinLine.dart';
-export 'src/language/Location.dart';
-export 'src/language/Token.dart';
-export 'src/language/TokenMatcher.dart';
-export 'src/language/TokenType.dart';
-export 'src/language/FileTokenScanner.dart';
-export 'src/language/StringTokenScanner.dart';
-
-
+export 'src/language/gherkin_dialect.dart';
+export 'src/language/gherkin_dialect_provider.dart';
+export 'src/language/gherkin_line_span.dart';
+export 'src/language/gherkin_line.dart';
+export 'src/language/i_gherkin_dialect_provider.dart';
+export 'src/language/i_gherkin_dialect.dart';
+export 'src/language/id_generator.dart';
+export 'src/language/i_gherkin_line.dart';
+export 'src/language/location.dart';
+export 'src/language/token.dart';
+export 'src/language/token_matcher.dart';
+export 'src/language/markdown_token_matcher.dart';
+export 'src/language/token_type.dart';
+export 'src/language/file_token_scanner.dart';
+export 'src/language/string_token_scanner.dart';

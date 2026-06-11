@@ -1,6 +1,6 @@
-library gherkin.tokens;
+library;
 
-export 'src/tokens/object.dart';
-export 'src/tokens/TestTokenFormatter.dart';
-export 'src/tokens/TokensGenerator.dart';
-export 'src/tokens/TokenFormatterBuilder.dart';
+export 'src/tokens/no_op_result.dart';
+export 'src/tokens/test_token_formatter.dart';
+export 'src/tokens/tokens_generator.dart';
+export 'src/tokens/token_formatter_builder.dart';

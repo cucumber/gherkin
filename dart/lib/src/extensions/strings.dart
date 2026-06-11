@@ -2,8 +2,7 @@ class Strings {
   static const empty = '';
 }
 
-extension StringExtensions on String
-{
+extension StringExtensions on String {
   /// Indicates whether a specified string is `empty` or consists only
   /// of `white-space` characters.
   bool get isEmptyOrWhiteSpace => trim().isEmpty;
@@ -13,36 +12,33 @@ extension StringExtensions on String
   ///
   /// The [limit] parameter is used to decide how many times is to split
   /// the string.
-  List<String> splitWithLimit(Pattern pattern, {int limit=0}) {
-    if( limit == 0 ) {
+  List<String> splitWithLimit(Pattern pattern, {int limit = 0}) {
+    if (limit == 0) {
       return split(pattern);
     }
     var result = <String>[];
     // Positive.
-    if( limit > 0 ) {
+    if (limit > 0) {
       var parts = split(pattern);
-      if( parts.isNotEmpty ) {
+      if (parts.isNotEmpty) {
         --limit;
         var index = 0;
         while (index < limit && index < parts.length) {
           result.add(parts[index]);
           index++;
         }
-        if( result.isEmpty ) {
+        if (result.isEmpty) {
           result.add(this);
-        }
-        else if( index < parts.length ) {
-          final lastPart = result[result.length-1];
+        } else if (index < parts.length) {
+          final lastPart = result[result.length - 1];
           var start = indexOf(lastPart);
-          var complement = substring(start+lastPart.length+1);
+          var complement = substring(start + lastPart.length + 1);
           result.add(complement);
         }
-      }
-      else {
+      } else {
         result.add(this);
       }
-    }
-    else {
+    } else {
       throw UnimplementedError('splitWithLimit do not supports negative limit');
     }
     return result;
@@ -67,17 +63,17 @@ extension StringExtensions on String
 
   /// Removes all trailing occurrences of a character specified in an string.
   /// The default value of [trimChar] is an white-space.
-  String trimEnd([String trimChar=' ']) {
-    if(trimChar.length > 1 || trimChar.isEmpty) {
+  String trimEnd([String trimChar = ' ']) {
+    if (trimChar.length > 1 || trimChar.isEmpty) {
       throw ArgumentError('trimChar must be one char and cannot be empty');
     }
     var index = length - 1;
-    for( ; index > 0; index-- ) {
-      if( this[index] != trimChar) {
+    for (; index > 0; index--) {
+      if (this[index] != trimChar) {
         break;
       }
     }
-    return substring(0, index+1);
+    return substring(0, index + 1);
   }
 
   /*int codePointCount(int beginIndex, int endIndex) {

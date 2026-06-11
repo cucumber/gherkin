@@ -1,12 +1,10 @@
-library gherkin.exceptions;
+library;
 
-export 'src/exceptions/GherkinException.dart';
-export 'src/exceptions/NoSuchLanguageException.dart';
-export 'src/exceptions/ParserException.dart';
-export 'src/exceptions/CompositeParserException.dart';
-export 'src/exceptions/TokenParserException.dart';
-export 'src/exceptions/UnexpectedEofException.dart';
-export 'src/exceptions/UnexpectedTokenException.dart';
-export 'src/exceptions/AstBuilderException.dart';
-
-
+export 'src/exceptions/gherkin_exception.dart';
+export 'src/exceptions/no_such_language_exception.dart';
+export 'src/exceptions/parser_exception.dart';
+export 'src/exceptions/composite_parser_exception.dart';
+export 'src/exceptions/token_parser_exception.dart';
+export 'src/exceptions/unexpected_eof_exception.dart';
+export 'src/exceptions/unexpected_token_exception.dart';
+export 'src/exceptions/ast_builder_exception.dart';

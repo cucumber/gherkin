@@ -1,3 +1,3 @@
-library gherkin.helpers;
+library;
 
-export 'src/helpers/LineEndingHelper.dart';
+export 'src/helpers/line_ending_helper.dart';

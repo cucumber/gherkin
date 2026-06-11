@@ -1,8 +1,7 @@
 import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
 
-class Location implements INullSafetyObject
-{
+class Location implements INullSafetyObject {
   final int line;
   final int column;
 
@@ -18,8 +17,7 @@ class Location implements INullSafetyObject
 }
 
 /// Convenience implementation of an invalid [Location] instance.
-class _InvalidLocation extends Location
-{
+class _InvalidLocation extends Location {
   const _InvalidLocation() : super(Int.min, Int.min);
 
   @override

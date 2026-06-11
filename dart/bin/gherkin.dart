@@ -1,20 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:gherkin/Gherkin.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
+import 'package:gherkin/gherkin.dart';
 import 'package:gherkin/exceptions.dart';
 import 'package:gherkin/language.dart';
-import 'package:gherkin/messages.dart';
 
-void main(List<String> args) async
-{
+Future<void> main(List<String> args) async {
   var includeSource = true;
   var includeAst = true;
   var includePickles = true;
-  var paths = <String>[];
+  var defaultDialect = 'en';
   var idGenerator = IdGenerator.uuidGenerator;
+  final paths = <String>[];
 
-  for( var arg in args ) {
-    switch(arg) {
+  for (var i = 0; i < args.length; i++) {
+    final arg = args[i];
+    switch (arg) {
       case '--no-source':
         includeSource = false;
         break;
@@ -27,30 +29,47 @@ void main(List<String> args) async
       case '--predictable-ids':
         idGenerator = IdGenerator.incrementingGenerator;
         break;
+      case '--default-dialect':
+        if (i + 1 >= args.length) {
+          throw ArgumentError('--default-dialect requires a value');
+        }
+        defaultDialect = args[++i];
+        break;
       default:
-        paths.add(arg);
+        if (arg.startsWith('--default-dialect=')) {
+          defaultDialect = arg.substring('--default-dialect='.length);
+        } else {
+          paths.add(arg);
+        }
     }
+  }
 
-    var messageWriter = makeMessageWriter();
+  final parser = GherkinParser(
+    includeSource: includeSource,
+    includeGherkinDocument: includeAst,
+    includePickles: includePickles,
+    defaultDialect: defaultDialect,
+    idGenerator: idGenerator,
+  );
 
-    var messages = Gherkin.fromPaths(paths, includeSource
-        , includeAst, includePickles, idGenerator);
-    printMessages(messageWriter, messages);
+  final envelopeStream =
+      paths.isEmpty
+          ? parser.parseEnvelopes(
+            messages.decodeNdjsonEnvelopes(
+              stdin.transform(utf8.decoder).transform(const LineSplitter()),
+            ),
+          )
+          : parser.parsePaths(paths);
+
+  await printMessages(envelopeStream);
+}
+
+Future<void> printMessages(Stream<messages.Envelope> messagesStream) async {
+  try {
+    await for (final line in messages.encodeNdjsonEnvelopes(messagesStream)) {
+      stdout.write(line);
+    }
+  } on IOException catch (e) {
+    throw GherkinException("Couldn't print messages", e);
   }
 }
-
-IMessageWriter makeMessageWriter() {
-  return MessageToNdjsonWriter(stdout);
-}
-
-void printMessages(IMessageWriter messageWriter, Stream<Envelope> messages) {
-  messages.forEach((envelope) {
-    try {
-      messageWriter.write(envelope);
-    }
-    on IOException catch (e) {
-      throw GherkinException("Couldn't print messages", e);
-    }
-  });
-}
-

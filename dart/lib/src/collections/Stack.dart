@@ -1,6 +1,4 @@
-class Stack<T>
-{
-
+class Stack<T> {
   final List<T> _list = <T>[];
 
   /// Check if the stack is empty.
@@ -13,8 +11,7 @@ class Stack<T>
   void push(T value) => _list.insert(0, value);
 
   /// Get the top of the stack and delete it.
-  T pop() =>
-    _list.removeAt(0);
+  T pop() => _list.removeAt(0);
 
   // final ListQueue<T> _list;
   //
