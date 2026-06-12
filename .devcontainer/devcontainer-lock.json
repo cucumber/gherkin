@@ -1,0 +1,77 @@
+{
+  "features": {
+    "ghcr.io/devcontainer-community/devcontainer-features/apt-build-essential:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/apt-build-essential@sha256:e396b09fdd04aef5ca8d35b9957547142761575575513d12fd8dc3c98c1728f8",
+      "integrity": "sha256:e396b09fdd04aef5ca8d35b9957547142761575575513d12fd8dc3c98c1728f8"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/ccache.dev:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/ccache.dev@sha256:7288d603484d8c40c7d1c3b2c09ef7599fe50a9fcd8d5cf5f6118311e328f061",
+      "integrity": "sha256:7288d603484d8c40c7d1c3b2c09ef7599fe50a9fcd8d5cf5f6118311e328f061"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/clang-format:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/clang-format@sha256:fd4a701f3d067e74caa5e8e229eaf13e45e85385dcac5ad81401c4e7678b735e",
+      "integrity": "sha256:fd4a701f3d067e74caa5e8e229eaf13e45e85385dcac5ad81401c4e7678b735e"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/clang-tidy:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/clang-tidy@sha256:e120a41ca26d1638ffd5407a1c27cd75ee1b79c9bce1b7f17ede2fa20bc6d5b5",
+      "integrity": "sha256:e120a41ca26d1638ffd5407a1c27cd75ee1b79c9bce1b7f17ede2fa20bc6d5b5"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/cmake.org:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/cmake.org@sha256:3f498a612eb69d006535cbe49bc7344108a7106e116cc85123d5e7bfcbe79a6e",
+      "integrity": "sha256:3f498a612eb69d006535cbe49bc7344108a7106e116cc85123d5e7bfcbe79a6e"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/collection-c-cpp:1": {
+      "version": "1.0.3",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/collection-c-cpp@sha256:f9c47d6a760dd17d54a96ba35958c40afea09d7b9b9975b2f44803469045c325",
+      "integrity": "sha256:f9c47d6a760dd17d54a96ba35958c40afea09d7b9b9975b2f44803469045c325",
+      "dependsOn": [
+        "ghcr.io/devcontainer-community/devcontainer-features/cmake.org:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/ninja-build.org:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/sourceware.org-gdb:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/valgrind.org:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/ccache.dev:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/danmar-cppcheck:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/clang-format:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/clang-tidy:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/distcc.org:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/vcpkg.io:latest",
+        "ghcr.io/devcontainer-community/devcontainer-features/apt-build-essential:latest"
+      ]
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/danmar-cppcheck:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/danmar-cppcheck@sha256:7b1fa136d884d4f90b3696b20713753e5d5d2507c7b589a9adc37f784d2bdc56",
+      "integrity": "sha256:7b1fa136d884d4f90b3696b20713753e5d5d2507c7b589a9adc37f784d2bdc56"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/distcc.org:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/distcc.org@sha256:7a1c3a4c76cd4200ae2773268eee9372c620f05806faa3c7b8bb487c57ffe391",
+      "integrity": "sha256:7a1c3a4c76cd4200ae2773268eee9372c620f05806faa3c7b8bb487c57ffe391"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/ninja-build.org:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/ninja-build.org@sha256:9df3174efc44643c61204fb1b1c0579a091f433246b581d88c7419f6cd4de3ac",
+      "integrity": "sha256:9df3174efc44643c61204fb1b1c0579a091f433246b581d88c7419f6cd4de3ac"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/sourceware.org-gdb:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/sourceware.org-gdb@sha256:c6db6642afafecd431b655dad060e3b3998a46884473cb2a21bf867d4bd30528",
+      "integrity": "sha256:c6db6642afafecd431b655dad060e3b3998a46884473cb2a21bf867d4bd30528"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/valgrind.org:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/valgrind.org@sha256:0422a1ed5cdd2e1b997be8c5f67f729d94f9f1b51ad6144b3e9c0346a7347bba",
+      "integrity": "sha256:0422a1ed5cdd2e1b997be8c5f67f729d94f9f1b51ad6144b3e9c0346a7347bba"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/vcpkg.io:latest": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainer-community/devcontainer-features/vcpkg.io@sha256:aa1c839509ab397336da9c187c89b16e5cb85666f1c8756a2919f401ed3b44ae",
+      "integrity": "sha256:aa1c839509ab397336da9c187c89b16e5cb85666f1c8756a2919f401ed3b44ae"
+    }
+  }
+}
