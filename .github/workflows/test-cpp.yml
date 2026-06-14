@@ -64,7 +64,7 @@ jobs:
 
       - name: Install build tools (macos)
         if: startsWith(matrix.config.os, 'macos')
-        run: brew install ccache
+        run: brew install ccache llvm@${{ matrix.config.version }}
 
       - name: Cache CPM packages
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
@@ -81,12 +81,20 @@ jobs:
           key: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
           restore-keys: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-
 
-      - name: Configure (non-Windows)
-        if: "!startsWith(matrix.config.os, 'windows')"
+      - name: Configure (ubuntu)
+        if: startsWith(matrix.config.os, 'ubuntu')
         working-directory: cpp
         run: >
           cmake --preset host
           -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}-${{ matrix.config.version }}
+          "-DCPM_SOURCE_CACHE=${{ env.CPM_SOURCE_CACHE }}"
+
+      - name: Configure (macos)
+        if: startsWith(matrix.config.os, 'macos')
+        working-directory: cpp
+        run: >
+          cmake --preset host
+          "-DCMAKE_CXX_COMPILER=$(brew --prefix llvm@${{ matrix.config.version }})/bin/clang++"
           "-DCPM_SOURCE_CACHE=${{ env.CPM_SOURCE_CACHE }}"
 
       - name: Configure (Windows)
