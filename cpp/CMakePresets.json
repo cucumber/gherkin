@@ -8,8 +8,7 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "On",
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CPM_SOURCE_CACHE": "${sourceDir}/build/.cache/CPM"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ],

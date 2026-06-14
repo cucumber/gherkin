@@ -30,6 +30,9 @@
 				"ms-vscode.cmake-tools"
 			]
 		}
+	},
+	"remoteEnv": {
+		"CPM_SOURCE_CACHE": "/cache/.cpm"
 	}
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
