@@ -102,30 +102,57 @@ jobs:
         run: ctest --preset host --test-dir build/host
 
   test-cpp-acceptance:
+    env:
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+
     strategy:
       fail-fast: false
       matrix:
         config:
           - os: ubuntu-latest
-            cc: gcc
+            cxx: g++
           - os: ubuntu-latest
-            cc: clang
+            cxx: clang++
           - os: macos-latest
-            cc: clang
+            cxx: clang++
           # Doesn't work on windows. See: https://github.com/cucumber/gherkin/issues/412
           # If fixed, please merge test-cpp and test-cpp-acceptance
           # - os: windows-latest
           #  cc: cl
+
     runs-on: ${{ matrix.config.os }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
 
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-        if: startsWith(matrix.config.os, 'windows')
+      - name: Install build tools (ubuntu)
+        if: startsWith(matrix.config.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache
+
+      - name: Install build tools (macos)
+        if: startsWith(matrix.config.os, 'macos')
+        run: brew install ccache
+
+      - name: Cache CPM packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+          restore-keys: cpm-
+
+      - name: Cache ccache
+        if: "!startsWith(matrix.config.os, 'windows')"
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ github.ref }}
+          restore-keys: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-
 
       - name: run acceptance tests
         working-directory: cpp
-        run: |
-          make acceptance
+        run: make acceptance
