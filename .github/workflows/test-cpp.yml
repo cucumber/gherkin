@@ -31,23 +31,21 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - os: ubuntu-22.04
-            cxx: g++
-            version: [10, 11, 12]
-          - os: ubuntu-24.04
-            cxx: g++
-            version: [12, 13, 14]
-          - os: ubuntu-22.04
-            cxx: clang++
-            version: [13, 14, 15]
-          - os: ubuntu-24.04
-            cxx: clang++
-            version: [16, 17, 18, 19]
-          - os: macos-latest
-            cxx: clang++
-            version: [17]
-          - os: windows-latest
-            cxx: cl
+          - { os: ubuntu-22.04, cxx: g++,      version: 10 }
+          - { os: ubuntu-22.04, cxx: g++,      version: 11 }
+          - { os: ubuntu-22.04, cxx: g++,      version: 12 }
+          - { os: ubuntu-24.04, cxx: g++,      version: 12 }
+          - { os: ubuntu-24.04, cxx: g++,      version: 13 }
+          - { os: ubuntu-24.04, cxx: g++,      version: 14 }
+          - { os: ubuntu-22.04, cxx: clang++,  version: 13 }
+          - { os: ubuntu-22.04, cxx: clang++,  version: 14 }
+          - { os: ubuntu-22.04, cxx: clang++,  version: 15 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 16 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 17 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 18 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 19 }
+          - { os: macos-latest, cxx: clang++,  version: 17 }
+          - { os: windows-latest, cxx: cl }
 
     runs-on: ${{ matrix.config.os }}
     steps:
