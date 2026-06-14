@@ -15,8 +15,8 @@ HERE = $(shell pwd)
 CMAKE_BUILDROOT = $(HERE)/build/root
 CMAKELISTS = $(shell find src -name CMakeLists.txt)
 
-GHERKIN = stage/bin/gherkin
-GHERKIN_GENERATE_TOKENS = stage/bin/gherkin-generate-tokens
+GHERKIN = install/bin/gherkin
+GHERKIN_GENERATE_TOKENS = install/bin/gherkin-generate-tokens
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
@@ -68,7 +68,7 @@ acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build ac
 
 .built: $(SOURCE_FILES)
 	cmake --preset host
-	cmake --build --preset host
+	cmake --build --preset host --target install
 	touch $@
 
 define berp-generate-parser =
