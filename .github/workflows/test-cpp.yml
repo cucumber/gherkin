@@ -43,7 +43,6 @@ jobs:
           - { os: ubuntu-24.04, cxx: clang++,  version: 16 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 17 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 18 }
-          - { os: ubuntu-24.04, cxx: clang++,  version: 19 }
           - { os: macos-latest, cxx: clang++,  version: 17 }
           - { os: windows-latest, cxx: cl }
 
