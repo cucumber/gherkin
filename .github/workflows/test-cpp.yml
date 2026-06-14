@@ -129,6 +129,9 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+        if: startsWith(matrix.config.os, 'windows')
+
       - name: Install build tools (ubuntu)
         if: startsWith(matrix.config.os, 'ubuntu')
         run: |
