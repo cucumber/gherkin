@@ -26,6 +26,7 @@ jobs:
     env:
       CCACHE_BASEDIR: ${{ github.workspace }}
       CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
 
     strategy:
       fail-fast: false
@@ -68,7 +69,7 @@ jobs:
       - name: Cache CPM packages
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
-          path: ~/.cpm
+          path: ${{ env.CPM_SOURCE_CACHE }}
           key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
           restore-keys: cpm-
 
@@ -86,14 +87,14 @@ jobs:
         run: >
           cmake --preset host
           -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}-${{ matrix.config.version }}
-          -DCPM_SOURCE_CACHE=~/.cpm
+          "-DCPM_SOURCE_CACHE=${{ env.CPM_SOURCE_CACHE }}"
 
       - name: Configure (Windows)
         if: startsWith(matrix.config.os, 'windows')
         working-directory: cpp
         run: >
           cmake --preset host
-          -DCPM_SOURCE_CACHE=~/.cpm
+          "-DCPM_SOURCE_CACHE=${{ env.CPM_SOURCE_CACHE }}"
 
       - name: Build
         working-directory: cpp
