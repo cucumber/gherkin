@@ -17,5 +17,11 @@
             "name": "host",
             "configurePreset": "host"
         }
+    ],
+    "testPresets": [
+        {
+            "name": "host",
+            "configurePreset": "host"
+        }
     ]
 }

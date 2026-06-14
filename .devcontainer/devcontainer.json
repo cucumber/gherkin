@@ -1,36 +1,6 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+// README at: https://github.com/devcontainers/templates/tree/main/src/alpine
 {
-	"name": "Ubuntu",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:resolute",
-	"features": {
-		"ghcr.io/devcontainer-community/devcontainer-features/collection-c-cpp:1": {}
-	},
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
-	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"settings": {
-				"clangd.arguments": [
-					"--compile-commands-dir=${userHome}/.cpp"
-				],
-				"cmake.copyCompileCommands": "${userHome}/.cpp/compile_commands.json",
-				"cmake.ignoreCMakeListsMissing": true,
-				"cmake.sourceDirectory": "${workspaceFolder}/cpp",
-				"cmake.useCMakePresets": "auto"
-			},
-			"extensions": [
-				"llvm-vs-code-extensions.vscode-clangd",
-				"ms-vscode.cmake-tools"
-			]
-		}
-	}
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	"name": "Alpine",
+	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.22"
 }
