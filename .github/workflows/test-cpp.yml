@@ -117,6 +117,7 @@ jobs:
             cxx: clang++
           - os: macos-latest
             cxx: clang++
+          - os: windows-latest
           # Doesn't work on windows. See: https://github.com/cucumber/gherkin/issues/412
           # If fixed, please merge test-cpp and test-cpp-acceptance
           # - os: windows-latest
