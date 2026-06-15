@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - cpp/**
+      - Makefile
       - testdata/**
       - .github/**
   pull_request:
@@ -15,6 +16,7 @@ on:
       - main
     paths:
       - cpp/**
+      - Makefile
       - testdata/**
       - .github/**
   schedule:
@@ -27,28 +29,57 @@ concurrency:
 
 jobs:
   analyze:
+    env:
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+
     name: Analyze C++
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
     permissions:
       security-events: write
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache
+
+      - name: Cache CPM packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+          restore-keys: cpm-
+
+      - name: Cache ccache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-analysis-${{ github.ref }}
+          restore-keys: ccache-analysis-
+
       - uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         with:
           languages: c-cpp
           build-mode: manual
           tools: linked
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-      - name: install dependencies
+
+      - name: Configure
         working-directory: cpp
-        run: |
-          cmake -P cmake/cmate --cc=gcc install
-      - name: configure and build
+        run: cmake --preset host
+
+      - name: Build
         working-directory: cpp
-        run: |
-          cmake -P cmake/cmate --cc=gcc build --release
+        run: cmake --build --preset host
+
+      - name: Test
+        working-directory: cpp
+        run: ctest --preset host --test-dir build/host
+
       - uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         with:
           category: "/language:cpp"
