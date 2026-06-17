@@ -164,5 +164,5 @@ jobs:
       - name: create test output
         if: failure()
         working-directory: cpp
-        run: install/bin/gherkin --testme | jq --compact-output "."
+        run: install\bin\gherkin --testme | jq --compact-output "."
         shell: cmd

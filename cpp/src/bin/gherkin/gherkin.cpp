@@ -76,7 +76,8 @@ int main(int ac, char** av)
     }
 
     if (opts.testme){
-        std::cout << "{\"n\": \"value\n\nvalue\", \"rn\": \"value\r\nvalue\"}" << std::endl;
+        std::cout << "{\"n\": \"value\\n\\nvalue\", \"rn\": \"value\\r\\nvalue\"}" << std::endl;
+        return 0;
     }
 
     cucumber::gherkin::app app;
