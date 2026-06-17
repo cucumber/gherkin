@@ -169,4 +169,4 @@ jobs:
       - name: cat test output
         if: failure()
         working-directory: cpp
-        run: cat testme.ndjson
+        run: jq --compact-output "." testme.ndjson
