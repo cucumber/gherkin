@@ -164,9 +164,4 @@ jobs:
       - name: create test output
         if: failure()
         working-directory: cpp
-        run: install/bin/gherkin --testme > testme.ndjson
-
-      - name: cat test output
-        if: failure()
-        working-directory: cpp
-        run: jq --compact-output "." testme.ndjson
+        run: install/bin/gherkin --testme | jq --compact-output "." testme.ndjson
