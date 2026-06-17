@@ -161,12 +161,12 @@ jobs:
         working-directory: cpp
         run: make acceptance
 
-      - name: cat actual output
+      - name: create test output
         if: failure()
         working-directory: cpp
-        run: cat acceptance/testdata/good/background.feature.source.ndjson
+        run: install/bin/gherkin --testme > testme.ndjson
 
-      - name: cat expected output
+      - name: cat test output
         if: failure()
         working-directory: cpp
-        run: cat ../testdata/good/background.feature.source.ndjson
+        run: cat testme.ndjson

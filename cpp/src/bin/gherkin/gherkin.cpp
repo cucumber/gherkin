@@ -5,6 +5,7 @@
 
 struct options
 {
+    bool testme = false;
     bool exit = false;
     int exit_code = 0;
     int last_arg = 0;
@@ -22,7 +23,9 @@ parse_options(int ac, char** av)
     for (opts.last_arg = 1; opts.last_arg < ac; ++opts.last_arg) {
         std::string_view arg(av[opts.last_arg]);
 
-        if (arg == "--no-source") {
+        if(arg == "--testme"){
+            opts.testme = true;
+        }else if (arg == "--no-source") {
             opts.include_source = false;
         } else if (arg == "--no-ast") {
             opts.include_ast = false;
@@ -70,6 +73,10 @@ int main(int ac, char** av)
 
     if (opts.exit) {
         return opts.exit_code;
+    }
+
+    if (opts.testme){
+        std::cout << "{\"n\": \"value\n\nvalue\", \"rn\": \"value\r\nvalue\"}" << std::endl;
     }
 
     cucumber::gherkin::app app;
