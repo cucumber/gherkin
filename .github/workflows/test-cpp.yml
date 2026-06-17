@@ -162,9 +162,11 @@ jobs:
         run: make acceptance
 
       - name: cat actual output
+        if: failure()
         working-directory: cpp
         run: cat acceptance/testdata/good/background.feature.source.ndjson
 
       - name: cat expected output
+        if: failure()
         working-directory: cpp
         run: cat ../testdata/good/background.feature.source.ndjson
