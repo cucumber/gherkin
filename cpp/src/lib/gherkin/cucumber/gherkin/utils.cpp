@@ -1,9 +1,11 @@
 #include <cwchar>
+#include <iomanip>
 #include <locale>
 #include <fstream>
 #include <filesystem>
 #include <string_view>
 #include <regex>
+#include <iostream>
 
 #include <cucumber/gherkin/utils.hpp>
 
@@ -24,6 +26,8 @@ slurp(const std::string& path)
 
         ifs.read(bytes.data(), fsize);
         ifs.close();
+
+        std::cerr << "Read raw :"<< std::quoted(bytes) << std::endl;
     }
 
     return bytes;

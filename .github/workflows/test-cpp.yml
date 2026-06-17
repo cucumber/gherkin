@@ -160,9 +160,3 @@ jobs:
       - name: run acceptance tests
         working-directory: cpp
         run: make acceptance
-
-      - name: create test output
-        if: failure()
-        working-directory: cpp
-        run: install\bin\gherkin --testme | jq --compact-output "."
-        shell: cmd
