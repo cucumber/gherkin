@@ -160,3 +160,11 @@ jobs:
       - name: run acceptance tests
         working-directory: cpp
         run: make acceptance
+
+      - name: cat actual output
+        working-directory: cpp
+        run: cat acceptance/testdata/good/background.feature.source.ndjson
+
+      - name: cat expected output
+        working-directory: cpp
+        run: cat ../testdata/good/background.feature.source.ndjson
