@@ -165,3 +165,4 @@ jobs:
         if: failure()
         working-directory: cpp
         run: install/bin/gherkin --testme | jq --compact-output "."
+        shell: cmd
