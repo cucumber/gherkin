@@ -1,0 +1,2 @@
+# in testdata/.gitattributes
+**/*.ndjson text eol=lf
