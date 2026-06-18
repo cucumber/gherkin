@@ -87,24 +87,24 @@ src/lib/$(SUB_DIR)/dialect.cpp: ../gherkin-languages.json dialect.cpp.jq
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
 	$(GHERKIN_GENERATE_TOKENS) $< > $@
-	diff --unified $<.tokens $@
+	diff --unified --strip-trailing-cr $<.tokens $@
 
 acceptance/testdata/%.ast.ndjson: ../testdata/% ../testdata/%.ast.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-source --no-pickles --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-	diff --unified <(jq "." $<.ast.ndjson) <(jq "." $@)
+	diff --unified --strip-trailing-cr <(jq "." $<.ast.ndjson) <(jq "." $@)
 
 acceptance/testdata/%.pickles.ndjson: ../testdata/% ../testdata/%.pickles.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-source --no-ast --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-	diff --unified <(jq "." $<.pickles.ndjson) <(jq "." $@)
+	diff --unified --strip-trailing-cr <(jq "." $<.pickles.ndjson) <(jq "." $@)
 
 acceptance/testdata/%.source.ndjson: ../testdata/% ../testdata/%.source.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-ast --no-pickles --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-	diff --unified <(jq "." $<.source.ndjson) <(jq "." $@)
+	diff --unified --strip-trailing-cr <(jq "." $<.source.ndjson) <(jq "." $@)
 
 acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 	mkdir -p $(@D)
 	$(GHERKIN) --no-source --predictable-ids $< | jq --sort-keys --compact-output "." > $@
-	diff --unified <(jq "." $<.errors.ndjson) <(jq "." $@)
+	diff --unified --strip-trailing-cr <(jq "." $<.errors.ndjson) <(jq "." $@)
