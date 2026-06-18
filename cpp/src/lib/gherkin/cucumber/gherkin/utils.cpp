@@ -1,5 +1,4 @@
 #include <cwchar>
-#include <iomanip>
 #include <locale>
 #include <fstream>
 #include <filesystem>

@@ -74,16 +74,7 @@ int main(int ac, char** av)
 
     cucumber::gherkin::app app;
     cucumber::gherkin::app::callbacks cbs{
-        .source = [&](const cucumber::messages::source& m) {
-            print_json_obj("source", m);
-
-            nlohmann::json j;
-            m.to_json(j);
-
-            std::cerr << "dump1       : " << j << std::endl;
-            std::cerr << "dump1.pretty: " <<std::setw(4) << j << std::endl;
-            std::cerr << "dump1.dump  : " << j.dump() << std::endl;
-        },
+        .source = [&](const cucumber::messages::source& m) { print_json_obj("source", m); },
         .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
         .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
         .error = [&](const auto& m) { std::cout << m.to_json() << std::endl; }
