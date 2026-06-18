@@ -74,21 +74,15 @@ int main(int ac, char** av)
 
     cucumber::gherkin::app app;
     cucumber::gherkin::app::callbacks cbs{
-        .source = [&](const auto& m) {
+        .source = [&](const cucumber::messages::source& m) {
             print_json_obj("source", m);
 
-            using namespace nlohmann::literals;
-            nlohmann::json js;
-            js["n"] = "value\nvalue";
-            js["rn"] = "value\r\nvalue";
+            nlohmann::json j;
+            m.to_json(j);
 
-            std::cerr << "dump1       : " << js << std::endl;
-            std::cerr << "dump1.pretty: " << std::setw(4) << js << std::endl;
-            std::cerr << "dump1.str   : " << js["n"].get<std::string>() << std::endl;
-            std::cerr << "dump2       : " << js.dump() << std::endl;
-            std::cerr << "dump2.pretty: " << std::setw(4) << js.dump() << std::endl;
-            std::cerr << "dump2.str   : " << js["rn"].get<std::string>() << std::endl;
-
+            std::cerr << "dump1       : " << j << std::endl;
+            std::cerr << "dump1.pretty: " <<std::setw(4) << j << std::endl;
+            std::cerr << "dump1.dump  : " << j.dump() << std::endl;
         },
         .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
         .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
