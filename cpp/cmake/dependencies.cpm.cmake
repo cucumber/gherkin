@@ -32,7 +32,7 @@ CPMAddPackage(
 CPMAddPackage(
     NAME cucumber_messages
     GITHUB_REPOSITORY cucumber/messages
-    GIT_TAG 089479c092df4e10bb86d4413094f920858fc48e #cpp-remove-cmate-use-native-cmake-and-CPM
+    GIT_TAG 572d419f3ba14bbeb7123714a9e4f74698bc3363 #cpp-remove-cmate-use-native-cmake-and-CPM
     SOURCE_SUBDIR cpp
     SYSTEM
 )
