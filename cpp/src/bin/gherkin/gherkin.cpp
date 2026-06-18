@@ -5,7 +5,6 @@
 
 struct options
 {
-    bool testme = false;
     bool exit = false;
     int exit_code = 0;
     int last_arg = 0;
@@ -22,10 +21,8 @@ parse_options(int ac, char** av)
 
     for (opts.last_arg = 1; opts.last_arg < ac; ++opts.last_arg) {
         std::string_view arg(av[opts.last_arg]);
-
-        if(arg == "--testme"){
-            opts.testme = true;
-        }else if (arg == "--no-source") {
+        
+        if (arg == "--no-source") {
             opts.include_source = false;
         } else if (arg == "--no-ast") {
             opts.include_ast = false;
@@ -75,14 +72,24 @@ int main(int ac, char** av)
         return opts.exit_code;
     }
 
-    if (opts.testme){
-        std::cout << "{\"n\": \"value\\n\\nvalue\", \"rn\": \"value\\r\\nvalue\"}" << std::endl;
-        return 0;
-    }
-
     cucumber::gherkin::app app;
     cucumber::gherkin::app::callbacks cbs{
-        .source = [&](const auto& m) { print_json_obj("source", m); },
+        .source = [&](const auto& m) {
+            print_json_obj("source", m);
+
+            using namespace nlohmann::literals;
+            nlohmann::json js;
+            js["n"] = "value\nvalue";
+            js["rn"] = "value\r\nvalue";
+
+            std::cerr << "dump1       : " << js << std::endl;
+            std::cerr << "dump1.pretty: " << std::setw(4) << js << std::endl;
+            std::cerr << "dump1.str   : " << js["n"].get<std::string>() << std::endl;
+            std::cerr << "dump2       : " << js.dump() << std::endl;
+            std::cerr << "dump2.pretty: " << std::setw(4) << js.dump() << std::endl;
+            std::cerr << "dump2.str   : " << js["rn"].get<std::string>() << std::endl;
+
+        },
         .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
         .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
         .error = [&](const auto& m) { std::cout << m.to_json() << std::endl; }

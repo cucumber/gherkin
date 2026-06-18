@@ -32,8 +32,6 @@ app::parse(const file& f, const callbacks& cbs)
 
     e.source = cms::source{ .uri = f.path, .data = slurp(f.path) };
 
-    std::cerr << "Read json:" << std::quoted(e.source->data) << std::endl;
-
     parse(e, cbs);
 }
 
