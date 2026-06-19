@@ -4,11 +4,12 @@ defmodule CucumberGherkin.PickleCompiler do
 
   alias CucumberMessages.GherkinDocument.Feature, as: FeatureMessage
   alias CucumberMessages.GherkinDocument.Feature.Scenario, as: ScenarioMessage
-  alias CucumberMessages.GherkinDocument.Feature.Step, as: StepMessage
+  alias CucumberGherkin.AstStep, as: StepMessage
   alias CucumberMessages.GherkinDocument.Feature.TableRow, as: TableRowMessage
-  alias CucumberMessages.Pickle, as: PickleMessage
-  alias CucumberMessages.Pickle.PickleStep, as: PickleStepMessage
+  alias CucumberGherkin.Pickle, as: PickleMessage
+  alias CucumberGherkin.PickleStep, as: PickleStepMessage
   alias CucumberMessages.Pickle.PickleTag, as: PickleTagMessage
+  alias CucumberGherkin.PickleStepArgument, as: PickleStepArgumentMessage
   alias CucumberMessages.GherkinDocument.Feature.Tag, as: TagMessage
   alias CucumberMessages.GherkinDocument.Feature.FeatureChild, as: FeatureChildMessage
   alias CucumberMessages.GherkinDocument.Feature.FeatureChild.Rule, as: RuleMessage
@@ -72,10 +73,10 @@ defmodule CucumberGherkin.PickleCompiler do
 
   # Match for a normal scenario. NOT a scenario outline. NO examples.
   defp compile_scenario(m, %ScenarioMessage{examples: []} = s, feature_or_rule_bg_steps?) do
-    {steps, semi_updated_acc} =
+    {steps, semi_updated_acc, _last_keyword_type} =
       case s.steps do
         [] ->
-          {[], m.compiler_acc}
+          {[], m.compiler_acc, "Unknown"}
 
         list_of_steps ->
           (Map.fetch!(m, feature_or_rule_bg_steps?) ++ list_of_steps)
@@ -86,13 +87,14 @@ defmodule CucumberGherkin.PickleCompiler do
     {id, updated_compiler_acc} = get_id_and_update_compiler_acc(semi_updated_acc)
 
     new_msg = %PickleMessage{
+      ast_node_ids: [s.id],
       id: id,
-      uri: m.compiler_acc.uri,
-      name: s.name,
       language: m.compiler_acc.language,
+      location: s.location,
+      name: s.name,
       steps: steps,
       tags: pickle_tags,
-      ast_node_ids: [s.id]
+      uri: m.compiler_acc.uri
     }
 
     %{m | pickles: [new_msg | m.pickles], compiler_acc: updated_compiler_acc}
@@ -115,18 +117,26 @@ defmodule CucumberGherkin.PickleCompiler do
 
   defp scenario_outline_create_pickles(m, example, s, f_or_bg?, table_header) do
     Enum.reduce(example.table_body, m, fn value_row, m_acc ->
-      {steps, updated_acc} =
+      {steps, updated_acc, last_keyword_type} =
         case s.steps do
-          [] -> {[], m_acc.compiler_acc}
+          [] -> {[], m_acc.compiler_acc, "Unknown"}
           _steplist -> Map.fetch!(m_acc, f_or_bg?) |> pickle_steps(m_acc.compiler_acc)
         end
 
-      {updated_steps, updated_acc} =
-        Enum.reduce(s.steps, {steps, updated_acc}, fn scen_outline_step, {step_acc, c_acc} ->
-          {newly_created_step, new_c_acc} =
-            pickle_step_creator(scen_outline_step, table_header.cells, value_row, c_acc)
+      {updated_steps, updated_acc, _last_keyword_type} =
+        Enum.reduce(s.steps, {steps, updated_acc, last_keyword_type}, fn scen_outline_step,
+                                                                         {step_acc, c_acc,
+                                                                          last_keyword_type} ->
+          {newly_created_step, new_c_acc, new_last_keyword_type} =
+            pickle_step_creator(
+              scen_outline_step,
+              table_header.cells,
+              value_row,
+              c_acc,
+              last_keyword_type
+            )
 
-          {step_acc ++ [newly_created_step], new_c_acc}
+          {step_acc ++ [newly_created_step], new_c_acc, new_last_keyword_type}
         end)
 
       tags = m_acc.feature_tags ++ s.tags ++ example.tags
@@ -135,13 +145,14 @@ defmodule CucumberGherkin.PickleCompiler do
       {id, updated_acc} = get_id_and_update_compiler_acc(updated_acc)
 
       new_msg = %PickleMessage{
+        ast_node_ids: [s.id, value_row.id],
         id: id,
-        uri: m_acc.compiler_acc.uri,
-        name: interpolate(s.name, table_header.cells, value_row.cells),
         language: m_acc.compiler_acc.language,
+        location: s.location,
+        name: interpolate(s.name, table_header.cells, value_row.cells),
         steps: updated_steps,
         tags: pickle_tags,
-        ast_node_ids: [s.id, value_row.id]
+        uri: m_acc.compiler_acc.uri
       }
 
       %{m_acc | pickles: [new_msg | m_acc.pickles], compiler_acc: updated_acc}
@@ -155,18 +166,23 @@ defmodule CucumberGherkin.PickleCompiler do
   defp pickle_tag(%TagMessage{} = t), do: %PickleTagMessage{ast_node_id: t.id, name: t.name}
 
   defp pickle_steps(step_messages, %@me{} = acc) do
-    {reversed_msges, new_acc} =
-      Enum.reduce(step_messages, {[], acc}, fn message, {pickle_steps_acc, compiler_acc} ->
-        {pickle_step, updated_acc} = pickle_step(message, compiler_acc)
-        {[pickle_step | pickle_steps_acc], updated_acc}
+    {reversed_msges, new_acc, last_keyword_type} =
+      Enum.reduce(step_messages, {[], acc, "Unknown"}, fn message,
+                                                          {pickle_steps_acc, compiler_acc,
+                                                           last_keyword_type} ->
+        {pickle_step, updated_acc, updated_last_keyword_type} =
+          pickle_step(message, compiler_acc, last_keyword_type)
+
+        {[pickle_step | pickle_steps_acc], updated_acc, updated_last_keyword_type}
       end)
 
-    {Enum.reverse(reversed_msges), new_acc}
+    {Enum.reverse(reversed_msges), new_acc, last_keyword_type}
   end
 
-  defp pickle_step(%StepMessage{} = m, %@me{} = acc), do: pickle_step_creator(m, [], nil, acc)
+  defp pickle_step(%StepMessage{} = m, %@me{} = acc, last_keyword_type),
+    do: pickle_step_creator(m, [], nil, acc, last_keyword_type)
 
-  defp pickle_step_creator(%StepMessage{} = m, variable_cells, values_row, %@me{} = acc) do
+  defp pickle_step_creator(%StepMessage{} = m, variable_cells, values_row, %@me{} = acc, last_keyword_type) do
     value_cells =
       case values_row do
         nil -> []
@@ -175,14 +191,21 @@ defmodule CucumberGherkin.PickleCompiler do
 
     step_text = interpolate(m.text, variable_cells, value_cells)
     {id, updated_compiler_acc} = get_id_and_update_compiler_acc(acc)
+    effective_keyword_type = effective_keyword_type(m.keyword_type, last_keyword_type)
 
     message =
-      %PickleStepMessage{id: id, ast_node_ids: [m.id], text: step_text}
+      %PickleStepMessage{
+        argument: nil,
+        ast_node_ids: [m.id],
+        id: id,
+        text: step_text,
+        type: effective_keyword_type
+      }
       |> add_ast_node_id(values_row)
       |> add_datatable(m, variable_cells, value_cells)
       |> add_doc_string(m, variable_cells, value_cells)
 
-    {message, updated_compiler_acc}
+    {message, updated_compiler_acc, effective_keyword_type(m.keyword_type, last_keyword_type)}
   end
 
   defp interpolate(text, variable_cells, value_cells) do
@@ -237,35 +260,37 @@ defmodule CucumberGherkin.PickleCompiler do
   defp add_ast_node_id(%PickleStepMessage{ast_node_ids: ids} = m, %TableRowMessage{} = row),
     do: %{m | ast_node_ids: ids ++ [row.id]}
 
-  defp add_datatable(%PickleStepMessage{} = m, %StepMessage{argument: nil}, _, _), do: m
-
-  defp add_datatable(%PickleStepMessage{} = m, %StepMessage{argument: {:doc_string, _}}, _, _),
+  defp add_datatable(%PickleStepMessage{} = m, %StepMessage{data_table: nil}, _, _),
     do: m
 
   defp add_datatable(
          %PickleStepMessage{} = m,
-         %StepMessage{argument: {:data_table, d}},
+         %StepMessage{data_table: d},
          variable_cells,
          value_cells
        ) do
     result = pickle_data_table_creator(d, variable_cells, value_cells)
-    %{m | argument: result}
+    argument = m.argument || %PickleStepArgumentMessage{}
+    %{m | argument: %{argument | data_table: result}}
   end
 
-  defp add_doc_string(%PickleStepMessage{} = m, %StepMessage{argument: nil}, _, _), do: m
-
-  defp add_doc_string(%PickleStepMessage{} = m, %StepMessage{argument: {:data_table, _}}, _, _),
+  defp add_doc_string(%PickleStepMessage{} = m, %StepMessage{doc_string: nil}, _, _),
     do: m
 
   defp add_doc_string(
          %PickleStepMessage{} = m,
-         %StepMessage{argument: {:doc_string, d}},
+         %StepMessage{doc_string: d},
          variable_cells,
          value_cells
        ) do
     result = pickle_doc_string_creator(d, variable_cells, value_cells)
-    %{m | argument: result}
+    argument = m.argument || %PickleStepArgumentMessage{}
+    %{m | argument: %{argument | doc_string: result}}
   end
+
+  defp effective_keyword_type("Conjunction", last_keyword_type), do: last_keyword_type || "Unknown"
+  defp effective_keyword_type(nil, _last_keyword_type), do: "Unknown"
+  defp effective_keyword_type(keyword_type, _last_keyword_type), do: keyword_type
 
   defp get_id_and_update_compiler_acc(%@me{id_gen: gen} = compiler_acc) do
     {id, updated_generator} = CucumberGherkin.IdGenerator.get_id(gen)

@@ -13,9 +13,11 @@ class PickleStep
 
   final PickleStepArgument argument;
 
+  final String type;
+
   final List<String> astNodeIds = <String>[];
 
-  PickleStep(this.id, this.text, this.argument);
+  PickleStep(this.id, this.text, this.argument, {this.type=Strings.empty});
 
   @override
   bool get isEmpty => false;
@@ -34,6 +36,10 @@ class PickleStep
       ..write('argument')
       ..write('=')
       ..write(argument.isEmpty ? '<null>' : argument)
+      ..write(',')
+      ..write('type')
+      ..write('=')
+      ..write(type.isEmpty ? '<null>' : type)
       ..write(',')
       ..write('astNodeIds')
       ..write('=')
@@ -56,6 +62,7 @@ class PickleStep
         && other.id == id
         && other.text == text
         && other.argument == argument
+        && other.type == type
         && other.astNodeIds == astNodeIds
     ;
   }
@@ -65,6 +72,7 @@ class PickleStep
       id.hashCode
       ^ text.hashCode
       ^ argument.hashCode
+      ^ type.hashCode
       ^ astNodeIds.hashCode
   ;
 }

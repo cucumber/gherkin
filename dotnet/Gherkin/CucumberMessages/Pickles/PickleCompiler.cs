@@ -196,6 +196,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
 
     protected virtual PickleStepArgument CreatePickleArgument(Step step, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
     {
+        PickleTable pickleTable = null;
         if (step.DataTable != null)
         {
             var t = step.DataTable;
@@ -215,24 +216,22 @@ public class PickleCompiler(IIdGenerator idGenerator)
                 }
                 newRows.Add(new PickleTableRow(newCells));
             }
-            return new PickleStepArgument(null, new PickleTable(newRows));
+            pickleTable = new PickleTable(newRows);
         }
 
+        PickleDocString pickleDocString = null;
         if (step.DocString != null)
         {
             var ds = step.DocString;
-            return
-                new PickleStepArgument
-                (
-                    new PickleDocString(
-                        ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
-                        Interpolate(ds.Content, variableCells, valueCells)
-                    ),
-                    null
-                );
+            pickleDocString = new PickleDocString(
+                ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
+                Interpolate(ds.Content, variableCells, valueCells)
+            );
         }
 
-        return null;
+        return pickleTable != null || pickleDocString != null
+            ? new PickleStepArgument(pickleDocString, pickleTable)
+            : null;
     }
 
     protected virtual PickleStep[] PickleSteps(IEnumerable<Step> steps)

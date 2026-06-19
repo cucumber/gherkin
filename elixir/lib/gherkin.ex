@@ -70,7 +70,7 @@ defmodule CucumberGherkin do
       {"pickle":{ .......... }}
       {"pickle":{ .......... }}
   """
-  defdelegate print_messages(envelopes, type), to: CucumberMessages, as: :convert_envelopes_to
+  defdelegate print_messages(envelopes, type), to: CucumberGherkin.MessageWriter, as: :convert_envelopes_to
 
   ####################
   # HELPER FUNCTIONS #
