@@ -1,5 +1,6 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.ndjson.Json;
 import io.cucumber.messages.ndjson.Serializer;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.MessageToNdjsonWriter;
@@ -39,9 +40,11 @@ public final class Main {
         }
 
         GherkinParser parser = builder.build();
-
+        var serializer = Json.instance()
+                .map(json -> json.serializer(Envelope.class))
+                .orElseThrow();
         OutputStream out = new NonClosableOutputStream(System.out);
-        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(out, new Serializer())) {
+        try (MessageToNdjsonWriter writer = new MessageToNdjsonWriter(out, serializer::writeValue)) {
             for (String path : paths) {
                 try (InputStream fis  = Files.newInputStream(Paths.get(path))) {
                     // Don't use parser.parse(Path). The test suite uses relative paths.
