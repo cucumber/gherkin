@@ -1,7 +1,6 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.messages.ndjson.Json;
-import io.cucumber.messages.ndjson.Serializer;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.MessageToNdjsonWriter;
 
