@@ -1,20 +1,25 @@
-import DIALECTS from './gherkin-languages.json'
-import Dialect from './Dialect'
-import { NoSuchLanguageException, ParserException } from './Errors'
-import IToken, { IGherkinLine, Item } from './IToken'
-import * as messages from '@cucumber/messages'
-import { TokenType } from './Parser'
-import ITokenMatcher from './ITokenMatcher'
-import countSymbols from './countSymbols'
-import { compareStepKeywords } from './compareStepKeywords'
+import { type Location, StepKeywordType } from '@cucumber/messages'
+import { compareStepKeywords } from './compareStepKeywords.js'
+import countSymbols from './countSymbols.js'
+import type Dialect from './Dialect.js'
+import { NoSuchLanguageException, ParserException } from './Errors.js'
+import DIALECTS from './gherkin-languages.json' with { type: 'json' }
+import type IToken from './IToken.js'
+import type { IGherkinLine, Item } from './IToken.js'
+import type ITokenMatcher from './ITokenMatcher.js'
+import { TokenType } from './Parser.js'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const LANGUAGE_PATTERN = /^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$/
 
-function addKeywordTypeMappings(h: { [key: string]: messages.StepKeywordType[] }, keywords: readonly string[], keywordType: messages.StepKeywordType) {
+function addKeywordTypeMappings(
+  h: { [key: string]: StepKeywordType[] },
+  keywords: readonly string[],
+  keywordType: StepKeywordType
+) {
   for (const k of keywords) {
     if (!(k in h)) {
-      h[k] = [] as messages.StepKeywordType[]
+      h[k] = [] as StepKeywordType[]
     }
     h[k].push(keywordType)
   }
@@ -25,14 +30,14 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
   private dialectName: string
   private activeDocStringSeparator: string
   private indentToRemove: number
-  private keywordTypesMap: { [key: string]: messages.StepKeywordType[] }
+  private keywordTypesMap: { [key: string]: StepKeywordType[] }
   private sortedStepKeywords: readonly string[]
 
   constructor(private readonly defaultDialectName: string = 'en') {
     this.reset()
   }
 
-  changeDialect(newDialectName: string, location?: messages.Location) {
+  changeDialect(newDialectName: string, location?: Location) {
     const newDialect = DIALECT_DICT[newDialectName]
     if (!newDialect) {
       throw NoSuchLanguageException.create(newDialectName, location)
@@ -54,12 +59,14 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
 
   initializeKeywordTypes() {
     this.keywordTypesMap = {}
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.given, messages.StepKeywordType.CONTEXT)
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.when, messages.StepKeywordType.ACTION)
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.then, messages.StepKeywordType.OUTCOME)
-    addKeywordTypeMappings(this.keywordTypesMap,
-                           [].concat(this.dialect.and).concat(this.dialect.but),
-                           messages.StepKeywordType.CONJUNCTION)
+    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.given, StepKeywordType.CONTEXT)
+    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.when, StepKeywordType.ACTION)
+    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.then, StepKeywordType.OUTCOME)
+    addKeywordTypeMappings(
+      this.keywordTypesMap,
+      [].concat(this.dialect.and).concat(this.dialect.but),
+      StepKeywordType.CONJUNCTION
+    )
   }
 
   initializeSortedStepKeywords() {
@@ -74,7 +81,15 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
 
   match_TagLine(token: IToken<TokenType>) {
     if (token.line.startsWith('@')) {
-      this.setTokenMatched(token, TokenType.TagLine, null, null, null, null, this.getTags(token.line))
+      this.setTokenMatched(
+        token,
+        TokenType.TagLine,
+        null,
+        null,
+        null,
+        null,
+        this.getTags(token.line)
+      )
       return true
     }
     return false
@@ -106,7 +121,15 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
   match_TableRow(token: IToken<TokenType>) {
     if (token.line.startsWith('|')) {
       // TODO: indent
-      this.setTokenMatched(token, TokenType.TableRow, null, null, null, null, token.line.getTableCells())
+      this.setTokenMatched(
+        token,
+        TokenType.TableRow,
+        null,
+        null,
+        null,
+        null,
+        token.line.getTableCells()
+      )
       return true
     }
     return false
@@ -183,7 +206,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
         const keywordTypes = this.keywordTypesMap[keyword]
         let keywordType = keywordTypes[0]
         if (keywordTypes.length > 1) {
-          keywordType = messages.StepKeywordType.UNKNOWN
+          keywordType = StepKeywordType.UNKNOWN
         }
 
         this.setTokenMatched(token, TokenType.StepLine, title, keyword, null, keywordType)
@@ -204,16 +227,16 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
     const uncommentedLine = line.trimmedLineText.split(/\s#/g, 2)[0]
     let column = line.indent + 1
     const items = uncommentedLine.split('@')
-    const tags: any[] = []
+    const tags: Item[] = []
     for (let i = 0; i < items.length; i++) {
       const item = items[i].trimRight()
-      if (item.length == 0) {
+      if (item.length === 0) {
         continue
       }
       if (!item.match(/^\S+$/)) {
         throw ParserException.create('A tag may not contain whitespace', line.lineNumber, column)
       }
-      const span = { column, text: '@' + item }
+      const span = { column, text: `@${item}` }
       tags.push(span)
       column += countSymbols(items[i]) + 1
     }
@@ -241,7 +264,7 @@ export default class GherkinClassicTokenMatcher implements ITokenMatcher<TokenTy
     text?: string,
     keyword?: string,
     indent?: number,
-    keywordType?: messages.StepKeywordType,
+    keywordType?: StepKeywordType,
     items?: readonly Item[]
   ) {
     token.matchedType = matchedType

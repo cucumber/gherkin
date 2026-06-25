@@ -10,19 +10,11 @@ module Gherkin
   }.freeze
 
   def self.from_paths(paths, options = {})
-    Stream::ParserMessageStream.new(
-      paths,
-      [],
-      options
-    ).messages
+    Stream::ParserMessageStream.new(paths: paths, options: options).messages
   end
 
   def self.from_sources(sources, options = {})
-    Stream::ParserMessageStream.new(
-      [],
-      sources,
-      options
-    ).messages
+    Stream::ParserMessageStream.new(sources: sources, options: options).messages
   end
 
   def self.from_source(uri, data, options = {})

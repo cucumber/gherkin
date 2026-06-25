@@ -1,8 +1,26 @@
-# Gherkin
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/cucumber/cucumber-js/46a5a78107be27e99c6e044c69b6e8f885ce456c/docs/images/logo.svg" alt="Cucumber logo" width="75">
+  <br>
+  Gherkin
+</h1>
+<p align="center">
+  <b>Gherkin is a parser and compiler for the Gherkin language.
+</b>
+</p>
 
-Gherkin is a parser and compiler for the Gherkin language.
+<div align="center">
 
-Gherkin is currently implemented for the following platforms (in order of birthday):
+[![NuGet Version](https://img.shields.io/nuget/v/Gherkin)](https://www.nuget.org/packages/Gherkin)
+[![Maven Central](https://img.shields.io/maven-central/v/io.cucumber/gherkin)](https://central.sonatype.com/artifact/io.cucumber/gherkin)
+[![NPM Version](https://img.shields.io/npm/v/%40cucumber%2Fgherkin)](https://www.npmjs.com/package/@cucumber/gherkin)
+[![Gem Version](https://img.shields.io/gem/v/cucumber-gherkin)](https://rubygems.org/gems/cucumber-gherkin)
+[![PyPI - Python Version](https://img.shields.io/pypi/v/gherkin-official)](https://pypi.org/project/gherkin-official)
+[![CPAN Version](https://img.shields.io/cpan/v/Gherkin)](https://metacpan.org/pod/Gherkin)
+[![Packagist Version](https://img.shields.io/packagist/v/cucumber/gherkin)](https://packagist.org/packages/cucumber/gherkin)
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cucumber/gherkin/badge)](https://scorecard.dev/viewer/?uri=github.com/cucumber/gherkin)
+
+</div>
 
 - [.NET](./dotnet) - [![test dotnet workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dotnet.yml/badge.svg)](./.github/workflows/test-dotnet.yml)
 - [Java](./java) - [![test java workflow](https://github.com/cucumber/gherkin/actions/workflows/test-java.yml/badge.svg)](./.github/workflows/test-java.yml)
@@ -11,7 +29,6 @@ Gherkin is currently implemented for the following platforms (in order of birthd
 - [Go](./go) - [![test go workflow](https://github.com/cucumber/gherkin/actions/workflows/test-go.yml/badge.svg)](./.github/workflows/test-go.yml)
 - [Python](./python) - [![test python workflow](https://github.com/cucumber/gherkin/actions/workflows/test-python.yml/badge.svg)](./.github/workflows/test-python.yml)
 - [C](./c) - [![test c workflow](https://github.com/cucumber/gherkin/actions/workflows/test-c.yml/badge.svg)](./.github/workflows/test-c.yml)
-- [Objective-C](./objective-c) - _Currently not actively tested, requires maintenance_
 - [Perl](./perl) - [![test perl workflow](https://github.com/cucumber/gherkin/actions/workflows/test-perl.yml/badge.svg)](./.github/workflows/test-perl.yml)
 - [PHP](./php) - [![test php workflow](https://github.com/cucumber/gherkin/actions/workflows/test-php.yml/badge.svg)](./.github/workflows/test-php.yml)
 - [Dart](./dart) - [![test dart workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dart.yml/badge.svg)](./.github/workflows/test-dart.yml)
@@ -104,9 +121,9 @@ var matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInM
 var parser = new Gherkin.Parser(builder, matcher);
 var gherkinDocument = parser.parse("Feature: ...");
 var pickles = Gherkin.compile(
-  gherkinDocument,
-  "uri_of_the_feature.feature",
-  uuidFn
+    gherkinDocument,
+    "uri_of_the_feature.feature",
+    uuidFn
 );
 ```
 
@@ -138,20 +155,6 @@ from gherkin import Compiler, Parser
 gherkin_document = Parser().parse("Feature: ...")
 gherkin_document["uri"] = "uri_of_the_feature.feature"
 pickles = Compiler().compile(gherkin_document)
-```
-
-#### Objective-C
-
-```Objective-C
-#import "GHParser+Extensions.h"
-
-GHParser * parser = [[GHParser alloc] init];
-NSString * featureFilePath; // Should refer to the place where we can get the content of the feature
-NSString * content = [NSString stringWithContentsOfURL:featureFilePath encoding:NSUTF8StringEncoding error:nil];
-if([content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0){
-      // GHParser will throw an error if you passed empty content... handle this issue first.
-}
-GHGherkinDocument * result = [parser parseContent:content];
 ```
 
 #### Perl
@@ -367,6 +370,7 @@ Example:
 ```gherkin
 @a
 Feature:
+
   @b @c
   Scenario Outline:
     Given <x>
@@ -536,3 +540,4 @@ See [Markdown with Gherkin](./MARKDOWN_WITH_GHERKIN.md).
 - [cucumber-js](https://github.com/cucumber/cucumber-js)
 - [godog](https://github.com/cucumber/godog)
 - [pytest-bdd](https://github.com/pytest-dev/pytest-bdd)
+- [Reqnroll](https://reqnroll.net/)

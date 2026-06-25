@@ -15,7 +15,7 @@
   }
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
-{<text>    $token->detach;
+{<text>
     $err = $self->_construct_parser_error(
         $token,
         ["@Raw(string.Join("\", \"", expectedTokens))"],
@@ -136,8 +136,6 @@ sub match_token_at_@(state.Id) {
 sub lookahead_@(lookAheadHint.Id) {
     my ($self, $context, $current_token) = @@_;
 
-    $current_token->detach();
-
     my $token;
     my @@queue;
     my $match = 0;
@@ -145,7 +143,6 @@ sub lookahead_@(lookAheadHint.Id) {
     my $ok;
     while (1) {
         $token = $context->read_token();
-        $token->detach;
         push( @@queue, $token );
 
         @foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>

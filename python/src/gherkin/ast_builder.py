@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TypedDict, TypeVar, Union, cast
+from typing import TypedDict, TypeVar, cast
 
 from .ast_node import AstNode
 from .errors import AstBuilderException
@@ -280,7 +280,7 @@ class AstBuilder:
 
             return "\n".join(token.matched_text for token in tokens)
         if node.rule_type == "Rule":
-            header = cast(Union[AstNode, None], node.get_single("RuleHeader"))
+            header = cast(AstNode | None, node.get_single("RuleHeader"))
             if not header:
                 return None
             tags = self.get_tags(header)
@@ -309,7 +309,7 @@ class AstBuilder:
                 },
             )
         if node.rule_type == "Feature":
-            header = cast(Union[AstNode, None], node.get_single("FeatureHeader"))
+            header = cast(AstNode | None, node.get_single("FeatureHeader"))
             if not header:
                 return None
 

@@ -1,18 +1,17 @@
 {
   "name": "@cucumber/gherkin",
-  "version": "39.0.0",
+  "version": "41.0.0",
   "description": "Gherkin parser",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build:cjs": "tsc --build tsconfig.build-cjs.json",
-    "build:esm": "tsc --build tsconfig.build-esm.json",
-    "build:legacy": "tsc --build tsconfig.build.json",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:legacy",
-    "clean": "npm run clean-tsc && rm -rf node_modules package-lock.json acceptance && rm -rf node_modules package-lock.json",
-    "clean-tsc": "rm -rf dist",
+    "build": "tsc --project tsconfig.build.json",
     "test": "mocha",
-    "prepublishOnly": "tsc --build tsconfig.build.json"
+    "fix": "biome check --fix --error-on-warnings",
+    "lint": "biome check --error-on-warnings",
+    "postbuild": "node -e \"require('.')\"",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -29,16 +28,18 @@
   },
   "homepage": "https://github.com/cucumber/gherkin",
   "devDependencies": {
+    "@biomejs/biome": "^2.4.13",
+    "@cucumber/biome-config": "github:cucumber/biome-config#v0.3.0",
+    "@tsconfig/recommended": "^1.0.13",
     "@types/mocha": "10.0.10",
-    "@types/node": "22.19.15",
-    "commander": "^14.0.0",
-    "core-js": "3.49.0",
-    "mocha": "11.7.5",
+    "@types/node": "^22.19.19",
+    "commander": "^15.0.0",
+    "mocha": "11.7.6",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "dependencies": {
-    "@cucumber/messages": ">=31.0.0 <33"
+    "@cucumber/messages": ">=31.0.0 <34"
   },
   "directories": {
     "test": "test"

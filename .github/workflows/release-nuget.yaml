@@ -12,15 +12,23 @@ jobs:
     # Failing on `ubuntu-24.04` (https://github.com/cucumber/gherkin/issues/349)
     runs-on: ubuntu-24.04
     environment: Release
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Setup .NET
-        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2 # v5.3.0
         with:
           dotnet-version: 9.0.x
-      - uses: cucumber/action-publish-nuget@f059d15b2dbcd962afc0d29424f4f083177255aa # v1.0.0
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        id: login
         with:
-          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+          user: ${{ secrets.NUGET_USER }}
+      - uses: cucumber/action-publish-nuget@c1fe9167b2165369697c5e3b13fe2cee64e122f8 # v1.1.0
+        with:
+          nuget-api-key: ${{ steps.login.outputs.NUGET_API_KEY }}
           working-directory: "dotnet"

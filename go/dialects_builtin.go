@@ -2,7 +2,7 @@
 
 package gherkin
 
-import messages "github.com/cucumber/messages/go/v32"
+import messages "github.com/cucumber/messages/go/v33"
 
 // Builtin dialects for af (Afrikaans), am (Armenian), an (Aragonese), ar (Arabic), ast (Asturian), az (Azerbaijani), be (Belarusian), bg (Bulgarian), bm (Malay), bs (Bosnian), ca (Catalan), cs (Czech), cy-GB (Welsh), da (Danish), de (German), el (Greek), em (Emoji), en (English), en-Scouse (Scouse), en-au (Australian), en-lol (LOLCAT), en-old (Old English), en-pirate (Pirate), en-tx (Texas), eo (Esperanto), es (Spanish), et (Estonian), fa (Persian), fi (Finnish), fr (French), ga (Irish), gj (Gujarati), gl (Galician), he (Hebrew), hi (Hindi), hr (Croatian), ht (Creole), hu (Hungarian), id (Indonesian), is (Icelandic), it (Italian), ja (Japanese), jv (Javanese), ka (Georgian), kn (Kannada), ko (Korean), lt (Lithuanian), lu (Luxemburgish), lv (Latvian), mk-Cyrl (Macedonian), mk-Latn (Macedonian (Latin)), mn (Mongolian), ne (Nepali), nl (Dutch), no (Norwegian), pa (Panjabi), pl (Polish), pt (Portuguese), ro (Romanian), ru (Russian), sk (Slovak), sl (Slovenian), sr-Cyrl (Serbian), sr-Latn (Serbian (Latin)), sv (Swedish), ta (Tamil), th (Thai), te (Telugu), tlh (Klingon), tr (Turkish), tt (Tatar), uk (Ukrainian), ur (Urdu), uz (Uzbek), vi (Vietnamese), zh-CN (Chinese simplified), ml (Malayalam), zh-TW (Chinese traditional), mr (Marathi), amh (Amharic)
 func DialectsBuiltin() DialectProvider {
@@ -4870,57 +4870,189 @@ var builtinDialects = gherkinDialectMap{
 		Keywords: map[string][]string{
 			feature: {
 				"Özellik",
+				"İş Gereksinimi",
+				"Gereksinim",
+				"İşlev",
+				"Kullanıcı Hikayesi",
+				"Yetenek",
+				"Teknik Gereksinim",
 			},
 			rule: {
 				"Kural",
+				"İş Kuralı",
+				"Kaide",
+				"Hüküm",
+				"Madde",
 			},
 			background: {
 				"Geçmiş",
+				"Arka Plan",
+				"Ön Koşul",
+				"Önkoşul",
+				"Önceki Durum",
+				"Giriş",
+				"Mukaddime",
+				"Mevcut Durum",
 			},
 			scenario: {
 				"Örnek",
 				"Senaryo",
+				"Durum",
+				"Vaka",
 			},
 			scenarioOutline: {
 				"Senaryo taslağı",
+				"Senaryo şablonu",
 			},
 			examples: {
 				"Örnekler",
+				"Değerler",
 			},
 			given: {
 				"* ",
+				"Mevcut ",
+				"Önceden ",
+				"Geçmişte ",
+				"Daha önce ",
+				"Halihazırda ",
+				"Zaten ",
+				"Sistemde ",
 				"Diyelim ki ",
+				"Varsayalım ki ",
+				"Farz edelim ki ",
+				"Kabul edelim ki ",
+				"Başlangıçta ",
+				"Varsayılan olarak ",
+				"Biliniyor ki ",
 			},
 			when: {
 				"* ",
+				"Eğer ",
 				"Eğer ki ",
+				"Ne zaman ",
+				"Ne zaman ki ",
+				"Şayet ",
 			},
 			then: {
 				"* ",
+				"Beklenen ",
 				"O zaman ",
+				"Sonuç olarak ",
+				"Böylece ",
+				"Bunun üzerine ",
+				"Bu durumda ",
+				"O takdirde ",
+				"Şu halde ",
+				"Netice itibariyle ",
+				"Buna binaen ",
 			},
 			and: {
 				"* ",
 				"Ve ",
+				"Hem de ",
+				"Bir de ",
+				"Ayrıca ",
+				"İlaveten ",
+				"Buna ek olarak ",
 			},
 			but: {
 				"* ",
 				"Fakat ",
 				"Ama ",
+				"Ancak ",
+				"Yalnız ",
+				"Lakin ",
+				"Meğer ki ",
+				"Buna mukabil ",
+				"Aksi halde ",
 			},
 		},
 		KeywordTypes: map[string]messages.StepKeywordType{
+			"Mevcut ": messages.StepKeywordType_CONTEXT,
+
+			"Önceden ": messages.StepKeywordType_CONTEXT,
+
+			"Geçmişte ": messages.StepKeywordType_CONTEXT,
+
+			"Daha önce ": messages.StepKeywordType_CONTEXT,
+
+			"Halihazırda ": messages.StepKeywordType_CONTEXT,
+
+			"Zaten ": messages.StepKeywordType_CONTEXT,
+
+			"Sistemde ": messages.StepKeywordType_CONTEXT,
+
 			"Diyelim ki ": messages.StepKeywordType_CONTEXT,
+
+			"Varsayalım ki ": messages.StepKeywordType_CONTEXT,
+
+			"Farz edelim ki ": messages.StepKeywordType_CONTEXT,
+
+			"Kabul edelim ki ": messages.StepKeywordType_CONTEXT,
+
+			"Başlangıçta ": messages.StepKeywordType_CONTEXT,
+
+			"Varsayılan olarak ": messages.StepKeywordType_CONTEXT,
+
+			"Biliniyor ki ": messages.StepKeywordType_CONTEXT,
+
+			"Eğer ": messages.StepKeywordType_ACTION,
 
 			"Eğer ki ": messages.StepKeywordType_ACTION,
 
+			"Ne zaman ": messages.StepKeywordType_ACTION,
+
+			"Ne zaman ki ": messages.StepKeywordType_ACTION,
+
+			"Şayet ": messages.StepKeywordType_ACTION,
+
+			"Beklenen ": messages.StepKeywordType_OUTCOME,
+
 			"O zaman ": messages.StepKeywordType_OUTCOME,
 
+			"Sonuç olarak ": messages.StepKeywordType_OUTCOME,
+
+			"Böylece ": messages.StepKeywordType_OUTCOME,
+
+			"Bunun üzerine ": messages.StepKeywordType_OUTCOME,
+
+			"Bu durumda ": messages.StepKeywordType_OUTCOME,
+
+			"O takdirde ": messages.StepKeywordType_OUTCOME,
+
+			"Şu halde ": messages.StepKeywordType_OUTCOME,
+
+			"Netice itibariyle ": messages.StepKeywordType_OUTCOME,
+
+			"Buna binaen ": messages.StepKeywordType_OUTCOME,
+
 			"Ve ": messages.StepKeywordType_CONJUNCTION,
+
+			"Hem de ": messages.StepKeywordType_CONJUNCTION,
+
+			"Bir de ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ayrıca ": messages.StepKeywordType_CONJUNCTION,
+
+			"İlaveten ": messages.StepKeywordType_CONJUNCTION,
+
+			"Buna ek olarak ": messages.StepKeywordType_CONJUNCTION,
 
 			"Fakat ": messages.StepKeywordType_CONJUNCTION,
 
 			"Ama ": messages.StepKeywordType_CONJUNCTION,
+
+			"Ancak ": messages.StepKeywordType_CONJUNCTION,
+
+			"Yalnız ": messages.StepKeywordType_CONJUNCTION,
+
+			"Lakin ": messages.StepKeywordType_CONJUNCTION,
+
+			"Meğer ki ": messages.StepKeywordType_CONJUNCTION,
+
+			"Buna mukabil ": messages.StepKeywordType_CONJUNCTION,
+
+			"Aksi halde ": messages.StepKeywordType_CONJUNCTION,
 
 			"* ": messages.StepKeywordType_UNKNOWN,
 		},

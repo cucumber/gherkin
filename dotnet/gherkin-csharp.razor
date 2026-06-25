@@ -27,7 +27,6 @@
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
             const string stateComment = "State: @state.Id - @Raw(state.Comment)";
-            token.Detach();
             var expectedTokens = new string[] {"@Raw(string.Join("\", \"", expectedTokens))"};
             var error = token.IsEOF ? (ParserException)new UnexpectedEOFException(token, expectedTokens, stateComment) 
                 : new UnexpectedTokenException(token, expectedTokens, stateComment);
@@ -271,14 +270,12 @@ namespace @Model.Namespace
         <text>
         bool LookAhead_@(lookAheadHint.Id)(ParserContext context, Token currentToken)
         {
-            currentToken.Detach();
             Token token;
             var queue = new Queue<Token>();
             bool match = false;
             do
             {
                 token = ReadToken(context);
-                token.Detach();
                 queue.Enqueue(token);
 
                 if (false

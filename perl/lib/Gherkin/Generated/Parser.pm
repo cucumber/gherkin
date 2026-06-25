@@ -155,7 +155,7 @@ sub match_token_at_0 {
         return 0;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Language", "#TagLine", "#FeatureLine", "#Comment", "#Empty"],
@@ -196,7 +196,7 @@ sub match_token_at_1 {
         return 1;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#FeatureLine", "#Comment", "#Empty"],
@@ -237,7 +237,7 @@ sub match_token_at_2 {
         return 2;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#FeatureLine", "#Comment", "#Empty"],
@@ -328,7 +328,7 @@ sub match_token_at_3 {
         return 4;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -417,7 +417,7 @@ sub match_token_at_4 {
         return 4;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -507,7 +507,7 @@ sub match_token_at_5 {
         return 6;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -595,7 +595,7 @@ sub match_token_at_6 {
         return 6;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -697,7 +697,7 @@ sub match_token_at_7 {
         return 7;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -797,7 +797,7 @@ sub match_token_at_8 {
         return 8;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -839,7 +839,7 @@ sub match_token_at_9 {
         return 9;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"],
@@ -952,7 +952,7 @@ sub match_token_at_10 {
         return 11;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -1065,7 +1065,7 @@ sub match_token_at_11 {
         return 11;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -1192,7 +1192,7 @@ sub match_token_at_12 {
         return 12;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -1319,7 +1319,7 @@ sub match_token_at_13 {
         return 13;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -1361,7 +1361,7 @@ sub match_token_at_14 {
         return 14;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"],
@@ -1488,7 +1488,7 @@ sub match_token_at_15 {
         return 16;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -1615,7 +1615,7 @@ sub match_token_at_16 {
         return 16;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -1740,7 +1740,7 @@ sub match_token_at_17 {
         return 17;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -1781,7 +1781,7 @@ sub match_token_at_18 {
         return 18;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#RuleLine", "#Comment", "#Empty"],
@@ -1875,7 +1875,7 @@ sub match_token_at_19 {
         return 20;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -1967,7 +1967,7 @@ sub match_token_at_20 {
         return 20;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -2060,7 +2060,7 @@ sub match_token_at_21 {
         return 22;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -2151,7 +2151,7 @@ sub match_token_at_22 {
         return 22;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -2256,7 +2256,7 @@ sub match_token_at_23 {
         return 23;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -2359,7 +2359,7 @@ sub match_token_at_24 {
         return 24;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -2401,7 +2401,7 @@ sub match_token_at_25 {
         return 25;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"],
@@ -2517,7 +2517,7 @@ sub match_token_at_26 {
         return 27;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -2633,7 +2633,7 @@ sub match_token_at_27 {
         return 27;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -2763,7 +2763,7 @@ sub match_token_at_28 {
         return 28;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -2893,7 +2893,7 @@ sub match_token_at_29 {
         return 29;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -2935,7 +2935,7 @@ sub match_token_at_30 {
         return 30;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"],
@@ -3065,7 +3065,7 @@ sub match_token_at_31 {
         return 32;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -3195,7 +3195,7 @@ sub match_token_at_32 {
         return 32;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
@@ -3323,7 +3323,7 @@ sub match_token_at_33 {
         return 33;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -3351,7 +3351,7 @@ sub match_token_at_35 {
         return 35;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#DocStringSeparator", "#Other"],
@@ -3475,7 +3475,7 @@ sub match_token_at_36 {
         return 36;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -3503,7 +3503,7 @@ sub match_token_at_37 {
         return 37;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#DocStringSeparator", "#Other"],
@@ -3600,7 +3600,7 @@ sub match_token_at_38 {
         return 38;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -3628,7 +3628,7 @@ sub match_token_at_39 {
         return 39;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#DocStringSeparator", "#Other"],
@@ -3749,7 +3749,7 @@ sub match_token_at_40 {
         return 40;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -3777,7 +3777,7 @@ sub match_token_at_41 {
         return 41;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#DocStringSeparator", "#Other"],
@@ -3871,7 +3871,7 @@ sub match_token_at_42 {
         return 42;
     }
 
-    $token->detach;
+
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
@@ -3887,8 +3887,6 @@ sub match_token_at_42 {
 sub lookahead_0 {
     my ($self, $context, $current_token) = @_;
 
-    $current_token->detach();
-
     my $token;
     my @queue;
     my $match = 0;
@@ -3896,7 +3894,6 @@ sub lookahead_0 {
     my $ok;
     while (1) {
         $token = $context->read_token();
-        $token->detach;
         push( @queue, $token );
 
 
@@ -3918,8 +3915,6 @@ sub lookahead_0 {
 sub lookahead_1 {
     my ($self, $context, $current_token) = @_;
 
-    $current_token->detach();
-
     my $token;
     my @queue;
     my $match = 0;
@@ -3927,7 +3922,6 @@ sub lookahead_1 {
     my $ok;
     while (1) {
         $token = $context->read_token();
-        $token->detach;
         push( @queue, $token );
 
 

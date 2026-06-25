@@ -1,4 +1,4 @@
-import { IdGenerator } from '@cucumber/messages'
+import type { IdGenerator } from '@cucumber/messages'
 
 export default interface IGherkinOptions {
   defaultDialect?: string

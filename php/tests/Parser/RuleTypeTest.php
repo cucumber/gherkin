@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Cucumber\Gherkin\Parser;
 
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class RuleTypeTest extends TestCase
 {
-    /** @dataProvider tokenCaseProvider */
+    #[DataProvider('tokenCaseProvider')]
     public function testItCanCastFromTokens(TokenType $tokenType): void
     {
         self::assertInstanceOf(RuleType::class, RuleType::cast($tokenType));

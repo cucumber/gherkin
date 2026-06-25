@@ -1,4 +1,6 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
+#pragma once
+
 #include <cucumber/gherkin/parser_base.hpp>
 #include <cucumber/gherkin/rule_type.hpp>
 
@@ -340,14 +342,12 @@ protected:
 
     bool lookahead_0(context_type& context, token& current_token)
     {
-        current_token.detach();
         token token;
         token_queue queue;
         bool match = false;
 
         while (true) {
             token = context.read_token();
-            token.detach();
             queue.push_back(token);
 
             if (match_scenario_line(context, token) || false) {
@@ -367,14 +367,12 @@ protected:
 
     bool lookahead_1(context_type& context, token& current_token)
     {
-        current_token.detach();
         token token;
         token_queue queue;
         bool match = false;
 
         while (true) {
             token = context.read_token();
-            token.detach();
             queue.push_back(token);
 
             if (match_examples_line(context, token) || false) {
@@ -4012,8 +4010,6 @@ protected:
                 std::runtime_error(
                     "invalid operation: " + std::to_string(state)
                 );
-
-            return -1;
         }
     }
 };

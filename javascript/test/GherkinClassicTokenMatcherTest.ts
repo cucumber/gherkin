@@ -1,12 +1,12 @@
-import assert from 'assert'
-import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher'
-import { NoSuchLanguageException } from '../src/Errors'
-import * as messages from '@cucumber/messages'
-import GherkinLine from '../src/GherkinLine'
-import { Token, TokenType } from '../src/Parser'
+import assert from 'node:assert'
+import type { Location } from '@cucumber/messages'
+import { NoSuchLanguageException } from '../src/Errors.js'
+import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher.js'
+import GherkinLine from '../src/GherkinLine.js'
+import { Token, TokenType } from '../src/Parser.js'
 
-describe('TokenMatcher', function () {
-  it('throws for invalid languages', function () {
+describe('TokenMatcher', () => {
+  it('throws for invalid languages', () => {
     assert.throws(
       () => new GherkinClassicTokenMatcher('en-US'),
       NoSuchLanguageException.create('en-US')
@@ -15,7 +15,7 @@ describe('TokenMatcher', function () {
 
   it('tokenizes FeatureLine', () => {
     const tm = new GherkinClassicTokenMatcher()
-    const location: messages.Location = { line: 1, column: 1 }
+    const location: Location = { line: 1, column: 1 }
     const line = new GherkinLine('Feature: hello', location.line)
     const token = new Token(line, location)
     assert(tm.match_FeatureLine(token))
