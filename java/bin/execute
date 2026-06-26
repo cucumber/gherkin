@@ -16,6 +16,7 @@ if [ ! -f "${DIR}/arguments.txt" ] || [ "${DIR}/class-path.txt" -nt "${DIR}/argu
     CLASSPATH_SEPARATOR=":"
   fi
   echo "--class-path $DEPENDENCIES$CLASSPATH_SEPARATOR${DIR}/../target/classes$CLASSPATH_SEPARATOR${DIR}/../target/test-classes" > "${DIR}/arguments.txt"
+  >&2 cat "${DIR}/arguments.txt"
 fi
 
 java "@${DIR}/arguments.txt" $*
