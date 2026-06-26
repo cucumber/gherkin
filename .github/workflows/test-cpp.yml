@@ -9,6 +9,7 @@ on:
       - renovate/**
     paths:
       - cpp/**
+      - Makefile
       - testdata/**
       - .github/**
   pull_request:
@@ -16,58 +17,146 @@ on:
       - main
     paths:
       - cpp/**
+      - Makefile
       - testdata/**
       - .github/**
 
 jobs:
   test-cpp:
+    env:
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+
     strategy:
+      fail-fast: false
       matrix:
         config:
-          - os: ubuntu-latest
-            cc: gcc
-          - os: ubuntu-latest
-            cc: clang
-          - os: macos-latest
-            cc: clang
-          - os: windows-latest
-            cc: cl
+          - { os: ubuntu-22.04, cxx: g++,      version: 10 }
+          - { os: ubuntu-22.04, cxx: g++,      version: 11 }
+          - { os: ubuntu-22.04, cxx: g++,      version: 12 }
+          - { os: ubuntu-24.04, cxx: g++,      version: 12 }
+          - { os: ubuntu-24.04, cxx: g++,      version: 13 }
+          - { os: ubuntu-24.04, cxx: g++,      version: 14 }
+          - { os: ubuntu-22.04, cxx: clang++,  version: 13 }
+          - { os: ubuntu-22.04, cxx: clang++,  version: 14 }
+          - { os: ubuntu-22.04, cxx: clang++,  version: 15 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 16 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 17 }
+          - { os: ubuntu-24.04, cxx: clang++,  version: 18 }
+          - { os: macos-latest, cxx: clang++,  version: 17 }
+          - { os: windows-latest, cxx: cl }
+
     runs-on: ${{ matrix.config.os }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-      - name: install dependencies
-        working-directory: cpp
-        run: |
-          cmake -P cmake/cmate --cc=${{ matrix.config.cc }} install
 
-      - name: configure and build
-        working-directory: cpp
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+        if: startsWith(matrix.config.os, 'windows')
+
+      - name: Install build tools (ubuntu)
+        if: startsWith(matrix.config.os, 'ubuntu')
         run: |
-          cmake -P cmake/cmate --cc=${{ matrix.config.cc }} build --release
+          sudo apt-get update
+          sudo apt-get install -y ccache
+
+      - name: Install build tools (macos)
+        if: startsWith(matrix.config.os, 'macos')
+        run: brew install ccache llvm@${{ matrix.config.version }}
+
+      - name: Cache CPM packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+          restore-keys: cpm-
+
+      - name: Cache ccache
+        if: "!startsWith(matrix.config.os, 'windows')"
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
+          restore-keys: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-
+
+      - name: Set CXX (ubuntu)
+        if: startsWith(matrix.config.os, 'ubuntu')
+        run: echo "CXX=${{ matrix.config.cxx }}-${{ matrix.config.version }}" >> $GITHUB_ENV
+
+      - name: Set CXX (macos)
+        if: startsWith(matrix.config.os, 'macos')
+        run: echo "CXX=$(brew --prefix llvm@${{ matrix.config.version }})/bin/clang++" >> $GITHUB_ENV
+
+      - name: Configure
+        working-directory: cpp
+        run: cmake --preset host
+
+      - name: Build
+        working-directory: cpp
+        run: cmake --build --preset host
+
+      - name: Test
+        working-directory: cpp
+        run: ctest --preset host --test-dir build/host
+
   test-cpp-acceptance:
+    env:
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+
     strategy:
+      fail-fast: false
       matrix:
         config:
           - os: ubuntu-latest
-            cc: gcc
+            cxx: g++
           - os: ubuntu-latest
-            cc: clang
+            cxx: clang++
           - os: macos-latest
-            cc: clang
+            cxx: clang++
+          - os: windows-latest
           # Doesn't work on windows. See: https://github.com/cucumber/gherkin/issues/412
           # If fixed, please merge test-cpp and test-cpp-acceptance
           # - os: windows-latest
           #  cc: cl
+
     runs-on: ${{ matrix.config.os }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+
       - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+        if: startsWith(matrix.config.os, 'windows')
+
+      - name: Install build tools (ubuntu)
+        if: startsWith(matrix.config.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache
+
+      - name: Install build tools (macos)
+        if: startsWith(matrix.config.os, 'macos')
+        run: brew install ccache
+
+      - name: Cache CPM packages
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+          restore-keys: cpm-
+
+      - name: Cache ccache
+        if: "!startsWith(matrix.config.os, 'windows')"
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ github.ref }}
+          restore-keys: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-
+
       - name: run acceptance tests
         working-directory: cpp
-        run: |
-          make acceptance
+        run: make acceptance

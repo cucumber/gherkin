@@ -21,7 +21,7 @@ parse_options(int ac, char** av)
 
     for (opts.last_arg = 1; opts.last_arg < ac; ++opts.last_arg) {
         std::string_view arg(av[opts.last_arg]);
-
+        
         if (arg == "--no-source") {
             opts.include_source = false;
         } else if (arg == "--no-ast") {
@@ -74,7 +74,7 @@ int main(int ac, char** av)
 
     cucumber::gherkin::app app;
     cucumber::gherkin::app::callbacks cbs{
-        .source = [&](const auto& m) { print_json_obj("source", m); },
+        .source = [&](const cucumber::messages::source& m) { print_json_obj("source", m); },
         .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
         .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
         .error = [&](const auto& m) { std::cout << m.to_json() << std::endl; }
