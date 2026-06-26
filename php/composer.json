@@ -21,6 +21,6 @@
         "vimeo/psalm": "6.16.1",
         "phpunit/phpunit": "13.1.14",
         "psalm/plugin-phpunit": "0.19.7",
-        "friendsofphp/php-cs-fixer": "3.95.7"
+        "friendsofphp/php-cs-fixer": "3.95.11"
     }
 }

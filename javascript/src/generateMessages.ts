@@ -1,4 +1,4 @@
-import * as messages from '@cucumber/messages'
+import { type Envelope, SourceMediaType } from '@cucumber/messages'
 import AstBuilder from './AstBuilder.js'
 import GherkinClassicTokenMatcher from './GherkinClassicTokenMatcher.js'
 import GherkinInMarkdownTokenMatcher from './GherkinInMarkdownTokenMatcher.js'
@@ -11,15 +11,15 @@ import compile from './pickles/compile.js'
 export default function generateMessages(
   data: string,
   uri: string,
-  mediaType: messages.SourceMediaType,
+  mediaType: SourceMediaType,
   options: IGherkinOptions
-): readonly messages.Envelope[] {
+): readonly Envelope[] {
   let tokenMatcher: ITokenMatcher<TokenType>
   switch (mediaType) {
-    case messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN:
+    case SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN:
       tokenMatcher = new GherkinClassicTokenMatcher(options.defaultDialect)
       break
-    case messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN:
+    case SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN:
       tokenMatcher = new GherkinInMarkdownTokenMatcher(options.defaultDialect)
       break
     default:

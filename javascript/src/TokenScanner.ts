@@ -1,4 +1,4 @@
-import type * as messages from '@cucumber/messages'
+import type { Location } from '@cucumber/messages'
 import type IToken from './IToken.js'
 
 /**
@@ -14,7 +14,7 @@ export default class TokenScanner<TokenType> {
 
   constructor(
     source: string,
-    private readonly makeToken: (line: string, location: messages.Location) => IToken<TokenType>
+    private readonly makeToken: (line: string, location: Location) => IToken<TokenType>
   ) {
     this.lines = source.split(/\r?\n/)
     if (this.lines.length > 0 && this.lines[this.lines.length - 1].trim() === '') {
