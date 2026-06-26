@@ -5,3 +5,4 @@
 
 # Test/fixture data must be LF
 *.feature       text eol=lf
+*.tokens        text eol=lf
