@@ -31,9 +31,8 @@ jobs:
           - ubuntu-latest
         java: ['21']
         include:
-# Integration tests don't work on windows, classpath must be seperated with a ';' instead.
-#          - os: windows-latest
-#            java: '21'
+          - os: windows-latest
+            java: '21'
           - os: macos-latest
             java: '21'
 
