@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -euf -o pipefail
-LIB=$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd lib && pwd)
-
-java --class-path "${LIB}/*" $*
