@@ -4,8 +4,8 @@ GHERKIN_PARSER = src/main/java/io/cucumber/gherkin/Parser.java
 GHERKIN_RAZOR = gherkin-java.razor
 SOURCE_FILES = $(shell find . -name "*.java" | grep -v $(GHERKIN_PARSER))
 
-GHERKIN = bin/gherkin
-GHERKIN_GENERATE_TOKENS = bin/gherkin-generate-tokens
+GHERKIN = bin/execute io.cucumber.gherkin.Main
+GHERKIN_GENERATE_TOKENS = bin/execute io.cucumber.gherkin.GenerateTokens
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
