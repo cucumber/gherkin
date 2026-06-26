@@ -23,6 +23,6 @@ fi
 
 set -x
 
-java \
-  -classpath "$DEPENDENCIES$CLASSPATH_SEPARATOR${DIR}/../target/classes$CLASSPATH_SEPARATOR${DIR}/../target/test-classes" \
-  io.cucumber.gherkin.GenerateTokens $*
+echo "-classpath $DEPENDENCIES$CLASSPATH_SEPARATOR${DIR}/../target/classes$CLASSPATH_SEPARATOR${DIR}/../target/test-classes" >> "${DIR}/arguments.txt"
+
+java "@${DIR}/arguments.txt" io.cucumber.gherkin.GenerateTokens $*
