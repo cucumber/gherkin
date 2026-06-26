@@ -35,9 +35,6 @@ jobs:
             node-version: "22.x"
 
     steps:
-      - name: set git core.autocrlf to 'input'
-        run: git config --global core.autocrlf input
-
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
