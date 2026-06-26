@@ -2,8 +2,9 @@ package io.cucumber.gherkin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-class TokenFormatterBuilder implements Parser.Builder<List<String>> {
+class TokenFormatterBuilder implements Parser.Builder<String> {
     private final TokenFormatter formatter = new TokenFormatter();
     private final List<String> tokens = new ArrayList<>();
 
@@ -21,8 +22,8 @@ class TokenFormatterBuilder implements Parser.Builder<List<String>> {
     }
 
     @Override
-    public List<String> getResult() {
-        return tokens;
+    public String getResult() {
+        return tokens.stream().collect(Collectors.joining("\n", "","\n"));
     }
 
     @Override

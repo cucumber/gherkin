@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.readString;
@@ -20,14 +19,14 @@ public final class GenerateTokens {
 
     public static void main(String[] args) throws IOException {
         TokenFormatterBuilder builder = new TokenFormatterBuilder();
-        Parser<List<String>> parser = new Parser<>(builder);
+        Parser<String> parser = new Parser<>(builder);
         GherkinTokenMatcher matcher = new GherkinTokenMatcher();
         OutputStream out = new NonClosableOutputStream(System.out);
         try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, UTF_8))) {
             for (String fileName : args) {
                 String bytes = readString(Paths.get(fileName), UTF_8);
-                parser.parse(bytes, matcher, fileName)
-                        .forEach(writer::println);
+                String result = parser.parse(bytes, matcher, fileName);
+                writer.print(result);
             }
         }
     }
