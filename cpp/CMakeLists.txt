@@ -56,7 +56,7 @@ option(
 option(
     CUCUMBER_GHERKIN_FETCH_DEPS
     "Fetch dependencies via FetchContent."
-    ${CUCUMBER_GHERKIN_FETCH_DEPS}
+    On
 )
 
 ###
@@ -97,7 +97,7 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
     FetchContent_Declare(
         cucumber_messages
         GIT_REPOSITORY https://github.com/cucumber/messages.git
-        GIT_TAG main
+        GIT_TAG cpp-remove-cmate-use-native-cmake-and-CPM
         OVERRIDE_FIND_PACKAGE
         SOURCE_SUBDIR "cpp"
     )
