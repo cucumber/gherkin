@@ -29,9 +29,8 @@ jobs:
           - ubuntu-latest
         go: ['1.20.x', '1.21.x']
         include:
-# Integration tests don't work on Windows, reason unknown
-#          - os: windows-latest
-#            go: '1.21.x'
+          - os: windows-latest
+            go: '1.21.x'
           - os: macos-latest
             go: '1.24.x'
 
