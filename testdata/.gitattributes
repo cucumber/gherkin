@@ -3,7 +3,10 @@
 
 * text=auto
 
-# Test/fixture data must be LF
+# Test/fixture data must be LF unless defined otherwise
 *.feature       text eol=lf
 *.feature.md    text eol=lf
 *.tokens        text eol=lf
+
+# Defined otherwise:
+*.crlf.feature  text eol=crlf
