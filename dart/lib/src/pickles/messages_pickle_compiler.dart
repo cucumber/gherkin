@@ -1,5 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/src/language/id_generator.dart';
+import 'package:cucumber_gherkin/src/language/id_generator.dart';
 
 /// Compiles a [messages.GherkinDocument] into the list of executable
 /// [messages.Pickle]s it describes.
@@ -182,7 +182,7 @@ class MessagesPickleCompiler {
               lastKeywordType,
             );
             // Background steps are interpolated but do NOT reference the
-            // specific example row — they belong to the background node only.
+            // specific example row â€” they belong to the background node only.
             steps.add(
               _pickleStep(
                 step,

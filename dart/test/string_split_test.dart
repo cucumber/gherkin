@@ -1,4 +1,4 @@
-import 'package:gherkin/src/extensions/strings.dart';
+import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:test/test.dart';
 
 void main() {

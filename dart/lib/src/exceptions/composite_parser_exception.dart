@@ -1,4 +1,4 @@
-import 'package:gherkin/src/exceptions/parser_exception.dart';
+import 'package:cucumber_gherkin/src/exceptions/parser_exception.dart';
 
 /// Aggregates several [ParserException]s collected during a single parse.
 class CompositeParserException extends ParserException {

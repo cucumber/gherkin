@@ -1,4 +1,4 @@
-import 'package:gherkin/src/helpers/line_ending_helper.dart';
+import 'package:cucumber_gherkin/src/helpers/line_ending_helper.dart';
 import 'package:test/test.dart';
 
 void main() {

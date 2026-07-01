@@ -1,4 +1,4 @@
-import 'package:gherkin/src/language/gherkin_language_keywords.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 
 /// A Gherkin dialect: the set of localized keywords for a single language,
 /// backed by a set of [GherkinLanguageKeywords].
@@ -21,7 +21,7 @@ class GherkinDialect {
   /// The English name of the language (for example `English`).
   String get name => keywords.name;
 
-  /// The native name of the language (for example `français`).
+  /// The native name of the language (for example `franÃ§ais`).
   String get nativeName => keywords.native;
 
   /// The keywords that introduce a `Rule`.

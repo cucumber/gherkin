@@ -1,4 +1,4 @@
-import 'package:gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/src/language/location.dart';
 
 /// An error raised while parsing a Gherkin document.
 class ParserException implements Exception {

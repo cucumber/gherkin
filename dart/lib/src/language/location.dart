@@ -1,4 +1,4 @@
-import 'package:gherkin/src/extensions/int_extensions.dart';
+import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
 
 /// A one-based position (line and column) within a source document.
 class Location {

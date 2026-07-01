@@ -10,8 +10,8 @@ from pub.dev.
 
 ```dart
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/gherkin.dart';
-import 'package:gherkin/language.dart';
+import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/language.dart';
 
 final parser = (GherkinParser.builder()
       ..includeSource = false
@@ -41,7 +41,7 @@ stdin) and writes NDJSON messages:
 dart run bin/gherkin.dart [options] <paths...>
 ```
 
-Once the package is activated (`dart pub global activate gherkin`), the same
+Once the package is activated (`dart pub global activate cucumber_gherkin`), the same
 binary is available as the `gherkin` executable.
 
 Options:

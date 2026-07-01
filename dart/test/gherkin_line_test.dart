@@ -1,5 +1,5 @@
-import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/language.dart';
+import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/language.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -121,12 +121,12 @@ void main() {
 
   test('finds_escaped_table_cells', () {
     final gherkinLine = GherkinLine(
-      r'      | \|æ\\n     | \o\no\  | \\\|a\\\\n | ø\\\nø\\|',
+      r'      | \|Ã¦\\n     | \o\no\  | \\\|a\\\\n | Ã¸\\\nÃ¸\\|',
       line,
     );
 
     final texts = gherkinLine.tableCells.map((span) => span.text).toList();
-    expect([r'|æ\n', '\\o\no\\', r'\|a\\n', 'ø\\\nø\\'], texts);
+    expect([r'|Ã¦\n', '\\o\no\\', r'\|a\\n', 'Ã¸\\\nÃ¸\\'], texts);
   });
 
   test('preserve_escaped_new_lines_at_start_and_end', () {

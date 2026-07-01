@@ -1,4 +1,4 @@
-import 'package:gherkin/src/exceptions/parser_exception.dart';
+import 'package:cucumber_gherkin/src/exceptions/parser_exception.dart';
 
 /// Raised by the AST builder when the token stream is structurally invalid
 /// (for example, a data table with an inconsistent cell count).

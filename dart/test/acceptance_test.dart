@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/gherkin.dart';
-import 'package:gherkin/language.dart';
+import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/language.dart';
 import 'package:test/test.dart';
 
 // ---------------------------------------------------------------------------
@@ -121,7 +121,7 @@ void main() {
   final goodNames = _fixtures(goodDir, exts);
   final badNames = _fixtures(badDir, exts);
 
-  // ── AST ──────────────────────────────────────────────────────────────────
+  // â”€â”€ AST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   group('acceptance/ast', () {
     for (final name in goodNames) {
       test(name, () async {
@@ -140,7 +140,7 @@ void main() {
     }
   });
 
-  // ── Pickles ───────────────────────────────────────────────────────────────
+  // â”€â”€ Pickles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   group('acceptance/pickles', () {
     for (final name in goodNames) {
       test(name, () async {
@@ -159,7 +159,7 @@ void main() {
     }
   });
 
-  // ── Source ────────────────────────────────────────────────────────────────
+  // â”€â”€ Source â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   group('acceptance/source', () {
     for (final name in goodNames) {
       test(name, () async {
@@ -178,7 +178,7 @@ void main() {
     }
   });
 
-  // ── Errors (bad fixtures) ─────────────────────────────────────────────────
+  // â”€â”€ Errors (bad fixtures) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   group('acceptance/errors', () {
     for (final name in badNames) {
       test(name, () async {

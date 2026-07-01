@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:gherkin/src/extensions/random_access_file_extension.dart';
-import 'package:gherkin/src/language/gherkin_line.dart';
-import 'package:gherkin/src/language/location.dart';
-import 'package:gherkin/src/language/token.dart';
-import 'package:gherkin/src/parser/token_scanner.dart';
+import 'package:cucumber_gherkin/src/extensions/random_access_file_extension.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
+import 'package:cucumber_gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
 /// A [TokenScanner] that reads a Gherkin document from a file (typically a
 /// `.feature` file), producing one token per line.

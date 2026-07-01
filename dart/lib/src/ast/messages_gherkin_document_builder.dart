@@ -1,16 +1,16 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/src/ast/ast_node.dart';
-import 'package:gherkin/src/collections/stack.dart';
-import 'package:gherkin/src/extensions/int_extensions.dart';
-import 'package:gherkin/src/extensions/strings.dart';
-import 'package:gherkin/src/extensions/token_type_extension.dart';
-import 'package:gherkin/src/language/id_generator.dart';
-import 'package:gherkin/src/language/location.dart';
-import 'package:gherkin/src/language/token.dart';
-import 'package:gherkin/src/language/token_type.dart';
-import 'package:gherkin/src/parser/builder.dart';
-import 'package:gherkin/src/parser/rule_type.dart';
+import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/ast/ast_node.dart';
+import 'package:cucumber_gherkin/src/collections/stack.dart';
+import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
+import 'package:cucumber_gherkin/src/extensions/strings.dart';
+import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
+import 'package:cucumber_gherkin/src/language/id_generator.dart';
+import 'package:cucumber_gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/language/token_type.dart';
+import 'package:cucumber_gherkin/src/parser/builder.dart';
+import 'package:cucumber_gherkin/src/parser/rule_type.dart';
 
 /// A [Builder] that assembles parser events into a Cucumber Messages
 /// [messages.GherkinDocument].

@@ -1,5 +1,5 @@
-import 'package:gherkin/src/exceptions/token_parser_exception.dart';
-import 'package:gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/exceptions/token_parser_exception.dart';
+import 'package:cucumber_gherkin/src/language/token.dart';
 
 /// Raised when the parser encounters a token it did not expect.
 class UnexpectedTokenException extends TokenParserException {

@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/gherkin.dart';
-import 'package:gherkin/language.dart';
+import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/language.dart';
 
 /// Parses a feature file and prints the names of the compiled pickles.
 ///

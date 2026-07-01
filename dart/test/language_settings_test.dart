@@ -1,4 +1,4 @@
-import 'package:gherkin/language.dart';
+import 'package:cucumber_gherkin/language.dart';
 import 'package:test/test.dart';
 
 void main() {

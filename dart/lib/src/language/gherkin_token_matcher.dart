@@ -1,15 +1,15 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/src/extensions/int_extensions.dart';
-import 'package:gherkin/src/extensions/strings.dart';
-import 'package:gherkin/src/language/gherkin_language_constants.dart';
-import 'package:gherkin/src/language/gherkin_dialect.dart';
-import 'package:gherkin/src/language/gherkin_dialect_provider.dart';
-import 'package:gherkin/src/language/gherkin_line.dart';
-import 'package:gherkin/src/language/gherkin_line_span.dart';
-import 'package:gherkin/src/language/location.dart';
-import 'package:gherkin/src/language/token.dart';
-import 'package:gherkin/src/language/token_type.dart';
-import 'package:gherkin/src/parser/token_matcher.dart';
+import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
+import 'package:cucumber_gherkin/src/extensions/strings.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
+import 'package:cucumber_gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/language/token_type.dart';
+import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
 class GherkinTokenMatcher implements TokenMatcher {

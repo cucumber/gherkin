@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/gherkin.dart';
-import 'package:gherkin/language.dart';
+import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/language.dart';
 
 Future<void> main(List<String> args) async {
   var includeSource = true;

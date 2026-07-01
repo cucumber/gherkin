@@ -1,4 +1,4 @@
-name: gherkin
+name: cucumber_gherkin
 description: Gherkin parser/compiler for Dart.
 version: 0.0.1
 homepage: https://github.com/cucumber/gherkin

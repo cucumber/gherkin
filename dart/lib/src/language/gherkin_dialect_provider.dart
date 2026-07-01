@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/src/language/gherkin_dialect.dart';
-import 'package:gherkin/src/language/gherkin_language_keywords.dart';
-import 'package:gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
+import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:path/path.dart';
 
 /// Supplies [GherkinDialect]s by language tag, backed by an in-memory map of

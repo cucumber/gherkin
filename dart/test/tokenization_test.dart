@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:gherkin/language.dart';
-import 'package:gherkin/src/helpers/line_ending_helper.dart';
-import 'package:gherkin/src/tokens/tokens_generator.dart';
+import 'package:cucumber_gherkin/language.dart';
+import 'package:cucumber_gherkin/src/helpers/line_ending_helper.dart';
+import 'package:cucumber_gherkin/src/tokens/tokens_generator.dart';
 import 'package:test/test.dart';
 
 void main() {

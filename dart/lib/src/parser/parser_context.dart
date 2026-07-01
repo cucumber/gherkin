@@ -1,9 +1,9 @@
 import 'dart:collection';
 
-import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/src/language/token.dart';
-import 'package:gherkin/src/parser/token_matcher.dart';
-import 'package:gherkin/src/parser/token_scanner.dart';
+import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
+import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
 /// The mutable state threaded through a single parse run.
 class ParserContext {
