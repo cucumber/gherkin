@@ -9,6 +9,13 @@ extension IntExtensions on int {
 
 /// Integer constants used as sentinels throughout the library.
 class Int {
-  /// The smallest 64-bit signed integer, used as an "unset" sentinel.
-  static const int min = 1 << 63;
+  /// An "unset" sentinel for line numbers, columns, and indents.
+  ///
+  /// All real values for these are non-negative (columns and lines are
+  /// 1-based, indents are 0-based character offsets), so a negative value can
+  /// never collide with a legitimate one. A negative literal is used rather
+  /// than `1 << 63` because bit-shift arithmetic does not produce the 64-bit
+  /// minimum integer on the web/JS target, which would silently break the
+  /// sentinel there.
+  static const int min = -1;
 }
