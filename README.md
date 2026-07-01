@@ -111,16 +111,16 @@ pickles = Gherkin::Pickles::Compiler.new(id_generator).compile(gherkin_document,
 #### JavaScript
 
 ```javascript
-import * as Gherkin from "@cucumber/gherkin";
-import * as Messages from "@cucumber/messages";
+import { AstBuilder, compile, GherkinClassicTokenMatcher, Parser } from "@cucumber/gherkin";
+import { IdGenerator } from "@cucumber/messages";
 
-const uuidFn = Messages.IdGenerator.uuid();
-const builder = new Gherkin.AstBuilder(uuidFn);
-const matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInMarkdownTokenMatcher()
+const uuidFn = IdGenerator.uuid();
+const builder = new AstBuilder(uuidFn);
+const matcher = new GherkinClassicTokenMatcher(); // or GherkinInMarkdownTokenMatcher()
 
-const parser = new Gherkin.Parser(builder, matcher);
+const parser = new Parser(builder, matcher);
 const gherkinDocument = parser.parse("Feature: ...");
-const pickles = Gherkin.compile(
+const pickles = compile(
     gherkinDocument,
     "uri_of_the_feature.feature",
     uuidFn
