@@ -1,11 +1,16 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/collections.dart';
 import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/extensions.dart';
-import 'package:gherkin/language.dart' as lang;
-import 'package:gherkin/parser.dart';
-
 import 'package:gherkin/src/ast/ast_node.dart';
+import 'package:gherkin/src/collections/stack.dart';
+import 'package:gherkin/src/extensions/int_extensions.dart';
+import 'package:gherkin/src/extensions/strings.dart';
+import 'package:gherkin/src/extensions/token_type_extension.dart';
+import 'package:gherkin/src/language/id_generator.dart';
+import 'package:gherkin/src/language/location.dart';
+import 'package:gherkin/src/language/token.dart';
+import 'package:gherkin/src/language/token_type.dart';
+import 'package:gherkin/src/parser/builder.dart';
+import 'package:gherkin/src/parser/rule_type.dart';
 
 /// A [Builder] that assembles parser events into a Cucumber Messages
 /// [messages.GherkinDocument].
@@ -17,15 +22,15 @@ class MessagesGherkinDocumentBuilder
   }
 
   /// The generator used to assign ids to the produced messages.
-  final lang.IdGenerator idGenerator;
+  final IdGenerator idGenerator;
   final Stack<AstNode> _stack = Stack<AstNode>();
   final List<messages.Comment> _comments = <messages.Comment>[];
 
   AstNode get _currentNode => _stack.top;
 
   @override
-  void build(lang.Token token) {
-    if (token.matchedType == lang.TokenType.comment) {
+  void build(Token token) {
+    if (token.matchedType == TokenType.comment) {
       _comments.add(
         messages.Comment(
           location: _messageLocation(token.location),
@@ -96,7 +101,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Step _createStep(AstNode node) {
-    final stepLine = node.getToken(lang.TokenType.stepLine)!;
+    final stepLine = node.getToken(TokenType.stepLine)!;
     final dataTables = node.items<messages.DataTable>(RuleType.dataTable);
     final docStrings = node.items<messages.DocString>(RuleType.docString);
     return messages.Step(
@@ -111,11 +116,10 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.DocString _createDocString(AstNode node) {
-    final separatorToken =
-        node.getTokens(lang.TokenType.docStringSeparator).first;
+    final separatorToken = node.getTokens(TokenType.docStringSeparator).first;
     final mediaType =
         separatorToken.matchedText.isEmpty ? null : separatorToken.matchedText;
-    final lineTokens = node.getTokens(lang.TokenType.other);
+    final lineTokens = node.getTokens(TokenType.other);
     final content = lineTokens.map((token) => token.matchedText).join('\n');
     return messages.DocString(
       location: _messageLocation(separatorToken.location),
@@ -131,7 +135,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   List<messages.TableRow> _getTableRows(AstNode node) {
-    final tokens = node.getTokens(lang.TokenType.tableRow);
+    final tokens = node.getTokens(TokenType.tableRow);
     final rows =
         tokens
             .map(
@@ -146,7 +150,7 @@ class MessagesGherkinDocumentBuilder
     return rows;
   }
 
-  List<messages.TableCell> _getCells(lang.Token token) =>
+  List<messages.TableCell> _getCells(Token token) =>
       token.matchedItems
           .map(
             (item) => messages.TableCell(
@@ -172,7 +176,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Background _createBackground(AstNode node) {
-    final backgroundLine = node.getToken(lang.TokenType.backgroundLine)!;
+    final backgroundLine = node.getToken(TokenType.backgroundLine)!;
     return messages.Background(
       id: idGenerator.newId(),
       location: _messageLocation(backgroundLine.location),
@@ -186,7 +190,7 @@ class MessagesGherkinDocumentBuilder
   messages.Scenario _createScenario(AstNode node) {
     final tags = _getTags(node);
     final scenarioNode = node.singleOrNull<AstNode>(RuleType.scenario)!;
-    final scenarioLine = scenarioNode.getToken(lang.TokenType.scenarioLine)!;
+    final scenarioLine = scenarioNode.getToken(TokenType.scenarioLine)!;
     return messages.Scenario(
       id: idGenerator.newId(),
       location: _messageLocation(scenarioLine.location),
@@ -210,7 +214,7 @@ class MessagesGherkinDocumentBuilder
   messages.Examples _createExamplesDefinition(AstNode node) {
     final tags = _getTags(node);
     final examplesNode = node.singleOrNull<AstNode>(RuleType.examples)!;
-    final examplesLine = examplesNode.getToken(lang.TokenType.examplesLine)!;
+    final examplesLine = examplesNode.getToken(TokenType.examplesLine)!;
     final allRows = examplesNode.singleOrDefault<List<messages.TableRow>>(
       RuleType.examplesTable,
       const <messages.TableRow>[],
@@ -233,7 +237,7 @@ class MessagesGherkinDocumentBuilder
     if (tagsNode == null) {
       return <messages.Tag>[];
     }
-    return tagsNode.getTokens(lang.TokenType.tagLine).expand((token) {
+    return tagsNode.getTokens(TokenType.tagLine).expand((token) {
       return token.matchedItems.map(
         (tagItem) => messages.Tag(
           id: idGenerator.newId(),
@@ -245,7 +249,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   String _createDescription(AstNode node) {
-    final lineTokens = node.getTokens(lang.TokenType.other).toList();
+    final lineTokens = node.getTokens(TokenType.other).toList();
     while (lineTokens.isNotEmpty &&
         lineTokens.last.matchedText.isEmptyOrWhiteSpace) {
       lineTokens.removeLast();
@@ -258,7 +262,7 @@ class MessagesGherkinDocumentBuilder
     if (header == null) {
       return null;
     }
-    final featureLine = header.getToken(lang.TokenType.featureLine);
+    final featureLine = header.getToken(TokenType.featureLine);
     if (featureLine == null || featureLine.matchedGherkinDialect == null) {
       return null;
     }
@@ -293,7 +297,7 @@ class MessagesGherkinDocumentBuilder
     if (header == null) {
       return null;
     }
-    final ruleLine = header.getToken(lang.TokenType.ruleLine);
+    final ruleLine = header.getToken(TokenType.ruleLine);
     if (ruleLine == null) {
       return null;
     }
@@ -336,13 +340,13 @@ class MessagesGherkinDocumentBuilder
     );
   }
 
-  messages.Location _messageLocation(lang.Location location, [int? column]) {
+  messages.Location _messageLocation(Location location, [int? column]) {
     return messages.Location(
       line: location.line,
       column: column ?? (location.column.isMin ? null : location.column),
     );
   }
 
-  lang.Location _langLocation(messages.Location location) =>
-      lang.Location(location.line, location.column ?? 0);
+  Location _langLocation(messages.Location location) =>
+      Location(location.line, location.column ?? 0);
 }

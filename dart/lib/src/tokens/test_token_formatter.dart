@@ -1,5 +1,5 @@
-import 'package:gherkin/extensions.dart';
-import 'package:gherkin/language.dart';
+import 'package:gherkin/src/extensions/token_type_extension.dart';
+import 'package:gherkin/src/language/token.dart';
 
 /// Renders a [Token] in the shared `*.tokens` text format used by the
 /// acceptance tests.

@@ -1,6 +1,7 @@
-import 'package:gherkin/helpers.dart';
-import 'package:gherkin/language.dart';
-import 'package:gherkin/parser.dart';
+import 'package:gherkin/src/helpers/line_ending_helper.dart';
+import 'package:gherkin/src/language/file_token_scanner.dart';
+import 'package:gherkin/src/parser/parser.g.dart';
+import 'package:gherkin/src/parser/token_matcher.dart';
 import 'package:gherkin/src/tokens/no_op_result.dart';
 import 'package:gherkin/src/tokens/token_formatter_builder.dart';
 

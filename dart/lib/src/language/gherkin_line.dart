@@ -1,8 +1,10 @@
 import 'package:characters/characters.dart';
 import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/extensions.dart';
-import 'package:gherkin/language.dart';
+import 'package:gherkin/src/extensions/int_extensions.dart';
+import 'package:gherkin/src/extensions/strings.dart';
 import 'package:gherkin/src/language/gherkin_language_constants.dart';
+import 'package:gherkin/src/language/gherkin_line_span.dart';
+import 'package:gherkin/src/language/location.dart';
 
 /// A single source line, providing the queries the scanner needs to classify
 /// it.

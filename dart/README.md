@@ -41,6 +41,9 @@ stdin) and writes NDJSON messages:
 dart run bin/gherkin.dart [options] <paths...>
 ```
 
+Once the package is activated (`dart pub global activate gherkin`), the same
+binary is available as the `gherkin` executable.
+
 Options:
 
 - `--no-source` — omit `source` envelopes
@@ -55,6 +58,9 @@ tests (mirrors `gherkin-generate-tokens` in the other implementations):
 ```console
 dart run bin/gherkin_generate_tokens.dart <paths...>
 ```
+
+This binary is available as `gherkin-generate-tokens` once the package is
+activated.
 
 ## Tests
 

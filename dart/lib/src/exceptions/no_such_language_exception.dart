@@ -1,6 +1,5 @@
-import 'package:gherkin/language.dart';
-
 import 'package:gherkin/src/exceptions/parser_exception.dart';
+import 'package:gherkin/src/language/location.dart';
 
 /// Raised when a requested dialect (`# language:`) is not supported.
 class NoSuchLanguageException extends ParserException {

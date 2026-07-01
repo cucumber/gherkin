@@ -1,4 +1,4 @@
-import 'package:gherkin/extensions.dart';
+import 'package:gherkin/src/extensions/strings.dart';
 import 'package:test/test.dart';
 
 void main() {

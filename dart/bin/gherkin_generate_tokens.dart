@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:gherkin/language.dart';
-import 'package:gherkin/tokens.dart';
+import 'package:gherkin/src/tokens/tokens_generator.dart';
 
 /// Emits the tokenized representation of one or more Gherkin feature files,
 /// matching the `*.tokens` reference format used by the acceptance tests.

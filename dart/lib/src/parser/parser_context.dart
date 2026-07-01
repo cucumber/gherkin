@@ -1,8 +1,7 @@
 import 'dart:collection';
 
 import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/language.dart';
-
+import 'package:gherkin/src/language/token.dart';
 import 'package:gherkin/src/parser/token_matcher.dart';
 import 'package:gherkin/src/parser/token_scanner.dart';
 

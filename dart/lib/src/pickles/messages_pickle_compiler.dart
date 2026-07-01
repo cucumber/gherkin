@@ -1,5 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:gherkin/language.dart';
+import 'package:gherkin/src/language/id_generator.dart';
 
 /// Compiles a [messages.GherkinDocument] into the list of executable
 /// [messages.Pickle]s it describes.

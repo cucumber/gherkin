@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:gherkin/extensions.dart';
+import 'package:gherkin/src/extensions/random_access_file_extension.dart';
 import 'package:test/test.dart';
 
 void main() {

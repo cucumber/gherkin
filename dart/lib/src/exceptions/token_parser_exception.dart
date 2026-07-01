@@ -1,6 +1,6 @@
-import 'package:gherkin/language.dart';
-
 import 'package:gherkin/src/exceptions/parser_exception.dart';
+import 'package:gherkin/src/language/location.dart';
+import 'package:gherkin/src/language/token.dart';
 
 /// A [ParserException] whose location is derived from the offending token.
 class TokenParserException extends ParserException {

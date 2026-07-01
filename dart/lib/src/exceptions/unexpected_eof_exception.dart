@@ -1,6 +1,5 @@
-import 'package:gherkin/language.dart';
-
 import 'package:gherkin/src/exceptions/token_parser_exception.dart';
+import 'package:gherkin/src/language/token.dart';
 
 /// Raised when the file ends while the parser still expected more tokens.
 class UnexpectedEofException extends TokenParserException {

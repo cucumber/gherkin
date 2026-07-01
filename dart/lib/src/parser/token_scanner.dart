@@ -1,4 +1,4 @@
-import 'package:gherkin/language.dart';
+import 'package:gherkin/src/language/token.dart';
 
 /// A source of [Token]s consumed by the parser.
 ///

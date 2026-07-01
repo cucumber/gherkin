@@ -1,4 +1,4 @@
-import 'package:gherkin/language.dart';
+import 'package:gherkin/src/language/token.dart';
 
 /// Classifies scanned [Token]s, setting their matched type and metadata.
 ///

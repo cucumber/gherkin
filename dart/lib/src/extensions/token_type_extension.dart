@@ -1,5 +1,5 @@
-import 'package:gherkin/language.dart';
-import 'package:gherkin/parser.dart';
+import 'package:gherkin/src/language/token_type.dart';
+import 'package:gherkin/src/parser/rule_type.dart';
 
 /// Conversions from [TokenType] to its wire name and corresponding rule type.
 extension TokenTypeExtension on TokenType {

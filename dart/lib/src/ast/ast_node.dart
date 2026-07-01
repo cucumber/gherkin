@@ -1,6 +1,7 @@
-import 'package:gherkin/extensions.dart';
-import 'package:gherkin/language.dart';
-import 'package:gherkin/parser.dart';
+import 'package:gherkin/src/extensions/token_type_extension.dart';
+import 'package:gherkin/src/language/token.dart';
+import 'package:gherkin/src/language/token_type.dart';
+import 'package:gherkin/src/parser/rule_type.dart';
 
 /// A node in the intermediate parse tree, grouping the sub-items recognized
 /// for a single [RuleType].

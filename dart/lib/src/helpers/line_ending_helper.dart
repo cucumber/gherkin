@@ -1,4 +1,4 @@
-import 'package:gherkin/extensions.dart';
+import 'package:gherkin/src/extensions/strings.dart';
 
 /// Helpers for normalizing line endings so output is stable across platforms.
 class LineEndingHelper {

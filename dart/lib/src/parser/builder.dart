@@ -1,5 +1,4 @@
-import 'package:gherkin/language.dart';
-
+import 'package:gherkin/src/language/token.dart';
 import 'package:gherkin/src/parser/rule_type.dart';
 
 /// Assembles a result of type [T] from the events emitted by the parser.

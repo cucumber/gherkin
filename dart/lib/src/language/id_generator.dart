@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 /// Generates the ids assigned to emitted Cucumber messages.
@@ -10,6 +11,7 @@ abstract class IdGenerator {
 
   /// Returns a **new** [Incrementing] instance each time; safe for per-test
   /// use.
+  @visibleForTesting
   static IdGenerator get freshIncrementingGenerator => Incrementing();
 
   /// A shared [UUID] generator producing random UUIDs.

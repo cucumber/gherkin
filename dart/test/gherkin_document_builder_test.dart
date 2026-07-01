@@ -1,6 +1,6 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/language.dart';
-import 'package:gherkin/parser.dart';
+import 'package:gherkin/src/parser/parser.g.dart';
 import 'package:gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:gherkin/src/pickles/messages_pickle_compiler.dart';
 import 'package:test/test.dart';

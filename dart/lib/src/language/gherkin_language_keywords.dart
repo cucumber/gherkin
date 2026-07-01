@@ -1,4 +1,4 @@
-import 'package:gherkin/extensions.dart';
+import 'package:gherkin/src/extensions/strings.dart';
 
 /// The localized Gherkin keywords for a single language, as defined in
 /// `gherkin-languages.json`.

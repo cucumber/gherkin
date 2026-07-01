@@ -1,5 +1,6 @@
-import 'package:gherkin/language.dart';
-import 'package:gherkin/parser.dart';
+import 'package:gherkin/src/language/token.dart';
+import 'package:gherkin/src/parser/builder.dart';
+import 'package:gherkin/src/parser/rule_type.dart';
 import 'package:gherkin/src/tokens/no_op_result.dart';
 import 'package:gherkin/src/tokens/test_token_formatter.dart';
 
