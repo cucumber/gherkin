@@ -7,7 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [40.0.0] - 2026-06-10
+### Changed
 - [.Net] Replaced FluentAssertions with AwesomeAssertions
+- [JavaScript] BREAKING CHANGE: Switch to ESM ([#610](https://github.com/cucumber/gherkin/pull/610))
 
 ## [39.1.0] - 2026-05-06
 ### Added
@@ -912,7 +916,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v39.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v40.0.0...HEAD
+[40.0.0]: https://github.com/cucumber/gherkin/compare/v39.1.0...v40.0.0
 [39.1.0]: https://github.com/cucumber/gherkin/compare/v39.0.0...v39.1.0
 [39.0.0]: https://github.com/cucumber/gherkin/compare/v38.0.0...v39.0.0
 [38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0

@@ -1,5 +1,5 @@
 import type * as messages from '@cucumber/messages'
-import type IToken from './IToken'
+import type IToken from './IToken.js'
 
 export interface IAstBuilder<AstNode, TokenType, RuleType> {
   stack: AstNode[]

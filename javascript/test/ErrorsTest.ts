@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import { AstBuilderException } from '../src/Errors'
+import { AstBuilderException } from '../src/Errors.js'
 
 describe('Errors', () => {
   it('AstBuilderException is an instance of AstBuilderException', () => {

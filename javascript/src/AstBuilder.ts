@@ -1,9 +1,9 @@
 import type * as messages from '@cucumber/messages'
-import AstNode from './AstNode'
-import { AstBuilderException } from './Errors'
-import type { IAstBuilder } from './IAstBuilder'
-import type IToken from './IToken'
-import { RuleType, TokenType } from './Parser'
+import AstNode from './AstNode.js'
+import { AstBuilderException } from './Errors.js'
+import type { IAstBuilder } from './IAstBuilder.js'
+import type IToken from './IToken.js'
+import { RuleType, TokenType } from './Parser.js'
 
 export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleType> {
   stack: AstNode[]
