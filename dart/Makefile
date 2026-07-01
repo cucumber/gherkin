@@ -1,6 +1,8 @@
 SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = lib/src/assets/gherkin-languages.json
+GHERKIN_PARSER = lib/src/parser/parser.g.dart
+GHERKIN_RAZOR = gherkin-dart.razor
 GHERKIN = dart run bin/gherkin.dart
 GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
 
@@ -19,11 +21,13 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make <target>\n\nWhere <target> is one of:\n"} /^[$$()% a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 .PHONY: help
 
-generate:
-	echo "Nothing to do"
+generate: $(GHERKIN_PARSER) ## Generate gherkin parser files
 .PHONY: generate
 
-clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin parser files
+$(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
+	berp -g ../gherkin.berp -t $(GHERKIN_RAZOR) -o $@ --noBOM
+
+clean-generate: ## Remove generated Gherkin parser files
 	rm -f $(GHERKIN_PARSER)
 .PHONY: clean-generate
 

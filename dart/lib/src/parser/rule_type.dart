@@ -105,9 +105,9 @@ enum RuleType {
   tags,
 
   /// A description helper:
-  /// `DescriptionHelper := #Empty* Description? #Comment*`.
+  /// `DescriptionHelper := #Empty* Description?`.
   descriptionHelper,
 
-  /// Free-text description: `Description := #Other+`.
+  /// Free-text description: `Description := (#Other | #Comment)+`.
   description,
 }

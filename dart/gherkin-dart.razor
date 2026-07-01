@@ -1,0 +1,317 @@
+@using System
+@using System.Text
+@using System.Linq
+@using Berp
+@functions {
+    // Normalize an acronym-heavy PascalCase name so that fully-uppercase runs
+    // become title-case (e.g. "EOF" -> "Eof", "DocString" -> "DocString").
+    // This lets us derive Dart identifiers that follow the lowerCamelCase
+    // convention used throughout the hand-written support code.
+    static string Pascal(string raw)
+    {
+        var name = raw.Replace("#", "");
+        var sb = new StringBuilder();
+        for (var i = 0; i < name.Length; i++)
+        {
+            var c = name[i];
+            if (char.IsUpper(c))
+            {
+                // Keep the first letter of a run uppercase; lowercase the rest
+                // of a fully-uppercase acronym (EOF -> Eof).
+                var isRunStart = i == 0 || !char.IsUpper(name[i - 1]);
+                var isRunEnd = i + 1 >= name.Length || !char.IsLower(name[i + 1]);
+                if (isRunStart)
+                {
+                    sb.Append(c);
+                }
+                else if (isRunEnd && i + 1 < name.Length && char.IsUpper(name[i + 1]) == false)
+                {
+                    sb.Append(char.ToLowerInvariant(c));
+                }
+                else if (char.IsUpper(name[Math.Max(0, i - 1)]))
+                {
+                    sb.Append(char.ToLowerInvariant(c));
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+        return sb.ToString();
+    }
+
+    // The lowerCamelCase enum member / identifier form used by Dart, e.g.
+    // "#EOF" -> "eof", "GherkinDocument" -> "gherkinDocument".
+    static string Camel(string raw)
+    {
+        var p = Pascal(raw);
+        if (p.Length == 0) return p;
+        return char.ToLowerInvariant(p[0]) + p.Substring(1);
+    }
+
+    // The matcher method name for a token rule, e.g. "#TableRow" -> "matchTableRow".
+    static string MatchName(string raw)
+    {
+        return "match" + Pascal(raw);
+    }
+}
+@helper CallProduction(ProductionRule production)
+{
+    switch(production.Type) {
+        case ProductionRuleType.Start:
+                @:_startRule(context, RuleType.@Camel(production.RuleName));
+            break;
+        case ProductionRuleType.End:
+                @:_endRule(context, RuleType.@Camel(production.RuleName));
+            break;
+        case ProductionRuleType.Process:
+                @:_build(context, token);
+            break;
+    }
+}
+@helper HandleParserError(IEnumerable<string> expectedTokens, State state)
+{<text>
+    token.detach();
+    final expectedTokens = <String>[
+      @Raw(string.Join(",\n      ", expectedTokens.Select(t => "'" + t + "'")))@(",")
+    ];
+    final error = token.isEof
+        ? UnexpectedEofException(token, expectedTokens)
+        : UnexpectedTokenException(token, expectedTokens);
+
+    if (stopAtFirstError) {
+      throw error;
+    }
+
+    _addError(context, error);
+    return @state.Id;
+</text>}
+@helper MatchToken(TokenType tokenType)
+{<text>_match@(Pascal(tokenType.ToString()))(context, token)</text>}
+// GENERATED FILE - DO NOT EDIT.
+//
+// This file was generated from `gherkin-dart.razor` by
+// [Berp](https://github.com/gasparnagy/berp) using the shared
+// `../gherkin.berp` grammar. Run `make generate` to regenerate it.
+//
+// The supporting types (`IBuilder`, `ITokenMatcher`, `ITokenScanner`,
+// `ParserContext`, `RuleType`) live in hand-written sibling files so this
+// generated unit contains only the parser state machine.
+// dart format off
+import 'dart:collection';
+
+import 'package:gherkin/exceptions.dart';
+import 'package:gherkin/language.dart';
+
+import 'package:gherkin/src/parser/i_builder.dart';
+import 'package:gherkin/src/parser/i_token_matcher.dart';
+import 'package:gherkin/src/parser/i_token_scanner.dart';
+import 'package:gherkin/src/parser/parser_context.dart';
+import 'package:gherkin/src/parser/rule_type.dart';
+
+/// A recursive-descent Gherkin parser driven by a Berp-generated state machine.
+///
+/// The parser reads [Token]s from an [ITokenScanner], classifies them with an
+/// [ITokenMatcher], and feeds the recognized grammar rules to an [IBuilder] of
+/// type [T], which assembles the final result returned by [parse].
+class @(Model.ParserClassName)<T> {
+  /// Creates a parser that emits its result through the given [IBuilder].
+  @(Model.ParserClassName)(this._builder);
+
+  final IBuilder<T> _builder;
+
+  /// Whether parsing should throw on the first error instead of collecting
+  /// every error encountered while scanning the document.
+  bool stopAtFirstError = false;
+
+  /// Parses the tokens produced by [tokenScanner], using [tokenMatcher] to
+  /// classify each token, and returns the assembled result of type [T].
+  ///
+  /// Throws a [CompositeParserException] if one or more parse errors are
+  /// encountered.
+  T parse(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher) {
+    _builder.reset();
+    tokenMatcher.reset();
+
+    final context = ParserContext(
+      tokenScanner,
+      tokenMatcher,
+      Queue<Token>(),
+      <ParserException>[],
+    );
+
+    _startRule(context, RuleType.@Camel(Model.RuleSet.StartRule.Name));
+    var state = 0;
+    Token token;
+    do {
+      token = _readToken(context);
+      state = _matchToken(state, token, context);
+    } while (!token.isEof);
+
+    _endRule(context, RuleType.@Camel(Model.RuleSet.StartRule.Name));
+
+    if (context.errors.isNotEmpty) {
+      throw CompositeParserException(context.errors);
+    }
+
+    return _builder.result;
+  }
+
+  void _addError(ParserContext context, ParserException error) {
+    // Deduplicate by (message, line, column) so the same parse-error at the
+    // same location is not reported twice, but distinct errors with an
+    // identical message at different locations are kept.
+    for (final e in context.errors) {
+      if (e.message == error.message &&
+          e.location.line == error.location.line &&
+          e.location.column == error.location.column) {
+        return;
+      }
+    }
+    context.errors.add(error);
+    if (context.errors.length > 10) {
+      throw CompositeParserException(context.errors);
+    }
+  }
+
+  void _handleAstError<V>(ParserContext context, V Function() action) =>
+      _handleExternalError(context, action, null);
+
+  V _handleExternalError<V>(
+    ParserContext context,
+    V Function() action,
+    V defaultValue,
+  ) {
+    if (stopAtFirstError) {
+      return action();
+    }
+
+    try {
+      return action();
+    } on CompositeParserException catch (compositeParserException) {
+      for (final error in compositeParserException.errors) {
+        _addError(context, error);
+      }
+    } on ParserException catch (error) {
+      _addError(context, error);
+    }
+    return defaultValue;
+  }
+
+  void _build(ParserContext context, Token token) =>
+      _handleAstError(context, () {
+        _builder.build(token);
+      });
+
+  void _startRule(ParserContext context, RuleType ruleType) =>
+      _handleAstError(context, () {
+        _builder.startRule(ruleType);
+      });
+
+  void _endRule(ParserContext context, RuleType ruleType) =>
+      _handleAstError(context, () {
+        _builder.endRule(ruleType);
+      });
+
+  Token _readToken(ParserContext context) =>
+      context.tokenQueue.isNotEmpty
+          ? context.tokenQueue.removeFirst()
+          : context.tokenScanner.read();
+@foreach(var rule in Model.RuleSet.TokenRules)
+{<text>
+  bool _match@(Pascal(rule.Name))(ParserContext context, Token token) {
+    @if (rule.Name != "#EOF")
+    {
+    @:if (token.isEof) {
+    @:  return false;
+    @:}
+    }
+    return _handleExternalError(
+      context,
+      () => context.tokenMatcher.@(MatchName(rule.Name))(token),
+      false,
+    );
+  }
+</text>
+}
+
+  int _matchToken(int state, Token token, ParserContext context) {
+    int newState;
+    switch (state) {
+    @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+    {
+      @:case @state.Id:
+      @:  newState = _matchTokenAt_@(state.Id)(token, context);
+    }
+      default:
+        throw StateError('Unknown state: $state');
+    }
+    return newState;
+  }
+@foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+{
+<text>
+  // @Raw(state.Comment)
+  int _matchTokenAt_@(state.Id)(Token token, ParserContext context) {
+    @foreach(var transition in state.Transitions)
+    {
+    @:if (@MatchToken(transition.TokenType)) {
+        if (transition.LookAheadHint != null)
+        {
+        @:  if (_lookahead_@(transition.LookAheadHint.Id)(context, token)) {
+        }
+        foreach(var production in transition.Productions)
+        {
+            @CallProduction(production)
+        }
+        @:  return @transition.TargetState;
+        if (transition.LookAheadHint != null)
+        {
+        @:  }
+        }
+    @:}
+    }
+    @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)
+  }
+</text>
+}
+@foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
+{
+<text>
+  bool _lookahead_@(lookAheadHint.Id)(ParserContext context, Token currentToken) {
+    currentToken.detach();
+    Token token;
+    final queue = Queue<Token>();
+    var match = false;
+    do {
+      token = _readToken(context)..detach();
+      queue.add(token);
+
+      if (false
+      @foreach(var tokenType in lookAheadHint.ExpectedTokens)
+      {
+          @:    || @MatchToken(tokenType)
+      }
+      ) {
+        match = true;
+        break;
+      }
+    } while (false
+    @foreach(var tokenType in lookAheadHint.Skip)
+    {
+        @:    || @MatchToken(tokenType)
+    }
+    );
+
+    context.tokenQueue.addAll(queue);
+
+    return match;
+  }
+</text>
+}
+}
