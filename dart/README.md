@@ -3,8 +3,8 @@
 Gherkin parser/compiler for Dart.
 
 The Dart implementation emits [Cucumber Messages](https://github.com/cucumber/messages)
-using `package:cucumber_messages/cucumber_messages.dart`. In this repository it depends
-on the adjacent messages checkout via `../../messages/dart`.
+using the [`cucumber_messages`](https://pub.dev/packages/cucumber_messages) package
+from pub.dev.
 
 ## Library usage
 
