@@ -113,10 +113,7 @@ Feature: Eating
 
   test('throws the first error immediately when stopAtFirstError is true', () {
     expect(
-      () => _parse(
-        '@tag\nnot a feature line\n',
-        stopAtFirstError: true,
-      ),
+      () => _parse('@tag\nnot a feature line\n', stopAtFirstError: true),
       throwsA(isA<ParserException>()),
     );
   });
@@ -130,14 +127,8 @@ Feature: Eating
     );
     final parser = Parser<messages.GherkinDocument>(builder);
 
-    final first = parser.parse(
-      StringTokenScanner('Feature: One\n'),
-      matcher,
-    );
-    final second = parser.parse(
-      StringTokenScanner('Feature: Two\n'),
-      matcher,
-    );
+    final first = parser.parse(StringTokenScanner('Feature: One\n'), matcher);
+    final second = parser.parse(StringTokenScanner('Feature: Two\n'), matcher);
 
     expect(first.feature!.name, 'One');
     expect(second.feature!.name, 'Two');
