@@ -32,17 +32,18 @@ final pickle = envelopes
 envelopes (`parseEnvelope` / `parseEnvelopes`). Both `.feature` and Markdown
 `.feature.md` sources are supported.
 
-## CLI
+## Tooling
 
-The CLI reads `.feature`/`.feature.md` files (or NDJSON source envelopes on
-stdin) and writes NDJSON messages:
+The repo includes two internal helper scripts used to generate the acceptance
+test fixtures (mirroring the other implementations). They are not published as
+executables and are intended to be run from the repo with `dart run`.
+
+`bin/gherkin.dart` reads `.feature`/`.feature.md` files (or NDJSON source
+envelopes on stdin) and writes NDJSON messages:
 
 ```console
 dart run bin/gherkin.dart [options] <paths...>
 ```
-
-Once the package is activated (`dart pub global activate cucumber_gherkin`), the same
-binary is available as the `gherkin` executable.
 
 Options:
 
@@ -52,15 +53,13 @@ Options:
 - `--predictable-ids` — use incrementing ids instead of UUIDs
 - `--default-dialect <lang>` — dialect to use when a feature has no `# language:` header (defaults to `en`)
 
-A second binary emits the tokenized representation used by the acceptance
-tests (mirrors `gherkin-generate-tokens` in the other implementations):
+`bin/gherkin_generate_tokens.dart` emits the tokenized representation used by
+the acceptance tests (mirrors `gherkin-generate-tokens` in the other
+implementations):
 
 ```console
 dart run bin/gherkin_generate_tokens.dart <paths...>
 ```
-
-This binary is available as `gherkin-generate-tokens` once the package is
-activated.
 
 ## Tests
 

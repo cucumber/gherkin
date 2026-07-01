@@ -13,10 +13,6 @@ funding:
 environment:
   sdk: ^3.7.0
 
-executables:
-  gherkin:
-  gherkin-generate-tokens: gherkin_generate_tokens
-
 topics:
   - cucumber
   - gherkin
