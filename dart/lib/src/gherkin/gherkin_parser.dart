@@ -58,6 +58,14 @@ class GherkinParser {
   static GherkinParserBuilder builder() => GherkinParserBuilder();
 
   /// Parses the file at [path] and emits the resulting envelopes.
+  ///
+  /// I/O failures (e.g. the file does not exist) are *thrown* as a
+  /// [GherkinException] rather than emitted as a `parseError` envelope: they
+  /// are not a property of the Gherkin source. This matches the flagship
+  /// implementations, where the path-based entry point surfaces I/O errors to
+  /// the caller (e.g. Java's `GherkinParser.parse(Path)` declares
+  /// `throws IOException`). Malformed Gherkin, by contrast, is always reported
+  /// as a `parseError` envelope.
   Stream<messages.Envelope> parsePath(String path) {
     try {
       // Read the file verbatim. The `source` envelope's `data` must preserve
@@ -150,6 +158,18 @@ class GherkinParser {
   }
 
   messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
+    // A location-less error (e.g. an unsupported default dialect) has no
+    // position to report: emit a null location and the "(-1,0)" prefix used by
+    // the other first-party implementations (see Java's ParserException).
+    if (error.location.isEmpty) {
+      return messages.Envelope(
+        parseError: messages.ParseError(
+          source: messages.SourceReference(uri: uri),
+          message: '(-1,0): ${error.message}',
+        ),
+      );
+    }
+
     final line = error.location.line;
     final column = error.location.column;
     // Prefix the message with "(line:column): " to match the format produced

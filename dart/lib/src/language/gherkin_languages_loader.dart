@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cucumber_gherkin/src/exceptions/gherkin_exception.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:path/path.dart';
 
@@ -17,11 +18,13 @@ const _dialectsAssetRelativePath = 'lib/src/assets/gherkin-languages.json';
 /// is consumed as a dependency. Falls back to a working-directory-relative
 /// lookup when no package config is available.
 ///
-/// Throws an [Exception] if the resource cannot be found.
+/// Throws a [GherkinException] if the resource cannot be found. This is a
+/// fatal deployment/packaging error rather than a parse error, so it is not
+/// emitted as a `parseError` envelope.
 Map<String, GherkinLanguageKeywords> loadGherkinLanguagesFromJsonAsset() {
   final file = _resolveDialectsAsset();
   if (file == null || !file.existsSync()) {
-    throw Exception(
+    throw GherkinException(
       'Gherkin language resource not found: $_dialectsAssetRelativePath',
     );
   }
