@@ -7,10 +7,10 @@ import 'package:gherkin/parser.dart';
 
 import 'package:gherkin/src/ast/ast_node.dart';
 
-/// An [IBuilder] that assembles parser events into a Cucumber Messages
+/// A [Builder] that assembles parser events into a Cucumber Messages
 /// [messages.GherkinDocument].
 class MessagesGherkinDocumentBuilder
-    implements IBuilder<messages.GherkinDocument> {
+    implements Builder<messages.GherkinDocument> {
   /// Creates a builder that assigns ids using [idGenerator].
   MessagesGherkinDocumentBuilder(this.idGenerator) {
     reset();
@@ -96,7 +96,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Step _createStep(AstNode node) {
-    final stepLine = node.getToken(lang.TokenType.stepLine);
+    final stepLine = node.getToken(lang.TokenType.stepLine)!;
     final dataTables = node.items<messages.DataTable>(RuleType.dataTable);
     final docStrings = node.items<messages.DocString>(RuleType.docString);
     return messages.Step(
@@ -172,7 +172,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Background _createBackground(AstNode node) {
-    final backgroundLine = node.getToken(lang.TokenType.backgroundLine);
+    final backgroundLine = node.getToken(lang.TokenType.backgroundLine)!;
     return messages.Background(
       id: idGenerator.newId(),
       location: _messageLocation(backgroundLine.location),
@@ -185,11 +185,8 @@ class MessagesGherkinDocumentBuilder
 
   messages.Scenario _createScenario(AstNode node) {
     final tags = _getTags(node);
-    final scenarioNode = node.singleOrDefault<AstNode>(
-      RuleType.scenario,
-      AstNode.empty,
-    );
-    final scenarioLine = scenarioNode.getToken(lang.TokenType.scenarioLine);
+    final scenarioNode = node.singleOrNull<AstNode>(RuleType.scenario)!;
+    final scenarioLine = scenarioNode.getToken(lang.TokenType.scenarioLine)!;
     return messages.Scenario(
       id: idGenerator.newId(),
       location: _messageLocation(scenarioLine.location),
@@ -212,11 +209,8 @@ class MessagesGherkinDocumentBuilder
 
   messages.Examples _createExamplesDefinition(AstNode node) {
     final tags = _getTags(node);
-    final examplesNode = node.singleOrDefault<AstNode>(
-      RuleType.examples,
-      AstNode.empty,
-    );
-    final examplesLine = examplesNode.getToken(lang.TokenType.examplesLine);
+    final examplesNode = node.singleOrNull<AstNode>(RuleType.examples)!;
+    final examplesLine = examplesNode.getToken(lang.TokenType.examplesLine)!;
     final allRows = examplesNode.singleOrDefault<List<messages.TableRow>>(
       RuleType.examplesTable,
       const <messages.TableRow>[],
@@ -235,11 +229,8 @@ class MessagesGherkinDocumentBuilder
   }
 
   List<messages.Tag> _getTags(AstNode node) {
-    final tagsNode = node.singleOrDefault<AstNode>(
-      RuleType.tags,
-      AstNode.empty,
-    );
-    if (tagsNode.isEmpty) {
+    final tagsNode = node.singleOrNull<AstNode>(RuleType.tags);
+    if (tagsNode == null) {
       return <messages.Tag>[];
     }
     return tagsNode.getTokens(lang.TokenType.tagLine).expand((token) {
@@ -263,15 +254,12 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Feature? _createFeature(AstNode node) {
-    final header = node.singleOrDefault<AstNode>(
-      RuleType.featureHeader,
-      AstNode.empty,
-    );
-    if (header.isEmpty) {
+    final header = node.singleOrNull<AstNode>(RuleType.featureHeader);
+    if (header == null) {
       return null;
     }
     final featureLine = header.getToken(lang.TokenType.featureLine);
-    if (featureLine.isEmpty || featureLine.matchedGherkinDialect.isEmpty) {
+    if (featureLine == null || featureLine.matchedGherkinDialect == null) {
       return null;
     }
 
@@ -292,7 +280,7 @@ class MessagesGherkinDocumentBuilder
     return messages.Feature(
       location: _messageLocation(featureLine.location),
       tags: _getTags(header),
-      language: featureLine.matchedGherkinDialect.language,
+      language: featureLine.matchedGherkinDialect!.language,
       keyword: featureLine.matchedKeyword,
       name: featureLine.matchedText,
       description: _getDescription(header),
@@ -301,15 +289,12 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Rule? _createRule(AstNode node) {
-    final header = node.singleOrDefault<AstNode>(
-      RuleType.ruleHeader,
-      AstNode.empty,
-    );
-    if (header.isEmpty) {
+    final header = node.singleOrNull<AstNode>(RuleType.ruleHeader);
+    if (header == null) {
       return null;
     }
     final ruleLine = header.getToken(lang.TokenType.ruleLine);
-    if (ruleLine.isEmpty) {
+    if (ruleLine == null) {
       return null;
     }
 

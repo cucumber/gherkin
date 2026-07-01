@@ -1,23 +1,27 @@
 import 'package:characters/characters.dart';
-import 'package:gherkin/core.dart';
 import 'package:gherkin/exceptions.dart';
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/src/language/gherkin_language_constants.dart';
 
-/// The concrete [IGherkinLine] backed by a single line of source text.
-class GherkinLine with INullSafetyObject implements IGherkinLine {
+/// A single source line, providing the queries the scanner needs to classify
+/// it.
+class GherkinLine {
   /// Creates a line from its [_lineText] at the one-based [_lineNumber].
   GherkinLine(this._lineText, this._lineNumber)
     : _trimmedLineText = _lineText.trimLeft(),
       _isEof = false;
 
-  /// Creates the sentinel line that marks the end of the file.
+  /// Creates the line that marks the end of the file.
   GherkinLine.eof()
     : _lineText = Strings.empty,
       _lineNumber = Int.min,
       _trimmedLineText = Strings.empty,
       _isEof = true;
+
+  /// Sentinel passed to [getLineText] to keep the entire line text.
+  static const int entireLine = 0;
+
   // Columns are 1-indexed.
   static const int _offset = 1;
 
@@ -26,25 +30,24 @@ class GherkinLine with INullSafetyObject implements IGherkinLine {
   final String _trimmedLineText;
   final bool _isEof;
 
-  // A concrete line is never the empty sentinel; only [IGherkinLine.empty]
-  // (the private [_EmptyGherkinLine]) reports itself as empty.
-  @override
-  bool get isEmpty => false;
-
-  @override
+  /// Whether this line is the end-of-file marker.
   bool get isEof => _isEof;
 
-  @override
+  /// Whether this line is not the end-of-file marker.
   bool get isNotEof => !isEof;
 
-  /// NOP
-  @override
+  /// Called by the parser to indicate non-streamed reading (for example during
+  /// look-ahead). No-op for this in-memory implementation.
   void detach() {}
 
   /// The one-based line number of this line in the source.
   int get lineNumber => _lineNumber;
 
-  @override
+  /// Returns the line text.
+  ///
+  /// [indentToRemove] is the maximum number of whitespace characters to remove
+  /// from the start of the line; a negative value removes all leading
+  /// whitespace.
   String getLineText([int indentToRemove = 0]) {
     if (indentToRemove < 0 || indentToRemove > indent) {
       return _trimmedLineText;
@@ -52,20 +55,23 @@ class GherkinLine with INullSafetyObject implements IGherkinLine {
     return _lineText.substring(indentToRemove);
   }
 
-  @override
+  /// Returns the remaining part of the line after the first [length]
+  /// characters, trimmed.
   String getRestTrimmed(int length) =>
       _trimmedLineText.substring(length).trim();
 
-  @override
+  /// The number of whitespace characters at the beginning of the line.
   int get indent => _lineText.length - _trimmedLineText.length;
 
-  @override
+  /// Whether the line is empty or contains whitespace only.
   bool get isEmptyLine => _trimmedLineText.isEmpty;
 
-  @override
+  /// Whether the beginning of the line (ignoring leading whitespace) matches
+  /// [prefix].
   bool startsWith(String prefix) => _trimmedLineText.startsWith(prefix);
 
-  @override
+  /// Whether the beginning of the line (ignoring leading whitespace) matches
+  /// the title keyword [text] followed by a `:` separator.
   bool startsWithTitleKeyword(String text) {
     final textLength = text.length;
     if (_trimmedLineText.length <= textLength) {
@@ -82,7 +88,8 @@ class GherkinLine with INullSafetyObject implements IGherkinLine {
     return b2 && b3;
   }
 
-  @override
+  /// Parses the line as a tag list, returning a `(column, text)` span for each
+  /// tag (including its leading `@`).
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
     final pattern = RegExp(r'\s' + GherkinLanguageConstants.commentPrefix);
@@ -116,7 +123,8 @@ class GherkinLine with INullSafetyObject implements IGherkinLine {
     return tags;
   }
 
-  @override
+  /// Parses the line as a table row, returning a `(column, text)` span for each
+  /// trimmed cell value.
   Iterable<GherkinLineSpan> get tableCells {
     final lineSpans = <GherkinLineSpan>[];
     var cellBuffer = StringBuffer();

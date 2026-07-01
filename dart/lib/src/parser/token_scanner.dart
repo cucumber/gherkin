@@ -7,7 +7,7 @@ import 'package:gherkin/language.dart';
 /// implementations (for example `StringTokenScanner` and `FileTokenScanner`),
 /// so it is modelled as an interface rather than a standalone function.
 // ignore: one_member_abstracts
-abstract class ITokenScanner {
+abstract class TokenScanner {
   /// Reads and returns the next [Token] from the underlying source.
   Token read();
 }

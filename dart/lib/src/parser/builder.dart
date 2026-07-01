@@ -3,7 +3,7 @@ import 'package:gherkin/language.dart';
 import 'package:gherkin/src/parser/rule_type.dart';
 
 /// Assembles a result of type [T] from the events emitted by the parser.
-abstract class IBuilder<T> {
+abstract class Builder<T> {
   /// Handles a recognized [token].
   void build(Token token);
 

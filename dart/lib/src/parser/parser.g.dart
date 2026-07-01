@@ -4,7 +4,7 @@
 // [Berp](https://github.com/gasparnagy/berp) using the shared
 // `../gherkin.berp` grammar. Run `make generate` to regenerate it.
 //
-// The supporting types (`IBuilder`, `ITokenMatcher`, `ITokenScanner`,
+// The supporting types (`Builder`, `TokenMatcher`, `TokenScanner`,
 // `ParserContext`, `RuleType`) live in hand-written sibling files so this
 // generated unit contains only the parser state machine.
 // dart format off
@@ -13,22 +13,22 @@ import 'dart:collection';
 import 'package:gherkin/exceptions.dart';
 import 'package:gherkin/language.dart';
 
-import 'package:gherkin/src/parser/i_builder.dart';
-import 'package:gherkin/src/parser/i_token_matcher.dart';
-import 'package:gherkin/src/parser/i_token_scanner.dart';
+import 'package:gherkin/src/parser/builder.dart';
 import 'package:gherkin/src/parser/parser_context.dart';
 import 'package:gherkin/src/parser/rule_type.dart';
+import 'package:gherkin/src/parser/token_matcher.dart';
+import 'package:gherkin/src/parser/token_scanner.dart';
 
 /// A recursive-descent Gherkin parser driven by a Berp-generated state machine.
 ///
-/// The parser reads [Token]s from an [ITokenScanner], classifies them with an
-/// [ITokenMatcher], and feeds the recognized grammar rules to an [IBuilder] of
+/// The parser reads [Token]s from a [TokenScanner], classifies them with a
+/// [TokenMatcher], and feeds the recognized grammar rules to a [Builder] of
 /// type [T], which assembles the final result returned by [parse].
 class Parser<T> {
-  /// Creates a parser that emits its result through the given [IBuilder].
+  /// Creates a parser that emits its result through the given [Builder].
   Parser(this._builder);
 
-  final IBuilder<T> _builder;
+  final Builder<T> _builder;
 
   /// Whether parsing should throw on the first error instead of collecting
   /// every error encountered while scanning the document.
@@ -39,7 +39,7 @@ class Parser<T> {
   ///
   /// Throws a [CompositeParserException] if one or more parse errors are
   /// encountered.
-  T parse(ITokenScanner tokenScanner, ITokenMatcher tokenMatcher) {
+  T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher) {
     _builder.reset();
     tokenMatcher.reset();
 

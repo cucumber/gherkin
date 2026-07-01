@@ -1,10 +1,12 @@
-import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
 
 /// A one-based position (line and column) within a source document.
-class Location with INullSafetyObject {
+class Location {
   /// Creates a location at the given [line] and [column].
   const Location(this.line, this.column);
+
+  /// A location representing an unknown/absent position.
+  static const empty = Location(Int.min, Int.min);
 
   /// The one-based line number.
   final int line;
@@ -12,17 +14,6 @@ class Location with INullSafetyObject {
   /// The one-based column number.
   final int column;
 
-  /// A sentinel location representing an invalid/absent position.
-  static const empty = _InvalidLocation();
-
-  @override
-  bool get isEmpty => false;
-}
-
-/// Convenience implementation of an invalid [Location] instance.
-class _InvalidLocation extends Location {
-  const _InvalidLocation() : super(Int.min, Int.min);
-
-  @override
-  bool get isEmpty => true;
+  /// Whether this is the unknown/absent [empty] location.
+  bool get isEmpty => line == empty.line && column == empty.column;
 }

@@ -3,9 +3,9 @@ import 'package:gherkin/parser.dart';
 import 'package:gherkin/src/tokens/no_op_result.dart';
 import 'package:gherkin/src/tokens/test_token_formatter.dart';
 
-/// An [IBuilder] that renders each scanned token using the shared `*.tokens`
+/// A [Builder] that renders each scanned token using the shared `*.tokens`
 /// text format used by the acceptance tests.
-class TokenFormatterBuilder implements IBuilder<NoOpResult> {
+class TokenFormatterBuilder implements Builder<NoOpResult> {
   /// The formatter used to render individual tokens.
   final TestTokenFormatter formatter = TestTokenFormatter();
 

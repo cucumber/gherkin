@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 
-/// An [ITokenScanner] that reads a Gherkin document from an in-memory string.
-class StringTokenScanner implements ITokenScanner {
+/// A [TokenScanner] that reads a Gherkin document from an in-memory string.
+class StringTokenScanner implements TokenScanner {
   /// Creates a scanner over the lines of [source].
   StringTokenScanner(String source)
     : _linesIterator = LineSplitter.split(source).iterator;

@@ -4,7 +4,7 @@ import 'package:gherkin/language.dart';
 ///
 /// Each `match*` method returns `true` if the token is of the corresponding
 /// type, in which case the token is populated with the matched details.
-abstract class ITokenMatcher {
+abstract class TokenMatcher {
   /// Matches the end-of-file token.
   bool matchEof(Token token);
 

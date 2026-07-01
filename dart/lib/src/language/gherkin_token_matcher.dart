@@ -2,18 +2,18 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/parser.dart';
 import 'package:gherkin/src/language/gherkin_language_constants.dart';
+import 'package:gherkin/src/language/gherkin_dialect.dart';
+import 'package:gherkin/src/language/gherkin_dialect_provider.dart';
+import 'package:gherkin/src/language/gherkin_line.dart';
 import 'package:gherkin/src/language/gherkin_line_span.dart';
-import 'package:gherkin/src/language/i_gherkin_dialect.dart';
-import 'package:gherkin/src/language/i_gherkin_dialect_provider.dart';
-import 'package:gherkin/src/language/i_gherkin_line.dart';
 import 'package:gherkin/src/language/location.dart';
 import 'package:gherkin/src/language/token.dart';
 import 'package:gherkin/src/language/token_type.dart';
 
-/// The [ITokenMatcher] for plain (`.feature`) Gherkin sources.
-class TokenMatcher implements ITokenMatcher {
+/// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
+class GherkinTokenMatcher implements TokenMatcher {
   /// Creates a matcher that resolves dialects through [_dialectProvider].
-  TokenMatcher(this._dialectProvider)
+  GherkinTokenMatcher(this._dialectProvider)
     : _currentDialect = _dialectProvider.defaultDialect {
     _initializeKeywordTypes();
   }
@@ -21,20 +21,15 @@ class TokenMatcher implements ITokenMatcher {
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
   );
 
-  final IGherkinDialectProvider _dialectProvider;
+  final GherkinDialectProvider _dialectProvider;
 
-  IGherkinDialect _currentDialect;
+  GherkinDialect _currentDialect;
   String _activeDocStringSeparator = Strings.empty;
   int _indentToRemove = 0;
   Map<String, List<messages.StepKeywordType>> _keywordTypesMap = {};
 
-  /// The dialect currently in effect, falling back to the default dialect.
-  IGherkinDialect get currentDialect {
-    if (_currentDialect.isEmpty) {
-      return _dialectProvider.defaultDialect;
-    }
-    return _currentDialect;
-  }
+  /// The dialect currently in effect.
+  GherkinDialect get currentDialect => _currentDialect;
 
   @override
   void reset() {
@@ -78,7 +73,7 @@ class TokenMatcher implements ITokenMatcher {
   @override
   bool matchComment(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.commentPrefix)) {
-      final text = token.line.getLineText(IGherkinLine.entireLine);
+      final text = token.line.getLineText(GherkinLine.entireLine);
       setTokenMatched(token, TokenType.comment, text: text, indent: 0);
       return true;
     }
@@ -88,7 +83,7 @@ class TokenMatcher implements ITokenMatcher {
   @override
   bool matchLanguage(Token token) {
     final match = _languagePattern.firstMatch(
-      token.line.getLineText(IGherkinLine.entireLine),
+      token.line.getLineText(GherkinLine.entireLine),
     );
     if (match != null) {
       final language = match.group(1) ?? Strings.empty;
@@ -257,7 +252,7 @@ class TokenMatcher implements ITokenMatcher {
               ? 0
               : indent.isNotMin
               ? indent
-              : (token.line.isEmpty ? 0 : token.line.indent)
+              : token.line.indent
       ..location = Location(token.location.line, token.matchedIndent + 1);
   }
 

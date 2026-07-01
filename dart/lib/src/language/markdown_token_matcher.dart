@@ -4,8 +4,8 @@ import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 
-/// The [ITokenMatcher] for Markdown (`.feature.md`) Gherkin sources.
-class MarkdownTokenMatcher implements ITokenMatcher {
+/// The [TokenMatcher] for Markdown (`.feature.md`) Gherkin sources.
+class MarkdownTokenMatcher implements TokenMatcher {
   /// Creates a matcher that resolves dialects through [_dialectProvider],
   /// defaulting to [_defaultDialectName] when no `# language:` header is found.
   MarkdownTokenMatcher(
@@ -18,10 +18,10 @@ class MarkdownTokenMatcher implements ITokenMatcher {
     );
     _initializeDialectState();
   }
-  final IGherkinDialectProvider _dialectProvider;
+  final GherkinDialectProvider _dialectProvider;
   final String _defaultDialectName;
 
-  late IGherkinDialect _currentDialect;
+  late GherkinDialect _currentDialect;
   late List<String> _nonStarStepKeywords;
   late List<String> _headerKeywords;
   late Map<String, List<messages.StepKeywordType>> _keywordTypesMap;
@@ -301,7 +301,7 @@ class MarkdownTokenMatcher implements ITokenMatcher {
               ? 0
               : indent.isNotMin
               ? indent
-              : (token.line.isEmpty ? 0 : token.line.indent)
+              : token.line.indent
       ..location = Location(token.location.line, token.matchedIndent + 1);
   }
 

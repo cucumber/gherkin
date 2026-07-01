@@ -13,7 +13,7 @@ void main() {
   test('Test successful parsing', () async {
     final dialectProvider = GherkinDialectProvider(languages);
 
-    final matcher = TokenMatcher(dialectProvider);
+    final matcher = GherkinTokenMatcher(dialectProvider);
 
     final goodDir = Directory('../testdata/good');
 

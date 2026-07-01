@@ -1,40 +1,39 @@
-import 'package:gherkin/core.dart';
 import 'package:gherkin/src/language/gherkin_language_keywords.dart';
-import 'package:gherkin/src/language/i_gherkin_dialect.dart';
 
-/// The concrete [IGherkinDialect] backed by a set of
-/// [GherkinLanguageKeywords].
-class GherkinDialect with INullSafetyObject implements IGherkinDialect {
+/// A Gherkin dialect: the set of localized keywords for a single language,
+/// backed by a set of [GherkinLanguageKeywords].
+class GherkinDialect {
   /// Creates a dialect for [_language] using the given [_keywords].
   GherkinDialect(this._language, this._keywords);
+
   final String _language;
   final GherkinLanguageKeywords _keywords;
 
-  @override
+  /// The raw keyword definitions backing this dialect.
   GherkinLanguageKeywords get keywords => _keywords;
 
-  @override
+  /// The IETF language tag of this dialect (for example `en` or `fr`).
   String get language => _language;
 
-  @override
+  /// The keywords that introduce a `Feature`.
   List<String> get featureKeywords => keywords.feature;
 
-  @override
+  /// The English name of the language (for example `English`).
   String get name => keywords.name;
 
-  @override
+  /// The native name of the language (for example `français`).
   String get nativeName => keywords.native;
 
-  @override
+  /// The keywords that introduce a `Rule`.
   List<String> get ruleKeywords => keywords.rule;
 
-  @override
+  /// The keywords that introduce a `Scenario`.
   List<String> get scenarioKeywords => keywords.scenario;
 
-  @override
+  /// The keywords that introduce a `Scenario Outline`.
   List<String> get scenarioOutlineKeywords => keywords.scenarioOutline;
 
-  @override
+  /// All step keywords, regardless of their semantic type.
   List<String> get stepKeywords =>
       <String>{
         ...givenStepKeywords,
@@ -44,27 +43,24 @@ class GherkinDialect with INullSafetyObject implements IGherkinDialect {
         ...butStepKeywords,
       }.toList();
 
-  @override
+  /// The keywords that introduce a `Background`.
   List<String> get backgroundKeywords => keywords.background;
 
-  @override
+  /// The keywords that introduce an `Examples` block.
   List<String> get examplesKeywords => keywords.examples;
 
-  @override
+  /// The keywords that introduce a `Given` step.
   List<String> get givenStepKeywords => keywords.given;
 
-  @override
+  /// The keywords that introduce a `When` step.
   List<String> get whenStepKeywords => keywords.when;
 
-  @override
+  /// The keywords that introduce a `Then` step.
   List<String> get thenStepKeywords => keywords.then;
 
-  @override
+  /// The keywords that introduce an `And` step.
   List<String> get andStepKeywords => keywords.and;
 
-  @override
+  /// The keywords that introduce a `But` step.
   List<String> get butStepKeywords => keywords.but;
-
-  @override
-  bool get isEmpty => false;
 }

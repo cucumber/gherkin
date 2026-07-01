@@ -11,7 +11,7 @@ void main() {
   final idGenerator = IdGenerator.incrementingGenerator;
   final builder = MessagesGherkinDocumentBuilder(idGenerator);
   final parser = Parser<messages.GherkinDocument>(builder);
-  final matcher = TokenMatcher(dialectProvider);
+  final matcher = GherkinTokenMatcher(dialectProvider);
 
   test('Is reusable', () {
     var tokenScanner = StringTokenScanner('Feature: 1');

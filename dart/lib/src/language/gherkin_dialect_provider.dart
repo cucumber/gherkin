@@ -6,19 +6,23 @@ import 'package:gherkin/language.dart';
 import 'package:gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:path/path.dart';
 
-/// An [IGherkinDialectProvider] backed by an in-memory map of dialects.
-class GherkinDialectProvider implements IGherkinDialectProvider {
+/// Supplies [GherkinDialect]s by language tag, backed by an in-memory map of
+/// dialects.
+class GherkinDialectProvider {
   /// Creates a provider over [_dialects], defaulting to [_defaultDialectName].
   GherkinDialectProvider(this._dialects, [this._defaultDialectName = 'en']);
 
   final String _defaultDialectName;
   final Map<String, GherkinLanguageKeywords> _dialects;
 
-  @override
-  IGherkinDialect get defaultDialect => getDialect(_defaultDialectName);
+  /// The dialect used when none is specified.
+  GherkinDialect get defaultDialect => getDialect(_defaultDialectName);
 
-  @override
-  IGherkinDialect getDialect(
+  /// Returns the dialect for [language].
+  ///
+  /// [location] is used to report a [NoSuchLanguageException] when the language
+  /// is not supported.
+  GherkinDialect getDialect(
     String language, [
     Location location = Location.empty,
   ]) {
@@ -30,7 +34,7 @@ class GherkinDialectProvider implements IGherkinDialectProvider {
     return GherkinDialect(language, languageSettings);
   }
 
-  @override
+  /// The language tags of all supported dialects.
   List<String> get languages => _dialects.keys.toList();
 }
 

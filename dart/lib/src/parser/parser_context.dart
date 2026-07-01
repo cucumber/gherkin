@@ -3,8 +3,8 @@ import 'dart:collection';
 import 'package:gherkin/exceptions.dart';
 import 'package:gherkin/language.dart';
 
-import 'package:gherkin/src/parser/i_token_matcher.dart';
-import 'package:gherkin/src/parser/i_token_scanner.dart';
+import 'package:gherkin/src/parser/token_matcher.dart';
+import 'package:gherkin/src/parser/token_scanner.dart';
 
 /// The mutable state threaded through a single parse run.
 class ParserContext {
@@ -17,10 +17,10 @@ class ParserContext {
   );
 
   /// The scanner the tokens are read from.
-  final ITokenScanner tokenScanner;
+  final TokenScanner tokenScanner;
 
   /// The matcher used to classify each token.
-  final ITokenMatcher tokenMatcher;
+  final TokenMatcher tokenMatcher;
 
   /// Tokens that have been read ahead and not yet consumed.
   final Queue<Token> tokenQueue;

@@ -41,7 +41,7 @@ class GherkinParser {
   /// The [lang.IdGenerator] used to assign ids to emitted messages.
   final lang.IdGenerator idGenerator;
 
-  late final lang.IGherkinDialectProvider _dialectProvider;
+  late final lang.GherkinDialectProvider _dialectProvider;
 
   /// Creates a [GherkinParserBuilder] for fluent configuration.
   static GherkinParserBuilder builder() => GherkinParserBuilder();
@@ -129,10 +129,10 @@ class GherkinParser {
     return result;
   }
 
-  ITokenMatcher _tokenMatcher(messages.SourceMediaType mediaType) {
+  TokenMatcher _tokenMatcher(messages.SourceMediaType mediaType) {
     switch (mediaType) {
       case messages.SourceMediaType.textXCucumberGherkinPlain:
-        return lang.TokenMatcher(_dialectProvider);
+        return lang.GherkinTokenMatcher(_dialectProvider);
       case messages.SourceMediaType.textXCucumberGherkinMarkdown:
         return lang.MarkdownTokenMatcher(_dialectProvider, defaultDialect);
     }

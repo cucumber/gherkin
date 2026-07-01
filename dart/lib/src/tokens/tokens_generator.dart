@@ -11,7 +11,7 @@ class TokensGenerator {
   /// normalized `*.tokens` text.
   static String generateTokens(
     String featureFilePath,
-    ITokenMatcher tokenMatcher,
+    TokenMatcher tokenMatcher,
   ) {
     final tokenFormatterBuilder = TokenFormatterBuilder();
     final parser = Parser<NoOpResult>(tokenFormatterBuilder);

@@ -4,7 +4,7 @@ import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 
-/// An [ITokenScanner] that reads a Gherkin document from a file (typically a
+/// A [TokenScanner] that reads a Gherkin document from a file (typically a
 /// `.feature` file), producing one token per line.
 ///
 /// The tokens are passed to the parser, which outputs an abstract syntax tree
@@ -13,7 +13,7 @@ import 'package:gherkin/parser.dart';
 /// If the scanner sees a `#` language header, the matcher reconfigures itself
 /// to look for the Gherkin keywords of the associated language. Those keywords
 /// are defined in `gherkin-languages.json`.
-class FileTokenScanner implements ITokenScanner {
+class FileTokenScanner implements TokenScanner {
   /// Creates a scanner that reads the file at [filepath].
   FileTokenScanner.fromPath(String filepath)
     : _access = File(filepath).openSync();

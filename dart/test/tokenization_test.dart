@@ -21,7 +21,7 @@ void main() {
       final tokenMatcher =
           fullPathToTestFeatureFile.endsWith('.md')
               ? MarkdownTokenMatcher(dialectProvider)
-              : TokenMatcher(dialectProvider);
+              : GherkinTokenMatcher(dialectProvider);
       final expectedTokensFile = '$fullPathToTestFeatureFile.tokens';
 
       final tokensText = TokensGenerator.generateTokens(

@@ -16,7 +16,7 @@ void main(List<String> args) {
     final tokenMatcher =
         path.endsWith('.md')
             ? MarkdownTokenMatcher(dialectProvider)
-            : TokenMatcher(dialectProvider);
+            : GherkinTokenMatcher(dialectProvider);
     // Emit a trailing newline so the final `EOF` line is newline-terminated,
     // matching the reference implementations (e.g. Go uses `Fprintln` for
     // every token, including EOF). `generateTokens` trims trailing newlines

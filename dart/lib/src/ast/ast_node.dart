@@ -1,25 +1,21 @@
-import 'package:gherkin/core.dart';
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/parser.dart';
 
 /// A node in the intermediate parse tree, grouping the sub-items recognized
 /// for a single [RuleType].
-class AstNode with INullSafetyObject {
+class AstNode {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);
-
-  /// A sentinel node representing an invalid/absent node.
-  static AstNode empty = _InvalidAstNode();
 
   final Map<RuleType, List<dynamic>> _subItems = <RuleType, List<dynamic>>{};
 
   /// The grammar rule this node represents.
   final RuleType ruleType;
 
-  /// Returns the single [Token] of [tokenType], or [Token.empty] if absent.
-  Token getToken(TokenType tokenType) =>
-      singleOrDefault<Token>(tokenType.toRuleType(), Token.empty);
+  /// Returns the single [Token] of [tokenType], or `null` if absent.
+  Token? getToken(TokenType tokenType) =>
+      singleOrNull<Token>(tokenType.toRuleType());
 
   /// Returns all [Token]s of the given [tokenType] held by this node.
   Iterable<Token> getTokens(TokenType tokenType) =>
@@ -35,15 +31,19 @@ class AstNode with INullSafetyObject {
     }
   }
 
-  /// Returns the first sub-item of [ruleType], or [emptyValue] if there is
-  /// none.
-  T singleOrDefault<T>(RuleType ruleType, T emptyValue) {
+  /// Returns the first sub-item of [ruleType], or `null` if there is none.
+  T? singleOrNull<T>(RuleType ruleType) {
     final elems = items<T>(ruleType);
     if (elems.isEmpty) {
-      return emptyValue;
+      return null;
     }
     return elems.first;
   }
+
+  /// Returns the first sub-item of [ruleType], or [defaultValue] if there is
+  /// none.
+  T singleOrDefault<T>(RuleType ruleType, T defaultValue) =>
+      singleOrNull<T>(ruleType) ?? defaultValue;
 
   /// Returns all sub-items stored under [ruleType], cast to type [T].
   List<T> items<T>(RuleType ruleType) {
@@ -53,17 +53,4 @@ class AstNode with INullSafetyObject {
     }
     return list.cast<T>();
   }
-
-  // A concrete node is never the empty sentinel; only [AstNode.empty]
-  // (the private [_InvalidAstNode]) reports itself as empty.
-  @override
-  bool get isEmpty => false;
-}
-
-/// Convenience implementation of an invalid [AstNode] instance.
-class _InvalidAstNode extends AstNode {
-  _InvalidAstNode() : super(RuleType.none);
-
-  @override
-  bool get isEmpty => true;
 }
