@@ -9,12 +9,12 @@ void main() {
   test('Use this in readme', () async {
     const paths = <String>['../testdata/good/minimal.feature'];
     const includeSource = false;
-    const includeAst = true;
+    const includeGherkinDocument = true;
     const includePickles = true;
     final envelopeStream = Gherkin.fromPaths(
       paths,
       includeSource: includeSource,
-      includeAst: includeAst,
+      includeGherkinDocument: includeGherkinDocument,
       includePickles: includePickles,
       idGenerator: idGenerator,
     );
@@ -30,13 +30,13 @@ void main() {
   test('Provides access to the ast', () async {
     const paths = <String>['../testdata/good/minimal.feature'];
     const includeSource = false;
-    const includeAst = true;
+    const includeGherkinDocument = true;
     const includePickles = false;
     final envelopes =
         await Gherkin.fromPaths(
           paths,
           includeSource: includeSource,
-          includeAst: includeAst,
+          includeGherkinDocument: includeGherkinDocument,
           includePickles: includePickles,
           idGenerator: idGenerator,
         ).toList();
@@ -59,7 +59,7 @@ void main() {
         await Gherkin.fromPaths(
           paths,
           includeSource: false,
-          includeAst: false,
+          includeGherkinDocument: false,
           includePickles: true,
           idGenerator: idGenerator,
         ).toList();
@@ -87,7 +87,7 @@ void main() {
         await Gherkin.fromSources(
           singletonList,
           includeSource: false,
-          includeAst: true,
+          includeGherkinDocument: true,
           includePickles: false,
           idGenerator: idGenerator,
         ).toList();

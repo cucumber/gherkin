@@ -4,7 +4,7 @@ import 'package:gherkin/language.dart';
 
 /// A single source line, providing the queries the scanner needs to classify
 /// it.
-abstract class IGherkinLine extends INullSafetyObject {
+abstract class IGherkinLine implements INullSafetyObject {
   /// A sentinel line representing an invalid/absent line.
   static const empty = _EmptyGherkinLine();
 
@@ -65,7 +65,7 @@ abstract class IGherkinLine extends INullSafetyObject {
 }
 
 /// Convenience implementation of an invalid [IGherkinLine] instance.
-class _EmptyGherkinLine implements IGherkinLine {
+class _EmptyGherkinLine with INullSafetyObject implements IGherkinLine {
   const _EmptyGherkinLine();
 
   @override
@@ -85,9 +85,6 @@ class _EmptyGherkinLine implements IGherkinLine {
 
   @override
   bool get isEmpty => true;
-
-  @override
-  bool get isNotEmpty => !isEmpty;
 
   @override
   bool get isEof => false;

@@ -58,7 +58,7 @@ abstract class IGherkinDialect implements INullSafetyObject {
 }
 
 /// Convenience implementation of an invalid [IGherkinDialect] instance.
-class _EmptyGherkinDialect implements IGherkinDialect {
+class _EmptyGherkinDialect with INullSafetyObject implements IGherkinDialect {
   const _EmptyGherkinDialect();
 
   @override
@@ -111,7 +111,4 @@ class _EmptyGherkinDialect implements IGherkinDialect {
 
   @override
   bool get isEmpty => true;
-
-  @override
-  bool get isNotEmpty => false;
 }

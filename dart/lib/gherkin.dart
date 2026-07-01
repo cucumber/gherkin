@@ -220,18 +220,20 @@ class GherkinParserBuilder {
 class Gherkin {
   /// Parses each path in [paths] and emits the resulting [messages.Envelope]s.
   ///
-  /// Use [includeSource], [includeAst], and [includePickles] to control which
-  /// kinds of envelopes are emitted, and [idGenerator] to assign message ids.
+  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
+  /// control which kinds of envelopes are emitted, and [idGenerator] to assign
+  /// message ids (defaults to UUIDs). All envelope kinds are emitted by
+  /// default.
   static Stream<messages.Envelope> fromPaths(
     List<String> paths, {
-    required bool includeSource,
-    required bool includeAst,
-    required bool includePickles,
-    required lang.IdGenerator idGenerator,
+    bool includeSource = true,
+    bool includeGherkinDocument = true,
+    bool includePickles = true,
+    lang.IdGenerator? idGenerator,
   }) {
     return GherkinParser(
       includeSource: includeSource,
-      includeGherkinDocument: includeAst,
+      includeGherkinDocument: includeGherkinDocument,
       includePickles: includePickles,
       idGenerator: idGenerator,
     ).parsePaths(paths);
@@ -240,18 +242,20 @@ class Gherkin {
   /// Parses the source [envelopes] and emits the resulting
   /// [messages.Envelope]s.
   ///
-  /// Use [includeSource], [includeAst], and [includePickles] to control which
-  /// kinds of envelopes are emitted, and [idGenerator] to assign message ids.
+  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
+  /// control which kinds of envelopes are emitted, and [idGenerator] to assign
+  /// message ids (defaults to UUIDs). All envelope kinds are emitted by
+  /// default.
   static Stream<messages.Envelope> fromSources(
     List<messages.Envelope> envelopes, {
-    required bool includeSource,
-    required bool includeAst,
-    required bool includePickles,
-    required lang.IdGenerator idGenerator,
+    bool includeSource = true,
+    bool includeGherkinDocument = true,
+    bool includePickles = true,
+    lang.IdGenerator? idGenerator,
   }) {
     return GherkinParser(
       includeSource: includeSource,
-      includeGherkinDocument: includeAst,
+      includeGherkinDocument: includeGherkinDocument,
       includePickles: includePickles,
       idGenerator: idGenerator,
     ).parseEnvelopes(Stream.fromIterable(envelopes));

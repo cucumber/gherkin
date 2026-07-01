@@ -5,7 +5,7 @@ import 'package:gherkin/parser.dart';
 
 /// A node in the intermediate parse tree, grouping the sub-items recognized
 /// for a single [RuleType].
-class AstNode implements INullSafetyObject {
+class AstNode with INullSafetyObject {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);
 
@@ -54,11 +54,10 @@ class AstNode implements INullSafetyObject {
     return list.cast<T>();
   }
 
+  // A concrete node is never the empty sentinel; only [AstNode.empty]
+  // (the private [_InvalidAstNode]) reports itself as empty.
   @override
-  bool get isEmpty => false; //_subItems.isEmpty && ruleType == RuleType.none;
-
-  @override
-  bool get isNotEmpty => !isEmpty;
+  bool get isEmpty => false;
 }
 
 /// Convenience implementation of an invalid [AstNode] instance.

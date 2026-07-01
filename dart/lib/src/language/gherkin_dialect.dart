@@ -1,9 +1,10 @@
+import 'package:gherkin/core.dart';
 import 'package:gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:gherkin/src/language/i_gherkin_dialect.dart';
 
 /// The concrete [IGherkinDialect] backed by a set of
 /// [GherkinLanguageKeywords].
-class GherkinDialect implements IGherkinDialect {
+class GherkinDialect with INullSafetyObject implements IGherkinDialect {
   /// Creates a dialect for [_language] using the given [_keywords].
   GherkinDialect(this._language, this._keywords);
   final String _language;
@@ -66,7 +67,4 @@ class GherkinDialect implements IGherkinDialect {
 
   @override
   bool get isEmpty => false;
-
-  @override
-  bool get isNotEmpty => !isEmpty;
 }

@@ -1,11 +1,12 @@
 import 'package:characters/characters.dart';
+import 'package:gherkin/core.dart';
 import 'package:gherkin/exceptions.dart';
 import 'package:gherkin/extensions.dart';
 import 'package:gherkin/language.dart';
 import 'package:gherkin/src/language/gherkin_language_constants.dart';
 
 /// The concrete [IGherkinLine] backed by a single line of source text.
-class GherkinLine implements IGherkinLine {
+class GherkinLine with INullSafetyObject implements IGherkinLine {
   /// Creates a line from its [_lineText] at the one-based [_lineNumber].
   GherkinLine(this._lineText, this._lineNumber)
     : _trimmedLineText = _lineText.trimLeft(),
@@ -25,11 +26,10 @@ class GherkinLine implements IGherkinLine {
   final String _trimmedLineText;
   final bool _isEof;
 
+  // A concrete line is never the empty sentinel; only [IGherkinLine.empty]
+  // (the private [_EmptyGherkinLine]) reports itself as empty.
   @override
-  bool get isEmpty => false; //_lineText.isEmpty && _lineNumber.isMin;
-
-  @override
-  bool get isNotEmpty => !isEmpty;
+  bool get isEmpty => false;
 
   @override
   bool get isEof => _isEof;

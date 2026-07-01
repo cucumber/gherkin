@@ -9,7 +9,7 @@ import 'package:gherkin/src/language/token_type.dart';
 
 /// A single scanned line of a Gherkin document together with the result of
 /// matching it against a [TokenType].
-class Token implements INullSafetyObject {
+class Token with INullSafetyObject {
   /// Creates a token for the given [line] at the given [location].
   Token(this.line, this.location);
 
@@ -59,16 +59,10 @@ class Token implements INullSafetyObject {
   @override
   String toString() => '${matchedType.wireName}: $matchedKeyword/$matchedText';
 
+  // A concrete token is never the empty sentinel; only [Token.empty]
+  // (the private [_InvalidToken]) reports itself as empty.
   @override
-  bool get isEmpty => false; /*line.isEmpty
-      && location.isEmpty
-      && matchedKeyword.isEmpty
-      && matchedText.isEmpty
-      && matchedItems.isEmpty
-      && matchedGherkinDialect.isEmpty;*/
-
-  @override
-  bool get isNotEmpty => !isEmpty;
+  bool get isEmpty => false;
 }
 
 /// Convenience implementation of an invalid [Token] instance.
