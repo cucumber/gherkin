@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   characters: ^1.1.0
-  cucumber_messages:
-    path: ../../messages/dart
+  cucumber_messages: ^33.0.4
   meta: ^1.16.0
   path: ^1.8.0
   uuid: ^4.0.0
