@@ -1,7 +1,10 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/language.dart';
 import 'package:cucumber_gherkin/src/helpers/line_ending_helper.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
+import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/tokens/tokens_generator.dart';
 import 'package:test/test.dart';
 

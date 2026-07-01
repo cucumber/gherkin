@@ -1,5 +1,7 @@
 import 'package:cucumber_gherkin/exceptions.dart';
 import 'package:cucumber_gherkin/language.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
+import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:test/test.dart';
 
 void main() {
