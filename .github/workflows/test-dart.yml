@@ -10,6 +10,7 @@ on:
     paths:
       - dart/**
       - testdata/**
+      - gherkin-languages.json
       - .github/**
   pull_request:
     branches:
@@ -17,11 +18,18 @@ on:
     paths:
       - dart/**
       - testdata/**
+      - gherkin-languages.json
       - .github/**
 
 jobs:
   test-dart:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
 
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -31,6 +39,14 @@ jobs:
       - name: install dart
         uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
 
+      - name: install dependencies
+        run: dart pub get
+        working-directory: dart
+
       - name: run tests
         run: dart test
+        working-directory: dart
+
+      - name: run acceptance tests
+        run: make acceptance
         working-directory: dart
