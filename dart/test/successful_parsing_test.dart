@@ -6,7 +6,7 @@ import 'package:cucumber_gherkin/src/language/file_token_scanner.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
-import 'package:cucumber_gherkin/src/language/id_generator.dart';
+import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:test/test.dart';

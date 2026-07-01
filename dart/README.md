@@ -11,7 +11,6 @@ from pub.dev.
 ```dart
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/gherkin.dart';
-import 'package:cucumber_gherkin/language.dart';
 
 final parser = (GherkinParser.builder()
       ..includeSource = false

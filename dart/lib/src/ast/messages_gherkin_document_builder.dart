@@ -5,7 +5,7 @@ import 'package:cucumber_gherkin/src/collections/stack.dart';
 import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
 import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
-import 'package:cucumber_gherkin/src/language/id_generator.dart';
+import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/language/token_type.dart';

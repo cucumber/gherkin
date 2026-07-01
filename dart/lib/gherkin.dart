@@ -1,2 +1,2 @@
 export 'src/gherkin/gherkin_parser.dart';
-export 'src/language/id_generator.dart';
+export 'src/gherkin/id_generator.dart';

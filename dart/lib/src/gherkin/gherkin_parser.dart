@@ -9,7 +9,7 @@ import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart'
     as lang;
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart'
     as lang;
-import 'package:cucumber_gherkin/src/language/id_generator.dart' as lang;
+import 'package:cucumber_gherkin/src/gherkin/id_generator.dart' as lang;
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart'
     as lang;
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart'
