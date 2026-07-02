@@ -24,18 +24,10 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
-        with:
-          sdk: "3.7.0"
-
       - name: install berp
         run: |
           dotnet tool update Berp --version 1.6.0 --tool-path ~/bin
           echo "~/bin" >> $GITHUB_PATH
-
-      - name: install dart dependencies
-        run: dart pub get --enforce-lockfile
-        working-directory: dart
 
       - name: generate code for all languages
         run: |
