@@ -7,3 +7,5 @@ benchmark/
 acceptance/
 pubspec.lock
 gherkin-dart.razor
+# Build-time input for dialects_builtin.g.dart; not read at runtime.
+lib/src/assets/gherkin-languages.json
