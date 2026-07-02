@@ -1,4 +1,4 @@
-import type * as messages from '@cucumber/messages'
+import type { Location, StepKeywordType } from '@cucumber/messages'
 
 export interface IGherkinLine {
   readonly lineNumber: number
@@ -24,7 +24,7 @@ export type Item = {
 }
 
 export default interface IToken<TokenType> {
-  location: messages.Location
+  location: Location
   line: IGherkinLine
 
   isEof: boolean
@@ -32,7 +32,7 @@ export default interface IToken<TokenType> {
   matchedType: TokenType
   matchedItems: readonly Item[]
   matchedKeyword: string
-  matchedKeywordType: messages.StepKeywordType
+  matchedKeywordType: StepKeywordType
   matchedIndent: number
   matchedGherkinDialect: string
   getTokenValue(): string

@@ -8,6 +8,13 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+## [41.0.0] - 2026-06-20
+### Changed
+- [PHP] BREAKING CHANGE: Require PHP 8.4
+
+### Fixed
+- [JavaScript] Remove namespace imports from messages
+
 ## [40.0.0] - 2026-06-10
 ### Changed
 - [.Net] Replaced FluentAssertions with AwesomeAssertions
@@ -916,7 +923,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v40.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v41.0.0...HEAD
+[41.0.0]: https://github.com/cucumber/gherkin/compare/v40.0.0...v41.0.0
 [40.0.0]: https://github.com/cucumber/gherkin/compare/v39.1.0...v40.0.0
 [39.1.0]: https://github.com/cucumber/gherkin/compare/v39.0.0...v39.1.0
 [39.0.0]: https://github.com/cucumber/gherkin/compare/v38.0.0...v39.0.0

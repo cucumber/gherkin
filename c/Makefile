@@ -97,7 +97,7 @@ acceptance/testdata/%.feature.tokens: ../testdata/%.feature ../testdata/%.featur
 	mkdir -p $(@D)
 	echo $(RUN_GHERKIN_GENERATE_TOKENS)
 	$(RUN_GHERKIN_GENERATE_TOKENS) $< > $@
-	diff --strip-trailing-cr --unified $<.tokens $@
+	diff --unified $<.tokens $@
 
 acceptance/testdata/%.feature.ast.ndjson: ../testdata/%.feature ../testdata/%.feature.ast.ndjson $(GHERKIN)
 	mkdir -p $(@D)
