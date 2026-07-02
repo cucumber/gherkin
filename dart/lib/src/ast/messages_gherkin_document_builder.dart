@@ -93,7 +93,6 @@ class MessagesGherkinDocumentBuilder
       // returned unchanged. An exhaustive switch is not possible because
       // RuleType also declares library-private token rule types that cannot
       // be referenced from this library.
-      // ignore: no_default_cases
       default:
         return node;
     }
