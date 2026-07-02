@@ -47,11 +47,8 @@ class UUID implements IdGenerator {
 
 /// An [IdGenerator] that produces sequential ids starting at `0`.
 class Incrementing implements IdGenerator {
-  int _next = -1;
+  int _next = 0;
 
   @override
-  String newId() {
-    _next++;
-    return _next.toString();
-  }
+  String newId() => (_next++).toString();
 }
