@@ -72,8 +72,10 @@ Entry points:
 
 - `parsePath(path)` / `parsePaths(paths)`: read files. I/O failures throw a
   `GherkinException`; malformed Gherkin is reported as a `parseError` envelope.
-- `parseString(data, uri)`: parse in-memory Gherkin. `uri` supplies the source
-  reference and infers the media type from its extension (`.feature` or `.md`).
+- `parseString(data, uri, {mediaType})`: parse in-memory Gherkin. `uri`
+  supplies the source reference. The media type is taken from `mediaType` when
+  given; otherwise it is inferred from the `uri` extension (`.feature` or
+  `.md`). Pass `mediaType` when the `uri` has no recognized extension.
 - `parseEnvelope(envelope)` / `parseEnvelopes(stream)`: parse pre-built
   `source` envelopes.
 
