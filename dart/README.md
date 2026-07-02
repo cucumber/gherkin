@@ -52,6 +52,13 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 `GherkinParser` parses files, in-memory strings, or pre-built source envelopes,
 and emits a stream of `Envelope`s.
 
+> **Error handling contract:** malformed Gherkin never throws — it is reported
+> as a `parseError` envelope in the stream. Only I/O failures from the
+> file-reading entry points (`parsePath` / `parsePaths`) are *thrown*, as a
+> `GherkinException`, since they are not a property of the Gherkin source. This
+> matches the flagship implementations (e.g. Java's `parse(Path)` declares
+> `throws IOException`).
+
 ```dart
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/gherkin.dart';
