@@ -7,7 +7,10 @@ void main() {
   final currDir = Directory.current.path.replaceAll(r'\', '/');
   const assetDir = 'test/assets';
 
-  test('Read lines with only CR', () async {
+  test('Read lines with only CR keeps lone CR as content', () async {
+    // A lone `\r` is not a line separator (only `\n` and `\r\n` are), matching
+    // the reference implementations' `\r?\n` splitting. The whole file is one
+    // line and the `\r` bytes are preserved verbatim.
     final filepath = '$currDir/$assetDir/text-with-only-cr.txt';
     final textFile = File(filepath).openSync();
     final buffer = StringBuffer();
@@ -22,7 +25,8 @@ void main() {
     expect(lineCount, 1);
 
     final text = buffer.toString();
-    const expectedText = 'TestingbreaklineswithcharacterCR(CarriageReturn)';
+    const expectedText =
+        'Testing\rbreak\rlines\rwith\rcharacter\rCR\r(\rCarriage\rReturn\r)\r';
     expect(text, expectedText);
   });
 
@@ -66,6 +70,9 @@ void main() {
   });
 
   test('Read lines with multiples CR before LF', () async {
+    // Only the `\r` immediately preceding `\n` forms the terminator; any extra
+    // leading `\r`s are content and are preserved. The first line here is
+    // "Testing" followed by five `\r` and a `\n`, so four `\r`s remain.
     final filepath = '$currDir/$assetDir/text-with-multiples-cr-before-lf.txt';
     final textFile = File(filepath).openSync();
     final buffer = StringBuffer();
@@ -81,7 +88,8 @@ void main() {
 
     final text = buffer.toString();
     const expectedText =
-        'TestingbreaklineswithmultiplesCRbeforeLF(CarriageReturnandLineFeed)';
+        'Testing\r\r\r\r'
+        'breaklineswithmultiplesCRbeforeLF(CarriageReturnandLineFeed)';
     expect(text, expectedText);
   });
 

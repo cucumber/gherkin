@@ -57,7 +57,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   @override
-  messages.GherkinDocument get result => _currentNode.singleOrDefault(
+  messages.GherkinDocument get result => _currentNode.firstOrDefault(
     RuleType.gherkinDocument,
     const messages.GherkinDocument(comments: <messages.Comment>[]),
   );
@@ -204,7 +204,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   String _getDescription(AstNode node) =>
-      node.singleOrDefault<String>(RuleType.description, '');
+      node.firstOrDefault<String>(RuleType.description, '');
 
   List<messages.Step> _getSteps(AstNode node) =>
       node.items<messages.Step>(RuleType.step);
@@ -213,7 +213,7 @@ class MessagesGherkinDocumentBuilder
     final tags = _getTags(node);
     final examplesNode = node.require<AstNode>(RuleType.examples);
     final examplesLine = examplesNode.requireToken(TokenType.examplesLine);
-    final allRows = examplesNode.singleOrDefault<List<messages.TableRow>>(
+    final allRows = examplesNode.firstOrDefault<List<messages.TableRow>>(
       RuleType.examplesTable,
       const <messages.TableRow>[],
     );
@@ -231,7 +231,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   List<messages.Tag> _getTags(AstNode node) {
-    final tagsNode = node.singleOrNull<AstNode>(RuleType.tags);
+    final tagsNode = node.firstOrNull<AstNode>(RuleType.tags);
     if (tagsNode == null) {
       return <messages.Tag>[];
     }
@@ -256,7 +256,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Feature? _createFeature(AstNode node) {
-    final header = node.singleOrNull<AstNode>(RuleType.featureHeader);
+    final header = node.firstOrNull<AstNode>(RuleType.featureHeader);
     if (header == null) {
       return null;
     }
@@ -292,7 +292,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Rule? _createRule(AstNode node) {
-    final header = node.singleOrNull<AstNode>(RuleType.ruleHeader);
+    final header = node.firstOrNull<AstNode>(RuleType.ruleHeader);
     if (header == null) {
       return null;
     }

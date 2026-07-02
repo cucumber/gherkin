@@ -49,7 +49,33 @@ void main() {
   test('Split with limit negative', () {
     expect(
       () => str.splitWithLimit(pattern, limit: -1),
-      throwsA(const TypeMatcher<UnimplementedError>()),
+      throwsA(const TypeMatcher<ArgumentError>()),
     );
+  });
+
+  test('Repeated substring is split at the correct offset', () {
+    // The first field ("a") also appears inside a later field. The old
+    // indexOf-based implementation reconstructed the remainder from the first
+    // occurrence and produced the wrong split; the remainder here must be the
+    // text after the *second* separator, not after the first "a".
+    const repeated = 'a b a c';
+    expect(repeated.splitWithLimit(' ', limit: 2), ['a', 'b a c']);
+    expect(repeated.splitWithLimit(' ', limit: 3), ['a', 'b', 'a c']);
+  });
+
+  test('Multi-character separator preserves the full remainder', () {
+    // The old "+ 1" offset assumed a single-character separator and dropped a
+    // character from multi-character separators.
+    const csv = 'a::b::c::d';
+    expect(csv.splitWithLimit('::', limit: 2), ['a', 'b::c::d']);
+    expect(csv.splitWithLimit('::', limit: 3), ['a', 'b', 'c::d']);
+  });
+
+  test('Remainder retains further separators', () {
+    expect(str.splitWithLimit(' ', limit: 2), ['a', 'bc def ghij klmno']);
+  });
+
+  test('Leading separator yields a leading empty field', () {
+    expect(' a b'.splitWithLimit(' ', limit: 2), ['', 'a b']);
   });
 }

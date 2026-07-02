@@ -56,7 +56,20 @@ void main() {
   test('Split string using RegExp with limit negative', () {
     expect(
       () => str.splitWithLimit(regexp, limit: -1),
-      throwsA(const TypeMatcher<UnimplementedError>()),
+      throwsA(const TypeMatcher<ArgumentError>()),
     );
+  });
+
+  test('Split using RegExp with a repeated field', () {
+    const repeated = 'a\tb\ta\tc';
+    expect(repeated.splitWithLimit(regexp, limit: 2), ['a', 'b\ta\tc']);
+    expect(repeated.splitWithLimit(regexp, limit: 3), ['a', 'b', 'a\tc']);
+  });
+
+  test('Split using a multi-character RegExp separator', () {
+    const s = 'aXXbXXcXXd';
+    final sep = RegExp('XX');
+    expect(s.splitWithLimit(sep, limit: 2), ['a', 'bXXcXXd']);
+    expect(s.splitWithLimit(sep, limit: 3), ['a', 'b', 'cXXd']);
   });
 }

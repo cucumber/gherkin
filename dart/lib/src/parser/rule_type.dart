@@ -1,9 +1,8 @@
 /// The grammar rules recognized by the Gherkin parser.
 ///
-/// The first group mirrors the lexical `TokenType`s one-to-one (so that
-/// `TokenType.index` maps directly onto the corresponding [RuleType] via
-/// `RuleType.values[index]`); the remaining values are the structural
-/// production rules of the Gherkin grammar.
+/// The first group mirrors the lexical `TokenType`s one-to-one (the explicit
+/// mapping lives in `TokenTypeExtension.toRuleType`); the remaining values are
+/// the structural production rules of the Gherkin grammar.
 enum RuleType {
   /// No rule; the initial/sentinel value.
   none,

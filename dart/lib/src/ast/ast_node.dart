@@ -14,9 +14,9 @@ class AstNode {
   /// The grammar rule this node represents.
   final RuleType ruleType;
 
-  /// Returns the single [Token] of [tokenType], or `null` if absent.
+  /// Returns the first [Token] of [tokenType], or `null` if absent.
   Token? getToken(TokenType tokenType) =>
-      singleOrNull<Token>(tokenType.toRuleType());
+      firstOrNull<Token>(tokenType.toRuleType());
 
   /// Returns the single [Token] of [tokenType].
   ///
@@ -49,7 +49,11 @@ class AstNode {
   }
 
   /// Returns the first sub-item of [ruleType], or `null` if there is none.
-  T? singleOrNull<T>(RuleType ruleType) {
+  ///
+  /// This has first-match ("firstOrNull") semantics: when a node holds more
+  /// than one sub-item of [ruleType] the first is returned; it does not assert
+  /// that exactly one is present.
+  T? firstOrNull<T>(RuleType ruleType) {
     final elems = items<T>(ruleType);
     if (elems.isEmpty) {
       return null;
@@ -59,18 +63,18 @@ class AstNode {
 
   /// Returns the first sub-item of [ruleType], or [defaultValue] if there is
   /// none.
-  T singleOrDefault<T>(RuleType ruleType, T defaultValue) =>
-      singleOrNull<T>(ruleType) ?? defaultValue;
+  T firstOrDefault<T>(RuleType ruleType, T defaultValue) =>
+      firstOrNull<T>(ruleType) ?? defaultValue;
 
   /// Returns the first sub-item of [ruleType].
   ///
-  /// Unlike [singleOrNull], this throws a [StateError] when no sub-item of
+  /// Unlike [firstOrNull], this throws a [StateError] when no sub-item of
   /// [ruleType] is present. The grammar guarantees the sub-item exists at the
   /// point this is called, so its absence indicates the generated parser and
   /// this builder have drifted out of sync. Failing loudly here surfaces that
   /// as a clear diagnostic rather than a downstream null-dereference crash.
   T require<T>(RuleType requestedRuleType) =>
-      singleOrNull<T>(requestedRuleType) ??
+      firstOrNull<T>(requestedRuleType) ??
       (throw StateError(
         'Parser/builder drift: expected a $requestedRuleType sub-item under '
         '$ruleType but none was present. The generated parser (parser.g.dart) '
