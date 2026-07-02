@@ -22,7 +22,7 @@ void main() {
 
   group('UUID', () {
     test('produces RFC 4122 version 4 UUIDs', () {
-      final generator = UUID();
+      final generator = Uuid();
       for (var i = 0; i < 100; i++) {
         final id = generator.newId();
         expect(
@@ -34,14 +34,14 @@ void main() {
     });
 
     test('sets the version nibble to 4 and the variant to 10xx', () {
-      final id = UUID().newId();
+      final id = Uuid().newId();
       // Format: xxxxxxxx-xxxx-Vxxx-Nxxx-xxxxxxxxxxxx
       expect(id[14], '4', reason: 'version nibble must be 4');
       expect('89ab', contains(id[19]), reason: 'variant nibble must be 8-b');
     });
 
     test('produces unique ids', () {
-      final generator = UUID();
+      final generator = Uuid();
       final ids = {for (var i = 0; i < 1000; i++) generator.newId()};
       expect(ids, hasLength(1000));
     });

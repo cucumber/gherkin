@@ -93,15 +93,16 @@ class GherkinLine {
     if (_trimmedLineText.length <= textLength) {
       return false;
     }
-    final b2 = _trimmedLineText.startsWith(text);
+    final startsWithKeyword = _trimmedLineText.startsWith(text);
     const separatorLength =
         GherkinLanguageConstants.titleKeywordSeparator.length;
-    final substr = _trimmedLineText.substring(
+    final afterKeyword = _trimmedLineText.substring(
       textLength,
       textLength + separatorLength,
     );
-    final b3 = substr == GherkinLanguageConstants.titleKeywordSeparator;
-    return b2 && b3;
+    final hasSeparator =
+        afterKeyword == GherkinLanguageConstants.titleKeywordSeparator;
+    return startsWithKeyword && hasSeparator;
   }
 
   /// Parses the line as a tag list, returning a `(column, text)` span for each

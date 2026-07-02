@@ -15,8 +15,8 @@ abstract class IdGenerator {
   @visibleForTesting
   static IdGenerator get freshIncrementingGenerator => Incrementing();
 
-  /// A shared [UUID] generator producing random UUIDs.
-  static final IdGenerator uuidGenerator = UUID();
+  /// A shared [Uuid] generator producing random UUIDs.
+  static final IdGenerator uuidGenerator = Uuid();
 }
 
 /// An [IdGenerator] that produces random RFC 4122 version 4 UUIDs.
@@ -25,7 +25,7 @@ abstract class IdGenerator {
 /// implementations (e.g. Java's `UUID.randomUUID()` and Ruby's
 /// `Cucumber::Messages::Helpers::IdGenerator::UUID`), which both produce random
 /// (version 4) UUIDs.
-class UUID implements IdGenerator {
+class Uuid implements IdGenerator {
   static final Random _random = Random.secure();
 
   @override

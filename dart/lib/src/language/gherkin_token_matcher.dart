@@ -49,7 +49,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchOther(Token token) {
-    /// take the entire line, except removing DocString indents
+    // take the entire line, except removing DocString indents
     final text = token.line.getLineText(_indentToRemove);
     setTokenMatched(
       token,
