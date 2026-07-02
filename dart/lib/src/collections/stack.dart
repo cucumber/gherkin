@@ -2,20 +2,27 @@
 class Stack<T> {
   final List<T> _list = <T>[];
 
-  /// Check if the stack is empty.
+  /// Whether the stack has no elements.
   bool get isEmpty => _list.isEmpty;
 
-  /// Check if the stack is not empty.
+  /// Whether the stack has at least one element.
   bool get isNotEmpty => _list.isNotEmpty;
 
-  /// Push element in top of the stack.
-  void push(T value) => _list.insert(0, value);
+  /// Pushes [value] onto the top of the stack.
+  ///
+  /// The top of the stack is kept at the end of the backing list so that
+  /// [push], [pop], and [top] are all amortized O(1).
+  void push(T value) => _list.add(value);
 
-  /// Get the top of the stack and delete it.
-  T pop() => _list.removeAt(0);
+  /// Removes and returns the element at the top of the stack.
+  ///
+  /// Throws a [StateError] if the stack is empty.
+  T pop() => _list.removeLast();
 
-  /// Get the top of the stack without deleting it.
-  T get top => _list.first;
+  /// Returns the element at the top of the stack without removing it.
+  ///
+  /// Throws a [StateError] if the stack is empty.
+  T get top => _list.last;
 
   /// Removes all elements from the stack.
   void clear() => _list.clear();
