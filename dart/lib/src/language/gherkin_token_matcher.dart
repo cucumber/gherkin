@@ -5,16 +5,17 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/src/language/step_keyword_types.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/language/token_type.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
-class GherkinTokenMatcher implements TokenMatcher {
+class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   /// Creates a matcher that resolves dialects through [_dialectProvider].
   GherkinTokenMatcher(this._dialectProvider)
     : _currentDialect = _dialectProvider.defaultDialect {
-    _initializeKeywordTypes();
+    initializeKeywordTypes(_currentDialect);
   }
   static final RegExp _languagePattern = RegExp(
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
@@ -25,7 +26,6 @@ class GherkinTokenMatcher implements TokenMatcher {
   GherkinDialect _currentDialect;
   String _activeDocStringSeparator = '';
   int _indentToRemove = 0;
-  Map<String, List<messages.StepKeywordType>> _keywordTypesMap = {};
 
   /// The dialect currently in effect.
   GherkinDialect get currentDialect => _currentDialect;
@@ -35,7 +35,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     _activeDocStringSeparator = '';
     _indentToRemove = 0;
     _currentDialect = _dialectProvider.defaultDialect;
-    _initializeKeywordTypes();
+    initializeKeywordTypes(_currentDialect);
   }
 
   @override
@@ -88,7 +88,7 @@ class GherkinTokenMatcher implements TokenMatcher {
       final language = match.group(1) ?? '';
       setTokenMatched(token, TokenType.language, text: language);
       _currentDialect = _dialectProvider.getDialect(language, token.location);
-      _initializeKeywordTypes();
+      initializeKeywordTypes(_currentDialect);
       return true;
     }
     return false;
@@ -209,7 +209,10 @@ class GherkinTokenMatcher implements TokenMatcher {
           TokenType.stepLine,
           keyword: keyword,
           text: stepText,
-          keywordType: _keywordType(keyword),
+          // The plain matcher reports `unknown` for an unmapped keyword, unlike
+          // the Markdown matcher which reports `null`.
+          keywordType:
+              keywordTypeOrNull(keyword) ?? messages.StepKeywordType.unknown,
         );
         return true;
       }
@@ -247,49 +250,6 @@ class GherkinTokenMatcher implements TokenMatcher {
       ..matchedIndent =
           matchedType == TokenType.empty ? 0 : indent ?? token.line.indent
       ..location = Location(token.location.line, token.matchedIndent + 1);
-  }
-
-  void _initializeKeywordTypes() {
-    _keywordTypesMap = {};
-    _addKeywordTypeMappings(
-      currentDialect.givenStepKeywords,
-      messages.StepKeywordType.context,
-    );
-    _addKeywordTypeMappings(
-      currentDialect.whenStepKeywords,
-      messages.StepKeywordType.action,
-    );
-    _addKeywordTypeMappings(
-      currentDialect.thenStepKeywords,
-      messages.StepKeywordType.outcome,
-    );
-    _addKeywordTypeMappings(
-      currentDialect.andStepKeywords,
-      messages.StepKeywordType.conjunction,
-    );
-    _addKeywordTypeMappings(
-      currentDialect.butStepKeywords,
-      messages.StepKeywordType.conjunction,
-    );
-  }
-
-  void _addKeywordTypeMappings(
-    Iterable<String> keywords,
-    messages.StepKeywordType keywordType,
-  ) {
-    for (final keyword in keywords) {
-      _keywordTypesMap
-          .putIfAbsent(keyword, () => <messages.StepKeywordType>[])
-          .add(keywordType);
-    }
-  }
-
-  messages.StepKeywordType _keywordType(String keyword) {
-    final keywordTypes = _keywordTypesMap[keyword];
-    if (keywordTypes == null || keywordTypes.length != 1) {
-      return messages.StepKeywordType.unknown;
-    }
-    return keywordTypes.single;
   }
 
   String _unescapeDocString(String text) {

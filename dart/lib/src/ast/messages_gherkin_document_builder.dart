@@ -1,7 +1,8 @@
+import 'dart:collection';
+
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/exceptions.dart';
 import 'package:cucumber_gherkin/src/ast/ast_node.dart';
-import 'package:cucumber_gherkin/src/collections/stack.dart';
 import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
@@ -22,10 +23,13 @@ class MessagesGherkinDocumentBuilder
 
   /// The generator used to assign ids to the produced messages.
   final IdGenerator idGenerator;
-  final Stack<AstNode> _stack = Stack<AstNode>();
+  // A LIFO stack of the rules currently being reduced. The top of the stack is
+  // kept at the end of the queue, so `addLast`/`removeLast`/`last` are all the
+  // amortized O(1) push/pop/peek operations.
+  final ListQueue<AstNode> _stack = ListQueue<AstNode>();
   final List<messages.Comment> _comments = <messages.Comment>[];
 
-  AstNode get _currentNode => _stack.top;
+  AstNode get _currentNode => _stack.last;
 
   @override
   void build(Token token) {
@@ -43,7 +47,7 @@ class MessagesGherkinDocumentBuilder
 
   @override
   void endRule(RuleType ruleType) {
-    final node = _stack.pop();
+    final node = _stack.removeLast();
     final transformedNode = _transformNode(node);
     _currentNode.add(node.ruleType, transformedNode);
   }
@@ -52,7 +56,7 @@ class MessagesGherkinDocumentBuilder
   void reset() {
     _stack
       ..clear()
-      ..push(AstNode(RuleType.none));
+      ..addLast(AstNode(RuleType.none));
     _comments.clear();
   }
 
@@ -63,9 +67,9 @@ class MessagesGherkinDocumentBuilder
   );
 
   @override
-  void startRule(RuleType ruleType) => _stack.push(AstNode(ruleType));
+  void startRule(RuleType ruleType) => _stack.addLast(AstNode(ruleType));
 
-  dynamic _transformNode(AstNode node) {
+  Object? _transformNode(AstNode node) {
     switch (node.ruleType) {
       case RuleType.step:
         return _createStep(node);
@@ -329,12 +333,12 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.GherkinDocument _createGherkinDocument(AstNode node) {
-    final features = node.items<messages.Feature?>(RuleType.feature);
+    final features =
+        node
+            .items<messages.Feature?>(RuleType.feature)
+            .whereType<messages.Feature>();
     return messages.GherkinDocument(
-      feature:
-          features.whereType<messages.Feature>().isEmpty
-              ? null
-              : features.whereType<messages.Feature>().first,
+      feature: features.isEmpty ? null : features.first,
       comments: List<messages.Comment>.unmodifiable(_comments),
     );
   }

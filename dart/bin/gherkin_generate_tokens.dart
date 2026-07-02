@@ -4,6 +4,7 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
+import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/tokens/tokens_generator.dart';
 
 /// Emits the tokenized representation of one or more Gherkin feature files,
@@ -16,7 +17,7 @@ void main(List<String> args) {
   final dialectProvider = GherkinDialectProvider(languages);
 
   for (final path in args) {
-    final tokenMatcher =
+    final TokenMatcher tokenMatcher =
         path.endsWith('.md')
             ? MarkdownTokenMatcher(dialectProvider)
             : GherkinTokenMatcher(dialectProvider);

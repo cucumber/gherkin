@@ -26,4 +26,15 @@ class Location {
 
   /// Whether the [column] is unset (has no known position).
   bool get hasColumn => column != _unset;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Location && other.line == line && other.column == column;
+
+  @override
+  int get hashCode => Object.hash(line, column);
+
+  @override
+  String toString() => 'Location($line, $column)';
 }

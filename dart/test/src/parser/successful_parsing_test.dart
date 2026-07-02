@@ -9,6 +9,7 @@ import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -37,7 +38,7 @@ void main() {
       final file = File(fileEntity.path);
 
       final tokenScanner = FileTokenScanner.fromFile(file);
-      final matcherForFile =
+      final TokenMatcher matcherForFile =
           fileEntity.path.endsWith('.md')
               ? MarkdownTokenMatcher(dialectProvider)
               : matcher;

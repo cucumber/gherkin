@@ -4,12 +4,13 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
+import 'package:cucumber_gherkin/src/language/step_keyword_types.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/language/token_type.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
 /// The [TokenMatcher] for Markdown (`.feature.md`) Gherkin sources.
-class MarkdownTokenMatcher implements TokenMatcher {
+class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
   /// Creates a matcher that resolves dialects through [_dialectProvider],
   /// defaulting to [_defaultDialectName] when no `# language:` header is found.
   MarkdownTokenMatcher(
@@ -27,7 +28,6 @@ class MarkdownTokenMatcher implements TokenMatcher {
 
   late GherkinDialect _currentDialect;
   late List<String> _nonStarStepKeywords;
-  late Map<String, List<messages.StepKeywordType>> _keywordTypesMap;
 
   RegExp _activeDocStringSeparator = _openDocStringSeparator;
   bool _inDocString = false;
@@ -274,7 +274,9 @@ class MarkdownTokenMatcher implements TokenMatcher {
     final prefixText = match.group(1) ?? '';
     final keyword = match.group(2) ?? '';
     final text = match.group(3)?.trim() ?? '';
-    final keywordType = _keywordType(keyword);
+    // The Markdown matcher reports `null` for an unmapped keyword, unlike the
+    // plain matcher which reports `unknown`.
+    final keywordType = keywordTypeOrNull(keyword);
     _setTokenMatched(
       token,
       matchedType,
@@ -335,49 +337,7 @@ class MarkdownTokenMatcher implements TokenMatcher {
       throw NoSuchLanguageException(_defaultDialectName);
     }
 
-    _keywordTypesMap = {};
-    _addKeywordTypeMappings(
-      _currentDialect.givenStepKeywords,
-      messages.StepKeywordType.context,
-    );
-    _addKeywordTypeMappings(
-      _currentDialect.whenStepKeywords,
-      messages.StepKeywordType.action,
-    );
-    _addKeywordTypeMappings(
-      _currentDialect.thenStepKeywords,
-      messages.StepKeywordType.outcome,
-    );
-    _addKeywordTypeMappings(
-      _currentDialect.andStepKeywords,
-      messages.StepKeywordType.conjunction,
-    );
-    _addKeywordTypeMappings(
-      _currentDialect.butStepKeywords,
-      messages.StepKeywordType.conjunction,
-    );
-  }
-
-  void _addKeywordTypeMappings(
-    Iterable<String> keywords,
-    messages.StepKeywordType keywordType,
-  ) {
-    for (final keyword in keywords) {
-      _keywordTypesMap
-          .putIfAbsent(keyword, () => <messages.StepKeywordType>[])
-          .add(keywordType);
-    }
-  }
-
-  messages.StepKeywordType? _keywordType(String keyword) {
-    final keywordTypes = _keywordTypesMap[keyword];
-    if (keywordTypes == null) {
-      return null;
-    }
-    if (keywordTypes.length != 1) {
-      return messages.StepKeywordType.unknown;
-    }
-    return keywordTypes.single;
+    initializeKeywordTypes(_currentDialect);
   }
 
   bool _isGfmTableSeparator(List<GherkinLineSpan> tableCells) {

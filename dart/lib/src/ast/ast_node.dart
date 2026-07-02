@@ -9,7 +9,13 @@ class AstNode {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);
 
-  final Map<RuleType, List<dynamic>> _subItems = <RuleType, List<dynamic>>{};
+  // Sub-items are heterogeneous — raw [Token]s during parsing and the various
+  // Cucumber Messages types produced as rules are reduced. A reduced node may
+  // be null (e.g. a `Feature`/`Rule` with no header), and callers rely on those
+  // nulls being retained so they can filter them out downstream. The store is
+  // therefore typed as `Object?` rather than `dynamic` to keep access
+  // statically checked; [items] narrows back to the caller's `T` via `cast`.
+  final Map<RuleType, List<Object?>> _subItems = <RuleType, List<Object?>>{};
 
   /// The grammar rule this node represents.
   final RuleType ruleType;
@@ -39,13 +45,11 @@ class AstNode {
       items<Token>(tokenType.toRuleType());
 
   /// Adds [obj] to the list of sub-items stored under [ruleType].
-  void add<T>(RuleType ruleType, T obj) {
-    final list = _subItems[ruleType];
-    if (list == null) {
-      _subItems[ruleType] = [obj];
-    } else {
-      list.add(obj);
-    }
+  ///
+  /// [obj] may be null: a reduced rule (for example a `Feature` or `Rule` with
+  /// no header) can produce a null value that callers filter out later.
+  void add(RuleType ruleType, Object? obj) {
+    (_subItems[ruleType] ??= <Object?>[]).add(obj);
   }
 
   /// Returns the first sub-item of [ruleType], or `null` if there is none.
