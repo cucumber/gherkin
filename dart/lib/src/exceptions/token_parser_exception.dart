@@ -1,9 +1,10 @@
-import 'package:cucumber_gherkin/src/exceptions/parser_exception.dart';
-import 'package:cucumber_gherkin/src/language/location.dart';
-import 'package:cucumber_gherkin/src/language/token.dart';
+part of 'exceptions.dart';
 
 /// A [ParserException] whose location is derived from the offending token.
-class TokenParserException extends ParserException {
+///
+/// This type is `sealed`: its subtypes ([UnexpectedTokenException] and
+/// [UnexpectedEofException]) are a closed set defined by this library.
+sealed class TokenParserException extends ParserException {
   /// Creates an exception with [message], locating it at [receivedToken].
   TokenParserException(String message, Token receivedToken)
     : super(message, _getLocation(receivedToken));

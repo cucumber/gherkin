@@ -1,8 +1,7 @@
-import 'package:cucumber_gherkin/src/exceptions/token_parser_exception.dart';
-import 'package:cucumber_gherkin/src/language/token.dart';
+part of 'exceptions.dart';
 
 /// Raised when the parser encounters a token it did not expect.
-class UnexpectedTokenException extends TokenParserException {
+final class UnexpectedTokenException extends TokenParserException {
   /// Creates an exception for an unexpected [receivedToken].
   ///
   /// [expectedTokenTypes] lists the token types the parser would have accepted.

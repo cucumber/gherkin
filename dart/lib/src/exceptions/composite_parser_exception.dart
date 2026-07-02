@@ -1,7 +1,7 @@
-import 'package:cucumber_gherkin/src/exceptions/parser_exception.dart';
+part of 'exceptions.dart';
 
 /// Aggregates several [ParserException]s collected during a single parse.
-class CompositeParserException extends ParserException {
+final class CompositeParserException extends ParserException {
   /// Creates an exception wrapping all of the given [errors].
   CompositeParserException(this.errors) : super(_getMessage(errors));
 
@@ -10,6 +10,14 @@ class CompositeParserException extends ParserException {
 
   static String _getMessage(List<ParserException> errors) {
     final linedErrors = errors.map((e) => e.message).join('\n');
+    return 'Parser errors:\n$linedErrors';
+  }
+
+  /// Renders each aggregated error on its own line, including the location
+  /// prefix of every error rather than just their bare messages.
+  @override
+  String toString() {
+    final linedErrors = errors.map((e) => e.toString()).join('\n');
     return 'Parser errors:\n$linedErrors';
   }
 }

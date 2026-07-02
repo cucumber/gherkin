@@ -1,8 +1,7 @@
-import 'package:cucumber_gherkin/src/exceptions/token_parser_exception.dart';
-import 'package:cucumber_gherkin/src/language/token.dart';
+part of 'exceptions.dart';
 
 /// Raised when the file ends while the parser still expected more tokens.
-class UnexpectedEofException extends TokenParserException {
+final class UnexpectedEofException extends TokenParserException {
   /// Creates an exception for an unexpected end of file.
   ///
   /// [expectedTokenTypes] lists the token types the parser would have accepted.

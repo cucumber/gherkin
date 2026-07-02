@@ -124,7 +124,7 @@ class GherkinLine {
           uncommentedLine.substring(0, indexInUncommentedLine).length;
       final column = indent + symbolLength + 1;
       if (!_nonWhitespaceToken.hasMatch(token)) {
-        throw ParserException(
+        throw ParserException.create(
           'A tag may not contain whitespace',
           Location(lineNumber, column),
         );
