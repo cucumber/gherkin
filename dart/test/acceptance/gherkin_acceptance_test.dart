@@ -41,13 +41,57 @@ dynamic _sortKeys(dynamic v) {
   return v;
 }
 
-/// Parse a multi-line NDJSON string into a list of sorted-key objects.
-List<Map<String, dynamic>> _parseNdjson(String ndjson) =>
-    ndjson
-        .split('\n')
-        .where((l) => l.trim().isNotEmpty)
-        .map((l) => _sortKeys(jsonDecode(l)) as Map<String, dynamic>)
-        .toList();
+/// Parse a concatenation of JSON objects into a list of sorted-key objects.
+///
+/// Reference fixtures are normally NDJSON (one compact object per line), but a
+/// few are committed pretty-printed, so a single object can span several lines.
+/// This scans by brace depth (ignoring braces inside strings) instead of
+/// splitting on newlines, which also makes the result insensitive to how a
+/// checkout rewrites line endings (e.g. `core.autocrlf` on Windows).
+List<Map<String, dynamic>> _parseNdjson(String ndjson) {
+  final objects = <Map<String, dynamic>>[];
+  final buffer = StringBuffer();
+  var depth = 0;
+  var inString = false;
+  var escaped = false;
+
+  for (final rune in ndjson.runes) {
+    final char = String.fromCharCode(rune);
+
+    if (depth == 0 && char.trim().isEmpty) {
+      continue; // Skip whitespace between top-level objects.
+    }
+    buffer.write(char);
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (char == r'\') {
+        escaped = true;
+      } else if (char == '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    switch (char) {
+      case '"':
+        inString = true;
+      case '{':
+        depth++;
+      case '}':
+        depth--;
+        if (depth == 0) {
+          objects.add(
+            _sortKeys(jsonDecode(buffer.toString())) as Map<String, dynamic>,
+          );
+          buffer.clear();
+        }
+    }
+  }
+
+  return objects;
+}
 
 /// Run the Gherkin parser on [relativePath] with the given output toggles.
 /// Returns a list of sorted-key JSON objects, one per emitted envelope.
