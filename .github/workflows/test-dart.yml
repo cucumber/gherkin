@@ -25,28 +25,44 @@ jobs:
   test-dart:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest
+        dart: ["3.7.0", "3.12.0"]
+        include:
+          - os: windows-latest
+            dart: "3.12.0"
+          - os: macos-latest
+            dart: "3.12.0"
+
+    defaults:
+      run:
+        working-directory: dart
 
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
 
-      - name: install dart
-        uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+        with:
+          sdk: ${{ matrix.dart }}
 
-      - name: install dependencies
-        run: dart pub get
-        working-directory: dart
+      - name: Install dependencies
+        run: dart pub get --enforce-lockfile
 
-      - name: run tests
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: dart analyze
+
+      - name: Test
         run: dart test
-        working-directory: dart
 
-      - name: run acceptance tests
+      - name: Run acceptance tests
         run: make acceptance
-        working-directory: dart
+
+      - name: Verify publishable package
+        run: dart pub publish --dry-run
