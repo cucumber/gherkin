@@ -30,7 +30,8 @@ class MarkdownTokenMatcher implements TokenMatcher {
   late List<String> _headerKeywords;
   late Map<String, List<messages.StepKeywordType>> _keywordTypesMap;
 
-  RegExp _activeDocStringSeparator = RegExp('^(```[`]*)(.*)');
+  RegExp _activeDocStringSeparator = _openDocStringSeparator;
+  bool _inDocString = false;
   int _indentToRemove = 0;
   bool _matchedFeatureLine = false;
 
@@ -40,9 +41,11 @@ class MarkdownTokenMatcher implements TokenMatcher {
       _defaultDialectName,
       Location.empty,
     );
-    _activeDocStringSeparator = RegExp('^(```[`]*)(.*)');
+    _activeDocStringSeparator = _openDocStringSeparator;
+    _inDocString = false;
     _indentToRemove = 0;
     _matchedFeatureLine = false;
+    _titleLineRegexps.clear();
     _initializeDialectState();
   }
 
@@ -109,11 +112,13 @@ class MarkdownTokenMatcher implements TokenMatcher {
 
     final separator = match.group(1) ?? '';
     final mediaType = match.groupCount >= 2 ? match.group(2) ?? '' : '';
-    if (_activeDocStringSeparator.pattern == '^(```[`]*)(.*)') {
+    if (!_inDocString) {
       _activeDocStringSeparator = RegExp('^(${RegExp.escape(separator)})\$');
+      _inDocString = true;
       _indentToRemove = token.line.indent;
     } else {
-      _activeDocStringSeparator = RegExp('^(```[`]*)(.*)');
+      _activeDocStringSeparator = _openDocStringSeparator;
+      _inDocString = false;
       _indentToRemove = 0;
     }
 
@@ -216,7 +221,7 @@ class MarkdownTokenMatcher implements TokenMatcher {
   @override
   bool matchTableRow(Token token) {
     final lineText = token.line.getLineText(0);
-    if (!RegExp(r'^\s{2,5}\|').hasMatch(lineText)) {
+    if (!_tableRowLine.hasMatch(lineText)) {
       return false;
     }
     final tableCells = token.line.tableCells.toList();
@@ -236,8 +241,7 @@ class MarkdownTokenMatcher implements TokenMatcher {
   bool matchTagLine(Token token) {
     final tags = <GherkinLineSpan>[];
     final trimmed = token.line.getLineText(-1);
-    final re = RegExp('`(@[^`]+)`');
-    for (final match in re.allMatches(trimmed)) {
+    for (final match in _tagLine.allMatches(trimmed)) {
       tags.add(
         GherkinLineSpan(
           token.line.indent + match.start + 2,
@@ -259,10 +263,10 @@ class MarkdownTokenMatcher implements TokenMatcher {
     String suffix,
     TokenType matchedType,
   ) {
-    final escapedKeywords = keywords.map(RegExp.escape).join('|');
-    final regexp = RegExp(
-      '$prefix($escapedKeywords)${RegExp.escape(suffix)}(.*)',
-    );
+    final regexp = _titleLineRegexps.putIfAbsent(keywords, () {
+      final escapedKeywords = keywords.map(RegExp.escape).join('|');
+      return RegExp('$prefix($escapedKeywords)${RegExp.escape(suffix)}(.*)');
+    });
     final match = regexp.firstMatch(token.line.getLineText(0));
     if (match == null) {
       return false;
@@ -375,9 +379,27 @@ class MarkdownTokenMatcher implements TokenMatcher {
   }
 
   bool _isGfmTableSeparator(List<GherkinLineSpan> tableCells) {
-    return tableCells.any((cell) => RegExp(r'^:?-+:?$').hasMatch(cell.text));
+    return tableCells.any((cell) => _gfmTableSeparatorCell.hasMatch(cell.text));
   }
 
   static const _bulletPrefix = r'^(\s*[*+-]\s*)';
   static const _headerPrefix = r'^(#{1,6}\s)';
+
+  /// The opening/closing fence of a Markdown doc string (three or more
+  /// backticks), capturing the fence and any trailing info string.
+  static final RegExp _openDocStringSeparator = RegExp('^(```[`]*)(.*)');
+
+  /// Matches a single GFM table separator cell (for example `---` or `:-:`).
+  static final RegExp _gfmTableSeparatorCell = RegExp(r'^:?-+:?$');
+
+  /// Matches a Markdown table row indented by two to five spaces.
+  static final RegExp _tableRowLine = RegExp(r'^\s{2,5}\|');
+
+  /// Matches an inline-code tag (for example `` `@wip` ``) on a tag line.
+  static final RegExp _tagLine = RegExp('`(@[^`]+)`');
+
+  /// Caches the compiled title-line regex per keyword list so that the pattern
+  /// is not rebuilt for every scanned line. The key is the identity of the
+  /// dialect's keyword list, which is stable for a given dialect.
+  final Map<List<String>, RegExp> _titleLineRegexps = <List<String>, RegExp>{};
 }

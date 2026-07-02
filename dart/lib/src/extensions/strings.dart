@@ -1,5 +1,18 @@
 /// Utility string operations used by the Gherkin scanners.
 extension StringExtensions on String {
+  // Leading/trailing horizontal-whitespace patterns. Compiled once and reused
+  // rather than rebuilt on every call (these run per table cell).
+  // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
+  static final RegExp _leadingHorizontalWhitespace = RegExp(
+    r'^[ \t\x0B\f\r\x85\xA0]+',
+  );
+  static final RegExp _trailingHorizontalWhitespace = RegExp(
+    r'[ \t\x0B\f\r\x85\xA0]+$',
+  );
+  static final RegExp _trailingWhitespace = RegExp(
+    r'[ \t\n\x0B\f\r\x85\xA0]+$',
+  );
+
   /// Indicates whether a specified string is `empty` or consists only
   /// of `white-space` characters.
   bool get isEmptyOrWhiteSpace => trim().isEmpty;
@@ -42,24 +55,13 @@ extension StringExtensions on String {
   }
 
   /// Removes leading horizontal whitespace while preserving line breaks.
-  String ltrimKeepNewLines() {
-    // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
-    final regexp = RegExp(r'^[ \t\x0B\f\r\x85\xA0]+');
-    return replaceAll(regexp, '');
-  }
+  String ltrimKeepNewLines() => replaceAll(_leadingHorizontalWhitespace, '');
 
   /// Removes trailing horizontal whitespace while preserving line breaks.
-  String rtrimKeepNewLines() {
-    // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
-    final regexp = RegExp(r'[ \t\x0B\f\r\x85\xA0]+$');
-    return replaceAll(regexp, '');
-  }
+  String rtrimKeepNewLines() => replaceAll(_trailingHorizontalWhitespace, '');
 
   /// Removes all trailing whitespace, including line breaks.
-  String rtrim() {
-    final regexp = RegExp(r'[ \t\n\x0B\f\r\x85\xA0]+$');
-    return replaceAll(regexp, '');
-  }
+  String rtrim() => replaceAll(_trailingWhitespace, '');
 
   /// Removes all trailing occurrences of a character specified in an string.
   /// The default value of [trimChar] is an white-space.

@@ -200,9 +200,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchStepLine(Token token) {
-    final keywords =
-        currentDialect.stepKeywords.toList()
-          ..sort((a, b) => b.length - a.length);
+    final keywords = currentDialect.stepKeywordsByLengthDesc;
     for (final keyword in keywords) {
       if (token.line.startsWith(keyword)) {
         final stepText = token.line.getRestTrimmed(keyword.length);

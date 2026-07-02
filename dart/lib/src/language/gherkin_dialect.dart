@@ -45,6 +45,15 @@ class GherkinDialect {
         ...butStepKeywords,
       }.toList();
 
+  /// [stepKeywords] sorted by descending length, so that the longest matching
+  /// keyword is tried first (for example matching `* ` after `Given `).
+  ///
+  /// The order is dialect-invariant, so it is computed once on first access and
+  /// cached for subsequent reads rather than re-sorted on every step line.
+  late final List<String> stepKeywordsByLengthDesc = List<String>.of(
+    stepKeywords,
+  )..sort((a, b) => b.length - a.length);
+
   /// The keywords that introduce a `Background`.
   List<String> get backgroundKeywords => keywords.background;
 

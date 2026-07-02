@@ -31,6 +31,16 @@ class GherkinLine {
   // Columns are 1-indexed.
   static const int _offset = 1;
 
+  /// Matches the whitespace-preceded comment prefix that ends the tag portion
+  /// of a line. Compiled once and reused across lines.
+  static final RegExp _commentSuffix = RegExp(
+    r'\s' + GherkinLanguageConstants.commentPrefix,
+  );
+
+  /// Matches a token containing no whitespace. Compiled once and reused rather
+  /// than rebuilt for every tag on every line.
+  static final RegExp _nonWhitespaceToken = RegExp(r'^\S+$');
+
   final String _lineText;
   final int _lineNumber;
   final String _trimmedLineText;
@@ -98,8 +108,7 @@ class GherkinLine {
   /// tag (including its leading `@`).
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
-    final pattern = RegExp(r'\s' + GherkinLanguageConstants.commentPrefix);
-    final parts = _trimmedLineText.splitWithLimit(pattern, limit: 2);
+    final parts = _trimmedLineText.splitWithLimit(_commentSuffix, limit: 2);
     final uncommentedLine = parts[0];
 
     var indexInUncommentedLine = 0;
@@ -113,8 +122,7 @@ class GherkinLine {
       final symbolLength =
           uncommentedLine.substring(0, indexInUncommentedLine).length;
       final column = indent + symbolLength + 1;
-      final subPattern = RegExp(r'^\S+$');
-      if (!subPattern.hasMatch(token)) {
+      if (!_nonWhitespaceToken.hasMatch(token)) {
         throw ParserException(
           'A tag may not contain whitespace',
           Location(lineNumber, column),
