@@ -138,7 +138,7 @@ to produce `lib/src/parser/parser.g.dart`. Install berp with
 
 ## Acceptance Test Suite
 
-`test/acceptance_test.dart` is a pure-Dart, cross-platform port of the shared
+`test/acceptance/gherkin_acceptance_test.dart` is a pure-Dart, cross-platform port of the shared
 acceptance suite. It reads fixtures from `../testdata/` in the monorepo and
 compares AST, pickle, source, and error output against the reference (including
 the Markdown fixtures). Run it with `dart test` alongside the unit tests.

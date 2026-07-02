@@ -54,7 +54,7 @@ clean: mostlyclean
 # Linux/macOS monorepo CI. On Windows (or for a quick cross-platform check of
 # the same coverage), run the pure-Dart equivalent instead:
 #
-#     dart test test/acceptance_test.dart
+#     dart test test/acceptance/gherkin_acceptance_test.dart
 #
 # which compares ASTs, pickles, sources, and errors for every fixture
 # (including the Markdown `.feature.md` fixtures) without needing bash/jq/diff.
