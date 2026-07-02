@@ -10,7 +10,7 @@ import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final languages = loadGherkinLanguagesFromJsonAsset();
+  final languages = builtinGherkinDialects();
   final dialectProvider = GherkinDialectProvider(languages);
   final idGenerator = IdGenerator.incrementingGenerator;
   final builder = MessagesGherkinDocumentBuilder(idGenerator);

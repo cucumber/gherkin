@@ -18,23 +18,6 @@ class GherkinLanguageKeywords {
     this.but,
   );
 
-  /// Creates a set of keywords from a `gherkin-languages.json` entry.
-  GherkinLanguageKeywords.fromJson(Map<String, dynamic> json)
-    : name = json['name'] as String,
-      native = json['native'] as String,
-      feature = (json['feature'] as List<dynamic>).cast<String>(),
-      rule = (json['rule'] as List<dynamic>).cast<String>(),
-      background = (json['background'] as List<dynamic>).cast<String>(),
-      scenario = (json['scenario'] as List<dynamic>).cast<String>(),
-      scenarioOutline =
-          (json['scenarioOutline'] as List<dynamic>).cast<String>(),
-      examples = (json['examples'] as List<dynamic>).cast<String>(),
-      given = (json['given'] as List<dynamic>).cast<String>(),
-      when = (json['when'] as List<dynamic>).cast<String>(),
-      then = (json['then'] as List<dynamic>).cast<String>(),
-      and = (json['and'] as List<dynamic>).cast<String>(),
-      but = (json['but'] as List<dynamic>).cast<String>();
-
   /// A sentinel value with an empty name and no keywords.
   static const GherkinLanguageKeywords empty = GherkinLanguageKeywords(
     '',

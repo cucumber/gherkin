@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Test successful token matching', () async {
-    final languages = loadGherkinLanguagesFromJsonAsset();
+    final languages = builtinGherkinDialects();
     final path = Directory('../testdata/good');
     final files = path.listSync().where(
       (file) =>

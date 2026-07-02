@@ -16,7 +16,7 @@ messages.GherkinDocument _parse(
   String defaultDialect = 'en',
   bool stopAtFirstError = false,
 }) {
-  final languages = loadGherkinLanguagesFromJsonAsset();
+  final languages = builtinGherkinDialects();
   final dialectProvider = GherkinDialectProvider(languages, defaultDialect);
   final matcher = GherkinTokenMatcher(dialectProvider);
   final builder = MessagesGherkinDocumentBuilder(
@@ -123,7 +123,7 @@ Feature: Eating
   });
 
   test('a parser instance can be reused for multiple documents', () {
-    final languages = loadGherkinLanguagesFromJsonAsset();
+    final languages = builtinGherkinDialects();
     final dialectProvider = GherkinDialectProvider(languages, 'en');
     final matcher = GherkinTokenMatcher(dialectProvider);
     final builder = MessagesGherkinDocumentBuilder(

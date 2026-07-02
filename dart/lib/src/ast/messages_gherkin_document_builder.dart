@@ -99,7 +99,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Step _createStep(AstNode node) {
-    final stepLine = node.getToken(TokenType.stepLine)!;
+    final stepLine = node.requireToken(TokenType.stepLine);
     final dataTables = node.items<messages.DataTable>(RuleType.dataTable);
     final docStrings = node.items<messages.DocString>(RuleType.docString);
     return messages.Step(
@@ -174,7 +174,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Background _createBackground(AstNode node) {
-    final backgroundLine = node.getToken(TokenType.backgroundLine)!;
+    final backgroundLine = node.requireToken(TokenType.backgroundLine);
     return messages.Background(
       id: idGenerator.newId(),
       location: _messageLocation(backgroundLine.location),
@@ -187,8 +187,8 @@ class MessagesGherkinDocumentBuilder
 
   messages.Scenario _createScenario(AstNode node) {
     final tags = _getTags(node);
-    final scenarioNode = node.singleOrNull<AstNode>(RuleType.scenario)!;
-    final scenarioLine = scenarioNode.getToken(TokenType.scenarioLine)!;
+    final scenarioNode = node.require<AstNode>(RuleType.scenario);
+    final scenarioLine = scenarioNode.requireToken(TokenType.scenarioLine);
     return messages.Scenario(
       id: idGenerator.newId(),
       location: _messageLocation(scenarioLine.location),
@@ -211,8 +211,8 @@ class MessagesGherkinDocumentBuilder
 
   messages.Examples _createExamplesDefinition(AstNode node) {
     final tags = _getTags(node);
-    final examplesNode = node.singleOrNull<AstNode>(RuleType.examples)!;
-    final examplesLine = examplesNode.getToken(TokenType.examplesLine)!;
+    final examplesNode = node.require<AstNode>(RuleType.examples);
+    final examplesLine = examplesNode.requireToken(TokenType.examplesLine);
     final allRows = examplesNode.singleOrDefault<List<messages.TableRow>>(
       RuleType.examplesTable,
       const <messages.TableRow>[],
@@ -261,7 +261,8 @@ class MessagesGherkinDocumentBuilder
       return null;
     }
     final featureLine = header.getToken(TokenType.featureLine);
-    if (featureLine == null || featureLine.matchedGherkinDialect == null) {
+    final dialect = featureLine?.matchedGherkinDialect;
+    if (featureLine == null || dialect == null) {
       return null;
     }
 
@@ -282,7 +283,7 @@ class MessagesGherkinDocumentBuilder
     return messages.Feature(
       location: _messageLocation(featureLine.location),
       tags: _getTags(header),
-      language: featureLine.matchedGherkinDialect!.language,
+      language: dialect.language,
       keyword: featureLine.matchedKeyword,
       name: featureLine.matchedText,
       description: _getDescription(header),

@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Load language settings from json assets', () {
-    final settings = loadGherkinLanguagesFromJsonAsset();
+    final settings = builtinGherkinDialects();
     expect(settings, isNotEmpty);
     expect(settings['en'], isNotNull);
     expect(settings['en']?.name.toLowerCase(), 'english');

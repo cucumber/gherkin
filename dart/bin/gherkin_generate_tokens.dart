@@ -12,7 +12,7 @@ import 'package:cucumber_gherkin/src/tokens/tokens_generator.dart';
 /// Mirrors the `gherkin-generate-tokens` binaries of the other first-party
 /// implementations (Java, Go, Ruby).
 void main(List<String> args) {
-  final languages = loadGherkinLanguagesFromJsonAsset();
+  final languages = builtinGherkinDialects();
   final dialectProvider = GherkinDialectProvider(languages);
 
   for (final path in args) {

@@ -13,7 +13,7 @@ import 'package:test/test.dart';
 
 void main() {
   final idGenerator = IdGenerator.incrementingGenerator;
-  final languages = loadGherkinLanguagesFromJsonAsset();
+  final languages = builtinGherkinDialects();
 
   test('Test successful parsing', () async {
     final dialectProvider = GherkinDialectProvider(languages);

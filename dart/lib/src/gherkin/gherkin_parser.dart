@@ -33,7 +33,7 @@ class GherkinParser {
     this.defaultDialect = defaultDefaultDialect,
     lang.IdGenerator? idGenerator,
   }) : idGenerator = idGenerator ?? lang.IdGenerator.uuidGenerator {
-    final languages = lang.loadGherkinLanguagesFromJsonAsset();
+    final languages = lang.builtinGherkinDialects();
     _dialectProvider = lang.GherkinDialectProvider(languages, defaultDialect);
   }
 

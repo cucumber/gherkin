@@ -18,6 +18,22 @@ class AstNode {
   Token? getToken(TokenType tokenType) =>
       singleOrNull<Token>(tokenType.toRuleType());
 
+  /// Returns the single [Token] of [tokenType].
+  ///
+  /// Unlike [getToken], this throws a [StateError] when the token is absent.
+  /// The grammar guarantees the token exists at the point this is called, so a
+  /// missing token indicates the generated parser and this builder have drifted
+  /// out of sync (e.g. `parser.g.dart` was regenerated from a changed grammar
+  /// without updating the builder). Failing loudly here surfaces that as a
+  /// clear diagnostic rather than a downstream null-dereference crash.
+  Token requireToken(TokenType tokenType) =>
+      getToken(tokenType) ??
+      (throw StateError(
+        'Parser/builder drift: expected a $tokenType token under $ruleType '
+        'but none was present. The generated parser (parser.g.dart) and the '
+        'document builder are out of sync.',
+      ));
+
   /// Returns all [Token]s of the given [tokenType] held by this node.
   Iterable<Token> getTokens(TokenType tokenType) =>
       items<Token>(tokenType.toRuleType());
@@ -45,6 +61,21 @@ class AstNode {
   /// none.
   T singleOrDefault<T>(RuleType ruleType, T defaultValue) =>
       singleOrNull<T>(ruleType) ?? defaultValue;
+
+  /// Returns the first sub-item of [ruleType].
+  ///
+  /// Unlike [singleOrNull], this throws a [StateError] when no sub-item of
+  /// [ruleType] is present. The grammar guarantees the sub-item exists at the
+  /// point this is called, so its absence indicates the generated parser and
+  /// this builder have drifted out of sync. Failing loudly here surfaces that
+  /// as a clear diagnostic rather than a downstream null-dereference crash.
+  T require<T>(RuleType requestedRuleType) =>
+      singleOrNull<T>(requestedRuleType) ??
+      (throw StateError(
+        'Parser/builder drift: expected a $requestedRuleType sub-item under '
+        '$ruleType but none was present. The generated parser (parser.g.dart) '
+        'and the document builder are out of sync.',
+      ));
 
   /// Returns all sub-items stored under [ruleType], cast to type [T].
   List<T> items<T>(RuleType ruleType) {

@@ -7,6 +7,6 @@ import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 /// `dialects_builtin.g.dart` (produced from `gherkin-languages.json` by the
 /// `dialects_builtin.g.dart.jq` script), so loading does not depend on the
 /// current working directory, runtime asset resolution, or the package layout.
-Map<String, GherkinLanguageKeywords> loadGherkinLanguagesFromJsonAsset() {
+Map<String, GherkinLanguageKeywords> builtinGherkinDialects() {
   return builtinDialects;
 }

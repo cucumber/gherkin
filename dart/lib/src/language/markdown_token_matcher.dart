@@ -27,7 +27,6 @@ class MarkdownTokenMatcher implements TokenMatcher {
 
   late GherkinDialect _currentDialect;
   late List<String> _nonStarStepKeywords;
-  late List<String> _headerKeywords;
   late Map<String, List<messages.StepKeywordType>> _keywordTypesMap;
 
   RegExp _activeDocStringSeparator = _openDocStringSeparator;
@@ -319,17 +318,20 @@ class MarkdownTokenMatcher implements TokenMatcher {
           }.where((keyword) => keyword != '* ').toList()
           ..sort((a, b) => b.length - a.length);
 
-    _headerKeywords =
-        <String>{
-          ..._currentDialect.featureKeywords,
-          ..._currentDialect.backgroundKeywords,
-          ..._currentDialect.ruleKeywords,
-          ..._currentDialect.scenarioOutlineKeywords,
-          ..._currentDialect.scenarioKeywords,
-          ..._currentDialect.examplesKeywords,
-        }.toList();
+    // Guard against a resolved-but-empty dialect (e.g. the empty sentinel):
+    // a usable dialect must define at least one header keyword. Checked with
+    // short-circuiting `any` rather than materializing the full keyword set,
+    // since the result is only ever used for this emptiness test.
+    final hasHeaderKeyword = [
+      _currentDialect.featureKeywords,
+      _currentDialect.backgroundKeywords,
+      _currentDialect.ruleKeywords,
+      _currentDialect.scenarioOutlineKeywords,
+      _currentDialect.scenarioKeywords,
+      _currentDialect.examplesKeywords,
+    ].any((keywords) => keywords.isNotEmpty);
 
-    if (_headerKeywords.isEmpty) {
+    if (!hasHeaderKeyword) {
       throw NoSuchLanguageException(_defaultDialectName);
     }
 
