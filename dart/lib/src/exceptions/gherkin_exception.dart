@@ -10,8 +10,12 @@ class GherkinException implements Exception {
   /// A human-readable description of the error.
   final String message;
 
-  /// The underlying exception that triggered this error, if any.
-  final Exception? cause;
+  /// The underlying error that triggered this error, if any.
+  ///
+  /// Typed as [Object] rather than [Exception] because Dart also throws
+  /// [Error] subtypes (and, in principle, arbitrary objects); constraining it
+  /// to [Exception] would silently drop those causes.
+  final Object? cause;
 
   @override
   String toString() {
