@@ -59,7 +59,7 @@ import 'package:cucumber_gherkin/gherkin.dart';
 final parser = GherkinParser();
 
 final envelopes = await parser
-    .parsePath('../testdata/good/minimal.feature')
+    .parsePath('example/minimal.feature')
     .toList();
 
 final pickle = envelopes
