@@ -116,8 +116,7 @@ with a `# language:` header; `defaultDialect` (default `en`) applies when the
 header is absent. Requesting an unsupported language throws a
 `NoSuchLanguageException`.
 
-See [`example/dart_example.dart`](example/dart_example.dart) and the tests under
-[`test/`](test/) for more usage.
+See the tests under [`test/`](test/) for more usage.
 
 ## Development
 
