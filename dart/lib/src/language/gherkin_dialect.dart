@@ -21,7 +21,7 @@ class GherkinDialect {
   /// The English name of the language (for example `English`).
   String get name => keywords.name;
 
-  /// The native name of the language (for example `franÃ§ais`).
+  /// The native name of the language (for example `français`).
   String get nativeName => keywords.native;
 
   /// The keywords that introduce a `Rule`.
