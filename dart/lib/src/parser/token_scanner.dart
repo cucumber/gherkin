@@ -6,7 +6,6 @@ import 'package:cucumber_gherkin/src/language/token.dart';
 /// returns the next line as a [Token]. This contract has multiple
 /// implementations (for example `StringTokenScanner` and `FileTokenScanner`),
 /// so it is modelled as an interface rather than a standalone function.
-// ignore: one_member_abstracts
 abstract class TokenScanner {
   /// Reads and returns the next [Token] from the underlying source.
   Token read();
