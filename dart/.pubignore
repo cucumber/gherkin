@@ -1,7 +1,9 @@
 Makefile
 build/
-test/acceptance/
+coverage/
+bin/
+test/
 benchmark/
-pubspec.lock
 acceptance/
+pubspec.lock
 gherkin-dart.razor
