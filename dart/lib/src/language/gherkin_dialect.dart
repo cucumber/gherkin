@@ -34,14 +34,15 @@ class GherkinDialect {
   List<String> get scenarioOutlineKeywords => keywords.scenarioOutline;
 
   /// All step keywords, regardless of their semantic type.
-  List<String> get stepKeywords =>
-      <String>{
-        ...givenStepKeywords,
-        ...whenStepKeywords,
-        ...thenStepKeywords,
-        ...andStepKeywords,
-        ...butStepKeywords,
-      }.toList();
+  ///
+  /// Computed once on first access and cached for subsequent reads.
+  late final List<String> stepKeywords = <String>{
+    ...givenStepKeywords,
+    ...whenStepKeywords,
+    ...thenStepKeywords,
+    ...andStepKeywords,
+    ...butStepKeywords,
+  }.toList();
 
   /// The keywords that introduce a `Background`.
   List<String> get backgroundKeywords => keywords.background;
