@@ -1,9 +1,3 @@
-/// String constants used throughout the library.
-class Strings {
-  /// The empty string.
-  static const empty = '';
-}
-
 /// Utility string operations used by the Gherkin scanners.
 extension StringExtensions on String {
   /// Indicates whether a specified string is `empty` or consists only

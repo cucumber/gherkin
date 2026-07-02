@@ -1,5 +1,4 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
@@ -23,13 +22,13 @@ class Token {
   TokenType matchedType = TokenType.none;
 
   /// The localized keyword recognized on the line, if any.
-  String matchedKeyword = Strings.empty;
+  String matchedKeyword = '';
 
   /// The semantic type of the matched step keyword, if this is a step line.
   messages.StepKeywordType? matchedKeywordType;
 
   /// The text remaining on the line after the matched keyword.
-  String matchedText = Strings.empty;
+  String matchedText = '';
 
   /// The spans (for example tags or table cells) recognized on the line.
   Iterable<GherkinLineSpan> matchedItems = const <GherkinLineSpan>[];

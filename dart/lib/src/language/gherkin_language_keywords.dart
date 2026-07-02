@@ -1,5 +1,3 @@
-import 'package:cucumber_gherkin/src/extensions/strings.dart';
-
 /// The localized Gherkin keywords for a single language, as defined in
 /// `gherkin-languages.json`.
 class GherkinLanguageKeywords {
@@ -39,8 +37,8 @@ class GherkinLanguageKeywords {
 
   /// A sentinel value with an empty name and no keywords.
   static const GherkinLanguageKeywords empty = GherkinLanguageKeywords(
-    Strings.empty,
-    Strings.empty,
+    '',
+    '',
     [],
     [],
     [],

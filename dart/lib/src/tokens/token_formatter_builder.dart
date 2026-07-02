@@ -13,10 +13,8 @@ class TokenFormatterBuilder implements Builder<NoOpResult> {
   /// Accumulates the rendered token lines.
   final StringBuffer tokensTextBuilder = StringBuffer();
 
-  /// Returns the full rendered token text accumulated so far.
-  String getTokensText() {
-    return tokensTextBuilder.toString();
-  }
+  /// The full rendered token text accumulated so far.
+  String get tokensText => tokensTextBuilder.toString();
 
   @override
   void build(Token token) {

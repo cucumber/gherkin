@@ -1,7 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/exceptions.dart';
-import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
-import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
@@ -109,9 +107,8 @@ class MarkdownTokenMatcher implements TokenMatcher {
       return false;
     }
 
-    final separator = match.group(1) ?? Strings.empty;
-    final mediaType =
-        match.groupCount >= 2 ? match.group(2) ?? Strings.empty : Strings.empty;
+    final separator = match.group(1) ?? '';
+    final mediaType = match.groupCount >= 2 ? match.group(2) ?? '' : '';
     if (_activeDocStringSeparator.pattern == '^(```[`]*)(.*)') {
       _activeDocStringSeparator = RegExp('^(${RegExp.escape(separator)})\$');
       _indentToRemove = token.line.indent;
@@ -244,7 +241,7 @@ class MarkdownTokenMatcher implements TokenMatcher {
       tags.add(
         GherkinLineSpan(
           token.line.indent + match.start + 2,
-          match.group(1) ?? Strings.empty,
+          match.group(1) ?? '',
         ),
       );
     }
@@ -271,9 +268,9 @@ class MarkdownTokenMatcher implements TokenMatcher {
       return false;
     }
 
-    final prefixText = match.group(1) ?? Strings.empty;
-    final keyword = match.group(2) ?? Strings.empty;
-    final text = match.group(3)?.trim() ?? Strings.empty;
+    final prefixText = match.group(1) ?? '';
+    final keyword = match.group(2) ?? '';
+    final text = match.group(3)?.trim() ?? '';
     final keywordType = _keywordType(keyword);
     _setTokenMatched(
       token,
@@ -289,10 +286,10 @@ class MarkdownTokenMatcher implements TokenMatcher {
   void _setTokenMatched(
     Token token,
     TokenType matchedType, {
-    String text = Strings.empty,
-    String keyword = Strings.empty,
+    String text = '',
+    String keyword = '',
     messages.StepKeywordType? keywordType,
-    int indent = Int.min,
+    int? indent,
     Iterable<GherkinLineSpan> items = const <GherkinLineSpan>[],
   }) {
     token
@@ -303,11 +300,7 @@ class MarkdownTokenMatcher implements TokenMatcher {
       ..matchedItems = items
       ..matchedGherkinDialect = _currentDialect
       ..matchedIndent =
-          matchedType == TokenType.empty
-              ? 0
-              : indent.isNotMin
-              ? indent
-              : token.line.indent
+          matchedType == TokenType.empty ? 0 : indent ?? token.line.indent
       ..location = Location(token.location.line, token.matchedIndent + 1);
   }
 

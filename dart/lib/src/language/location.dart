@@ -1,12 +1,19 @@
-import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
-
 /// A one-based position (line and column) within a source document.
 class Location {
   /// Creates a location at the given [line] and [column].
   const Location(this.line, this.column);
 
+  /// Marks an unset line or column.
+  ///
+  /// Real values are always non-negative (columns and lines are 1-based), so a
+  /// negative value can never collide with a legitimate one. A negative literal
+  /// is used rather than `1 << 63` because bit-shift arithmetic does not produce
+  /// the 64-bit minimum integer on the web/JS target, which would silently break
+  /// the sentinel there.
+  static const int _unset = -1;
+
   /// A location representing an unknown/absent position.
-  static const empty = Location(Int.min, Int.min);
+  static const empty = Location(_unset, _unset);
 
   /// The one-based line number.
   final int line;
@@ -16,4 +23,7 @@ class Location {
 
   /// Whether this is the unknown/absent [empty] location.
   bool get isEmpty => line == empty.line && column == empty.column;
+
+  /// Whether the [column] is unset (has no known position).
+  bool get hasColumn => column != _unset;
 }

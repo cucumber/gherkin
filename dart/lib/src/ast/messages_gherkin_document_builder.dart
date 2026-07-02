@@ -2,7 +2,6 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/exceptions.dart';
 import 'package:cucumber_gherkin/src/ast/ast_node.dart';
 import 'package:cucumber_gherkin/src/collections/stack.dart';
-import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
 import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
@@ -206,7 +205,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   String _getDescription(AstNode node) =>
-      node.singleOrDefault<String>(RuleType.description, Strings.empty);
+      node.singleOrDefault<String>(RuleType.description, '');
 
   List<messages.Step> _getSteps(AstNode node) =>
       node.items<messages.Step>(RuleType.step);
@@ -343,7 +342,7 @@ class MessagesGherkinDocumentBuilder
   messages.Location _messageLocation(Location location, [int? column]) {
     return messages.Location(
       line: location.line,
-      column: column ?? (location.column.isMin ? null : location.column),
+      column: column ?? (location.hasColumn ? location.column : null),
     );
   }
 

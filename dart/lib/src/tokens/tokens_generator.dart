@@ -18,7 +18,7 @@ class TokensGenerator {
     final parser = Parser<NoOpResult>(tokenFormatterBuilder);
     final tokenScanner = FileTokenScanner.fromPath(featureFilePath);
     parser.parse(tokenScanner, tokenMatcher);
-    final tokensText = tokenFormatterBuilder.getTokensText();
+    final tokensText = tokenFormatterBuilder.tokensText;
     return LineEndingHelper.normalizeLineEndings(tokensText);
   }
 }

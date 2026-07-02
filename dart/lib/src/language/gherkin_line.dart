@@ -1,6 +1,5 @@
 import 'package:characters/characters.dart';
 import 'package:cucumber_gherkin/exceptions.dart';
-import 'package:cucumber_gherkin/src/extensions/int_extensions.dart';
 import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
@@ -16,13 +15,18 @@ class GherkinLine {
 
   /// Creates the line that marks the end of the file.
   GherkinLine.eof()
-    : _lineText = Strings.empty,
-      _lineNumber = Int.min,
-      _trimmedLineText = Strings.empty,
+    : _lineText = '',
+      _lineNumber = _unsetLineNumber,
+      _trimmedLineText = '',
       _isEof = true;
 
   /// Sentinel passed to [getLineText] to keep the entire line text.
   static const int entireLine = 0;
+
+  /// Placeholder line number for the end-of-file marker, which has no position
+  /// in the source. Real line numbers are 1-based, so a negative value can
+  /// never collide with one.
+  static const int _unsetLineNumber = -1;
 
   // Columns are 1-indexed.
   static const int _offset = 1;
