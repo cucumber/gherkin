@@ -1,10 +1,12 @@
 SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = lib/src/assets/gherkin-languages.json
+GHERKIN_DIALECTS = lib/src/language/dialects_builtin.g.dart
 GHERKIN_PARSER = lib/src/parser/parser.g.dart
 GHERKIN_RAZOR = gherkin-dart.razor
 GHERKIN = dart run bin/gherkin.dart
 GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
+GHERKIN_GENERATE_DIALECTS = dart run bin/gherkin_generate_dialects.dart
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
@@ -31,11 +33,14 @@ clean-generate: ## Remove generated Gherkin parser files
 	rm -f $(GHERKIN_PARSER)
 .PHONY: clean-generate
 
-copy-gherkin-languages: $(GHERKIN_LANGUAGES_JSON) ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_DIALECTS) ## Copy gherkin-languages.json and/or generate derived files
 .PHONY: copy-gherkin-languages
 
+$(GHERKIN_DIALECTS): $(GHERKIN_LANGUAGES_JSON)
+	$(GHERKIN_GENERATE_DIALECTS) $(GHERKIN_LANGUAGES_JSON) $@
+
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f $(GHERKIN_LANGUAGES_JSON)
+	rm -f $(GHERKIN_LANGUAGES_JSON) $(GHERKIN_DIALECTS)
 .PHONY: clean-gherkin-languages
 
 mostlyclean:

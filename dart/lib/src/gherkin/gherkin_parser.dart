@@ -84,6 +84,16 @@ class GherkinParser {
     return Stream.fromIterable(paths).asyncExpand(parsePath);
   }
 
+  /// Parses in-memory Gherkin [data] identified by [uri] and emits the
+  /// resulting envelopes.
+  ///
+  /// The [uri] is used as the source reference and to infer the media type
+  /// from its extension (`.feature` or `.md`); it does not need to point at a
+  /// real file. Unlike [parsePath], no I/O is performed.
+  Stream<messages.Envelope> parseString(String data, String uri) {
+    return parseEnvelope(makeSourceEnvelope(data, uri));
+  }
+
   /// Parses a single source [envelope] and emits the resulting envelopes.
   ///
   /// The incoming [envelope] is re-emitted first when [includeSource] is set.
@@ -268,6 +278,36 @@ class Gherkin {
       includePickles: includePickles,
       idGenerator: idGenerator,
     ).parsePaths(paths);
+  }
+
+  /// Parses in-memory Gherkin [data] identified by [uri] and emits the
+  /// resulting [messages.Envelope]s.
+  ///
+  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
+  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
+  /// the dialect used when a feature has no `# language:` header, and
+  /// [idGenerator] to assign message ids (defaults to UUIDs). All envelope
+  /// kinds are emitted by default.
+  ///
+  /// The [uri] is used as the source reference and to infer the media type
+  /// from its extension (`.feature` or `.md`); it does not need to point at a
+  /// real file.
+  static Stream<messages.Envelope> fromString(
+    String data,
+    String uri, {
+    bool includeSource = true,
+    bool includeGherkinDocument = true,
+    bool includePickles = true,
+    String defaultDialect = 'en',
+    lang.IdGenerator? idGenerator,
+  }) {
+    return GherkinParser(
+      includeSource: includeSource,
+      includeGherkinDocument: includeGherkinDocument,
+      includePickles: includePickles,
+      defaultDialect: defaultDialect,
+      idGenerator: idGenerator,
+    ).parseString(data, uri);
   }
 
   /// Parses the source [envelopes] and emits the resulting
