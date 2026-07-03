@@ -8,7 +8,10 @@ GHERKIN_RAZOR = gherkin-dart.razor
 GHERKIN = dart run bin/gherkin.dart
 GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
 
-SOURCE_FILES = $(shell find lib bin test/src -name "*.dart")
+# Hand-written sources only. Generated files (`*.g.dart`) are excluded so the
+# build-first `.built` target never tries to regenerate them (which would
+# require the berp/jq toolchain); they are validated by the codegen workflow.
+SOURCE_FILES = $(shell find lib bin test/src -name "*.dart" ! -name "*.g.dart")
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
