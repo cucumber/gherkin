@@ -99,33 +99,6 @@ Entry points:
 - `parseEnvelope(envelope)` / `parseEnvelopes(stream)`: parse pre-built
   `source` envelopes.
 
-### Convenience methods
-
-The streaming API above is the most general, but the common case — "give me the
-document (or pickles) for this one source" — has direct, non-stream helpers.
-Unlike the streaming API, these return the result directly and **throw** a
-`ParserException` (or `CompositeParserException`) on malformed Gherkin (there is
-no envelope stream to carry a `parseError`):
-
-- `parseStringSync(data, {uri, mediaType})` → `GherkinDocument`, and
-  `compileStringSync(data, {uri, mediaType})` → `List<Pickle>`: parse in-memory
-  Gherkin (in the core, platform-agnostic library).
-- `parseDocument(path)` → `Future<GherkinDocument>`, and
-  `compilePickles(path)` → `Future<List<Pickle>>`: read and parse a file (from
-  `cucumber_gherkin_io.dart`). I/O failures throw a `GherkinException`.
-
-```dart
-import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
-
-final parser = GherkinParser();
-
-// In-memory, synchronous:
-final document = parser.parseStringSync('Feature: Minimal\n');
-
-// From a file:
-final pickles = await parser.compilePickles('example/minimal.feature');
-```
-
 ### Configuration
 
 Configure which envelope kinds are emitted, the fallback dialect, and id
@@ -175,16 +148,14 @@ to produce `lib/src/parser/parser.g.dart`. Install berp with
 
 ## Acceptance Test Suite
 
-`make acceptance` runs the shared conformance suite: it parses every fixture
-under `../testdata/` in the monorepo and compares the tokens, AST, pickle,
-source, and error output against the reference files using `diff` (via
-`bash`/`jq`), exactly like the other first-party implementations. This is the
-single source of truth for acceptance, so there is no separate Dart port to
-drift out of sync.
+`test/acceptance/gherkin_acceptance_test.dart` is a pure-Dart, cross-platform port of the shared
+acceptance suite. It reads fixtures from `../testdata/` in the monorepo and
+compares AST, pickle, source, and error output against the reference (including
+the Markdown fixtures). Run it with `dart test` alongside the unit tests.
 
-The recipe needs `bash`, `jq`, and `diff`; on Windows, run it under Git Bash or
-WSL. Acceptance output under `acceptance/` and the monorepo fixtures are not
-part of the published package.
+On Linux/macOS the same coverage is available via `make acceptance`, which
+shells out to `bash`/`jq`/`diff`. Acceptance output under `acceptance/` and the
+monorepo fixtures are not part of the published package.
 
 For general information about Gherkin and the other language implementations,
 see the repository root [README](../README.md).

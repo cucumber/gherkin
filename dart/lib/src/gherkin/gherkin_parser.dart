@@ -31,27 +31,15 @@ import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 ///
 /// ## Error contract
 ///
-/// The streaming entry points ([parseString], [parseEnvelope],
-/// [parseEnvelopes]) never throw on malformed Gherkin: it is reported as a
-/// `parseError` envelope in the stream. The only synchronous throws are for
-/// conditions that are *not* a property of the Gherkin source:
+/// Malformed Gherkin never throws: it is reported as a `parseError` envelope in
+/// the stream. The only synchronous throws are for conditions that are *not* a
+/// property of the Gherkin source and are detected before parsing:
 ///
-/// * [parseString] and [makeSourceEnvelope] throw a [GherkinException] when the
+/// * [parseString] and [makeSourceEnvelope] throw an [ArgumentError] when the
 ///   media type cannot be resolved (no `mediaType` and an unrecognized `uri`
 ///   extension);
 /// * the file-reading entry points (`parsePath`/`parsePaths`) surface I/O
 ///   failures as a [GherkinException] error event on the stream.
-///
-/// ## Convenience methods
-///
-/// The streaming API is the most general, but the common case — "give me the
-/// document (or pickles) for this one source" — is served by the convenience
-/// methods [parseStringSync]/[compileStringSync] (in-memory) and, from
-/// `package:cucumber_gherkin/cucumber_gherkin_io.dart`, `parseDocument`/
-/// `compilePickles` (file-based). Unlike the streaming API, these return the
-/// document/pickles directly and *throw* a [ParserException] (or
-/// [CompositeParserException]) on malformed Gherkin, since there is no envelope
-/// stream to carry a `parseError`.
 class GherkinParser {
   /// Creates a parser.
   ///
@@ -83,17 +71,6 @@ class GherkinParser {
   /// The default for [defaultDialect]: the `en` dialect.
   static const String defaultDialectValue = 'en';
 
-  /// The default `uri` used by the in-memory convenience methods
-  /// [parseStringSync] and [compileStringSync] when the caller does not supply
-  /// one.
-  ///
-  /// It also implies the plain-Gherkin media type (via its `.feature`
-  /// extension) for quick in-memory parsing. The streaming entry points
-  /// ([parseString], [makeSourceEnvelope]) require an explicit `uri`, matching
-  /// the flagship implementations (e.g. JavaScript's `makeSourceEnvelope`,
-  /// Ruby's `from_source`).
-  static const String defaultUri = 'unknown.feature';
-
   /// Whether `source` envelopes are emitted.
   final bool includeSource;
 
@@ -123,7 +100,7 @@ class GherkinParser {
   /// explicitly when the [uri] has no recognized extension.
   ///
   /// Unlike malformed Gherkin — which is always reported as a `parseError`
-  /// envelope and never thrown — this method throws a [GherkinException]
+  /// envelope and never thrown — this method throws an [ArgumentError]
   /// *synchronously* when [mediaType] is omitted and the [uri] has no
   /// recognized extension, because the media type cannot be resolved before any
   /// parsing begins.
@@ -158,9 +135,19 @@ class GherkinParser {
       return;
     }
 
+    final builder = MessagesGherkinDocumentBuilder(idGenerator);
+    final parser = Parser<messages.GherkinDocument>(builder)
+      ..stopAtFirstError = false;
+    final tokenScanner = StringTokenScanner(source.data);
+
     final messages.GherkinDocument gherkinDocument;
     try {
-      gherkinDocument = _buildDocument(source);
+      // Build the token matcher inside the try: constructing it resolves the
+      // default dialect eagerly, so an unsupported `defaultDialect` (with no
+      // `# language:` header, hence no location) must surface as a `parseError`
+      // envelope rather than escaping to the caller.
+      final tokenMatcher = _tokenMatcher(source.mediaType);
+      gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
     } on CompositeParserException catch (e) {
       yield* e.errors.map((error) => _parseErrorEnvelope(error, source.uri));
       return;
@@ -169,85 +156,24 @@ class GherkinParser {
       return;
     }
 
-    if (includeGherkinDocument) {
-      yield messages.Envelope(gherkinDocument: gherkinDocument);
-    }
-    if (includePickles) {
-      for (final pickle in _compile(gherkinDocument, source.uri)) {
-        yield messages.Envelope(pickle: pickle);
-      }
-    }
-  }
-
-  /// Parses [source] into a [messages.GherkinDocument] with its `uri` set.
-  ///
-  /// Throws a [ParserException] (or [CompositeParserException]) when the source
-  /// is malformed; this is the throwing core shared by the streaming API (which
-  /// catches and converts these to `parseError` envelopes) and the convenience
-  /// methods [parseStringSync]/[compileStringSync] (which let them propagate).
-  messages.GherkinDocument _buildDocument(messages.Source source) {
-    final builder = MessagesGherkinDocumentBuilder(idGenerator);
-    final parser = Parser<messages.GherkinDocument>(builder)
-      ..stopAtFirstError = false;
-    final tokenScanner = StringTokenScanner(source.data);
-
-    // Building the token matcher resolves the default dialect eagerly, so an
-    // unsupported `defaultDialect` (with no `# language:` header, hence no
-    // location) surfaces here as a `NoSuchLanguageException` (a
-    // `ParserException`) rather than escaping uncaught.
-    final tokenMatcher = _tokenMatcher(source.mediaType);
-    final gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
-
-    return messages.GherkinDocument(
+    final gherkinDocumentWithUri = messages.GherkinDocument(
       uri: source.uri,
       feature: gherkinDocument.feature,
       comments: gherkinDocument.comments,
     );
-  }
 
-  List<messages.Pickle> _compile(
-    messages.GherkinDocument gherkinDocument,
-    String uri,
-  ) {
-    return MessagesPickleCompiler(idGenerator).compile(gherkinDocument, uri);
-  }
-
-  /// Parses in-memory Gherkin [data] and returns the resulting document.
-  ///
-  /// A convenience wrapper over the streaming API for the common case of
-  /// parsing a single in-memory source. Unlike [parseString], it returns the
-  /// [messages.GherkinDocument] directly and *throws* a [ParserException] (or
-  /// [CompositeParserException]) when [data] is malformed. The
-  /// [includeGherkinDocument]/[includePickles] flags do not apply.
-  ///
-  /// The [uri] (default [defaultUri]) is used as the source reference and, when
-  /// [mediaType] is omitted, to infer the media type from its extension
-  /// (`.feature` or `.md`); a [GherkinException] is thrown when neither yields a
-  /// media type.
-  messages.GherkinDocument parseStringSync(
-    String data, {
-    String uri = defaultUri,
-    messages.SourceMediaType? mediaType,
-  }) {
-    final source = makeSourceEnvelope(data, uri, mediaType: mediaType).source!;
-    return _buildDocument(source);
-  }
-
-  /// Parses in-memory Gherkin [data] and compiles it into pickles.
-  ///
-  /// A convenience wrapper over the streaming API. Unlike [parseString], it
-  /// returns the [messages.Pickle]s directly and *throws* a [ParserException]
-  /// (or [CompositeParserException]) when [data] is malformed. The
-  /// [includeGherkinDocument]/[includePickles] flags do not apply.
-  ///
-  /// See [parseStringSync] for how [uri] and [mediaType] are used.
-  List<messages.Pickle> compileStringSync(
-    String data, {
-    String uri = defaultUri,
-    messages.SourceMediaType? mediaType,
-  }) {
-    final source = makeSourceEnvelope(data, uri, mediaType: mediaType).source!;
-    return _compile(_buildDocument(source), source.uri);
+    if (includeGherkinDocument) {
+      yield messages.Envelope(gherkinDocument: gherkinDocumentWithUri);
+    }
+    if (includePickles) {
+      final pickleCompiler = MessagesPickleCompiler(idGenerator);
+      for (final pickle in pickleCompiler.compile(
+        gherkinDocumentWithUri,
+        source.uri,
+      )) {
+        yield messages.Envelope(pickle: pickle);
+      }
+    }
   }
 
   /// Parses a stream of source [envelopes] and emits the resulting envelopes.
@@ -306,10 +232,10 @@ class GherkinParser {
 
   /// Builds a `source` [messages.Envelope] from raw Gherkin [data].
   ///
-  /// The [uri] identifies the source. The media type is taken from [mediaType]
-  /// when provided; otherwise it is inferred from the [uri] extension
-  /// (`.feature` or `.md`). When [mediaType] is omitted and the [uri] has no
-  /// recognized extension, a [GherkinException] is thrown.
+  /// The media type is taken from [mediaType] when provided; otherwise it is
+  /// inferred from the [uri] extension (`.feature` or `.md`). When [mediaType]
+  /// is omitted and the [uri] has no recognized extension, an [ArgumentError]
+  /// is thrown.
   static messages.Envelope makeSourceEnvelope(
     String data,
     String uri, {
@@ -332,7 +258,7 @@ class GherkinParser {
     if (uri.endsWith('.md')) {
       return messages.SourceMediaType.textXCucumberGherkinMarkdown;
     }
-    throw GherkinException(
+    throw ArgumentError(
       'The uri ($uri) must end with .feature or .md, or a mediaType must be '
       'provided',
     );
