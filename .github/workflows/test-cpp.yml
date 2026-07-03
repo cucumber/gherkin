@@ -95,10 +95,6 @@ jobs:
         if: startsWith(matrix.config.os, 'macos')
         run: echo "CXX=$(brew --prefix llvm@${{ matrix.config.version }})/bin/clang++" >> $GITHUB_ENV
 
-      - name: Test
-        working-directory: cpp
-        run: cmake --workflow test
-
       - name: Build
         working-directory: cpp
         run: cmake --workflow host

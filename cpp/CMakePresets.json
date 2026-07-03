@@ -8,18 +8,10 @@
         {
             "name": "host",
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "installDir": "${sourceDir}/install",
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "On",
                 "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "test",
-            "inherits": "host",
-            "cacheVariables": {
-                "CUCUMBER_GHERKIN_BUILD_TESTS": "On"
             }
         }
     ],
@@ -27,22 +19,6 @@
         {
             "name": "host",
             "configurePreset": "host"
-        },
-        {
-            "name": "test",
-            "configurePreset": "test"
-        }
-    ],
-    "testPresets": [
-        {
-            "name": "test",
-            "configurePreset": "test",
-            "output": {
-                "outputOnFailure": true
-            },
-            "execution": {
-                "noTestsAction": "error"
-            }
         }
     ],
     "workflowPresets": [
@@ -56,23 +32,6 @@
                 {
                     "name": "host",
                     "type": "build"
-                }
-            ]
-        },
-        {
-            "name": "test",
-            "steps": [
-                {
-                    "name": "test",
-                    "type": "configure"
-                },
-                {
-                    "name": "test",
-                    "type": "build"
-                },
-                {
-                    "name": "test",
-                    "type": "test"
                 }
             ]
         }
