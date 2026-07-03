@@ -1,5 +1,0 @@
-{
-    "cmake.ignoreCMakeListsMissing": true,
-    "cmake.sourceDirectory": "${workspaceFolder}/cpp",
-    "cmake.useCMakePresets": "auto"
-}
