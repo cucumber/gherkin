@@ -14,7 +14,7 @@ else()
     message(FATAL_ERROR "unable to parse version: ${VERSION}")
 endif()
 
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
 project(cucumber_gherkin VERSION ${VERSION} LANGUAGES CXX)
 
 # Required so CMake can find the custom package/config helper modules in ./cmake.
@@ -24,14 +24,14 @@ message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
 
 # Standalone check
-if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+if(PROJECT_IS_TOP_LEVEL)
     set(cucumber_gherkin_MAIN_PROJECT ON)
 else()
     set(cucumber_gherkin_MAIN_PROJECT OFF)
 endif()
 
 # Options
-option(CUCUMBER_GHERKIN_BUILD_TESTS "Build the unit tests." ${cucumber_gherkin_MAIN_PROJECT})
+option(CUCUMBER_GHERKIN_BUILD_TESTS "Build the unit tests." OFF)
 option(CUCUMBER_GHERKIN_FETCH_DEPS "Fetch dependencies via FetchContent." ${cucumber_gherkin_MAIN_PROJECT})
 
 set(CMAKE_CXX_STANDARD 17)
