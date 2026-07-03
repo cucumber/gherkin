@@ -1,4 +1,5 @@
-set(VERSION 30.0.4)
+# The VERSION here is a placeholder; the real version is in the VERSION file.
+set(VERSION 28.0.0)
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
     file(STRINGS "VERSION" LINES)
@@ -20,9 +21,6 @@ project(cucumber_gherkin VERSION ${VERSION} LANGUAGES CXX)
 # Required so CMake can find the custom package/config helper modules in ./cmake.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
-
 # Standalone check
 if(PROJECT_IS_TOP_LEVEL)
     set(cucumber_gherkin_MAIN_PROJECT ON)
@@ -31,16 +29,18 @@ else()
 endif()
 
 # Options
-option(CUCUMBER_GHERKIN_BUILD_TESTS "Build the unit tests." OFF)
+if (POLICY CMP0077)
+    # Allow CMake 3.13+ to override options when using FetchContent / add_subdirectory.
+    cmake_policy(SET CMP0077 NEW)
+endif ()
+
 option(CUCUMBER_GHERKIN_FETCH_DEPS "Fetch dependencies via FetchContent." ${cucumber_gherkin_MAIN_PROJECT})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# ---------------------------------------------------------------------------
 # Compiler cache
-# ---------------------------------------------------------------------------
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
     set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
@@ -62,9 +62,6 @@ endif()
 
 # CMake dependencies
 include(dependencies.cpm)
-
-# find_package(nlohmann_json CONFIG REQUIRED)
-# find_package(cucumber_messages CONFIG REQUIRED)
 
 # Targets
 add_subdirectory(src/lib/gherkin)
@@ -111,8 +108,7 @@ install(
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cucumber_gherkin"
 )
 
-
 install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/gherkin/"
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cucumber
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
