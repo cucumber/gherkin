@@ -1,5 +1,5 @@
 import 'package:characters/characters.dart';
-import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';

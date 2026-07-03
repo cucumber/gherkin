@@ -1,4 +1,4 @@
-import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:test/test.dart';

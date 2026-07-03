@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';

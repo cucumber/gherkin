@@ -1,6 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/exceptions.dart';
-import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:test/test.dart';
 
 /// Verifies the error-handling contract shared with the flagship
@@ -109,12 +108,63 @@ void main() {
   });
 
   group('I/O errors are thrown, not enveloped', () {
-    test('parsePath on a missing file throws GherkinException', () {
-      expect(
-        () => parser().parsePath('does-not-exist.feature').toList(),
+    test('parsePath on a missing file throws GherkinException', () async {
+      // parsePath reads the file asynchronously, so the I/O failure surfaces as
+      // an error event on the stream (awaited here) rather than a synchronous
+      // throw from the call itself.
+      await expectLater(
+        parser().parsePath('does-not-exist.feature').toList(),
         throwsA(isA<GherkinException>()),
       );
     });
+  });
+
+  group('parseError message formatting', () {
+    test('a located error is prefixed with "(line:column): "', () async {
+      final envelopes = await parseSource('not gherkin', 'bad.feature');
+
+      final parseError = envelopes.single.parseError!;
+      // The location in the prefix must agree with the structured location on
+      // the source reference.
+      expect(parseError.message, startsWith('(1:1): '));
+      expect(parseError.source.location!.line, 1);
+      expect(parseError.source.location!.column, 1);
+    });
+
+    test(
+      'a location-less error uses the "(-1,0): " prefix and omits the location',
+      () async {
+        // An unsupported *default* dialect (no `# language:` header) has no
+        // position to report: it exercises the empty-location branch, which
+        // emits the "(-1,0): " prefix and a source reference with no location.
+        final envelopes =
+            await GherkinParser(
+                  includeSource: false,
+                  includePickles: false,
+                  defaultDialect: 'no-such-lang',
+                  idGenerator: idGenerator,
+                )
+                .parseEnvelope(
+                  GherkinParser.makeSourceEnvelope(
+                    'Feature: x\n',
+                    'bad.feature',
+                  ),
+                )
+                .toList();
+
+        expect(envelopes, isNotEmpty);
+        final parseError = envelopes
+            .map((e) => e.parseError)
+            .whereType<messages.ParseError>()
+            .firstWhere((pe) => pe.message.contains('Language not supported'));
+        expect(parseError.message, startsWith('(-1,0): '));
+        expect(
+          parseError.message,
+          contains('Language not supported: no-such-lang'),
+        );
+        expect(parseError.source.location, isNull);
+      },
+    );
   });
 
   group('GherkinException', () {

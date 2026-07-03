@@ -1,5 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:test/test.dart';
 
 void main() {

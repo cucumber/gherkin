@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart'
     as lang;
@@ -19,6 +19,16 @@ import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 
 /// Parses Gherkin documents into a stream of Cucumber [messages.Envelope]s.
+///
+/// ## Streaming semantics
+///
+/// The returned [Stream]s are lazy *across* sources but eager *within* a
+/// source. Each source (file, string, or `source` envelope) is parsed in full
+/// the first time its portion of the stream is pulled — a Gherkin document is
+/// not available incrementally, since building the AST and compiling pickles
+/// requires the whole document. When several sources are parsed together (for
+/// example via [parsePaths] or [parseEnvelopes]), a later source is not read or
+/// parsed until the preceding source's envelopes have been consumed.
 class GherkinParser {
   /// Creates a parser.
   ///
@@ -30,7 +40,7 @@ class GherkinParser {
     this.includeSource = defaultIncludeSource,
     this.includeGherkinDocument = defaultIncludeGherkinDocument,
     this.includePickles = defaultIncludePickles,
-    this.defaultDialect = defaultDefaultDialect,
+    this.defaultDialect = defaultDialectValue,
     lang.IdGenerator? idGenerator,
   }) : idGenerator = idGenerator ?? lang.IdGenerator.uuidGenerator {
     final languages = lang.builtinGherkinDialects();
@@ -48,7 +58,7 @@ class GherkinParser {
   static const bool defaultIncludePickles = true;
 
   /// The default for [defaultDialect]: the `en` dialect.
-  static const String defaultDefaultDialect = 'en';
+  static const String defaultDialectValue = 'en';
 
   /// Whether `source` envelopes are emitted.
   final bool includeSource;
@@ -67,32 +77,36 @@ class GherkinParser {
 
   late final lang.GherkinDialectProvider _dialectProvider;
 
-  /// Creates a [GherkinParserBuilder] for fluent configuration.
-  static GherkinParserBuilder builder() => GherkinParserBuilder();
-
   /// Parses the file at [path] and emits the resulting envelopes.
   ///
-  /// I/O failures (e.g. the file does not exist) are *thrown* as a
-  /// [GherkinException] rather than emitted as a `parseError` envelope: they
-  /// are not a property of the Gherkin source. This matches the flagship
-  /// implementations, where the path-based entry point surfaces I/O errors to
-  /// the caller (e.g. Java's `GherkinParser.parse(Path)` declares
-  /// `throws IOException`). Malformed Gherkin, by contrast, is always reported
-  /// as a `parseError` envelope.
-  Stream<messages.Envelope> parsePath(String path) {
+  /// The file is read asynchronously (without blocking the isolate) when the
+  /// stream is first listened to.
+  ///
+  /// I/O failures (e.g. the file does not exist) are surfaced as a
+  /// [GherkinException] error event on the stream rather than emitted as a
+  /// `parseError` envelope: they are not a property of the Gherkin source. This
+  /// matches the flagship implementations, where the path-based entry point
+  /// surfaces I/O errors to the caller (e.g. Java's `GherkinParser.parse(Path)`
+  /// declares `throws IOException`). Malformed Gherkin, by contrast, is always
+  /// reported as a `parseError` envelope.
+  Stream<messages.Envelope> parsePath(String path) async* {
+    final String data;
     try {
       // Read the file verbatim. The `source` envelope's `data` must preserve
       // the original bytes (including CRLF), matching the other first-party
       // implementations (e.g. Go sets `Data: string(in)`); the line scanner
       // tolerates CRLF when classifying tokens.
-      final data = File(path).readAsStringSync();
-      return parseEnvelope(makeSourceEnvelope(data, path));
+      data = await File(path).readAsString();
     } on IOException catch (e) {
       throw GherkinException(e.toString(), e);
     }
+    yield* parseEnvelope(makeSourceEnvelope(data, path));
   }
 
   /// Parses each path in [paths] and emits the resulting envelopes.
+  ///
+  /// Paths are processed lazily and in order: a path is not read or parsed
+  /// until the preceding path's envelopes have been consumed.
   Stream<messages.Envelope> parsePaths(Iterable<String> paths) {
     return Stream.fromIterable(paths).asyncExpand(parsePath);
   }
@@ -117,6 +131,10 @@ class GherkinParser {
   /// Parses a single source [envelope] and emits the resulting envelopes.
   ///
   /// The incoming [envelope] is re-emitted first when [includeSource] is set.
+  ///
+  /// The source is parsed in full when the first `gherkinDocument`/`pickle`
+  /// envelope is pulled from the stream (see the class-level streaming
+  /// semantics); the document cannot be produced incrementally.
   Stream<messages.Envelope> parseEnvelope(messages.Envelope envelope) async* {
     if (includeSource) {
       yield envelope;
@@ -136,11 +154,15 @@ class GherkinParser {
     final builder = MessagesGherkinDocumentBuilder(idGenerator);
     final parser = Parser<messages.GherkinDocument>(builder)
       ..stopAtFirstError = false;
-    final tokenMatcher = _tokenMatcher(source.mediaType);
     final tokenScanner = lang.StringTokenScanner(source.data);
 
     final messages.GherkinDocument gherkinDocument;
     try {
+      // Build the token matcher inside the try: constructing it resolves the
+      // default dialect eagerly, so an unsupported `defaultDialect` (with no
+      // `# language:` header, hence no location) must surface as a `parseError`
+      // envelope rather than escaping to the caller.
+      final tokenMatcher = _tokenMatcher(source.mediaType);
       gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
     } on CompositeParserException catch (e) {
       yield* e.errors.map((error) => _parseErrorEnvelope(error, source.uri));
@@ -171,6 +193,9 @@ class GherkinParser {
   }
 
   /// Parses a stream of source [envelopes] and emits the resulting envelopes.
+  ///
+  /// Envelopes are processed lazily and in order: a source is not parsed until
+  /// the preceding source's envelopes have been consumed.
   Stream<messages.Envelope> parseEnvelopes(
     Stream<messages.Envelope> envelopes,
   ) {
@@ -256,61 +281,28 @@ class GherkinParser {
   }
 }
 
-/// A mutable builder for configuring and creating a [GherkinParser].
-///
-/// Configure the builder with cascades and then call [build]:
-///
-/// ```dart
-/// final parser = (GherkinParser.builder()
-///       ..includeSource = false
-///       ..idGenerator = IdGenerator.incrementingGenerator)
-///     .build();
-/// ```
-class GherkinParserBuilder {
-  /// Whether the built parser should emit `source` envelopes.
-  bool includeSource = GherkinParser.defaultIncludeSource;
-
-  /// Whether the built parser should emit `gherkinDocument` envelopes.
-  bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument;
-
-  /// Whether the built parser should emit `pickle` envelopes.
-  bool includePickles = GherkinParser.defaultIncludePickles;
-
-  /// The dialect used when a feature has no `# language:` header.
-  String defaultDialect = GherkinParser.defaultDefaultDialect;
-
-  /// The [lang.IdGenerator] used to assign ids to emitted messages.
-  lang.IdGenerator idGenerator = lang.IdGenerator.uuidGenerator;
-
-  /// Creates a [GherkinParser] using the current configuration.
-  GherkinParser build() => GherkinParser(
-    includeSource: includeSource,
-    includeGherkinDocument: includeGherkinDocument,
-    includePickles: includePickles,
-    defaultDialect: defaultDialect,
-    idGenerator: idGenerator,
-  );
-}
-
 /// Convenience entry points for parsing Gherkin into Cucumber Messages.
 class Gherkin {
   /// Parses each path in [paths] and emits the resulting [messages.Envelope]s.
   ///
   /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
-  /// control which kinds of envelopes are emitted, and [idGenerator] to assign
-  /// message ids (defaults to UUIDs). All envelope kinds are emitted by
-  /// default.
+  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
+  /// the dialect used when a feature has no `# language:` header, and
+  /// [idGenerator] to assign message ids (defaults to UUIDs). All envelope
+  /// kinds are emitted by default.
   static Stream<messages.Envelope> fromPaths(
     List<String> paths, {
     bool includeSource = GherkinParser.defaultIncludeSource,
     bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument,
     bool includePickles = GherkinParser.defaultIncludePickles,
+    String defaultDialect = GherkinParser.defaultDialectValue,
     lang.IdGenerator? idGenerator,
   }) {
     return GherkinParser(
       includeSource: includeSource,
       includeGherkinDocument: includeGherkinDocument,
       includePickles: includePickles,
+      defaultDialect: defaultDialect,
       idGenerator: idGenerator,
     ).parsePaths(paths);
   }
@@ -333,7 +325,7 @@ class Gherkin {
     bool includeSource = GherkinParser.defaultIncludeSource,
     bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument,
     bool includePickles = GherkinParser.defaultIncludePickles,
-    String defaultDialect = GherkinParser.defaultDefaultDialect,
+    String defaultDialect = GherkinParser.defaultDialectValue,
     lang.IdGenerator? idGenerator,
     messages.SourceMediaType? mediaType,
   }) {
@@ -350,20 +342,23 @@ class Gherkin {
   /// [messages.Envelope]s.
   ///
   /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
-  /// control which kinds of envelopes are emitted, and [idGenerator] to assign
-  /// message ids (defaults to UUIDs). All envelope kinds are emitted by
-  /// default.
+  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
+  /// the dialect used when a feature has no `# language:` header, and
+  /// [idGenerator] to assign message ids (defaults to UUIDs). All envelope
+  /// kinds are emitted by default.
   static Stream<messages.Envelope> fromSources(
     List<messages.Envelope> envelopes, {
     bool includeSource = GherkinParser.defaultIncludeSource,
     bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument,
     bool includePickles = GherkinParser.defaultIncludePickles,
+    String defaultDialect = GherkinParser.defaultDialectValue,
     lang.IdGenerator? idGenerator,
   }) {
     return GherkinParser(
       includeSource: includeSource,
       includeGherkinDocument: includeGherkinDocument,
       includePickles: includePickles,
+      defaultDialect: defaultDialect,
       idGenerator: idGenerator,
     ).parseEnvelopes(Stream.fromIterable(envelopes));
   }

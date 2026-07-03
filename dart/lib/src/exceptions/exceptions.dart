@@ -4,7 +4,8 @@
 /// [TokenParserException] can be `sealed`: Dart only permits subtypes of a
 /// sealed class within the same library. The individual `part` files below
 /// keep the source split one-class-per-file for readability, while the public
-/// [package:cucumber_gherkin/exceptions.dart] barrel re-exports this library.
+/// `package:cucumber_gherkin/cucumber_gherkin.dart` library re-exports these
+/// types.
 library;
 
 import 'package:cucumber_gherkin/src/language/location.dart';

@@ -1,4 +1,4 @@
-import 'package:cucumber_gherkin/exceptions.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';

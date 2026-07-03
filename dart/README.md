@@ -29,13 +29,14 @@ dependencies:
   cucumber_gherkin: ^<published-version>
 ```
 
-Import the public API from the package libraries:
+Import the public API from the package's single library:
 
 ```dart
-import 'package:cucumber_gherkin/gherkin.dart';      // GherkinParser, Gherkin, IdGenerator
-import 'package:cucumber_gherkin/language.dart';     // GherkinDialect, GherkinDialectProvider
-import 'package:cucumber_gherkin/exceptions.dart';   // GherkinException and subtypes
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 ```
+
+This exposes `GherkinParser`, the static `Gherkin` helpers, `IdGenerator`,
+`GherkinDialect`/`GherkinDialectProvider`, and the `GherkinException` hierarchy.
 
 Do not import from `package:cucumber_gherkin/src/...`; files under `lib/src/`
 are implementation details and may change without notice.
@@ -61,7 +62,7 @@ and emits a stream of `Envelope`s.
 
 ```dart
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/gherkin.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 
 final parser = GherkinParser();
 
@@ -89,9 +90,8 @@ Entry points:
 ### Configuration
 
 Configure which envelope kinds are emitted, the fallback dialect, and id
-generation. All envelope kinds are emitted by default; ids default to UUIDs.
-
-Use the constructor:
+generation via named constructor arguments. All envelope kinds are emitted by
+default; ids default to UUIDs.
 
 ```dart
 final parser = GherkinParser(
@@ -99,15 +99,6 @@ final parser = GherkinParser(
   defaultDialect: 'en',
   idGenerator: IdGenerator.incrementingGenerator,
 );
-```
-
-Or the builder:
-
-```dart
-final parser = (GherkinParser.builder()
-      ..includeSource = false
-      ..idGenerator = IdGenerator.incrementingGenerator)
-    .build();
 ```
 
 `IdGenerator.uuidGenerator` produces random v4 UUIDs (the default).

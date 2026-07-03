@@ -8,6 +8,8 @@ GHERKIN_RAZOR = gherkin-dart.razor
 GHERKIN = dart run bin/gherkin.dart
 GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
 
+SOURCE_FILES = $(shell find lib bin test/src -name "*.dart")
+
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
 
@@ -44,6 +46,7 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 .PHONY: clean-gherkin-languages
 
 mostlyclean:
+	rm -rf .built
 	rm -rf acceptance
 .PHONY: mostlyclean
 
@@ -58,7 +61,18 @@ clean: mostlyclean
 #
 # which compares ASTs, pickles, sources, and errors for every fixture
 # (including the Markdown `.feature.md` fixtures) without needing bash/jq/diff.
-acceptance: $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+acceptance: .built $(TOKENS) $(ASTS) $(PICKLES) $(ERRORS) $(SOURCES) ## Build acceptance test dir and compare results with reference
+
+# Fetch dependencies, compile-check the sources, and run the unit tests before
+# comparing acceptance output — mirroring the build-first `acceptance` target of
+# the other implementations (e.g. Java's `bin/lib`). The pure-Dart acceptance
+# suite under test/acceptance is intentionally excluded here; it is exercised by
+# the fixture comparison rules below (and by a plain `dart test`).
+.built: pubspec.yaml pubspec.lock $(SOURCE_FILES)
+	dart pub get
+	dart analyze
+	dart test test/src
+	@touch $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
 	mkdir -p $(@D)
