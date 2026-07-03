@@ -21,13 +21,13 @@ on:
       - testdata/**
       - .github/**
 
+env:
+  CCACHE_BASEDIR: ${{ github.workspace }}
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+
 jobs:
   test-cpp:
-    env:
-      CCACHE_BASEDIR: ${{ github.workspace }}
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
-
     strategy:
       fail-fast: false
       matrix:
@@ -38,12 +38,18 @@ jobs:
           - { os: ubuntu-24.04, cxx: g++,      version: 12 }
           - { os: ubuntu-24.04, cxx: g++,      version: 13 }
           - { os: ubuntu-24.04, cxx: g++,      version: 14 }
+          - { os: ubuntu-26.04, cxx: g++,      version: 13 }
+          - { os: ubuntu-26.04, cxx: g++,      version: 14 }
+          - { os: ubuntu-26.04, cxx: g++,      version: 15 }
           - { os: ubuntu-22.04, cxx: clang++,  version: 13 }
           - { os: ubuntu-22.04, cxx: clang++,  version: 14 }
           - { os: ubuntu-22.04, cxx: clang++,  version: 15 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 16 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 17 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 18 }
+          - { os: ubuntu-26.04, cxx: clang++,  version: 20 }
+          - { os: ubuntu-26.04, cxx: clang++,  version: 21 }
+          - { os: ubuntu-26.04, cxx: clang++,  version: 22 }
           - { os: macos-latest, cxx: clang++,  version: 17 }
           - { os: windows-latest, cxx: cl }
 
@@ -67,7 +73,7 @@ jobs:
         run: brew install ccache llvm@${{ matrix.config.version }}
 
       - name: Cache CPM packages
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.CPM_SOURCE_CACHE }}
           key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
@@ -75,11 +81,11 @@ jobs:
 
       - name: Cache ccache
         if: "!startsWith(matrix.config.os, 'windows')"
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
-          restore-keys: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-
+          key: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
+          restore-keys: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-
 
       - name: Set CXX (ubuntu)
         if: startsWith(matrix.config.os, 'ubuntu')
@@ -89,24 +95,25 @@ jobs:
         if: startsWith(matrix.config.os, 'macos')
         run: echo "CXX=$(brew --prefix llvm@${{ matrix.config.version }})/bin/clang++" >> $GITHUB_ENV
 
-      - name: Configure
+      - name: Test
         working-directory: cpp
-        run: cmake --preset host
+        run: cmake --workflow test
 
       - name: Build
         working-directory: cpp
-        run: cmake --build --preset host
+        run: cmake --workflow host
 
-      - name: Test
+      - name: Install (Unix)
+        if: ${{ matrix.config.os != 'windows-latest' }}
         working-directory: cpp
-        run: ctest --preset host --test-dir build/host
+        run: sudo cmake --install build/host
+
+      - name: Install (Windows)
+        if: ${{ matrix.config.os == 'windows-latest' }}
+        working-directory: cpp
+        run: cmake --install build/host
 
   test-cpp-acceptance:
-    env:
-      CCACHE_BASEDIR: ${{ github.workspace }}
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
-
     strategy:
       fail-fast: false
       matrix:
@@ -118,10 +125,7 @@ jobs:
           - os: macos-latest
             cxx: clang++
           - os: windows-latest
-          # Doesn't work on windows. See: https://github.com/cucumber/gherkin/issues/412
-          # If fixed, please merge test-cpp and test-cpp-acceptance
-          # - os: windows-latest
-          #  cc: cl
+            cc: cl
 
     runs-on: ${{ matrix.config.os }}
     steps:
@@ -154,8 +158,8 @@ jobs:
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ github.ref }}
-          restore-keys: ccache-${{ matrix.config.os }}-${{ matrix.config.cxx }}-
+          key: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ github.ref }}
+          restore-keys: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-
 
       - name: run acceptance tests
         working-directory: cpp
