@@ -20,7 +20,6 @@ topics:
   - parser
 
 dependencies:
-  characters: ^1.1.0
   cucumber_messages: ^33.0.4
   meta: ^1.16.0
 

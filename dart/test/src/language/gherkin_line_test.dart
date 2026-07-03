@@ -120,6 +120,27 @@ void main() {
     expect(42, greenSpan.column);
   });
 
+  test('counts_combining_marks_as_separate_columns', () {
+    // The first cell holds "cafe" followed by a combining acute accent
+    // (U+0301), i.e. "cafÃ©" written as base letter + combining mark. Columns
+    // are counted per Unicode code point (to match the other first-party
+    // implementations), so the combining mark advances the column on its own
+    // and the next cell starts one column later than it would under
+    // grapheme-cluster counting.
+    final gherkinLine = GherkinLine('|cafe\u0301|test|', line);
+
+    final firstCell = gherkinLine.tableCells.first;
+    final secondCell = gherkinLine.tableCells.elementAt(1);
+
+    expect('cafe\u0301', firstCell.text);
+    expect(2, firstCell.column);
+
+    expect('test', secondCell.text);
+    // 8 with code-point counting; would be 7 if the combining sequence were
+    // counted as a single grapheme cluster.
+    expect(8, secondCell.column);
+  });
+
   test('finds_escaped_table_cells', () {
     final gherkinLine = GherkinLine(
       r'      | \|Ã¦\\n     | \o\no\  | \\\|a\\\\n | Ã¸\\\nÃ¸\\|',
