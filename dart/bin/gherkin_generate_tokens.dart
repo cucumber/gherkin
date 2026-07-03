@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
@@ -14,7 +14,7 @@ import '../tool/tokens_generator.dart';
 /// Mirrors the `gherkin-generate-tokens` binaries of the other first-party
 /// implementations (Java, Go, Ruby).
 void main(List<String> args) {
-  final languages = builtinGherkinDialects();
+  final languages = builtinDialects;
   final dialectProvider = GherkinDialectProvider(languages);
 
   for (final path in args) {

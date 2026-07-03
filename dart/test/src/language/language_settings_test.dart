@@ -1,9 +1,9 @@
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
+import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('Load language settings from json assets', () {
-    final settings = builtinGherkinDialects();
+    final settings = builtinDialects;
     expect(settings, isNotEmpty);
     expect(settings['en'], isNotNull);
     expect(settings['en']?.name.toLowerCase(), 'english');

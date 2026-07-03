@@ -1,7 +1,7 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
+import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
@@ -9,7 +9,7 @@ import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final languages = builtinGherkinDialects();
+  final languages = builtinDialects;
   final dialectProvider = GherkinDialectProvider(languages);
   final idGenerator = IdGenerator.incrementingGenerator;
   final builder = MessagesGherkinDocumentBuilder(idGenerator);

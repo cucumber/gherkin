@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
+import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
@@ -15,7 +15,7 @@ import '../../../tool/file_token_scanner.dart';
 
 void main() {
   final idGenerator = IdGenerator.incrementingGenerator;
-  final languages = builtinGherkinDialects();
+  final languages = builtinDialects;
 
   test('Test successful parsing', () async {
     final dialectProvider = GherkinDialectProvider(languages);

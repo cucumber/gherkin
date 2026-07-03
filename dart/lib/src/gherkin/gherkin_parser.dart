@@ -2,8 +2,8 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
+import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
@@ -54,8 +54,11 @@ class GherkinParser {
     this.defaultDialect = defaultDialectValue,
     IdGenerator? idGenerator,
   }) : idGenerator = idGenerator ?? IdGenerator.uuidGenerator {
-    final languages = builtinGherkinDialects();
-    _dialectProvider = GherkinDialectProvider(languages, defaultDialect);
+    // The dialects are embedded as generated Dart source in
+    // `dialects_builtin.g.dart` (produced from `gherkin-languages.json`), so
+    // loading does not depend on the current working directory, runtime asset
+    // resolution, or the package layout.
+    _dialectProvider = GherkinDialectProvider(builtinDialects, defaultDialect);
   }
 
   /// The default for [includeSource]: `source` envelopes are emitted.

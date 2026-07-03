@@ -1,10 +1,10 @@
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
+import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final languages0 = builtinGherkinDialects();
+  final languages0 = builtinDialects;
 
   test('Provides emoji dialect', () {
     final em = GherkinDialectProvider(languages0).getDialect('em');
