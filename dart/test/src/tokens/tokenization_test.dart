@@ -6,8 +6,9 @@ import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
-import 'package:cucumber_gherkin/src/tokens/tokens_generator.dart';
 import 'package:test/test.dart';
+
+import '../../../tool/tokens_generator.dart';
 
 void main() {
   test('Test successful token matching', () async {

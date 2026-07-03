@@ -105,7 +105,7 @@ Future<List<Map<String, dynamic>>> _parse(
     includeSource: source,
     includeGherkinDocument: ast,
     includePickles: pickles,
-    idGenerator: IdGenerator.freshIncrementingGenerator,
+    idGenerator: IncrementingIdGenerator(),
   );
   final envelopes = await parser.parsePath(relativePath).toList();
   return envelopes

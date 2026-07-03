@@ -28,6 +28,18 @@ import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 /// separate `package:cucumber_gherkin/cucumber_gherkin_io.dart` library because
 /// they depend on `dart:io`; this core library stays platform-agnostic and is
 /// usable on the web.
+///
+/// ## Error contract
+///
+/// Malformed Gherkin never throws: it is reported as a `parseError` envelope in
+/// the stream. The only synchronous throws are for conditions that are *not* a
+/// property of the Gherkin source and are detected before parsing:
+///
+/// * [parseString] and [makeSourceEnvelope] throw an [ArgumentError] when the
+///   media type cannot be resolved (no `mediaType` and an unrecognized `uri`
+///   extension);
+/// * the file-reading entry points (`parsePath`/`parsePaths`) surface I/O
+///   failures as a [GherkinException] error event on the stream.
 class GherkinParser {
   /// Creates a parser.
   ///
@@ -86,6 +98,12 @@ class GherkinParser {
   /// The media type is taken from [mediaType] when provided; otherwise it is
   /// inferred from the [uri] extension (`.feature` or `.md`). Pass [mediaType]
   /// explicitly when the [uri] has no recognized extension.
+  ///
+  /// Unlike malformed Gherkin — which is always reported as a `parseError`
+  /// envelope and never thrown — this method throws an [ArgumentError]
+  /// *synchronously* when [mediaType] is omitted and the [uri] has no
+  /// recognized extension, because the media type cannot be resolved before any
+  /// parsing begins.
   Stream<messages.Envelope> parseString(
     String data,
     String uri, {

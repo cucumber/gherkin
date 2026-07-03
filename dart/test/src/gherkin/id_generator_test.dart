@@ -6,23 +6,23 @@ final _uuidV4Pattern = RegExp(
 );
 
 void main() {
-  group('Incrementing', () {
+  group('IncrementingIdGenerator', () {
     test('produces sequential ids starting at 0', () {
-      final generator = Incrementing();
+      final generator = IncrementingIdGenerator();
       expect(generator.newId(), '0');
       expect(generator.newId(), '1');
       expect(generator.newId(), '2');
     });
 
-    test('freshIncrementingGenerator restarts from 0 each time', () {
-      IdGenerator.freshIncrementingGenerator.newId(); // advances a fresh one
-      expect(IdGenerator.freshIncrementingGenerator.newId(), '0');
+    test('a fresh instance restarts from 0 each time', () {
+      IncrementingIdGenerator().newId(); // advances a fresh one
+      expect(IncrementingIdGenerator().newId(), '0');
     });
   });
 
   group('UUID', () {
     test('produces RFC 4122 version 4 UUIDs', () {
-      final generator = Uuid();
+      final generator = UuidIdGenerator();
       for (var i = 0; i < 100; i++) {
         final id = generator.newId();
         expect(
@@ -34,14 +34,14 @@ void main() {
     });
 
     test('sets the version nibble to 4 and the variant to 10xx', () {
-      final id = Uuid().newId();
+      final id = UuidIdGenerator().newId();
       // Format: xxxxxxxx-xxxx-Vxxx-Nxxx-xxxxxxxxxxxx
       expect(id[14], '4', reason: 'version nibble must be 4');
       expect('89ab', contains(id[19]), reason: 'variant nibble must be 8-b');
     });
 
     test('produces unique ids', () {
-      final generator = Uuid();
+      final generator = UuidIdGenerator();
       final ids = {for (var i = 0; i < 1000; i++) generator.newId()};
       expect(ids, hasLength(1000));
     });

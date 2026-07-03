@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/src/tokens/random_access_file_extension.dart';
 import 'package:test/test.dart';
+
+import '../../../tool/random_access_file_extension.dart';
 
 void main() {
   final currDir = Directory.current.path.replaceAll(r'\', '/');

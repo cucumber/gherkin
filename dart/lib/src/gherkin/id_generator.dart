@@ -1,22 +1,19 @@
 import 'dart:math';
 
-import 'package:meta/meta.dart';
-
 /// Generates the ids assigned to emitted Cucumber messages.
 abstract class IdGenerator {
   /// Returns the next id.
   String newId();
 
-  /// A shared [Incrementing] generator producing predictable, sequential ids.
-  static final IdGenerator incrementingGenerator = Incrementing();
+  /// A shared [IncrementingIdGenerator] producing predictable, sequential ids.
+  ///
+  /// This is a single shared instance whose counter is never reset. When you
+  /// need an independent counter (for example, to get reproducible ids across
+  /// separate parses), construct a fresh [IncrementingIdGenerator] instead.
+  static final IdGenerator incrementingGenerator = IncrementingIdGenerator();
 
-  /// Returns a **new** [Incrementing] instance each time; safe for per-test
-  /// use.
-  @visibleForTesting
-  static IdGenerator get freshIncrementingGenerator => Incrementing();
-
-  /// A shared [Uuid] generator producing random UUIDs.
-  static final IdGenerator uuidGenerator = Uuid();
+  /// A shared [UuidIdGenerator] producing random UUIDs.
+  static final IdGenerator uuidGenerator = UuidIdGenerator();
 }
 
 /// An [IdGenerator] that produces random RFC 4122 version 4 UUIDs.
@@ -25,7 +22,7 @@ abstract class IdGenerator {
 /// implementations (e.g. Java's `UUID.randomUUID()` and Ruby's
 /// `Cucumber::Messages::Helpers::IdGenerator::UUID`), which both produce random
 /// (version 4) UUIDs.
-class Uuid implements IdGenerator {
+class UuidIdGenerator implements IdGenerator {
   static final Random _random = Random.secure();
 
   @override
@@ -46,7 +43,7 @@ class Uuid implements IdGenerator {
 }
 
 /// An [IdGenerator] that produces sequential ids starting at `0`.
-class Incrementing implements IdGenerator {
+class IncrementingIdGenerator implements IdGenerator {
   int _next = 0;
 
   @override

@@ -4,6 +4,8 @@ coverage/
 bin/
 test/
 benchmark/
+# Token-dump helpers used only by bin/ and test/ (both excluded above).
+tool/
 acceptance/
 pubspec.lock
 gherkin-dart.razor
@@ -11,5 +13,3 @@ gherkin-dart.razor
 lib/src/assets/gherkin-languages.json
 # Build-time code generator for dialects_builtin.g.dart.
 lib/src/language/dialects_builtin.g.dart.jq
-# Token-dump helpers used only by bin/ and test/ (both excluded above).
-lib/src/tokens/

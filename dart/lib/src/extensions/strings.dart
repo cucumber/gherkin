@@ -78,11 +78,13 @@ extension StringExtensions on String {
       throw ArgumentError('trimChar must be one char and cannot be empty');
     }
     var index = length - 1;
-    for (; index > 0; index--) {
+    for (; index >= 0; index--) {
       if (this[index] != trimChar) {
         break;
       }
     }
+    // When every character was [trimChar], `index` is -1 and this returns the
+    // empty string, matching the behaviour of trimming away all trailing chars.
     return substring(0, index + 1);
   }
 }

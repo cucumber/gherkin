@@ -5,7 +5,8 @@ import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
-import 'package:cucumber_gherkin/src/tokens/tokens_generator.dart';
+
+import '../tool/tokens_generator.dart';
 
 /// Emits the tokenized representation of one or more Gherkin feature files,
 /// matching the `*.tokens` reference format used by the acceptance tests.

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
-import 'package:cucumber_gherkin/src/tokens/file_token_scanner.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
@@ -11,6 +10,8 @@ import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:test/test.dart';
+
+import '../../../tool/file_token_scanner.dart';
 
 void main() {
   final idGenerator = IdGenerator.incrementingGenerator;
