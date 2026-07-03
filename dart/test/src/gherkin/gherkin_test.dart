@@ -10,13 +10,12 @@ void main() {
     const includeSource = false;
     const includeGherkinDocument = true;
     const includePickles = true;
-    final envelopeStream = Gherkin.fromPaths(
-      paths,
+    final envelopeStream = GherkinParser(
       includeSource: includeSource,
       includeGherkinDocument: includeGherkinDocument,
       includePickles: includePickles,
       idGenerator: idGenerator,
-    );
+    ).parsePaths(paths);
 
     final pickleStream = envelopeStream.where(
       (envelope) => envelope.pickle != null,
@@ -32,13 +31,12 @@ void main() {
     const includeGherkinDocument = true;
     const includePickles = false;
     final envelopes =
-        await Gherkin.fromPaths(
-          paths,
+        await GherkinParser(
           includeSource: includeSource,
           includeGherkinDocument: includeGherkinDocument,
           includePickles: includePickles,
           idGenerator: idGenerator,
-        ).toList();
+        ).parsePaths(paths).toList();
 
     // Get the AST
     final gherkinDocument = envelopes.first.gherkinDocument!;
@@ -55,13 +53,12 @@ void main() {
   test('Provides access to pickles which are compiled from the ast', () async {
     const paths = <String>['../testdata/good/scenario_outline.feature'];
     final envelopes =
-        await Gherkin.fromPaths(
-          paths,
+        await GherkinParser(
           includeSource: false,
           includeGherkinDocument: false,
           includePickles: true,
           idGenerator: idGenerator,
-        ).toList();
+        ).parsePaths(paths).toList();
 
     // Get the first pickle
     final pickle = envelopes.first.pickle!;
@@ -72,7 +69,7 @@ void main() {
   });
 
   test('Parses supplied source', () async {
-    final envelope = Gherkin.makeSourceEnvelope(
+    final envelope = GherkinParser.makeSourceEnvelope(
       'Feature: Minimal\n'
           '\n'
           '  Scenario: minimalistic\n'
@@ -83,13 +80,12 @@ void main() {
     final singletonList = <messages.Envelope>[envelope];
 
     final envelopes =
-        await Gherkin.fromSources(
-          singletonList,
+        await GherkinParser(
           includeSource: false,
           includeGherkinDocument: true,
           includePickles: false,
           idGenerator: idGenerator,
-        ).toList();
+        ).parseEnvelopes(Stream.fromIterable(singletonList)).toList();
 
     final gherkinDocument = envelopes.first.gherkinDocument!;
     final feature = gherkinDocument.feature!;

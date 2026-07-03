@@ -1,22 +1,18 @@
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart'
-    as lang;
-import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart'
-    as lang;
-import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart'
-    as lang;
-import 'package:cucumber_gherkin/src/gherkin/id_generator.dart' as lang;
-import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart'
-    as lang;
-import 'package:cucumber_gherkin/src/language/string_token_scanner.dart'
-    as lang;
-import 'package:cucumber_gherkin/src/parser/parser.g.dart';
-import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
-import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
+
+import '../ast/messages_gherkin_document_builder.dart';
+import '../exceptions/exceptions.dart';
+import '../language/gherkin_dialect_provider.dart';
+import '../language/gherkin_languages_loader.dart';
+import '../language/gherkin_token_matcher.dart';
+import '../language/markdown_token_matcher.dart';
+import '../language/string_token_scanner.dart';
+import '../parser/parser.g.dart';
+import '../parser/token_matcher.dart';
+import '../pickles/messages_pickle_compiler.dart';
+import 'id_generator.dart';
 
 /// Parses Gherkin documents into a stream of Cucumber [messages.Envelope]s.
 ///
@@ -41,10 +37,10 @@ class GherkinParser {
     this.includeGherkinDocument = defaultIncludeGherkinDocument,
     this.includePickles = defaultIncludePickles,
     this.defaultDialect = defaultDialectValue,
-    lang.IdGenerator? idGenerator,
-  }) : idGenerator = idGenerator ?? lang.IdGenerator.uuidGenerator {
-    final languages = lang.builtinGherkinDialects();
-    _dialectProvider = lang.GherkinDialectProvider(languages, defaultDialect);
+    IdGenerator? idGenerator,
+  }) : idGenerator = idGenerator ?? IdGenerator.uuidGenerator {
+    final languages = builtinGherkinDialects();
+    _dialectProvider = GherkinDialectProvider(languages, defaultDialect);
   }
 
   /// The default for [includeSource]: `source` envelopes are emitted.
@@ -72,10 +68,10 @@ class GherkinParser {
   /// The dialect used when a feature has no `# language:` header.
   final String defaultDialect;
 
-  /// The [lang.IdGenerator] used to assign ids to emitted messages.
-  final lang.IdGenerator idGenerator;
+  /// The [IdGenerator] used to assign ids to emitted messages.
+  final IdGenerator idGenerator;
 
-  late final lang.GherkinDialectProvider _dialectProvider;
+  late final GherkinDialectProvider _dialectProvider;
 
   /// Parses the file at [path] and emits the resulting envelopes.
   ///
@@ -154,7 +150,7 @@ class GherkinParser {
     final builder = MessagesGherkinDocumentBuilder(idGenerator);
     final parser = Parser<messages.GherkinDocument>(builder)
       ..stopAtFirstError = false;
-    final tokenScanner = lang.StringTokenScanner(source.data);
+    final tokenScanner = StringTokenScanner(source.data);
 
     final messages.GherkinDocument gherkinDocument;
     try {
@@ -205,9 +201,9 @@ class GherkinParser {
   TokenMatcher _tokenMatcher(messages.SourceMediaType mediaType) {
     switch (mediaType) {
       case messages.SourceMediaType.textXCucumberGherkinPlain:
-        return lang.GherkinTokenMatcher(_dialectProvider);
+        return GherkinTokenMatcher(_dialectProvider);
       case messages.SourceMediaType.textXCucumberGherkinMarkdown:
-        return lang.MarkdownTokenMatcher(_dialectProvider, defaultDialect);
+        return MarkdownTokenMatcher(_dialectProvider, defaultDialect);
     }
   }
 
@@ -279,97 +275,4 @@ class GherkinParser {
       'provided',
     );
   }
-}
-
-/// Convenience entry points for parsing Gherkin into Cucumber Messages.
-class Gherkin {
-  /// Parses each path in [paths] and emits the resulting [messages.Envelope]s.
-  ///
-  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
-  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
-  /// the dialect used when a feature has no `# language:` header, and
-  /// [idGenerator] to assign message ids (defaults to UUIDs). All envelope
-  /// kinds are emitted by default.
-  static Stream<messages.Envelope> fromPaths(
-    List<String> paths, {
-    bool includeSource = GherkinParser.defaultIncludeSource,
-    bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument,
-    bool includePickles = GherkinParser.defaultIncludePickles,
-    String defaultDialect = GherkinParser.defaultDialectValue,
-    lang.IdGenerator? idGenerator,
-  }) {
-    return GherkinParser(
-      includeSource: includeSource,
-      includeGherkinDocument: includeGherkinDocument,
-      includePickles: includePickles,
-      defaultDialect: defaultDialect,
-      idGenerator: idGenerator,
-    ).parsePaths(paths);
-  }
-
-  /// Parses in-memory Gherkin [data] identified by [uri] and emits the
-  /// resulting [messages.Envelope]s.
-  ///
-  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
-  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
-  /// the dialect used when a feature has no `# language:` header, and
-  /// [idGenerator] to assign message ids (defaults to UUIDs). All envelope
-  /// kinds are emitted by default.
-  ///
-  /// The [uri] is used as the source reference; it does not need to point at a
-  /// real file. The media type is taken from [mediaType] when provided;
-  /// otherwise it is inferred from the [uri] extension (`.feature` or `.md`).
-  static Stream<messages.Envelope> fromString(
-    String data,
-    String uri, {
-    bool includeSource = GherkinParser.defaultIncludeSource,
-    bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument,
-    bool includePickles = GherkinParser.defaultIncludePickles,
-    String defaultDialect = GherkinParser.defaultDialectValue,
-    lang.IdGenerator? idGenerator,
-    messages.SourceMediaType? mediaType,
-  }) {
-    return GherkinParser(
-      includeSource: includeSource,
-      includeGherkinDocument: includeGherkinDocument,
-      includePickles: includePickles,
-      defaultDialect: defaultDialect,
-      idGenerator: idGenerator,
-    ).parseString(data, uri, mediaType: mediaType);
-  }
-
-  /// Parses the source [envelopes] and emits the resulting
-  /// [messages.Envelope]s.
-  ///
-  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
-  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
-  /// the dialect used when a feature has no `# language:` header, and
-  /// [idGenerator] to assign message ids (defaults to UUIDs). All envelope
-  /// kinds are emitted by default.
-  static Stream<messages.Envelope> fromSources(
-    List<messages.Envelope> envelopes, {
-    bool includeSource = GherkinParser.defaultIncludeSource,
-    bool includeGherkinDocument = GherkinParser.defaultIncludeGherkinDocument,
-    bool includePickles = GherkinParser.defaultIncludePickles,
-    String defaultDialect = GherkinParser.defaultDialectValue,
-    lang.IdGenerator? idGenerator,
-  }) {
-    return GherkinParser(
-      includeSource: includeSource,
-      includeGherkinDocument: includeGherkinDocument,
-      includePickles: includePickles,
-      defaultDialect: defaultDialect,
-      idGenerator: idGenerator,
-    ).parseEnvelopes(Stream.fromIterable(envelopes));
-  }
-
-  /// Builds a `source` [messages.Envelope] from raw Gherkin [data].
-  ///
-  /// The media type is taken from [mediaType] when provided; otherwise it is
-  /// inferred from the [uri] extension (`.feature` or `.md`).
-  static messages.Envelope makeSourceEnvelope(
-    String data,
-    String uri, {
-    messages.SourceMediaType? mediaType,
-  }) => GherkinParser.makeSourceEnvelope(data, uri, mediaType: mediaType);
 }

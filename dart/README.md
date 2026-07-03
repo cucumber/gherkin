@@ -35,7 +35,7 @@ Import the public API from the package's single library:
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 ```
 
-This exposes `GherkinParser`, the static `Gherkin` helpers, `IdGenerator`,
+This exposes `GherkinParser`, `IdGenerator`,
 `GherkinDialect`/`GherkinDialectProvider`, and the `GherkinException` hierarchy.
 
 Do not import from `package:cucumber_gherkin/src/...`; files under `lib/src/`
@@ -104,9 +104,6 @@ final parser = GherkinParser(
 `IdGenerator.uuidGenerator` produces random v4 UUIDs (the default).
 `IdGenerator.incrementingGenerator` produces predictable sequential ids
 starting at `0`.
-
-The static `Gherkin` helpers wrap a one-shot parser:
-`Gherkin.fromPaths(...)`, `Gherkin.fromString(...)`, `Gherkin.fromSources(...)`.
 
 ### Dialects
 
