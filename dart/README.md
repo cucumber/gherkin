@@ -29,14 +29,25 @@ dependencies:
   cucumber_gherkin: ^<published-version>
 ```
 
-Import the public API from the package's single library:
+The package has two public libraries:
+
+- `package:cucumber_gherkin/cucumber_gherkin.dart` — the core, **platform-agnostic**
+  API (no `dart:io`, so it works on the web). Exposes `GherkinParser`,
+  `IdGenerator`, `GherkinDialect`/`GherkinDialectProvider`,
+  `GherkinLanguageKeywords`, and the `GherkinException` hierarchy. Feed Gherkin
+  in via `parseString`, `parseEnvelope`, or `parseEnvelopes`.
+- `package:cucumber_gherkin/cucumber_gherkin_io.dart` — re-exports the core and
+  adds the `dart:io`-based file entry points `parsePath`/`parsePaths` as
+  extension methods on `GherkinParser`. Import this on the Dart VM, Flutter
+  mobile/desktop, or server-side.
 
 ```dart
+// Web / platform-agnostic:
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
-```
 
-This exposes `GherkinParser`, `IdGenerator`,
-`GherkinDialect`/`GherkinDialectProvider`, and the `GherkinException` hierarchy.
+// When you also need to read from files:
+import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
+```
 
 Do not import from `package:cucumber_gherkin/src/...`; files under `lib/src/`
 are implementation details and may change without notice.
@@ -62,7 +73,7 @@ and emits a stream of `Envelope`s.
 
 ```dart
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
 
 final parser = GherkinParser();
 
@@ -78,7 +89,8 @@ final pickle = envelopes
 
 Entry points:
 
-- `parsePath(path)` / `parsePaths(paths)`: read files. I/O failures throw a
+- `parsePath(path)` / `parsePaths(paths)` (from
+  `cucumber_gherkin_io.dart`): read files. I/O failures throw a
   `GherkinException`; malformed Gherkin is reported as a `parseError` envelope.
 - `parseString(data, uri, {mediaType})`: parse in-memory Gherkin. `uri`
   supplies the source reference. The media type is taken from `mediaType` when

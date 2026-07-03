@@ -1,5 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
 import 'package:test/test.dart';
 
 /// Verifies the error-handling contract shared with the flagship

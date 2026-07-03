@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
 
 Future<void> main(List<String> args) async {
   var includeSource = true;
