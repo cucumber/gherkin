@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [cpp] Added cpp devcontainer. ([#617](https://github.com/cucumber/gherkin/pull/617))
+- [cpp] Added many flavours of compilers to CI. ([#617](https://github.com/cucumber/gherkin/pull/617))
+
+### Changed
+- [cpp] Removed cmate and all related files. ([#617](https://github.com/cucumber/gherkin/pull/617))
+- [testdata] removed stray \r\n line endings, replaced with \n. ([#617](https://github.com/cucumber/gherkin/pull/617))
 
 ## [41.0.0] - 2026-06-20
 ### Changed
