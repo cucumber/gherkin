@@ -1,4 +1,4 @@
-import 'package:cucumber_gherkin/src/helpers/line_ending_helper.dart';
+import 'line_ending_helper.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
