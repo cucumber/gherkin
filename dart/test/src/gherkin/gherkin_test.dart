@@ -92,6 +92,69 @@ void main() {
     expect('Minimal', feature.name);
   });
 
+  group('convenience methods', () {
+    const feature =
+        'Feature: Minimal\n'
+        '\n'
+        '  Scenario: minimalistic\n'
+        '    Given the minimalism\n';
+
+    GherkinParser parser() => GherkinParser(idGenerator: idGenerator);
+
+    test('parseStringSync returns the document (default uri)', () {
+      final document = parser().parseStringSync(feature);
+      expect(document.feature!.name, 'Minimal');
+      expect(document.uri, GherkinParser.defaultUri);
+    });
+
+    test('parseStringSync uses an explicit uri', () {
+      final document = parser().parseStringSync(feature, uri: 'a.feature');
+      expect(document.uri, 'a.feature');
+    });
+
+    test('compileStringSync returns the pickles', () {
+      final pickles = parser().compileStringSync(feature);
+      expect(pickles, hasLength(1));
+      expect(pickles.single.name, 'minimalistic');
+    });
+
+    test('parseStringSync throws a ParserException on malformed input', () {
+      expect(
+        () => parser().parseStringSync('not gherkin'),
+        throwsA(isA<ParserException>()),
+      );
+    });
+
+    test('compileStringSync throws a ParserException on malformed input', () {
+      expect(
+        () => parser().compileStringSync('not gherkin'),
+        throwsA(isA<ParserException>()),
+      );
+    });
+
+    test('parseDocument reads a file and returns the document', () async {
+      final document = await parser().parseDocument(
+        '../testdata/good/minimal.feature',
+      );
+      expect(document.feature!.name, 'Minimal');
+      expect(document.uri, '../testdata/good/minimal.feature');
+    });
+
+    test('compilePickles reads a file and returns the pickles', () async {
+      final pickles = await parser().compilePickles(
+        '../testdata/good/minimal.feature',
+      );
+      expect(pickles.single.name, 'minimalistic');
+    });
+
+    test('parseDocument throws a GherkinException on a missing file', () {
+      expect(
+        parser().parseDocument('does-not-exist.feature'),
+        throwsA(isA<GherkinException>()),
+      );
+    });
+  });
+
   group('makeSourceEnvelope media-type inference', () {
     test('infers the plain media type from a .feature uri', () {
       final envelope = GherkinParser.makeSourceEnvelope('', 'a.feature');
@@ -109,11 +172,11 @@ void main() {
       );
     });
 
-    test('throws ArgumentError for an unrecognized extension with no '
+    test('throws GherkinException for an unrecognized extension with no '
         'mediaType', () {
       expect(
         () => GherkinParser.makeSourceEnvelope('', 'a.txt'),
-        throwsA(isA<ArgumentError>()),
+        throwsA(isA<GherkinException>()),
       );
     });
 
