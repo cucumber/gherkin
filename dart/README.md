@@ -65,11 +65,18 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 and emits a stream of `Envelope`s.
 
 > **Error handling contract:** malformed Gherkin never throws — it is reported
-> as a `parseError` envelope in the stream. Only I/O failures from the
-> file-reading entry points (`parsePath` / `parsePaths`) are *thrown*, as a
-> `GherkinException`, since they are not a property of the Gherkin source. This
-> matches the flagship implementations (e.g. Java's `parse(Path)` declares
-> `throws IOException`).
+> as a `parseError` envelope in the stream. The only synchronous throws are for
+> conditions that are *not* a property of the Gherkin source:
+>
+> - I/O failures from the file-reading entry points (`parsePath` /
+>   `parsePaths`) are thrown as a `GherkinException`. This matches the flagship
+>   implementations (e.g. Java's `parse(Path)` declares `throws IOException`).
+> - `parseString` (and `GherkinParser.makeSourceEnvelope`) throw an
+>   `ArgumentError` when the media type cannot be resolved — that is, when
+>   `mediaType` is omitted and the `uri` has no recognized extension
+>   (`.feature` or `.md`). This is detected before any parsing begins, so it is
+>   surfaced synchronously rather than as a `parseError` envelope. Pass
+>   `mediaType` explicitly to avoid it.
 
 ```dart
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
