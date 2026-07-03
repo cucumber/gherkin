@@ -162,7 +162,7 @@ packages:
     source: hosted
     version: "0.12.19"
   meta:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: meta
       sha256: df0c643f44ad098eb37988027a8e2b2b5a031fd3977f06bbfd3a76637e8df739
