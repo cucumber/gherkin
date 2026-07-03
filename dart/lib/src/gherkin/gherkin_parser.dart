@@ -1,16 +1,15 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-
-import '../ast/messages_gherkin_document_builder.dart';
-import '../exceptions/exceptions.dart';
-import '../language/gherkin_dialect_provider.dart';
-import '../language/gherkin_languages_loader.dart';
-import '../language/gherkin_token_matcher.dart';
-import '../language/markdown_token_matcher.dart';
-import '../language/string_token_scanner.dart';
-import '../parser/parser.g.dart';
-import '../parser/token_matcher.dart';
-import '../pickles/messages_pickle_compiler.dart';
-import 'id_generator.dart';
+import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
+import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_languages_loader.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
+import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
+import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
+import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 
 /// Parses Gherkin documents into a stream of Cucumber [messages.Envelope]s.
 ///

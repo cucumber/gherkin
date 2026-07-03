@@ -119,8 +119,9 @@ starting at `0`.
 
 ### Dialects
 
-`GherkinDialectProvider` and `GherkinDialect` (in `language.dart`) expose the
-supported languages and their localized keywords. A feature selects its dialect
+`GherkinDialectProvider` and `GherkinDialect` (exported from
+`package:cucumber_gherkin/cucumber_gherkin.dart`) expose the supported languages
+and their localized keywords. A feature selects its dialect
 with a `# language:` header; `defaultDialect` (default `en`) applies when the
 header is absent. Requesting an unsupported language throws a
 `NoSuchLanguageException`.

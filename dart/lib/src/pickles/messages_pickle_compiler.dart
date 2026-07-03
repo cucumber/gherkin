@@ -182,7 +182,7 @@ class MessagesPickleCompiler {
               lastKeywordType,
             );
             // Background steps are interpolated but do NOT reference the
-            // specific example row â€” they belong to the background node only.
+            // specific example row — they belong to the background node only.
             steps.add(
               _pickleStep(
                 step,

@@ -13,8 +13,8 @@
 /// It exposes:
 ///
 /// * [GherkinParser] and [IdGenerator] for parsing;
-/// * [GherkinDialect] and [GherkinDialectProvider] for the supported languages
-///   and their localized keywords;
+/// * [GherkinDialect], [GherkinDialectProvider], and [GherkinLanguageKeywords]
+///   for the supported languages and their localized keywords;
 /// * [GherkinException] and the [ParserException] hierarchy for errors.
 ///
 /// To read Gherkin directly from files, import
