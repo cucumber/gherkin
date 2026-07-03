@@ -29,11 +29,10 @@ jobs:
           - ubuntu-latest
         go: ['1.20.x', '1.21.x']
         include:
-# Integration tests don't work on Windows, reason unknown
-#          - os: windows-latest
-#            go: '1.21.x'
-          - os: macos-latest
+          - os: windows-latest
             go: '1.21.x'
+          - os: macos-latest
+            go: '1.24.x'
 
     steps:
     - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0

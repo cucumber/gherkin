@@ -1,6 +1,12 @@
 # Ensure consistent LF line endings across platforms.
 # See https://help.github.com/articles/dealing-with-line-endings/
 
-# Test/fixture data must be LF — Windows autocrlf would corrupt binary comparisons
-testdata/**  text eol=lf
-*.feature    text eol=lf
+* text=auto
+
+# Test/fixture data must be LF unless defined otherwise
+*.feature       text eol=lf
+*.feature.md    text eol=lf
+*.tokens        text eol=lf
+
+# Defined otherwise:
+*.crlf.feature  text eol=crlf
