@@ -1,5 +1,5 @@
 import 'package:cucumber_gherkin/src/helpers/line_ending_helper.dart';
-import 'package:cucumber_gherkin/src/language/file_token_scanner.dart';
+import 'package:cucumber_gherkin/src/tokens/file_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/tokens/no_op_result.dart';

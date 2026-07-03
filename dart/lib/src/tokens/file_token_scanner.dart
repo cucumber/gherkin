@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/src/extensions/random_access_file_extension.dart';
+import 'package:cucumber_gherkin/src/tokens/random_access_file_extension.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';

@@ -91,4 +91,55 @@ void main() {
     final feature = gherkinDocument.feature!;
     expect('Minimal', feature.name);
   });
+
+  group('makeSourceEnvelope media-type inference', () {
+    test('infers the plain media type from a .feature uri', () {
+      final envelope = GherkinParser.makeSourceEnvelope('', 'a.feature');
+      expect(
+        envelope.source!.mediaType,
+        messages.SourceMediaType.textXCucumberGherkinPlain,
+      );
+    });
+
+    test('infers the markdown media type from a .md uri', () {
+      final envelope = GherkinParser.makeSourceEnvelope('', 'a.md');
+      expect(
+        envelope.source!.mediaType,
+        messages.SourceMediaType.textXCucumberGherkinMarkdown,
+      );
+    });
+
+    test('throws ArgumentError for an unrecognized extension with no '
+        'mediaType', () {
+      expect(
+        () => GherkinParser.makeSourceEnvelope('', 'a.txt'),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('uses an explicit mediaType when the uri has no recognized '
+        'extension', () {
+      final envelope = GherkinParser.makeSourceEnvelope(
+        '',
+        'a.txt',
+        mediaType: messages.SourceMediaType.textXCucumberGherkinMarkdown,
+      );
+      expect(
+        envelope.source!.mediaType,
+        messages.SourceMediaType.textXCucumberGherkinMarkdown,
+      );
+    });
+
+    test('an explicit mediaType overrides the uri extension', () {
+      final envelope = GherkinParser.makeSourceEnvelope(
+        '',
+        'a.feature',
+        mediaType: messages.SourceMediaType.textXCucumberGherkinMarkdown,
+      );
+      expect(
+        envelope.source!.mediaType,
+        messages.SourceMediaType.textXCucumberGherkinMarkdown,
+      );
+    });
+  });
 }
