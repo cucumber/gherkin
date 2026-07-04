@@ -284,7 +284,7 @@ pickle_compiler::make_pickle_step(
         ;
 
     cms::pickle_step ps{
-        {},
+        std::nullopt,
         { step.id },
         next_id(),
         to_pickle_step_type(keyword_type),
@@ -293,7 +293,7 @@ pickle_compiler::make_pickle_step(
 
     if (step.data_table) {
         ps.argument = cms::pickle_step_argument{
-            {},
+            std::nullopt,
             make_pickle_table(
                  *step.data_table,
                  variable_cells,
@@ -353,8 +353,8 @@ pickle_compiler::make_pickle_doc_string(
 )
 {
     cms::pickle_doc_string pds{
-        {},
-        {},
+        std::nullopt,
+        std::nullopt,
         interpolate(ds.content, variable_cells, value_cells)
     };
 

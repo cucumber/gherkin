@@ -115,7 +115,7 @@ token_matcher::match_tag_line(token& token)
     }
 
     set_token_matched(token, rule_type::tag_line,
-                      {{}, {}, {}, {}, std::move(token.line.tags())});
+                      {std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::move(token.line.tags())});
 
     return true;
 }
@@ -166,7 +166,7 @@ token_matcher::match_empty(token& token)
         return false;
     }
 
-    set_token_matched(token, rule_type::empty, {{}, {}, {}, 0});
+    set_token_matched(token, rule_type::empty, {std::nullopt, std::nullopt, std::nullopt, 0});
 
     return true;
 }
@@ -185,8 +185,8 @@ token_matcher::match_comment(token& token)
     set_token_matched(
         token, rule_type::comment, {
             comment_text,
-            {},
-            {},
+            std::nullopt,
+            std::nullopt,
             0
         }
     );
@@ -202,8 +202,8 @@ token_matcher::match_other(token& token)
     set_token_matched(
         token, rule_type::other, {
             unescape_docstring(text),
-            {},
-            {},
+            std::nullopt,
+            std::nullopt,
             0
         }
     );

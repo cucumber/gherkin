@@ -6,6 +6,7 @@
 #include <cucumber/gherkin/join_utils.hpp>
 #include <cucumber/gherkin/regex.hpp>
 #include <cucumber/gherkin/exceptions.hpp>
+#include <optional>
 
 namespace cucumber::gherkin {
 
@@ -110,8 +111,8 @@ ast_builder::make_step(ast_node& node)
                 step_line.matched_keyword.value_or(""),
                 step_line.matched_keyword_type,
                 step_line.matched_text,
-                {},
-                {},
+                std::nullopt,
+                std::nullopt,
                 next_id()};
 
     node.set(rule_type::doc_string, m.doc_string);
@@ -354,7 +355,7 @@ ast_builder::make_gherkin_document(ast_node& node)
 {
     cms::gherkin_document gd{
        std::string(uri_),
-       {},
+       std::nullopt,
        comments_
     };
 
