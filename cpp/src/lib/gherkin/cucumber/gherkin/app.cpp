@@ -30,7 +30,7 @@ app::parse(const file& f, const callbacks& cbs)
 {
     cms::envelope e;
 
-    e.source = cms::source{ .uri = f.path, .data = slurp(f.path) };
+    e.source = cms::source{  f.path,  slurp(f.path) };
 
     parse(e, cbs);
 }
@@ -77,9 +77,9 @@ app::send_parse_error(
 ) const
 {
     parse_error pe{
-        .uri = uri,
-        .location = e.location(),
-        .message = e.what()
+        uri,
+        e.location(),
+        e.what()
     };
 
     call_cb(cbs.error, pe);

@@ -45,7 +45,7 @@ pickle_compiler::compile(
     pickle_cb sink
 )
 {
-    pickle_compiler_context ctx{ .idp = idp_, .sink = sink };
+    pickle_compiler_context ctx{idp_,sink };
 
     if (d.feature) {
         compile_feature(ctx, *d.feature, d.feature->language, uri);
@@ -183,14 +183,14 @@ pickle_compiler::compile_scenario(
     strings source_ids = { s.id };
 
     cms::pickle p{
-        .id = ctx.next_id(),
-        .uri = uri,
-        .location = s.location,
-        .name = s.name,
-        .language = language,
-        .steps = steps,
-        .tags = make_pickle_tags(tags),
-        .ast_node_ids = source_ids
+       ctx.next_id(),
+       uri,
+       s.location,
+       s.name,
+       language,
+       steps,
+       make_pickle_tags(tags),
+       source_ids
     };
 
     ctx.add_pickle(p);
@@ -254,14 +254,14 @@ pickle_compiler::compile_scenario_outline(
             strings source_ids = { s.id, values_row.id };
 
             cms::pickle p{
-                .id = ctx.next_id(),
-                .uri = uri,
-                .location = values_row.location,
-                .name = interpolate(s.name, variable_cells, value_cells),
-                .language = language,
-                .steps = steps,
-                .tags = make_pickle_tags(tags),
-                .ast_node_ids = source_ids
+               ctx.next_id(),
+               uri,
+               values_row.location,
+               interpolate(s.name, variable_cells, value_cells),
+               language,
+               steps,
+               make_pickle_tags(tags),
+               source_ids
             };
 
             ctx.add_pickle(p);
@@ -284,23 +284,25 @@ pickle_compiler::make_pickle_step(
         ;
 
     cms::pickle_step ps{
-        .ast_node_ids = { step.id },
-        .id = next_id(),
-        .type = to_pickle_step_type(keyword_type),
-        .text = interpolate(step.text, variable_cells, value_cells)
+        {},
+        { step.id },
+        next_id(),
+        to_pickle_step_type(keyword_type),
+        interpolate(step.text, variable_cells, value_cells)
     };
 
     if (step.data_table) {
         ps.argument = cms::pickle_step_argument{
-            .data_table = make_pickle_table(
-                *step.data_table,
-                variable_cells,
-                value_cells
-            )
+            {},
+            make_pickle_table(
+                 *step.data_table,
+                 variable_cells,
+                 value_cells
+             )
         };
     } else if (step.doc_string) {
         ps.argument = cms::pickle_step_argument{
-            .doc_string = make_pickle_doc_string(
+           make_pickle_doc_string(
                 *step.doc_string,
                 variable_cells,
                 value_cells
@@ -329,7 +331,7 @@ pickle_compiler::make_pickle_table(
 
         for (const auto& cell : row.cells) {
             r.cells.emplace_back(cms::pickle_table_cell{
-                .value = interpolate(
+               interpolate(
                     cell.value,
                     variable_cells,
                     value_cells
@@ -351,7 +353,9 @@ pickle_compiler::make_pickle_doc_string(
 )
 {
     cms::pickle_doc_string pds{
-        .content = interpolate(ds.content, variable_cells, value_cells)
+        {},
+        {},
+        interpolate(ds.content, variable_cells, value_cells)
     };
 
     if (ds.media_type) {
@@ -383,8 +387,8 @@ pickle_compiler::make_pickle_tags(const tags& tags)
         [](const auto& t) {
             return
                 cms::pickle_tag{
-                    .name = t.name,
-                    .ast_node_id = t.id
+                   t.name,
+                   t.id
                 };
         }
     );

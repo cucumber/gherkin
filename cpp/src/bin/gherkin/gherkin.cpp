@@ -74,10 +74,10 @@ int main(int ac, char** av)
 
     cucumber::gherkin::app app;
     cucumber::gherkin::app::callbacks cbs{
-        .source = [&](const auto& m) { print_json_obj("source", m); },
-        .ast = [&](const auto& m) { print_json_obj("gherkinDocument", m); },
-        .pickle = [&](const auto& m) { print_json_obj("pickle", m); },
-        .error = [&](const auto& m) { std::cout << m.to_json() << std::endl; }
+       [&](const auto& m) { print_json_obj("source", m); },
+       [&](const auto& m) { print_json_obj("gherkinDocument", m); },
+       [&](const auto& m) { print_json_obj("pickle", m); },
+       [&](const auto& m) { std::cout << m.to_json() << std::endl; }
     };
 
     app.include_source(opts.include_source);

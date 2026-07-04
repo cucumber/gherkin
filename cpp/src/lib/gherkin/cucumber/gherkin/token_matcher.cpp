@@ -84,9 +84,9 @@ token_matcher::match_table_row(token& token)
         return false;
     }
 
-    set_token_matched(
-        token, rule_type::table_row, { .items = token.line.table_cells() }
-    );
+    token_info ti;
+    ti.items = token.line.table_cells();
+    set_token_matched(token, rule_type::table_row, ti);
 
     return true;
 }
@@ -100,7 +100,8 @@ token_matcher::match_language(token& token)
         return false;
     }
 
-    set_token_matched(token, rule_type::language, { .text = dialect_name });
+    set_token_matched(token, rule_type::language,
+                      {dialect_name});
     change_dialect(dialect_name);
 
     return true;
@@ -113,11 +114,8 @@ token_matcher::match_tag_line(token& token)
         return false;
     }
 
-    set_token_matched(
-        token, rule_type::tag_line, {
-            .items = std::move(token.line.tags())
-        }
-    );
+    set_token_matched(token, rule_type::tag_line,
+                      {{}, {}, {}, {}, std::move(token.line.tags())});
 
     return true;
 }
@@ -138,8 +136,8 @@ token_matcher::match_title_line(
 
         set_token_matched(
             token, token_type, {
-                .text = token.line.get_keyword_trimmed(k),
-                .keyword = k
+               token.line.get_keyword_trimmed(k),
+               k
             }
         );
 
@@ -168,7 +166,7 @@ token_matcher::match_empty(token& token)
         return false;
     }
 
-    set_token_matched(token, rule_type::empty, { .indent = 0 } );
+    set_token_matched(token, rule_type::empty, {{}, {}, {}, 0});
 
     return true;
 }

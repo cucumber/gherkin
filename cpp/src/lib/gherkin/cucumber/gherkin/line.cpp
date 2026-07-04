@@ -139,8 +139,8 @@ line::table_cells() const
             stripped_cell = rstrip(stripped_cell, re_pattern::spaces_no_nl);
 
             item i{
-                .column = col + indent_ + cell_indent,
-                .text = to_narrow(stripped_cell)
+               col + indent_ + cell_indent,
+               to_narrow(stripped_cell)
             };
 
             for (const auto& p : line_unescapes) {
@@ -176,13 +176,13 @@ line::tags() const
             throw
                 parser_error(
                     "A tag may not contain whitespace",
-                    { .line = line_number_, .column = column }
+                    {line_number_,column }
                 );
         }
 
         tags.emplace_back(item{
-            .column = column,
-            .text = "@" + sitem
+           column,
+           "@" + sitem
         });
 
         column += original_item.size() + 1;
