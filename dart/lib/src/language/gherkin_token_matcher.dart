@@ -80,9 +80,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
 
   @override
   bool matchLanguage(Token token) {
-    final match = _languagePattern.firstMatch(
-      token.line.getLineText(),
-    );
+    final match = _languagePattern.firstMatch(token.line.getLineText());
     if (match != null) {
       final language = match.group(1) ?? '';
       setTokenMatched(token, TokenType.language, text: language);

@@ -17,9 +17,7 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
     this._dialectProvider, [
     this._defaultDialectName = 'en',
   ]) {
-    _currentDialect = _dialectProvider.getDialect(
-      _defaultDialectName,
-    );
+    _currentDialect = _dialectProvider.getDialect(_defaultDialectName);
     _initializeDialectState();
   }
   final GherkinDialectProvider _dialectProvider;
@@ -35,9 +33,7 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
 
   @override
   void reset() {
-    _currentDialect = _dialectProvider.getDialect(
-      _defaultDialectName,
-    );
+    _currentDialect = _dialectProvider.getDialect(_defaultDialectName);
     _activeDocStringSeparator = _openDocStringSeparator;
     _inDocString = false;
     _indentToRemove = 0;
