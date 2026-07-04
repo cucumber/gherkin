@@ -1,12 +1,13 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Shared step-keyword-to-[messages.StepKeywordType] mapping for the token
 /// matchers.
 ///
 /// Both the plain (`.feature`) and Markdown (`.feature.md`) matchers classify
-/// step keywords identically: `Given` keywords are [messages.StepKeywordType.context],
-/// `When` keywords are [messages.StepKeywordType.action], `Then` keywords are
+/// step keywords identically: `Given` keywords are
+/// [messages.StepKeywordType.context], `When` keywords are
+/// [messages.StepKeywordType.action], `Then` keywords are
 /// [messages.StepKeywordType.outcome], and both `And` and `But` keywords are
 /// [messages.StepKeywordType.conjunction]. A single keyword may map to more
 /// than one type (for example a dialect that reuses one word across step

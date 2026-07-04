@@ -4,7 +4,6 @@ import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
-import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
 import '../tool/tokens_generator.dart';
 
@@ -14,18 +13,21 @@ import '../tool/tokens_generator.dart';
 /// Mirrors the `gherkin-generate-tokens` binaries of the other first-party
 /// implementations (Java, Go, Ruby).
 void main(List<String> args) {
-  final languages = builtinDialects;
+  const languages = builtinDialects;
   final dialectProvider = GherkinDialectProvider(languages);
 
   for (final path in args) {
-    final TokenMatcher tokenMatcher =
-        path.endsWith('.md')
-            ? MarkdownTokenMatcher(dialectProvider)
-            : GherkinTokenMatcher(dialectProvider);
     // Emit a trailing newline so the final `EOF` line is newline-terminated,
     // matching the reference implementations (e.g. Go uses `Fprintln` for
     // every token, including EOF). `generateTokens` trims trailing newlines
     // during normalization, so re-add one here via `writeln`.
-    stdout.writeln(TokensGenerator.generateTokens(path, tokenMatcher));
+    stdout.writeln(
+      TokensGenerator.generateTokens(
+        path,
+        path.endsWith('.md')
+            ? MarkdownTokenMatcher(dialectProvider)
+            : GherkinTokenMatcher(dialectProvider),
+      ),
+    );
   }
 }

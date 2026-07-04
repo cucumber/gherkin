@@ -1,8 +1,7 @@
 import 'dart:collection';
 
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/ast/ast_node.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
@@ -11,6 +10,7 @@ import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/language/token_type.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/rule_type.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// A [Builder] that assembles parser events into a Cucumber Messages
 /// [messages.GherkinDocument].
@@ -93,11 +93,32 @@ class MessagesGherkinDocumentBuilder
         return _createRule(node);
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
-      // All other rule types are structural/intermediate nodes that are
-      // returned unchanged. An exhaustive switch is not possible because
-      // RuleType also declares library-private token rule types that cannot
-      // be referenced from this library.
-      default:
+      // All remaining rule types are structural/intermediate nodes that are
+      // returned unchanged. They are enumerated explicitly rather than caught
+      // by a `default:` clause so that introducing a new RuleType becomes a
+      // compile-time error here instead of silently falling through.
+      case RuleType.none:
+      case RuleType.eof:
+      case RuleType.empty:
+      case RuleType.comment:
+      case RuleType.tagLine:
+      case RuleType.featureLine:
+      case RuleType.ruleLine:
+      case RuleType.backgroundLine:
+      case RuleType.scenarioLine:
+      case RuleType.examplesLine:
+      case RuleType.stepLine:
+      case RuleType.docStringSeparator:
+      case RuleType.tableRow:
+      case RuleType.language:
+      case RuleType.other:
+      case RuleType.featureHeader:
+      case RuleType.ruleHeader:
+      case RuleType.scenario:
+      case RuleType.examples:
+      case RuleType.stepArg:
+      case RuleType.tags:
+      case RuleType.descriptionHelper:
         return node;
     }
   }

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 Future<void> main(List<String> args) async {
   var includeSource = true;
@@ -59,9 +59,7 @@ Future<void> main(List<String> args) async {
 
 Future<void> printMessages(Stream<messages.Envelope> messagesStream) async {
   try {
-    await for (final line in messages.encodeNdjsonEnvelopes(messagesStream)) {
-      stdout.write(line);
-    }
+    await messages.encodeNdjsonEnvelopes(messagesStream).forEach(stdout.write);
   } on IOException catch (e) {
     throw GherkinException("Couldn't print messages", e);
   }

@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/gherkin/gherkin_parser.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// File-system entry points for [GherkinParser].
 ///

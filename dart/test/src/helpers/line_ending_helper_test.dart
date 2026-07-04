@@ -1,5 +1,6 @@
-import '../../../tool/line_ending_helper.dart';
 import 'package:test/test.dart';
+
+import '../../../tool/line_ending_helper.dart';
 
 void main() {
   test('Test LineEndingHelper.normalizeLineEndings', () async {

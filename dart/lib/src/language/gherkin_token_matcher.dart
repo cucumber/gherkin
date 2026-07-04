@@ -1,14 +1,13 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
-import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/step_keyword_types.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/language/token_type.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
 class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
@@ -72,7 +71,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   @override
   bool matchComment(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.commentPrefix)) {
-      final text = token.line.getLineText(GherkinLine.entireLine);
+      final text = token.line.getLineText();
       setTokenMatched(token, TokenType.comment, text: text, indent: 0);
       return true;
     }
@@ -82,7 +81,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   @override
   bool matchLanguage(Token token) {
     final match = _languagePattern.firstMatch(
-      token.line.getLineText(GherkinLine.entireLine),
+      token.line.getLineText(),
     );
     if (match != null) {
       final language = match.group(1) ?? '';

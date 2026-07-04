@@ -1,4 +1,3 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
@@ -8,6 +7,7 @@ import 'package:cucumber_gherkin/src/language/step_keyword_types.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/language/token_type.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// The [TokenMatcher] for Markdown (`.feature.md`) Gherkin sources.
 class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
@@ -19,7 +19,6 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
   ]) {
     _currentDialect = _dialectProvider.getDialect(
       _defaultDialectName,
-      Location.empty,
     );
     _initializeDialectState();
   }
@@ -38,7 +37,6 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
   void reset() {
     _currentDialect = _dialectProvider.getDialect(
       _defaultDialectName,
-      Location.empty,
     );
     _activeDocStringSeparator = _openDocStringSeparator;
     _inDocString = false;
@@ -219,7 +217,7 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
 
   @override
   bool matchTableRow(Token token) {
-    final lineText = token.line.getLineText(0);
+    final lineText = token.line.getLineText();
     if (!_tableRowLine.hasMatch(lineText)) {
       return false;
     }
@@ -266,7 +264,7 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
       final escapedKeywords = keywords.map(RegExp.escape).join('|');
       return RegExp('$prefix($escapedKeywords)${RegExp.escape(suffix)}(.*)');
     });
-    final match = regexp.firstMatch(token.line.getLineText(0));
+    final match = regexp.firstMatch(token.line.getLineText());
     if (match == null) {
       return false;
     }

@@ -1,5 +1,5 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 void main() {
@@ -8,12 +8,8 @@ void main() {
   test('Use this in readme', () async {
     const paths = <String>['../testdata/good/minimal.feature'];
     const includeSource = false;
-    const includeGherkinDocument = true;
-    const includePickles = true;
     final envelopeStream = GherkinParser(
       includeSource: includeSource,
-      includeGherkinDocument: includeGherkinDocument,
-      includePickles: includePickles,
       idGenerator: idGenerator,
     ).parsePaths(paths);
 
@@ -28,12 +24,10 @@ void main() {
   test('Provides access to the ast', () async {
     const paths = <String>['../testdata/good/minimal.feature'];
     const includeSource = false;
-    const includeGherkinDocument = true;
     const includePickles = false;
     final envelopes =
         await GherkinParser(
           includeSource: includeSource,
-          includeGherkinDocument: includeGherkinDocument,
           includePickles: includePickles,
           idGenerator: idGenerator,
         ).parsePaths(paths).toList();
@@ -56,7 +50,6 @@ void main() {
         await GherkinParser(
           includeSource: false,
           includeGherkinDocument: false,
-          includePickles: true,
           idGenerator: idGenerator,
         ).parsePaths(paths).toList();
 
@@ -82,7 +75,6 @@ void main() {
     final envelopes =
         await GherkinParser(
           includeSource: false,
-          includeGherkinDocument: true,
           includePickles: false,
           idGenerator: idGenerator,
         ).parseEnvelopes(Stream.fromIterable(singletonList)).toList();

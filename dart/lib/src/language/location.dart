@@ -1,4 +1,7 @@
+import 'package:meta/meta.dart';
+
 /// A one-based position (line and column) within a source document.
+@immutable
 class Location {
   /// Creates a location at the given [line] and [column].
   const Location(this.line, this.column);
@@ -6,10 +9,10 @@ class Location {
   /// Marks an unset line or column.
   ///
   /// Real values are always non-negative (columns and lines are 1-based), so a
-  /// negative value can never collide with a legitimate one. A negative literal
-  /// is used rather than `1 << 63` because bit-shift arithmetic does not produce
-  /// the 64-bit minimum integer on the web/JS target, which would silently break
-  /// the sentinel there.
+  /// negative value can never collide with a legitimate one. A negative
+  /// literal is used rather than `1 << 63` because bit-shift arithmetic does
+  /// not produce the 64-bit minimum integer on the web/JS target, which would
+  /// silently break the sentinel there.
   static const int _unset = -1;
 
   /// A location representing an unknown/absent position.

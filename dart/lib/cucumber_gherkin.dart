@@ -12,15 +12,15 @@
 ///
 /// It exposes:
 ///
-/// * [GherkinParser] and [IdGenerator] for parsing;
-/// * [GherkinDialect], [GherkinDialectProvider], and [GherkinLanguageKeywords]
+/// * `GherkinParser` and `IdGenerator` for parsing;
+/// * `GherkinDialect`, `GherkinDialectProvider`, and `GherkinLanguageKeywords`
 ///   for the supported languages and their localized keywords;
-/// * [GherkinException] and the [ParserException] hierarchy for errors.
+/// * `GherkinException` and the `ParserException` hierarchy for errors.
 ///
 /// To read Gherkin directly from files, import
 /// `package:cucumber_gherkin/cucumber_gherkin_io.dart` instead: it re-exports
 /// everything here and adds the `dart:io`-based `parsePath`/`parsePaths` entry
-/// points as extension methods on [GherkinParser].
+/// points as extension methods on `GherkinParser`.
 library;
 
 export 'src/exceptions/exceptions.dart';

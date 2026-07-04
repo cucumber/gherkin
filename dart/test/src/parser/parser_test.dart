@@ -1,10 +1,10 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 /// Parses [source] with a fresh Berp-generated [Parser] and returns the
@@ -14,7 +14,7 @@ messages.GherkinDocument _parse(
   String defaultDialect = 'en',
   bool stopAtFirstError = false,
 }) {
-  final languages = builtinDialects;
+  const languages = builtinDialects;
   final dialectProvider = GherkinDialectProvider(languages, defaultDialect);
   final matcher = GherkinTokenMatcher(dialectProvider);
   final builder = MessagesGherkinDocumentBuilder(
@@ -121,8 +121,8 @@ Feature: Eating
   });
 
   test('a parser instance can be reused for multiple documents', () {
-    final languages = builtinDialects;
-    final dialectProvider = GherkinDialectProvider(languages, 'en');
+    const languages = builtinDialects;
+    final dialectProvider = GherkinDialectProvider(languages);
     final matcher = GherkinTokenMatcher(dialectProvider);
     final builder = MessagesGherkinDocumentBuilder(
       IdGenerator.incrementingGenerator,

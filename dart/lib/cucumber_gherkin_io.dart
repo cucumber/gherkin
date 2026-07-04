@@ -3,7 +3,7 @@
 /// This library re-exports the entire platform-agnostic
 /// `package:cucumber_gherkin/cucumber_gherkin.dart` API and additionally
 /// provides the `dart:io`-based file-reading entry points as extension methods
-/// on [GherkinParser]:
+/// on `GherkinParser`:
 ///
 /// ```dart
 /// import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';

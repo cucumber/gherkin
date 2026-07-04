@@ -1,8 +1,8 @@
-import 'line_ending_helper.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
 import 'file_token_scanner.dart';
+import 'line_ending_helper.dart';
 import 'no_op_result.dart';
 import 'token_formatter_builder.dart';
 

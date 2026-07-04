@@ -1,4 +1,3 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
@@ -10,6 +9,7 @@ import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Parses Gherkin documents into a stream of Cucumber [messages.Envelope]s.
 ///

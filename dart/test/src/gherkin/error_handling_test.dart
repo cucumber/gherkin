@@ -1,5 +1,5 @@
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 /// Verifies the error-handling contract shared with the flagship
@@ -58,7 +58,6 @@ void main() {
           await GherkinParser(
                 includeSource: false,
                 includeGherkinDocument: false,
-                includePickles: true,
                 idGenerator: idGenerator,
               )
               .parseEnvelope(
@@ -173,7 +172,7 @@ void main() {
     });
 
     test('formats with a cause', () {
-      final cause = FormatException('bad');
+      const cause = FormatException('bad');
       expect(GherkinException('boom', cause).toString(), 'boom: $cause');
     });
   });
