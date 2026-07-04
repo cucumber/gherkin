@@ -1,5 +1,5 @@
 import 'package:cucumber_gherkin/src/language/token.dart';
-import 'package:cucumber_gherkin/src/parser/rule_type.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 /// Assembles a result of type [T] from the events emitted by the parser.
 abstract class Builder<T> {

@@ -1,5 +1,4 @@
-import 'package:cucumber_gherkin/src/language/token_type.dart';
-import 'package:cucumber_gherkin/src/parser/rule_type.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 /// Conversions from [TokenType] to its wire name and corresponding rule type.
 extension TokenTypeExtension on TokenType {

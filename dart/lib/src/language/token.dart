@@ -3,7 +3,7 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
-import 'package:cucumber_gherkin/src/language/token_type.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// A single scanned line of a Gherkin document together with the result of

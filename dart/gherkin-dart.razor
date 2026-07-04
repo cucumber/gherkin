@@ -59,6 +59,76 @@
     {
         return "match" + Pascal(raw);
     }
+
+    // The dartdoc comment (already `///`-prefixed and indented) for a
+    // `TokenType` member, keyed by its lowerCamelCase Dart name. The prose is
+    // kept here so the generated enum stays documented; unknown members fall
+    // back to a name-derived comment.
+    static string TokenTypeDoc(string camel)
+    {
+        switch (camel)
+        {
+            case "eof": return "  /// End of file.";
+            case "empty": return "  /// A blank (whitespace-only) line.";
+            case "comment": return "  /// A comment line (starting with `#`).";
+            case "tagLine": return "  /// A line containing one or more tags.";
+            case "featureLine": return "  /// A `Feature:` line.";
+            case "ruleLine": return "  /// A `Rule:` line.";
+            case "backgroundLine": return "  /// A `Background:` line.";
+            case "scenarioLine": return "  /// A `Scenario:` or `Scenario Outline:` line.";
+            case "examplesLine": return "  /// An `Examples:` line.";
+            case "stepLine": return "  /// A step line (`Given`/`When`/`Then`/`And`/`But`).";
+            case "docStringSeparator": return "  /// A doc string delimiter (`\"\"\"` or ` ``` `).";
+            case "tableRow": return "  /// A data/examples table row.";
+            case "language": return "  /// A `# language:` header line.";
+            case "other": return "  /// Any other line (free text or description).";
+            default: return "  /// The `" + camel + "` token type.";
+        }
+    }
+
+    // The dartdoc comment (already `///`-prefixed and indented, possibly
+    // spanning multiple lines) for a `RuleType` member, keyed by its
+    // lowerCamelCase Dart name. Unknown members fall back to a name-derived
+    // comment so new grammar rules stay documented.
+    static string RuleTypeDoc(string camel)
+    {
+        switch (camel)
+        {
+            case "eof": return "  /// End-of-file token rule (`#EOF`).";
+            case "empty": return "  /// Blank line token rule (`#Empty`).";
+            case "comment": return "  /// Comment line token rule (`#Comment`).";
+            case "tagLine": return "  /// Tag line token rule (`#TagLine`).";
+            case "featureLine": return "  /// `Feature:` line token rule (`#FeatureLine`).";
+            case "ruleLine": return "  /// `Rule:` line token rule (`#RuleLine`).";
+            case "backgroundLine": return "  /// `Background:` line token rule (`#BackgroundLine`).";
+            case "scenarioLine": return "  /// `Scenario:`/`Scenario Outline:` line token rule (`#ScenarioLine`).";
+            case "examplesLine": return "  /// `Examples:` line token rule (`#ExamplesLine`).";
+            case "stepLine": return "  /// Step line token rule (`#StepLine`).";
+            case "docStringSeparator": return "  /// Doc string delimiter token rule (`#DocStringSeparator`).";
+            case "tableRow": return "  /// Table row token rule (`#TableRow`).";
+            case "language": return "  /// `# language:` header token rule (`#Language`).";
+            case "other": return "  /// Any other (description/free text) token rule (`#Other`).";
+            case "gherkinDocument": return "  /// The whole document: `GherkinDocument := Feature?`.";
+            case "feature": return "  /// A feature:\n  /// `Feature := FeatureHeader Background? ScenarioDefinition* Rule*`.";
+            case "featureHeader": return "  /// A feature header:\n  /// `FeatureHeader := #Language? Tags? #FeatureLine DescriptionHelper`.";
+            case "rule": return "  /// A rule: `Rule := RuleHeader Background? ScenarioDefinition*`.";
+            case "ruleHeader": return "  /// A rule header: `RuleHeader := Tags? #RuleLine DescriptionHelper`.";
+            case "background": return "  /// A background: `Background := #BackgroundLine DescriptionHelper Step*`.";
+            case "scenarioDefinition": return "  /// A (optionally tagged) scenario: `ScenarioDefinition := Tags? Scenario`.";
+            case "scenario": return "  /// A scenario:\n  /// `Scenario := #ScenarioLine DescriptionHelper Step* ExamplesDefinition*`.";
+            case "examplesDefinition": return "  /// A (optionally tagged) examples block:\n  /// `ExamplesDefinition := Tags? Examples`.";
+            case "examples": return "  /// An examples block:\n  /// `Examples := #ExamplesLine DescriptionHelper ExamplesTable?`.";
+            case "examplesTable": return "  /// An examples table: `ExamplesTable := #TableRow #TableRow*`.";
+            case "step": return "  /// A step: `Step := #StepLine StepArg?`.";
+            case "stepArg": return "  /// A step argument: `StepArg := (DataTable | DocString)`.";
+            case "dataTable": return "  /// A data table: `DataTable := #TableRow+`.";
+            case "docString": return "  /// A doc string:\n  /// `DocString := #DocStringSeparator #Other* #DocStringSeparator`.";
+            case "tags": return "  /// One or more tag lines: `Tags := #TagLine+`.";
+            case "descriptionHelper": return "  /// A description helper:\n  /// `DescriptionHelper := #Empty* Description?`.";
+            case "description": return "  /// Free-text description: `Description := (#Other | #Comment)+`.";
+            default: return "  /// Grammar rule `" + camel + "`.";
+        }
+    }
 }
 @helper CallProduction(ProductionRule production)
 {
@@ -99,9 +169,9 @@
 // [Berp](https://github.com/gasparnagy/berp) using the shared
 // `../gherkin.berp` grammar. Run `make generate` to regenerate it.
 //
-// The supporting types (`Builder`, `TokenMatcher`, `TokenScanner`,
-// `ParserContext`, `RuleType`) live in hand-written sibling files so this
-// generated unit contains only the parser state machine.
+// The `TokenType` and `RuleType` enums below are generated here from the
+// grammar. The remaining supporting types (`Builder`, `TokenMatcher`,
+// `TokenScanner`, `ParserContext`) live in hand-written sibling files.
 // dart format off
 import 'dart:collection';
 
@@ -109,9 +179,36 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser_context.dart';
-import 'package:cucumber_gherkin/src/parser/rule_type.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
+
+/// The lexical token types produced while scanning a Gherkin document.
+enum TokenType {
+  /// No token; the initial/sentinel value.
+  none,
+@foreach(var rule in Model.RuleSet.TokenRules)
+{<text>
+@Raw(TokenTypeDoc(Camel(rule.Name)))
+  @Raw(Camel(rule.Name)),
+</text>
+}
+}
+
+/// The grammar rules recognized by the Gherkin parser.
+///
+/// The first group mirrors the lexical `TokenType`s one-to-one (the explicit
+/// mapping lives in `TokenTypeExtension.toRuleType`); the remaining values are
+/// the structural production rules of the Gherkin grammar.
+enum RuleType {
+  /// No rule; the initial/sentinel value.
+  none,
+@foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+{<text>
+@Raw(RuleTypeDoc(Camel(rule.Name)))
+  @Raw(Camel(rule.Name)),
+</text>
+}
+}
 
 /// A recursive-descent Gherkin parser driven by a Berp-generated state machine.
 ///
@@ -162,13 +259,12 @@ class @(Model.ParserClassName)<T> {
   }
 
   void _addError(ParserContext context, ParserException error) {
-    // Deduplicate by (message, line, column) so the same parse-error at the
-    // same location is not reported twice, but distinct errors with an
-    // identical message at different locations are kept.
+    // Deduplicate by message. Each message already carries its
+    // `(line:column): ` position prefix, so identical messages describe the
+    // same error at the same location; this mirrors the other first-party
+    // Gherkin implementations.
     for (final e in context.errors) {
-      if (e.message == error.message &&
-          e.location.line == error.location.line &&
-          e.location.column == error.location.column) {
+      if (e.message == error.message) {
         return;
       }
     }

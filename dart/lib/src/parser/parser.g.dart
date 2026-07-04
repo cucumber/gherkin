@@ -4,9 +4,9 @@
 // [Berp](https://github.com/gasparnagy/berp) using the shared
 // `../gherkin.berp` grammar. Run `make generate` to regenerate it.
 //
-// The supporting types (`Builder`, `TokenMatcher`, `TokenScanner`,
-// `ParserContext`, `RuleType`) live in hand-written sibling files so this
-// generated unit contains only the parser state machine.
+// The `TokenType` and `RuleType` enums below are generated here from the
+// grammar. The remaining supporting types (`Builder`, `TokenMatcher`,
+// `TokenScanner`, `ParserContext`) live in hand-written sibling files.
 // dart format off
 import 'dart:collection';
 
@@ -14,9 +14,169 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser_context.dart';
-import 'package:cucumber_gherkin/src/parser/rule_type.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
+
+/// The lexical token types produced while scanning a Gherkin document.
+enum TokenType {
+  /// No token; the initial/sentinel value.
+  none,
+
+  /// End of file.
+  eof,
+
+  /// A blank (whitespace-only) line.
+  empty,
+
+  /// A comment line (starting with `#`).
+  comment,
+
+  /// A line containing one or more tags.
+  tagLine,
+
+  /// A `Feature:` line.
+  featureLine,
+
+  /// A `Rule:` line.
+  ruleLine,
+
+  /// A `Background:` line.
+  backgroundLine,
+
+  /// A `Scenario:` or `Scenario Outline:` line.
+  scenarioLine,
+
+  /// An `Examples:` line.
+  examplesLine,
+
+  /// A step line (`Given`/`When`/`Then`/`And`/`But`).
+  stepLine,
+
+  /// A doc string delimiter (`"""` or ` ``` `).
+  docStringSeparator,
+
+  /// A data/examples table row.
+  tableRow,
+
+  /// A `# language:` header line.
+  language,
+
+  /// Any other line (free text or description).
+  other,
+}
+
+/// The grammar rules recognized by the Gherkin parser.
+///
+/// The first group mirrors the lexical `TokenType`s one-to-one (the explicit
+/// mapping lives in `TokenTypeExtension.toRuleType`); the remaining values are
+/// the structural production rules of the Gherkin grammar.
+enum RuleType {
+  /// No rule; the initial/sentinel value.
+  none,
+
+  /// End-of-file token rule (`#EOF`).
+  eof,
+
+  /// Blank line token rule (`#Empty`).
+  empty,
+
+  /// Comment line token rule (`#Comment`).
+  comment,
+
+  /// Tag line token rule (`#TagLine`).
+  tagLine,
+
+  /// `Feature:` line token rule (`#FeatureLine`).
+  featureLine,
+
+  /// `Rule:` line token rule (`#RuleLine`).
+  ruleLine,
+
+  /// `Background:` line token rule (`#BackgroundLine`).
+  backgroundLine,
+
+  /// `Scenario:`/`Scenario Outline:` line token rule (`#ScenarioLine`).
+  scenarioLine,
+
+  /// `Examples:` line token rule (`#ExamplesLine`).
+  examplesLine,
+
+  /// Step line token rule (`#StepLine`).
+  stepLine,
+
+  /// Doc string delimiter token rule (`#DocStringSeparator`).
+  docStringSeparator,
+
+  /// Table row token rule (`#TableRow`).
+  tableRow,
+
+  /// `# language:` header token rule (`#Language`).
+  language,
+
+  /// Any other (description/free text) token rule (`#Other`).
+  other,
+
+  /// The whole document: `GherkinDocument := Feature?`.
+  gherkinDocument,
+
+  /// A feature:
+  /// `Feature := FeatureHeader Background? ScenarioDefinition* Rule*`.
+  feature,
+
+  /// A feature header:
+  /// `FeatureHeader := #Language? Tags? #FeatureLine DescriptionHelper`.
+  featureHeader,
+
+  /// A rule: `Rule := RuleHeader Background? ScenarioDefinition*`.
+  rule,
+
+  /// A rule header: `RuleHeader := Tags? #RuleLine DescriptionHelper`.
+  ruleHeader,
+
+  /// A background: `Background := #BackgroundLine DescriptionHelper Step*`.
+  background,
+
+  /// A (optionally tagged) scenario: `ScenarioDefinition := Tags? Scenario`.
+  scenarioDefinition,
+
+  /// A scenario:
+  /// `Scenario := #ScenarioLine DescriptionHelper Step* ExamplesDefinition*`.
+  scenario,
+
+  /// A (optionally tagged) examples block:
+  /// `ExamplesDefinition := Tags? Examples`.
+  examplesDefinition,
+
+  /// An examples block:
+  /// `Examples := #ExamplesLine DescriptionHelper ExamplesTable?`.
+  examples,
+
+  /// An examples table: `ExamplesTable := #TableRow #TableRow*`.
+  examplesTable,
+
+  /// A step: `Step := #StepLine StepArg?`.
+  step,
+
+  /// A step argument: `StepArg := (DataTable | DocString)`.
+  stepArg,
+
+  /// A data table: `DataTable := #TableRow+`.
+  dataTable,
+
+  /// A doc string:
+  /// `DocString := #DocStringSeparator #Other* #DocStringSeparator`.
+  docString,
+
+  /// One or more tag lines: `Tags := #TagLine+`.
+  tags,
+
+  /// A description helper:
+  /// `DescriptionHelper := #Empty* Description?`.
+  descriptionHelper,
+
+  /// Free-text description: `Description := (#Other | #Comment)+`.
+  description,
+}
 
 /// A recursive-descent Gherkin parser driven by a Berp-generated state machine.
 ///
@@ -67,13 +227,12 @@ class Parser<T> {
   }
 
   void _addError(ParserContext context, ParserException error) {
-    // Deduplicate by (message, line, column) so the same parse-error at the
-    // same location is not reported twice, but distinct errors with an
-    // identical message at different locations are kept.
+    // Deduplicate by message. Each message already carries its
+    // `(line:column): ` position prefix, so identical messages describe the
+    // same error at the same location; this mirrors the other first-party
+    // Gherkin implementations.
     for (final e in context.errors) {
-      if (e.message == error.message &&
-          e.location.line == error.location.line &&
-          e.location.column == error.location.column) {
+      if (e.message == error.message) {
         return;
       }
     }

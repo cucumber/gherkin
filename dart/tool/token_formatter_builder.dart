@@ -1,6 +1,6 @@
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
-import 'package:cucumber_gherkin/src/parser/rule_type.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 import 'no_op_result.dart';
 import 'test_token_formatter.dart';

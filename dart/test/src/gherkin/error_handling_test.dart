@@ -86,12 +86,14 @@ void main() {
     });
 
     test(
-      'a location-less NoSuchLanguageException stringifies to its message',
+      'a location-less NoSuchLanguageException uses the "(-1,0): " prefix',
       () {
-        // With no location, the message must not carry a bogus "(line:column)".
+        // Matching the other first-party implementations, an unknown location
+        // stringifies with the sentinel "(-1,0): " prefix (see Java's
+        // ParserException.createMessage).
         expect(
           NoSuchLanguageException('xx').toString(),
-          'Language not supported: xx',
+          '(-1,0): Language not supported: xx',
         );
       },
     );

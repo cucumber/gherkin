@@ -7,9 +7,8 @@ import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
-import 'package:cucumber_gherkin/src/language/token_type.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
-import 'package:cucumber_gherkin/src/parser/rule_type.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// A [Builder] that assembles parser events into a Cucumber Messages

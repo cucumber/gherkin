@@ -7,7 +7,7 @@ part of 'exceptions.dart';
 sealed class TokenParserException extends ParserException {
   /// Creates an exception with [message], locating it at [receivedToken].
   TokenParserException(String message, Token receivedToken)
-    : super(message, _getLocation(receivedToken));
+    : super.located(message, _getLocation(receivedToken));
 
   static Location _getLocation(Token receivedToken) {
     return receivedToken.isEof || receivedToken.location.column > 1

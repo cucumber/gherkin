@@ -198,23 +198,20 @@ class GherkinParser {
   }
 
   messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
-    // A location-less error (e.g. an unsupported default dialect) has no
-    // position to report. Emit a null location and the "(-1,0)" prefix used by
-    // the other first-party implementations (see Java's ParserException).
+    // The error message already carries its `(line:column): ` (or `(-1,0): `)
+    // position prefix, matching the other first-party implementations; emit it
+    // verbatim and add the structured source location alongside it.
     if (error.location.isEmpty) {
       return messages.Envelope(
         parseError: messages.ParseError(
           source: messages.SourceReference(uri: uri),
-          message: '(-1,0): ${error.message}',
+          message: error.message,
         ),
       );
     }
 
     final line = error.location.line;
     final column = error.location.column;
-    // Prefix the message with "(line:column): " to match the format produced
-    // by the other first-party Gherkin implementations.
-    final prefix = '($line:$column): ';
     return messages.Envelope(
       parseError: messages.ParseError(
         source: messages.SourceReference(
@@ -227,7 +224,7 @@ class GherkinParser {
                     column: column == 0 ? null : column,
                   ),
         ),
-        message: '$prefix${error.message}',
+        message: error.message,
       ),
     );
   }
