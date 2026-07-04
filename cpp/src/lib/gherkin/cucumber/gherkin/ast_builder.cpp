@@ -137,6 +137,7 @@ ast_builder::make_doc_string(ast_node& node)
 
     cms::doc_string m{
        get_location(separator_token),
+       std::nullopt,
        content,
        separator_token.matched_keyword.value_or("")
     };
@@ -174,6 +175,8 @@ ast_builder::make_background(ast_node& node)
        get_location(background_line),
        background_line.matched_keyword.value_or(""),
        background_line.matched_text,
+       {},
+       {},
        next_id()
     };
 
@@ -195,6 +198,9 @@ ast_builder::make_scenario_definition(ast_node& node)
        get_tags(node),
        scenario_line.matched_keyword.value_or(""),
        scenario_line.matched_text,
+       {},
+       {},
+       {},
        next_id()
     };
 
@@ -328,6 +334,8 @@ ast_builder::make_rule(ast_node& node)
        get_tags(header),
        rule_line.matched_keyword.value_or(""),
        rule_line.matched_text,
+       {},
+       {},
        next_id()
     };
 
