@@ -184,8 +184,10 @@ token_matcher::match_comment(token& token)
 
     set_token_matched(
         token, rule_type::comment, {
-            .text = comment_text,
-            .indent = 0
+            comment_text,
+            {},
+            {},
+            0
         }
     );
 
@@ -199,8 +201,10 @@ token_matcher::match_other(token& token)
 
     set_token_matched(
         token, rule_type::other, {
-            .text = unescape_docstring(text),
-            .indent = 0
+            unescape_docstring(text),
+            {},
+            {},
+            0
         }
     );
 
@@ -233,9 +237,9 @@ token_matcher::match_step_line(token& token)
 
         set_token_matched(
             token, rule_type::step_line, {
-                .text = title,
-                .keyword = std::string(keyword),
-                .keyword_type = keyword_type(keyword)
+                title,
+                std::string(keyword),
+                keyword_type(keyword)
             }
         );
 
@@ -286,8 +290,8 @@ token_matcher::match_doc_string_separator_(
 
     set_token_matched(
         token, rule_type::doc_string_separator, {
-            .text = content_type,
-            .keyword = tseparator
+            content_type,
+            tseparator
         }
     );
 
