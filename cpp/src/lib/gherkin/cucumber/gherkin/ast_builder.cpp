@@ -223,6 +223,9 @@ ast_builder::make_examples_definition(ast_node& node)
        get_tags(node),
        examples_line.matched_keyword.value_or(""),
        examples_line.matched_text,
+       {},
+       std::nullopt,
+       {},
        next_id()
     };
 
