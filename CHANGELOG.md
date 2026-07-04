@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Changed
-- [Dart] Revived the Dart implementation to parity with the other languages, rebuilt on cucumber_messages-native types, and validated against the shared acceptance testdata.
+- [Dart] Revived the Dart implementation, rebuilt on cucumber_messages-native types with a Berp-generated parser and validated against the shared acceptance testdata.
 
 ## [41.0.0] - 2026-06-20
 ### Changed
