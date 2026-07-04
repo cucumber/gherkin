@@ -23,9 +23,8 @@ class MessagesGherkinDocumentBuilder
 
   /// The generator used to assign ids to the produced messages.
   final IdGenerator idGenerator;
-  // A LIFO stack of the rules currently being reduced. The top of the stack is
-  // kept at the end of the queue, so `addLast`/`removeLast`/`last` are all the
-  // amortized O(1) push/pop/peek operations.
+  // LIFO stack of rules being reduced. The top is kept at the queue's end, so
+  // `addLast`/`removeLast`/`last` are O(1) push/pop/peek.
   final ListQueue<AstNode> _stack = ListQueue<AstNode>();
   final List<messages.Comment> _comments = <messages.Comment>[];
 
@@ -93,10 +92,10 @@ class MessagesGherkinDocumentBuilder
         return _createRule(node);
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
-      // All remaining rule types are structural/intermediate nodes that are
-      // returned unchanged. They are enumerated explicitly rather than caught
-      // by a `default:` clause so that introducing a new RuleType becomes a
-      // compile-time error here instead of silently falling through.
+      // Remaining rule types are structural/intermediate nodes returned
+      // unchanged. Enumerated explicitly rather than via `default:` so a new
+      // RuleType is a compile-time error here instead of silently falling
+      // through.
       case RuleType.none:
       case RuleType.eof:
       case RuleType.empty:
@@ -337,9 +336,9 @@ class MessagesGherkinDocumentBuilder
       children.add(messages.RuleChild(scenario: scenario));
     }
 
-    // Allocate tag IDs before the rule's own ID so the ID sequence matches
-    // the other first-party Gherkin implementations (tags appear before the
-    // keyword line in source and therefore receive lower IDs).
+    // Allocate tag IDs before the rule's own ID so the ID sequence matches the
+    // other first-party implementations: tags precede the keyword line in
+    // source, so get lower IDs.
     final tags = _getTags(header);
 
     return messages.Rule(

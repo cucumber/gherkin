@@ -164,7 +164,7 @@ class GherkinLine {
           case GherkinLanguageConstants.tableCellSeparator:
             cellBuffer.write('|');
           default:
-            // Invalid escape. We'll just ignore it.
+            // Invalid escape; ignore it.
             cellBuffer.write(r'\');
             cellBuffer.write(chr);
         }

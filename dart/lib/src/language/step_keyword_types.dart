@@ -5,19 +5,18 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 /// matchers.
 ///
 /// Both the plain (`.feature`) and Markdown (`.feature.md`) matchers classify
-/// step keywords identically: `Given` keywords are
-/// [messages.StepKeywordType.context], `When` keywords are
-/// [messages.StepKeywordType.action], `Then` keywords are
-/// [messages.StepKeywordType.outcome], and both `And` and `But` keywords are
-/// [messages.StepKeywordType.conjunction]. A single keyword may map to more
-/// than one type (for example a dialect that reuses one word across step
-/// kinds), which is why the mapping stores a list per keyword.
+/// step keywords identically: `Given` is [messages.StepKeywordType.context],
+/// `When` is [messages.StepKeywordType.action], `Then` is
+/// [messages.StepKeywordType.outcome], and `And`/`But` are
+/// [messages.StepKeywordType.conjunction]. A keyword may map to more than one
+/// type (e.g. a dialect reusing one word across step kinds), so the mapping
+/// stores a list per keyword.
 ///
-/// The matchers differ only in how they treat keywords that are *not* mapped:
-/// the plain matcher reports [messages.StepKeywordType.unknown], while the
-/// Markdown matcher reports `null`. [keywordTypeOrNull] exposes that shared
-/// three-way result (mapped / ambiguous / absent) so each matcher can apply its
-/// own policy for the absent case.
+/// The matchers differ only in how they treat unmapped keywords: the plain
+/// matcher reports [messages.StepKeywordType.unknown], the Markdown matcher
+/// reports `null`. [keywordTypeOrNull] exposes the shared three-way result
+/// (mapped / ambiguous / absent) so each matcher applies its own policy for the
+/// absent case.
 mixin StepKeywordTypes {
   final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
       <String, List<messages.StepKeywordType>>{};

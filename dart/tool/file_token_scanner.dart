@@ -9,13 +9,6 @@ import 'random_access_file_extension.dart';
 
 /// A [TokenScanner] that reads a Gherkin document from a file (typically a
 /// `.feature` file), producing one token per line.
-///
-/// The tokens are passed to the parser, which outputs an abstract syntax tree
-/// (AST).
-///
-/// If the scanner sees a `#` language header, the matcher reconfigures itself
-/// to look for the Gherkin keywords of the associated language. Those keywords
-/// are defined in `gherkin-languages.json`.
 class FileTokenScanner implements TokenScanner {
   /// Creates a scanner that reads the file at [filepath].
   FileTokenScanner.fromPath(String filepath)

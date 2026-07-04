@@ -32,14 +32,10 @@ void main() {
           idGenerator: idGenerator,
         ).parsePaths(paths).toList();
 
-    // Get the AST
     final gherkinDocument = envelopes.first.gherkinDocument!;
-
-    // Get the Feature node of the AST
     final feature = gherkinDocument.feature!;
     expect('Minimal', feature.name);
 
-    // Get the first Scenario node of the Feature node
     final scenario = feature.children.first.scenario!;
     expect('minimalistic', scenario.name);
   });
@@ -53,10 +49,7 @@ void main() {
           idGenerator: idGenerator,
         ).parsePaths(paths).toList();
 
-    // Get the first pickle
     final pickle = envelopes.first.pickle!;
-
-    // Get the first step of the pickle
     final step = pickle.steps.first;
     expect('the minimalism', step.text);
   });

@@ -1,7 +1,8 @@
 /// Utility string operations used by the Gherkin scanners.
 extension StringExtensions on String {
   // Leading/trailing horizontal-whitespace patterns. Compiled once and reused
-  // rather than rebuilt on every call (these run per table cell).
+  // rather than rebuilt per call (these run per table cell). \xA0 is a
+  // non-breaking space, which some trims miss:
   // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
   static final RegExp _leadingHorizontalWhitespace = RegExp(
     r'^[ \t\x0B\f\r\x85\xA0]+',
@@ -13,8 +14,7 @@ extension StringExtensions on String {
     r'[ \t\n\x0B\f\r\x85\xA0]+$',
   );
 
-  /// Indicates whether a specified string is `empty` or consists only
-  /// of `white-space` characters.
+  /// Whether the string is empty or whitespace-only.
   bool get isEmptyOrWhiteSpace => trim().isEmpty;
 
   /// Splits the string at matches of [pattern] and returns a list of
@@ -27,9 +27,9 @@ extension StringExtensions on String {
   ///   the first `limit - 1` matches and the unsplit remainder (which may still
   ///   contain further matches of [pattern]) becomes the final substring.
   ///
-  /// Unlike the previous implementation this walks the actual match offsets, so
-  /// it is correct for multi-character and regular-expression separators and
-  /// for strings in which an earlier substring repeats later on.
+  /// Walks the actual match offsets, so it is correct for multi-character and
+  /// regular-expression separators and for strings where an earlier substring
+  /// repeats later.
   ///
   /// Throws an [ArgumentError] if [limit] is negative.
   List<String> splitWithLimit(Pattern pattern, {int limit = 0}) {
@@ -71,8 +71,7 @@ extension StringExtensions on String {
   /// Removes all trailing whitespace, including line breaks.
   String rtrim() => replaceAll(_trailingWhitespace, '');
 
-  /// Removes all trailing occurrences of a character specified in an string.
-  /// The default value of [trimChar] is an white-space.
+  /// Removes all trailing occurrences of [trimChar] (default: a space).
   String trimEnd([String trimChar = ' ']) {
     if (trimChar.length > 1 || trimChar.isEmpty) {
       throw ArgumentError('trimChar must be one char and cannot be empty');
@@ -84,7 +83,7 @@ extension StringExtensions on String {
       }
     }
     // When every character was [trimChar], `index` is -1 and this returns the
-    // empty string, matching the behaviour of trimming away all trailing chars.
+    // empty string.
     return substring(0, index + 1);
   }
 }

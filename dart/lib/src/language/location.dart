@@ -8,11 +8,10 @@ class Location {
 
   /// Marks an unset line or column.
   ///
-  /// Real values are always non-negative (columns and lines are 1-based), so a
-  /// negative value can never collide with a legitimate one. A negative
-  /// literal is used rather than `1 << 63` because bit-shift arithmetic does
-  /// not produce the 64-bit minimum integer on the web/JS target, which would
-  /// silently break the sentinel there.
+  /// Real values are non-negative (lines and columns are 1-based), so a
+  /// negative value never collides with a legitimate one. Uses a negative
+  /// literal rather than `1 << 63`, which does not produce the 64-bit minimum
+  /// integer on the web/JS target and would break the sentinel there.
   static const int _unset = -1;
 
   /// A location representing an unknown/absent position.

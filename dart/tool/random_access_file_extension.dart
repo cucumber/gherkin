@@ -12,14 +12,12 @@ extension RandomAccessFileExtension on RandomAccessFile {
   /// The sentinel byte returned at end of file.
   static const eof = -1;
 
-  /// Synchronously reads a single line from the file. If end-of-file
-  /// has been reached then `null` string is returned.
-  /// If not specified, [encoding] uses [utf8].
+  /// Synchronously reads a single line, or `null` at end of file. [encoding]
+  /// defaults to [utf8].
   ///
-  /// A line is terminated by `\n` or `\r\n`; the terminator is not included in
-  /// the returned string. A lone `\r` that is *not* immediately followed by
-  /// `\n` is treated as ordinary content and preserved, matching the reference
-  /// Gherkin implementations, which split lines on `\r?\n` (see
+  /// A line ends at `\n` or `\r\n`; the terminator is not included. A lone `\r`
+  /// not followed by `\n` is treated as content and preserved, matching the
+  /// reference Gherkin implementations that split on `\r?\n` (see
   /// `TokenScanner` in the JavaScript implementation). This keeps the file and
   /// string scanners consistent.
   ///

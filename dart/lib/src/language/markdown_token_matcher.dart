@@ -318,10 +318,10 @@ class MarkdownTokenMatcher with StepKeywordTypes implements TokenMatcher {
           }.where((keyword) => keyword != '* ').toList()
           ..sort((a, b) => b.length - a.length);
 
-    // Guard against a resolved-but-empty dialect (e.g. the empty sentinel):
-    // a usable dialect must define at least one header keyword. Checked with
-    // short-circuiting `any` rather than materializing the full keyword set,
-    // since the result is only ever used for this emptiness test.
+    // Guard against a resolved-but-empty dialect (e.g. the empty sentinel): a
+    // usable dialect defines at least one header keyword. Uses short-circuiting
+    // `any` rather than materializing the full keyword set, since the result is
+    // only this emptiness test.
     final hasHeaderKeyword = [
       _currentDialect.featureKeywords,
       _currentDialect.backgroundKeywords,

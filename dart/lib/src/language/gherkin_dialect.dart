@@ -35,7 +35,7 @@ class GherkinDialect {
 
   /// All step keywords, regardless of their semantic type.
   ///
-  /// Computed once on first access and cached for subsequent reads.
+  /// Computed once on first access, then cached.
   late final List<String> stepKeywords =
       <String>{
         ...givenStepKeywords,
@@ -45,11 +45,11 @@ class GherkinDialect {
         ...butStepKeywords,
       }.toList();
 
-  /// [stepKeywords] sorted by descending length, so that the longest matching
-  /// keyword is tried first (for example matching `* ` after `Given `).
+  /// [stepKeywords] sorted by descending length, so the longest matching
+  /// keyword is tried first (e.g. `* ` after `Given `).
   ///
-  /// The order is dialect-invariant, so it is computed once on first access and
-  /// cached for subsequent reads rather than re-sorted on every step line.
+  /// Order is dialect-invariant, so computed once on first access and cached
+  /// rather than re-sorted on every step line.
   late final List<String> stepKeywordsByLengthDesc = List<String>.of(
     stepKeywords,
   )..sort((a, b) => b.length - a.length);

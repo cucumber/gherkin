@@ -9,12 +9,12 @@ class AstNode {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);
 
-  // Sub-items are heterogeneous — raw [Token]s during parsing and the various
-  // Cucumber Messages types produced as rules are reduced. A reduced node may
-  // be null (e.g. a `Feature`/`Rule` with no header), and callers rely on those
-  // nulls being retained so they can filter them out downstream. The store is
-  // therefore typed as `Object?` rather than `dynamic` to keep access
-  // statically checked; [items] narrows back to the caller's `T` via `cast`.
+  // Sub-items are heterogeneous: raw [Token]s during parsing, plus the Cucumber
+  // Messages types produced as rules reduce. A reduced node may be null (e.g. a
+  // `Feature`/`Rule` with no header), and callers rely on those nulls being
+  // retained so they can filter them out later. Typed as `Object?` rather than
+  // `dynamic` to keep access statically checked; [items] narrows back to the
+  // caller's `T` via `cast`.
   final Map<RuleType, List<Object?>> _subItems = <RuleType, List<Object?>>{};
 
   /// The grammar rule this node represents.
@@ -26,12 +26,12 @@ class AstNode {
 
   /// Returns the single [Token] of [tokenType].
   ///
-  /// Unlike [getToken], this throws a [StateError] when the token is absent.
-  /// The grammar guarantees the token exists at the point this is called, so a
-  /// missing token indicates the generated parser and this builder have drifted
-  /// out of sync (e.g. `parser.g.dart` was regenerated from a changed grammar
-  /// without updating the builder). Failing loudly here surfaces that as a
-  /// clear diagnostic rather than a downstream null-dereference crash.
+  /// Unlike [getToken], throws a [StateError] when the token is absent. The
+  /// grammar guarantees the token exists here, so a missing token means the
+  /// generated parser and this builder have drifted out of sync (e.g.
+  /// `parser.g.dart` regenerated from a changed grammar without updating the
+  /// builder). Failing loudly surfaces a clear diagnostic instead of a
+  /// downstream null-dereference crash.
   Token requireToken(TokenType tokenType) =>
       getToken(tokenType) ??
       (throw StateError(
@@ -54,9 +54,8 @@ class AstNode {
 
   /// Returns the first sub-item of [ruleType], or `null` if there is none.
   ///
-  /// This has first-match ("firstOrNull") semantics: when a node holds more
-  /// than one sub-item of [ruleType] the first is returned; it does not assert
-  /// that exactly one is present.
+  /// First-match semantics: with multiple sub-items of [ruleType], returns the
+  /// first. Does not assert exactly one is present.
   T? firstOrNull<T>(RuleType ruleType) {
     final elems = items<T>(ruleType);
     if (elems.isEmpty) {
@@ -72,11 +71,11 @@ class AstNode {
 
   /// Returns the first sub-item of [ruleType].
   ///
-  /// Unlike [firstOrNull], this throws a [StateError] when no sub-item of
-  /// [ruleType] is present. The grammar guarantees the sub-item exists at the
-  /// point this is called, so its absence indicates the generated parser and
-  /// this builder have drifted out of sync. Failing loudly here surfaces that
-  /// as a clear diagnostic rather than a downstream null-dereference crash.
+  /// Unlike [firstOrNull], throws a [StateError] when no sub-item of [ruleType]
+  /// is present. The grammar guarantees it exists here, so its absence means
+  /// the generated parser and this builder have drifted out of sync. Failing
+  /// loudly surfaces a clear diagnostic instead of a downstream
+  /// null-dereference crash.
   T require<T>(RuleType requestedRuleType) =>
       firstOrNull<T>(requestedRuleType) ??
       (throw StateError(

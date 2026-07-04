@@ -99,8 +99,8 @@ void main() {
     test(
       'NoSuchLanguageException accepts an empty language without throwing',
       () {
-        // Previously this threw an ArgumentError, which would have escaped the
-        // parser's ParserException handling and crashed the caller.
+        // An empty language must not throw an ArgumentError; that would escape
+        // the parser's ParserException handling and crash the caller.
         expect(() => NoSuchLanguageException(''), returnsNormally);
       },
     );

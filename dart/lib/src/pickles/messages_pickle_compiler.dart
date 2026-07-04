@@ -182,7 +182,7 @@ class MessagesPickleCompiler {
               lastKeywordType,
             );
             // Background steps are interpolated but do NOT reference the
-            // specific example row — they belong to the background node only.
+            // specific example row; they belong to the background node only.
             steps.add(
               _pickleStep(
                 step,
@@ -303,12 +303,11 @@ class MessagesPickleCompiler {
     List<messages.TableCell> variableCells,
     List<messages.TableCell> valueCells,
   ) {
-    // Placeholders are always wrapped in `<...>`; if the value contains no `<`
-    // there is nothing to interpolate, so skip the per-variable scans entirely.
-    // This preserves the exact sequential-replace semantics of the other
-    // first-party implementations (e.g. Go's `interpolate`) for the case that
-    // matters, while avoiding a full-string pass per variable for the common
-    // case of text with no placeholders.
+    // Placeholders are always wrapped in `<...>`. With no `<` there is nothing
+    // to interpolate, so skip the per-variable scans. This keeps the exact
+    // sequential-replace semantics of the other first-party implementations
+    // (e.g. Go's `interpolate`) while avoiding a full-string pass per variable
+    // for the common case of text with no placeholders.
     if (!value.contains('<')) {
       return value;
     }

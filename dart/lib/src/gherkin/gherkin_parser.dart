@@ -15,24 +15,24 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 ///
 /// ## Streaming semantics
 ///
-/// The returned [Stream]s are lazy *across* sources but eager *within* a
-/// source. Each source (file, string, or `source` envelope) is parsed in full
-/// the first time its portion of the stream is pulled — a Gherkin document is
-/// not available incrementally, since building the AST and compiling pickles
-/// requires the whole document. When several sources are parsed together (for
-/// example via [parseEnvelopes], or `parsePaths` from
+/// The returned [Stream]s are lazy across sources but eager within a source.
+/// Each source (file, string, or `source` envelope) is parsed in full the first
+/// time its portion of the stream is pulled: a Gherkin document is not
+/// available incrementally, since building the AST and compiling pickles needs
+/// the whole document. When several sources are parsed together (for example
+/// via [parseEnvelopes], or `parsePaths` from
 /// `package:cucumber_gherkin/cucumber_gherkin_io.dart`), a later source is not
-/// read or parsed until the preceding source's envelopes have been consumed.
+/// read or parsed until the preceding source's envelopes are consumed.
 ///
 /// The file-reading entry points (`parsePath`/`parsePaths`) live in the
 /// separate `package:cucumber_gherkin/cucumber_gherkin_io.dart` library because
-/// they depend on `dart:io`; this core library stays platform-agnostic and is
+/// they depend on `dart:io`. This core library stays platform-agnostic and
 /// usable on the web.
 ///
 /// ## Error contract
 ///
-/// Malformed Gherkin never throws: it is reported as a `parseError` envelope in
-/// the stream. The only synchronous throws are for conditions that are *not* a
+/// Malformed Gherkin never throws. It is reported as a `parseError` envelope in
+/// the stream. The only synchronous throws are for conditions that are not a
 /// property of the Gherkin source and are detected before parsing:
 ///
 /// * [parseString] and [makeSourceEnvelope] throw an [ArgumentError] when the
@@ -54,10 +54,10 @@ class GherkinParser {
     this.defaultDialect = defaultDialectValue,
     IdGenerator? idGenerator,
   }) : idGenerator = idGenerator ?? IdGenerator.uuidGenerator {
-    // The dialects are embedded as generated Dart source in
-    // `dialects_builtin.g.dart` (produced from `gherkin-languages.json`), so
-    // loading does not depend on the current working directory, runtime asset
-    // resolution, or the package layout.
+    // Dialects are embedded as generated Dart source in
+    // `dialects_builtin.g.dart` (from `gherkin-languages.json`), so loading
+    // does not depend on the working directory, runtime asset resolution, or
+    // package layout.
     _dialectProvider = GherkinDialectProvider(builtinDialects, defaultDialect);
   }
 
@@ -102,11 +102,10 @@ class GherkinParser {
   /// inferred from the [uri] extension (`.feature` or `.md`). Pass [mediaType]
   /// explicitly when the [uri] has no recognized extension.
   ///
-  /// Unlike malformed Gherkin — which is always reported as a `parseError`
-  /// envelope and never thrown — this method throws an [ArgumentError]
-  /// *synchronously* when [mediaType] is omitted and the [uri] has no
-  /// recognized extension, because the media type cannot be resolved before any
-  /// parsing begins.
+  /// Unlike malformed Gherkin, which is always reported as a `parseError`
+  /// envelope and never thrown, this method throws an [ArgumentError]
+  /// synchronously when [mediaType] is omitted and the [uri] has no recognized
+  /// extension: the media type cannot be resolved before parsing begins.
   Stream<messages.Envelope> parseString(
     String data,
     String uri, {
@@ -145,10 +144,10 @@ class GherkinParser {
 
     final messages.GherkinDocument gherkinDocument;
     try {
-      // Build the token matcher inside the try: constructing it resolves the
-      // default dialect eagerly, so an unsupported `defaultDialect` (with no
+      // Build the token matcher inside the try. Constructing it resolves the
+      // default dialect eagerly, so an unsupported `defaultDialect` (no
       // `# language:` header, hence no location) must surface as a `parseError`
-      // envelope rather than escaping to the caller.
+      // envelope rather than escape to the caller.
       final tokenMatcher = _tokenMatcher(source.mediaType);
       gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
     } on CompositeParserException catch (e) {
@@ -200,7 +199,7 @@ class GherkinParser {
 
   messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
     // A location-less error (e.g. an unsupported default dialect) has no
-    // position to report: emit a null location and the "(-1,0)" prefix used by
+    // position to report. Emit a null location and the "(-1,0)" prefix used by
     // the other first-party implementations (see Java's ParserException).
     if (error.location.isEmpty) {
       return messages.Envelope(

@@ -14,12 +14,12 @@ class GherkinDialectProvider {
 
   /// Caches the [GherkinDialect] built for each language tag.
   ///
-  /// A dialect is immutable for a given language and its derived, length-sorted
-  /// step keywords are computed and cached lazily per instance (see
+  /// A dialect is immutable per language, and its derived length-sorted step
+  /// keywords are computed and cached lazily per instance (see
   /// [GherkinDialect.stepKeywordsByLengthDesc]). Returning the same instance
-  /// for repeated lookups of the same language preserves that cache instead of
-  /// rebuilding the dialect — and re-sorting its keywords — on every call,
-  /// including each token-matcher `reset()`.
+  /// for repeated lookups preserves that cache instead of rebuilding the
+  /// dialect and re-sorting its keywords on every call, including each
+  /// token-matcher `reset()`.
   final Map<String, GherkinDialect> _dialectCache = <String, GherkinDialect>{};
 
   /// The dialect used when none is specified.

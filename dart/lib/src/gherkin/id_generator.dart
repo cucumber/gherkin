@@ -7,9 +7,9 @@ abstract class IdGenerator {
 
   /// A shared [IncrementingIdGenerator] producing predictable, sequential ids.
   ///
-  /// This is a single shared instance whose counter is never reset. When you
-  /// need an independent counter (for example, to get reproducible ids across
-  /// separate parses), construct a fresh [IncrementingIdGenerator] instead.
+  /// Single shared instance; its counter is never reset. For an independent
+  /// counter (e.g. reproducible ids across separate parses), construct a fresh
+  /// [IncrementingIdGenerator].
   static final IdGenerator incrementingGenerator = IncrementingIdGenerator();
 
   /// A shared [UuidIdGenerator] producing random UUIDs.

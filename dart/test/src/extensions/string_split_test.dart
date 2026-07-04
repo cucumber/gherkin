@@ -54,18 +54,15 @@ void main() {
   });
 
   test('Repeated substring is split at the correct offset', () {
-    // The first field ("a") also appears inside a later field. The old
-    // indexOf-based implementation reconstructed the remainder from the first
-    // occurrence and produced the wrong split; the remainder here must be the
-    // text after the *second* separator, not after the first "a".
+    // The first field ("a") also appears inside a later field. The remainder
+    // must be the text after the second separator, not after the first "a".
     const repeated = 'a b a c';
     expect(repeated.splitWithLimit(' ', limit: 2), ['a', 'b a c']);
     expect(repeated.splitWithLimit(' ', limit: 3), ['a', 'b', 'a c']);
   });
 
   test('Multi-character separator preserves the full remainder', () {
-    // The old "+ 1" offset assumed a single-character separator and dropped a
-    // character from multi-character separators.
+    // A multi-character separator must not drop a character from the remainder.
     const csv = 'a::b::c::d';
     expect(csv.splitWithLimit('::', limit: 2), ['a', 'b::c::d']);
     expect(csv.splitWithLimit('::', limit: 3), ['a', 'b', 'c::d']);
