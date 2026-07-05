@@ -308,7 +308,7 @@ ast_builder::make_feature(ast_node& node)
 
     if (ps) {
         for (auto& scenario : *ps) {
-            m.children.emplace_back(cms::feature_child{.scenario = scenario});
+            m.children.emplace_back(cms::feature_child{std::nullopt, std::nullopt, scenario});
         }
     }
 
@@ -316,7 +316,7 @@ ast_builder::make_feature(ast_node& node)
 
     if (pr) {
         for (auto& rule : *pr) {
-            m.children.emplace_back(cms::feature_child{.rule = rule});
+            m.children.emplace_back(cms::feature_child{rule});
         }
     }
 
@@ -354,7 +354,7 @@ ast_builder::make_rule(ast_node& node)
 
     if (ps) {
         for (auto& scenario : *ps) {
-            m.children.emplace_back(cms::rule_child{.scenario = scenario});
+            m.children.emplace_back(cms::rule_child{std::nullopt, scenario});
         }
     }
 
