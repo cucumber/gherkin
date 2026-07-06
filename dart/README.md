@@ -153,4 +153,4 @@ dart test test/acceptance/gherkin_acceptance_test.dart
 it targets Linux and macOS CI.
 
 For general information about Gherkin and the other language implementations, see the
-repository root [README](../README.md).
+repository root [README](https://github.com/cucumber/gherkin/blob/main/README.md).
