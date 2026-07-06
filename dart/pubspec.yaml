@@ -23,7 +23,7 @@ topics:
   - parser
 
 dependencies:
-  cucumber_messages: ^33.0.4
+  cucumber_messages: ^34.0.1
   meta: ^1.18.3
 
 dev_dependencies:

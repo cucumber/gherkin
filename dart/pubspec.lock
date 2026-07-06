@@ -85,10 +85,10 @@ packages:
     dependency: "direct main"
     description:
       name: cucumber_messages
-      sha256: "37724a59f7059b1d26856e052b15a1e4e0c326318f9cd2be939298b24de36d5f"
+      sha256: "59371dcd2bf29d3f2d2cf16c77776c885202518caa8e935a321e103b6857d2af"
       url: "https://pub.dev"
     source: hosted
-    version: "33.0.4"
+    version: "34.0.1"
   file:
     dependency: transitive
     description:
