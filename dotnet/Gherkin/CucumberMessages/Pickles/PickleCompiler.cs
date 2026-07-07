@@ -196,42 +196,62 @@ public class PickleCompiler(IIdGenerator idGenerator)
 
     protected virtual PickleStepArgument CreatePickleArgument(Step step, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
     {
-        PickleTable pickleTable = null;
-        if (step.DataTable != null)
+        if (step.DataTable != null && step.DocString != null)
         {
-            var t = step.DataTable;
-            var rows = t.Rows;
-            var newRows = new List<PickleTableRow>(rows.Count());
-            foreach (var row in rows)
+            bool tableFirst = step.DocString.Location.Line > step.DataTable.Location.Line;
+            return new PickleStepArgument(
+                CreatePickleDocString(tableFirst ? 2L : 1L, step.DocString, variableCells, valueCells),
+                CreatePickleTable(tableFirst ? 2L : 1L, step.DataTable, variableCells, valueCells)
+            )
+        }
+        else if (step.DataTable != null)
+        {
+            return new PickleStepArgument(
+                null
+                CreatePickleTable(null, step.DataTable, variableCells, valueCells)
+            )
+        }
+        else if(step.DocString != null)
+        {
+            return new PickleStepArgument(
+                CreatePickleDocString(null, step.DocString, variableCells, valueCells),
+                null
+            )
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    protected virtual PickleStepArgument CreatePickleDocString(Nullable<long> argumentIndex, DocString docString, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
+    {
+        return new PickleDocString(
+            argumentIndex,
+            docString.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
+            Interpolate(ds.Content, variableCells, valueCells)
+        );
+    }
+
+    protected virtual PickleTable CreatePickleTable(Nullable<long> argumentIndex, DataTable dataTable, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
+    {
+        var rows = dataTable.Rows;
+        var newRows = new List<PickleTableRow>(rows.Count());
+        foreach (var row in rows)
+        {
+            var cells = row.Cells;
+            var newCells = new List<PickleTableCell>();
+            foreach (var cell in cells)
             {
-                var cells = row.Cells;
-                var newCells = new List<PickleTableCell>();
-                foreach (var cell in cells)
-                {
-                    newCells.Add(
-                            new PickleTableCell(
-                                    Interpolate(cell.Value, variableCells, valueCells)
-                            )
-                    );
-                }
-                newRows.Add(new PickleTableRow(newCells));
+                newCells.Add(
+                        new PickleTableCell(
+                                Interpolate(cell.Value, variableCells, valueCells)
+                        )
+                );
             }
-            pickleTable = new PickleTable(newRows);
+            newRows.Add(new PickleTableRow(newCells));
         }
-
-        PickleDocString pickleDocString = null;
-        if (step.DocString != null)
-        {
-            var ds = step.DocString;
-            pickleDocString = new PickleDocString(
-                ds.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
-                Interpolate(ds.Content, variableCells, valueCells)
-            );
-        }
-
-        return pickleTable != null || pickleDocString != null
-            ? new PickleStepArgument(pickleDocString, pickleTable)
-            : null;
+        return new PickleTable(argumentIndex, newRows);
     }
 
     protected virtual PickleStep[] PickleSteps(IEnumerable<Step> steps)
