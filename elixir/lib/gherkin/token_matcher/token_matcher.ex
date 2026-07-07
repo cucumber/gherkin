@@ -116,6 +116,7 @@ defmodule CucumberGherkin.TokenMatcher do
 
   def parse(StepLine, %Line{content: c} = l, context) do
     keyword = Lexicon.load_keywords(StepLine, context.lexicon) |> match_line(StepLine, c)
+    keyword_type = Lexicon.step_keyword_type(keyword, context.lexicon)
 
     %{"indent" => indent, "matched_text" => matched_text} =
       keyword |> base_key_regex() |> Regex.named_captures(c)
@@ -125,7 +126,8 @@ defmodule CucumberGherkin.TokenMatcher do
       line: l,
       indent: String.length(indent) + 1,
       matched_text: String.trim(matched_text),
-      matched_keyword: keyword
+      matched_keyword: keyword,
+      matched_keyword_type: keyword_type
     ]
 
     token = struct!(Token, opts)

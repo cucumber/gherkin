@@ -205,38 +205,44 @@ sub _pickle_step_props {
     if ($values) {
         push @{ $props{ast_node_ids} }, $values->id;
     }
+    my $data_table;
     if (my $data = $step->data_table) {
-        $props{argument} =
-            Cucumber::Messages::PickleStepArgument->new(
-                data_table => Cucumber::Messages::PickleTable->new(
-                    rows => [
-                        map {
-                            my $row = $_;
-                            Cucumber::Messages::PickleTableRow->new(
-                                cells => [
-                                    map {
-                                        my $cell = $_;
-                                        Cucumber::Messages::PickleTableCell->new(
-                                            value => $class->_interpolate(
-                                                $cell->value, $variables,
-                                                $value_cells
-                                            ))
-                                    } @{ $row->cells || [] }
-                                ]);
-                        } @{ $data->rows || [] }
-                    ]
-                ));
+        $data_table = Cucumber::Messages::PickleTable->new(
+            rows => [
+                map {
+                    my $row = $_;
+                    Cucumber::Messages::PickleTableRow->new(
+                        cells => [
+                            map {
+                                my $cell = $_;
+                                Cucumber::Messages::PickleTableCell->new(
+                                    value => $class->_interpolate(
+                                        $cell->value, $variables,
+                                        $value_cells
+                                    ))
+                            } @{ $row->cells || [] }
+                        ]);
+                } @{ $data->rows || [] }
+            ]
+        );
     }
-    elsif (my $docstring = $step->doc_string) {
+
+    my $doc_string;
+    if (my $docstring = $step->doc_string) {
+        $doc_string = Cucumber::Messages::PickleDocString->new(
+            media_type => $class->_interpolate( $docstring->media_type,
+                                                $variables, $value_cells),
+            content    => $class->_interpolate( $docstring->content,
+                                                $variables, $value_cells)
+        );
+    }
+
+    if ($data_table || $doc_string) {
         $props{argument} =
             Cucumber::Messages::PickleStepArgument->new(
-                doc_string => Cucumber::Messages::PickleDocString->new(
-                    media_type => $class->_interpolate( $docstring->media_type,
-                                                        $variables, $value_cells),
-                    content    => $class->_interpolate( $docstring->content,
-                                                        $variables, $value_cells)
-                ));
-
+                data_table => $data_table,
+                doc_string => $doc_string,
+            );
     }
     return %props; # returns a list
 }

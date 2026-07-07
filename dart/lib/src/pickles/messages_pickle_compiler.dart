@@ -251,43 +251,50 @@ class MessagesPickleCompiler {
     List<messages.TableCell> variableCells,
     List<messages.TableCell> valueCells,
   ) {
-    final dataTable = step.dataTable;
-    if (dataTable != null) {
-      return messages.PickleStepArgument(
-        dataTable: messages.PickleTable(
-          rows:
-              dataTable.rows.map((row) {
-                return messages.PickleTableRow(
-                  cells:
-                      row.cells.map((cell) {
-                        return messages.PickleTableCell(
-                          value: _interpolate(
-                            cell.value,
-                            variableCells,
-                            valueCells,
-                          ),
-                        );
-                      }).toList(),
-                );
-              }).toList(),
-        ),
-      );
-    }
+    final dataTable =
+        step.dataTable == null
+            ? null
+            : messages.PickleTable(
+              rows:
+                  step.dataTable!.rows.map((row) {
+                    return messages.PickleTableRow(
+                      cells:
+                          row.cells.map((cell) {
+                            return messages.PickleTableCell(
+                              value: _interpolate(
+                                cell.value,
+                                variableCells,
+                                valueCells,
+                              ),
+                            );
+                          }).toList(),
+                    );
+                  }).toList(),
+            );
 
-    final docString = step.docString;
-    if (docString != null) {
+    final docString =
+        step.docString == null
+            ? null
+            : messages.PickleDocString(
+              mediaType:
+                  step.docString!.mediaType == null
+                      ? null
+                      : _interpolate(
+                        step.docString!.mediaType!,
+                        variableCells,
+                        valueCells,
+                      ),
+              content: _interpolate(
+                step.docString!.content,
+                variableCells,
+                valueCells,
+              ),
+            );
+
+    if (dataTable != null || docString != null) {
       return messages.PickleStepArgument(
-        docString: messages.PickleDocString(
-          mediaType:
-              docString.mediaType == null
-                  ? null
-                  : _interpolate(
-                    docString.mediaType!,
-                    variableCells,
-                    valueCells,
-                  ),
-          content: _interpolate(docString.content, variableCells, valueCells),
-        ),
+        dataTable: dataTable,
+        docString: docString,
       );
     }
     return null;

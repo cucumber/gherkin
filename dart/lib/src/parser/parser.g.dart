@@ -157,7 +157,7 @@ enum RuleType {
   /// A step: `Step := #StepLine StepArg?`.
   step,
 
-  /// A step argument: `StepArg := (DataTable | DocString)`.
+  /// A step argument: `StepArg := (DataTableAndMaybeDocString | DocStringAndMaybeDataTable)`.
   stepArg,
 
   /// A data table: `DataTable := #TableRow+`.
@@ -1097,6 +1097,12 @@ class Parser<T> {
                 _build(context, token);
           return 8;
     }
+    if (_matchDocStringSeparator(context, token)) {
+                _endRule(context, RuleType.dataTable);
+                _startRule(context, RuleType.docString);
+                _build(context, token);
+          return 41;
+    }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -1156,6 +1162,7 @@ class Parser<T> {
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
+      '#DocStringSeparator',
       '#StepLine',
       '#TagLine',
       '#ScenarioLine',
@@ -1550,6 +1557,12 @@ class Parser<T> {
                 _build(context, token);
           return 13;
     }
+    if (_matchDocStringSeparator(context, token)) {
+                _endRule(context, RuleType.dataTable);
+                _startRule(context, RuleType.docString);
+                _build(context, token);
+          return 39;
+    }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -1631,6 +1644,7 @@ class Parser<T> {
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
+      '#DocStringSeparator',
       '#StepLine',
       '#TagLine',
       '#ExamplesLine',
@@ -2529,6 +2543,12 @@ class Parser<T> {
                 _build(context, token);
           return 24;
     }
+    if (_matchDocStringSeparator(context, token)) {
+                _endRule(context, RuleType.dataTable);
+                _startRule(context, RuleType.docString);
+                _build(context, token);
+          return 37;
+    }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -2590,6 +2610,7 @@ class Parser<T> {
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
+      '#DocStringSeparator',
       '#StepLine',
       '#TagLine',
       '#ScenarioLine',
@@ -2994,6 +3015,12 @@ class Parser<T> {
                 _build(context, token);
           return 29;
     }
+    if (_matchDocStringSeparator(context, token)) {
+                _endRule(context, RuleType.dataTable);
+                _startRule(context, RuleType.docString);
+                _build(context, token);
+          return 35;
+    }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -3077,6 +3104,7 @@ class Parser<T> {
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
+      '#DocStringSeparator',
       '#StepLine',
       '#TagLine',
       '#ExamplesLine',
@@ -3534,6 +3562,12 @@ class Parser<T> {
                 _build(context, token);
           return 34;
     }
+    if (_matchTableRow(context, token)) {
+                _endRule(context, RuleType.docString);
+                _startRule(context, RuleType.dataTable);
+                _build(context, token);
+          return 29;
+    }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -3616,6 +3650,7 @@ class Parser<T> {
     token.detach();
     final expectedTokens = <String>[
       '#EOF',
+      '#TableRow',
       '#StepLine',
       '#TagLine',
       '#ExamplesLine',
@@ -3674,6 +3709,12 @@ class Parser<T> {
                 _endRule(context, RuleType.feature);
                 _build(context, token);
           return 34;
+    }
+    if (_matchTableRow(context, token)) {
+                _endRule(context, RuleType.docString);
+                _startRule(context, RuleType.dataTable);
+                _build(context, token);
+          return 24;
     }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.docString);
@@ -3735,6 +3776,7 @@ class Parser<T> {
     token.detach();
     final expectedTokens = <String>[
       '#EOF',
+      '#TableRow',
       '#StepLine',
       '#TagLine',
       '#ScenarioLine',
@@ -3792,6 +3834,12 @@ class Parser<T> {
                 _endRule(context, RuleType.feature);
                 _build(context, token);
           return 34;
+    }
+    if (_matchTableRow(context, token)) {
+                _endRule(context, RuleType.docString);
+                _startRule(context, RuleType.dataTable);
+                _build(context, token);
+          return 13;
     }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.docString);
@@ -3873,6 +3921,7 @@ class Parser<T> {
     token.detach();
     final expectedTokens = <String>[
       '#EOF',
+      '#TableRow',
       '#StepLine',
       '#TagLine',
       '#ExamplesLine',
@@ -3930,6 +3979,12 @@ class Parser<T> {
                 _endRule(context, RuleType.feature);
                 _build(context, token);
           return 34;
+    }
+    if (_matchTableRow(context, token)) {
+                _endRule(context, RuleType.docString);
+                _startRule(context, RuleType.dataTable);
+                _build(context, token);
+          return 8;
     }
     if (_matchStepLine(context, token)) {
                 _endRule(context, RuleType.docString);
@@ -3989,6 +4044,7 @@ class Parser<T> {
     token.detach();
     final expectedTokens = <String>[
       '#EOF',
+      '#TableRow',
       '#StepLine',
       '#TagLine',
       '#ScenarioLine',

@@ -265,9 +265,8 @@ classDiagram
     TableRow "0..*" --* "1" Examples: rows
     Background "1" *-- "0..*" Step: steps
     Step "0..*" --* "1" ScenarioDefinition: steps
-    StepArgument "0..1" --* "1" Step: stepArgument
-    DataTable --|> StepArgument
-    StepArgument <|-- DocString
+    DataTable "0..1" --* "1" Step: dataTable
+    DocString "0..1" --* "1" Step: docString
     TableRow "0..*" --* "1" DataTable: rows
     TableRow "1" *-- "0..*" TableCell: cells
     class ScenarioDefinition {
@@ -323,6 +322,7 @@ Every class represents a node in the AST. Every node has a `Location` that descr
 the line number and column number in the input file. These numbers are 1-indexed.
 
 All fields on nodes are strings (except for `Location.line` and `Location.column`).
+A step may have at most one `DataTable` and at most one `DocString`.
 
 The implementation is simple objects without behaviour, only data. It's up to
 the implementation to decide whether to use classes or just basic collections,

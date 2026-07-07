@@ -1,7 +1,6 @@
 #ifndef GHERKIN_PICKLE_TABLE_H_
 #define GHERKIN_PICKLE_TABLE_H_
 
-#include "pickle_argument.h"
 #include "pickle_row.h"
 
 #ifdef __cplusplus
@@ -9,7 +8,6 @@ extern "C" {
 #endif
 
 typedef struct PickleTable {
-    PickleArgumentType type;
     const PickleRows* rows;
 } PickleTable;
 

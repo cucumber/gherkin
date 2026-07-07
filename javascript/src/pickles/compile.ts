@@ -223,6 +223,12 @@ function createPickleArguments(
   variableCells: readonly TableCell[],
   valueCells: readonly TableCell[]
 ): PickleStepArgument | undefined {
+  if (!step.dataTable && !step.docString) {
+    return undefined
+  }
+
+  const result: PickleStepArgument = {}
+
   if (step.dataTable) {
     const argument = step.dataTable
     const table: PickleTable = {
@@ -236,8 +242,10 @@ function createPickleArguments(
         }
       }),
     }
-    return { dataTable: table }
-  } else if (step.docString) {
+    result.dataTable = table
+  }
+
+  if (step.docString) {
     const argument = step.docString
     const docString: PickleDocString = {
       content: interpolate(argument.content, variableCells, valueCells),
@@ -245,8 +253,10 @@ function createPickleArguments(
     if (argument.mediaType) {
       docString.mediaType = interpolate(argument.mediaType, variableCells, valueCells)
     }
-    return { docString }
+    result.docString = docString
   }
+
+  return result
 }
 
 function interpolate(

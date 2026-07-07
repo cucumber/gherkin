@@ -225,15 +225,15 @@ func pickleStep(
 	if valuesRow != nil {
 		pickleStep.AstNodeIds = append(pickleStep.AstNodeIds, valuesRow.Id)
 	}
-	if step.DataTable != nil {
-		pickleStep.Argument = &messages.PickleStepArgument{
-			DataTable: pickleDataTable(step.DataTable, variableCells, valueCells),
+	if step.DataTable != nil || step.DocString != nil {
+		argument := &messages.PickleStepArgument{}
+		if step.DataTable != nil {
+			argument.DataTable = pickleDataTable(step.DataTable, variableCells, valueCells)
 		}
-	}
-	if step.DocString != nil {
-		pickleStep.Argument = &messages.PickleStepArgument{
-			DocString: pickleDocString(step.DocString, variableCells, valueCells),
+		if step.DocString != nil {
+			argument.DocString = pickleDocString(step.DocString, variableCells, valueCells)
 		}
+		pickleStep.Argument = argument
 	}
 	return pickleStep
 }
