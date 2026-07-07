@@ -146,12 +146,7 @@ class GherkinLine {
     var col = 0;
     var cellStart = 0;
     var escape = false;
-    // Iterate by Unicode code point (rune), not UTF-16 code unit or grapheme
-    // cluster. Columns are counted in code points, so an astral character such
-    // as an emoji advances the column by one. `String.fromCharCode`
-    // reconstructs each rune (including as a surrogate pair for astral code
-    // points) so the switch and buffered cell text keep working on `String`
-    // values.
+    // Columns are counted in Unicode code points.
     for (final rune in _lineText.runes) {
       final chr = String.fromCharCode(rune);
       if (escape) {

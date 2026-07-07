@@ -91,10 +91,7 @@ class MessagesGherkinDocumentBuilder
         return _createRule(node);
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
-      // Remaining rule types are structural/intermediate nodes returned
-      // unchanged. Enumerated explicitly rather than via `default:` so a new
-      // RuleType is a compile-time error here instead of silently falling
-      // through.
+      // Keep this exhaustive so new rule types must be handled explicitly.
       case RuleType.none:
       case RuleType.eof:
       case RuleType.empty:

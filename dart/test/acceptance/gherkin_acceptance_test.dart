@@ -10,17 +10,7 @@ import 'package:test/test.dart';
 // Helpers
 // ---------------------------------------------------------------------------
 
-/// Recursively sort every map by key so key-order differences don't matter.
-///
-/// Also applies two normalizations to make cross-platform comparison fair:
-/// 1. Empty strings are stripped: proto3 JSON serialization omits zero-value
-///    string fields, so both sides must be normalized the same way.
-/// 2. CRLF (\r\n) is collapsed to LF (\n): some fixtures have intentional
-///    mixed line-endings, but on a Windows checkout `core.autocrlf` rewrites the
-///    input feature files, so the verbatim `source.data` cannot be compared
-///    byte-for-byte portably. Collapsing CRLF on both sides keeps this suite
-///    platform-independent. The byte-exact `source.data` check is performed by
-///    the Makefile acceptance target (raw `diff`) in CI.
+/// Sorts maps and normalizes values for platform-independent fixture checks.
 dynamic _sortKeys(dynamic v) {
   if (v is Map<String, dynamic>) {
     final m = SplayTreeMap<String, dynamic>();
