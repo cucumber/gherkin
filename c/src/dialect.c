@@ -1272,8 +1272,8 @@ static const Dialect et_dialect = {
 static const wchar_t* const fa_and_KEYWORDS[] = { L"* ", L"و " };
 static const Keywords fa_and_keywords = { 2, fa_and_KEYWORDS };
 
-static const wchar_t* const fa_background_KEYWORDS[] = { L"پیش زمینه", L"مقدمات" };
-static const Keywords fa_background_keywords = { 2, fa_background_KEYWORDS };
+static const wchar_t* const fa_background_KEYWORDS[] = { L"زمینه", L"پیش زمینه", L"مقدمات" };
+static const Keywords fa_background_keywords = { 3, fa_background_KEYWORDS };
 
 static const wchar_t* const fa_but_KEYWORDS[] = { L"* ", L"اما " };
 static const Keywords fa_but_keywords = { 2, fa_but_KEYWORDS };

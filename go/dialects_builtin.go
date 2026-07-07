@@ -1828,6 +1828,7 @@ var builtinDialects = gherkinDialectMap{
 				"قانون",
 			},
 			background: {
+				"زمینه",
 				"پیش زمینه",
 				"مقدمات",
 			},
