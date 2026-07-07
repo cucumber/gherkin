@@ -199,8 +199,8 @@ class GherkinParser {
 
   messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
     // The error message already carries its `(line:column): ` (or `(-1,0): `)
-    // position prefix, matching the other first-party implementations; emit it
-    // verbatim and add the structured source location alongside it.
+    // position prefix; emit it verbatim and add the structured source location
+    // alongside it.
     if (error.location.isEmpty) {
       return messages.Envelope(
         parseError: messages.ParseError(

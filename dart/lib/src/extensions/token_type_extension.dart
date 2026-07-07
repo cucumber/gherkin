@@ -3,7 +3,7 @@ import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 /// Conversions from [TokenType] to its wire name and corresponding rule type.
 extension TokenTypeExtension on TokenType {
   /// The canonical wire name of this token type, as emitted in the `*.tokens`
-  /// acceptance format and shared with the other Gherkin implementations.
+  /// acceptance format.
   ///
   /// This is intentionally decoupled from the (lowerCamelCase) Dart enum
   /// identifier so the output format stays stable.

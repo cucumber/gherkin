@@ -19,9 +19,8 @@ sealed class ParserException implements Exception {
   /// canonical `(line:column): ` position marker (or `(-1,0): ` when the
   /// location is unknown).
   ///
-  /// Folding the prefix into [message] keeps it consistent with the other
-  /// first-party Gherkin implementations, where the position is part of the
-  /// error message itself.
+  /// Folding the prefix into [message] makes the position part of the error
+  /// message itself.
   ParserException.located(String message, this.location)
     : message = _formatMessage(message, location);
 

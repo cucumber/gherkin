@@ -16,10 +16,8 @@ extension RandomAccessFileExtension on RandomAccessFile {
   /// defaults to [utf8].
   ///
   /// A line ends at `\n` or `\r\n`; the terminator is not included. A lone `\r`
-  /// not followed by `\n` is treated as content and preserved, matching the
-  /// reference Gherkin implementations that split on `\r?\n` (see
-  /// `TokenScanner` in the JavaScript implementation). This keeps the file and
-  /// string scanners consistent.
+  /// not followed by `\n` is treated as content and preserved. This keeps the
+  /// file and string scanners consistent.
   ///
   /// Throws a [FileSystemException] if the operation fails.
   String? readLineSync({Encoding encoding = utf8}) {

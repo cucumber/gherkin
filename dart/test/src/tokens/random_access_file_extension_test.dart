@@ -9,9 +9,8 @@ void main() {
   const assetDir = 'test/assets';
 
   test('Read lines with only CR keeps lone CR as content', () async {
-    // A lone `\r` is not a line separator (only `\n` and `\r\n` are), matching
-    // the reference implementations' `\r?\n` splitting. The whole file is one
-    // line and the `\r` bytes are preserved verbatim.
+    // A lone `\r` is not a line separator (only `\n` and `\r\n` are). The
+    // whole file is one line and the `\r` bytes are preserved verbatim.
     final filepath = '$currDir/$assetDir/text-with-only-cr.txt';
     final textFile = File(filepath).openSync();
     final buffer = StringBuffer();

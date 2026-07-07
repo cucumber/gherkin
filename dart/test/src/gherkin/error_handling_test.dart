@@ -2,8 +2,7 @@ import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
-/// Verifies the error-handling contract shared with the flagship
-/// implementations:
+/// Verifies the error-handling contract:
 ///
 /// * malformed Gherkin input is reported as a `parseError` envelope and never
 ///   escapes as a thrown exception;
@@ -88,9 +87,7 @@ void main() {
     test(
       'a location-less NoSuchLanguageException uses the "(-1,0): " prefix',
       () {
-        // Matching the other first-party implementations, an unknown location
-        // stringifies with the sentinel "(-1,0): " prefix (see Java's
-        // ParserException.createMessage).
+        // An unknown location stringifies with the sentinel "(-1,0): " prefix.
         expect(
           NoSuchLanguageException('xx').toString(),
           '(-1,0): Language not supported: xx',

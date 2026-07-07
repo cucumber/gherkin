@@ -16,12 +16,11 @@ import 'package:test/test.dart';
 /// 1. Empty strings are stripped: proto3 JSON serialization omits zero-value
 ///    string fields, so both sides must be normalized the same way.
 /// 2. CRLF (\r\n) is collapsed to LF (\n): some fixtures have intentional
-///    mixed line-endings and the reference .ndjson files (generated on Linux)
-///    preserve them, but on a Windows checkout `core.autocrlf` rewrites the
+///    mixed line-endings, but on a Windows checkout `core.autocrlf` rewrites the
 ///    input feature files, so the verbatim `source.data` cannot be compared
 ///    byte-for-byte portably. Collapsing CRLF on both sides keeps this suite
-///    platform-independent. The byte-exact `source.data` parity check is
-///    performed by the Makefile acceptance target (raw `diff`) in CI.
+///    platform-independent. The byte-exact `source.data` check is performed by
+///    the Makefile acceptance target (raw `diff`) in CI.
 dynamic _sortKeys(dynamic v) {
   if (v is Map<String, dynamic>) {
     final m = SplayTreeMap<String, dynamic>();

@@ -18,10 +18,7 @@ abstract class IdGenerator {
 
 /// An [IdGenerator] that produces random RFC 4122 version 4 UUIDs.
 ///
-/// This matches the default id generation of the other first-party
-/// implementations (e.g. Java's `UUID.randomUUID()` and Ruby's
-/// `Cucumber::Messages::Helpers::IdGenerator::UUID`), which both produce random
-/// (version 4) UUIDs.
+/// Produces random RFC 4122 version 4 UUIDs.
 class UuidIdGenerator implements IdGenerator {
   static final Random _random = Random.secure();
 

@@ -95,8 +95,7 @@ void main() {
     // - U+00A0 (non-breaking space)
     // - U+0020 (space)
     // - U+0009 (tab)
-    // This is generated with `ruby -e 'STDOUT.write "\u00A0\u0020\u0009".encode("utf-8")' | pbcopy`
-    // and pasted.
+    // The input also includes cucumber emoji cells to verify Unicode columns.
     final gherkinLine = GherkinLine(
       '      |  \tred  \t|  \tblue  \t|  \t'
       '\uD83E\uDD52\uD83E\uDD52\uD83E\uDD52  \t|  \tgreen  \t|',
@@ -123,10 +122,9 @@ void main() {
   test('counts_combining_marks_as_separate_columns', () {
     // The first cell holds "cafe" followed by a combining acute accent
     // (U+0301), i.e. "cafÃ©" written as base letter + combining mark. Columns
-    // are counted per Unicode code point (to match the other first-party
-    // implementations), so the combining mark advances the column on its own
-    // and the next cell starts one column later than it would under
-    // grapheme-cluster counting.
+    // are counted per Unicode code point, so the combining mark advances the
+    // column on its own and the next cell starts one column later than it would
+    // under grapheme-cluster counting.
     final gherkinLine = GherkinLine('|cafe\u0301|test|', line);
 
     final firstCell = gherkinLine.tableCells.first;

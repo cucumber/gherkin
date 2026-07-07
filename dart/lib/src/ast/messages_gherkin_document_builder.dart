@@ -335,9 +335,8 @@ class MessagesGherkinDocumentBuilder
       children.add(messages.RuleChild(scenario: scenario));
     }
 
-    // Allocate tag IDs before the rule's own ID so the ID sequence matches the
-    // other first-party implementations: tags precede the keyword line in
-    // source, so get lower IDs.
+    // Allocate tag IDs before the rule's own ID: tags precede the keyword line
+    // in source, so get lower IDs.
     final tags = _getTags(header);
 
     return messages.Rule(

@@ -19,18 +19,15 @@ extension GherkinParserIo on GherkinParser {
   ///
   /// I/O failures (e.g. missing file) surface as a [GherkinException] error
   /// event on the stream rather than a `parseError` envelope: they are not a
-  /// property of the Gherkin source. This matches the flagship implementations,
-  /// where the path-based entry point surfaces I/O errors to the caller (e.g.
-  /// Java's `GherkinParser.parse(Path)` declares `throws IOException`).
+  /// property of the Gherkin source.
   /// Malformed Gherkin, by contrast, is always reported as a `parseError`
   /// envelope.
   Stream<messages.Envelope> parsePath(String path) async* {
     final String data;
     try {
       // Read the file verbatim. The `source` envelope's `data` must preserve
-      // the original bytes (including CRLF), matching the other first-party
-      // implementations (e.g. Go sets `Data: string(in)`); the line scanner
-      // tolerates CRLF when classifying tokens.
+      // the original bytes (including CRLF); the line scanner tolerates CRLF
+      // when classifying tokens.
       data = await File(path).readAsString();
     } on IOException catch (e) {
       throw GherkinException(e.toString(), e);

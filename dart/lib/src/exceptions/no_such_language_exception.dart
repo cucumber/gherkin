@@ -4,7 +4,7 @@ part of 'exceptions.dart';
 ///
 /// This is a [ParserException] subtype so that an unsupported dialect is
 /// reported to callers as a `parseError` envelope rather than escaping as an
-/// unhandled exception, matching the other first-party implementations.
+/// unhandled exception.
 final class NoSuchLanguageException extends ParserException {
   /// Creates an exception for the unsupported [language] at [location].
   NoSuchLanguageException(this.language, [Location location = Location.empty])

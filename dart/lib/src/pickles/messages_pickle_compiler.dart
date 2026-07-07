@@ -305,9 +305,8 @@ class MessagesPickleCompiler {
   ) {
     // Placeholders are always wrapped in `<...>`. With no `<` there is nothing
     // to interpolate, so skip the per-variable scans. This keeps the exact
-    // sequential-replace semantics of the other first-party implementations
-    // (e.g. Go's `interpolate`) while avoiding a full-string pass per variable
-    // for the common case of text with no placeholders.
+    // sequential-replace semantics while avoiding a full-string pass per
+    // variable for the common case of text with no placeholders.
     if (!value.contains('<')) {
       return value;
     }
