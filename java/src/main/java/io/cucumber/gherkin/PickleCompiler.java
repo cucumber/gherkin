@@ -28,7 +28,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static io.cucumber.messages.types.StepKeywordType.CONJUNCTION;
 import static io.cucumber.messages.types.StepKeywordType.UNKNOWN;
@@ -175,9 +174,9 @@ final class PickleCompiler {
             }
         }
     }
-    
-    @SuppressWarnings("ForLoopReplaceableByForEach") 
-    private PickleTable pickleDataTable(DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
+
+    @SuppressWarnings("ForLoopReplaceableByForEach")
+    private PickleTable pickleDataTable(@Nullable Long argumentIndex, DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
         List<TableRow> rows = dataTable.getRows();
         int rowCount = rows.size();
         List<PickleTableRow> newRows = new ArrayList<>(rowCount);
@@ -193,11 +192,12 @@ final class PickleCompiler {
             }
             newRows.add(new PickleTableRow(newCells));
         }
-        return new PickleTable(newRows);
+        return new PickleTable(argumentIndex, newRows);
     }
 
-    private PickleDocString pickleDocString(DocString docString, List<TableCell> variableCells, List<TableCell> valueCells) {
+    private PickleDocString pickleDocString(@Nullable Long argumentIndex, DocString docString, List<TableCell> variableCells, List<TableCell> valueCells) {
         return new PickleDocString(
+                argumentIndex,
                 docString.getMediaType().isPresent() ? interpolate(docString.getMediaType().get(), variableCells, valueCells) : null,
                 interpolate(docString.getContent(), variableCells, valueCells)
         );
@@ -206,21 +206,11 @@ final class PickleCompiler {
     private PickleStep pickleStep(Step step, List<TableCell> variableCells, @Nullable TableRow valuesRow, StepKeywordType keywordType) {
         List<TableCell> valueCells = valuesRow == null ? emptyList() : valuesRow.getCells();
         String stepText = interpolate(step.getText(), variableCells, valueCells);
-
-        PickleStepArgument argument = null;
-        Optional<DataTable> dataTable = step.getDataTable();
-        Optional<DocString> docString = step.getDocString();
-        if (dataTable.isPresent() || docString.isPresent()) {
-            argument = new PickleStepArgument(
-                    docString.map(value -> pickleDocString(value, variableCells, valueCells)).orElse(null),
-                    dataTable.map(value -> pickleDataTable(value, variableCells, valueCells)).orElse(null)
-            );
-        }
+        PickleStepArgument argument = pickleStepArgument(step, variableCells, valueCells);
 
         List<String> astNodeIds;
         if (valuesRow != null) {
             astNodeIds = List.of(step.getId(), valuesRow.getId());
-
         } else {
             astNodeIds = List.of(step.getId());
         }
@@ -232,6 +222,25 @@ final class PickleCompiler {
                 pickleStepType(keywordType),
                 stepText
         );
+    }
+
+    private @Nullable PickleStepArgument pickleStepArgument(Step step, List<TableCell> variableCells, List<TableCell> valueCells) {
+        var dataTable = step.getDataTable().orElse(null);
+        var docString = step.getDocString().orElse(null);
+        if (dataTable != null && docString != null) {
+            boolean tableFirst = docString.getLocation().getLine() > dataTable.getLocation().getLine();
+            var docStringArgument = pickleDocString(tableFirst ? 1L : 0L, docString, variableCells, valueCells);
+            var dataTableArgument = pickleDataTable(tableFirst ? 0L : 1L, dataTable, variableCells, valueCells);
+            return new PickleStepArgument(docStringArgument, dataTableArgument);
+        } else if (dataTable != null) {
+            var dataTableArgument = pickleDataTable(null, dataTable, variableCells, valueCells);
+            return new PickleStepArgument(null, dataTableArgument);
+        } else if (docString != null) {
+            var docStringArgument = pickleDocString(null, docString, variableCells, valueCells);
+            return new PickleStepArgument(docStringArgument, null);
+        } else {
+            return null;
+        }
     }
 
     private static PickleStepType pickleStepType(StepKeywordType keywordType) {
