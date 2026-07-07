@@ -8,10 +8,11 @@ extern "C" {
 #endif
 
 typedef struct PickleTable {
+    int argumentIndex;
     const PickleRows* rows;
 } PickleTable;
 
-const PickleTable* PickleTable_new(const PickleRows* rows);
+const PickleTable* PickleTable_new(int argumentIndex, const PickleRows* rows);
 
 void PickleTable_delete(const PickleTable* pickle_table);
 
