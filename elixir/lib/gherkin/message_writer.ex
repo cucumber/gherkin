@@ -2,10 +2,9 @@ defmodule CucumberGherkin.MessageWriter do
   @moduledoc false
 
   alias CucumberMessages.Envelope
-  alias CucumberMessages.GherkinDocument.Feature.FeatureChild
   alias CucumberMessages.Location
-  alias CucumberMessages.Pickle.PickleStep
-  alias CucumberMessages.PickleStepArgument.{PickleDocString, PickleTable}
+  alias CucumberMessages.PickleStep
+  alias CucumberMessages.{PickleDocString, PickleTable}
 
   def convert_envelopes_to(envelopes, :ndjson) do
     Enum.map(envelopes, &envelope_to_ndjson!/1)
@@ -62,9 +61,6 @@ defmodule CucumberGherkin.MessageWriter do
   defp unstruct(list, acc) when is_list(list) do
     list
     |> Enum.map(fn
-      %FeatureChild{} = el ->
-        el.value
-
       %PickleStep{argument: %PickleTable{}} = el ->
         Map.put(el, :argument, %{dataTable: el.argument}) |> Map.delete(:__struct__)
 

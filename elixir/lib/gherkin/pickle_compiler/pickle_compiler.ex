@@ -2,25 +2,24 @@ defmodule CucumberGherkin.PickleCompiler do
   @moduledoc false
   defstruct id_gen: nil, pickles: [], language: nil, uri: nil
 
-  alias CucumberMessages.GherkinDocument.Feature, as: FeatureMessage
-  alias CucumberMessages.GherkinDocument.Feature.Scenario, as: ScenarioMessage
-  alias CucumberGherkin.AstStep, as: StepMessage
-  alias CucumberMessages.GherkinDocument.Feature.TableRow, as: TableRowMessage
-  alias CucumberGherkin.Pickle, as: PickleMessage
-  alias CucumberGherkin.PickleStep, as: PickleStepMessage
-  alias CucumberMessages.Pickle.PickleTag, as: PickleTagMessage
-  alias CucumberGherkin.PickleStepArgument, as: PickleStepArgumentMessage
-  alias CucumberMessages.GherkinDocument.Feature.Tag, as: TagMessage
-  alias CucumberMessages.GherkinDocument.Feature.FeatureChild, as: FeatureChildMessage
-  alias CucumberMessages.GherkinDocument.Feature.FeatureChild.Rule, as: RuleMessage
-  alias CucumberMessages.GherkinDocument.Feature.Scenario.Examples, as: ExampleMessage
-  alias CucumberMessages.PickleStepArgument.PickleTable, as: PickleTableMessage
+  alias CucumberMessages.Feature, as: FeatureMessage
+  alias CucumberMessages.Scenario, as: ScenarioMessage
+  alias CucumberMessages.Step, as: StepMessage
+  alias CucumberMessages.TableRow, as: TableRowMessage
+  alias CucumberMessages.Pickle, as: PickleMessage
+  alias CucumberMessages.PickleStep, as: PickleStepMessage
+  alias CucumberMessages.PickleStepArgument, as: PickleStepArgumentMessage
+  alias CucumberMessages.PickleTag, as: PickleTagMessage
+  alias CucumberMessages.Tag, as: TagMessage
+  alias CucumberMessages.FeatureChild, as: FeatureChildMessage
+  alias CucumberMessages.Rule, as: RuleMessage
+  alias CucumberMessages.Examples, as: ExampleMessage
+  alias CucumberMessages.PickleTable, as: PickleTableMessage
 
-  alias CucumberMessages.PickleStepArgument.PickleTable.PickleTableRow.PickleTableCell,
-    as: PickleTableCellMessage
+  alias CucumberMessages.PickleTableCell, as: PickleTableCellMessage
 
-  alias CucumberMessages.PickleStepArgument.PickleTable.PickleTableRow, as: PickleTableRowMessage
-  alias CucumberMessages.GherkinDocument.Feature.Step.DataTable, as: DataTableMessage
+  alias CucumberMessages.PickleTableRow, as: PickleTableRowMessage
+  alias CucumberMessages.DataTable, as: DataTableMessage
 
   @me __MODULE__
 
@@ -63,10 +62,10 @@ defmodule CucumberGherkin.PickleCompiler do
     rule_tags = meta_info.feature_tags ++ r.tags
 
     Enum.reduce(r.children, resetted_meta_info, fn
-      %FeatureChildMessage{value: {:background, bg}}, m_acc ->
+      %FeatureChildMessage{background: bg}, m_acc ->
         %{m_acc | rule_backgr_steps: m_acc.rule_backgr_steps ++ bg.steps}
 
-      %FeatureChildMessage{value: {:scenario, s}}, m_acc ->
+      %FeatureChildMessage{scenario: s}, m_acc ->
         %{m_acc | feature_tags: rule_tags} |> compile_scenario(s, :rule_backgr_steps)
     end)
   end
@@ -236,8 +235,8 @@ defmodule CucumberGherkin.PickleCompiler do
     %PickleTableMessage{rows: table_row_messages}
   end
 
-  alias CucumberMessages.PickleStepArgument.PickleDocString, as: PickleDocStringMessage
-  alias CucumberMessages.GherkinDocument.Feature.Step.DocString, as: DocStringMessage
+  alias CucumberMessages.PickleDocString, as: PickleDocStringMessage
+  alias CucumberMessages.DocString, as: DocStringMessage
 
   defp pickle_doc_string_creator(%DocStringMessage{} = d, variable_cells, value_cells) do
     content = interpolate(d.content, variable_cells, value_cells)
