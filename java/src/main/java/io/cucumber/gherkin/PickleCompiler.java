@@ -198,7 +198,9 @@ final class PickleCompiler {
     private PickleDocString pickleDocString(@Nullable Long argumentIndex, DocString docString, List<TableCell> variableCells, List<TableCell> valueCells) {
         return new PickleDocString(
                 argumentIndex,
-                docString.getMediaType().isPresent() ? interpolate(docString.getMediaType().get(), variableCells, valueCells) : null,
+                docString.getMediaType()
+                        .map(mediaType -> interpolate(mediaType, variableCells, valueCells))
+                        .orElse(null),
                 interpolate(docString.getContent(), variableCells, valueCells)
         );
     }
@@ -229,15 +231,20 @@ final class PickleCompiler {
         var docString = step.getDocString().orElse(null);
         if (dataTable != null && docString != null) {
             boolean tableFirst = docString.getLocation().getLine() > dataTable.getLocation().getLine();
-            var docStringArgument = pickleDocString(tableFirst ? 2L : 1L, docString, variableCells, valueCells);
-            var dataTableArgument = pickleDataTable(tableFirst ? 1L : 2L, dataTable, variableCells, valueCells);
-            return new PickleStepArgument(docStringArgument, dataTableArgument);
+            return new PickleStepArgument(
+                    pickleDocString(tableFirst ? 2L : 1L, docString, variableCells, valueCells),
+                    pickleDataTable(tableFirst ? 1L : 2L, dataTable, variableCells, valueCells)
+            );
         } else if (dataTable != null) {
-            var dataTableArgument = pickleDataTable(null, dataTable, variableCells, valueCells);
-            return new PickleStepArgument(null, dataTableArgument);
+            return new PickleStepArgument(
+                    null,
+                    pickleDataTable(null, dataTable, variableCells, valueCells)
+            );
         } else if (docString != null) {
-            var docStringArgument = pickleDocString(null, docString, variableCells, valueCells);
-            return new PickleStepArgument(docStringArgument, null);
+            return new PickleStepArgument(
+                    pickleDocString(null, docString, variableCells, valueCells),
+                    null
+            );
         } else {
             return null;
         }
