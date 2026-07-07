@@ -208,11 +208,6 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new DocString(location, contentType, content, delimiter);
     }
 
-    protected virtual Step CreateStep(Location location, string keyword, StepKeywordType keywordType, string text, StepArgument argument, AstNode node)
-    {
-        return new Step(location, keyword, keywordType, text, argument);
-    }
-
     protected virtual Step CreateStep(Location location, string keyword, StepKeywordType keywordType, string text, DataTable dataTable, DocString docString, AstNode node)
     {
         return new Step(location, keyword, keywordType, text, dataTable, docString);
