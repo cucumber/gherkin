@@ -263,8 +263,8 @@ function createPickleArguments(
   if (step.dataTable && step.docString) {
     const tableFirst = step.docString.location.line > step.dataTable.location.line
     return {
-      docString: pickleDocString(tableFirst ? 1 : 0, step.docString, variableCells, valueCells),
-      dataTable: pickleTable(tableFirst ? 0 : 1, step.dataTable, variableCells, valueCells),
+      docString: pickleDocString(tableFirst ? 2 : 1, step.docString, variableCells, valueCells),
+      dataTable: pickleTable(tableFirst ? 1 : 2, step.dataTable, variableCells, valueCells),
     }
   } else if (step.dataTable) {
     return {

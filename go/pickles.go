@@ -242,11 +242,11 @@ func pickleStepArgument(step *messages.Step, variableCells []*messages.TableCell
 			DataTable: pickleDataTable(dataTable, variableCells, valueCells),
 		}
 		if docString.Location.Line > dataTable.Location.Line {
-			pickleStepArgument.DataTable.ArgumentIndex = int64(0)
-			pickleStepArgument.DocString.ArgumentIndex = int64(1)
-		} else {
 			pickleStepArgument.DataTable.ArgumentIndex = int64(1)
-			pickleStepArgument.DocString.ArgumentIndex = int64(0)
+			pickleStepArgument.DocString.ArgumentIndex = int64(2)
+		} else {
+			pickleStepArgument.DataTable.ArgumentIndex = int64(2)
+			pickleStepArgument.DocString.ArgumentIndex = int64(1)
 		}
 		return pickleStepArgument
 	} else if dataTable != nil {

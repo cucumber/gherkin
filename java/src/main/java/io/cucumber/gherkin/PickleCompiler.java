@@ -229,8 +229,8 @@ final class PickleCompiler {
         var docString = step.getDocString().orElse(null);
         if (dataTable != null && docString != null) {
             boolean tableFirst = docString.getLocation().getLine() > dataTable.getLocation().getLine();
-            var docStringArgument = pickleDocString(tableFirst ? 1L : 0L, docString, variableCells, valueCells);
-            var dataTableArgument = pickleDataTable(tableFirst ? 0L : 1L, dataTable, variableCells, valueCells);
+            var docStringArgument = pickleDocString(tableFirst ? 2L : 1L, docString, variableCells, valueCells);
+            var dataTableArgument = pickleDataTable(tableFirst ? 1L : 2L, dataTable, variableCells, valueCells);
             return new PickleStepArgument(docStringArgument, dataTableArgument);
         } else if (dataTable != null) {
             var dataTableArgument = pickleDataTable(null, dataTable, variableCells, valueCells);
