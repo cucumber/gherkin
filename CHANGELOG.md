@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- (i18n) Added Persian translation of "Rule" ([#642](https://github.com/cucumber/gherkin/pull/642))
+- (i18n) Added new synonyms for existing Persian keywords  ([#642](https://github.com/cucumber/gherkin/pull/642))
 ### Changed
 - Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599))
 
