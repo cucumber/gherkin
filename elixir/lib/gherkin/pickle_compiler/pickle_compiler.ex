@@ -20,6 +20,7 @@ defmodule CucumberGherkin.PickleCompiler do
 
   alias CucumberMessages.PickleTableRow, as: PickleTableRowMessage
   alias CucumberMessages.DataTable, as: DataTableMessage
+  alias CucumberMessages.DocString, as: DocStringMessage
 
   @me __MODULE__
 
@@ -216,7 +217,15 @@ defmodule CucumberGherkin.PickleCompiler do
     end)
   end
 
-  defp pickle_data_table_creator(%DataTableMessage{} = data_table, variable_cells, value_cells) do
+  defp pickle_data_table_creator(%DataTableMessage{} = data_table, %DocStringMessage{} = doc_string, variable_cells, value_cells) do
+    argument_index = if data_table do
+      if data_table.location.line > doc_string.location.line do
+        2
+      else
+        1
+      end
+    end
+
     table_row_messages =
       Enum.reduce(data_table.rows, [], fn %TableRowMessage{} = row, pickle_table_rows_acc ->
         new_cells =
@@ -233,22 +242,30 @@ defmodule CucumberGherkin.PickleCompiler do
       end)
       |> Enum.reverse()
 
-    %PickleTableMessage{rows: table_row_messages}
+    %PickleTableMessage{argument_index: argument_index, rows: table_row_messages}
   end
 
   alias CucumberMessages.PickleDocString, as: PickleDocStringMessage
   alias CucumberMessages.DocString, as: DocStringMessage
 
-  defp pickle_doc_string_creator(%DocStringMessage{} = d, variable_cells, value_cells) do
-    content = interpolate(d.content, variable_cells, value_cells)
+  defp pickle_doc_string_creator(%DocStringMessage{} = doc_string, %DataTableMessage{} = data_table, variable_cells, value_cells) do
+    content = interpolate(doc_string.content, variable_cells, value_cells)
+
+    argument_index = if data_table do
+      if data_table.location.line > doc_string.location.line do
+        1
+      else
+        2
+      end
+    end
 
     media_type =
-      case d.media_type do
-        nil -> nil
+      case doc_string.media_type do
+        "" -> ""
         media_type -> interpolate(media_type, variable_cells, value_cells)
       end
 
-    %PickleDocStringMessage{content: content, media_type: media_type}
+    %PickleDocStringMessage{argument_index: argument_index, content: content, media_type: media_type}
   end
 
   ####################################################
@@ -265,11 +282,11 @@ defmodule CucumberGherkin.PickleCompiler do
 
   defp add_datatable(
          %PickleStepMessage{} = m,
-         %StepMessage{data_table: d},
+         %StepMessage{data_table: data_table, doc_string: doc_string},
          variable_cells,
          value_cells
        ) do
-    result = pickle_data_table_creator(d, variable_cells, value_cells)
+    result = pickle_data_table_creator(data_table, doc_string, variable_cells, value_cells)
     argument = m.argument || %PickleStepArgumentMessage{}
     %{m | argument: %{argument | data_table: result}}
   end
@@ -279,11 +296,11 @@ defmodule CucumberGherkin.PickleCompiler do
 
   defp add_doc_string(
          %PickleStepMessage{} = m,
-         %StepMessage{doc_string: d},
+         %StepMessage{doc_string: doc_string, data_table: data_table},
          variable_cells,
          value_cells
        ) do
-    result = pickle_doc_string_creator(d, variable_cells, value_cells)
+    result = pickle_doc_string_creator(doc_string, data_table, variable_cells, value_cells)
     argument = m.argument || %PickleStepArgumentMessage{}
     %{m | argument: %{argument | doc_string: result}}
   end
