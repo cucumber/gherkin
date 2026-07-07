@@ -28,7 +28,7 @@ typedef struct ReplacementItem {
 
 static void compile_scenario_container(Compiler* compiler, const ChildDefinitions* child_definitions, const Tags* feature_tags, const Tags* rule_tags, const wchar_t* uri, const wchar_t* language, int context_background_step_count, const Steps* context_background_steps);
 
-static const PickleArgument* create_pickle_argument(const StepArgument* step_argument, const TableRow* example_header, const TableRow* body_row);
+static const PickleString* create_pickle_string(const DocString* doc_string, const TableRow* example_header, const TableRow* body_row);
 
 static const PickleTable* create_pickle_table(DataTable* data_table, const TableRow* example_header, const TableRow* body_row);
 
@@ -190,35 +190,31 @@ static void compile_scenario_container(Compiler* compiler, const ChildDefinition
     }
 }
 
-static const PickleArgument* create_pickle_argument(const StepArgument* step_argument, const TableRow* example_header, const TableRow* body_row) {
-    const PickleArgument* argument = 0;
-    if (step_argument) {
-        if (step_argument->type == Gherkin_DataTable) {
-            argument = (const PickleArgument*)create_pickle_table((DataTable*)step_argument, example_header, body_row);
-        }
-        else if (step_argument->type == Gherkin_DocString) {
-            const DocString* doc_string = (DocString*)step_argument;
-            if (!example_header) {
-                argument = (const PickleArgument*)PickleString_new(doc_string->content, doc_string->media_type);
-            }
-            else {
-                const wchar_t* expanded_text = create_expanded_text(doc_string->content, example_header, body_row);
-                const wchar_t* expanded_media_type = 0;
-                if(doc_string->media_type){
-                    expanded_media_type = create_expanded_text(doc_string->media_type, example_header, body_row);
-                }
-                argument = (const PickleArgument*)PickleString_new(expanded_text, expanded_media_type);
-                free((void*)expanded_text);
-                if(expanded_media_type != 0){
-                    free((void*)expanded_media_type);
-                }
-            }
-        }
+static const PickleString* create_pickle_string(const DocString* doc_string, const TableRow* example_header, const TableRow* body_row) {
+    if (!doc_string) {
+        return 0;
     }
-    return argument;
+    if (!example_header) {
+        return PickleString_new(doc_string->content, doc_string->media_type);
+    }
+
+    const wchar_t* expanded_text = create_expanded_text(doc_string->content, example_header, body_row);
+    const wchar_t* expanded_media_type = 0;
+    if(doc_string->media_type){
+        expanded_media_type = create_expanded_text(doc_string->media_type, example_header, body_row);
+    }
+    const PickleString* pickle_string = PickleString_new(expanded_text, expanded_media_type);
+    free((void*)expanded_text);
+    if(expanded_media_type != 0){
+        free((void*)expanded_media_type);
+    }
+    return pickle_string;
 }
 
 static const PickleTable* create_pickle_table(DataTable* data_table, const TableRow* example_header, const TableRow* body_row) {
+    if (!data_table) {
+        return 0;
+    }
     PickleRows* rows = (PickleRows*)malloc(sizeof(PickleRows));
     rows->row_count = data_table->rows->row_count;
     rows->pickle_rows = 0;
@@ -302,15 +298,18 @@ static void copy_tags(PickleTag* destination_array, const Tags* source) {
 static void copy_step(IdGenerator* id_generator, KeywordType keyword_type, PickleStep* destination_array, const Step* source_step) {
     PickleStepType pickle_step_type = convert_to_pickle_step_type(keyword_type);
     const PickleAstNodeIds* step_ast_node_ids = PickleAstNodeIds_new_single(source_step->id);
-    const PickleArgument* argument = create_pickle_argument(source_step->argument, 0, 0);
-    const PickleStep* step = PickleStep_new(step_ast_node_ids, id_generator, source_step->text, pickle_step_type, argument);
+    const PickleTable* data_table = create_pickle_table((DataTable*)source_step->data_table, 0, 0);
+    const PickleString* doc_string = create_pickle_string(source_step->doc_string, 0, 0);
+    const PickleStep* step = PickleStep_new(step_ast_node_ids, id_generator, source_step->text, pickle_step_type, data_table, doc_string);
     PickleStep_transfer(destination_array, (PickleStep*)step);
 }
 
 static const PickleStep* expand_outline_step(IdGenerator* id_generator, const Step* outline_step, const TableRow* example_header, const TableRow* body_row, const PickleAstNodeIds* ast_node_ids, KeywordType keyword_type) {
     PickleStepType pickle_step_type = convert_to_pickle_step_type(keyword_type);
     const wchar_t* expanded_step_text = create_expanded_text(outline_step->text, example_header, body_row);
-    const PickleStep* expanded_step = PickleStep_new(ast_node_ids, id_generator, expanded_step_text, pickle_step_type, create_pickle_argument(outline_step->argument, example_header, body_row));
+    const PickleTable* data_table = create_pickle_table((DataTable*)outline_step->data_table, example_header, body_row);
+    const PickleString* doc_string = create_pickle_string(outline_step->doc_string, example_header, body_row);
+    const PickleStep* expanded_step = PickleStep_new(ast_node_ids, id_generator, expanded_step_text, pickle_step_type, data_table, doc_string);
     free((void*)expanded_step_text);
     return expanded_step;
 }

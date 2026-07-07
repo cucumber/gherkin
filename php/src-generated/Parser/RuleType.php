@@ -42,7 +42,9 @@ enum RuleType
     case Examples; // Examples! := #ExamplesLine DescriptionHelper ExamplesTable?
     case ExamplesTable; // ExamplesTable! := #TableRow #TableRow*
     case Step; // Step! := #StepLine StepArg?
-    case StepArg; // StepArg := (DataTable | DocString)
+    case StepArg; // StepArg := (DataTableAndMaybeDocString | DocStringAndMaybeDataTable)
+    case DataTableAndMaybeDocString; // DataTableAndMaybeDocString := DataTable DocString?
+    case DocStringAndMaybeDataTable; // DocStringAndMaybeDataTable := DocString DataTable?
     case DataTable; // DataTable! := #TableRow+
     case DocString; // DocString! := #DocStringSeparator #Other* #DocStringSeparator
     case Tags; // Tags! := #TagLine+

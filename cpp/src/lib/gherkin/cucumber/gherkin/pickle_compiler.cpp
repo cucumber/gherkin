@@ -290,22 +290,23 @@ pickle_compiler::make_pickle_step(
         .text = interpolate(step.text, variable_cells, value_cells)
     };
 
-    if (step.data_table) {
-        ps.argument = cms::pickle_step_argument{
-            .data_table = make_pickle_table(
-                *step.data_table,
-                variable_cells,
-                value_cells
-            )
-        };
-    } else if (step.doc_string) {
-        ps.argument = cms::pickle_step_argument{
-            .doc_string = make_pickle_doc_string(
+    if (step.data_table || step.doc_string) {
+        auto argument = cms::pickle_step_argument{};
+        if (step.doc_string) {
+            argument.doc_string = make_pickle_doc_string(
                 *step.doc_string,
                 variable_cells,
                 value_cells
-            )
-        };
+            );
+        }
+        if (step.data_table) {
+            argument.data_table = make_pickle_table(
+                *step.data_table,
+                variable_cells,
+                value_cells
+            );
+        }
+        ps.argument = argument;
     }
 
     if (value_row_ptr) {

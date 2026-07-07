@@ -6,7 +6,7 @@
 
 static void delete_pickle_step_content(const PickleStep* pickle_step);
 
-const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleArgument* argument) {
+const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleTable* data_table, const PickleString* doc_string) {
     PickleStep* pickle_step = (PickleStep*)malloc(sizeof(PickleStep));
     pickle_step->ast_node_ids = ast_node_ids;
     pickle_step->id = id_generator->new_id(id_generator);
@@ -15,7 +15,8 @@ const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerat
         pickle_step->text = StringUtilities_copy_string(text);
     }
     pickle_step->pickle_step_type = pickle_step_type;
-    pickle_step->argument = argument;
+    pickle_step->data_table = data_table;
+    pickle_step->doc_string = doc_string;
     return pickle_step;
 }
 
@@ -35,8 +36,10 @@ void PickleStep_transfer(PickleStep* to_pickle_step, PickleStep* from_pickle_ste
     to_pickle_step->text = from_pickle_step->text;
     from_pickle_step->text = 0;
     to_pickle_step->pickle_step_type = from_pickle_step->pickle_step_type;
-    to_pickle_step->argument = from_pickle_step->argument;
-    from_pickle_step->argument = 0;
+    to_pickle_step->data_table = from_pickle_step->data_table;
+    from_pickle_step->data_table = 0;
+    to_pickle_step->doc_string = from_pickle_step->doc_string;
+    from_pickle_step->doc_string = 0;
     PickleStep_delete(from_pickle_step);
 }
 
@@ -64,12 +67,10 @@ static void delete_pickle_step_content(const PickleStep* pickle_step) {
     if (pickle_step->text) {
         free((void*)pickle_step->text);
     }
-    if (pickle_step->argument) {
-        if (pickle_step->argument->type == Argument_String) {
-            PickleString_delete((const PickleString*)pickle_step->argument);
-        }
-        else if (pickle_step->argument->type == Argument_Table) {
-            PickleTable_delete((const PickleTable*)pickle_step->argument);
-        }
+    if (pickle_step->doc_string) {
+        PickleString_delete(pickle_step->doc_string);
+    }
+    if (pickle_step->data_table) {
+        PickleTable_delete(pickle_step->data_table);
     }
 }

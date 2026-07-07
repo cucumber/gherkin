@@ -56,10 +56,10 @@ public class AstBuilder<T> : IAstBuilder<T>
             case RuleType.Step:
                 {
                     var stepLine = node.GetToken(TokenType.StepLine);
-                    var stepArg = node.GetSingle<StepArgument>(RuleType.DataTable) ??
-                                  node.GetSingle<StepArgument>(RuleType.DocString);
+                    var dataTable = node.GetSingle<DataTable>(RuleType.DataTable);
+                    var docString = node.GetSingle<DocString>(RuleType.DocString);
                     var keywordType = GetKeywordType(stepLine);
-                    return CreateStep(GetLocation(stepLine), stepLine.MatchedKeyword, keywordType, stepLine.MatchedText, stepArg, node);
+                    return CreateStep(GetLocation(stepLine), stepLine.MatchedKeyword, keywordType, stepLine.MatchedText, dataTable, docString, node);
                 }
             case RuleType.DocString:
                 {
@@ -208,9 +208,9 @@ public class AstBuilder<T> : IAstBuilder<T>
         return new DocString(location, contentType, content, delimiter);
     }
 
-    protected virtual Step CreateStep(Location location, string keyword, StepKeywordType keywordType, string text, StepArgument argument, AstNode node)
+    protected virtual Step CreateStep(Location location, string keyword, StepKeywordType keywordType, string text, DataTable dataTable, DocString docString, AstNode node)
     {
-        return new Step(location, keyword, keywordType, text, argument);
+        return new Step(location, keyword, keywordType, text, dataTable, docString);
     }
 
     protected virtual GherkinDocument CreateGherkinDocument(Feature feature, IEnumerable<Comment> gherkinDocumentComments, AstNode node)

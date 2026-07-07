@@ -39,7 +39,8 @@ class GherkinDialect implements IGherkinDialect
     ...thenStepKeywords,
     ...andStepKeywords,
     ...butStepKeywords
-  }.toList();
+  }.toList()
+    ..sort((a, b) => b.length.compareTo(a.length));
 
   @override
   List<String> get backgroundKeywords => keywords.background;
@@ -68,4 +69,3 @@ class GherkinDialect implements IGherkinDialect
   @override
   bool get isNotEmpty => !isEmpty;
 }
-

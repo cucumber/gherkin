@@ -19,6 +19,8 @@ class Token implements INullSafetyObject
 
   String matchedKeyword = Strings.empty;
 
+  String matchedKeywordType = Strings.empty;
+
   String matchedText = Strings.empty;
 
   Iterable<GherkinLineSpan> matchedItems = const <GherkinLineSpan>[];
@@ -62,6 +64,7 @@ class _InvalidToken extends Token
     matchedGherkinDialect = IGherkinDialect.empty;
     matchedType = TokenType.None;
     matchedKeyword = Strings.empty;
+    matchedKeywordType = Strings.empty;
     matchedText = Strings.empty;
     matchedItems = const <GherkinLineSpan>[];
     matchedIndent = 0;
