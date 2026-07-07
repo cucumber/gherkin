@@ -224,12 +224,12 @@ public class PickleCompiler(IIdGenerator idGenerator)
         }
     }
 
-    protected virtual PickleStepArgument CreatePickleDocString(Nullable<long> argumentIndex, DocString docString, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
+    protected virtual PickleDocString CreatePickleDocString(Nullable<long> argumentIndex, DocString docString, IEnumerable<TableCell> variableCells, IEnumerable<TableCell> valueCells)
     {
         return new PickleDocString(
             argumentIndex,
-            docString.MediaType == null ? null : Interpolate(ds.MediaType, variableCells, valueCells),
-            Interpolate(ds.Content, variableCells, valueCells)
+            docString.MediaType == null ? null : Interpolate(docString.MediaType, variableCells, valueCells),
+            Interpolate(docString.Content, variableCells, valueCells)
         );
     }
 
