@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-GHERKIN_LANGUAGES_JSON = lib/src/assets/gherkin-languages.json
+GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_DIALECTS = lib/src/language/dialects_builtin.g.dart
 GHERKIN_DIALECTS_JQ = lib/src/language/dialects_builtin.g.dart.jq
 GHERKIN_PARSER = lib/src/parser/parser.g.dart
@@ -33,14 +33,14 @@ clean-generate: ## Remove generated Gherkin parser files
 	rm -f $(GHERKIN_PARSER)
 .PHONY: clean-generate
 
-copy-gherkin-languages: $(GHERKIN_DIALECTS) ## Copy gherkin-languages.json and/or generate derived files
+copy-gherkin-languages: $(GHERKIN_DIALECTS) ## Generate derived files from gherkin-languages.json
 .PHONY: copy-gherkin-languages
 
 $(GHERKIN_DIALECTS): $(GHERKIN_LANGUAGES_JSON) $(GHERKIN_DIALECTS_JQ)
 	jq --sort-keys --from-file $(GHERKIN_DIALECTS_JQ) --raw-output --compact-output $< > $@
 
-clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	rm -f $(GHERKIN_LANGUAGES_JSON) $(GHERKIN_DIALECTS)
+clean-gherkin-languages: ## Remove derived files generated from gherkin-languages.json
+	rm -f $(GHERKIN_DIALECTS)
 .PHONY: clean-gherkin-languages
 
 mostlyclean:
@@ -98,6 +98,3 @@ acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 
 .DELETE_ON_ERROR:
 
-$(GHERKIN_LANGUAGES_JSON):
-	mkdir -p $(@D)
-	cp ../gherkin-languages.json $@
