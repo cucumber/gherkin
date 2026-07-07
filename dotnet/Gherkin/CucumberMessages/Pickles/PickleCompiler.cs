@@ -207,7 +207,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
         else if (step.DataTable != null)
         {
             return new PickleStepArgument(
-                null
+                null,
                 CreatePickleTable(null, step.DataTable, variableCells, valueCells)
             );
         }
