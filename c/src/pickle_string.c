@@ -4,7 +4,6 @@
 
 const PickleString* PickleString_new(const wchar_t* content, const wchar_t* media_type) {
     PickleString* pickle_string = (PickleString*)malloc(sizeof(PickleString));
-    pickle_string->type = Argument_String;
     pickle_string->content = 0;
     if (content) {
         pickle_string->content = StringUtilities_copy_string(content);

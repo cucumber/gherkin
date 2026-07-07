@@ -6,21 +6,7 @@
 
 static void delete_pickle_step_content(const PickleStep* pickle_step);
 
-const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleArgument* argument) {
-    const PickleTable* data_table = 0;
-    const PickleString* doc_string = 0;
-    if (argument) {
-        if (argument->type == Argument_Table) {
-            data_table = (const PickleTable*)argument;
-        }
-        else if (argument->type == Argument_String) {
-            doc_string = (const PickleString*)argument;
-        }
-    }
-    return PickleStep_new_with_arguments(ast_node_ids, id_generator, text, pickle_step_type, data_table, doc_string);
-}
-
-const PickleStep* PickleStep_new_with_arguments(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleTable* data_table, const PickleString* doc_string) {
+const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleTable* data_table, const PickleString* doc_string) {
     PickleStep* pickle_step = (PickleStep*)malloc(sizeof(PickleStep));
     pickle_step->ast_node_ids = ast_node_ids;
     pickle_step->id = id_generator->new_id(id_generator);
@@ -29,7 +15,6 @@ const PickleStep* PickleStep_new_with_arguments(const PickleAstNodeIds* ast_node
         pickle_step->text = StringUtilities_copy_string(text);
     }
     pickle_step->pickle_step_type = pickle_step_type;
-    pickle_step->argument = data_table ? (const PickleArgument*)data_table : (const PickleArgument*)doc_string;
     pickle_step->data_table = data_table;
     pickle_step->doc_string = doc_string;
     return pickle_step;
@@ -51,8 +36,6 @@ void PickleStep_transfer(PickleStep* to_pickle_step, PickleStep* from_pickle_ste
     to_pickle_step->text = from_pickle_step->text;
     from_pickle_step->text = 0;
     to_pickle_step->pickle_step_type = from_pickle_step->pickle_step_type;
-    to_pickle_step->argument = from_pickle_step->argument;
-    from_pickle_step->argument = 0;
     to_pickle_step->data_table = from_pickle_step->data_table;
     from_pickle_step->data_table = 0;
     to_pickle_step->doc_string = from_pickle_step->doc_string;

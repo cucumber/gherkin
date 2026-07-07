@@ -158,7 +158,7 @@ static void* transform_node(AstNode* ast_node, AstBuilder* ast_builder) {
     switch (ast_node->rule_type) {
     case Rule_Step: {
         token = AstNode_get_token(ast_node, Token_StepLine);
-        const Step* step = Step_new_with_arguments(token->location, ast_builder->id_generator, token->matched_keyword, token->matched_keyword_type, token->matched_text, get_step_data_table(ast_node), get_step_doc_string(ast_node));
+        const Step* step = Step_new(token->location, ast_builder->id_generator, token->matched_keyword, token->matched_keyword_type, token->matched_text, get_step_data_table(ast_node), get_step_doc_string(ast_node));
         Token_delete(token);
         AstNode_delete(ast_node);
         return (void*)step;

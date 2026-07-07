@@ -300,7 +300,7 @@ static void copy_step(IdGenerator* id_generator, KeywordType keyword_type, Pickl
     const PickleAstNodeIds* step_ast_node_ids = PickleAstNodeIds_new_single(source_step->id);
     const PickleTable* data_table = create_pickle_table((DataTable*)source_step->data_table, 0, 0);
     const PickleString* doc_string = create_pickle_string(source_step->doc_string, 0, 0);
-    const PickleStep* step = PickleStep_new_with_arguments(step_ast_node_ids, id_generator, source_step->text, pickle_step_type, data_table, doc_string);
+    const PickleStep* step = PickleStep_new(step_ast_node_ids, id_generator, source_step->text, pickle_step_type, data_table, doc_string);
     PickleStep_transfer(destination_array, (PickleStep*)step);
 }
 
@@ -309,7 +309,7 @@ static const PickleStep* expand_outline_step(IdGenerator* id_generator, const St
     const wchar_t* expanded_step_text = create_expanded_text(outline_step->text, example_header, body_row);
     const PickleTable* data_table = create_pickle_table((DataTable*)outline_step->data_table, example_header, body_row);
     const PickleString* doc_string = create_pickle_string(outline_step->doc_string, example_header, body_row);
-    const PickleStep* expanded_step = PickleStep_new_with_arguments(ast_node_ids, id_generator, expanded_step_text, pickle_step_type, data_table, doc_string);
+    const PickleStep* expanded_step = PickleStep_new(ast_node_ids, id_generator, expanded_step_text, pickle_step_type, data_table, doc_string);
     free((void*)expanded_step_text);
     return expanded_step;
 }
