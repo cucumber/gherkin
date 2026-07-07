@@ -261,8 +261,7 @@ class @(Model.ParserClassName)<T> {
   void _addError(ParserContext context, ParserException error) {
     // Deduplicate by message. Each message already carries its
     // `(line:column): ` position prefix, so identical messages describe the
-    // same error at the same location; this mirrors the other first-party
-    // Gherkin implementations.
+    // same error at the same location.
     for (final e in context.errors) {
       if (e.message == error.message) {
         return;
