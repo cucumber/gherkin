@@ -1,7 +1,7 @@
 # Gherkin for Dart
 
-Gherkin parser and compiler for Dart. Parses `.feature` and Markdown sources into
-[Cucumber Messages](https://github.com/cucumber/messages) envelopes: `source`,
+Gherkin parser and compiler for Dart. Parses `.feature` sources into [Cucumber
+Messages](https://github.com/cucumber/messages) envelopes: `source`,
 `gherkinDocument`, and `pickle`. See [Gherkin](https://github.com/cucumber/gherkin)
 for the format and the other language implementations.
 
@@ -53,7 +53,7 @@ implementation details and may change without notice.
 where the source lives.
 
 Parse an in-memory string. The media type is inferred from the `uri` extension
-(`.feature` or `.md`), or pass `mediaType` when the extension is unrecognized:
+(`.feature`), or pass `mediaType` when the extension is unrecognized:
 
 ```dart
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';

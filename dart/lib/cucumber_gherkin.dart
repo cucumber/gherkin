@@ -1,6 +1,5 @@
-/// Gherkin parser/compiler for Dart. Parses `.feature` and Markdown sources
-/// into Cucumber [messages](https://pub.dev/packages/cucumber_messages)
-/// envelopes.
+/// Gherkin parser/compiler for Dart. Parses `.feature` sources into Cucumber
+/// [messages](https://pub.dev/packages/cucumber_messages) envelopes.
 ///
 /// Core, platform-agnostic public library. No `dart:io` dependency, so it works
 /// on the web. Import it for the whole public API:

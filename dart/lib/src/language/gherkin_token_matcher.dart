@@ -206,8 +206,6 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
           TokenType.stepLine,
           keyword: keyword,
           text: stepText,
-          // The plain matcher reports `unknown` for an unmapped keyword, unlike
-          // the Markdown matcher which reports `null`.
           keywordType:
               keywordTypeOrNull(keyword) ?? messages.StepKeywordType.unknown,
         );

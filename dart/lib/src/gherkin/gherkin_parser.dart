@@ -4,7 +4,6 @@ import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
-import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
@@ -138,7 +137,7 @@ class GherkinParser {
       case messages.SourceMediaType.textXCucumberGherkinPlain:
         return GherkinTokenMatcher(_dialectProvider);
       case messages.SourceMediaType.textXCucumberGherkinMarkdown:
-        return MarkdownTokenMatcher(_dialectProvider, defaultDialect);
+        throw UnsupportedError('Markdown Gherkin is not supported');
     }
   }
 
@@ -177,7 +176,7 @@ class GherkinParser {
   /// Builds a `source` [messages.Envelope] from raw Gherkin [data].
   ///
   /// The media type is taken from [mediaType] when provided; otherwise it is
-  /// inferred from the [uri] extension (`.feature` or `.md`). When [mediaType]
+  /// inferred from the [uri] extension (`.feature`). When [mediaType]
   /// is omitted and the [uri] has no recognized extension, an [ArgumentError]
   /// is thrown.
   static messages.Envelope makeSourceEnvelope(
@@ -199,11 +198,8 @@ class GherkinParser {
     if (uri.endsWith('.feature')) {
       return messages.SourceMediaType.textXCucumberGherkinPlain;
     }
-    if (uri.endsWith('.md')) {
-      return messages.SourceMediaType.textXCucumberGherkinMarkdown;
-    }
     throw ArgumentError(
-      'The uri ($uri) must end with .feature or .md, or a mediaType must be '
+      'The uri ($uri) must end with .feature, or a mediaType must be '
       'provided',
     );
   }

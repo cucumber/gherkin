@@ -5,7 +5,6 @@ import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
-import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
@@ -24,8 +23,7 @@ void main() {
     final goodDir = Directory('../testdata/good');
 
     final filesEntities = goodDir.listSync().where(
-      (file) =>
-          file.path.endsWith('.feature') || file.path.endsWith('.feature.md'),
+      (file) => file.path.endsWith('.feature'),
     );
 
     final builder = MessagesGherkinDocumentBuilder(idGenerator);
@@ -38,15 +36,7 @@ void main() {
       final file = File(fileEntity.path);
 
       final tokenScanner = FileTokenScanner.fromFile(file);
-      // The matcher is passed directly so the `TokenMatcher` parameter context
-      // type applies: its two branches share no supertype other than
-      // `TokenMatcher`.
-      final parsingResult = parser.parse(
-        tokenScanner,
-        fileEntity.path.endsWith('.md')
-            ? MarkdownTokenMatcher(dialectProvider)
-            : matcher,
-      );
+      final parsingResult = parser.parse(tokenScanner, matcher);
 
       expect(
         parsingResult,

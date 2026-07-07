@@ -4,19 +4,12 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 /// Shared step-keyword-to-[messages.StepKeywordType] mapping for the token
 /// matchers.
 ///
-/// Both the plain (`.feature`) and Markdown (`.feature.md`) matchers classify
-/// step keywords identically: `Given` is [messages.StepKeywordType.context],
-/// `When` is [messages.StepKeywordType.action], `Then` is
-/// [messages.StepKeywordType.outcome], and `And`/`But` are
+/// The plain matcher classifies `Given` as [messages.StepKeywordType.context],
+/// `When` as [messages.StepKeywordType.action], `Then` as
+/// [messages.StepKeywordType.outcome], and `And`/`But` as
 /// [messages.StepKeywordType.conjunction]. A keyword may map to more than one
 /// type (e.g. a dialect reusing one word across step kinds), so the mapping
 /// stores a list per keyword.
-///
-/// The matchers differ only in how they treat unmapped keywords: the plain
-/// matcher reports [messages.StepKeywordType.unknown], the Markdown matcher
-/// reports `null`. [keywordTypeOrNull] exposes the shared three-way result
-/// (mapped / ambiguous / absent) so each matcher applies its own policy for the
-/// absent case.
 mixin StepKeywordTypes {
   final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
       <String, List<messages.StepKeywordType>>{};

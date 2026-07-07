@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
-import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 import 'package:test/test.dart';
 
 import '../../../tool/line_ending_helper.dart';
@@ -14,8 +13,7 @@ void main() {
     const languages = builtinDialects;
     final path = Directory('../testdata/good');
     final files = path.listSync().where(
-      (file) =>
-          file.path.endsWith('.feature') || file.path.endsWith('.feature.md'),
+      (file) => file.path.endsWith('.feature'),
     );
 
     final dialectProvider = GherkinDialectProvider(languages);
@@ -26,9 +24,7 @@ void main() {
 
       final tokensText = TokensGenerator.generateTokens(
         fullPathToTestFeatureFile,
-        fullPathToTestFeatureFile.endsWith('.md')
-            ? MarkdownTokenMatcher(dialectProvider)
-            : GherkinTokenMatcher(dialectProvider),
+        GherkinTokenMatcher(dialectProvider),
       );
       final tokens = await File(expectedTokensFile).readAsString();
       final expectedTokensText = LineEndingHelper.normalizeLineEndings(tokens);

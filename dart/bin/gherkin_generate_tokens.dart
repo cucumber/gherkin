@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
-import 'package:cucumber_gherkin/src/language/markdown_token_matcher.dart';
 
 import '../tool/tokens_generator.dart';
 
@@ -20,9 +19,7 @@ void main(List<String> args) {
     stdout.writeln(
       TokensGenerator.generateTokens(
         path,
-        path.endsWith('.md')
-            ? MarkdownTokenMatcher(dialectProvider)
-            : GherkinTokenMatcher(dialectProvider),
+        GherkinTokenMatcher(dialectProvider),
       ),
     );
   }

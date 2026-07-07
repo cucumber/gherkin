@@ -86,14 +86,6 @@ void main() {
       );
     });
 
-    test('infers the markdown media type from a .md uri', () {
-      final envelope = GherkinParser.makeSourceEnvelope('', 'a.md');
-      expect(
-        envelope.source!.mediaType,
-        messages.SourceMediaType.textXCucumberGherkinMarkdown,
-      );
-    });
-
     test('throws ArgumentError for an unrecognized extension with no '
         'mediaType', () {
       expect(
@@ -107,11 +99,11 @@ void main() {
       final envelope = GherkinParser.makeSourceEnvelope(
         '',
         'a.txt',
-        mediaType: messages.SourceMediaType.textXCucumberGherkinMarkdown,
+        mediaType: messages.SourceMediaType.textXCucumberGherkinPlain,
       );
       expect(
         envelope.source!.mediaType,
-        messages.SourceMediaType.textXCucumberGherkinMarkdown,
+        messages.SourceMediaType.textXCucumberGherkinPlain,
       );
     });
 
@@ -119,11 +111,11 @@ void main() {
       final envelope = GherkinParser.makeSourceEnvelope(
         '',
         'a.feature',
-        mediaType: messages.SourceMediaType.textXCucumberGherkinMarkdown,
+        mediaType: messages.SourceMediaType.textXCucumberGherkinPlain,
       );
       expect(
         envelope.source!.mediaType,
-        messages.SourceMediaType.textXCucumberGherkinMarkdown,
+        messages.SourceMediaType.textXCucumberGherkinPlain,
       );
     });
   });
