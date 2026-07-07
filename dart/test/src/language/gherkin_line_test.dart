@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 void main() {
   const line = 12;
 
-  test('Finds tags', () {
+  test('finds_tags', () {
     final gherkinLine = GherkinLine('@this @is @a @tag', line);
     final gherkinLineSpans = gherkinLine.tags;
 
@@ -18,7 +18,7 @@ void main() {
     ], gherkinLineSpans);
   });
 
-  test('Throws on tags with spaces', () {
+  test('throws_on_tags_with_spaces', () {
     final gherkinLine = GherkinLine('@this @is @a space separated @tag', line);
     expect(
       () => gherkinLine.tags,
@@ -26,7 +26,7 @@ void main() {
     );
   });
 
-  test('Throws on tags with leading spaces', () {
+  test('throws_on_tags_with_leading_spaces', () {
     final gherkinLine = GherkinLine('@ leadingSpace', line);
     expect(
       () => gherkinLine.tags,
@@ -34,19 +34,19 @@ void main() {
     );
   });
 
-  test('Ignores empty tag', () {
+  test('ignores_empty_tag', () {
     final gherkinLine = GherkinLine('@', line);
     final gherkinLineSpans = gherkinLine.tags;
     expect(<GherkinLineSpan>[], gherkinLineSpans);
   });
 
-  test('Ignores empty tags', () {
+  test('ignores_empty_tags', () {
     final gherkinLine = GherkinLine('@@', line);
     final gherkinLineSpans = gherkinLine.tags;
     expect(<GherkinLineSpan>[], gherkinLineSpans);
   });
 
-  test('Finds tags trim whitespace', () {
+  test('finds_tags_trim_whitespace', () {
     final gherkinLine = GherkinLine('    @this @is  @a @tag  ', line);
     final gherkinLineSpans = gherkinLine.tags;
     expect(const [
@@ -57,7 +57,7 @@ void main() {
     ], gherkinLineSpans);
   });
 
-  test('Finds tags comment inside tag', () {
+  test('finds_tags_comment_inside_tag', () {
     final gherkinLine = GherkinLine('@this @is #acomment  ', line);
     final gherkinLineSpans = gherkinLine.tags;
 
@@ -67,7 +67,7 @@ void main() {
     ], gherkinLineSpans);
   });
 
-  test('Finds tags commented before tag', () {
+  test('finds_tags_commented_before_tag', () {
     final gherkinLine = GherkinLine('@this @is #@a commented tag', line);
     final gherkinLineSpans = gherkinLine.tags;
 
@@ -77,7 +77,7 @@ void main() {
     ], gherkinLineSpans);
   });
 
-  test('Finds tags commented multiple tags', () {
+  test('finds_tags_commented_multiple_tags', () {
     final gherkinLine = GherkinLine(
       '@this @is #@a @commented @sequence of tags',
       line,
@@ -165,7 +165,7 @@ void main() {
     expect(['\\o\no|'], texts);
   });
 
-  test('throws_on_illegal_escapes_backslash', () {
+  test('preserves_illegal_escapes_backslash', () {
     final gherkinLine = GherkinLine(r'|\o\no\||', line);
     final texts = gherkinLine.tableCells.map((span) => span.text).toList();
     expect(['\\o\no|'], texts);
