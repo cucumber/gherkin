@@ -6,10 +6,6 @@ import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 /// Sorts maps and normalizes values for platform-independent fixture checks.
 dynamic _sortKeys(dynamic v) {
   if (v is Map<String, dynamic>) {
@@ -141,10 +137,6 @@ void _compare(
   }
 }
 
-// ---------------------------------------------------------------------------
-// Test groups
-// ---------------------------------------------------------------------------
-
 void main() {
   const goodDir = '../testdata/good';
   const badDir = '../testdata/bad';
@@ -153,7 +145,6 @@ void main() {
   final goodNames = _fixtures(goodDir, exts);
   final badNames = _fixtures(badDir, exts);
 
-  // -- AST --------------------------------------------------------------------
   group('acceptance/ast', () {
     for (final name in goodNames) {
       test(name, () async {
@@ -172,7 +163,6 @@ void main() {
     }
   });
 
-  // -- Pickles ----------------------------------------------------------------
   group('acceptance/pickles', () {
     for (final name in goodNames) {
       test(name, () async {
@@ -191,7 +181,6 @@ void main() {
     }
   });
 
-  // -- Source -----------------------------------------------------------------
   group('acceptance/source', () {
     for (final name in goodNames) {
       test(name, () async {
@@ -210,7 +199,6 @@ void main() {
     }
   });
 
-  // -- Errors (bad fixtures) --------------------------------------------------
   group('acceptance/errors', () {
     for (final name in badNames) {
       test(name, () async {
