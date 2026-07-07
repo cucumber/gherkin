@@ -1,12 +1,16 @@
 package io.cucumber.gherkin;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 class TokenFormatterBuilder implements Parser.Builder<String> {
     private final TokenFormatter formatter = new TokenFormatter();
-    private final StringBuilder tokensTextBuilder = new StringBuilder();
+    private final List<String> tokens = new ArrayList<>();
 
     @Override
     public void build(Token token) {
-        tokensTextBuilder.append(formatter.formatToken(token)).append("\n");
+        tokens.add(formatter.formatToken(token));
     }
 
     @Override
@@ -19,7 +23,7 @@ class TokenFormatterBuilder implements Parser.Builder<String> {
 
     @Override
     public String getResult() {
-        return tokensTextBuilder.toString();
+        return tokens.stream().collect(Collectors.joining("\n", "","\n"));
     }
 
     @Override

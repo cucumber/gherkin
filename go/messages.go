@@ -3,7 +3,7 @@ package gherkin
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cucumber/messages/go/v32"
+	"github.com/cucumber/messages/go/v33"
 	"io"
 	"io/ioutil"
 	"strings"

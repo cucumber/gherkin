@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Text;
-using FluentAssertions;
+using AwesomeAssertions;
 using Gherkin.CucumberMessages;
 using Io.Cucumber.Messages.Types;
 using Gherkin.Specs.EventStubs;

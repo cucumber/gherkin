@@ -1,16 +1,33 @@
-import type * as messages from '@cucumber/messages'
-import AstNode from './AstNode'
-import { AstBuilderException } from './Errors'
-import type { IAstBuilder } from './IAstBuilder'
-import type IToken from './IToken'
-import { RuleType, TokenType } from './Parser'
+import type {
+  Background,
+  Comment,
+  DataTable,
+  DocString,
+  Examples,
+  Feature,
+  FeatureChild,
+  GherkinDocument,
+  IdGenerator,
+  Location,
+  Rule,
+  RuleChild,
+  Scenario,
+  Step,
+  TableRow,
+  Tag,
+} from '@cucumber/messages'
+import AstNode from './AstNode.js'
+import { AstBuilderException } from './Errors.js'
+import type { IAstBuilder } from './IAstBuilder.js'
+import type IToken from './IToken.js'
+import { RuleType, TokenType } from './Parser.js'
 
 export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleType> {
   stack: AstNode[]
-  comments: messages.Comment[]
-  readonly newId: messages.IdGenerator.NewId
+  comments: Comment[]
+  readonly newId: IdGenerator.NewId
 
-  constructor(newId: messages.IdGenerator.NewId) {
+  constructor(newId: IdGenerator.NewId) {
     this.newId = newId
     if (!newId) {
       throw new Error('No newId')
@@ -52,12 +69,12 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
     return this.stack[this.stack.length - 1]
   }
 
-  getLocation(token: IToken<TokenType>, column?: number): messages.Location {
+  getLocation(token: IToken<TokenType>, column?: number): Location {
     return !column ? token.location : { line: token.location.line, column }
   }
 
   getTags(node: AstNode) {
-    const tags: messages.Tag[] = []
+    const tags: Tag[] = []
     const tagsNode = node.getSingle(RuleType.Tags)
     if (!tagsNode) {
       return tags
@@ -100,7 +117,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
     return rows.length === 0 ? [] : rows
   }
 
-  ensureCellCount(rows: messages.TableRow[]) {
+  ensureCellCount(rows: TableRow[]) {
     if (rows.length === 0) {
       return
     }
@@ -121,7 +138,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         const docString = node.getSingle(RuleType.DocString)
 
         const location = this.getLocation(stepLine)
-        const step: messages.Step = {
+        const step: Step = {
           id: this.newId(),
           location,
           keyword: stepLine.matchedKeyword,
@@ -139,7 +156,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         const lineTokens = node.getTokens(TokenType.Other)
         const content = lineTokens.map((t) => t.matchedText).join('\n')
 
-        const result: messages.DocString = {
+        const result: DocString = {
           location: this.getLocation(separatorToken),
           content,
           delimiter: separatorToken.matchedKeyword,
@@ -152,7 +169,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
       }
       case RuleType.DataTable: {
         const rows = this.getTableRows(node)
-        const dataTable: messages.DataTable = {
+        const dataTable: DataTable = {
           location: rows[0].location,
           rows,
         }
@@ -163,7 +180,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         const description = this.getDescription(node)
         const steps = this.getSteps(node)
 
-        const background: messages.Background = {
+        const background: Background = {
           id: this.newId(),
           location: this.getLocation(backgroundLine),
           keyword: backgroundLine.matchedKeyword,
@@ -180,7 +197,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         const description = this.getDescription(scenarioNode)
         const steps = this.getSteps(scenarioNode)
         const examples = scenarioNode.getItems(RuleType.ExamplesDefinition)
-        const scenario: messages.Scenario = {
+        const scenario: Scenario = {
           id: this.newId(),
           tags,
           location: this.getLocation(scenarioLine),
@@ -197,9 +214,9 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         const examplesNode = node.getSingle(RuleType.Examples)
         const examplesLine = examplesNode.getToken(TokenType.ExamplesLine)
         const description = this.getDescription(examplesNode)
-        const examplesTable: messages.TableRow[] = examplesNode.getSingle(RuleType.ExamplesTable)
+        const examplesTable: TableRow[] = examplesNode.getSingle(RuleType.ExamplesTable)
 
-        const examples: messages.Examples = {
+        const examples: Examples = {
           id: this.newId(),
           tags,
           location: this.getLocation(examplesLine),
@@ -236,7 +253,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         if (!featureLine) {
           return null
         }
-        const children: messages.FeatureChild[] = []
+        const children: FeatureChild[] = []
         const background = node.getSingle(RuleType.Background)
         if (background) {
           children.push({
@@ -257,7 +274,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         const description = this.getDescription(header)
         const language = featureLine.matchedGherkinDialect
 
-        const feature: messages.Feature = {
+        const feature: Feature = {
           tags,
           location: this.getLocation(featureLine),
           language,
@@ -279,7 +296,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
           return null
         }
         const tags = this.getTags(header)
-        const children: messages.RuleChild[] = []
+        const children: RuleChild[] = []
         const background = node.getSingle(RuleType.Background)
         if (background) {
           children.push({
@@ -293,7 +310,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
         }
         const description = this.getDescription(header)
 
-        const rule: messages.Rule = {
+        const rule: Rule = {
           id: this.newId(),
           location: this.getLocation(ruleLine),
           keyword: ruleLine.matchedKeyword,
@@ -307,7 +324,7 @@ export default class AstBuilder implements IAstBuilder<AstNode, TokenType, RuleT
       case RuleType.GherkinDocument: {
         const feature = node.getSingle(RuleType.Feature)
 
-        const gherkinDocument: messages.GherkinDocument = {
+        const gherkinDocument: GherkinDocument = {
           feature,
           comments: this.comments,
         }
