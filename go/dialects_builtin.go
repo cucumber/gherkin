@@ -1821,13 +1821,15 @@ var builtinDialects = gherkinDialectMap{
 		Native:   "فارسی",
 		Keywords: map[string][]string{
 			feature: {
-				"وِیژگی",
+				"ویژگی",
+				"قابلیت",
 			},
 			rule: {
-				"Rule",
+				"قانون",
 			},
 			background: {
-				"زمینه",
+				"پیش زمینه",
+				"مقدمات",
 			},
 			scenario: {
 				"مثال",
@@ -1842,14 +1844,19 @@ var builtinDialects = gherkinDialectMap{
 			given: {
 				"* ",
 				"با فرض ",
+				"فرض کنید ",
+				"با در نظر گرفتن ",
 			},
 			when: {
 				"* ",
 				"هنگامی ",
+				"وقتی ",
 			},
 			then: {
 				"* ",
 				"آنگاه ",
+				"سپس ",
+				"انتظار می رود ",
 			},
 			and: {
 				"* ",
@@ -1863,9 +1870,19 @@ var builtinDialects = gherkinDialectMap{
 		KeywordTypes: map[string]messages.StepKeywordType{
 			"با فرض ": messages.StepKeywordType_CONTEXT,
 
+			"فرض کنید ": messages.StepKeywordType_CONTEXT,
+
+			"با در نظر گرفتن ": messages.StepKeywordType_CONTEXT,
+
 			"هنگامی ": messages.StepKeywordType_ACTION,
 
+			"وقتی ": messages.StepKeywordType_ACTION,
+
 			"آنگاه ": messages.StepKeywordType_OUTCOME,
+
+			"سپس ": messages.StepKeywordType_OUTCOME,
+
+			"انتظار می رود ": messages.StepKeywordType_OUTCOME,
 
 			"و ": messages.StepKeywordType_CONJUNCTION,
 

@@ -1272,8 +1272,8 @@ static const Dialect et_dialect = {
 static const wchar_t* const fa_and_KEYWORDS[] = { L"* ", L"و " };
 static const Keywords fa_and_keywords = { 2, fa_and_KEYWORDS };
 
-static const wchar_t* const fa_background_KEYWORDS[] = { L"زمینه" };
-static const Keywords fa_background_keywords = { 1, fa_background_KEYWORDS };
+static const wchar_t* const fa_background_KEYWORDS[] = { L"پیش زمینه", L"مقدمات" };
+static const Keywords fa_background_keywords = { 2, fa_background_KEYWORDS };
 
 static const wchar_t* const fa_but_KEYWORDS[] = { L"* ", L"اما " };
 static const Keywords fa_but_keywords = { 2, fa_but_KEYWORDS };
@@ -1281,13 +1281,13 @@ static const Keywords fa_but_keywords = { 2, fa_but_KEYWORDS };
 static const wchar_t* const fa_examples_KEYWORDS[] = { L"نمونه ها" };
 static const Keywords fa_examples_keywords = { 1, fa_examples_KEYWORDS };
 
-static const wchar_t* const fa_feature_KEYWORDS[] = { L"وِیژگی" };
-static const Keywords fa_feature_keywords = { 1, fa_feature_KEYWORDS };
+static const wchar_t* const fa_feature_KEYWORDS[] = { L"ویژگی", L"قابلیت" };
+static const Keywords fa_feature_keywords = { 2, fa_feature_KEYWORDS };
 
-static const wchar_t* const fa_given_KEYWORDS[] = { L"* ", L"با فرض " };
-static const Keywords fa_given_keywords = { 2, fa_given_KEYWORDS };
+static const wchar_t* const fa_given_KEYWORDS[] = { L"* ", L"با فرض ", L"فرض کنید ", L"با در نظر گرفتن " };
+static const Keywords fa_given_keywords = { 4, fa_given_KEYWORDS };
 
-static const wchar_t* const fa_rule_KEYWORDS[] = { L"Rule" };
+static const wchar_t* const fa_rule_KEYWORDS[] = { L"قانون" };
 static const Keywords fa_rule_keywords = { 1, fa_rule_KEYWORDS };
 
 static const wchar_t* const fa_scenario_KEYWORDS[] = { L"مثال", L"سناریو" };
@@ -1296,11 +1296,11 @@ static const Keywords fa_scenario_keywords = { 2, fa_scenario_KEYWORDS };
 static const wchar_t* const fa_scenarioOutline_KEYWORDS[] = { L"الگوی سناریو" };
 static const Keywords fa_scenarioOutline_keywords = { 1, fa_scenarioOutline_KEYWORDS };
 
-static const wchar_t* const fa_then_KEYWORDS[] = { L"* ", L"آنگاه " };
-static const Keywords fa_then_keywords = { 2, fa_then_KEYWORDS };
+static const wchar_t* const fa_then_KEYWORDS[] = { L"* ", L"آنگاه ", L"سپس ", L"انتظار می رود " };
+static const Keywords fa_then_keywords = { 4, fa_then_KEYWORDS };
 
-static const wchar_t* const fa_when_KEYWORDS[] = { L"* ", L"هنگامی " };
-static const Keywords fa_when_keywords = { 2, fa_when_KEYWORDS };
+static const wchar_t* const fa_when_KEYWORDS[] = { L"* ", L"هنگامی ", L"وقتی " };
+static const Keywords fa_when_keywords = { 3, fa_when_KEYWORDS };
 
 static const Dialect fa_dialect = {
         L"fa",
