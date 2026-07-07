@@ -202,21 +202,21 @@ public class PickleCompiler(IIdGenerator idGenerator)
             return new PickleStepArgument(
                 CreatePickleDocString(tableFirst ? 2L : 1L, step.DocString, variableCells, valueCells),
                 CreatePickleTable(tableFirst ? 2L : 1L, step.DataTable, variableCells, valueCells)
-            )
+            );
         }
         else if (step.DataTable != null)
         {
             return new PickleStepArgument(
                 null
                 CreatePickleTable(null, step.DataTable, variableCells, valueCells)
-            )
+            );
         }
         else if(step.DocString != null)
         {
             return new PickleStepArgument(
                 CreatePickleDocString(null, step.DocString, variableCells, valueCells),
                 null
-            )
+            );
         }
         else
         {
