@@ -11,42 +11,12 @@ import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Parses Gherkin documents into a stream of Cucumber [messages.Envelope]s.
+/// Parses Gherkin documents into Cucumber [messages.Envelope]s.
 ///
-/// ## Streaming semantics
-///
-/// The returned [Stream]s are lazy across sources but eager within a source.
-/// Each source (file, string, or `source` envelope) is parsed in full the first
-/// time its portion of the stream is pulled: a Gherkin document is not
-/// available incrementally, since building the AST and compiling pickles needs
-/// the whole document. When several sources are parsed together (for example
-/// via [parseEnvelopes], or `parsePaths` from
-/// `package:cucumber_gherkin/cucumber_gherkin_io.dart`), a later source is not
-/// read or parsed until the preceding source's envelopes are consumed.
-///
-/// The file-reading entry points (`parsePath`/`parsePaths`) live in the
-/// separate `package:cucumber_gherkin/cucumber_gherkin_io.dart` library because
-/// they depend on `dart:io`. This core library stays platform-agnostic and
-/// usable on the web.
-///
-/// ## Error contract
-///
-/// Malformed Gherkin never throws. It is reported as a `parseError` envelope in
-/// the stream. The only synchronous throws are for conditions that are not a
-/// property of the Gherkin source and are detected before parsing:
-///
-/// * [parseString] and [makeSourceEnvelope] throw an [ArgumentError] when the
-///   media type cannot be resolved (no `mediaType` and an unrecognized `uri`
-///   extension);
-/// * the file-reading entry points (`parsePath`/`parsePaths`) surface I/O
-///   failures as a [GherkinException] error event on the stream.
+/// Streams are lazy across sources but eager within a source. Malformed Gherkin
+/// is reported as `parseError` envelopes rather than thrown exceptions.
 class GherkinParser {
   /// Creates a parser.
-  ///
-  /// Use [includeSource], [includeGherkinDocument], and [includePickles] to
-  /// control which kinds of envelopes are emitted, [defaultDialect] to choose
-  /// the dialect used when a feature has no `# language:` header, and
-  /// [idGenerator] to assign message ids (defaults to UUIDs).
   GherkinParser({
     this.includeSource = defaultIncludeSource,
     this.includeGherkinDocument = defaultIncludeGherkinDocument,
@@ -54,10 +24,6 @@ class GherkinParser {
     this.defaultDialect = defaultDialectValue,
     IdGenerator? idGenerator,
   }) : idGenerator = idGenerator ?? IdGenerator.uuidGenerator {
-    // Dialects are embedded as generated Dart source in
-    // `dialects_builtin.g.dart` (from `gherkin-languages.json`), so loading
-    // does not depend on the working directory, runtime asset resolution, or
-    // package layout.
     _dialectProvider = GherkinDialectProvider(builtinDialects, defaultDialect);
   }
 
@@ -91,21 +57,10 @@ class GherkinParser {
 
   late final GherkinDialectProvider _dialectProvider;
 
-  /// Parses in-memory Gherkin [data] identified by [uri] and emits the
-  /// resulting envelopes.
+  /// Parses in-memory Gherkin [data] identified by [uri].
   ///
-  /// The [uri] is used as the source reference; it does not need to point at a
-  /// real file. No I/O is performed. To read Gherkin from a file, use
-  /// `parsePath` from `package:cucumber_gherkin/cucumber_gherkin_io.dart`.
-  ///
-  /// The media type is taken from [mediaType] when provided; otherwise it is
-  /// inferred from the [uri] extension (`.feature` or `.md`). Pass [mediaType]
-  /// explicitly when the [uri] has no recognized extension.
-  ///
-  /// Unlike malformed Gherkin, which is always reported as a `parseError`
-  /// envelope and never thrown, this method throws an [ArgumentError]
-  /// synchronously when [mediaType] is omitted and the [uri] has no recognized
-  /// extension: the media type cannot be resolved before parsing begins.
+  /// Throws an [ArgumentError] when [mediaType] is omitted and the [uri]
+  /// extension is not recognized.
   Stream<messages.Envelope> parseString(
     String data,
     String uri, {
@@ -114,13 +69,7 @@ class GherkinParser {
     return parseEnvelope(makeSourceEnvelope(data, uri, mediaType: mediaType));
   }
 
-  /// Parses a single source [envelope] and emits the resulting envelopes.
-  ///
-  /// The incoming [envelope] is re-emitted first when [includeSource] is set.
-  ///
-  /// The source is parsed in full when the first `gherkinDocument`/`pickle`
-  /// envelope is pulled from the stream (see the class-level streaming
-  /// semantics); the document cannot be produced incrementally.
+  /// Parses a single source [envelope].
   Stream<messages.Envelope> parseEnvelope(messages.Envelope envelope) async* {
     if (includeSource) {
       yield envelope;
@@ -144,10 +93,6 @@ class GherkinParser {
 
     final messages.GherkinDocument gherkinDocument;
     try {
-      // Build the token matcher inside the try. Constructing it resolves the
-      // default dialect eagerly, so an unsupported `defaultDialect` (no
-      // `# language:` header, hence no location) must surface as a `parseError`
-      // envelope rather than escape to the caller.
       final tokenMatcher = _tokenMatcher(source.mediaType);
       gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
     } on CompositeParserException catch (e) {

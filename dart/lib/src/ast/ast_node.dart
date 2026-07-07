@@ -2,18 +2,11 @@ import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
-/// A node in the intermediate parse tree, grouping the sub-items recognized
-/// for a single [RuleType].
+/// A node in the intermediate parse tree.
 class AstNode {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);
 
-  // Sub-items are heterogeneous: raw [Token]s during parsing, plus the Cucumber
-  // Messages types produced as rules reduce. A reduced node may be null (e.g. a
-  // `Feature`/`Rule` with no header), and callers rely on those nulls being
-  // retained so they can filter them out later. Typed as `Object?` rather than
-  // `dynamic` to keep access statically checked; [items] narrows back to the
-  // caller's `T` via `cast`.
   final Map<RuleType, List<Object?>> _subItems = <RuleType, List<Object?>>{};
 
   /// The grammar rule this node represents.
@@ -24,13 +17,6 @@ class AstNode {
       firstOrNull<Token>(tokenType.toRuleType());
 
   /// Returns the single [Token] of [tokenType].
-  ///
-  /// Unlike [getToken], throws a [StateError] when the token is absent. The
-  /// grammar guarantees the token exists here, so a missing token means the
-  /// generated parser and this builder have drifted out of sync (e.g.
-  /// `parser.g.dart` regenerated from a changed grammar without updating the
-  /// builder). Failing loudly surfaces a clear diagnostic instead of a
-  /// downstream null-dereference crash.
   Token requireToken(TokenType tokenType) =>
       getToken(tokenType) ??
       (throw StateError(
@@ -44,17 +30,11 @@ class AstNode {
       items<Token>(tokenType.toRuleType());
 
   /// Adds [obj] to the list of sub-items stored under [ruleType].
-  ///
-  /// [obj] may be null: a reduced rule (for example a `Feature` or `Rule` with
-  /// no header) can produce a null value that callers filter out later.
   void add(RuleType ruleType, Object? obj) {
     (_subItems[ruleType] ??= <Object?>[]).add(obj);
   }
 
   /// Returns the first sub-item of [ruleType], or `null` if there is none.
-  ///
-  /// First-match semantics: with multiple sub-items of [ruleType], returns the
-  /// first. Does not assert exactly one is present.
   T? firstOrNull<T>(RuleType ruleType) {
     final elems = items<T>(ruleType);
     if (elems.isEmpty) {
@@ -69,12 +49,6 @@ class AstNode {
       firstOrNull<T>(ruleType) ?? defaultValue;
 
   /// Returns the first sub-item of [ruleType].
-  ///
-  /// Unlike [firstOrNull], throws a [StateError] when no sub-item of [ruleType]
-  /// is present. The grammar guarantees it exists here, so its absence means
-  /// the generated parser and this builder have drifted out of sync. Failing
-  /// loudly surfaces a clear diagnostic instead of a downstream
-  /// null-dereference crash.
   T require<T>(RuleType requestedRuleType) =>
       firstOrNull<T>(requestedRuleType) ??
       (throw StateError(
