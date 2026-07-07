@@ -121,7 +121,7 @@ void main() {
 
   test('counts_combining_marks_as_separate_columns', () {
     // The first cell holds "cafe" followed by a combining acute accent
-    // (U+0301), i.e. "cafÃ©" written as base letter + combining mark. Columns
+    // (U+0301), written as base letter + combining mark. Columns
     // are counted per Unicode code point, so the combining mark advances the
     // column on its own and the next cell starts one column later than it would
     // under grapheme-cluster counting.
@@ -141,12 +141,13 @@ void main() {
 
   test('finds_escaped_table_cells', () {
     final gherkinLine = GherkinLine(
-      r'      | \|Ã¦\\n     | \o\no\  | \\\|a\\\\n | Ã¸\\\nÃ¸\\|',
+      '      | \\|\u00e6\\\\n     | \\o\\no\\  | '
+      '\\\\\\|a\\\\\\\\n | \u00f8\\\\\\n\u00f8\\\\|',
       line,
     );
 
     final texts = gherkinLine.tableCells.map((span) => span.text).toList();
-    expect([r'|Ã¦\n', '\\o\no\\', r'\|a\\n', 'Ã¸\\\nÃ¸\\'], texts);
+    expect(['|\u00e6\\n', '\\o\no\\', r'\|a\\n', '\u00f8\\\n\u00f8\\'], texts);
   });
 
   test('preserve_escaped_new_lines_at_start_and_end', () {
