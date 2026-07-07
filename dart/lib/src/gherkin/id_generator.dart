@@ -2,6 +2,9 @@ import 'dart:math';
 
 /// Generates the ids assigned to emitted Cucumber messages.
 abstract class IdGenerator {
+  /// Creates an id generator.
+  IdGenerator();
+
   /// Returns the next id.
   String newId();
 
@@ -21,6 +24,9 @@ abstract class IdGenerator {
 /// Produces random RFC 4122 version 4 UUIDs.
 class UuidIdGenerator implements IdGenerator {
   static final Random _random = Random.secure();
+
+  /// Creates an id generator that produces random UUIDs.
+  UuidIdGenerator();
 
   @override
   String newId() {
@@ -42,6 +48,9 @@ class UuidIdGenerator implements IdGenerator {
 /// An [IdGenerator] that produces sequential ids starting at `0`.
 class IncrementingIdGenerator implements IdGenerator {
   int _next = 0;
+
+  /// Creates a sequential id generator starting at `0`.
+  IncrementingIdGenerator();
 
   @override
   String newId() => (_next++).toString();
