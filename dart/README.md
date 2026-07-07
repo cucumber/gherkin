@@ -143,14 +143,11 @@ Flags: `--no-source`, `--no-ast`, `--no-pickles`, `--predictable-ids`, and
 ## Acceptance test suite
 
 Acceptance tests compare ASTs, pickles, sources, and errors against the fixtures in
-`../testdata/`. Run the pure-Dart suite on any platform:
+`../testdata/`:
 
 ```sh
-dart test test/acceptance/gherkin_acceptance_test.dart
+make acceptance
 ```
-
-`make acceptance` runs the same coverage but shells out to bash, jq, and diff, so
-it targets Linux and macOS CI.
 
 For general information about Gherkin and the other language implementations, see the
 repository root [README](https://github.com/cucumber/gherkin/blob/main/README.md).
