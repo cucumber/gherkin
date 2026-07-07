@@ -201,7 +201,7 @@ public class PickleCompiler(IIdGenerator idGenerator)
             bool tableFirst = step.DocString.Location.Line > step.DataTable.Location.Line;
             return new PickleStepArgument(
                 CreatePickleDocString(tableFirst ? 2L : 1L, step.DocString, variableCells, valueCells),
-                CreatePickleTable(tableFirst ? 2L : 1L, step.DataTable, variableCells, valueCells)
+                CreatePickleTable(tableFirst ? 1L : 2L, step.DataTable, variableCells, valueCells)
             );
         }
         else if (step.DataTable != null)
