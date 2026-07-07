@@ -12,8 +12,4 @@ public class Step(Location location, string keyword, StepKeywordType keywordType
     public DataTable DataTable { get; } = dataTable;
     public DocString DocString { get; } = docString;
 
-    public Step(Location location, string keyword, StepKeywordType keywordType, string text, StepArgument argument)
-        : this(location, keyword, keywordType, text, argument as DataTable, argument as DocString)
-    {
-    }
 }
