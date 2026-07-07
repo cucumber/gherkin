@@ -40,8 +40,6 @@ typedef struct Steps {
 
 const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string);
 
-const Step* Step_new_with_arguments(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string);
-
 void Step_delete(const Step* step);
 
 void Step_transfer(Step* to_step, Step* from_step);
