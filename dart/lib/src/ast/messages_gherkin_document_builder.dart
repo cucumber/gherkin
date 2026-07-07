@@ -112,6 +112,8 @@ class MessagesGherkinDocumentBuilder
       case RuleType.scenario:
       case RuleType.examples:
       case RuleType.stepArg:
+      case RuleType.dataTableAndMaybeDocString:
+      case RuleType.docStringAndMaybeDataTable:
       case RuleType.tags:
       case RuleType.descriptionHelper:
         return node;
