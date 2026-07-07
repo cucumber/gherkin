@@ -1,11 +1,16 @@
 import assert from 'node:assert'
-import * as messages from '@cucumber/messages'
-import AstBuilder from '../src/AstBuilder'
-import type AstNode from '../src/AstNode'
-import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher'
-import GherkinInMarkdownTokenMatcher from '../src/GherkinInMarkdownTokenMatcher'
-import generateMessages from '../src/generateMessages'
-import Parser from '../src/Parser'
+import {
+  type GherkinDocument,
+  IdGenerator,
+  SourceMediaType,
+  StepKeywordType,
+} from '@cucumber/messages'
+import AstBuilder from '../src/AstBuilder.js'
+import type AstNode from '../src/AstNode.js'
+import GherkinClassicTokenMatcher from '../src/GherkinClassicTokenMatcher.js'
+import GherkinInMarkdownTokenMatcher from '../src/GherkinInMarkdownTokenMatcher.js'
+import generateMessages from '../src/generateMessages.js'
+import Parser from '../src/Parser.js'
 
 describe('Parser', () => {
   describe('with Gherkin Classic', () => {
@@ -13,14 +18,14 @@ describe('Parser', () => {
     beforeEach(
       () =>
         (parser = new Parser<AstNode>(
-          new AstBuilder(messages.IdGenerator.incrementing()),
+          new AstBuilder(IdGenerator.incrementing()),
           new GherkinClassicTokenMatcher()
         ))
     )
 
     it('parses a simple feature', () => {
       const ast = parser.parse('Feature: hello')
-      const gherkinDocument: messages.GherkinDocument = {
+      const gherkinDocument: GherkinDocument = {
         feature: {
           description: '',
           tags: [],
@@ -39,7 +44,7 @@ describe('Parser', () => {
       const ast1 = parser.parse('Feature: hello')
       const ast2 = parser.parse('Feature: hello again')
 
-      const gherkinDocument1: messages.GherkinDocument = {
+      const gherkinDocument1: GherkinDocument = {
         feature: {
           tags: [],
           description: '',
@@ -52,7 +57,7 @@ describe('Parser', () => {
         comments: [],
       }
       assert.deepStrictEqual(ast1, gherkinDocument1)
-      const gherkinDocument2: messages.GherkinDocument = {
+      const gherkinDocument2: GherkinDocument = {
         feature: {
           tags: [],
           description: '',
@@ -73,7 +78,7 @@ describe('Parser', () => {
   description
 `)
 
-      const gherkinDocument: messages.GherkinDocument = {
+      const gherkinDocument: GherkinDocument = {
         feature: {
           tags: [],
           description: '  This is the\n  description',
@@ -89,7 +94,7 @@ describe('Parser', () => {
     })
 
     it('parses feature after parse error', () => {
-      let ast: messages.GherkinDocument
+      let ast: GherkinDocument
       try {
         parser.parse(
           '# a comment\n' +
@@ -110,7 +115,7 @@ describe('Parser', () => {
         )
       }
 
-      const gherkinDocument: messages.GherkinDocument = {
+      const gherkinDocument: GherkinDocument = {
         feature: {
           tags: [],
           description: '',
@@ -137,7 +142,7 @@ describe('Parser', () => {
                       location: { line: 4, column: 7 },
                     },
                     keyword: 'Given ',
-                    keywordType: messages.StepKeywordType.CONTEXT,
+                    keywordType: StepKeywordType.CONTEXT,
                     location: { line: 3, column: 5 },
                     text: 'x',
                   },
@@ -161,8 +166,8 @@ describe('Parser', () => {
           '    | is (not) triggered | value |\n' +
           '    | is triggered       | foo   |\n ',
         '',
-        messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN,
-        { includePickles: true, newId: messages.IdGenerator.incrementing() }
+        SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN,
+        { includePickles: true, newId: IdGenerator.incrementing() }
       )
 
       const pickle = envelopes.find((envelope) => envelope.pickle).pickle
@@ -172,9 +177,9 @@ describe('Parser', () => {
 
     it('can change the default language', () => {
       const matcher = new GherkinClassicTokenMatcher('no')
-      const parser = new Parser(new AstBuilder(messages.IdGenerator.incrementing()), matcher)
+      const parser = new Parser(new AstBuilder(IdGenerator.incrementing()), matcher)
       const ast = parser.parse('Egenskap: i18n support')
-      const gherkinDocument: messages.GherkinDocument = {
+      const gherkinDocument: GherkinDocument = {
         feature: {
           tags: [],
           description: '',
@@ -195,7 +200,7 @@ describe('Parser', () => {
     beforeEach(
       () =>
         (parser = new Parser<AstNode>(
-          new AstBuilder(messages.IdGenerator.incrementing()),
+          new AstBuilder(IdGenerator.incrementing()),
           new GherkinInMarkdownTokenMatcher()
         ))
     )
@@ -206,7 +211,7 @@ This is the
 description
 `)
 
-      const gherkinDocument: messages.GherkinDocument = {
+      const gherkinDocument: GherkinDocument = {
         feature: {
           tags: [],
           description: '',
@@ -232,7 +237,7 @@ description
 ## Some other header
 `)
 
-      const gherkinDocument: messages.GherkinDocument = {
+      const gherkinDocument: GherkinDocument = {
         feature: {
           tags: [],
           location: {
@@ -263,7 +268,7 @@ description
                       column: 3,
                     },
                     keyword: 'Given ',
-                    keywordType: messages.StepKeywordType.CONTEXT,
+                    keywordType: StepKeywordType.CONTEXT,
                     text: 'a step',
                     dataTable: undefined,
                     docString: undefined,
@@ -291,11 +296,11 @@ description
       const envelopes = generateMessages(
         markdown,
         'test.md',
-        messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN,
+        SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN,
         {
           includePickles: true,
           includeGherkinDocument: true,
-          newId: messages.IdGenerator.incrementing(),
+          newId: IdGenerator.incrementing(),
         }
       )
 

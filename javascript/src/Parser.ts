@@ -1,21 +1,21 @@
 // This file is generated. Do not edit! Edit gherkin-javascript.razor instead.
 
-import * as messages from '@cucumber/messages'
+import type { GherkinDocument, Location, StepKeywordType } from '@cucumber/messages'
 import {
   AstBuilderException,
   CompositeParserException,
   NoSuchLanguageException,
   ParserException,
-} from './Errors'
+} from './Errors.js'
 import {
   UnexpectedEOFException,
   UnexpectedTokenException,
-} from './TokenExceptions'
-import TokenScanner from './TokenScanner'
-import ITokenMatcher from './ITokenMatcher'
-import GherkinLine from './GherkinLine'
-import IToken, { Item } from './IToken'
-import { IAstBuilder } from './IAstBuilder'
+} from './TokenExceptions.js'
+import TokenScanner from './TokenScanner.js'
+import ITokenMatcher from './ITokenMatcher.js'
+import GherkinLine from './GherkinLine.js'
+import IToken, { Item } from './IToken.js'
+import { IAstBuilder } from './IAstBuilder.js'
 
 export class Token implements IToken<TokenType> {
   public isEof: boolean
@@ -25,11 +25,11 @@ export class Token implements IToken<TokenType> {
   public matchedKeyword: string
   public matchedIndent: number
   public matchedGherkinDialect: string
-  public matchedKeywordType: messages.StepKeywordType
+  public matchedKeywordType: StepKeywordType
 
   constructor(
     public readonly line: GherkinLine,
-    public readonly location:  messages.Location
+    public readonly location:  Location
   ) {
     this.isEof = !line
   }
@@ -110,10 +110,10 @@ export default class Parser<AstNode> {
     private readonly tokenMatcher: ITokenMatcher<TokenType>
   ) {}
 
-  public parse(gherkinSource: string): messages.GherkinDocument {
+  public parse(gherkinSource: string): GherkinDocument {
     const tokenScanner = new TokenScanner(
       gherkinSource,
-      (line: string, location:  messages.Location) => {
+      (line: string, location:  Location) => {
         const gherkinLine =
           line === null || line === undefined
             ? null

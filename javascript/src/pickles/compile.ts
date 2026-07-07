@@ -1,21 +1,36 @@
-import * as messages from '@cucumber/messages'
+import {
+  type GherkinDocument,
+  type IdGenerator,
+  type Pickle,
+  type PickleDocString,
+  type PickleStep,
+  type PickleStepArgument,
+  PickleStepType,
+  type PickleTable,
+  type PickleTag,
+  type Rule,
+  type Scenario,
+  type Step,
+  StepKeywordType,
+  type TableCell,
+  type TableRow,
+  type Tag,
+} from '@cucumber/messages'
 
-import IGherkinDocument = messages.GherkinDocument
-
-const pickleStepTypeFromKeyword: { [key in messages.StepKeywordType]: messages.PickleStepType } = {
-  [messages.StepKeywordType.UNKNOWN]: messages.PickleStepType.UNKNOWN,
-  [messages.StepKeywordType.CONTEXT]: messages.PickleStepType.CONTEXT,
-  [messages.StepKeywordType.ACTION]: messages.PickleStepType.ACTION,
-  [messages.StepKeywordType.OUTCOME]: messages.PickleStepType.OUTCOME,
-  [messages.StepKeywordType.CONJUNCTION]: null,
+const pickleStepTypeFromKeyword: { [key in StepKeywordType]: PickleStepType } = {
+  [StepKeywordType.UNKNOWN]: PickleStepType.UNKNOWN,
+  [StepKeywordType.CONTEXT]: PickleStepType.CONTEXT,
+  [StepKeywordType.ACTION]: PickleStepType.ACTION,
+  [StepKeywordType.OUTCOME]: PickleStepType.OUTCOME,
+  [StepKeywordType.CONJUNCTION]: null,
 }
 
 export default function compile(
-  gherkinDocument: IGherkinDocument,
+  gherkinDocument: GherkinDocument,
   uri: string,
-  newId: messages.IdGenerator.NewId
-): readonly messages.Pickle[] {
-  const pickles: messages.Pickle[] = []
+  newId: IdGenerator.NewId
+): readonly Pickle[] {
+  const pickles: Pickle[] = []
 
   if (gherkinDocument.feature == null) {
     return pickles
@@ -24,7 +39,7 @@ export default function compile(
   const feature = gherkinDocument.feature
   const language = feature.language
   const featureTags = feature.tags
-  let featureBackgroundSteps: messages.Step[] = []
+  let featureBackgroundSteps: Step[] = []
 
   feature.children.forEach((stepsContainer) => {
     if (stepsContainer.background) {
@@ -65,13 +80,13 @@ export default function compile(
 }
 
 function compileRule(
-  featureTags: readonly messages.Tag[],
-  featureBackgroundSteps: readonly messages.Step[],
-  rule: messages.Rule,
+  featureTags: readonly Tag[],
+  featureBackgroundSteps: readonly Step[],
+  rule: Rule,
   language: string,
-  pickles: messages.Pickle[],
+  pickles: Pickle[],
   uri: string,
-  newId: messages.IdGenerator.NewId
+  newId: IdGenerator.NewId
 ) {
   let ruleBackgroundSteps = [].concat(featureBackgroundSteps)
 
@@ -105,23 +120,21 @@ function compileRule(
 }
 
 function compileScenario(
-  inheritedTags: readonly messages.Tag[],
-  backgroundSteps: readonly messages.Step[],
-  scenario: messages.Scenario,
+  inheritedTags: readonly Tag[],
+  backgroundSteps: readonly Step[],
+  scenario: Scenario,
   language: string,
-  pickles: messages.Pickle[],
+  pickles: Pickle[],
   uri: string,
-  newId: messages.IdGenerator.NewId
+  newId: IdGenerator.NewId
 ) {
-  let lastKeywordType = messages.StepKeywordType.UNKNOWN
-  const steps = [] as messages.PickleStep[]
+  let lastKeywordType = StepKeywordType.UNKNOWN
+  const steps = [] as PickleStep[]
 
   if (scenario.steps.length !== 0) {
     backgroundSteps.forEach((step) => {
       lastKeywordType =
-        step.keywordType === messages.StepKeywordType.CONJUNCTION
-          ? lastKeywordType
-          : step.keywordType
+        step.keywordType === StepKeywordType.CONJUNCTION ? lastKeywordType : step.keywordType
       steps.push(pickleStep(step, [], null, newId, lastKeywordType))
     })
   }
@@ -130,11 +143,11 @@ function compileScenario(
 
   scenario.steps.forEach((step) => {
     lastKeywordType =
-      step.keywordType === messages.StepKeywordType.CONJUNCTION ? lastKeywordType : step.keywordType
+      step.keywordType === StepKeywordType.CONJUNCTION ? lastKeywordType : step.keywordType
     steps.push(pickleStep(step, [], null, newId, lastKeywordType))
   })
 
-  const pickle: messages.Pickle = {
+  const pickle: Pickle = {
     id: newId(),
     uri,
     location: scenario.location,
@@ -148,34 +161,32 @@ function compileScenario(
 }
 
 function compileScenarioOutline(
-  inheritedTags: readonly messages.Tag[],
-  backgroundSteps: readonly messages.Step[],
-  scenario: messages.Scenario,
+  inheritedTags: readonly Tag[],
+  backgroundSteps: readonly Step[],
+  scenario: Scenario,
   language: string,
-  pickles: messages.Pickle[],
+  pickles: Pickle[],
   uri: string,
-  newId: messages.IdGenerator.NewId
+  newId: IdGenerator.NewId
 ) {
   scenario.examples
     .filter((e) => e.tableHeader)
     .forEach((examples) => {
       const variableCells = examples.tableHeader.cells
       examples.tableBody.forEach((valuesRow) => {
-        let lastKeywordType = messages.StepKeywordType.UNKNOWN
-        const steps = [] as messages.PickleStep[]
+        let lastKeywordType = StepKeywordType.UNKNOWN
+        const steps = [] as PickleStep[]
         if (scenario.steps.length !== 0) {
           backgroundSteps.forEach((step) => {
             lastKeywordType =
-              step.keywordType === messages.StepKeywordType.CONJUNCTION
-                ? lastKeywordType
-                : step.keywordType
+              step.keywordType === StepKeywordType.CONJUNCTION ? lastKeywordType : step.keywordType
             steps.push(pickleStep(step, [], null, newId, lastKeywordType))
           })
         }
 
         scenario.steps.forEach((scenarioOutlineStep) => {
           lastKeywordType =
-            scenarioOutlineStep.keywordType === messages.StepKeywordType.CONJUNCTION
+            scenarioOutlineStep.keywordType === StepKeywordType.CONJUNCTION
               ? lastKeywordType
               : scenarioOutlineStep.keywordType
           const step = pickleStep(
@@ -208,19 +219,19 @@ function compileScenarioOutline(
 }
 
 function createPickleArguments(
-  step: messages.Step,
-  variableCells: readonly messages.TableCell[],
-  valueCells: readonly messages.TableCell[]
-): messages.PickleStepArgument | undefined {
+  step: Step,
+  variableCells: readonly TableCell[],
+  valueCells: readonly TableCell[]
+): PickleStepArgument | undefined {
   if (!step.dataTable && !step.docString) {
     return undefined
   }
 
-  const result: messages.PickleStepArgument = {}
+  const result: PickleStepArgument = {}
 
   if (step.dataTable) {
     const argument = step.dataTable
-    const table: messages.PickleTable = {
+    const table: PickleTable = {
       rows: argument.rows.map((row) => {
         return {
           cells: row.cells.map((cell) => {
@@ -236,7 +247,7 @@ function createPickleArguments(
 
   if (step.docString) {
     const argument = step.docString
-    const docString: messages.PickleDocString = {
+    const docString: PickleDocString = {
       content: interpolate(argument.content, variableCells, valueCells),
     }
     if (argument.mediaType) {
@@ -250,8 +261,8 @@ function createPickleArguments(
 
 function interpolate(
   name: string,
-  variableCells: readonly messages.TableCell[],
-  valueCells: readonly messages.TableCell[]
+  variableCells: readonly TableCell[],
+  valueCells: readonly TableCell[]
 ) {
   variableCells.forEach((variableCell, n) => {
     const valueCell = valueCells[n]
@@ -267,12 +278,12 @@ function interpolate(
 }
 
 function pickleStep(
-  step: messages.Step,
-  variableCells: readonly messages.TableCell[],
-  valuesRow: messages.TableRow | null,
-  newId: messages.IdGenerator.NewId,
-  keywordType: messages.StepKeywordType
-): messages.PickleStep {
+  step: Step,
+  variableCells: readonly TableCell[],
+  valuesRow: TableRow | null,
+  newId: IdGenerator.NewId,
+  keywordType: StepKeywordType
+): PickleStep {
   const astNodeIds = [step.id]
   if (valuesRow) {
     astNodeIds.push(valuesRow.id)
@@ -288,11 +299,11 @@ function pickleStep(
   }
 }
 
-function pickleTags(tags: messages.Tag[]): readonly messages.PickleTag[] {
+function pickleTags(tags: Tag[]): readonly PickleTag[] {
   return tags.map(pickleTag)
 }
 
-function pickleTag(tag: messages.Tag): messages.PickleTag {
+function pickleTag(tag: Tag): PickleTag {
   return {
     name: tag.name,
     astNodeId: tag.id,

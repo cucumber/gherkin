@@ -7,6 +7,23 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- (i18n) Added Persian translation of "Rule" ([#642](https://github.com/cucumber/gherkin/pull/642))
+- (i18n) Added new synonyms for existing Persian keywords  ([#642](https://github.com/cucumber/gherkin/pull/642))
+### Changed
+- Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599))
+
+## [41.0.0] - 2026-06-20
+### Changed
+- [PHP] BREAKING CHANGE: Require PHP 8.4
+
+### Fixed
+- [JavaScript] Remove namespace imports from messages
+
+## [40.0.0] - 2026-06-10
+### Changed
+- [.Net] Replaced FluentAssertions with AwesomeAssertions
+- [JavaScript] BREAKING CHANGE: Switch to ESM ([#610](https://github.com/cucumber/gherkin/pull/610))
 
 ## [39.1.0] - 2026-05-06
 ### Added
@@ -911,7 +928,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v39.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v41.0.0...HEAD
+[41.0.0]: https://github.com/cucumber/gherkin/compare/v40.0.0...v41.0.0
+[40.0.0]: https://github.com/cucumber/gherkin/compare/v39.1.0...v40.0.0
 [39.1.0]: https://github.com/cucumber/gherkin/compare/v39.0.0...v39.1.0
 [39.0.0]: https://github.com/cucumber/gherkin/compare/v38.0.0...v39.0.0
 [38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0

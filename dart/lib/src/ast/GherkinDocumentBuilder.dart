@@ -108,7 +108,7 @@ abstract class AstRulesBuilder
     var docString = node.singleOrDefault<DocString>(RuleType.DocString
         , DocString.empty);
     return Step(_getLocation(stepLine), stepLine.matchedKeyword
-        , stepLine.matchedKeywordType, stepLine.matchedText, StepArgument.empty
+        , stepLine.matchedKeywordType, stepLine.matchedText
         , dataTable: dataTable, docString: docString );
   }
 

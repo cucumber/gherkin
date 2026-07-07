@@ -4,7 +4,6 @@
 #include <wchar.h>
 
 #include "pickle_ast_node_id.h"
-#include "pickle_argument.h"
 #include "pickle_string.h"
 #include "pickle_table.h"
 #include "id_generator.h"
@@ -25,7 +24,6 @@ typedef struct PickleStep {
     const wchar_t* id;
     wchar_t* text;
     PickleStepType pickle_step_type;
-    const PickleArgument* argument;
     const PickleString* doc_string;
     const PickleTable* data_table;
 } PickleStep;
@@ -35,9 +33,7 @@ typedef struct PickleSteps {
     PickleStep* steps;
 } PickleSteps;
 
-const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleArgument* argument);
-
-const PickleStep* PickleStep_new_with_arguments(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleTable* data_table, const PickleString* doc_string);
+const PickleStep* PickleStep_new(const PickleAstNodeIds* ast_node_ids, IdGenerator* id_generator, const wchar_t* text, const PickleStepType pickle_step_type, const PickleTable* data_table, const PickleString* doc_string);
 
 void PickleStep_delete(const PickleStep* pickle_step);
 

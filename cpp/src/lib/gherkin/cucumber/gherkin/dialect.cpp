@@ -15,7 +15,7 @@ all_keywords()
             { "examples", { "Voorbeelde" } },
             { "feature", { "Funksie", "Besigheid Behoefte", "Vermoë" } },
             { "given", { "* ", "Gegewe " } },
-            { "rule", { "Regel" } },
+            { "rule", { "Reël", "Reel" } },
             { "scenario", { "Voorbeeld", "Situasie" } },
             { "scenarioOutline", { "Situasie Uiteensetting" } },
             { "then", { "* ", "Dan " } },
@@ -442,16 +442,16 @@ all_keywords()
         "fa",
         {
             { "and", { "* ", "و " } },
-            { "background", { "زمینه" } },
+            { "background", { "پیش زمینه", "مقدمات" } },
             { "but", { "* ", "اما " } },
             { "examples", { "نمونه ها" } },
-            { "feature", { "وِیژگی" } },
-            { "given", { "* ", "با فرض " } },
-            { "rule", { "Rule" } },
+            { "feature", { "ویژگی", "قابلیت" } },
+            { "given", { "* ", "با فرض ", "فرض کنید ", "با در نظر گرفتن " } },
+            { "rule", { "قانون" } },
             { "scenario", { "مثال", "سناریو" } },
             { "scenarioOutline", { "الگوی سناریو" } },
-            { "then", { "* ", "آنگاه " } },
-            { "when", { "* ", "هنگامی " } }
+            { "then", { "* ", "آنگاه ", "سپس ", "انتظار می رود " } },
+            { "when", { "* ", "هنگامی ", "وقتی " } }
         }
     },
     {
@@ -735,7 +735,7 @@ all_keywords()
             { "examples", { "예" } },
             { "feature", { "기능" } },
             { "given", { "* ", "조건 ", "먼저 " } },
-            { "rule", { "Rule" } },
+            { "rule", { "규칙" } },
             { "scenario", { "시나리오" } },
             { "scenarioOutline", { "시나리오 개요" } },
             { "then", { "* ", "그러면 " } },
@@ -956,7 +956,7 @@ all_keywords()
             { "and", { "* ", "И ", "К тому же ", "Также " } },
             { "background", { "Предыстория", "Контекст" } },
             { "but", { "* ", "Но ", "А ", "Иначе " } },
-            { "examples", { "Примеры" } },
+            { "examples", { "Примеры", "Значения" } },
             { "feature", { "Функция", "Функциональность", "Функционал", "Свойство", "Фича" } },
             { "given", { "* ", "Допустим ", "Дано ", "Пусть " } },
             { "rule", { "Правило" } },
@@ -1113,17 +1113,17 @@ all_keywords()
     {
         "tr",
         {
-            { "and", { "* ", "Ve " } },
-            { "background", { "Geçmiş" } },
-            { "but", { "* ", "Fakat ", "Ama " } },
-            { "examples", { "Örnekler" } },
-            { "feature", { "Özellik" } },
-            { "given", { "* ", "Diyelim ki " } },
-            { "rule", { "Kural" } },
-            { "scenario", { "Örnek", "Senaryo" } },
-            { "scenarioOutline", { "Senaryo taslağı" } },
-            { "then", { "* ", "O zaman " } },
-            { "when", { "* ", "Eğer ki " } }
+            { "and", { "* ", "Ve ", "Hem de ", "Bir de ", "Ayrıca ", "İlaveten ", "Buna ek olarak " } },
+            { "background", { "Geçmiş", "Arka Plan", "Ön Koşul", "Önkoşul", "Önceki Durum", "Giriş", "Mukaddime", "Mevcut Durum" } },
+            { "but", { "* ", "Fakat ", "Ama ", "Ancak ", "Yalnız ", "Lakin ", "Meğer ki ", "Buna mukabil ", "Aksi halde " } },
+            { "examples", { "Örnekler", "Değerler" } },
+            { "feature", { "Özellik", "İş Gereksinimi", "Gereksinim", "İşlev", "Kullanıcı Hikayesi", "Yetenek", "Teknik Gereksinim" } },
+            { "given", { "* ", "Mevcut ", "Önceden ", "Geçmişte ", "Daha önce ", "Halihazırda ", "Zaten ", "Sistemde ", "Diyelim ki ", "Varsayalım ki ", "Farz edelim ki ", "Kabul edelim ki ", "Başlangıçta ", "Varsayılan olarak ", "Biliniyor ki " } },
+            { "rule", { "Kural", "İş Kuralı", "Kaide", "Hüküm", "Madde" } },
+            { "scenario", { "Örnek", "Senaryo", "Durum", "Vaka" } },
+            { "scenarioOutline", { "Senaryo taslağı", "Senaryo şablonu" } },
+            { "then", { "* ", "Beklenen ", "O zaman ", "Sonuç olarak ", "Böylece ", "Bunun üzerine ", "Bu durumda ", "O takdirde ", "Şu halde ", "Netice itibariyle ", "Buna binaen " } },
+            { "when", { "* ", "Eğer ", "Eğer ki ", "Ne zaman ", "Ne zaman ki ", "Şayet " } }
         }
     },
     {

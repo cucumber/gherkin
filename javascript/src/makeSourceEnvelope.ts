@@ -1,13 +1,15 @@
-import * as messages from '@cucumber/messages'
+import { type Envelope, SourceMediaType } from '@cucumber/messages'
 
-export default function makeSourceEnvelope(data: string, uri: string): messages.Envelope {
-  let mediaType: messages.SourceMediaType
+export default function makeSourceEnvelope(data: string, uri: string): Envelope {
+  let mediaType: SourceMediaType
   if (uri.endsWith('.feature')) {
-    mediaType = messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN
+    mediaType = SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN
   } else if (uri.endsWith('.md')) {
-    mediaType = messages.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN
+    mediaType = SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_MARKDOWN
   }
-  if (!mediaType) throw new Error(`The uri (${uri}) must end with .feature or .md`)
+  if (!mediaType) {
+    throw new Error(`The uri (${uri}) must end with .feature or .md`)
+  }
   return {
     source: {
       data,

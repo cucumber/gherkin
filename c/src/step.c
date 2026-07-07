@@ -6,21 +6,7 @@
 
 static void delete_step_content(const Step* step);
 
-const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const StepArgument* argument) {
-    const DataTable* data_table = 0;
-    const DocString* doc_string = 0;
-    if (argument) {
-        if (argument->type == Gherkin_DataTable) {
-            data_table = (const DataTable*)argument;
-        }
-        else if (argument->type == Gherkin_DocString) {
-            doc_string = (const DocString*)argument;
-        }
-    }
-    return Step_new_with_arguments(location, id_generator, keyword, keyword_type, text, data_table, doc_string);
-}
-
-const Step* Step_new_with_arguments(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string) {
+const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string) {
     Step* step = (Step*)malloc(sizeof(Step));
     step->step_delete = (item_delete_function)Step_delete;
     step->type = Gherkin_Step;
@@ -34,7 +20,6 @@ const Step* Step_new_with_arguments(Location location, IdGenerator* id_generator
     if (text) {
         step->text = StringUtilities_copy_string(text);
     }
-    step->argument = data_table ? (const StepArgument*)data_table : (const StepArgument*)doc_string;
     step->data_table = data_table;
     step->doc_string = doc_string;
     return step;
@@ -59,8 +44,6 @@ void Step_transfer(Step* to_step, Step* from_step) {
     to_step->keyword_type = from_step->keyword_type;
     to_step->text = from_step->text;
     from_step->text = 0;
-    to_step->argument = from_step->argument;
-    from_step->argument = 0;
     to_step->data_table = from_step->data_table;
     from_step->data_table = 0;
     to_step->doc_string = from_step->doc_string;

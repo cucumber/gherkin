@@ -1,5 +1,5 @@
-import type IToken from './IToken'
-import type { RuleType, TokenType } from './Parser'
+import type IToken from './IToken.js'
+import type { RuleType, TokenType } from './Parser.js'
 
 export default class AstNode {
   // biome-ignore lint/suspicious/noExplicitAny: keys and values are heterogeneous AST entries

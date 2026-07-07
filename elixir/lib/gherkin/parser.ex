@@ -8,7 +8,7 @@ defmodule CucumberGherkin.TokenTypes do
   @token_types [
     None,
 EOF,Empty,Comment,TagLine,FeatureLine,RuleLine,BackgroundLine,ScenarioLine,ExamplesLine,StepLine,DocStringSeparator,TableRow,Language,Other,  ]
-  def get_ordinal(type), do: Enum.find_index @token_types, &( &1 == type )
+  def get_ordinal(type), do: Enum.find_index(@token_types, &( &1 == type ))
 end
 
 defmodule CucumberGherkin.RuleTypes do

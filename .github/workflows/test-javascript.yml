@@ -27,7 +27,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        node-version: ["18.x", "20.x", "22.x", "23.x"]
+        node-version: ["22.x", "24.x", "26.x"]
         include:
           - os: windows-latest
             node-version: "22.x"
@@ -35,10 +35,7 @@ jobs:
             node-version: "22.x"
 
     steps:
-      - name: set git core.autocrlf to 'input'
-        run: git config --global core.autocrlf input
-
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 

@@ -38,7 +38,7 @@ typedef struct Steps {
     Step* steps;
 } Steps;
 
-const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const StepArgument* argument);
+const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string);
 
 const Step* Step_new_with_arguments(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string);
 

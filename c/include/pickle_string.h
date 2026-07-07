@@ -3,14 +3,11 @@
 
 #include <wchar.h>
 
-#include "pickle_argument.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct PickleString {
-    PickleArgumentType type;
     wchar_t* media_type;
     wchar_t* content;
 } PickleString;
