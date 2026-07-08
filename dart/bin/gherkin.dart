@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
@@ -8,12 +7,10 @@ Future<void> main(List<String> args) async {
   var includeSource = true;
   var includeAst = true;
   var includePickles = true;
-  var defaultDialect = 'en';
   var idGenerator = IdGenerator.uuidGenerator;
   final paths = <String>[];
 
-  for (var i = 0; i < args.length; i++) {
-    final arg = args[i];
+  for (final arg in args) {
     switch (arg) {
       case '--no-source':
         includeSource = false;
@@ -23,17 +20,8 @@ Future<void> main(List<String> args) async {
         includePickles = false;
       case '--predictable-ids':
         idGenerator = IdGenerator.incrementingGenerator;
-      case '--default-dialect':
-        if (i + 1 >= args.length) {
-          throw ArgumentError('--default-dialect requires a value');
-        }
-        defaultDialect = args[++i];
       default:
-        if (arg.startsWith('--default-dialect=')) {
-          defaultDialect = arg.substring('--default-dialect='.length);
-        } else {
-          paths.add(arg);
-        }
+        paths.add(arg);
     }
   }
 
@@ -41,20 +29,10 @@ Future<void> main(List<String> args) async {
     includeSource: includeSource,
     includeGherkinDocument: includeAst,
     includePickles: includePickles,
-    defaultDialect: defaultDialect,
     idGenerator: idGenerator,
   );
 
-  final envelopeStream =
-      paths.isEmpty
-          ? parser.parseEnvelopes(
-            messages.decodeNdjsonEnvelopes(
-              stdin.transform(utf8.decoder).transform(const LineSplitter()),
-            ),
-          )
-          : parser.parsePaths(paths);
-
-  await printMessages(envelopeStream);
+  await printMessages(parser.parsePaths(paths));
 }
 
 Future<void> printMessages(Stream<messages.Envelope> messagesStream) async {
