@@ -11,6 +11,7 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "On",
+                "CUCUMBER_GHERKIN_FETCH_DEPS": "On",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }

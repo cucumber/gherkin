@@ -21,20 +21,13 @@ project(cucumber_gherkin VERSION ${VERSION} LANGUAGES CXX)
 # Required so CMake can find the custom package/config helper modules in ./cmake.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-# Standalone check
-if(PROJECT_IS_TOP_LEVEL)
-    set(cucumber_gherkin_MAIN_PROJECT ON)
-else()
-    set(cucumber_gherkin_MAIN_PROJECT OFF)
-endif()
-
 # Options
 if (POLICY CMP0077)
     # Allow CMake 3.13+ to override options when using FetchContent / add_subdirectory.
     cmake_policy(SET CMP0077 NEW)
 endif ()
 
-option(CUCUMBER_GHERKIN_FETCH_DEPS "Fetch dependencies via FetchContent." ${cucumber_gherkin_MAIN_PROJECT})
+option(CUCUMBER_GHERKIN_FETCH_DEPS "Fetch dependencies via FetchContent." Off)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
