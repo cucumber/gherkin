@@ -19,10 +19,9 @@ void main(List<String> args) {
 
   for (final path in args) {
     final builder = _TokenFormatterBuilder();
-    Parser<void>(builder).parse(
-      StringTokenScanner(File(path).readAsStringSync()),
-      matcher,
-    );
+    Parser<void>(
+      builder,
+    ).parse(StringTokenScanner(File(path).readAsStringSync()), matcher);
     stdout.write(builder.tokensText);
   }
 }
@@ -63,9 +62,10 @@ String _formatToken(Token token) {
       .join(',');
   final matchedType = token.matchedType.wireName;
   final matchedKeyword = token.matchedKeyword;
-  final matchedKeywordType = matchedKeyword.isEmpty
-      ? ''
-      : token.matchedKeywordType == null
+  final matchedKeywordType =
+      matchedKeyword.isEmpty
+          ? ''
+          : token.matchedKeywordType == null
           ? '()'
           : '(${token.matchedKeywordType!.value})';
   return '(${token.location.line}:${token.location.column})'
