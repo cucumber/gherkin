@@ -43,16 +43,17 @@ defmodule CucumberGherkin.PickleCompiler do
       compiler_acc: %{compiler_acc | language: f.language}
     }
 
-    Enum.reduce(f.children, meta_info, fn child, m_acc ->
-      case child.value do
-        {:background, bg} ->
-          %{m_acc | feature_backgr_steps: bg.steps}
+    children = if f.children, do: f.children, else: []
+    Enum.reduce(children, meta_info, fn child, m_acc ->
+      case child do
+        %{background: background} when background != nil ->
+          %{m_acc | feature_backgr_steps: background.steps}
 
-        {:rule, rule} ->
+        %{rule: rule} when rule != nil ->
           compile_rule(m_acc, rule)
 
-        {:scenario, s} ->
-          compile_scenario(m_acc, s, :feature_backgr_steps)
+        %{scenario: scenario} when scenario != nil ->
+          compile_scenario(m_acc, scenario, :feature_backgr_steps)
       end
     end)
   end
@@ -62,10 +63,10 @@ defmodule CucumberGherkin.PickleCompiler do
     rule_tags = meta_info.feature_tags ++ r.tags
 
     Enum.reduce(r.children, resetted_meta_info, fn
-      %FeatureChildMessage{background: bg}, m_acc ->
+      %FeatureChildMessage{background: bg}, m_acc when bg != nil ->
         %{m_acc | rule_backgr_steps: m_acc.rule_backgr_steps ++ bg.steps}
 
-      %FeatureChildMessage{scenario: s}, m_acc ->
+      %FeatureChildMessage{scenario: s}, m_acc when s != nil ->
         %{m_acc | feature_tags: rule_tags} |> compile_scenario(s, :rule_backgr_steps)
     end)
   end
@@ -139,7 +140,6 @@ defmodule CucumberGherkin.PickleCompiler do
         end)
 
       tags = m_acc.feature_tags ++ s.tags ++ example.tags
-      pickle_tags = tags |> List.flatten() |> pickle_tags()
 
       {id, updated_acc} = get_id_and_update_compiler_acc(updated_acc)
 
@@ -150,7 +150,7 @@ defmodule CucumberGherkin.PickleCompiler do
         location: s.location,
         name: interpolate(s.name, table_header.cells, value_row.cells),
         steps: updated_steps,
-        tags: pickle_tags,
+        tags: tags,
         uri: m_acc.compiler_acc.uri
       }
 
@@ -243,7 +243,7 @@ defmodule CucumberGherkin.PickleCompiler do
 
     media_type =
       case d.media_type do
-        "" -> ""
+        nil -> nil
         media_type -> interpolate(media_type, variable_cells, value_cells)
       end
 

@@ -18,7 +18,7 @@ defmodule CucumberGherkin.AstBuilder do
 
   @me __MODULE__
 
-  defstruct stack: %Stack{}, gherkin_doc: %GherkinDocumentMessage{}, id_gen: nil
+  defstruct stack: %Stack{}, gherkin_doc: %GherkinDocumentMessage{ comments: []}, id_gen: nil
 
   def new(opts) do
     root_node = %AstNode{rule_type: None}
@@ -140,9 +140,9 @@ defmodule CucumberGherkin.AstBuilder do
         location: loc,
         keyword: back_ground_line.matched_keyword,
         name: back_ground_line.matched_text,
-        steps: steps
+        steps: steps,
+        description: description
       }
-      |> add_description_to(description)
 
     tuplize(m, updated_context)
   end
@@ -183,13 +183,13 @@ defmodule CucumberGherkin.AstBuilder do
 
     example_message =
       %ExamplesMessage{
+        description: description,
         id: id,
         location: loc,
         keyword: examples_line.matched_keyword,
         name: examples_line.matched_text,
         tags: tags
       }
-      |> add_description_to(description)
 
     case rows != nil && !Enum.empty?(rows) do
       true ->
@@ -273,13 +273,13 @@ defmodule CucumberGherkin.AstBuilder do
       loc = Token.get_location(rule_line)
 
       %RuleMessage{
+        description: description,
         id: id,
         location: loc,
         keyword: rule_line.matched_keyword,
         name: rule_line.matched_text,
         tags: tags
       }
-      |> add_description_to(description)
       |> add_background_to(background)
       |> add_scen_def_children_to(scenarios)
       |> tuplize(updated_context)
@@ -337,7 +337,8 @@ defmodule CucumberGherkin.AstBuilder do
 
       %TableRowMessage{} = r ->
         error = %AstBuilderError{location: r.location} |> ParserException.generate_message()
-        updated_context = %{context | errors: context.errors ++ [error]}
+        errors = if context.errors, do: context.errors, else: []
+        updated_context = %{context | errors: errors ++ [error]}
         {rs, updated_context}
     end
   end
@@ -389,9 +390,6 @@ defmodule CucumberGherkin.AstBuilder do
   defp add_tablebody_to(%ExamplesMessage{} = m, nil), do: m
   defp add_tablebody_to(%ExamplesMessage{} = m, d), do: %{m | table_body: d}
 
-  defp add_description_to(m, nil), do: m
-  defp add_description_to(%{description: _} = m, d), do: %{m | description: d}
-
   defp add_mediatype_to(%DocStringMessage{} = m, nil), do: m
   defp add_mediatype_to(%DocStringMessage{} = m, d), do: %{m | media_type: d}
 
@@ -405,7 +403,8 @@ defmodule CucumberGherkin.AstBuilder do
 
   defp add_background_to(%{__struct__: t} = m, d) when t in [FeatureMessage, RuleMessage] do
     child = %FeatureChildMessage{background: d}
-    %{m | children: m.children ++ [child]}
+    children = if m.children, do: m.children, else: []
+    %{m | children: children ++ [child]}
   end
 
   defp add_scen_def_children_to(%{__struct__: t} = m, scenario_definition_items)
@@ -413,7 +412,8 @@ defmodule CucumberGherkin.AstBuilder do
     scenario_definition_items
     |> Enum.reduce(m, fn scenario_def, feature_message_acc ->
       child = %FeatureChildMessage{scenario: scenario_def}
-      %{feature_message_acc | children: feature_message_acc.children ++ [child]}
+      children = if feature_message_acc.children, do: feature_message_acc.children, else: []
+      %{feature_message_acc | children: children ++ [child]}
     end)
   end
 
@@ -421,7 +421,8 @@ defmodule CucumberGherkin.AstBuilder do
     rule_items
     |> Enum.reduce(m, fn rule, feature_message_acc ->
       child = %FeatureChildMessage{rule: rule}
-      %{feature_message_acc | children: feature_message_acc.children ++ [child]}
+      children = if feature_message_acc.children, do: feature_message_acc.children, else: []
+      %{feature_message_acc | children: children ++ [child]}
     end)
   end
 
