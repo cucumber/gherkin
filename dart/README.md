@@ -49,11 +49,9 @@ implementation details and may change without notice.
 
 ## Parsing
 
-`GherkinParser` turns Gherkin into a `Stream<Envelope>`. Choose an entry point by
-where the source lives.
-
-Parse an in-memory string. The media type is inferred from the `uri` extension
-(`.feature`), or pass `mediaType` when the extension is unrecognized:
+`GherkinParser` turns Gherkin into a `Stream<Envelope>`. The media type is inferred
+from the `uri` extension (`.feature`), or pass `mediaType` when the extension is
+unrecognized:
 
 ```dart
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
@@ -69,35 +67,10 @@ await for (final envelope in envelopes) {
 }
 ```
 
-Parse a file (I/O library only). Read is asynchronous, on first listen:
-
-```dart
-import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
-
-final parser = GherkinParser();
-final envelopes = await parser.parsePath('example/minimal.feature').toList();
-```
-
-Other entry points:
-
-* `parseEnvelope(Envelope)` parses a single `source` envelope.
-* `parseEnvelopes(Stream<Envelope>)` parses a stream of `source` envelopes.
-* `parsePaths(Iterable<String>)` parses many files (I/O library only).
-
-Streams are lazy across sources, eager within a source: a document is built and
-compiled in full the first time its portion of the stream is pulled, and a later
-source is not read or parsed until the preceding source's envelopes are consumed.
-
-### Options
-
-`GherkinParser` takes:
-
-* `includeSource`, `includeGherkinDocument`, `includePickles` (all default `true`)
-  select which envelope kinds are emitted.
-* `defaultDialect` (default `'en'`) sets the dialect used when a feature has no
-  `# language:` header.
-* `idGenerator` (default `IdGenerator.uuidGenerator`) assigns message ids. Use
-  `IdGenerator.incrementingGenerator` for predictable ids in tests.
+Other entry points: `parseEnvelope`/`parseEnvelopes` parse `source` envelopes, and
+(in the I/O library) `parsePath`/`parsePaths` read files. Streams are lazy across
+sources but eager within a source. `GherkinParser` accepts `includeSource`,
+`includeGherkinDocument`, `includePickles`, `defaultDialect`, and `idGenerator`.
 
 ### Errors
 
@@ -112,6 +85,7 @@ the source:
 
 ## Development
 
+See the repository root [CONTRIBUTING.md](https://github.com/cucumber/gherkin/blob/main/CONTRIBUTING.md).
 From the `dart/` directory:
 
 ```sh
@@ -120,33 +94,6 @@ dart format .
 dart analyze
 dart test
 dart pub publish --dry-run
-```
-
-Generated sources:
-
-```sh
-make generate                # regenerates lib/src/parser/parser.g.dart (requires berp)
-make copy-gherkin-languages  # regenerates dialects from gherkin-languages.json (requires jq)
-```
-
-`bin/gherkin.dart` is an internal CLI used by the acceptance tests, not a public
-entry point. It reads `source` envelopes as NDJSON from stdin, or reads the file
-paths given as arguments, and writes envelopes as NDJSON to stdout:
-
-```sh
-dart run bin/gherkin.dart example/minimal.feature
-```
-
-Flags: `--no-source`, `--no-ast`, `--no-pickles`, `--predictable-ids`, and
-`--default-dialect <lang>`.
-
-## Acceptance test suite
-
-Acceptance tests compare ASTs, pickles, sources, and errors against the fixtures in
-`../testdata/`:
-
-```sh
-make acceptance
 ```
 
 For general information about Gherkin and the other language implementations, see the
