@@ -1,23 +1,73 @@
 import 'dart:io';
 
+import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
-
-import 'tokens_generator.dart';
+import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
+import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/builder.dart';
+import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 /// Emits the tokenized representation of one or more Gherkin feature files,
 /// matching the `*.tokens` format used by the acceptance tests.
+///
+/// This format is an acceptance-test artifact rather than part of the published
+/// library, so the rendering lives here in the executable instead of `lib/`.
 void main(List<String> args) {
-  const languages = builtinDialects;
-  final dialectProvider = GherkinDialectProvider(languages);
+  final matcher = GherkinTokenMatcher(GherkinDialectProvider(builtinDialects));
 
   for (final path in args) {
-    stdout.write(
-      TokensGenerator.generateTokens(
-        path,
-        GherkinTokenMatcher(dialectProvider),
-      ),
+    final builder = _TokenFormatterBuilder();
+    Parser<void>(builder).parse(
+      StringTokenScanner(File(path).readAsStringSync()),
+      matcher,
     );
+    stdout.write(builder.tokensText);
   }
+}
+
+/// A [Builder] that renders each scanned token in the `*.tokens` text format.
+///
+/// The output is produced as a side effect (accumulated in [tokensText]); the
+/// parser's builder result is unused, hence `Builder<void>`.
+class _TokenFormatterBuilder implements Builder<void> {
+  final StringBuffer _buffer = StringBuffer();
+
+  /// The full rendered token text accumulated so far.
+  String get tokensText => _buffer.toString();
+
+  @override
+  void build(Token token) => _buffer.writeln(_formatToken(token));
+
+  @override
+  void endRule(RuleType ruleType) {}
+
+  @override
+  void startRule(RuleType ruleType) {}
+
+  @override
+  void reset() {}
+
+  @override
+  void get result {}
+}
+
+/// Returns the single-line `*.tokens` representation of [token].
+String _formatToken(Token token) {
+  if (token.isEof) {
+    return 'EOF';
+  }
+  final matchedItems = token.matchedItems
+      .map((element) => '${element.column}:${element.text}')
+      .join(',');
+  final matchedType = token.matchedType.wireName;
+  final matchedKeyword = token.matchedKeyword;
+  final matchedKeywordType = matchedKeyword.isEmpty
+      ? ''
+      : token.matchedKeywordType == null
+          ? '()'
+          : '(${token.matchedKeywordType!.value})';
+  return '(${token.location.line}:${token.location.column})'
+      '$matchedType:$matchedKeywordType$matchedKeyword/${token.matchedText}/$matchedItems';
 }

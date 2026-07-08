@@ -14,6 +14,12 @@ class StringTokenScanner implements TokenScanner {
   StringTokenScanner(String source) : _linesIterator = _splitLines(source);
 
   static Iterator<String> _splitLines(String source) {
+    // An empty source has no content lines. `split` would otherwise yield a
+    // single empty segment, producing a spurious blank line (and an `Empty`
+    // token) for input that a file-based scanner reports as immediate EOF.
+    if (source.isEmpty) {
+      return const <String>[].iterator;
+    }
     final lines = source.split(_lineSeparator);
     // A trailing separator produces a final empty segment; drop it so a file
     // ending in a newline does not yield a spurious blank line.
