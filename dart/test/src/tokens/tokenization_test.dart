@@ -5,7 +5,6 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:test/test.dart';
 
-import '../../../tool/line_ending_helper.dart';
 import '../../../tool/tokens_generator.dart';
 
 void main() {
@@ -26,8 +25,7 @@ void main() {
         fullPathToTestFeatureFile,
         GherkinTokenMatcher(dialectProvider),
       );
-      final tokens = await File(expectedTokensFile).readAsString();
-      final expectedTokensText = LineEndingHelper.normalizeLineEndings(tokens);
+      final expectedTokensText = await File(expectedTokensFile).readAsString();
 
       expect(
         tokensText,

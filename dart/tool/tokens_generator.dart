@@ -2,7 +2,6 @@ import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 
 import 'file_token_scanner.dart';
-import 'line_ending_helper.dart';
 import 'no_op_result.dart';
 import 'token_formatter_builder.dart';
 
@@ -10,7 +9,7 @@ import 'token_formatter_builder.dart';
 /// used by the acceptance tests.
 class TokensGenerator {
   /// Scans the file at [featureFilePath] with [tokenMatcher] and returns its
-  /// normalized `*.tokens` text.
+  /// `*.tokens` text.
   static String generateTokens(
     String featureFilePath,
     TokenMatcher tokenMatcher,
@@ -19,7 +18,6 @@ class TokensGenerator {
     final parser = Parser<NoOpResult>(tokenFormatterBuilder);
     final tokenScanner = FileTokenScanner.fromPath(featureFilePath);
     parser.parse(tokenScanner, tokenMatcher);
-    final tokensText = tokenFormatterBuilder.tokensText;
-    return LineEndingHelper.normalizeLineEndings(tokensText);
+    return tokenFormatterBuilder.tokensText;
   }
 }

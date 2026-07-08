@@ -13,10 +13,7 @@ void main(List<String> args) {
   final dialectProvider = GherkinDialectProvider(languages);
 
   for (final path in args) {
-    // Emit a trailing newline so the final `EOF` line is newline-terminated.
-    // `generateTokens` trims trailing newlines during normalization, so re-add
-    // one here via `writeln`.
-    stdout.writeln(
+    stdout.write(
       TokensGenerator.generateTokens(
         path,
         GherkinTokenMatcher(dialectProvider),
