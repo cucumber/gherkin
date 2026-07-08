@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash
 
 GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_DIALECTS = lib/src/language/dialects_builtin.g.dart
-GHERKIN_DIALECTS_JQ = lib/src/language/dialects_builtin.g.dart.jq
+GHERKIN_DIALECTS_JQ = dialects_builtin.g.dart.jq
 GHERKIN_PARSER = lib/src/parser/parser.g.dart
 GHERKIN_RAZOR = gherkin-dart.razor
 GHERKIN = dart run bin/gherkin.dart

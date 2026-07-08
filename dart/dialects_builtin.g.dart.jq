@@ -15,7 +15,7 @@
 # Usage:
 #
 #   jq --sort-keys --from-file dialects_builtin.g.dart.jq --raw-output \
-#     --compact-output gherkin-languages.json > dialects_builtin.g.dart
+#     --compact-output ../gherkin-languages.json > lib/src/language/dialects_builtin.g.dart
 
 # Renders a Dart single-line string literal for the input string.
 #
