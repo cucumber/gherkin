@@ -140,6 +140,7 @@ defmodule CucumberGherkin.PickleCompiler do
         end)
 
       tags = m_acc.feature_tags ++ s.tags ++ example.tags
+      pickle_tags = tags |> List.flatten() |> pickle_tags()
 
       {id, updated_acc} = get_id_and_update_compiler_acc(updated_acc)
 
@@ -147,10 +148,10 @@ defmodule CucumberGherkin.PickleCompiler do
         ast_node_ids: [s.id, value_row.id],
         id: id,
         language: m_acc.compiler_acc.language,
-        location: s.location,
+        location: value_row.location,
         name: interpolate(s.name, table_header.cells, value_row.cells),
         steps: updated_steps,
-        tags: tags,
+        tags: pickle_tags,
         uri: m_acc.compiler_acc.uri
       }
 

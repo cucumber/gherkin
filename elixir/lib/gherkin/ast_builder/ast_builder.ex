@@ -239,6 +239,7 @@ defmodule CucumberGherkin.AstBuilder do
       {tags, semi_updated_context} = get_tags(header, context)
 
       %FeatureMessage{
+        children: [],
         tags: tags,
         language: dialect,
         location: Token.get_location(fl),
