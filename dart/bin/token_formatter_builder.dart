@@ -6,7 +6,7 @@ import 'test_token_formatter.dart';
 
 /// A [Builder] that renders each scanned token using the shared `*.tokens`
 /// text format used by the acceptance tests.
-class TokenFormatterBuilder implements Builder<NoOpResult> {
+class TokenFormatterBuilder implements Builder<void> {
   /// The formatter used to render individual tokens.
   final TestTokenFormatter formatter = TestTokenFormatter();
 
