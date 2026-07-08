@@ -2,7 +2,6 @@ import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
-import 'no_op_result.dart';
 import 'test_token_formatter.dart';
 
 /// A [Builder] that renders each scanned token using the shared `*.tokens`
@@ -33,7 +32,7 @@ class TokenFormatterBuilder implements Builder<NoOpResult> {
   }
 
   @override
-  NoOpResult get result => NoOpResult();
+  void get result {}
 
   @override
   void startRule(RuleType ruleType) {
