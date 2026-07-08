@@ -353,7 +353,7 @@ defmodule CucumberGherkin.AstBuilder do
   end
 
   defp get_tags(node, context),
-    do: node |> AstNode.get_single(Tags, %AstNode{rule_type: None}) |> process_tags(context)
+    do: node |> AstNode.get_single(Tags, nil) |> process_tags(context)
 
   # Even possible?
   defp process_tags(nil, context), do: {[], context}
