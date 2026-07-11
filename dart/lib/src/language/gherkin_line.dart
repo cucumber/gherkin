@@ -29,9 +29,7 @@ class GherkinLine {
 
   /// Matches the whitespace-preceded comment prefix that ends the tag portion
   /// of a line. Compiled once and reused across lines.
-  static final RegExp _commentSuffix = RegExp(
-    r'\s' + GherkinLanguageConstants.commentPrefix,
-  );
+  static final RegExp _commentSuffix = RegExp(r'\s' + commentPrefix);
 
   /// Matches a token containing no whitespace. Compiled once and reused rather
   /// than rebuilt for every tag on every line.
@@ -84,14 +82,12 @@ class GherkinLine {
       return false;
     }
     final startsWithKeyword = _trimmedLineText.startsWith(text);
-    const separatorLength =
-        GherkinLanguageConstants.titleKeywordSeparator.length;
+    const separatorLength = titleKeywordSeparator.length;
     final afterKeyword = _trimmedLineText.substring(
       textLength,
       textLength + separatorLength,
     );
-    final hasSeparator =
-        afterKeyword == GherkinLanguageConstants.titleKeywordSeparator;
+    final hasSeparator = afterKeyword == titleKeywordSeparator;
     return startsWithKeyword && hasSeparator;
   }
 
@@ -106,7 +102,7 @@ class GherkinLine {
             : _trimmedLineText.substring(0, commentMatch.start);
 
     var indexInUncommentedLine = 0;
-    final elements = uncommentedLine.split(GherkinLanguageConstants.tagPrefix);
+    final elements = uncommentedLine.split(tagPrefix);
 
     for (final element in elements) {
       final token = element.rtrim();
@@ -122,9 +118,7 @@ class GherkinLine {
           Location(_lineNumber, column),
         );
       }
-      tags.add(
-        GherkinLineSpan(column, GherkinLanguageConstants.tagPrefix + token),
-      );
+      tags.add(GherkinLineSpan(column, tagPrefix + token));
       indexInUncommentedLine += element.length + 1;
     }
 
@@ -145,11 +139,11 @@ class GherkinLine {
       final chr = String.fromCharCode(rune);
       if (escape) {
         switch (chr) {
-          case GherkinLanguageConstants.tableCellNewLineEscape:
+          case tableCellNewLineEscape:
             cellBuffer.write('\n');
-          case GherkinLanguageConstants.tableCellEscapeChar:
+          case tableCellEscapeChar:
             cellBuffer.write(r'\');
-          case GherkinLanguageConstants.tableCellSeparator:
+          case tableCellSeparator:
             cellBuffer.write('|');
           default:
             // Invalid escape; ignore it.
@@ -159,9 +153,9 @@ class GherkinLine {
         escape = false;
       } else {
         switch (chr) {
-          case GherkinLanguageConstants.tableCellEscapeChar:
+          case tableCellEscapeChar:
             escape = true;
-          case GherkinLanguageConstants.tableCellSeparator:
+          case tableCellSeparator:
             if (beforeFirst) {
               // Skip the first empty span
               beforeFirst = false;

@@ -1,117 +1,24 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Compiles a [messages.GherkinDocument] into the list of executable
-/// [messages.Pickle]s it describes.
-class MessagesPickleCompiler {
-  /// Creates a compiler that assigns ids using [_idGenerator].
-  MessagesPickleCompiler(this._idGenerator);
-
-  final String Function() _idGenerator;
-
-  /// Compiles [gherkinDocument] (loaded from [uri]) into pickles.
-  ///
-  /// Returns an empty list when the document has no feature.
-  List<messages.Pickle> compile(
-    messages.GherkinDocument gherkinDocument,
-    String uri,
-  ) {
-    final pickles = <messages.Pickle>[];
-    final feature = gherkinDocument.feature;
-    if (feature == null) {
-      return pickles;
-    }
-
-    final featureBackgroundSteps = <messages.Step>[];
-    for (final child in feature.children) {
-      if (child.background != null) {
-        featureBackgroundSteps
-          ..clear()
-          ..addAll(child.background!.steps);
-      } else if (child.rule != null) {
-        _compileRule(
-          pickles,
-          feature.tags,
-          featureBackgroundSteps,
-          child.rule!,
-          feature.language,
-          uri,
-        );
-      } else if (child.scenario != null) {
-        final scenario = child.scenario!;
-        if (scenario.examples.isEmpty) {
-          _compileScenario(
-            pickles,
-            feature.tags,
-            featureBackgroundSteps,
-            scenario,
-            feature.language,
-            uri,
-          );
-        } else {
-          _compileScenarioOutline(
-            pickles,
-            feature.tags,
-            featureBackgroundSteps,
-            scenario,
-            feature.language,
-            uri,
-          );
-        }
-      }
-    }
+/// Compiles [gherkinDocument] (loaded from [uri]) into executable pickles.
+///
+/// Returns an empty list when the document has no feature.
+List<messages.Pickle> compilePickles(
+  messages.GherkinDocument gherkinDocument,
+  String uri,
+  String Function() idGenerator,
+) {
+  final pickles = <messages.Pickle>[];
+  final feature = gherkinDocument.feature;
+  if (feature == null) {
     return pickles;
   }
 
-  void _compileRule(
-    List<messages.Pickle> pickles,
-    List<messages.Tag> featureTags,
-    List<messages.Step> featureBackgroundSteps,
-    messages.Rule rule,
-    String language,
-    String uri,
-  ) {
-    final ruleBackgroundSteps = List<messages.Step>.from(
-      featureBackgroundSteps,
-    );
-    final inheritedTags = <messages.Tag>[...featureTags, ...rule.tags];
-    for (final child in rule.children) {
-      if (child.background != null) {
-        ruleBackgroundSteps
-          ..clear()
-          ..addAll(featureBackgroundSteps)
-          ..addAll(child.background!.steps);
-      } else if (child.scenario != null) {
-        final scenario = child.scenario!;
-        if (scenario.examples.isEmpty) {
-          _compileScenario(
-            pickles,
-            inheritedTags,
-            ruleBackgroundSteps,
-            scenario,
-            language,
-            uri,
-          );
-        } else {
-          _compileScenarioOutline(
-            pickles,
-            inheritedTags,
-            ruleBackgroundSteps,
-            scenario,
-            language,
-            uri,
-          );
-        }
-      }
-    }
-  }
-
-  void _compileScenario(
-    List<messages.Pickle> pickles,
+  void compileScenario(
     List<messages.Tag> inheritedTags,
     List<messages.Step> backgroundSteps,
     messages.Scenario scenario,
     String language,
-    String uri,
   ) {
     var lastKeywordType = messages.StepKeywordType.unknown;
     final steps = <messages.PickleStep>[];
@@ -128,6 +35,7 @@ class MessagesPickleCompiler {
             const <messages.TableCell>[],
             null,
             lastKeywordType,
+            idGenerator,
           ),
         );
       }
@@ -139,13 +47,19 @@ class MessagesPickleCompiler {
         lastKeywordType,
       );
       steps.add(
-        _pickleStep(step, const <messages.TableCell>[], null, lastKeywordType),
+        _pickleStep(
+          step,
+          const <messages.TableCell>[],
+          null,
+          lastKeywordType,
+          idGenerator,
+        ),
       );
     }
 
     pickles.add(
       messages.Pickle(
-        id: _idGenerator(),
+        id: idGenerator(),
         uri: uri,
         location: scenario.location,
         name: scenario.name,
@@ -157,13 +71,11 @@ class MessagesPickleCompiler {
     );
   }
 
-  void _compileScenarioOutline(
-    List<messages.Pickle> pickles,
+  void compileScenarioOutline(
     List<messages.Tag> inheritedTags,
     List<messages.Step> backgroundSteps,
     messages.Scenario scenario,
     String language,
-    String uri,
   ) {
     for (final examples in scenario.examples) {
       final variableCells = examples.tableHeader?.cells;
@@ -188,6 +100,7 @@ class MessagesPickleCompiler {
                 variableCells,
                 valuesRow,
                 lastKeywordType,
+                idGenerator,
                 trackRowInAstNodeIds: false,
               ),
             );
@@ -200,13 +113,19 @@ class MessagesPickleCompiler {
             lastKeywordType,
           );
           steps.add(
-            _pickleStep(step, variableCells, valuesRow, lastKeywordType),
+            _pickleStep(
+              step,
+              variableCells,
+              valuesRow,
+              lastKeywordType,
+              idGenerator,
+            ),
           );
         }
 
         pickles.add(
           messages.Pickle(
-            id: _idGenerator(),
+            id: idGenerator(),
             uri: uri,
             location: valuesRow.location,
             name: _interpolate(scenario.name, variableCells, valuesRow.cells),
@@ -224,126 +143,196 @@ class MessagesPickleCompiler {
     }
   }
 
-  messages.PickleStep _pickleStep(
-    messages.Step step,
-    List<messages.TableCell> variableCells,
-    messages.TableRow? valuesRow,
-    messages.StepKeywordType keywordType, {
-    bool trackRowInAstNodeIds = true,
-  }) {
-    final valueCells = valuesRow?.cells ?? const <messages.TableCell>[];
-    final astNodeIds = <String>[step.id];
-    if (valuesRow != null && trackRowInAstNodeIds) {
-      astNodeIds.add(valuesRow.id);
+  void compileRule(
+    List<messages.Tag> featureTags,
+    List<messages.Step> featureBackgroundSteps,
+    messages.Rule rule,
+    String language,
+  ) {
+    final ruleBackgroundSteps = List<messages.Step>.from(
+      featureBackgroundSteps,
+    );
+    final inheritedTags = <messages.Tag>[...featureTags, ...rule.tags];
+    for (final child in rule.children) {
+      if (child.background != null) {
+        ruleBackgroundSteps
+          ..clear()
+          ..addAll(featureBackgroundSteps)
+          ..addAll(child.background!.steps);
+      } else if (child.scenario != null) {
+        final scenario = child.scenario!;
+        if (scenario.examples.isEmpty) {
+          compileScenario(
+            inheritedTags,
+            ruleBackgroundSteps,
+            scenario,
+            language,
+          );
+        } else {
+          compileScenarioOutline(
+            inheritedTags,
+            ruleBackgroundSteps,
+            scenario,
+            language,
+          );
+        }
+      }
     }
-    return messages.PickleStep(
-      id: _idGenerator(),
-      text: _interpolate(step.text, variableCells, valueCells),
-      type: _pickleStepType(keywordType),
-      argument: _pickleStepArgument(step, variableCells, valueCells),
-      astNodeIds: astNodeIds,
+  }
+
+  final featureBackgroundSteps = <messages.Step>[];
+  for (final child in feature.children) {
+    if (child.background != null) {
+      featureBackgroundSteps
+        ..clear()
+        ..addAll(child.background!.steps);
+    } else if (child.rule != null) {
+      compileRule(
+        feature.tags,
+        featureBackgroundSteps,
+        child.rule!,
+        feature.language,
+      );
+    } else if (child.scenario != null) {
+      final scenario = child.scenario!;
+      if (scenario.examples.isEmpty) {
+        compileScenario(
+          feature.tags,
+          featureBackgroundSteps,
+          scenario,
+          feature.language,
+        );
+      } else {
+        compileScenarioOutline(
+          feature.tags,
+          featureBackgroundSteps,
+          scenario,
+          feature.language,
+        );
+      }
+    }
+  }
+  return pickles;
+}
+
+messages.PickleStep _pickleStep(
+  messages.Step step,
+  List<messages.TableCell> variableCells,
+  messages.TableRow? valuesRow,
+  messages.StepKeywordType keywordType,
+  String Function() idGenerator, {
+  bool trackRowInAstNodeIds = true,
+}) {
+  final valueCells = valuesRow?.cells ?? const <messages.TableCell>[];
+  final astNodeIds = <String>[step.id];
+  if (valuesRow != null && trackRowInAstNodeIds) {
+    astNodeIds.add(valuesRow.id);
+  }
+  return messages.PickleStep(
+    id: idGenerator(),
+    text: _interpolate(step.text, variableCells, valueCells),
+    type: _pickleStepType(keywordType),
+    argument: _pickleStepArgument(step, variableCells, valueCells),
+    astNodeIds: astNodeIds,
+  );
+}
+
+messages.PickleStepArgument? _pickleStepArgument(
+  messages.Step step,
+  List<messages.TableCell> variableCells,
+  List<messages.TableCell> valueCells,
+) {
+  final dataTable =
+      step.dataTable == null
+          ? null
+          : messages.PickleTable(
+            rows:
+                step.dataTable!.rows.map((row) {
+                  return messages.PickleTableRow(
+                    cells:
+                        row.cells.map((cell) {
+                          return messages.PickleTableCell(
+                            value: _interpolate(
+                              cell.value,
+                              variableCells,
+                              valueCells,
+                            ),
+                          );
+                        }).toList(),
+                  );
+                }).toList(),
+          );
+
+  final docString =
+      step.docString == null
+          ? null
+          : messages.PickleDocString(
+            mediaType:
+                step.docString!.mediaType == null
+                    ? null
+                    : _interpolate(
+                      step.docString!.mediaType!,
+                      variableCells,
+                      valueCells,
+                    ),
+            content: _interpolate(
+              step.docString!.content,
+              variableCells,
+              valueCells,
+            ),
+          );
+
+  if (dataTable != null || docString != null) {
+    return messages.PickleStepArgument(
+      dataTable: dataTable,
+      docString: docString,
     );
   }
+  return null;
+}
 
-  messages.PickleStepArgument? _pickleStepArgument(
-    messages.Step step,
-    List<messages.TableCell> variableCells,
-    List<messages.TableCell> valueCells,
-  ) {
-    final dataTable =
-        step.dataTable == null
-            ? null
-            : messages.PickleTable(
-              rows:
-                  step.dataTable!.rows.map((row) {
-                    return messages.PickleTableRow(
-                      cells:
-                          row.cells.map((cell) {
-                            return messages.PickleTableCell(
-                              value: _interpolate(
-                                cell.value,
-                                variableCells,
-                                valueCells,
-                              ),
-                            );
-                          }).toList(),
-                    );
-                  }).toList(),
-            );
+List<messages.PickleTag> _pickleTags(List<messages.Tag> tags) =>
+    tags
+        .map((tag) => messages.PickleTag(name: tag.name, astNodeId: tag.id))
+        .toList();
 
-    final docString =
-        step.docString == null
-            ? null
-            : messages.PickleDocString(
-              mediaType:
-                  step.docString!.mediaType == null
-                      ? null
-                      : _interpolate(
-                        step.docString!.mediaType!,
-                        variableCells,
-                        valueCells,
-                      ),
-              content: _interpolate(
-                step.docString!.content,
-                variableCells,
-                valueCells,
-              ),
-            );
-
-    if (dataTable != null || docString != null) {
-      return messages.PickleStepArgument(
-        dataTable: dataTable,
-        docString: docString,
-      );
-    }
-    return null;
+String _interpolate(
+  String value,
+  List<messages.TableCell> variableCells,
+  List<messages.TableCell> valueCells,
+) {
+  if (!value.contains('<')) {
+    return value;
   }
-
-  List<messages.PickleTag> _pickleTags(List<messages.Tag> tags) =>
-      tags
-          .map((tag) => messages.PickleTag(name: tag.name, astNodeId: tag.id))
-          .toList();
-
-  String _interpolate(
-    String value,
-    List<messages.TableCell> variableCells,
-    List<messages.TableCell> valueCells,
-  ) {
-    if (!value.contains('<')) {
-      return value;
-    }
-    var result = value;
-    for (var i = 0; i < variableCells.length; i++) {
-      final pattern = '<${variableCells[i].value}>';
-      result = result.replaceAll(pattern, valueCells[i].value);
-    }
-    return result;
+  var result = value;
+  for (var i = 0; i < variableCells.length; i++) {
+    final pattern = '<${variableCells[i].value}>';
+    result = result.replaceAll(pattern, valueCells[i].value);
   }
+  return result;
+}
 
-  messages.StepKeywordType _effectiveKeywordType(
-    messages.StepKeywordType? current,
-    messages.StepKeywordType previous,
-  ) {
-    if (current == null || current == messages.StepKeywordType.conjunction) {
-      return previous;
-    }
-    return current;
+messages.StepKeywordType _effectiveKeywordType(
+  messages.StepKeywordType? current,
+  messages.StepKeywordType previous,
+) {
+  if (current == null || current == messages.StepKeywordType.conjunction) {
+    return previous;
   }
+  return current;
+}
 
-  messages.PickleStepType? _pickleStepType(
-    messages.StepKeywordType keywordType,
-  ) {
-    switch (keywordType) {
-      case messages.StepKeywordType.context:
-        return messages.PickleStepType.context;
-      case messages.StepKeywordType.action:
-        return messages.PickleStepType.action;
-      case messages.StepKeywordType.outcome:
-        return messages.PickleStepType.outcome;
-      case messages.StepKeywordType.unknown:
-        return messages.PickleStepType.unknown;
-      case messages.StepKeywordType.conjunction:
-        return null;
-    }
+messages.PickleStepType? _pickleStepType(messages.StepKeywordType keywordType) {
+  switch (keywordType) {
+    case messages.StepKeywordType.context:
+      return messages.PickleStepType.context;
+    case messages.StepKeywordType.action:
+      return messages.PickleStepType.action;
+    case messages.StepKeywordType.outcome:
+      return messages.PickleStepType.outcome;
+    case messages.StepKeywordType.unknown:
+      return messages.PickleStepType.unknown;
+    case messages.StepKeywordType.conjunction:
+      return null;
   }
 }

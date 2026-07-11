@@ -1,26 +1,26 @@
 /// Punctuation and delimiter constants shared by the Gherkin scanners.
-class GherkinLanguageConstants {
-  /// The prefix that introduces a tag (`@`).
-  static const tagPrefix = '@';
+library;
 
-  /// The prefix that introduces a comment line (`#`).
-  static const commentPrefix = '#';
+/// The prefix that introduces a tag (`@`).
+const tagPrefix = '@';
 
-  /// The separator between a keyword and its title (`:`).
-  static const titleKeywordSeparator = ':';
+/// The prefix that introduces a comment line (`#`).
+const commentPrefix = '#';
 
-  /// The character that separates table cells (`|`).
-  static const tableCellSeparator = '|';
+/// The separator between a keyword and its title (`:`).
+const titleKeywordSeparator = ':';
 
-  /// The escape character used inside table cells (`\`).
-  static const tableCellEscapeChar = r'\';
+/// The character that separates table cells (`|`).
+const tableCellSeparator = '|';
 
-  /// The escaped-newline indicator inside table cells (`n`, as in `\n`).
-  static const tableCellNewLineEscape = 'n';
+/// The escape character used inside table cells (`\`).
+const tableCellEscapeChar = r'\';
 
-  /// The default doc string delimiter (`"""`).
-  static const docStringSeparator = '"""';
+/// The escaped-newline indicator inside table cells (`n`, as in `\n`).
+const tableCellNewLineEscape = 'n';
 
-  /// The alternative doc string delimiter (` ``` `).
-  static const docStringAlternativeSeparator = '```';
-}
+/// The default doc string delimiter (`"""`).
+const docStringSeparator = '"""';
+
+/// The alternative doc string delimiter (` ``` `).
+const docStringAlternativeSeparator = '```';

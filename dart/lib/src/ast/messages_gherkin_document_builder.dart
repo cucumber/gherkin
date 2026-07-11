@@ -57,10 +57,11 @@ class MessagesGherkinDocumentBuilder
   }
 
   @override
-  messages.GherkinDocument get result => _currentNode.firstOrDefault(
-    RuleType.gherkinDocument,
-    const messages.GherkinDocument(comments: <messages.Comment>[]),
-  );
+  messages.GherkinDocument get result =>
+      _currentNode.getSingle<messages.GherkinDocument>(
+        RuleType.gherkinDocument,
+      ) ??
+      const messages.GherkinDocument(comments: <messages.Comment>[]);
 
   @override
   void startRule(RuleType ruleType) => _stack.addLast(AstNode(ruleType));
@@ -119,9 +120,9 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Step _createStep(AstNode node) {
-    final stepLine = node.requireToken(TokenType.stepLine);
-    final dataTables = node.items<messages.DataTable>(RuleType.dataTable);
-    final docStrings = node.items<messages.DocString>(RuleType.docString);
+    final stepLine = node.getToken(TokenType.stepLine)!;
+    final dataTables = node.getItems<messages.DataTable>(RuleType.dataTable);
+    final docStrings = node.getItems<messages.DocString>(RuleType.docString);
     return messages.Step(
       id: _idGenerator(),
       location: _messageLocation(stepLine.location),
@@ -187,14 +188,14 @@ class MessagesGherkinDocumentBuilder
       if (row.cells.length != cellCount) {
         throw AstBuilderException(
           'inconsistent cell count within the table',
-          _langLocation(row.location),
+          Location(row.location.line, row.location.column ?? 0),
         );
       }
     }
   }
 
   messages.Background _createBackground(AstNode node) {
-    final backgroundLine = node.requireToken(TokenType.backgroundLine);
+    final backgroundLine = node.getToken(TokenType.backgroundLine)!;
     return messages.Background(
       id: _idGenerator(),
       location: _messageLocation(backgroundLine.location),
@@ -207,8 +208,8 @@ class MessagesGherkinDocumentBuilder
 
   messages.Scenario _createScenario(AstNode node) {
     final tags = _getTags(node);
-    final scenarioNode = node.require<AstNode>(RuleType.scenario);
-    final scenarioLine = scenarioNode.requireToken(TokenType.scenarioLine);
+    final scenarioNode = node.getSingle<AstNode>(RuleType.scenario)!;
+    final scenarioLine = scenarioNode.getToken(TokenType.scenarioLine)!;
     return messages.Scenario(
       id: _idGenerator(),
       location: _messageLocation(scenarioLine.location),
@@ -217,26 +218,27 @@ class MessagesGherkinDocumentBuilder
       name: scenarioLine.matchedText,
       description: _getDescription(scenarioNode),
       steps: _getSteps(scenarioNode),
-      examples: scenarioNode.items<messages.Examples>(
+      examples: scenarioNode.getItems<messages.Examples>(
         RuleType.examplesDefinition,
       ),
     );
   }
 
   String _getDescription(AstNode node) =>
-      node.firstOrDefault<String>(RuleType.description, '');
+      node.getSingle<String>(RuleType.description) ?? '';
 
   List<messages.Step> _getSteps(AstNode node) =>
-      node.items<messages.Step>(RuleType.step);
+      node.getItems<messages.Step>(RuleType.step);
 
   messages.Examples _createExamplesDefinition(AstNode node) {
     final tags = _getTags(node);
-    final examplesNode = node.require<AstNode>(RuleType.examples);
-    final examplesLine = examplesNode.requireToken(TokenType.examplesLine);
-    final allRows = examplesNode.firstOrDefault<List<messages.TableRow>>(
-      RuleType.examplesTable,
-      const <messages.TableRow>[],
-    );
+    final examplesNode = node.getSingle<AstNode>(RuleType.examples)!;
+    final examplesLine = examplesNode.getToken(TokenType.examplesLine)!;
+    final allRows =
+        examplesNode.getSingle<List<messages.TableRow>>(
+          RuleType.examplesTable,
+        ) ??
+        const <messages.TableRow>[];
     return messages.Examples(
       id: _idGenerator(),
       location: _messageLocation(examplesLine.location),
@@ -251,7 +253,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   List<messages.Tag> _getTags(AstNode node) {
-    final tagsNode = node.firstOrNull<AstNode>(RuleType.tags);
+    final tagsNode = node.getSingle<AstNode>(RuleType.tags);
     if (tagsNode == null) {
       return <messages.Tag>[];
     }
@@ -276,7 +278,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Feature? _createFeature(AstNode node) {
-    final header = node.firstOrNull<AstNode>(RuleType.featureHeader);
+    final header = node.getSingle<AstNode>(RuleType.featureHeader);
     if (header == null) {
       return null;
     }
@@ -287,16 +289,16 @@ class MessagesGherkinDocumentBuilder
     }
 
     final children = <messages.FeatureChild>[];
-    final backgrounds = node.items<messages.Background>(RuleType.background);
+    final backgrounds = node.getItems<messages.Background>(RuleType.background);
     if (backgrounds.isNotEmpty) {
       children.add(messages.FeatureChild(background: backgrounds.first));
     }
-    for (final scenario in node.items<messages.Scenario>(
+    for (final scenario in node.getItems<messages.Scenario>(
       RuleType.scenarioDefinition,
     )) {
       children.add(messages.FeatureChild(scenario: scenario));
     }
-    for (final rule in node.items<messages.Rule>(RuleType.rule)) {
+    for (final rule in node.getItems<messages.Rule>(RuleType.rule)) {
       children.add(messages.FeatureChild(rule: rule));
     }
 
@@ -312,7 +314,7 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.Rule? _createRule(AstNode node) {
-    final header = node.firstOrNull<AstNode>(RuleType.ruleHeader);
+    final header = node.getSingle<AstNode>(RuleType.ruleHeader);
     if (header == null) {
       return null;
     }
@@ -322,11 +324,11 @@ class MessagesGherkinDocumentBuilder
     }
 
     final children = <messages.RuleChild>[];
-    final backgrounds = node.items<messages.Background>(RuleType.background);
+    final backgrounds = node.getItems<messages.Background>(RuleType.background);
     if (backgrounds.isNotEmpty) {
       children.add(messages.RuleChild(background: backgrounds.first));
     }
-    for (final scenario in node.items<messages.Scenario>(
+    for (final scenario in node.getItems<messages.Scenario>(
       RuleType.scenarioDefinition,
     )) {
       children.add(messages.RuleChild(scenario: scenario));
@@ -350,7 +352,7 @@ class MessagesGherkinDocumentBuilder
   messages.GherkinDocument _createGherkinDocument(AstNode node) {
     final features =
         node
-            .items<messages.Feature?>(RuleType.feature)
+            .getItems<messages.Feature?>(RuleType.feature)
             .whereType<messages.Feature>();
     return messages.GherkinDocument(
       feature: features.isEmpty ? null : features.first,
@@ -364,7 +366,4 @@ class MessagesGherkinDocumentBuilder
       column: column ?? (location.hasColumn ? location.column : null),
     );
   }
-
-  Location _langLocation(messages.Location location) =>
-      Location(location.line, location.column ?? 0);
 }

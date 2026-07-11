@@ -74,7 +74,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchComment(Token token) {
-    if (token.line.startsWith(GherkinLanguageConstants.commentPrefix)) {
+    if (token.line.startsWith(commentPrefix)) {
       final text = token.line.getLineText();
       _setTokenMatched(token, TokenType.comment, text: text, indent: 0);
       return true;
@@ -99,7 +99,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchTagLine(Token token) {
-    if (token.line.startsWith(GherkinLanguageConstants.tagPrefix)) {
+    if (token.line.startsWith(tagPrefix)) {
       _setTokenMatched(token, TokenType.tagLine, items: token.line.tags);
       return true;
     }
@@ -146,8 +146,7 @@ class GherkinTokenMatcher implements TokenMatcher {
     for (final keyword in keywords) {
       if (token.line.startsWithTitleKeyword(keyword)) {
         final title = token.line.getRestTrimmed(
-          keyword.length +
-              GherkinLanguageConstants.titleKeywordSeparator.length,
+          keyword.length + titleKeywordSeparator.length,
         );
         _setTokenMatched(token, tokenType, keyword: keyword, text: title);
         return true;
@@ -160,14 +159,10 @@ class GherkinTokenMatcher implements TokenMatcher {
   bool matchDocStringSeparator(Token token) =>
       _activeDocStringSeparator.isEmpty
           // open
-          ? _matchDocStringSeparator(
-                token,
-                GherkinLanguageConstants.docStringSeparator,
-                true,
-              ) ||
+          ? _matchDocStringSeparator(token, docStringSeparator, true) ||
               _matchDocStringSeparator(
                 token,
-                GherkinLanguageConstants.docStringAlternativeSeparator,
+                docStringAlternativeSeparator,
                 true,
               )
           // close
@@ -216,7 +211,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchTableRow(Token token) {
-    if (token.line.startsWith(GherkinLanguageConstants.tableCellSeparator)) {
+    if (token.line.startsWith(tableCellSeparator)) {
       _setTokenMatched(token, TokenType.tableRow, items: token.line.tableCells);
       return true;
     }
@@ -254,19 +249,11 @@ class GherkinTokenMatcher implements TokenMatcher {
   }
 
   String _unescapeDocString(String text) {
-    if (GherkinLanguageConstants.docStringSeparator ==
-        _activeDocStringSeparator) {
-      return text.replaceFirst(
-        r'\"\"\"',
-        GherkinLanguageConstants.docStringSeparator,
-      );
+    if (docStringSeparator == _activeDocStringSeparator) {
+      return text.replaceFirst(r'\"\"\"', docStringSeparator);
     }
-    if (GherkinLanguageConstants.docStringAlternativeSeparator ==
-        _activeDocStringSeparator) {
-      return text.replaceFirst(
-        r'\`\`\`',
-        GherkinLanguageConstants.docStringAlternativeSeparator,
-      );
+    if (docStringAlternativeSeparator == _activeDocStringSeparator) {
+      return text.replaceFirst(r'\`\`\`', docStringAlternativeSeparator);
     }
     return text;
   }

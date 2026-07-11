@@ -101,10 +101,10 @@ List<messages.Envelope> generateMessages(
   }
 
   if (options.includePickles) {
-    final pickleCompiler = MessagesPickleCompiler(idGenerator);
-    for (final pickle in pickleCompiler.compile(
+    for (final pickle in compilePickles(
       gherkinDocumentWithUri,
       source.uri,
+      idGenerator,
     )) {
       result.add(messages.Envelope(pickle: pickle));
     }
