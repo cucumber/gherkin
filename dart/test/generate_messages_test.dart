@@ -25,7 +25,6 @@ void main() {
       'minimal.feature',
       const GherkinOptions(
         includeSource: false,
-        includeGherkinDocument: true,
         includePickles: false,
       ),
     );

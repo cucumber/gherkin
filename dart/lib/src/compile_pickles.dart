@@ -185,13 +185,14 @@ messages.StepKeywordType _appendPickleSteps(
   messages.StepKeywordType lastKeywordType,
   String Function() idGenerator,
 ) {
+  var keywordType = lastKeywordType;
   for (final step in sourceSteps) {
-    lastKeywordType = _effectiveKeywordType(step.keywordType, lastKeywordType);
+    keywordType = _effectiveKeywordType(step.keywordType, keywordType);
     steps.add(
-      _pickleStep(step, variableCells, valuesRow, lastKeywordType, idGenerator),
+      _pickleStep(step, variableCells, valuesRow, keywordType, idGenerator),
     );
   }
-  return lastKeywordType;
+  return keywordType;
 }
 
 messages.PickleStep _pickleStep(
