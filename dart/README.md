@@ -41,30 +41,21 @@ import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 final envelopes = generateMessages(
   'Feature: Minimal\n\n  Scenario: minimalistic\n    Given the minimalism\n',
   'minimal.feature',
+  GherkinOptions(
+    includeSource: true,
+    includeGherkinDocument: true,
+    includePickles: true,
+    defaultDialect: 'en',
+    idGenerator: () => 'fixed-id', // omit for random UUIDs
+  ),
 );
 
 for (final envelope in envelopes) {
-  // Do something with envelope
+  // source, gherkinDocument, pickle, or parseError
 }
 ```
 
-Use [GherkinOptions] to filter envelopes, set the default dialect, or supply a
-deterministic ID generator:
-
-```dart
-final envelopes = generateMessages(
-  source,
-  'example.feature',
-  GherkinOptions(
-    includeSource: false,
-    includePickles: false,
-    defaultDialect: 'es',
-    idGenerator: () => 'fixed-id',
-  ),
-);
-```
-
-Malformed Gherkin is reported as a `parseError` envelope.
+Malformed Gherkin is reported as a `parseError` envelope, not thrown.
 
 ## Development
 
