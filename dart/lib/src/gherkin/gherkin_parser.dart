@@ -7,7 +7,6 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
-import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
@@ -18,39 +17,21 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 class GherkinParser {
   /// Creates a parser.
   GherkinParser({
-    this.includeSource = defaultIncludeSource,
-    this.includeGherkinDocument = defaultIncludeGherkinDocument,
-    this.includePickles = defaultIncludePickles,
-    this.defaultDialect = defaultDialectValue,
+    bool includeSource = true,
+    bool includeGherkinDocument = true,
+    bool includePickles = true,
+    String defaultDialect = 'en',
     String Function()? idGenerator,
-  }) : _idGenerator = idGenerator ?? _newUuid {
+  }) : _includeSource = includeSource,
+       _includeGherkinDocument = includeGherkinDocument,
+       _includePickles = includePickles,
+       _idGenerator = idGenerator ?? _newUuid {
     _dialectProvider = GherkinDialectProvider(builtinDialects, defaultDialect);
   }
 
-  /// The default for [includeSource]: `source` envelopes are emitted.
-  static const bool defaultIncludeSource = true;
-
-  /// The default for [includeGherkinDocument]: `gherkinDocument` envelopes are
-  /// emitted.
-  static const bool defaultIncludeGherkinDocument = true;
-
-  /// The default for [includePickles]: `pickle` envelopes are emitted.
-  static const bool defaultIncludePickles = true;
-
-  /// The default for [defaultDialect]: the `en` dialect.
-  static const String defaultDialectValue = 'en';
-
-  /// Whether `source` envelopes are emitted.
-  final bool includeSource;
-
-  /// Whether `gherkinDocument` envelopes are emitted.
-  final bool includeGherkinDocument;
-
-  /// Whether `pickle` envelopes are emitted.
-  final bool includePickles;
-
-  /// The dialect used when a feature has no `# language:` header.
-  final String defaultDialect;
+  final bool _includeSource;
+  final bool _includeGherkinDocument;
+  final bool _includePickles;
 
   /// The function used to assign ids to emitted messages.
   final String Function() _idGenerator;
@@ -58,31 +39,22 @@ class GherkinParser {
   late final GherkinDialectProvider _dialectProvider;
 
   /// Parses in-memory Gherkin [data] identified by [uri].
-  ///
-  /// Throws an [ArgumentError] when [mediaType] is omitted and the [uri]
-  /// extension is not recognized.
-  Stream<messages.Envelope> parseString(
-    String data,
-    String uri, {
-    messages.SourceMediaType? mediaType,
-  }) {
-    return parseEnvelope(makeSourceEnvelope(data, uri, mediaType: mediaType));
-  }
-
-  /// Parses a single source [envelope].
-  Stream<messages.Envelope> parseEnvelope(messages.Envelope envelope) async* {
-    if (includeSource) {
+  Stream<messages.Envelope> parseString(String data, String uri) async* {
+    final envelope = messages.Envelope(
+      source: messages.Source(
+        uri: uri,
+        data: data,
+        mediaType: messages.SourceMediaType.textXCucumberGherkinPlain,
+      ),
+    );
+    if (_includeSource) {
       yield envelope;
     }
-    final source = envelope.source;
-    if (source == null) {
-      return;
-    }
-    yield* Stream.fromIterable(_parseSource(source));
+    yield* Stream.fromIterable(_parseSource(envelope.source!));
   }
 
   Iterable<messages.Envelope> _parseSource(messages.Source source) sync* {
-    if (!includeGherkinDocument && !includePickles) {
+    if (!_includeGherkinDocument && !_includePickles) {
       return;
     }
 
@@ -93,8 +65,10 @@ class GherkinParser {
 
     final messages.GherkinDocument gherkinDocument;
     try {
-      final tokenMatcher = _tokenMatcher(source.mediaType);
-      gherkinDocument = parser.parse(tokenScanner, tokenMatcher);
+      gherkinDocument = parser.parse(
+        tokenScanner,
+        GherkinTokenMatcher(_dialectProvider),
+      );
     } on CompositeParserException catch (e) {
       yield* e.errors.map((error) => _parseErrorEnvelope(error, source.uri));
       return;
@@ -109,10 +83,10 @@ class GherkinParser {
       comments: gherkinDocument.comments,
     );
 
-    if (includeGherkinDocument) {
+    if (_includeGherkinDocument) {
       yield messages.Envelope(gherkinDocument: gherkinDocumentWithUri);
     }
-    if (includePickles) {
+    if (_includePickles) {
       final pickleCompiler = MessagesPickleCompiler(_idGenerator);
       for (final pickle in pickleCompiler.compile(
         gherkinDocumentWithUri,
@@ -120,25 +94,6 @@ class GherkinParser {
       )) {
         yield messages.Envelope(pickle: pickle);
       }
-    }
-  }
-
-  /// Parses a stream of source [envelopes] and emits the resulting envelopes.
-  ///
-  /// Envelopes are processed lazily and in order: a source is not parsed until
-  /// the preceding source's envelopes have been consumed.
-  Stream<messages.Envelope> parseEnvelopes(
-    Stream<messages.Envelope> envelopes,
-  ) {
-    return envelopes.asyncExpand(parseEnvelope);
-  }
-
-  TokenMatcher _tokenMatcher(messages.SourceMediaType mediaType) {
-    switch (mediaType) {
-      case messages.SourceMediaType.textXCucumberGherkinPlain:
-        return GherkinTokenMatcher(_dialectProvider);
-      case messages.SourceMediaType.textXCucumberGherkinMarkdown:
-        throw UnsupportedError('Markdown Gherkin is not supported');
     }
   }
 
@@ -171,37 +126,6 @@ class GherkinParser {
         ),
         message: error.message,
       ),
-    );
-  }
-
-  /// Builds a `source` [messages.Envelope] from raw Gherkin [data].
-  ///
-  /// The media type is taken from [mediaType] when provided; otherwise it is
-  /// inferred from the [uri] extension (`.feature`). When [mediaType]
-  /// is omitted and the [uri] has no recognized extension, an [ArgumentError]
-  /// is thrown.
-  static messages.Envelope makeSourceEnvelope(
-    String data,
-    String uri, {
-    messages.SourceMediaType? mediaType,
-  }) {
-    final resolvedMediaType = mediaType ?? _inferMediaType(uri);
-    return messages.Envelope(
-      source: messages.Source(
-        uri: uri,
-        data: data,
-        mediaType: resolvedMediaType,
-      ),
-    );
-  }
-
-  static messages.SourceMediaType _inferMediaType(String uri) {
-    if (uri.endsWith('.feature')) {
-      return messages.SourceMediaType.textXCucumberGherkinPlain;
-    }
-    throw ArgumentError(
-      'The uri ($uri) must end with .feature, or a mediaType must be '
-      'provided',
     );
   }
 }

@@ -28,13 +28,6 @@ Import the platform-agnostic API from the package root:
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 ```
 
-To read Gherkin from files, import the I/O library instead. It re-exports the core
-API and adds `dart:io` file entry points:
-
-```dart
-import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
-```
-
 Do not import from `package:cucumber_gherkin/src/...`; files under `lib/src/` are
 implementation details and may change without notice.
 
