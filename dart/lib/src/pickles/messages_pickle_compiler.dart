@@ -92,16 +92,14 @@ List<messages.Pickle> compilePickles(
               step.keywordType,
               lastKeywordType,
             );
-            // Background steps are interpolated but do NOT reference the
-            // specific example row; they belong to the background node only.
+            // Background steps are not interpolated.
             steps.add(
               _pickleStep(
                 step,
-                variableCells,
-                valuesRow,
+                const <messages.TableCell>[],
+                null,
                 lastKeywordType,
                 idGenerator,
-                trackRowInAstNodeIds: false,
               ),
             );
           }
@@ -220,12 +218,11 @@ messages.PickleStep _pickleStep(
   List<messages.TableCell> variableCells,
   messages.TableRow? valuesRow,
   messages.StepKeywordType keywordType,
-  String Function() idGenerator, {
-  bool trackRowInAstNodeIds = true,
-}) {
+  String Function() idGenerator,
+) {
   final valueCells = valuesRow?.cells ?? const <messages.TableCell>[];
   final astNodeIds = <String>[step.id];
-  if (valuesRow != null && trackRowInAstNodeIds) {
+  if (valuesRow != null) {
     astNodeIds.add(valuesRow.id);
   }
   return messages.PickleStep(

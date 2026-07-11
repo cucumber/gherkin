@@ -87,20 +87,8 @@ class GherkinLine {
 
   /// Whether the beginning of the line (ignoring leading whitespace) matches
   /// the title keyword [text] followed by a `:` separator.
-  bool startsWithTitleKeyword(String text) {
-    final textLength = text.length;
-    if (_trimmedLineText.length <= textLength) {
-      return false;
-    }
-    final startsWithKeyword = _trimmedLineText.startsWith(text);
-    const separatorLength = titleKeywordSeparator.length;
-    final afterKeyword = _trimmedLineText.substring(
-      textLength,
-      textLength + separatorLength,
-    );
-    final hasSeparator = afterKeyword == titleKeywordSeparator;
-    return startsWithKeyword && hasSeparator;
-  }
+  bool startsWithTitleKeyword(String text) =>
+      startsWith('$text$titleKeywordSeparator');
 
   /// Parses the line as a tag list, returning a `(column, text)` span for each
   /// tag (including its leading `@`).

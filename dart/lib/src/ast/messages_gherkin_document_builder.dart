@@ -120,16 +120,14 @@ class MessagesGherkinDocumentBuilder
 
   messages.Step _createStep(AstNode node) {
     final stepLine = node.getToken(TokenType.stepLine)!;
-    final dataTables = node.getItems<messages.DataTable>(RuleType.dataTable);
-    final docStrings = node.getItems<messages.DocString>(RuleType.docString);
     return messages.Step(
       id: _idGenerator(),
       location: _messageLocation(stepLine.location),
       keyword: stepLine.matchedKeyword,
       keywordType: stepLine.matchedKeywordType,
       text: stepLine.matchedText,
-      dataTable: dataTables.isEmpty ? null : dataTables.first,
-      docString: docStrings.isEmpty ? null : docStrings.first,
+      dataTable: node.getSingle<messages.DataTable>(RuleType.dataTable),
+      docString: node.getSingle<messages.DocString>(RuleType.docString),
     );
   }
 
@@ -288,9 +286,9 @@ class MessagesGherkinDocumentBuilder
     }
 
     final children = <messages.FeatureChild>[];
-    final backgrounds = node.getItems<messages.Background>(RuleType.background);
-    if (backgrounds.isNotEmpty) {
-      children.add(messages.FeatureChild(background: backgrounds.first));
+    final background = node.getSingle<messages.Background>(RuleType.background);
+    if (background != null) {
+      children.add(messages.FeatureChild(background: background));
     }
     for (final scenario in node.getItems<messages.Scenario>(
       RuleType.scenarioDefinition,
@@ -323,9 +321,9 @@ class MessagesGherkinDocumentBuilder
     }
 
     final children = <messages.RuleChild>[];
-    final backgrounds = node.getItems<messages.Background>(RuleType.background);
-    if (backgrounds.isNotEmpty) {
-      children.add(messages.RuleChild(background: backgrounds.first));
+    final background = node.getSingle<messages.Background>(RuleType.background);
+    if (background != null) {
+      children.add(messages.RuleChild(background: background));
     }
     for (final scenario in node.getItems<messages.Scenario>(
       RuleType.scenarioDefinition,
@@ -349,12 +347,8 @@ class MessagesGherkinDocumentBuilder
   }
 
   messages.GherkinDocument _createGherkinDocument(AstNode node) {
-    final features =
-        node
-            .getItems<messages.Feature?>(RuleType.feature)
-            .whereType<messages.Feature>();
     return messages.GherkinDocument(
-      feature: features.isEmpty ? null : features.first,
+      feature: node.getSingle<messages.Feature>(RuleType.feature),
       comments: List<messages.Comment>.unmodifiable(_comments),
     );
   }
