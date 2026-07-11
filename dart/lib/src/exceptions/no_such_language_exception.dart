@@ -7,9 +7,6 @@ part of 'exceptions.dart';
 /// unhandled exception.
 final class NoSuchLanguageException extends ParserException {
   /// Creates an exception for the unsupported [language] at [location].
-  NoSuchLanguageException(this.language, [Location location = Location.empty])
+  NoSuchLanguageException(String language, [Location location = Location.empty])
     : super.located('Language not supported: $language', location);
-
-  /// The dialect name that was requested but is not supported.
-  final String language;
 }

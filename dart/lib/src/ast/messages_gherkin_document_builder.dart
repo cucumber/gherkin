@@ -14,13 +14,12 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 /// [messages.GherkinDocument].
 class MessagesGherkinDocumentBuilder
     implements Builder<messages.GherkinDocument> {
-  /// Creates a builder that assigns ids using [idGenerator].
-  MessagesGherkinDocumentBuilder(this.idGenerator) {
+  /// Creates a builder that assigns ids using [_idGenerator].
+  MessagesGherkinDocumentBuilder(this._idGenerator) {
     reset();
   }
 
-  /// The generator used to assign ids to the produced messages.
-  final String Function() idGenerator;
+  final String Function() _idGenerator;
   // LIFO stack of rules being reduced. The top is kept at the queue's end, so
   // `addLast`/`removeLast`/`last` are O(1) push/pop/peek.
   final ListQueue<AstNode> _stack = ListQueue<AstNode>();
@@ -124,7 +123,7 @@ class MessagesGherkinDocumentBuilder
     final dataTables = node.items<messages.DataTable>(RuleType.dataTable);
     final docStrings = node.items<messages.DocString>(RuleType.docString);
     return messages.Step(
-      id: idGenerator(),
+      id: _idGenerator(),
       location: _messageLocation(stepLine.location),
       keyword: stepLine.matchedKeyword,
       keywordType: stepLine.matchedKeywordType,
@@ -159,7 +158,7 @@ class MessagesGherkinDocumentBuilder
         tokens
             .map(
               (token) => messages.TableRow(
-                id: idGenerator(),
+                id: _idGenerator(),
                 location: _messageLocation(token.location),
                 cells: _getCells(token),
               ),
@@ -197,7 +196,7 @@ class MessagesGherkinDocumentBuilder
   messages.Background _createBackground(AstNode node) {
     final backgroundLine = node.requireToken(TokenType.backgroundLine);
     return messages.Background(
-      id: idGenerator(),
+      id: _idGenerator(),
       location: _messageLocation(backgroundLine.location),
       keyword: backgroundLine.matchedKeyword,
       name: backgroundLine.matchedText,
@@ -211,7 +210,7 @@ class MessagesGherkinDocumentBuilder
     final scenarioNode = node.require<AstNode>(RuleType.scenario);
     final scenarioLine = scenarioNode.requireToken(TokenType.scenarioLine);
     return messages.Scenario(
-      id: idGenerator(),
+      id: _idGenerator(),
       location: _messageLocation(scenarioLine.location),
       tags: tags,
       keyword: scenarioLine.matchedKeyword,
@@ -239,7 +238,7 @@ class MessagesGherkinDocumentBuilder
       const <messages.TableRow>[],
     );
     return messages.Examples(
-      id: idGenerator(),
+      id: _idGenerator(),
       location: _messageLocation(examplesLine.location),
       tags: tags,
       keyword: examplesLine.matchedKeyword,
@@ -259,7 +258,7 @@ class MessagesGherkinDocumentBuilder
     return tagsNode.getTokens(TokenType.tagLine).expand((token) {
       return token.matchedItems.map(
         (tagItem) => messages.Tag(
-          id: idGenerator(),
+          id: _idGenerator(),
           location: _messageLocation(token.location, tagItem.column),
           name: tagItem.text,
         ),
@@ -338,7 +337,7 @@ class MessagesGherkinDocumentBuilder
     final tags = _getTags(header);
 
     return messages.Rule(
-      id: idGenerator(),
+      id: _idGenerator(),
       location: _messageLocation(ruleLine.location),
       tags: tags,
       keyword: ruleLine.matchedKeyword,

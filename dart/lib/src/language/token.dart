@@ -12,7 +12,7 @@ class Token {
   Token(this.line, this.location);
 
   /// The source line this token was scanned from.
-  GherkinLine line;
+  final GherkinLine line;
 
   /// The location (line and column) of this token in the source.
   Location location;
@@ -32,9 +32,6 @@ class Token {
   /// The spans (for example tags or table cells) recognized on the line.
   Iterable<GherkinLineSpan> matchedItems = const <GherkinLineSpan>[];
 
-  /// The indentation (number of leading spaces) of the matched content.
-  int matchedIndent = 0;
-
   /// The dialect active when this token was matched, or `null` if the token
   /// has not been matched against a dialect yet.
   GherkinDialect? matchedGherkinDialect;
@@ -51,7 +48,4 @@ class Token {
       line.detach();
     }
   }
-
-  @override
-  String toString() => '${matchedType.name}: $matchedKeyword/$matchedText';
 }

@@ -24,20 +24,16 @@ class GherkinDialect {
   /// The keywords that introduce a `Scenario Outline`.
   List<String> get scenarioOutlineKeywords => _keywords.scenarioOutline;
 
-  /// All step keywords, regardless of their semantic type.
-  late final List<String> stepKeywords =
+  /// Step keywords sorted by descending length so the longest match wins.
+  late final List<String> stepKeywordsByLengthDesc =
       <String>{
-        ...givenStepKeywords,
-        ...whenStepKeywords,
-        ...thenStepKeywords,
-        ...andStepKeywords,
-        ...butStepKeywords,
-      }.toList();
-
-  /// [stepKeywords] sorted by descending length so the longest match wins.
-  late final List<String> stepKeywordsByLengthDesc = List<String>.of(
-    stepKeywords,
-  )..sort((a, b) => b.length - a.length);
+          ...givenStepKeywords,
+          ...whenStepKeywords,
+          ...thenStepKeywords,
+          ...andStepKeywords,
+          ...butStepKeywords,
+        }.toList()
+        ..sort((a, b) => b.length - a.length);
 
   /// The keywords that introduce a `Background`.
   List<String> get backgroundKeywords => _keywords.background;

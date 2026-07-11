@@ -26,9 +26,6 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   String _activeDocStringSeparator = '';
   int _indentToRemove = 0;
 
-  /// The dialect currently in effect.
-  GherkinDialect get currentDialect => _currentDialect;
-
   @override
   void reset() {
     _activeDocStringSeparator = '';
@@ -40,7 +37,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   @override
   bool matchEof(Token token) {
     if (token.isEof) {
-      setTokenMatched(token, TokenType.eof);
+      _setTokenMatched(token, TokenType.eof);
       return true;
     }
     return false;
@@ -50,7 +47,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   bool matchOther(Token token) {
     // Take the whole line, minus DocString indents.
     final text = token.line.getLineText(_indentToRemove);
-    setTokenMatched(
+    _setTokenMatched(
       token,
       TokenType.other,
       text: _unescapeDocString(text),
@@ -62,7 +59,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   @override
   bool matchEmpty(Token token) {
     if (token.line.isEmptyLine) {
-      setTokenMatched(token, TokenType.empty);
+      _setTokenMatched(token, TokenType.empty);
       return true;
     }
     return false;
@@ -72,7 +69,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   bool matchComment(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.commentPrefix)) {
       final text = token.line.getLineText();
-      setTokenMatched(token, TokenType.comment, text: text, indent: 0);
+      _setTokenMatched(token, TokenType.comment, text: text, indent: 0);
       return true;
     }
     return false;
@@ -83,7 +80,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
     final match = _languagePattern.firstMatch(token.line.getLineText());
     if (match != null) {
       final language = match.group(1) ?? '';
-      setTokenMatched(token, TokenType.language, text: language);
+      _setTokenMatched(token, TokenType.language, text: language);
       _currentDialect = _dialectProvider.getDialect(language, token.location);
       initializeKeywordTypes(_currentDialect);
       return true;
@@ -94,7 +91,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   @override
   bool matchTagLine(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.tagPrefix)) {
-      setTokenMatched(token, TokenType.tagLine, items: token.line.tags);
+      _setTokenMatched(token, TokenType.tagLine, items: token.line.tags);
       return true;
     }
     return false;
@@ -104,18 +101,18 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   bool matchFeatureLine(Token token) => _matchTitleLine(
     token,
     TokenType.featureLine,
-    currentDialect.featureKeywords,
+    _currentDialect.featureKeywords,
   );
 
   @override
   bool matchRuleLine(Token token) =>
-      _matchTitleLine(token, TokenType.ruleLine, currentDialect.ruleKeywords);
+      _matchTitleLine(token, TokenType.ruleLine, _currentDialect.ruleKeywords);
 
   @override
   bool matchBackgroundLine(Token token) => _matchTitleLine(
     token,
     TokenType.backgroundLine,
-    currentDialect.backgroundKeywords,
+    _currentDialect.backgroundKeywords,
   );
 
   @override
@@ -123,19 +120,19 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
       _matchTitleLine(
         token,
         TokenType.scenarioLine,
-        currentDialect.scenarioKeywords,
+        _currentDialect.scenarioKeywords,
       ) ||
       _matchTitleLine(
         token,
         TokenType.scenarioLine,
-        currentDialect.scenarioOutlineKeywords,
+        _currentDialect.scenarioOutlineKeywords,
       );
 
   @override
   bool matchExamplesLine(Token token) => _matchTitleLine(
     token,
     TokenType.examplesLine,
-    currentDialect.examplesKeywords,
+    _currentDialect.examplesKeywords,
   );
 
   bool _matchTitleLine(
@@ -149,7 +146,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
           keyword.length +
               GherkinLanguageConstants.titleKeywordSeparator.length,
         );
-        setTokenMatched(token, tokenType, keyword: keyword, text: title);
+        _setTokenMatched(token, tokenType, keyword: keyword, text: title);
         return true;
       }
     }
@@ -184,7 +181,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
         _activeDocStringSeparator = '';
         _indentToRemove = 0;
       }
-      setTokenMatched(
+      _setTokenMatched(
         token,
         TokenType.docStringSeparator,
         text: mediaType,
@@ -197,11 +194,11 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
 
   @override
   bool matchStepLine(Token token) {
-    final keywords = currentDialect.stepKeywordsByLengthDesc;
+    final keywords = _currentDialect.stepKeywordsByLengthDesc;
     for (final keyword in keywords) {
       if (token.line.startsWith(keyword)) {
         final stepText = token.line.getRestTrimmed(keyword.length);
-        setTokenMatched(
+        _setTokenMatched(
           token,
           TokenType.stepLine,
           keyword: keyword,
@@ -218,7 +215,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
   @override
   bool matchTableRow(Token token) {
     if (token.line.startsWith(GherkinLanguageConstants.tableCellSeparator)) {
-      setTokenMatched(token, TokenType.tableRow, items: token.line.tableCells);
+      _setTokenMatched(token, TokenType.tableRow, items: token.line.tableCells);
       return true;
     }
     return false;
@@ -226,7 +223,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
 
   /// Records that [token] matched [matchedType], populating its matched
   /// keyword, text, items, indentation, and location.
-  void setTokenMatched(
+  void _setTokenMatched(
     Token token,
     TokenType matchedType, {
     String text = '',
@@ -235,16 +232,16 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
     int? indent,
     Iterable<GherkinLineSpan> items = const <GherkinLineSpan>[],
   }) {
+    final matchedIndent =
+        matchedType == TokenType.empty ? 0 : indent ?? token.line.indent;
     token
       ..matchedType = matchedType
       ..matchedKeyword = keyword
       ..matchedKeywordType = keywordType
       ..matchedText = text
       ..matchedItems = items
-      ..matchedGherkinDialect = currentDialect
-      ..matchedIndent =
-          matchedType == TokenType.empty ? 0 : indent ?? token.line.indent
-      ..location = Location(token.location.line, token.matchedIndent + 1);
+      ..matchedGherkinDialect = _currentDialect
+      ..location = Location(token.location.line, matchedIndent + 1);
   }
 
   String _unescapeDocString(String text) {
