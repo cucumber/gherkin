@@ -49,9 +49,6 @@ class GherkinLine {
   /// look-ahead). No-op for this in-memory implementation.
   void detach() {}
 
-  /// The one-based line number of this line in the source.
-  int get lineNumber => _lineNumber;
-
   /// Returns the line text.
   ///
   /// [indentToRemove] is the maximum number of whitespace characters to remove
@@ -122,7 +119,7 @@ class GherkinLine {
       if (!_nonWhitespaceToken.hasMatch(token)) {
         throw ParserException.create(
           'A tag may not contain whitespace',
-          Location(lineNumber, column),
+          Location(_lineNumber, column),
         );
       }
       tags.add(
