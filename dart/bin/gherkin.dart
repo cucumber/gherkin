@@ -3,6 +3,11 @@ import 'dart:io';
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
+/// Emits the Gherkin envelopes for one or more feature files, matching the
+/// `*.ndjson` format used by the Cucumber CLI.
+///
+/// This format is an acceptance-test artifact rather than part of the published
+/// library, so the rendering lives here in the executable instead of `lib/`.
 Future<void> main(List<String> args) async {
   var includeSource = true;
   var includeAst = true;
