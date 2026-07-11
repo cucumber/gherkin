@@ -1,9 +1,5 @@
 /// Utility string operations used by the Gherkin scanners.
 extension StringExtensions on String {
-  // Leading/trailing horizontal-whitespace patterns. Compiled once and reused
-  // rather than rebuilt per call (these run per table cell). \xA0 is a
-  // non-breaking space, which some trims miss:
-  // https://stackoverflow.com/questions/1060570/why-is-non-breaking-space-not-a-whitespace-character-in-java
   static final RegExp _leadingHorizontalWhitespace = RegExp(
     r'^[ \t\x0B\f\r\x85\xA0]+',
   );
