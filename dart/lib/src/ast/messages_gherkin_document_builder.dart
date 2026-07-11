@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/ast/ast_node.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
@@ -36,7 +35,7 @@ class MessagesGherkinDocumentBuilder
         ),
       );
     } else {
-      _currentNode.add(token.matchedType.toRuleType(), token);
+      _currentNode.add(token.matchedType.ruleType, token);
     }
   }
 

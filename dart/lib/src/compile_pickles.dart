@@ -20,42 +20,27 @@ List<messages.Pickle> compilePickles(
     messages.Scenario scenario,
     String language,
   ) {
-    var lastKeywordType = messages.StepKeywordType.unknown;
     final steps = <messages.PickleStep>[];
+    var lastKeywordType = messages.StepKeywordType.unknown;
 
     if (scenario.steps.isNotEmpty) {
-      for (final step in backgroundSteps) {
-        lastKeywordType = _effectiveKeywordType(
-          step.keywordType,
-          lastKeywordType,
-        );
-        steps.add(
-          _pickleStep(
-            step,
-            const <messages.TableCell>[],
-            null,
-            lastKeywordType,
-            idGenerator,
-          ),
-        );
-      }
-    }
-
-    for (final step in scenario.steps) {
-      lastKeywordType = _effectiveKeywordType(
-        step.keywordType,
+      lastKeywordType = _appendPickleSteps(
+        steps,
+        backgroundSteps,
+        const <messages.TableCell>[],
+        null,
         lastKeywordType,
-      );
-      steps.add(
-        _pickleStep(
-          step,
-          const <messages.TableCell>[],
-          null,
-          lastKeywordType,
-          idGenerator,
-        ),
+        idGenerator,
       );
     }
+    _appendPickleSteps(
+      steps,
+      scenario.steps,
+      const <messages.TableCell>[],
+      null,
+      lastKeywordType,
+      idGenerator,
+    );
 
     pickles.add(
       messages.Pickle(
@@ -84,42 +69,27 @@ List<messages.Pickle> compilePickles(
       }
 
       for (final valuesRow in examples.tableBody) {
-        var lastKeywordType = messages.StepKeywordType.unknown;
         final steps = <messages.PickleStep>[];
+        var lastKeywordType = messages.StepKeywordType.unknown;
         if (scenario.steps.isNotEmpty) {
-          for (final step in backgroundSteps) {
-            lastKeywordType = _effectiveKeywordType(
-              step.keywordType,
-              lastKeywordType,
-            );
-            // Background steps are not interpolated.
-            steps.add(
-              _pickleStep(
-                step,
-                const <messages.TableCell>[],
-                null,
-                lastKeywordType,
-                idGenerator,
-              ),
-            );
-          }
-        }
-
-        for (final step in scenario.steps) {
-          lastKeywordType = _effectiveKeywordType(
-            step.keywordType,
+          // Background steps are not interpolated.
+          lastKeywordType = _appendPickleSteps(
+            steps,
+            backgroundSteps,
+            const <messages.TableCell>[],
+            null,
             lastKeywordType,
-          );
-          steps.add(
-            _pickleStep(
-              step,
-              variableCells,
-              valuesRow,
-              lastKeywordType,
-              idGenerator,
-            ),
+            idGenerator,
           );
         }
+        _appendPickleSteps(
+          steps,
+          scenario.steps,
+          variableCells,
+          valuesRow,
+          lastKeywordType,
+          idGenerator,
+        );
 
         pickles.add(
           messages.Pickle(
@@ -211,6 +181,23 @@ List<messages.Pickle> compilePickles(
     }
   }
   return pickles;
+}
+
+messages.StepKeywordType _appendPickleSteps(
+  List<messages.PickleStep> steps,
+  Iterable<messages.Step> sourceSteps,
+  List<messages.TableCell> variableCells,
+  messages.TableRow? valuesRow,
+  messages.StepKeywordType lastKeywordType,
+  String Function() idGenerator,
+) {
+  for (final step in sourceSteps) {
+    lastKeywordType = _effectiveKeywordType(step.keywordType, lastKeywordType);
+    steps.add(
+      _pickleStep(step, variableCells, valuesRow, lastKeywordType, idGenerator),
+    );
+  }
+  return lastKeywordType;
 }
 
 messages.PickleStep _pickleStep(

@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
+import 'package:cucumber_gherkin/src/compile_pickles.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
-import 'package:cucumber_gherkin/src/pickles/messages_pickle_compiler.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Controls which envelopes [generateMessages] emits and how IDs are assigned.

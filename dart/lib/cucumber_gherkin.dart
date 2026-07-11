@@ -8,4 +8,4 @@
 /// ```
 library;
 
-export 'src/gherkin/generate_messages.dart';
+export 'src/generate_messages.dart';

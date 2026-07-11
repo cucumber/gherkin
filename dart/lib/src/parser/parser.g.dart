@@ -67,9 +67,9 @@ enum TokenType {
 
 /// The grammar rules recognized by the Gherkin parser.
 ///
-/// The first group mirrors the lexical `TokenType`s one-to-one (the explicit
-/// mapping lives in `TokenTypeExtension.toRuleType`); the remaining values are
-/// the structural production rules of the Gherkin grammar.
+/// The first group mirrors the lexical [TokenType]s one-to-one (see
+/// [TokenType.ruleType]); the remaining values are the structural production
+/// rules of the Gherkin grammar.
 enum RuleType {
   /// No rule; the initial/sentinel value.
   none,
@@ -182,6 +182,14 @@ enum RuleType {
 
   /// Free-text description: `Description := (#Other | #Comment)+`.
   description,
+}
+
+/// The [RuleType] that corresponds to this lexical token type.
+///
+/// The leading [RuleType] values mirror [TokenType] in declaration order
+/// (both are generated from the same grammar), so the mapping is by index.
+extension TokenTypeRuleType on TokenType {
+  RuleType get ruleType => RuleType.values[index];
 }
 
 /// A recursive-descent Gherkin parser driven by a Berp-generated state machine.

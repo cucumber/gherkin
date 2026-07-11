@@ -1,4 +1,3 @@
-import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
@@ -36,10 +35,9 @@ class AstNode {
   }
 
   /// Returns the first [Token] of [tokenType], or `null` if absent.
-  Token? getToken(TokenType tokenType) =>
-      getSingle<Token>(tokenType.toRuleType());
+  Token? getToken(TokenType tokenType) => getSingle<Token>(tokenType.ruleType);
 
   /// Returns all [Token]s of the given [tokenType] held by this node.
   List<Token> getTokens(TokenType tokenType) =>
-      getItems<Token>(tokenType.toRuleType());
+      getItems<Token>(tokenType.ruleType);
 }
