@@ -14,15 +14,16 @@ List<messages.Pickle> compilePickles(
     return pickles;
   }
 
-  void compileScenario(
-    List<messages.Tag> inheritedTags,
+  /// Builds pickle steps for [scenario], optionally interpolating from an
+  /// examples row. Background steps are never interpolated.
+  List<messages.PickleStep> buildSteps(
     List<messages.Step> backgroundSteps,
-    messages.Scenario scenario,
-    String language,
-  ) {
+    messages.Scenario scenario, [
+    List<messages.TableCell> variableCells = const <messages.TableCell>[],
+    messages.TableRow? valuesRow,
+  ]) {
     final steps = <messages.PickleStep>[];
     var lastKeywordType = messages.StepKeywordType.unknown;
-
     if (scenario.steps.isNotEmpty) {
       lastKeywordType = _appendPickleSteps(
         steps,
@@ -36,12 +37,22 @@ List<messages.Pickle> compilePickles(
     _appendPickleSteps(
       steps,
       scenario.steps,
-      const <messages.TableCell>[],
-      null,
+      variableCells,
+      valuesRow,
       lastKeywordType,
       idGenerator,
     );
+    return steps;
+  }
 
+  void compileScenario(
+    List<messages.Tag> inheritedTags,
+    List<messages.Step> backgroundSteps,
+    messages.Scenario scenario,
+    String language,
+  ) {
+    // Allocate step IDs before the pickle ID to match acceptance fixtures.
+    final steps = buildSteps(backgroundSteps, scenario);
     pickles.add(
       messages.Pickle(
         id: idGenerator(),
@@ -69,28 +80,13 @@ List<messages.Pickle> compilePickles(
       }
 
       for (final valuesRow in examples.tableBody) {
-        final steps = <messages.PickleStep>[];
-        var lastKeywordType = messages.StepKeywordType.unknown;
-        if (scenario.steps.isNotEmpty) {
-          // Background steps are not interpolated.
-          lastKeywordType = _appendPickleSteps(
-            steps,
-            backgroundSteps,
-            const <messages.TableCell>[],
-            null,
-            lastKeywordType,
-            idGenerator,
-          );
-        }
-        _appendPickleSteps(
-          steps,
-          scenario.steps,
+        // Allocate step IDs before the pickle ID to match acceptance fixtures.
+        final steps = buildSteps(
+          backgroundSteps,
+          scenario,
           variableCells,
           valuesRow,
-          lastKeywordType,
-          idGenerator,
         );
-
         pickles.add(
           messages.Pickle(
             id: idGenerator(),

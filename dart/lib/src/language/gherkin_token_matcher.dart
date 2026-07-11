@@ -23,8 +23,8 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   final Map<String, GherkinLanguageKeywords> _dialects;
   final String _defaultLanguage;
-  final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
-      <String, List<messages.StepKeywordType>>{};
+  final Map<String, messages.StepKeywordType> _keywordTypesMap =
+      <String, messages.StepKeywordType>{};
 
   late String _currentLanguage;
   late GherkinLanguageKeywords _currentKeywords;
@@ -202,7 +202,7 @@ class GherkinTokenMatcher implements TokenMatcher {
           keyword: keyword,
           text: stepText,
           keywordType:
-              _keywordTypeOrNull(keyword) ?? messages.StepKeywordType.unknown,
+              _keywordTypesMap[keyword] ?? messages.StepKeywordType.unknown,
         );
         return true;
       }
@@ -273,37 +273,25 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   void _initializeKeywordTypes(GherkinLanguageKeywords keywords) {
     _keywordTypesMap.clear();
-    _addKeywordTypeMappings(keywords.given, messages.StepKeywordType.context);
-    _addKeywordTypeMappings(keywords.when, messages.StepKeywordType.action);
-    _addKeywordTypeMappings(keywords.then, messages.StepKeywordType.outcome);
-    _addKeywordTypeMappings(keywords.and, messages.StepKeywordType.conjunction);
-    _addKeywordTypeMappings(keywords.but, messages.StepKeywordType.conjunction);
-  }
+    void mapKeywords(
+      Iterable<String> stepKeywords,
+      messages.StepKeywordType type,
+    ) {
+      for (final keyword in stepKeywords) {
+        final existing = _keywordTypesMap[keyword];
+        // Ambiguous keywords (e.g. `* ` in given/when/then/and) are unknown.
+        _keywordTypesMap[keyword] =
+            existing == null || existing == type
+                ? type
+                : messages.StepKeywordType.unknown;
+      }
+    }
 
-  void _addKeywordTypeMappings(
-    Iterable<String> keywords,
-    messages.StepKeywordType keywordType,
-  ) {
-    for (final keyword in keywords) {
-      _keywordTypesMap
-          .putIfAbsent(keyword, () => <messages.StepKeywordType>[])
-          .add(keywordType);
-    }
-  }
-
-  /// Resolves the step keyword type for [keyword], or `null` when unknown.
-  ///
-  /// Ambiguous keywords (mapped to more than one type) return
-  /// [messages.StepKeywordType.unknown].
-  messages.StepKeywordType? _keywordTypeOrNull(String keyword) {
-    final keywordTypes = _keywordTypesMap[keyword];
-    if (keywordTypes == null) {
-      return null;
-    }
-    if (keywordTypes.length != 1) {
-      return messages.StepKeywordType.unknown;
-    }
-    return keywordTypes.single;
+    mapKeywords(keywords.given, messages.StepKeywordType.context);
+    mapKeywords(keywords.when, messages.StepKeywordType.action);
+    mapKeywords(keywords.then, messages.StepKeywordType.outcome);
+    mapKeywords(keywords.and, messages.StepKeywordType.conjunction);
+    mapKeywords(keywords.but, messages.StepKeywordType.conjunction);
   }
 
   static GherkinLanguageKeywords _lookupKeywords(
