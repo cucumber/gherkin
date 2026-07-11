@@ -1,6 +1,6 @@
-import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
@@ -12,8 +12,10 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 class GherkinTokenMatcher implements TokenMatcher {
   /// Creates a matcher that resolves dialects through [_dialectProvider].
   GherkinTokenMatcher(this._dialectProvider)
-    : _currentDialect = _dialectProvider.defaultDialect {
-    _initializeKeywordTypes(_currentDialect);
+    : _currentLanguage = _dialectProvider.defaultLanguage,
+      _currentKeywords = _dialectProvider.defaultKeywords {
+    _stepKeywordsByLengthDesc = _currentKeywords.stepKeywordsByLengthDesc;
+    _initializeKeywordTypes(_currentKeywords);
   }
   static final RegExp _languagePattern = RegExp(
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
@@ -23,7 +25,9 @@ class GherkinTokenMatcher implements TokenMatcher {
   final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
       <String, List<messages.StepKeywordType>>{};
 
-  GherkinDialect _currentDialect;
+  String _currentLanguage;
+  GherkinLanguageKeywords _currentKeywords;
+  late List<String> _stepKeywordsByLengthDesc;
   String _activeDocStringSeparator = '';
   int _indentToRemove = 0;
 
@@ -31,8 +35,10 @@ class GherkinTokenMatcher implements TokenMatcher {
   void reset() {
     _activeDocStringSeparator = '';
     _indentToRemove = 0;
-    _currentDialect = _dialectProvider.defaultDialect;
-    _initializeKeywordTypes(_currentDialect);
+    _useLanguage(
+      _dialectProvider.defaultLanguage,
+      _dialectProvider.defaultKeywords,
+    );
   }
 
   @override
@@ -82,8 +88,10 @@ class GherkinTokenMatcher implements TokenMatcher {
     if (match != null) {
       final language = match.group(1) ?? '';
       _setTokenMatched(token, TokenType.language, text: language);
-      _currentDialect = _dialectProvider.getDialect(language, token.location);
-      _initializeKeywordTypes(_currentDialect);
+      _useLanguage(
+        language,
+        _dialectProvider.getKeywords(language, token.location),
+      );
       return true;
     }
     return false;
@@ -99,21 +107,18 @@ class GherkinTokenMatcher implements TokenMatcher {
   }
 
   @override
-  bool matchFeatureLine(Token token) => _matchTitleLine(
-    token,
-    TokenType.featureLine,
-    _currentDialect.featureKeywords,
-  );
+  bool matchFeatureLine(Token token) =>
+      _matchTitleLine(token, TokenType.featureLine, _currentKeywords.feature);
 
   @override
   bool matchRuleLine(Token token) =>
-      _matchTitleLine(token, TokenType.ruleLine, _currentDialect.ruleKeywords);
+      _matchTitleLine(token, TokenType.ruleLine, _currentKeywords.rule);
 
   @override
   bool matchBackgroundLine(Token token) => _matchTitleLine(
     token,
     TokenType.backgroundLine,
-    _currentDialect.backgroundKeywords,
+    _currentKeywords.background,
   );
 
   @override
@@ -121,20 +126,17 @@ class GherkinTokenMatcher implements TokenMatcher {
       _matchTitleLine(
         token,
         TokenType.scenarioLine,
-        _currentDialect.scenarioKeywords,
+        _currentKeywords.scenario,
       ) ||
       _matchTitleLine(
         token,
         TokenType.scenarioLine,
-        _currentDialect.scenarioOutlineKeywords,
+        _currentKeywords.scenarioOutline,
       );
 
   @override
-  bool matchExamplesLine(Token token) => _matchTitleLine(
-    token,
-    TokenType.examplesLine,
-    _currentDialect.examplesKeywords,
-  );
+  bool matchExamplesLine(Token token) =>
+      _matchTitleLine(token, TokenType.examplesLine, _currentKeywords.examples);
 
   bool _matchTitleLine(
     Token token,
@@ -195,8 +197,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchStepLine(Token token) {
-    final keywords = _currentDialect.stepKeywordsByLengthDesc;
-    for (final keyword in keywords) {
+    for (final keyword in _stepKeywordsByLengthDesc) {
       if (token.line.startsWith(keyword)) {
         final stepText = token.line.getRestTrimmed(keyword.length);
         _setTokenMatched(
@@ -241,8 +242,15 @@ class GherkinTokenMatcher implements TokenMatcher {
       ..matchedKeywordType = keywordType
       ..matchedText = text
       ..matchedItems = items
-      ..matchedGherkinDialect = _currentDialect
+      ..matchedLanguage = _currentLanguage
       ..location = Location(token.location.line, matchedIndent + 1);
+  }
+
+  void _useLanguage(String language, GherkinLanguageKeywords keywords) {
+    _currentLanguage = language;
+    _currentKeywords = keywords;
+    _stepKeywordsByLengthDesc = keywords.stepKeywordsByLengthDesc;
+    _initializeKeywordTypes(keywords);
   }
 
   String _unescapeDocString(String text) {
@@ -263,28 +271,13 @@ class GherkinTokenMatcher implements TokenMatcher {
     return text;
   }
 
-  void _initializeKeywordTypes(GherkinDialect dialect) {
+  void _initializeKeywordTypes(GherkinLanguageKeywords keywords) {
     _keywordTypesMap.clear();
-    _addKeywordTypeMappings(
-      dialect.givenStepKeywords,
-      messages.StepKeywordType.context,
-    );
-    _addKeywordTypeMappings(
-      dialect.whenStepKeywords,
-      messages.StepKeywordType.action,
-    );
-    _addKeywordTypeMappings(
-      dialect.thenStepKeywords,
-      messages.StepKeywordType.outcome,
-    );
-    _addKeywordTypeMappings(
-      dialect.andStepKeywords,
-      messages.StepKeywordType.conjunction,
-    );
-    _addKeywordTypeMappings(
-      dialect.butStepKeywords,
-      messages.StepKeywordType.conjunction,
-    );
+    _addKeywordTypeMappings(keywords.given, messages.StepKeywordType.context);
+    _addKeywordTypeMappings(keywords.when, messages.StepKeywordType.action);
+    _addKeywordTypeMappings(keywords.then, messages.StepKeywordType.outcome);
+    _addKeywordTypeMappings(keywords.and, messages.StepKeywordType.conjunction);
+    _addKeywordTypeMappings(keywords.but, messages.StepKeywordType.conjunction);
   }
 
   void _addKeywordTypeMappings(

@@ -1,4 +1,3 @@
-import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
@@ -32,9 +31,9 @@ class Token {
   /// The spans (for example tags or table cells) recognized on the line.
   Iterable<GherkinLineSpan> matchedItems = const <GherkinLineSpan>[];
 
-  /// The dialect active when this token was matched, or `null` if the token
-  /// has not been matched against a dialect yet.
-  GherkinDialect? matchedGherkinDialect;
+  /// The language tag active when this token was matched, or `null` if the
+  /// token has not been matched against a dialect yet.
+  String? matchedLanguage;
 
   /// Whether this token marks the end of the file.
   bool get isEof => line.isEof;

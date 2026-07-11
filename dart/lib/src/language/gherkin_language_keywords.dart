@@ -56,4 +56,9 @@ class GherkinLanguageKeywords {
 
   /// The keywords that introduce a `But` step.
   final List<String> but;
+
+  /// Step keywords sorted by descending length so the longest match wins.
+  List<String> get stepKeywordsByLengthDesc =>
+      <String>{...given, ...when, ...then, ...and, ...but}.toList()
+        ..sort((a, b) => b.length - a.length);
 }

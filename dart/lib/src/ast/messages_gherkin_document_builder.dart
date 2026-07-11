@@ -281,8 +281,8 @@ class MessagesGherkinDocumentBuilder
       return null;
     }
     final featureLine = header.getToken(TokenType.featureLine);
-    final dialect = featureLine?.matchedGherkinDialect;
-    if (featureLine == null || dialect == null) {
+    final language = featureLine?.matchedLanguage;
+    if (featureLine == null || language == null) {
       return null;
     }
 
@@ -303,7 +303,7 @@ class MessagesGherkinDocumentBuilder
     return messages.Feature(
       location: _messageLocation(featureLine.location),
       tags: _getTags(header),
-      language: dialect.language,
+      language: language,
       keyword: featureLine.matchedKeyword,
       name: featureLine.matchedText,
       description: _getDescription(header),
