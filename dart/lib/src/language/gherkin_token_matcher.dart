@@ -1,7 +1,7 @@
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
+import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
@@ -11,11 +11,11 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
 class GherkinTokenMatcher implements TokenMatcher {
   /// Creates a matcher over [_dialects], defaulting to [_defaultLanguage].
-  GherkinTokenMatcher(this._dialects, [this._defaultLanguage = 'en'])
-    : _currentLanguage = _defaultLanguage,
-      _currentKeywords = _lookupKeywords(_dialects, _defaultLanguage) {
-    _stepKeywordsByLengthDesc = _currentKeywords.stepKeywordsByLengthDesc;
-    _initializeKeywordTypes(_currentKeywords);
+  GherkinTokenMatcher(this._dialects, [this._defaultLanguage = 'en']) {
+    _useLanguage(
+      _defaultLanguage,
+      _lookupKeywords(_dialects, _defaultLanguage),
+    );
   }
   static final RegExp _languagePattern = RegExp(
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
@@ -26,8 +26,8 @@ class GherkinTokenMatcher implements TokenMatcher {
   final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
       <String, List<messages.StepKeywordType>>{};
 
-  String _currentLanguage;
-  GherkinLanguageKeywords _currentKeywords;
+  late String _currentLanguage;
+  late GherkinLanguageKeywords _currentKeywords;
   late List<String> _stepKeywordsByLengthDesc;
   String _activeDocStringSeparator = '';
   int _indentToRemove = 0;
@@ -245,7 +245,16 @@ class GherkinTokenMatcher implements TokenMatcher {
   void _useLanguage(String language, GherkinLanguageKeywords keywords) {
     _currentLanguage = language;
     _currentKeywords = keywords;
-    _stepKeywordsByLengthDesc = keywords.stepKeywordsByLengthDesc;
+    // Longest match wins so e.g. `* ` does not shadow `Given `.
+    _stepKeywordsByLengthDesc =
+        <String>{
+            ...keywords.given,
+            ...keywords.when,
+            ...keywords.then,
+            ...keywords.and,
+            ...keywords.but,
+          }.toList()
+          ..sort((a, b) => b.length - a.length);
     _initializeKeywordTypes(keywords);
   }
 

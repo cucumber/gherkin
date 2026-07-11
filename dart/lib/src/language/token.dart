@@ -1,5 +1,4 @@
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;

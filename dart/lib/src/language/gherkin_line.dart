@@ -1,6 +1,5 @@
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 
 /// A single source line, providing the queries the scanner needs to classify
@@ -182,4 +181,18 @@ class GherkinLine {
     }
     return lineSpans;
   }
+}
+
+/// A span of text on a line together with its one-based column position.
+///
+/// Used for tags and table cells recognized while scanning a line.
+class GherkinLineSpan {
+  /// Creates a span starting at [column] containing [text].
+  const GherkinLineSpan(this.column, this.text);
+
+  /// One-based line position.
+  final int column;
+
+  /// Text part of the line.
+  final String text;
 }
