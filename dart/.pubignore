@@ -4,8 +4,6 @@ coverage/
 bin/
 test/
 benchmark/
-# Token-dump helpers used only by bin/ and test/ (both excluded above).
-tool/
 acceptance/
 pubspec.lock
 gherkin-dart.razor

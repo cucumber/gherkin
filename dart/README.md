@@ -22,7 +22,7 @@ dependencies:
   cucumber_gherkin: ^<published-version>
 ```
 
-Import the platform-agnostic API from the package root:
+Import from the package root:
 
 ```dart
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
