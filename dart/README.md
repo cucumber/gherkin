@@ -33,20 +33,35 @@ implementation details and may change without notice.
 
 ## Parsing
 
-`GherkinParser` turns Gherkin into a `Stream<Envelope>`:
+`generateMessages` turns Gherkin into a `List` of envelopes:
 
 ```dart
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 
-final parser = GherkinParser();
-final envelopes = parser.parseString(
+final envelopes = generateMessages(
   'Feature: Minimal\n\n  Scenario: minimalistic\n    Given the minimalism\n',
   'minimal.feature',
 );
 
-await for (final envelope in envelopes) {
+for (final envelope in envelopes) {
   // Do something with envelope
 }
+```
+
+Use [GherkinOptions] to filter envelopes, set the default dialect, or supply a
+deterministic ID generator:
+
+```dart
+final envelopes = generateMessages(
+  source,
+  'example.feature',
+  GherkinOptions(
+    includeSource: false,
+    includePickles: false,
+    defaultDialect: 'es',
+    idGenerator: () => 'fixed-id',
+  ),
+);
 ```
 
 Malformed Gherkin is reported as a `parseError` envelope.
