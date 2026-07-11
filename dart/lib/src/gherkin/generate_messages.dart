@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
@@ -66,10 +65,6 @@ List<messages.Envelope> generateMessages(
     return result;
   }
 
-  final dialectProvider = GherkinDialectProvider(
-    builtinDialects,
-    options.defaultDialect,
-  );
   final builder = MessagesGherkinDocumentBuilder(idGenerator);
   final parser = Parser<messages.GherkinDocument>(builder);
   final tokenScanner = StringTokenScanner(source.data);
@@ -78,7 +73,7 @@ List<messages.Envelope> generateMessages(
   try {
     gherkinDocument = parser.parse(
       tokenScanner,
-      GherkinTokenMatcher(dialectProvider),
+      GherkinTokenMatcher(builtinDialects, options.defaultDialect),
     );
   } on CompositeParserException catch (e) {
     result.addAll(
@@ -117,27 +112,17 @@ messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
   // The error message already carries its `(line:column): ` (or `(-1,0): `)
   // position prefix; emit it verbatim and add the structured source location
   // alongside it.
-  if (error.location.isEmpty) {
-    return messages.Envelope(
-      parseError: messages.ParseError(
-        source: messages.SourceReference(uri: uri),
-        message: error.message,
-      ),
-    );
-  }
-
-  final line = error.location.line;
-  final column = error.location.column;
+  final loc = error.location;
   return messages.Envelope(
     parseError: messages.ParseError(
       source: messages.SourceReference(
         uri: uri,
         location:
-            line == 0
+            loc.isEmpty || loc.line == 0
                 ? null
                 : messages.Location(
-                  line: line,
-                  column: column == 0 ? null : column,
+                  line: loc.line,
+                  column: loc.column == 0 ? null : loc.column,
                 ),
       ),
       message: error.message,

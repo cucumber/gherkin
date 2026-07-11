@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
@@ -10,7 +9,7 @@ import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 /// Acceptance CLI: feature paths → `*.tokens` text on stdout.
 void main(List<String> args) {
-  final matcher = GherkinTokenMatcher(GherkinDialectProvider(builtinDialects));
+  final matcher = GherkinTokenMatcher(builtinDialects);
 
   for (final path in args) {
     final builder = _TokenFormatterBuilder();

@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/ast/ast_node.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
@@ -271,7 +270,7 @@ class MessagesGherkinDocumentBuilder
   String _createDescription(AstNode node) {
     final lineTokens = node.getTokens(TokenType.other).toList();
     while (lineTokens.isNotEmpty &&
-        lineTokens.last.matchedText.isEmptyOrWhiteSpace) {
+        lineTokens.last.matchedText.trim().isEmpty) {
       lineTokens.removeLast();
     }
     return lineTokens.map((token) => token.matchedText).join('\n');

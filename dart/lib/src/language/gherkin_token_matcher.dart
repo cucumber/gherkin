@@ -1,4 +1,4 @@
-import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
@@ -10,10 +10,10 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
 class GherkinTokenMatcher implements TokenMatcher {
-  /// Creates a matcher that resolves dialects through [_dialectProvider].
-  GherkinTokenMatcher(this._dialectProvider)
-    : _currentLanguage = _dialectProvider.defaultLanguage,
-      _currentKeywords = _dialectProvider.defaultKeywords {
+  /// Creates a matcher over [_dialects], defaulting to [_defaultLanguage].
+  GherkinTokenMatcher(this._dialects, [this._defaultLanguage = 'en'])
+    : _currentLanguage = _defaultLanguage,
+      _currentKeywords = _lookupKeywords(_dialects, _defaultLanguage) {
     _stepKeywordsByLengthDesc = _currentKeywords.stepKeywordsByLengthDesc;
     _initializeKeywordTypes(_currentKeywords);
   }
@@ -21,7 +21,8 @@ class GherkinTokenMatcher implements TokenMatcher {
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
   );
 
-  final GherkinDialectProvider _dialectProvider;
+  final Map<String, GherkinLanguageKeywords> _dialects;
+  final String _defaultLanguage;
   final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
       <String, List<messages.StepKeywordType>>{};
 
@@ -36,8 +37,8 @@ class GherkinTokenMatcher implements TokenMatcher {
     _activeDocStringSeparator = '';
     _indentToRemove = 0;
     _useLanguage(
-      _dialectProvider.defaultLanguage,
-      _dialectProvider.defaultKeywords,
+      _defaultLanguage,
+      _lookupKeywords(_dialects, _defaultLanguage),
     );
   }
 
@@ -90,7 +91,7 @@ class GherkinTokenMatcher implements TokenMatcher {
       _setTokenMatched(token, TokenType.language, text: language);
       _useLanguage(
         language,
-        _dialectProvider.getKeywords(language, token.location),
+        _lookupKeywords(_dialects, language, token.location),
       );
       return true;
     }
@@ -291,5 +292,17 @@ class GherkinTokenMatcher implements TokenMatcher {
       return messages.StepKeywordType.unknown;
     }
     return keywordTypes.single;
+  }
+
+  static GherkinLanguageKeywords _lookupKeywords(
+    Map<String, GherkinLanguageKeywords> dialects,
+    String language, [
+    Location location = Location.empty,
+  ]) {
+    final keywords = dialects[language];
+    if (keywords == null) {
+      throw NoSuchLanguageException(language, location);
+    }
+    return keywords;
   }
 }

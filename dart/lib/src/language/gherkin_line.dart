@@ -1,5 +1,4 @@
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/extensions/strings.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
@@ -34,6 +33,18 @@ class GherkinLine {
   /// Matches a token containing no whitespace. Compiled once and reused rather
   /// than rebuilt for every tag on every line.
   static final RegExp _nonWhitespaceToken = RegExp(r'^\S+$');
+
+  // Horizontal-whitespace patterns used when trimming table cells / tags
+  // without consuming newlines.
+  static final RegExp _leadingHorizontalWhitespace = RegExp(
+    r'^[ \t\x0B\f\r\x85\xA0]+',
+  );
+  static final RegExp _trailingHorizontalWhitespace = RegExp(
+    r'[ \t\x0B\f\r\x85\xA0]+$',
+  );
+  static final RegExp _trailingWhitespace = RegExp(
+    r'[ \t\n\x0B\f\r\x85\xA0]+$',
+  );
 
   final String _lineText;
   final int _lineNumber;
@@ -105,7 +116,7 @@ class GherkinLine {
     final elements = uncommentedLine.split(tagPrefix);
 
     for (final element in elements) {
-      final token = element.rtrim();
+      final token = element.replaceAll(_trailingWhitespace, '');
       if (token.isEmpty) {
         continue;
       }
@@ -161,12 +172,17 @@ class GherkinLine {
               beforeFirst = false;
             } else {
               final cell = cellBuffer.toString();
-              final leftTrimmedCell = cell.ltrimKeepNewLines();
+              final leftTrimmedCell = cell.replaceAll(
+                _leadingHorizontalWhitespace,
+                '',
+              );
               final cellIndent = cell.length - leftTrimmedCell.length;
               final column = cellStart + cellIndent + _offset;
-              final text = leftTrimmedCell.rtrimKeepNewLines();
-              final lineSpan = GherkinLineSpan(column, text);
-              lineSpans.add(lineSpan);
+              final text = leftTrimmedCell.replaceAll(
+                _trailingHorizontalWhitespace,
+                '',
+              );
+              lineSpans.add(GherkinLineSpan(column, text));
             }
             cellBuffer = StringBuffer();
             cellStart = col + 1;
