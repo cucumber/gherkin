@@ -1,7 +1,12 @@
 # Gherkin for Dart
 
 Gherkin parser and compiler for Dart. It parses `.feature` sources into [Cucumber
-Messages](https://github.com/cucumber/messages) envelopes.
+Messages](https://github.com/cucumber/messages) envelopes (via the
+[`cucumber_messages`](https://pub.dev/packages/cucumber_messages) package).
+
+## Requirements
+
+* Dart SDK `>=3.7.0 <4.0.0`
 
 ## Installation
 
