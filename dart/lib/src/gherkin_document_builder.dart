@@ -11,7 +11,7 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 /// A [Builder] that assembles parser events into a Cucumber Messages
 /// [messages.GherkinDocument].
 class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
-  /// Creates a builder that assigns ids using [_idGenerator].
+  /// Creates a builder that assigns node ids with the given generator.
   GherkinDocumentBuilder(this._idGenerator) {
     reset();
   }

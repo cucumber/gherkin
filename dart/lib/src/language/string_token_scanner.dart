@@ -8,20 +8,20 @@ class StringTokenScanner implements TokenScanner {
   /// Creates a scanner over the lines of [source].
   ///
   /// Lines are separated on `\r?\n`. A lone `\r` is *not* a line separator and
-  /// is kept as part of the line, so the string and file scanners agree.
-  /// Dart's `LineSplitter`, by contrast, treats a bare `\r` as a break, so it
-  /// is deliberately not used here.
+  /// is kept as part of the line (matching Cucumber's cross-language line
+  /// splitting). Dart's `LineSplitter`, by contrast, treats a bare `\r` as a
+  /// break, so it is deliberately not used here.
   StringTokenScanner(String source) : _linesIterator = _splitLines(source);
 
   static Iterator<String> _splitLines(String source) {
     // An empty source has no content lines. `split` would otherwise yield a
     // single empty segment, producing a spurious blank line (and an `Empty`
-    // token) for input that a file-based scanner reports as immediate EOF.
+    // token) instead of immediate EOF.
     if (source.isEmpty) {
       return const <String>[].iterator;
     }
     final lines = source.split(_lineSeparator);
-    // A trailing separator produces a final empty segment; drop it so a file
+    // A trailing separator produces a final empty segment; drop it so a source
     // ending in a newline does not yield a spurious blank line.
     if (lines.length > 1 && lines.last.isEmpty) {
       lines.removeLast();

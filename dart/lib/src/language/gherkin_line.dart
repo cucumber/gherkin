@@ -5,7 +5,7 @@ import 'package:cucumber_gherkin/src/language/location.dart';
 /// A single source line, providing the queries the scanner needs to classify
 /// it.
 class GherkinLine {
-  /// Creates a line from its [_lineText] at the one-based [_lineNumber].
+  /// Creates a line from the given text at the given one-based line number.
   GherkinLine(this._lineText, this._lineNumber)
     : _trimmedLineText = _lineText.trimLeft(),
       _isEof = false;
@@ -33,14 +33,15 @@ class GherkinLine {
   /// than rebuilt for every tag on every line.
   static final RegExp _nonWhitespaceToken = RegExp(r'^\S+$');
 
-  // Horizontal-whitespace patterns used when trimming table cells / tags
-  // without consuming newlines.
+  // Horizontal-whitespace patterns used when trimming table cells without
+  // consuming newlines.
   static final RegExp _leadingHorizontalWhitespace = RegExp(
     r'^[ \t\x0B\f\r\x85\xA0]+',
   );
   static final RegExp _trailingHorizontalWhitespace = RegExp(
     r'[ \t\x0B\f\r\x85\xA0]+$',
   );
+  // Trailing whitespace (including newlines) stripped from tag tokens.
   static final RegExp _trailingWhitespace = RegExp(
     r'[ \t\n\x0B\f\r\x85\xA0]+$',
   );
@@ -53,8 +54,9 @@ class GherkinLine {
   /// Whether this line is the end-of-file marker.
   bool get isEof => _isEof;
 
-  /// Called by the parser to indicate non-streamed reading (for example during
-  /// look-ahead). No-op for this in-memory implementation.
+  /// Releases any resources held by this line.
+  ///
+  /// No-op for this in-memory implementation.
   void detach() {}
 
   /// Returns the line text.
@@ -144,7 +146,7 @@ class GherkinLine {
           case tableCellSeparator:
             cellBuffer.write('|');
           default:
-            // Invalid escape; ignore it.
+            // Invalid escape; keep both the backslash and the character.
             cellBuffer.write(r'\');
             cellBuffer.write(chr);
         }
@@ -190,7 +192,7 @@ class GherkinLineSpan {
   /// Creates a span starting at [column] containing [text].
   const GherkinLineSpan(this.column, this.text);
 
-  /// One-based line position.
+  /// One-based column position.
   final int column;
 
   /// Text part of the line.

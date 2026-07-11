@@ -10,7 +10,8 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
 class GherkinTokenMatcher implements TokenMatcher {
-  /// Creates a matcher over [_dialects], defaulting to [_defaultLanguage].
+  /// Creates a matcher over the given dialects map, defaulting to English
+  /// (`en`) unless another default language is supplied.
   GherkinTokenMatcher(this._dialects, [this._defaultLanguage = 'en']) {
     _useLanguage(
       _defaultLanguage,
@@ -248,7 +249,8 @@ class GherkinTokenMatcher implements TokenMatcher {
   void _useLanguage(String language, GherkinLanguageKeywords keywords) {
     _currentLanguage = language;
     _currentKeywords = keywords;
-    // Longest match wins so e.g. `* ` does not shadow `Given `.
+    // Longest first so a short keyword that is a prefix of a longer one cannot
+    // steal the match.
     _stepKeywordsByLengthDesc =
         <String>{
             ...keywords.given,

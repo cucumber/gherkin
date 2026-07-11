@@ -23,6 +23,6 @@ class Location {
   /// Whether this is the unknown/absent [empty] location.
   bool get isEmpty => line == empty.line && column == empty.column;
 
-  /// Whether the [column] is unset (has no known position).
+  /// Whether the [column] is set (has a known position).
   bool get hasColumn => column != _unset;
 }

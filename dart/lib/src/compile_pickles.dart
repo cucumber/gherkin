@@ -14,8 +14,8 @@ List<messages.Pickle> compilePickles(
     return pickles;
   }
 
-  /// Builds pickle steps for [scenario], optionally interpolating from an
-  /// examples row. Background steps are never interpolated.
+  // Builds pickle steps for [scenario], optionally interpolating from an
+  // examples row. Background steps are never interpolated.
   List<messages.PickleStep> buildSteps(
     List<messages.Step> backgroundSteps,
     messages.Scenario scenario, [

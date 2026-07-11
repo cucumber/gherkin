@@ -18,10 +18,10 @@ class GherkinLanguageKeywords {
     this.but,
   );
 
-  /// The English name of the language (for example `English`).
+  /// The English name of the language (for example `French`).
   final String name;
 
-  /// The native name of the language (for example `English`).
+  /// The native name of the language (for example `français`).
   final String native;
 
   /// The keywords that introduce a `Feature`.

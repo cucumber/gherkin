@@ -1,4 +1,4 @@
-/// Punctuation and delimiter constants shared by the Gherkin scanners.
+/// Punctuation and delimiter constants used while scanning Gherkin lines.
 library;
 
 /// The prefix that introduces a tag (`@`).
