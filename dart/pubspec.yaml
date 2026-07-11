@@ -23,7 +23,6 @@ topics:
 
 dependencies:
   cucumber_messages: ^34.0.1
-  meta: ^1.18.3
 
 dev_dependencies:
   lints: ^5.1.1

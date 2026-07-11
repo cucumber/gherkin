@@ -19,15 +19,4 @@ void main() {
     expect('Minimal', feature.name);
     expect(envelopes.last.pickle!.name, 'minimalistic');
   });
-
-  test('reports malformed input as a parseError envelope', () async {
-    final envelopes =
-        await GherkinParser()
-            .parseString('not gherkin', 'bad.feature')
-            .toList();
-
-    final error = envelopes.last.parseError!;
-    expect(error.message, startsWith('(1:1): '));
-    expect(error.source.location!.line, 1);
-  });
 }

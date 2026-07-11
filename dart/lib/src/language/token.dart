@@ -1,4 +1,3 @@
-import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
@@ -54,5 +53,5 @@ class Token {
   }
 
   @override
-  String toString() => '${matchedType.wireName}: $matchedKeyword/$matchedText';
+  String toString() => '${matchedType.name}: $matchedKeyword/$matchedText';
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/src/extensions/token_type_extension.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
@@ -60,7 +59,7 @@ String _formatToken(Token token) {
   final matchedItems = token.matchedItems
       .map((element) => '${element.column}:${element.text}')
       .join(',');
-  final matchedType = token.matchedType.wireName;
+  final matchedType = _wireName(token.matchedType);
   final matchedKeyword = token.matchedKeyword;
   final matchedKeywordType =
       matchedKeyword.isEmpty
@@ -70,4 +69,39 @@ String _formatToken(Token token) {
           : '(${token.matchedKeywordType!.value})';
   return '(${token.location.line}:${token.location.column})'
       '$matchedType:$matchedKeywordType$matchedKeyword/${token.matchedText}/$matchedItems';
+}
+
+String _wireName(TokenType tokenType) {
+  switch (tokenType) {
+    case TokenType.none:
+      return 'None';
+    case TokenType.eof:
+      return 'EOF';
+    case TokenType.empty:
+      return 'Empty';
+    case TokenType.comment:
+      return 'Comment';
+    case TokenType.tagLine:
+      return 'TagLine';
+    case TokenType.featureLine:
+      return 'FeatureLine';
+    case TokenType.ruleLine:
+      return 'RuleLine';
+    case TokenType.backgroundLine:
+      return 'BackgroundLine';
+    case TokenType.scenarioLine:
+      return 'ScenarioLine';
+    case TokenType.examplesLine:
+      return 'ExamplesLine';
+    case TokenType.stepLine:
+      return 'StepLine';
+    case TokenType.docStringSeparator:
+      return 'DocStringSeparator';
+    case TokenType.tableRow:
+      return 'TableRow';
+    case TokenType.language:
+      return 'Language';
+    case TokenType.other:
+      return 'Other';
+  }
 }

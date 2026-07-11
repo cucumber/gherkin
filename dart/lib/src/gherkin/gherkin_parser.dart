@@ -16,29 +16,51 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 /// is reported as `parseError` envelopes rather than thrown exceptions.
 class GherkinParser {
   /// Creates a parser.
-  GherkinParser({
-    bool includeSource = true,
-    bool includeGherkinDocument = true,
-    bool includePickles = true,
-    String defaultDialect = 'en',
-    String Function()? idGenerator,
-  }) : _includeSource = includeSource,
-       _includeGherkinDocument = includeGherkinDocument,
-       _includePickles = includePickles,
-       _idGenerator = idGenerator ?? _newUuid {
-    _dialectProvider = GherkinDialectProvider(builtinDialects, defaultDialect);
-  }
-
-  final bool _includeSource;
-  final bool _includeGherkinDocument;
-  final bool _includePickles;
-
-  /// The function used to assign ids to emitted messages.
-  final String Function() _idGenerator;
-
-  late final GherkinDialectProvider _dialectProvider;
+  GherkinParser();
 
   /// Parses in-memory Gherkin [data] identified by [uri].
+  Stream<messages.Envelope> parseString(String data, String uri) =>
+      parseFeature(data, uri);
+}
+
+/// Parses a feature for the acceptance executable.
+///
+/// This is intentionally kept under `lib/src`: published users should use
+/// [GherkinParser], while the executable needs deterministic IDs and filtering
+/// to produce each shared acceptance artifact.
+Stream<messages.Envelope> parseFeature(
+  String data,
+  String uri, {
+  bool includeSource = true,
+  bool includeGherkinDocument = true,
+  bool includePickles = true,
+  String Function()? idGenerator,
+}) async* {
+  final parser = _GherkinParser(
+    includeSource: includeSource,
+    includeGherkinDocument: includeGherkinDocument,
+    includePickles: includePickles,
+    idGenerator: idGenerator ?? _newUuid,
+  );
+  yield* parser.parseString(data, uri);
+}
+
+class _GherkinParser {
+  _GherkinParser({
+    required this.includeSource,
+    required this.includeGherkinDocument,
+    required this.includePickles,
+    required this.idGenerator,
+  });
+
+  final bool includeSource;
+  final bool includeGherkinDocument;
+  final bool includePickles;
+
+  final String Function() idGenerator;
+
+  final _dialectProvider = GherkinDialectProvider(builtinDialects);
+
   Stream<messages.Envelope> parseString(String data, String uri) async* {
     final envelope = messages.Envelope(
       source: messages.Source(
@@ -47,18 +69,18 @@ class GherkinParser {
         mediaType: messages.SourceMediaType.textXCucumberGherkinPlain,
       ),
     );
-    if (_includeSource) {
+    if (includeSource) {
       yield envelope;
     }
     yield* Stream.fromIterable(_parseSource(envelope.source!));
   }
 
   Iterable<messages.Envelope> _parseSource(messages.Source source) sync* {
-    if (!_includeGherkinDocument && !_includePickles) {
+    if (!includeGherkinDocument && !includePickles) {
       return;
     }
 
-    final builder = MessagesGherkinDocumentBuilder(_idGenerator);
+    final builder = MessagesGherkinDocumentBuilder(idGenerator);
     final parser = Parser<messages.GherkinDocument>(builder)
       ..stopAtFirstError = false;
     final tokenScanner = StringTokenScanner(source.data);
@@ -83,11 +105,11 @@ class GherkinParser {
       comments: gherkinDocument.comments,
     );
 
-    if (_includeGherkinDocument) {
+    if (includeGherkinDocument) {
       yield messages.Envelope(gherkinDocument: gherkinDocumentWithUri);
     }
-    if (_includePickles) {
-      final pickleCompiler = MessagesPickleCompiler(_idGenerator);
+    if (includePickles) {
+      final pickleCompiler = MessagesPickleCompiler(idGenerator);
       for (final pickle in pickleCompiler.compile(
         gherkinDocumentWithUri,
         source.uri,

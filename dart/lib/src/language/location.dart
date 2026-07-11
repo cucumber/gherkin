@@ -1,7 +1,4 @@
-import 'package:meta/meta.dart';
-
 /// A one-based position (line and column) within a source document.
-@immutable
 class Location {
   /// Creates a location at the given [line] and [column].
   const Location(this.line, this.column);

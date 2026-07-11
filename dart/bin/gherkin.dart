@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/src/gherkin/gherkin_parser.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 Future<void> main(List<String> args) async {
@@ -26,15 +26,15 @@ Future<void> main(List<String> args) async {
     }
   }
 
-  final parser = GherkinParser(
-    includeSource: includeSource,
-    includeGherkinDocument: includeAst,
-    includePickles: includePickles,
-    idGenerator: idGenerator,
-  );
-
   final envelopes = Stream.fromIterable(paths).asyncExpand((path) async* {
-    yield* parser.parseString(await File(path).readAsString(), path);
+    yield* parseFeature(
+      await File(path).readAsString(),
+      path,
+      includeSource: includeSource,
+      includeGherkinDocument: includeAst,
+      includePickles: includePickles,
+      idGenerator: idGenerator,
+    );
   });
   await messages.encodeNdjsonEnvelopes(envelopes).forEach(stdout.write);
 }
