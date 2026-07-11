@@ -32,15 +32,13 @@ class StringTokenScanner implements TokenScanner {
   static final RegExp _lineSeparator = RegExp(r'\r?\n');
 
   final Iterator<String> _linesIterator;
-
-  /// The number of lines read so far (the line of the most recent token).
-  int lineNumber = 0;
+  int _lineNumber = 0;
 
   @override
   Token read() {
-    final location = Location(++lineNumber, 0);
+    final location = Location(++_lineNumber, 0);
     if (_linesIterator.moveNext()) {
-      return Token(GherkinLine(_linesIterator.current, lineNumber), location);
+      return Token(GherkinLine(_linesIterator.current, _lineNumber), location);
     }
     return Token(GherkinLine.eof(), location);
   }

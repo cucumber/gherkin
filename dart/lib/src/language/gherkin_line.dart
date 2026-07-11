@@ -19,9 +19,6 @@ class GherkinLine {
       _trimmedLineText = '',
       _isEof = true;
 
-  /// Sentinel passed to [getLineText] to keep the entire line text.
-  static const int entireLine = 0;
-
   /// Placeholder line number for the end-of-file marker, which has no position
   /// in the source. Real line numbers are 1-based, so a negative value can
   /// never collide with one.

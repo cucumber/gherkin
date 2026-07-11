@@ -18,23 +18,6 @@ class GherkinLanguageKeywords {
     this.but,
   );
 
-  /// A sentinel value with an empty name and no keywords.
-  static const GherkinLanguageKeywords empty = GherkinLanguageKeywords(
-    '',
-    '',
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  );
-
   /// The English name of the language (for example `English`).
   final String name;
 

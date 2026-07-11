@@ -70,20 +70,4 @@ extension StringExtensions on String {
 
   /// Removes all trailing whitespace, including line breaks.
   String rtrim() => replaceAll(_trailingWhitespace, '');
-
-  /// Removes all trailing occurrences of [trimChar] (default: a space).
-  String trimEnd([String trimChar = ' ']) {
-    if (trimChar.length > 1 || trimChar.isEmpty) {
-      throw ArgumentError('trimChar must be one char and cannot be empty');
-    }
-    var index = length - 1;
-    for (; index >= 0; index--) {
-      if (this[index] != trimChar) {
-        break;
-      }
-    }
-    // When every character was [trimChar], `index` is -1 and this returns the
-    // empty string.
-    return substring(0, index + 1);
-  }
 }

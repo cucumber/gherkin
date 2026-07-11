@@ -9,33 +9,22 @@ class GherkinDialect {
   final String _language;
   final GherkinLanguageKeywords _keywords;
 
-  /// The raw keyword definitions backing this dialect.
-  GherkinLanguageKeywords get keywords => _keywords;
-
   /// The IETF language tag of this dialect (for example `en` or `fr`).
   String get language => _language;
 
   /// The keywords that introduce a `Feature`.
-  List<String> get featureKeywords => keywords.feature;
-
-  /// The English name of the language (for example `English`).
-  String get name => keywords.name;
-
-  /// The native name of the language (for example `français`).
-  String get nativeName => keywords.native;
+  List<String> get featureKeywords => _keywords.feature;
 
   /// The keywords that introduce a `Rule`.
-  List<String> get ruleKeywords => keywords.rule;
+  List<String> get ruleKeywords => _keywords.rule;
 
   /// The keywords that introduce a `Scenario`.
-  List<String> get scenarioKeywords => keywords.scenario;
+  List<String> get scenarioKeywords => _keywords.scenario;
 
   /// The keywords that introduce a `Scenario Outline`.
-  List<String> get scenarioOutlineKeywords => keywords.scenarioOutline;
+  List<String> get scenarioOutlineKeywords => _keywords.scenarioOutline;
 
   /// All step keywords, regardless of their semantic type.
-  ///
-  /// Computed once on first access, then cached.
   late final List<String> stepKeywords =
       <String>{
         ...givenStepKeywords,
@@ -45,33 +34,29 @@ class GherkinDialect {
         ...butStepKeywords,
       }.toList();
 
-  /// [stepKeywords] sorted by descending length, so the longest matching
-  /// keyword is tried first (e.g. `* ` after `Given `).
-  ///
-  /// Order is dialect-invariant, so computed once on first access and cached
-  /// rather than re-sorted on every step line.
+  /// [stepKeywords] sorted by descending length so the longest match wins.
   late final List<String> stepKeywordsByLengthDesc = List<String>.of(
     stepKeywords,
   )..sort((a, b) => b.length - a.length);
 
   /// The keywords that introduce a `Background`.
-  List<String> get backgroundKeywords => keywords.background;
+  List<String> get backgroundKeywords => _keywords.background;
 
   /// The keywords that introduce an `Examples` block.
-  List<String> get examplesKeywords => keywords.examples;
+  List<String> get examplesKeywords => _keywords.examples;
 
   /// The keywords that introduce a `Given` step.
-  List<String> get givenStepKeywords => keywords.given;
+  List<String> get givenStepKeywords => _keywords.given;
 
   /// The keywords that introduce a `When` step.
-  List<String> get whenStepKeywords => keywords.when;
+  List<String> get whenStepKeywords => _keywords.when;
 
   /// The keywords that introduce a `Then` step.
-  List<String> get thenStepKeywords => keywords.then;
+  List<String> get thenStepKeywords => _keywords.then;
 
   /// The keywords that introduce an `And` step.
-  List<String> get andStepKeywords => keywords.and;
+  List<String> get andStepKeywords => _keywords.and;
 
   /// The keywords that introduce a `But` step.
-  List<String> get butStepKeywords => keywords.but;
+  List<String> get butStepKeywords => _keywords.but;
 }

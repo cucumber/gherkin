@@ -8,11 +8,7 @@ import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
-/// Emits the tokenized representation of one or more Gherkin feature files,
-/// matching the `*.tokens` format used by the acceptance tests.
-///
-/// This format is an acceptance-test artifact rather than part of the published
-/// library, so the rendering lives here in the executable instead of `lib/`.
+/// Acceptance CLI: feature paths → `*.tokens` text on stdout.
 void main(List<String> args) {
   final matcher = GherkinTokenMatcher(GherkinDialectProvider(builtinDialects));
 
@@ -25,14 +21,9 @@ void main(List<String> args) {
   }
 }
 
-/// A [Builder] that renders each scanned token in the `*.tokens` text format.
-///
-/// The output is produced as a side effect (accumulated in [tokensText]); the
-/// parser's builder result is unused, hence `Builder<void>`.
 class _TokenFormatterBuilder implements Builder<void> {
   final StringBuffer _buffer = StringBuffer();
 
-  /// The full rendered token text accumulated so far.
   String get tokensText => _buffer.toString();
 
   @override
@@ -51,7 +42,6 @@ class _TokenFormatterBuilder implements Builder<void> {
   void get result {}
 }
 
-/// Returns the single-line `*.tokens` representation of [token].
 String _formatToken(Token token) {
   if (token.isEof) {
     return 'EOF';
@@ -71,37 +61,11 @@ String _formatToken(Token token) {
       '$matchedType:$matchedKeywordType$matchedKeyword/${token.matchedText}/$matchedItems';
 }
 
+/// Maps [TokenType] enum names to the PascalCase labels in `*.tokens` fixtures.
 String _wireName(TokenType tokenType) {
-  switch (tokenType) {
-    case TokenType.none:
-      return 'None';
-    case TokenType.eof:
-      return 'EOF';
-    case TokenType.empty:
-      return 'Empty';
-    case TokenType.comment:
-      return 'Comment';
-    case TokenType.tagLine:
-      return 'TagLine';
-    case TokenType.featureLine:
-      return 'FeatureLine';
-    case TokenType.ruleLine:
-      return 'RuleLine';
-    case TokenType.backgroundLine:
-      return 'BackgroundLine';
-    case TokenType.scenarioLine:
-      return 'ScenarioLine';
-    case TokenType.examplesLine:
-      return 'ExamplesLine';
-    case TokenType.stepLine:
-      return 'StepLine';
-    case TokenType.docStringSeparator:
-      return 'DocStringSeparator';
-    case TokenType.tableRow:
-      return 'TableRow';
-    case TokenType.language:
-      return 'Language';
-    case TokenType.other:
-      return 'Other';
+  final name = tokenType.name;
+  if (name == 'eof') {
+    return 'EOF';
   }
+  return '${name[0].toUpperCase()}${name.substring(1)}';
 }
