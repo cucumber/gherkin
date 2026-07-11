@@ -17,20 +17,20 @@ class GherkinLine {
       _trimmedLineText = '',
       _isEof = true;
 
-  /// Placeholder line number for the end-of-file marker, which has no position
-  /// in the source. Real line numbers are 1-based, so a negative value can
-  /// never collide with one.
+  // Placeholder line number for the end-of-file marker, which has no position
+  // in the source. Real line numbers are 1-based, so a negative value can
+  // never collide with one.
   static const int _unsetLineNumber = -1;
 
   // Columns are 1-indexed.
   static const int _offset = 1;
 
-  /// Matches the whitespace-preceded comment prefix that ends the tag portion
-  /// of a line. Compiled once and reused across lines.
+  // Matches the whitespace-preceded comment prefix that ends the tag portion
+  // of a line. Compiled once and reused across lines.
   static final RegExp _commentSuffix = RegExp(r'\s' + commentPrefix);
 
-  /// Matches a token containing no whitespace. Compiled once and reused rather
-  /// than rebuilt for every tag on every line.
+  // Matches a token containing no whitespace. Compiled once and reused rather
+  // than rebuilt for every tag on every line.
   static final RegExp _nonWhitespaceToken = RegExp(r'^\S+$');
 
   // Horizontal-whitespace patterns used when trimming table cells without

@@ -5090,7 +5090,7 @@ class Parser<T> {
   }
 }
 
-/// Mutable state for a single [Parser.parse] run.
+// Mutable state for a single [Parser.parse] run.
 final class _ParserContext {
   _ParserContext(
     this.tokenScanner,

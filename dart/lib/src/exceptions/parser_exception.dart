@@ -52,10 +52,10 @@ sealed class ParserException implements Exception {
   String toString() => message;
 }
 
-/// The concrete [ParserException] returned by [ParserException.create].
-///
-/// Kept private so the public error hierarchy stays a closed set of named
-/// subtypes; callers only ever observe it as a [ParserException].
+// The concrete [ParserException] returned by [ParserException.create].
+//
+// Kept private so the public error hierarchy stays a closed set of named
+// subtypes; callers only ever observe it as a [ParserException].
 final class _GenericParserException extends ParserException {
   _GenericParserException(super.message, [super.location = Location.empty])
     : super.located();

@@ -4,7 +4,10 @@
 /// ```dart
 /// import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 ///
-/// final envelopes = generateMessages(source, 'example.feature');
+/// final envelopes = generateMessages(
+///   'Feature: Minimal\n\n  Scenario: A\n    Given the minimalism\n',
+///   'example.feature',
+/// );
 /// ```
 library;
 

@@ -60,7 +60,7 @@ String _formatToken(Token token) {
       '$matchedType:$matchedKeywordType$matchedKeyword/${token.matchedText}/$matchedItems';
 }
 
-/// Maps [TokenType] enum names to the PascalCase labels in `*.tokens` fixtures.
+// Maps [TokenType] enum names to the PascalCase labels in `*.tokens` fixtures.
 String _wireName(TokenType tokenType) {
   final name = tokenType.name;
   if (name == 'eof') {
