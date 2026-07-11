@@ -111,6 +111,24 @@ List<messages.Pickle> compilePickles(
     }
   }
 
+  void compileScenarioOrOutline(
+    List<messages.Tag> inheritedTags,
+    List<messages.Step> backgroundSteps,
+    messages.Scenario scenario,
+    String language,
+  ) {
+    if (scenario.examples.isEmpty) {
+      compileScenario(inheritedTags, backgroundSteps, scenario, language);
+    } else {
+      compileScenarioOutline(
+        inheritedTags,
+        backgroundSteps,
+        scenario,
+        language,
+      );
+    }
+  }
+
   void compileRule(
     List<messages.Tag> featureTags,
     List<messages.Step> featureBackgroundSteps,
@@ -128,22 +146,12 @@ List<messages.Pickle> compilePickles(
           ..addAll(featureBackgroundSteps)
           ..addAll(child.background!.steps);
       } else if (child.scenario != null) {
-        final scenario = child.scenario!;
-        if (scenario.examples.isEmpty) {
-          compileScenario(
-            inheritedTags,
-            ruleBackgroundSteps,
-            scenario,
-            language,
-          );
-        } else {
-          compileScenarioOutline(
-            inheritedTags,
-            ruleBackgroundSteps,
-            scenario,
-            language,
-          );
-        }
+        compileScenarioOrOutline(
+          inheritedTags,
+          ruleBackgroundSteps,
+          child.scenario!,
+          language,
+        );
       }
     }
   }
@@ -162,22 +170,12 @@ List<messages.Pickle> compilePickles(
         feature.language,
       );
     } else if (child.scenario != null) {
-      final scenario = child.scenario!;
-      if (scenario.examples.isEmpty) {
-        compileScenario(
-          feature.tags,
-          featureBackgroundSteps,
-          scenario,
-          feature.language,
-        );
-      } else {
-        compileScenarioOutline(
-          feature.tags,
-          featureBackgroundSteps,
-          scenario,
-          feature.language,
-        );
-      }
+      compileScenarioOrOutline(
+        feature.tags,
+        featureBackgroundSteps,
+        child.scenario!,
+        feature.language,
+      );
     }
   }
   return pickles;

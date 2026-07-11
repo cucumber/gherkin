@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:cucumber_gherkin/src/ast/ast_node.dart';
+import 'package:cucumber_gherkin/src/ast_node.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
@@ -10,10 +10,9 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// A [Builder] that assembles parser events into a Cucumber Messages
 /// [messages.GherkinDocument].
-class MessagesGherkinDocumentBuilder
-    implements Builder<messages.GherkinDocument> {
+class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
   /// Creates a builder that assigns ids using [_idGenerator].
-  MessagesGherkinDocumentBuilder(this._idGenerator) {
+  GherkinDocumentBuilder(this._idGenerator) {
     reset();
   }
 
