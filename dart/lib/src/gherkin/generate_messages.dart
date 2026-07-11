@@ -71,8 +71,7 @@ List<messages.Envelope> generateMessages(
     options.defaultDialect,
   );
   final builder = MessagesGherkinDocumentBuilder(idGenerator);
-  final parser = Parser<messages.GherkinDocument>(builder)
-    ..stopAtFirstError = false;
+  final parser = Parser<messages.GherkinDocument>(builder);
   final tokenScanner = StringTokenScanner(source.data);
 
   final messages.GherkinDocument gherkinDocument;

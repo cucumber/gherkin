@@ -3,24 +3,25 @@ import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line_span.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
-import 'package:cucumber_gherkin/src/language/step_keyword_types.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
-class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
+class GherkinTokenMatcher implements TokenMatcher {
   /// Creates a matcher that resolves dialects through [_dialectProvider].
   GherkinTokenMatcher(this._dialectProvider)
     : _currentDialect = _dialectProvider.defaultDialect {
-    initializeKeywordTypes(_currentDialect);
+    _initializeKeywordTypes(_currentDialect);
   }
   static final RegExp _languagePattern = RegExp(
     r'^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$',
   );
 
   final GherkinDialectProvider _dialectProvider;
+  final Map<String, List<messages.StepKeywordType>> _keywordTypesMap =
+      <String, List<messages.StepKeywordType>>{};
 
   GherkinDialect _currentDialect;
   String _activeDocStringSeparator = '';
@@ -31,7 +32,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
     _activeDocStringSeparator = '';
     _indentToRemove = 0;
     _currentDialect = _dialectProvider.defaultDialect;
-    initializeKeywordTypes(_currentDialect);
+    _initializeKeywordTypes(_currentDialect);
   }
 
   @override
@@ -82,7 +83,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
       final language = match.group(1) ?? '';
       _setTokenMatched(token, TokenType.language, text: language);
       _currentDialect = _dialectProvider.getDialect(language, token.location);
-      initializeKeywordTypes(_currentDialect);
+      _initializeKeywordTypes(_currentDialect);
       return true;
     }
     return false;
@@ -204,7 +205,7 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
           keyword: keyword,
           text: stepText,
           keywordType:
-              keywordTypeOrNull(keyword) ?? messages.StepKeywordType.unknown,
+              _keywordTypeOrNull(keyword) ?? messages.StepKeywordType.unknown,
         );
         return true;
       }
@@ -260,5 +261,55 @@ class GherkinTokenMatcher with StepKeywordTypes implements TokenMatcher {
       );
     }
     return text;
+  }
+
+  void _initializeKeywordTypes(GherkinDialect dialect) {
+    _keywordTypesMap.clear();
+    _addKeywordTypeMappings(
+      dialect.givenStepKeywords,
+      messages.StepKeywordType.context,
+    );
+    _addKeywordTypeMappings(
+      dialect.whenStepKeywords,
+      messages.StepKeywordType.action,
+    );
+    _addKeywordTypeMappings(
+      dialect.thenStepKeywords,
+      messages.StepKeywordType.outcome,
+    );
+    _addKeywordTypeMappings(
+      dialect.andStepKeywords,
+      messages.StepKeywordType.conjunction,
+    );
+    _addKeywordTypeMappings(
+      dialect.butStepKeywords,
+      messages.StepKeywordType.conjunction,
+    );
+  }
+
+  void _addKeywordTypeMappings(
+    Iterable<String> keywords,
+    messages.StepKeywordType keywordType,
+  ) {
+    for (final keyword in keywords) {
+      _keywordTypesMap
+          .putIfAbsent(keyword, () => <messages.StepKeywordType>[])
+          .add(keywordType);
+    }
+  }
+
+  /// Resolves the step keyword type for [keyword], or `null` when unknown.
+  ///
+  /// Ambiguous keywords (mapped to more than one type) return
+  /// [messages.StepKeywordType.unknown].
+  messages.StepKeywordType? _keywordTypeOrNull(String keyword) {
+    final keywordTypes = _keywordTypesMap[keyword];
+    if (keywordTypes == null) {
+      return null;
+    }
+    if (keywordTypes.length != 1) {
+      return messages.StepKeywordType.unknown;
+    }
+    return keywordTypes.single;
   }
 }

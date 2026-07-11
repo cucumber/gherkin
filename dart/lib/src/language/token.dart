@@ -43,9 +43,5 @@ class Token {
   String get tokenValue => isEof ? 'EOF' : line.getLineText(-1);
 
   /// Releases any resources held by the underlying [line].
-  void detach() {
-    if (line.isNotEof) {
-      line.detach();
-    }
-  }
+  void detach() => line.detach();
 }

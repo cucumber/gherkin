@@ -45,9 +45,6 @@ class GherkinLine {
   /// Whether this line is the end-of-file marker.
   bool get isEof => _isEof;
 
-  /// Whether this line is not the end-of-file marker.
-  bool get isNotEof => !isEof;
-
   /// Called by the parser to indicate non-streamed reading (for example during
   /// look-ahead). No-op for this in-memory implementation.
   void detach() {}
@@ -105,8 +102,11 @@ class GherkinLine {
   /// tag (including its leading `@`).
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
-    final parts = _trimmedLineText.splitWithLimit(_commentSuffix, limit: 2);
-    final uncommentedLine = parts[0];
+    final commentMatch = _commentSuffix.firstMatch(_trimmedLineText);
+    final uncommentedLine =
+        commentMatch == null
+            ? _trimmedLineText
+            : _trimmedLineText.substring(0, commentMatch.start);
 
     var indexInUncommentedLine = 0;
     final elements = uncommentedLine.split(GherkinLanguageConstants.tagPrefix);
