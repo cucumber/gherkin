@@ -30,8 +30,8 @@ class Token {
   /// The spans (for example tags or table cells) recognized on the line.
   Iterable<GherkinLineSpan> matchedItems = const <GherkinLineSpan>[];
 
-  /// The language tag active when this token was matched, or `null` if the
-  /// token has not been matched against a dialect yet.
+  /// The language tag active when this Feature line was matched, or `null`
+  /// for other token types.
   String? matchedLanguage;
 
   /// Whether this token marks the end of the file.

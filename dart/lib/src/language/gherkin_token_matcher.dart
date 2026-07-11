@@ -238,8 +238,11 @@ class GherkinTokenMatcher implements TokenMatcher {
       ..matchedKeywordType = keywordType
       ..matchedText = text
       ..matchedItems = items
-      ..matchedLanguage = _currentLanguage
       ..location = Location(token.location.line, matchedIndent + 1);
+    // Only Feature lines carry the active dialect into the AST builder.
+    if (matchedType == TokenType.featureLine) {
+      token.matchedLanguage = _currentLanguage;
+    }
   }
 
   void _useLanguage(String language, GherkinLanguageKeywords keywords) {

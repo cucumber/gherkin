@@ -5,15 +5,14 @@
 // `../gherkin.berp` grammar. Run `make generate` to regenerate it.
 //
 // The `TokenType` and `RuleType` enums below are generated here from the
-// grammar. The remaining supporting types (`Builder`, `TokenMatcher`,
-// `TokenScanner`, `ParserContext`) live in hand-written sibling files.
+// grammar. `Builder`, `TokenMatcher`, and `TokenScanner` live in hand-written
+// sibling files; `_ParserContext` is generated below (library-private).
 // dart format off
 import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
-import 'package:cucumber_gherkin/src/parser/parser_context.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
@@ -216,7 +215,7 @@ class Parser<T> {
     _builder.reset();
     tokenMatcher.reset();
 
-    final context = ParserContext(
+    final context = _ParserContext(
       tokenScanner,
       tokenMatcher,
       Queue<Token>(),
@@ -240,7 +239,7 @@ class Parser<T> {
     return _builder.result;
   }
 
-  void _addError(ParserContext context, ParserException error) {
+  void _addError(_ParserContext context, ParserException error) {
     // Deduplicate by message. Each message already carries its
     // `(line:column): ` position prefix, so identical messages describe the
     // same error at the same location.
@@ -255,11 +254,11 @@ class Parser<T> {
     }
   }
 
-  void _handleAstError<V>(ParserContext context, V Function() action) =>
+  void _handleAstError<V>(_ParserContext context, V Function() action) =>
       _handleExternalError(context, action, null);
 
   V _handleExternalError<V>(
-    ParserContext context,
+    _ParserContext context,
     V Function() action,
     V defaultValue,
   ) {
@@ -279,27 +278,27 @@ class Parser<T> {
     return defaultValue;
   }
 
-  void _build(ParserContext context, Token token) =>
+  void _build(_ParserContext context, Token token) =>
       _handleAstError(context, () {
         _builder.build(token);
       });
 
-  void _startRule(ParserContext context, RuleType ruleType) =>
+  void _startRule(_ParserContext context, RuleType ruleType) =>
       _handleAstError(context, () {
         _builder.startRule(ruleType);
       });
 
-  void _endRule(ParserContext context, RuleType ruleType) =>
+  void _endRule(_ParserContext context, RuleType ruleType) =>
       _handleAstError(context, () {
         _builder.endRule(ruleType);
       });
 
-  Token _readToken(ParserContext context) =>
+  Token _readToken(_ParserContext context) =>
       context.tokenQueue.isNotEmpty
           ? context.tokenQueue.removeFirst()
           : context.tokenScanner.read();
 
-  bool _matchEof(ParserContext context, Token token) {
+  bool _matchEof(_ParserContext context, Token token) {
     return _handleExternalError(
       context,
       () => context.tokenMatcher.matchEof(token),
@@ -307,7 +306,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchEmpty(ParserContext context, Token token) {
+  bool _matchEmpty(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -318,7 +317,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchComment(ParserContext context, Token token) {
+  bool _matchComment(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -329,7 +328,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchTagLine(ParserContext context, Token token) {
+  bool _matchTagLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -340,7 +339,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchFeatureLine(ParserContext context, Token token) {
+  bool _matchFeatureLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -351,7 +350,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchRuleLine(ParserContext context, Token token) {
+  bool _matchRuleLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -362,7 +361,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchBackgroundLine(ParserContext context, Token token) {
+  bool _matchBackgroundLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -373,7 +372,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchScenarioLine(ParserContext context, Token token) {
+  bool _matchScenarioLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -384,7 +383,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchExamplesLine(ParserContext context, Token token) {
+  bool _matchExamplesLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -395,7 +394,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchStepLine(ParserContext context, Token token) {
+  bool _matchStepLine(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -406,7 +405,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchDocStringSeparator(ParserContext context, Token token) {
+  bool _matchDocStringSeparator(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -417,7 +416,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchTableRow(ParserContext context, Token token) {
+  bool _matchTableRow(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -428,7 +427,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchLanguage(ParserContext context, Token token) {
+  bool _matchLanguage(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -439,7 +438,7 @@ class Parser<T> {
     );
   }
 
-  bool _matchOther(ParserContext context, Token token) {
+  bool _matchOther(_ParserContext context, Token token) {
     if (token.isEof) {
       return false;
     }
@@ -450,7 +449,7 @@ class Parser<T> {
     );
   }
 
-  int _matchToken(int state, Token token, ParserContext context) {
+  int _matchToken(int state, Token token, _ParserContext context) {
     int newState;
     switch (state) {
       case 0:
@@ -568,7 +567,7 @@ class Parser<T> {
   }
 
   // Start
-  int _matchTokenAt_0(Token token, ParserContext context) {
+  int _matchTokenAt_0(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _build(context, token);
           return 42;
@@ -623,7 +622,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
-  int _matchTokenAt_1(Token token, ParserContext context) {
+  int _matchTokenAt_1(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _startRule(context, RuleType.tags);
                 _build(context, token);
@@ -662,7 +661,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
-  int _matchTokenAt_2(Token token, ParserContext context) {
+  int _matchTokenAt_2(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _build(context, token);
           return 2;
@@ -701,7 +700,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
-  int _matchTokenAt_3(Token token, ParserContext context) {
+  int _matchTokenAt_3(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.featureHeader);
                 _endRule(context, RuleType.feature);
@@ -784,7 +783,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_4(Token token, ParserContext context) {
+  int _matchTokenAt_4(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.featureHeader);
@@ -866,7 +865,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
-  int _matchTokenAt_5(Token token, ParserContext context) {
+  int _matchTokenAt_5(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.background);
                 _endRule(context, RuleType.feature);
@@ -948,7 +947,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_6(Token token, ParserContext context) {
+  int _matchTokenAt_6(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.background);
@@ -1029,7 +1028,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
-  int _matchTokenAt_7(Token token, ParserContext context) {
+  int _matchTokenAt_7(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.step);
                 _endRule(context, RuleType.background);
@@ -1122,7 +1121,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-  int _matchTokenAt_8(Token token, ParserContext context) {
+  int _matchTokenAt_8(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -1221,7 +1220,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_9(Token token, ParserContext context) {
+  int _matchTokenAt_9(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 10;
@@ -1249,7 +1248,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_10(Token token, ParserContext context) {
+  int _matchTokenAt_10(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -1336,7 +1335,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-  int _matchTokenAt_11(Token token, ParserContext context) {
+  int _matchTokenAt_11(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _build(context, token);
           return 11;
@@ -1376,7 +1375,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-  int _matchTokenAt_12(Token token, ParserContext context) {
+  int _matchTokenAt_12(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.scenario);
                 _endRule(context, RuleType.scenarioDefinition);
@@ -1478,7 +1477,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_13(Token token, ParserContext context) {
+  int _matchTokenAt_13(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.scenario);
@@ -1581,7 +1580,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-  int _matchTokenAt_14(Token token, ParserContext context) {
+  int _matchTokenAt_14(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.step);
                 _endRule(context, RuleType.scenario);
@@ -1696,7 +1695,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-  int _matchTokenAt_15(Token token, ParserContext context) {
+  int _matchTokenAt_15(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -1819,7 +1818,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_16(Token token, ParserContext context) {
+  int _matchTokenAt_16(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 17;
@@ -1847,7 +1846,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_17(Token token, ParserContext context) {
+  int _matchTokenAt_17(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -1958,7 +1957,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-  int _matchTokenAt_18(Token token, ParserContext context) {
+  int _matchTokenAt_18(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _build(context, token);
           return 18;
@@ -1998,7 +1997,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-  int _matchTokenAt_19(Token token, ParserContext context) {
+  int _matchTokenAt_19(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.examples);
                 _endRule(context, RuleType.examplesDefinition);
@@ -2114,7 +2113,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_20(Token token, ParserContext context) {
+  int _matchTokenAt_20(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.examples);
@@ -2231,7 +2230,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-  int _matchTokenAt_21(Token token, ParserContext context) {
+  int _matchTokenAt_21(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.examplesTable);
                 _endRule(context, RuleType.examples);
@@ -2346,7 +2345,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
-  int _matchTokenAt_22(Token token, ParserContext context) {
+  int _matchTokenAt_22(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _build(context, token);
           return 22;
@@ -2385,7 +2384,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
-  int _matchTokenAt_23(Token token, ParserContext context) {
+  int _matchTokenAt_23(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.ruleHeader);
                 _endRule(context, RuleType.rule);
@@ -2471,7 +2470,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_24(Token token, ParserContext context) {
+  int _matchTokenAt_24(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.ruleHeader);
@@ -2556,7 +2555,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-  int _matchTokenAt_25(Token token, ParserContext context) {
+  int _matchTokenAt_25(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.background);
                 _endRule(context, RuleType.rule);
@@ -2641,7 +2640,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_26(Token token, ParserContext context) {
+  int _matchTokenAt_26(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.background);
@@ -2725,7 +2724,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-  int _matchTokenAt_27(Token token, ParserContext context) {
+  int _matchTokenAt_27(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.step);
                 _endRule(context, RuleType.background);
@@ -2821,7 +2820,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-  int _matchTokenAt_28(Token token, ParserContext context) {
+  int _matchTokenAt_28(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -2923,7 +2922,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_29(Token token, ParserContext context) {
+  int _matchTokenAt_29(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 30;
@@ -2951,7 +2950,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_30(Token token, ParserContext context) {
+  int _matchTokenAt_30(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -3041,7 +3040,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-  int _matchTokenAt_31(Token token, ParserContext context) {
+  int _matchTokenAt_31(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _build(context, token);
           return 31;
@@ -3081,7 +3080,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-  int _matchTokenAt_32(Token token, ParserContext context) {
+  int _matchTokenAt_32(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.scenario);
                 _endRule(context, RuleType.scenarioDefinition);
@@ -3186,7 +3185,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_33(Token token, ParserContext context) {
+  int _matchTokenAt_33(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.scenario);
@@ -3292,7 +3291,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-  int _matchTokenAt_34(Token token, ParserContext context) {
+  int _matchTokenAt_34(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.step);
                 _endRule(context, RuleType.scenario);
@@ -3410,7 +3409,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-  int _matchTokenAt_35(Token token, ParserContext context) {
+  int _matchTokenAt_35(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -3536,7 +3535,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_36(Token token, ParserContext context) {
+  int _matchTokenAt_36(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 37;
@@ -3564,7 +3563,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_37(Token token, ParserContext context) {
+  int _matchTokenAt_37(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -3678,7 +3677,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-  int _matchTokenAt_38(Token token, ParserContext context) {
+  int _matchTokenAt_38(Token token, _ParserContext context) {
     if (_matchTagLine(context, token)) {
                 _build(context, token);
           return 38;
@@ -3718,7 +3717,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-  int _matchTokenAt_39(Token token, ParserContext context) {
+  int _matchTokenAt_39(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.examples);
                 _endRule(context, RuleType.examplesDefinition);
@@ -3837,7 +3836,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-  int _matchTokenAt_40(Token token, ParserContext context) {
+  int _matchTokenAt_40(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.description);
                 _endRule(context, RuleType.examples);
@@ -3957,7 +3956,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-  int _matchTokenAt_41(Token token, ParserContext context) {
+  int _matchTokenAt_41(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.examplesTable);
                 _endRule(context, RuleType.examples);
@@ -4075,7 +4074,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_43(Token token, ParserContext context) {
+  int _matchTokenAt_43(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 44;
@@ -4103,7 +4102,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_44(Token token, ParserContext context) {
+  int _matchTokenAt_44(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -4224,7 +4223,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-  int _matchTokenAt_45(Token token, ParserContext context) {
+  int _matchTokenAt_45(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -4343,7 +4342,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_46(Token token, ParserContext context) {
+  int _matchTokenAt_46(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 47;
@@ -4371,7 +4370,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_47(Token token, ParserContext context) {
+  int _matchTokenAt_47(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -4468,7 +4467,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-  int _matchTokenAt_48(Token token, ParserContext context) {
+  int _matchTokenAt_48(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -4563,7 +4562,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_49(Token token, ParserContext context) {
+  int _matchTokenAt_49(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 50;
@@ -4591,7 +4590,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_50(Token token, ParserContext context) {
+  int _matchTokenAt_50(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -4709,7 +4708,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-  int _matchTokenAt_51(Token token, ParserContext context) {
+  int _matchTokenAt_51(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -4825,7 +4824,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-  int _matchTokenAt_52(Token token, ParserContext context) {
+  int _matchTokenAt_52(Token token, _ParserContext context) {
     if (_matchDocStringSeparator(context, token)) {
                 _build(context, token);
           return 53;
@@ -4853,7 +4852,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-  int _matchTokenAt_53(Token token, ParserContext context) {
+  int _matchTokenAt_53(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.docString);
                 _endRule(context, RuleType.step);
@@ -4947,7 +4946,7 @@ class Parser<T> {
   }
 
   // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-  int _matchTokenAt_54(Token token, ParserContext context) {
+  int _matchTokenAt_54(Token token, _ParserContext context) {
     if (_matchEof(context, token)) {
                 _endRule(context, RuleType.dataTable);
                 _endRule(context, RuleType.step);
@@ -5038,7 +5037,7 @@ class Parser<T> {
     return 54;
   }
 
-  bool _lookahead_0(ParserContext context, Token currentToken) {
+  bool _lookahead_0(_ParserContext context, Token currentToken) {
     currentToken.detach();
     Token token;
     final queue = Queue<Token>();
@@ -5064,7 +5063,7 @@ class Parser<T> {
     return match;
   }
 
-  bool _lookahead_1(ParserContext context, Token currentToken) {
+  bool _lookahead_1(_ParserContext context, Token currentToken) {
     currentToken.detach();
     Token token;
     final queue = Queue<Token>();
@@ -5089,4 +5088,19 @@ class Parser<T> {
 
     return match;
   }
+}
+
+/// Mutable state for a single [Parser.parse] run.
+final class _ParserContext {
+  _ParserContext(
+    this.tokenScanner,
+    this.tokenMatcher,
+    this.tokenQueue,
+    this.errors,
+  );
+
+  final TokenScanner tokenScanner;
+  final TokenMatcher tokenMatcher;
+  final Queue<Token> tokenQueue;
+  final List<ParserException> errors;
 }

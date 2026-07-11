@@ -170,15 +170,14 @@
 // `../gherkin.berp` grammar. Run `make generate` to regenerate it.
 //
 // The `TokenType` and `RuleType` enums below are generated here from the
-// grammar. The remaining supporting types (`Builder`, `TokenMatcher`,
-// `TokenScanner`, `ParserContext`) live in hand-written sibling files.
+// grammar. `Builder`, `TokenMatcher`, and `TokenScanner` live in hand-written
+// sibling files; `_ParserContext` is generated below (library-private).
 // dart format off
 import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
-import 'package:cucumber_gherkin/src/parser/parser_context.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
@@ -242,7 +241,7 @@ class @(Model.ParserClassName)<T> {
     _builder.reset();
     tokenMatcher.reset();
 
-    final context = ParserContext(
+    final context = _ParserContext(
       tokenScanner,
       tokenMatcher,
       Queue<Token>(),
@@ -266,7 +265,7 @@ class @(Model.ParserClassName)<T> {
     return _builder.result;
   }
 
-  void _addError(ParserContext context, ParserException error) {
+  void _addError(_ParserContext context, ParserException error) {
     // Deduplicate by message. Each message already carries its
     // `(line:column): ` position prefix, so identical messages describe the
     // same error at the same location.
@@ -281,11 +280,11 @@ class @(Model.ParserClassName)<T> {
     }
   }
 
-  void _handleAstError<V>(ParserContext context, V Function() action) =>
+  void _handleAstError<V>(_ParserContext context, V Function() action) =>
       _handleExternalError(context, action, null);
 
   V _handleExternalError<V>(
-    ParserContext context,
+    _ParserContext context,
     V Function() action,
     V defaultValue,
   ) {
@@ -305,28 +304,28 @@ class @(Model.ParserClassName)<T> {
     return defaultValue;
   }
 
-  void _build(ParserContext context, Token token) =>
+  void _build(_ParserContext context, Token token) =>
       _handleAstError(context, () {
         _builder.build(token);
       });
 
-  void _startRule(ParserContext context, RuleType ruleType) =>
+  void _startRule(_ParserContext context, RuleType ruleType) =>
       _handleAstError(context, () {
         _builder.startRule(ruleType);
       });
 
-  void _endRule(ParserContext context, RuleType ruleType) =>
+  void _endRule(_ParserContext context, RuleType ruleType) =>
       _handleAstError(context, () {
         _builder.endRule(ruleType);
       });
 
-  Token _readToken(ParserContext context) =>
+  Token _readToken(_ParserContext context) =>
       context.tokenQueue.isNotEmpty
           ? context.tokenQueue.removeFirst()
           : context.tokenScanner.read();
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
-  bool _match@(Pascal(rule.Name))(ParserContext context, Token token) {
+  bool _match@(Pascal(rule.Name))(_ParserContext context, Token token) {
     @if (rule.Name != "#EOF")
     {
     @:if (token.isEof) {
@@ -342,7 +341,7 @@ class @(Model.ParserClassName)<T> {
 </text>
 }
 
-  int _matchToken(int state, Token token, ParserContext context) {
+  int _matchToken(int state, Token token, _ParserContext context) {
     int newState;
     switch (state) {
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
@@ -359,7 +358,7 @@ class @(Model.ParserClassName)<T> {
 {
 <text>
   // @Raw(state.Comment)
-  int _matchTokenAt_@(state.Id)(Token token, ParserContext context) {
+  int _matchTokenAt_@(state.Id)(Token token, _ParserContext context) {
     @foreach(var transition in state.Transitions)
     {
     @:if (@MatchToken(transition.TokenType)) {
@@ -385,7 +384,7 @@ class @(Model.ParserClassName)<T> {
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-  bool _lookahead_@(lookAheadHint.Id)(ParserContext context, Token currentToken) {
+  bool _lookahead_@(lookAheadHint.Id)(_ParserContext context, Token currentToken) {
     currentToken.detach();
     Token token;
     final queue = Queue<Token>();
@@ -416,4 +415,19 @@ class @(Model.ParserClassName)<T> {
   }
 </text>
 }
+}
+
+/// Mutable state for a single [Parser.parse] run.
+final class _ParserContext {
+  _ParserContext(
+    this.tokenScanner,
+    this.tokenMatcher,
+    this.tokenQueue,
+    this.errors,
+  );
+
+  final TokenScanner tokenScanner;
+  final TokenMatcher tokenMatcher;
+  final Queue<Token> tokenQueue;
+  final List<ParserException> errors;
 }
