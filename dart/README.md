@@ -1,16 +1,7 @@
 # Gherkin for Dart
 
-Gherkin parser and compiler for Dart. Parses `.feature` sources into [Cucumber
-Messages](https://github.com/cucumber/messages) envelopes: `source`,
-`gherkinDocument`, and `pickle`. See [Gherkin](https://github.com/cucumber/gherkin)
-for the format and the other language implementations.
-
-The core is platform-agnostic and has no `dart:io` dependency, so it runs on the web.
-File reading lives in a separate library.
-
-## Requirements
-
-* Dart SDK `>=3.7.0 <4.0.0`
+Gherkin parser and compiler for Dart. It parses `.feature` sources into [Cucumber
+Messages](https://github.com/cucumber/messages) envelopes.
 
 ## Installation
 
@@ -49,9 +40,7 @@ implementation details and may change without notice.
 
 ## Parsing
 
-`GherkinParser` turns Gherkin into a `Stream<Envelope>`. The media type is inferred
-from the `uri` extension (`.feature`), or pass `mediaType` when the extension is
-unrecognized:
+`GherkinParser` turns Gherkin into a `Stream<Envelope>`:
 
 ```dart
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
@@ -67,21 +56,7 @@ await for (final envelope in envelopes) {
 }
 ```
 
-Other entry points: `parseEnvelope`/`parseEnvelopes` parse `source` envelopes, and
-(in the I/O library) `parsePath`/`parsePaths` read files. Streams are lazy across
-sources but eager within a source. `GherkinParser` accepts `includeSource`,
-`includeGherkinDocument`, `includePickles`, `defaultDialect`, and `idGenerator`.
-
-### Errors
-
-Malformed Gherkin never throws. It is reported as a `parseError` envelope in the
-stream. Synchronous throws are reserved for conditions that are not a property of
-the source:
-
-* `parseString` and `makeSourceEnvelope` throw `ArgumentError` when the media type
-  cannot be resolved (no `mediaType` and an unrecognized `uri` extension).
-* `parsePath`/`parsePaths` surface I/O failures as a `GherkinException` error event
-  on the stream.
+Malformed Gherkin is reported as a `parseError` envelope.
 
 ## Development
 
@@ -93,6 +68,7 @@ dart pub get
 dart format .
 dart analyze
 dart test
+make acceptance
 dart pub publish --dry-run
 ```
 

@@ -1,13 +1,14 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 Future<void> main(List<String> args) async {
   var includeSource = true;
   var includeAst = true;
   var includePickles = true;
-  var idGenerator = IdGenerator.uuidGenerator;
+  String Function()? idGenerator;
+  var nextId = 0;
   final paths = <String>[];
 
   for (final arg in args) {
@@ -19,7 +20,7 @@ Future<void> main(List<String> args) async {
       case '--no-pickles':
         includePickles = false;
       case '--predictable-ids':
-        idGenerator = IdGenerator.incrementingGenerator;
+        idGenerator = () => (nextId++).toString();
       default:
         paths.add(arg);
     }
@@ -32,13 +33,8 @@ Future<void> main(List<String> args) async {
     idGenerator: idGenerator,
   );
 
-  await printMessages(parser.parsePaths(paths));
-}
-
-Future<void> printMessages(Stream<messages.Envelope> messagesStream) async {
-  try {
-    await messages.encodeNdjsonEnvelopes(messagesStream).forEach(stdout.write);
-  } on IOException catch (e) {
-    throw GherkinException("Couldn't print messages", e);
-  }
+  final envelopes = Stream.fromIterable(paths).asyncExpand((path) async* {
+    yield* parser.parseString(await File(path).readAsString(), path);
+  });
+  await messages.encodeNdjsonEnvelopes(envelopes).forEach(stdout.write);
 }

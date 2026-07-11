@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:cucumber_gherkin/src/ast/messages_gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_dialect_provider.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
@@ -21,8 +22,8 @@ class GherkinParser {
     this.includeGherkinDocument = defaultIncludeGherkinDocument,
     this.includePickles = defaultIncludePickles,
     this.defaultDialect = defaultDialectValue,
-    IdGenerator? idGenerator,
-  }) : idGenerator = idGenerator ?? IdGenerator.uuidGenerator {
+    String Function()? idGenerator,
+  }) : _idGenerator = idGenerator ?? _newUuid {
     _dialectProvider = GherkinDialectProvider(builtinDialects, defaultDialect);
   }
 
@@ -51,8 +52,8 @@ class GherkinParser {
   /// The dialect used when a feature has no `# language:` header.
   final String defaultDialect;
 
-  /// The [IdGenerator] used to assign ids to emitted messages.
-  final IdGenerator idGenerator;
+  /// The function used to assign ids to emitted messages.
+  final String Function() _idGenerator;
 
   late final GherkinDialectProvider _dialectProvider;
 
@@ -85,7 +86,7 @@ class GherkinParser {
       return;
     }
 
-    final builder = MessagesGherkinDocumentBuilder(idGenerator);
+    final builder = MessagesGherkinDocumentBuilder(_idGenerator);
     final parser = Parser<messages.GherkinDocument>(builder)
       ..stopAtFirstError = false;
     final tokenScanner = StringTokenScanner(source.data);
@@ -112,7 +113,7 @@ class GherkinParser {
       yield messages.Envelope(gherkinDocument: gherkinDocumentWithUri);
     }
     if (includePickles) {
-      final pickleCompiler = MessagesPickleCompiler(idGenerator);
+      final pickleCompiler = MessagesPickleCompiler(_idGenerator);
       for (final pickle in pickleCompiler.compile(
         gherkinDocumentWithUri,
         source.uri,
@@ -203,4 +204,15 @@ class GherkinParser {
       'provided',
     );
   }
+}
+
+String _newUuid() {
+  final random = Random.secure();
+  final bytes = List<int>.generate(16, (_) => random.nextInt(256));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  final hex = bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0'));
+  return '${hex.take(4).join()}-${hex.skip(4).take(2).join()}-'
+      '${hex.skip(6).take(2).join()}-${hex.skip(8).take(2).join()}-'
+      '${hex.skip(10).join()}';
 }

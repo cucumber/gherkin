@@ -1,4 +1,3 @@
-import 'package:cucumber_gherkin/src/gherkin/id_generator.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Compiles a [messages.GherkinDocument] into the list of executable
@@ -7,7 +6,7 @@ class MessagesPickleCompiler {
   /// Creates a compiler that assigns ids using [_idGenerator].
   MessagesPickleCompiler(this._idGenerator);
 
-  final IdGenerator _idGenerator;
+  final String Function() _idGenerator;
 
   /// Compiles [gherkinDocument] (loaded from [uri]) into pickles.
   ///
@@ -146,7 +145,7 @@ class MessagesPickleCompiler {
 
     pickles.add(
       messages.Pickle(
-        id: _idGenerator.newId(),
+        id: _idGenerator(),
         uri: uri,
         location: scenario.location,
         name: scenario.name,
@@ -207,7 +206,7 @@ class MessagesPickleCompiler {
 
         pickles.add(
           messages.Pickle(
-            id: _idGenerator.newId(),
+            id: _idGenerator(),
             uri: uri,
             location: valuesRow.location,
             name: _interpolate(scenario.name, variableCells, valuesRow.cells),
@@ -238,7 +237,7 @@ class MessagesPickleCompiler {
       astNodeIds.add(valuesRow.id);
     }
     return messages.PickleStep(
-      id: _idGenerator.newId(),
+      id: _idGenerator(),
       text: _interpolate(step.text, variableCells, valueCells),
       type: _pickleStepType(keywordType),
       argument: _pickleStepArgument(step, variableCells, valueCells),

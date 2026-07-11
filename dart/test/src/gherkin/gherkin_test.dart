@@ -1,17 +1,21 @@
-import 'package:cucumber_gherkin/cucumber_gherkin_io.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 void main() {
-  final idGenerator = IdGenerator.incrementingGenerator;
+  var nextId = 0;
+  String nextIdGenerator() => (nextId++).toString();
+  const source =
+      'Feature: Minimal\n'
+      '\n'
+      '  Scenario: minimalistic\n'
+      '    Given the minimalism\n';
 
-  test('Use this in readme', () async {
-    const paths = <String>['../testdata/good/minimal.feature'];
-    const includeSource = false;
+  test('parses source into pickles', () async {
     final envelopeStream = GherkinParser(
-      includeSource: includeSource,
-      idGenerator: idGenerator,
-    ).parsePaths(paths);
+      includeSource: false,
+      idGenerator: nextIdGenerator,
+    ).parseString(source, 'minimal.feature');
 
     final pickleStream = envelopeStream.where(
       (envelope) => envelope.pickle != null,
@@ -21,16 +25,13 @@ void main() {
     expect('minimalistic', envelope.pickle!.name);
   });
 
-  test('Provides access to the ast', () async {
-    const paths = <String>['../testdata/good/minimal.feature'];
-    const includeSource = false;
-    const includePickles = false;
+  test('emits the Gherkin document', () async {
     final envelopes =
         await GherkinParser(
-          includeSource: includeSource,
-          includePickles: includePickles,
-          idGenerator: idGenerator,
-        ).parsePaths(paths).toList();
+          includeSource: false,
+          includePickles: false,
+          idGenerator: nextIdGenerator,
+        ).parseString(source, 'minimal.feature').toList();
 
     final gherkinDocument = envelopes.first.gherkinDocument!;
     final feature = gherkinDocument.feature!;
@@ -40,21 +41,7 @@ void main() {
     expect('minimalistic', scenario.name);
   });
 
-  test('Provides access to pickles which are compiled from the ast', () async {
-    const paths = <String>['../testdata/good/scenario_outline.feature'];
-    final envelopes =
-        await GherkinParser(
-          includeSource: false,
-          includeGherkinDocument: false,
-          idGenerator: idGenerator,
-        ).parsePaths(paths).toList();
-
-    final pickle = envelopes.first.pickle!;
-    final step = pickle.steps.first;
-    expect('the minimalism', step.text);
-  });
-
-  test('Parses supplied source', () async {
+  test('parses source envelopes', () async {
     final envelope = GherkinParser.makeSourceEnvelope(
       'Feature: Minimal\n'
           '\n'
@@ -69,7 +56,7 @@ void main() {
         await GherkinParser(
           includeSource: false,
           includePickles: false,
-          idGenerator: idGenerator,
+          idGenerator: nextIdGenerator,
         ).parseEnvelopes(Stream.fromIterable(singletonList)).toList();
 
     final gherkinDocument = envelopes.first.gherkinDocument!;
