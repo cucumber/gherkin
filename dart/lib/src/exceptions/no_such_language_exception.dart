@@ -1,8 +1,6 @@
 part of 'exceptions.dart';
 
-/// Raised when a requested dialect (`# language:`) is not supported.
-///
-/// Subtype of [ParserException] for unsupported `# language:` dialect tags.
+/// Raised when a `# language:` dialect tag is not supported.
 final class NoSuchLanguageException extends ParserException {
   /// Creates an exception for the unsupported [language] at [location].
   NoSuchLanguageException(String language, [Location location = Location.empty])

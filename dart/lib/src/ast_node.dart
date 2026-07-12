@@ -1,22 +1,22 @@
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
-/// A node in the intermediate parse tree.
+/// A node in the parse tree built during a `Builder` walk.
 class AstNode {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);
 
   final Map<RuleType, List<Object?>> _subItems = <RuleType, List<Object?>>{};
 
-  /// The grammar rule this node represents.
+  /// The grammar [RuleType] this node represents.
   final RuleType ruleType;
 
-  /// Adds [obj] to the list of sub-items stored under [ruleType].
+  /// Records [obj] under [ruleType].
   void add(RuleType ruleType, Object? obj) {
     (_subItems[ruleType] ??= <Object?>[]).add(obj);
   }
 
-  /// Returns the first sub-item of [ruleType], or `null` if there is none.
+  /// Returns the first value for [ruleType], or `null` if none.
   T? getSingle<T>(RuleType ruleType) {
     final list = _subItems[ruleType];
     if (list == null || list.isEmpty) {
@@ -25,7 +25,7 @@ class AstNode {
     return list.first as T;
   }
 
-  /// Returns all sub-items stored under [ruleType], cast to type [T].
+  /// Returns all values for [ruleType], cast to [T].
   List<T> getItems<T>(RuleType ruleType) {
     final list = _subItems[ruleType];
     if (list == null) {

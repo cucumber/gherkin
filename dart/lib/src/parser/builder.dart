@@ -3,13 +3,13 @@ import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 /// Assembles a result of type [T] from the events emitted by the parser.
 abstract class Builder<T> {
-  /// Handles a recognized [token].
+  /// Handles a recognized [Token].
   void build(Token token);
 
-  /// Begins a grammar rule of the given [ruleType].
+  /// Begins a grammar rule of the given [RuleType].
   void startRule(RuleType ruleType);
 
-  /// Ends the current grammar rule of the given [ruleType].
+  /// Ends the current grammar rule of the given [RuleType].
   void endRule(RuleType ruleType);
 
   /// The assembled result, valid after a full parse.

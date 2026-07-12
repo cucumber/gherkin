@@ -11,8 +11,8 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Controls which envelopes [generateMessages] emits and how IDs are assigned.
 final class GherkinOptions {
-  /// Creates options with Cucumber-compatible defaults (source,
-  /// gherkinDocument, and pickle envelopes all included; English dialect;
+  /// Creates options with Cucumber-compatible defaults (`source`,
+  /// `gherkinDocument`, and `pickle` envelopes included; English dialect;
   /// random UUIDs).
   const GherkinOptions({
     this.includeSource = true,
@@ -110,9 +110,8 @@ List<messages.Envelope> generateMessages(
 }
 
 messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
-  // The error message already carries its `(line:column): ` (or `(-1,0): `)
-  // position prefix; emit it verbatim and add the structured source location
-  // alongside it.
+  // Error messages already include a `(line:column)` prefix; pass through
+  // verbatim and attach a structured location when available.
   final loc = error.location;
   return messages.Envelope(
     parseError: messages.ParseError(
@@ -131,7 +130,7 @@ messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
   );
 }
 
-// Generates a new UUID v4 based on the RFC 4122 specification.
+// RFC 4122 UUID v4.
 String _newUuidV4() {
   final random = Random.secure();
   final bytes = List<int>.generate(16, (_) => random.nextInt(256));

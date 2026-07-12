@@ -1,6 +1,4 @@
 /// The Gherkin parser error types.
-// Sealed types and their subtypes share this library; `part` files keep one
-// class per file.
 library;
 
 import 'package:cucumber_gherkin/src/language/location.dart';

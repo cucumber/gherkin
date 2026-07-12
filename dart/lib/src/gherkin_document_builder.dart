@@ -8,17 +8,14 @@ import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// A [Builder] that assembles parser events into a GherkinDocument from
-/// `package:cucumber_messages`.
+/// A [Builder] that assembles parser events into a [messages.GherkinDocument].
 class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
-  /// Creates a builder that assigns node ids with the given generator.
+  /// Creates a builder that uses the given ID generator for AST node IDs.
   GherkinDocumentBuilder(this._idGenerator) {
     reset();
   }
 
   final String Function() _idGenerator;
-  // LIFO stack of rules being reduced. The top is kept at the queue's end, so
-  // `addLast`/`removeLast`/`last` are O(1) push/pop/peek.
   final ListQueue<AstNode> _stack = ListQueue<AstNode>();
   final List<messages.Comment> _comments = <messages.Comment>[];
 
@@ -329,8 +326,7 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       children.add(messages.RuleChild(scenario: scenario));
     }
 
-    // Tag IDs are allocated before the rule ID because tags appear earlier in
-    // the source.
+    // Tag IDs precede the rule ID (tags appear earlier in the source).
     final tags = _getTags(header);
 
     return messages.Rule(

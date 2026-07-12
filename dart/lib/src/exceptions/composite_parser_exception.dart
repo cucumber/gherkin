@@ -5,7 +5,7 @@ final class CompositeParserException extends ParserException {
   /// Creates an exception wrapping all of the given [errors].
   CompositeParserException(this.errors) : super(_getMessage(errors));
 
-  /// The individual errors encountered during parsing.
+  /// The parser errors aggregated by this exception.
   final List<ParserException> errors;
 
   static String _getMessage(List<ParserException> errors) {

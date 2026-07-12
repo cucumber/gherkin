@@ -1,11 +1,11 @@
 part of 'exceptions.dart';
 
-/// A [ParserException] whose location is derived from the offending token.
+/// A [ParserException] whose [Location] is derived from the offending [Token].
 ///
-/// This type is `sealed`: its subtypes ([UnexpectedTokenException] and
-/// [UnexpectedEofException]) are a closed set defined by this library.
+/// Sealed: subtypes are [UnexpectedTokenException] and
+/// [UnexpectedEofException].
 sealed class TokenParserException extends ParserException {
-  /// Creates an exception with [message], locating it at [receivedToken].
+  /// Creates an exception with [message], locating it from [receivedToken].
   TokenParserException(String message, Token receivedToken)
     : super.located(message, _getLocation(receivedToken));
 

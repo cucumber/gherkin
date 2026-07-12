@@ -2,8 +2,8 @@ import 'package:cucumber_gherkin/src/language/token.dart';
 
 /// Classifies scanned [Token]s, setting their matched type and metadata.
 ///
-/// Each `match*` method returns `true` if the token is of the corresponding
-/// type, in which case the token is populated with the matched details.
+/// Each `match*` method returns whether the token matches; on success the
+/// token is populated with the matched details.
 abstract class TokenMatcher {
   /// Matches the end-of-file token.
   bool matchEof(Token token);
@@ -26,7 +26,7 @@ abstract class TokenMatcher {
   /// Matches a `Background:` line.
   bool matchBackgroundLine(Token token);
 
-  /// Matches a `Scenario:`/`Scenario Outline:` line.
+  /// Matches a `Scenario:` or `Scenario Outline:` line.
   bool matchScenarioLine(Token token);
 
   /// Matches an `Examples:` line.
