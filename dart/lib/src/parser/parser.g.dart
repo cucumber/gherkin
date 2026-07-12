@@ -51,16 +51,16 @@ enum TokenType {
   /// A step line (`Given`/`When`/`Then`/`And`/`But`).
   stepLine,
 
-  /// A doc string delimiter (`"""` or ` ``` `).
+  /// A doc string delimiter (`"""` or triple backticks).
   docStringSeparator,
 
   /// A data/examples table row.
   tableRow,
 
-  /// A `# language:` header line.
+  /// A language header line (`# language: …`).
   language,
 
-  /// Any other line (free text or description).
+  /// Any other line (description, free text, or doc string content).
   other,
 }
 
@@ -109,10 +109,10 @@ enum RuleType {
   /// Table row token rule (`#TableRow`).
   tableRow,
 
-  /// `# language:` header token rule (`#Language`).
+  /// Language header token rule (`#Language`).
   language,
 
-  /// Any other (description/free text) token rule (`#Other`).
+  /// Any other (description, free text, or doc string content) token rule (`#Other`).
   other,
 
   /// The whole document: `GherkinDocument := Feature?`.
@@ -159,10 +159,12 @@ enum RuleType {
   /// A step argument: `StepArg := (DataTable | DocString)`.
   stepArg,
 
-  /// Grammar rule `dataTableAndMaybeDocString`.
+  /// A data table optionally followed by a doc string:
+  /// `DataTableAndMaybeDocString := DataTable DocString?`.
   dataTableAndMaybeDocString,
 
-  /// Grammar rule `docStringAndMaybeDataTable`.
+  /// A doc string optionally followed by a data table:
+  /// `DocStringAndMaybeDataTable := DocString DataTable?`.
   docStringAndMaybeDataTable,
 
   /// A data table: `DataTable := #TableRow+`.
@@ -191,7 +193,7 @@ extension TokenTypeRuleType on TokenType {
   RuleType get ruleType => RuleType.values[index];
 }
 
-/// A recursive-descent Gherkin parser driven by a Berp-generated state machine.
+/// A Gherkin parser implemented as a Berp-generated state machine.
 ///
 /// The parser reads [Token]s from a [TokenScanner], classifies them with a
 /// [TokenMatcher], and feeds the recognized grammar rules to a [Builder] of
@@ -209,8 +211,10 @@ class Parser<T> {
   /// Parses the tokens produced by [tokenScanner], using [tokenMatcher] to
   /// classify each token, and returns the assembled result of type [T].
   ///
-  /// Throws a [CompositeParserException] if one or more parse errors are
-  /// encountered.
+  /// Throws [CompositeParserException] when one or more errors are collected
+  /// (the default). If [stopAtFirstError] is true, throws the first
+  /// [ParserException] immediately. Error collection stops after 10 distinct
+  /// errors.
   T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher) {
     _builder.reset();
     tokenMatcher.reset();

@@ -12,19 +12,30 @@ class Token {
   /// The source line this token was scanned from.
   final GherkinLine line;
 
-  /// The location (line and column) of this token in the source.
+  /// The location of this token in the source.
+  ///
+  /// Set by the scanner with column `0` initially; updated by the matcher to
+  /// a one-based column when the token is classified.
   Location location;
 
   /// The token type assigned by the matcher.
   TokenType matchedType = TokenType.none;
 
-  /// The localized keyword recognized on the line, if any.
+  /// The matched keyword or delimiter, if any.
+  ///
+  /// Localized Gherkin keywords for title and step lines; the doc-string
+  /// delimiter for doc-string separator lines; otherwise empty.
   String matchedKeyword = '';
 
   /// The semantic type of the matched step keyword, if this is a step line.
   messages.StepKeywordType? matchedKeywordType;
 
-  /// The text remaining on the line after the matched keyword.
+  /// Match-specific payload text set by the matcher.
+  ///
+  /// For title and step lines, the remainder after the matched keyword. For
+  /// comment lines, the full line text. For language headers, the language
+  /// tag. For doc-string separators, the media type (open) or empty (close).
+  /// Empty for tag lines, table rows, blank lines, and EOF.
   String matchedText = '';
 
   /// The spans (for example tags or table cells) recognized on the line.

@@ -1,7 +1,7 @@
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
-/// A node in the parse tree built during a `Builder` walk.
+/// A transient stack node used while a `Builder` assembles the Gherkin AST.
 class AstNode {
   /// Creates a node for the given [ruleType].
   AstNode(this.ruleType);

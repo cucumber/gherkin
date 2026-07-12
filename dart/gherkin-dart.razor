@@ -78,10 +78,10 @@
             case "scenarioLine": return "  /// A `Scenario:` or `Scenario Outline:` line.";
             case "examplesLine": return "  /// An `Examples:` line.";
             case "stepLine": return "  /// A step line (`Given`/`When`/`Then`/`And`/`But`).";
-            case "docStringSeparator": return "  /// A doc string delimiter (`\"\"\"` or ` ``` `).";
+            case "docStringSeparator": return "  /// A doc string delimiter (`\"\"\"` or triple backticks).";
             case "tableRow": return "  /// A data/examples table row.";
-            case "language": return "  /// A `# language:` header line.";
-            case "other": return "  /// Any other line (free text or description).";
+            case "language": return "  /// A language header line (`# language: …`).";
+            case "other": return "  /// Any other line (description, free text, or doc string content).";
             default: return "  /// The `" + camel + "` token type.";
         }
     }
@@ -106,8 +106,8 @@
             case "stepLine": return "  /// Step line token rule (`#StepLine`).";
             case "docStringSeparator": return "  /// Doc string delimiter token rule (`#DocStringSeparator`).";
             case "tableRow": return "  /// Table row token rule (`#TableRow`).";
-            case "language": return "  /// `# language:` header token rule (`#Language`).";
-            case "other": return "  /// Any other (description/free text) token rule (`#Other`).";
+            case "language": return "  /// Language header token rule (`#Language`).";
+            case "other": return "  /// Any other (description, free text, or doc string content) token rule (`#Other`).";
             case "gherkinDocument": return "  /// The whole document: `GherkinDocument := Feature?`.";
             case "feature": return "  /// A feature:\n  /// `Feature := FeatureHeader Background? ScenarioDefinition* Rule*`.";
             case "featureHeader": return "  /// A feature header:\n  /// `FeatureHeader := #Language? Tags? #FeatureLine DescriptionHelper`.";
@@ -122,6 +122,8 @@
             case "step": return "  /// A step: `Step := #StepLine StepArg?`.";
             case "stepArg": return "  /// A step argument: `StepArg := (DataTable | DocString)`.";
             case "dataTable": return "  /// A data table: `DataTable := #TableRow+`.";
+            case "dataTableAndMaybeDocString": return "  /// A data table optionally followed by a doc string:\n  /// `DataTableAndMaybeDocString := DataTable DocString?`.";
+            case "docStringAndMaybeDataTable": return "  /// A doc string optionally followed by a data table:\n  /// `DocStringAndMaybeDataTable := DocString DataTable?`.";
             case "docString": return "  /// A doc string:\n  /// `DocString := #DocStringSeparator #Other* #DocStringSeparator`.";
             case "tags": return "  /// One or more tag lines: `Tags := #TagLine+`.";
             case "descriptionHelper": return "  /// A description helper:\n  /// `DescriptionHelper := #Empty* Description?`.";
@@ -217,7 +219,7 @@ extension TokenTypeRuleType on TokenType {
   RuleType get ruleType => RuleType.values[index];
 }
 
-/// A recursive-descent Gherkin parser driven by a Berp-generated state machine.
+/// A Gherkin parser implemented as a Berp-generated state machine.
 ///
 /// The parser reads [Token]s from a [TokenScanner], classifies them with a
 /// [TokenMatcher], and feeds the recognized grammar rules to a [Builder] of
@@ -235,8 +237,10 @@ class @(Model.ParserClassName)<T> {
   /// Parses the tokens produced by [tokenScanner], using [tokenMatcher] to
   /// classify each token, and returns the assembled result of type [T].
   ///
-  /// Throws a [CompositeParserException] if one or more parse errors are
-  /// encountered.
+  /// Throws [CompositeParserException] when one or more errors are collected
+  /// (the default). If [stopAtFirstError] is true, throws the first
+  /// [ParserException] immediately. Error collection stops after 10 distinct
+  /// errors.
   T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher) {
     _builder.reset();
     tokenMatcher.reset();

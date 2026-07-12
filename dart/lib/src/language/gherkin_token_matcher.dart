@@ -221,7 +221,8 @@ class GherkinTokenMatcher implements TokenMatcher {
   }
 
   // Records that [token] matched [matchedType], populating its matched
-  // keyword, text, items, indentation, and location.
+  // keyword, text, items, and location (column derived from indent when
+  // applicable).
   void _setTokenMatched(
     Token token,
     TokenType matchedType, {

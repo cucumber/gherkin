@@ -34,7 +34,7 @@ final class GherkinOptions {
   /// Language tag used when the source does not declare `# language: …`.
   final String defaultDialect;
 
-  /// Supplies unique IDs for Gherkin document nodes and pickles.
+  /// Supplies unique IDs for AST elements, pickles, and pickle steps.
   ///
   /// When null, each ID is a random UUID v4.
   final String Function()? idGenerator;
@@ -42,8 +42,8 @@ final class GherkinOptions {
 
 /// Parses Gherkin [data] identified by [uri] into Cucumber message envelopes.
 ///
-/// Malformed Gherkin is reported as `parseError` envelopes rather than thrown
-/// exceptions.
+/// Parse failures ([ParserException] and subclasses) are reported as
+/// `parseError` envelopes rather than thrown to the caller.
 List<messages.Envelope> generateMessages(
   String data,
   String uri, [

@@ -1,4 +1,7 @@
-/// A one-based position (line and column) within a source document.
+/// A position within a source document.
+///
+/// Line numbers are one-based. Column numbers are one-based after matching;
+/// column `0` may appear on freshly scanned tokens before matching.
 class Location {
   /// Creates a location at the given [line] and [column].
   const Location(this.line, this.column);
@@ -13,12 +16,14 @@ class Location {
   /// The one-based line number.
   final int line;
 
-  /// The one-based column number.
+  /// The column number (one-based after matching; `0` before matching).
   final int column;
 
   /// Whether this is the unknown/absent [empty] location.
   bool get isEmpty => line == empty.line && column == empty.column;
 
-  /// Whether the [column] is set (has a known position).
+  /// Whether [column] is not the [empty] sentinel (`-1`).
+  ///
+  /// Column `0` (pre-match placeholder) still returns `true`.
   bool get hasColumn => column != _unset;
 }

@@ -60,9 +60,11 @@ class GherkinLine {
 
   /// Returns the line text.
   ///
-  /// [indentToRemove] is the maximum number of whitespace characters to remove
-  /// from the start of the line; a negative value removes all leading
-  /// whitespace.
+  /// With the default [indentToRemove] of `0`, returns the full raw line
+  /// including leading indent. A negative value, or a value greater than
+  /// [indent], returns the line with all leading whitespace removed.
+  /// Otherwise returns the line starting at index [indentToRemove] (used to
+  /// strip doc-string indentation).
   String getLineText([int indentToRemove = 0]) {
     if (indentToRemove < 0 || indentToRemove > indent) {
       return _trimmedLineText;
@@ -70,8 +72,8 @@ class GherkinLine {
     return _lineText.substring(indentToRemove);
   }
 
-  /// Returns the remaining part of the line after the first [length]
-  /// characters, trimmed.
+  /// Returns the remainder of the indent-stripped line after the first
+  /// [length] characters, trimmed on both ends.
   String getRestTrimmed(int length) =>
       _trimmedLineText.substring(length).trim();
 

@@ -10,7 +10,8 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// A [Builder] that assembles parser events into a [messages.GherkinDocument].
 class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
-  /// Creates a builder that uses the given ID generator for AST node IDs.
+  /// Creates a builder that uses the given ID generator for message AST
+  /// element IDs (steps, tags, scenarios, and similar).
   GherkinDocumentBuilder(this._idGenerator) {
     reset();
   }

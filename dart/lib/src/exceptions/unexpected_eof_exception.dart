@@ -4,6 +4,7 @@ part of 'exceptions.dart';
 final class UnexpectedEofException extends TokenParserException {
   /// Creates an exception for an unexpected end of file.
   ///
+  /// [receivedToken] is the EOF token used to determine error [location].
   /// [expectedTokenTypes] lists the token types the parser would have accepted.
   UnexpectedEofException(Token receivedToken, List<String> expectedTokenTypes)
     : super(_getMessage(expectedTokenTypes), receivedToken);

@@ -41,7 +41,7 @@ abstract class TokenMatcher {
   /// Matches a table row.
   bool matchTableRow(Token token);
 
-  /// Matches a `# language:` header line.
+  /// Matches a language header line (`# language: …`).
   bool matchLanguage(Token token);
 
   /// Matches any other (free text/description) line.

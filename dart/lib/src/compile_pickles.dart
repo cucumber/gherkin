@@ -16,7 +16,7 @@ List<messages.Pickle> compilePickles(
 
   // Builds pickle steps for [scenario], optionally interpolating from an
   // examples row. Background steps are never interpolated. Step IDs are
-  // allocated here; the pickle ID is allocated by the caller afterward.
+  // allocated here; the enclosing compile* function assigns the pickle ID next.
   List<messages.PickleStep> buildSteps(
     List<messages.Step> backgroundSteps,
     messages.Scenario scenario, [
