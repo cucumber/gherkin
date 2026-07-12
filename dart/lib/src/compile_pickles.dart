@@ -1,6 +1,6 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Compiles [gherkinDocument] (loaded from [uri]) into executable pickles.
+/// Compiles [gherkinDocument] into executable pickles, tagging each with [uri].
 ///
 /// Returns an empty list when the document has no feature.
 List<messages.Pickle> compilePickles(
@@ -51,7 +51,7 @@ List<messages.Pickle> compilePickles(
     messages.Scenario scenario,
     String language,
   ) {
-    // Allocate step IDs before the pickle ID to match acceptance fixtures.
+    // Step IDs are allocated before the pickle ID.
     final steps = buildSteps(backgroundSteps, scenario);
     pickles.add(
       messages.Pickle(
@@ -80,7 +80,7 @@ List<messages.Pickle> compilePickles(
       }
 
       for (final valuesRow in examples.tableBody) {
-        // Allocate step IDs before the pickle ID to match acceptance fixtures.
+        // Step IDs are allocated before the pickle ID.
         final steps = buildSteps(
           backgroundSteps,
           scenario,

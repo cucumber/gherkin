@@ -8,8 +8,8 @@ import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// A [Builder] that assembles parser events into a Cucumber Messages
-/// [messages.GherkinDocument].
+/// A [Builder] that assembles parser events into a GherkinDocument from
+/// `package:cucumber_messages`.
 class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
   /// Creates a builder that assigns node ids with the given generator.
   GherkinDocumentBuilder(this._idGenerator) {
@@ -329,8 +329,8 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       children.add(messages.RuleChild(scenario: scenario));
     }
 
-    // Allocate tag IDs before the rule's own ID: tags precede the keyword line
-    // in source, so get lower IDs.
+    // Tag IDs are allocated before the rule ID because tags appear earlier in
+    // the source.
     final tags = _getTags(header);
 
     return messages.Rule(

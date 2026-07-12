@@ -22,5 +22,5 @@ const tableCellNewLineEscape = 'n';
 /// The default doc string delimiter (`"""`).
 const docStringSeparator = '"""';
 
-/// The alternative doc string delimiter (` ``` `).
+/// The alternative doc string delimiter (three grave accents).
 const docStringAlternativeSeparator = '```';

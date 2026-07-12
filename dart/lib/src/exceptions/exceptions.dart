@@ -1,9 +1,6 @@
-/// The Gherkin exception hierarchy.
-///
-/// These types live in a single library so that [ParserException] and
-/// [TokenParserException] can be `sealed`: Dart only permits subtypes of a
-/// sealed class within the same library. The individual `part` files below
-/// keep the source split one-class-per-file for readability.
+/// The Gherkin parser error types.
+// Sealed types and their subtypes share this library; `part` files keep one
+// class per file.
 library;
 
 import 'package:cucumber_gherkin/src/language/location.dart';

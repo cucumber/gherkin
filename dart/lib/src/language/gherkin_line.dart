@@ -91,7 +91,7 @@ class GherkinLine {
   bool startsWithTitleKeyword(String text) =>
       startsWith('$text$titleKeywordSeparator');
 
-  /// Parses the line as a tag list, returning a `(column, text)` span for each
+  /// Parses the line as a tag list, returning a [GherkinLineSpan] for each
   /// tag (including its leading `@`).
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
@@ -125,7 +125,7 @@ class GherkinLine {
     return tags;
   }
 
-  /// Parses the line as a table row, returning a `(column, text)` span for each
+  /// Parses the line as a table row, returning a [GherkinLineSpan] for each
   /// trimmed cell value.
   Iterable<GherkinLineSpan> get tableCells {
     final lineSpans = <GherkinLineSpan>[];

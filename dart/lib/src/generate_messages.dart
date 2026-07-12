@@ -11,8 +11,9 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Controls which envelopes [generateMessages] emits and how IDs are assigned.
 final class GherkinOptions {
-  /// Creates options with Cucumber-compatible defaults (source, AST, and
-  /// pickles all included; English dialect; random UUIDs).
+  /// Creates options with Cucumber-compatible defaults (source,
+  /// gherkinDocument, and pickle envelopes all included; English dialect;
+  /// random UUIDs).
   const GherkinOptions({
     this.includeSource = true,
     this.includeGherkinDocument = true,
@@ -33,7 +34,7 @@ final class GherkinOptions {
   /// Language tag used when the source does not declare `# language: …`.
   final String defaultDialect;
 
-  /// Supplies unique IDs for AST nodes and pickles.
+  /// Supplies unique IDs for Gherkin document nodes and pickles.
   ///
   /// When null, each ID is a random UUID v4.
   final String Function()? idGenerator;
