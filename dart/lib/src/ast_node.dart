@@ -37,7 +37,7 @@ class AstNode {
   /// Returns the first [Token] of [tokenType], or `null` if absent.
   Token? getToken(TokenType tokenType) => getSingle<Token>(tokenType.ruleType);
 
-  /// Returns all [Token]s of the given [tokenType] held by this node.
+  /// Returns all [Token]s of [tokenType].
   List<Token> getTokens(TokenType tokenType) =>
       getItems<Token>(tokenType.ruleType);
 }

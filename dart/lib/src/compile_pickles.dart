@@ -1,6 +1,6 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Compiles [gherkinDocument] into [messages.Pickle]s tagged with [uri].
+/// Compiles [gherkinDocument] into [messages.Pickle]s, each with [uri] set.
 ///
 /// Returns an empty list when the document has no feature.
 List<messages.Pickle> compilePickles(
@@ -14,8 +14,9 @@ List<messages.Pickle> compilePickles(
     return pickles;
   }
 
-  // Allocates step IDs; callers allocate the pickle ID afterward. Background
-  // steps are never interpolated from examples rows.
+  // Builds pickle steps for [scenario], optionally interpolating from an
+  // examples row. Background steps are never interpolated. Step IDs are
+  // allocated here; the pickle ID is allocated by the caller afterward.
   List<messages.PickleStep> buildSteps(
     List<messages.Step> backgroundSteps,
     messages.Scenario scenario, [

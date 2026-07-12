@@ -6,10 +6,10 @@ abstract class Builder<T> {
   /// Handles a recognized [Token].
   void build(Token token);
 
-  /// Begins a grammar rule of the given [RuleType].
+  /// Begins a grammar rule of type [RuleType].
   void startRule(RuleType ruleType);
 
-  /// Ends the current grammar rule of the given [RuleType].
+  /// Ends the current grammar rule of type [RuleType].
   void endRule(RuleType ruleType);
 
   /// The assembled result, valid after a full parse.

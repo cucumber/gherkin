@@ -8,7 +8,7 @@ import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// The [TokenMatcher] for plain (`.feature`) Gherkin sources.
+/// The [TokenMatcher] for Gherkin (`.feature`) sources.
 class GherkinTokenMatcher implements TokenMatcher {
   /// Creates a matcher over the given dialects map, defaulting to English
   /// (`en`) unless another default language is supplied.

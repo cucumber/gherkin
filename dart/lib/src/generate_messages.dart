@@ -110,7 +110,7 @@ List<messages.Envelope> generateMessages(
 }
 
 messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
-  // Error messages already include a `(line:column)` prefix; pass through
+  // Error messages already include a `(line:column): ` prefix; pass through
   // verbatim and attach a structured location when available.
   final loc = error.location;
   return messages.Envelope(

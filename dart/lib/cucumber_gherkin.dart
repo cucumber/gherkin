@@ -1,5 +1,6 @@
 /// Gherkin parser/compiler for Dart. Parses `.feature` sources into
-/// [Cucumber Messages](https://pub.dev/packages/cucumber_messages) envelopes.
+/// [Cucumber Messages](https://github.com/cucumber/messages) envelopes (via
+/// [`cucumber_messages`](https://pub.dev/packages/cucumber_messages)).
 ///
 /// ```dart
 /// import 'package:cucumber_gherkin/cucumber_gherkin.dart';

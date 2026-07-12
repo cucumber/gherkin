@@ -2,8 +2,7 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 
-/// A single source line, providing the queries the scanner needs to classify
-/// it.
+/// A single source line, with helpers used when matching tokens.
 class GherkinLine {
   /// Creates a line from the given text at the given one-based line number.
   GherkinLine(this._lineText, this._lineNumber)

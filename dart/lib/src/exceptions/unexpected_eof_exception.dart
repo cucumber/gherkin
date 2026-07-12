@@ -1,6 +1,6 @@
 part of 'exceptions.dart';
 
-/// Raised when the file ends while the parser still expected more tokens.
+/// Raised when the input ends while the parser still expected more tokens.
 final class UnexpectedEofException extends TokenParserException {
   /// Creates an exception for an unexpected end of file.
   ///

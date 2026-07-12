@@ -7,9 +7,8 @@ import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 class StringTokenScanner implements TokenScanner {
   /// Creates a scanner over the lines of [source].
   ///
-  /// Lines are separated on `\r?\n`. A lone `\r` is *not* a line separator and
-  /// is kept as part of the line (matching Cucumber's cross-language line
-  /// splitting). Dart's `LineSplitter`, by contrast, treats a bare `\r` as a
+  /// Lines are separated on `\r?\n`. A lone `\r` is not a line separator and is
+  /// kept as part of the line. Dart's `LineSplitter` treats a bare `\r` as a
   /// break, so it is deliberately not used here.
   StringTokenScanner(String source) : _linesIterator = _splitLines(source);
 
