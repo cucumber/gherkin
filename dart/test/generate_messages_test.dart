@@ -23,10 +23,7 @@ void main() {
     final envelopes = generateMessages(
       source,
       'minimal.feature',
-      const GherkinOptions(
-        includeSource: false,
-        includePickles: false,
-      ),
+      const GherkinOptions(includeSource: false, includePickles: false),
     );
 
     expect(envelopes, hasLength(1));
