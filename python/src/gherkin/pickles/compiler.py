@@ -291,6 +291,8 @@ class Compiler:
     ) -> PickleArgumentEnvelope | None:
         argument: PickleArgumentEnvelope = {}
 
+        data_table_argument_index = None
+        doc_string_argument_index = None
         if "dataTable" in step and "docString" in step:
             table_first = (
                 step["docString"]["location"]["line"]
