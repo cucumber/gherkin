@@ -4,63 +4,17 @@ defmodule CucumberGherkinGoodTestdataTest do
 
   @moduletag timeout: :infinity
 
-  @files [
-    "../testdata/good/minimal.feature",
-    "../testdata/good/background.feature",
-    "../testdata/good/complex_background.feature",
-    "../testdata/good/conjunctions.feature",
-    "../testdata/good/datatables.feature",
-    "../testdata/good/datatables_with_new_lines.feature",
-    "../testdata/good/descriptions.crlf.feature",
-    "../testdata/good/descriptions.feature",
-    "../testdata/good/descriptions_with_comments.feature",
-    "../testdata/good/docstrings.crlf.feature",
-    "../testdata/good/docstrings.feature",
-    # Missing data field
-    # "../testdata/good/empty.feature",
-    "../testdata/good/escaped_pipes.feature",
-    "../testdata/good/example_token_multiple.feature",
-    "../testdata/good/example_tokens_everywhere.feature",
-    # Not implemented
-    # "../testdata/good/extra_table_content.feature",
-    "../testdata/good/i18n_emoji.feature",
-    "../testdata/good/i18n_fr.feature",
-    "../testdata/good/i18n_no.feature",
-    "../testdata/good/incomplete_background_1.feature",
-    "../testdata/good/incomplete_background_2.feature",
-    "../testdata/good/incomplete_feature_1.feature",
-    "../testdata/good/incomplete_feature_2.feature",
-    "../testdata/good/incomplete_feature_3.feature",
-    "../testdata/good/incomplete_scenario.feature",
-    "../testdata/good/incomplete_scenario_outline.feature",
-    "../testdata/good/language.feature",
-    "../testdata/good/minimal-example.feature",
-    "../testdata/good/minimal.crlf.feature",
-    "../testdata/good/minimal.feature",
-    "../testdata/good/padded_example.feature",
-    # not implemented
-    # "../testdata/good/prefixed-keywords.feature",
-    "../testdata/good/readme_example.feature",
-    "../testdata/good/rule.feature",
-    "../testdata/good/rule_with_tag.feature",
-    "../testdata/good/rule_without_name_and_description.feature",
-    "../testdata/good/scenario_outline.feature",
-    "../testdata/good/scenario_outline_no_newline.feature",
-    "../testdata/good/scenario_outline_with_docstring.feature",
-    "../testdata/good/scenario_outline_with_value_with_dollar_sign.feature",
-    "../testdata/good/scenario_outline_with_value_with_trailing_backslash.feature",
-    "../testdata/good/scenario_outlines_with_tags.feature",
-    "../testdata/good/several_examples.feature",
-    "../testdata/good/spaces_in_language.feature",
-    "../testdata/good/star-keywords.feature",
-    "../testdata/good/step_with_datatable_and_docstring.feature",
-    "../testdata/good/tagged_feature_with_scenario_outline.feature",
-    "../testdata/good/tags.feature",
-    # not implemented
-    # "../testdata/good/trim_space.feature",
-    # "../testdata/good/trim_tab.feature",
-    "../testdata/good/very_long.feature"
-  ]
+  @files [ "..", "testdata", "good", "*.feature"]
+         |> Path.join()
+         |> Path.wildcard()
+         # Not implemented https://github.com/cucumber/gherkin/pull/245
+         |> Enum.filter(fn el -> not String.contains?(el, "extra_table_content.feature") end)
+         # Not implemented https://github.com/cucumber/gherkin/issues/400
+         |> Enum.filter(fn el -> not String.contains?(el, "prefixed-keywords.feature") end)
+         # Not implemented https://github.com/cucumber/gherkin/pull/440
+         |> Enum.filter(fn el -> not String.contains?(el, "trim_space.feature") end)
+         # Not implemented https://github.com/cucumber/gherkin/pull/440
+         |> Enum.filter(fn el -> not String.contains?(el, "trim_tab.feature") end)
 
   @tag :good
   @tag :tokens
