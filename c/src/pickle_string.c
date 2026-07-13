@@ -2,8 +2,9 @@
 #include "string_utilities.h"
 #include <stdlib.h>
 
-const PickleString* PickleString_new(const wchar_t* content, const wchar_t* media_type) {
+const PickleString* PickleString_new(int argumentIndex, const wchar_t* content, const wchar_t* media_type) {
     PickleString* pickle_string = (PickleString*)malloc(sizeof(PickleString));
+    pickle_string->argumentIndex = argumentIndex;
     pickle_string->content = 0;
     if (content) {
         pickle_string->content = StringUtilities_copy_string(content);

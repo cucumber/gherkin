@@ -28,7 +28,7 @@ defmodule CucumberGherkin.TokenWriter do
 
   defp write_token(%Token{line: l, indent: i, matched_keyword: mk} = t) do
     mt = t.matched_type |> Atom.to_string() |> String.trim("Elixir.")
-    "(#{l.index}:#{i})#{mt}:#{mk}/#{t.matched_text}/"
+    "(#{l.index}:#{i})#{mt}:()#{mk}/#{t.matched_text}/"
   end
 
   defp write_single_item_line(%{column: col, content: ct}), do: "#{col}:#{ct}"
