@@ -22,6 +22,7 @@ on:
 jobs:
   test-cpp:
     strategy:
+      fail-fast: false
       matrix:
         config:
           - os: ubuntu-latest
