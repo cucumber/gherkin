@@ -217,6 +217,10 @@ defmodule CucumberGherkin.PickleCompiler do
     end)
   end
 
+  defp pickle_data_table_creator(%DataTableMessage{} = data_table, nil, variable_cells, value_cells) do
+    pickle_data_table_creator2(data_table, nil, variable_cells, value_cells)
+  end
+
   defp pickle_data_table_creator(%DataTableMessage{} = data_table, %DocStringMessage{} = doc_string, variable_cells, value_cells) do
     argument_index = if data_table do
       if data_table.location.line > doc_string.location.line do
@@ -225,7 +229,10 @@ defmodule CucumberGherkin.PickleCompiler do
         1
       end
     end
+    pickle_data_table_creator2(data_table, argument_index, variable_cells, value_cells)
+  end
 
+  defp pickle_data_table_creator2(%DataTableMessage{} = data_table, argument_index, variable_cells, value_cells) do
     table_row_messages =
       Enum.reduce(data_table.rows, [], fn %TableRowMessage{} = row, pickle_table_rows_acc ->
         new_cells =
@@ -248,9 +255,11 @@ defmodule CucumberGherkin.PickleCompiler do
   alias CucumberMessages.PickleDocString, as: PickleDocStringMessage
   alias CucumberMessages.DocString, as: DocStringMessage
 
-  defp pickle_doc_string_creator(%DocStringMessage{} = doc_string, %DataTableMessage{} = data_table, variable_cells, value_cells) do
-    content = interpolate(doc_string.content, variable_cells, value_cells)
+  defp pickle_doc_string_creator(%DocStringMessage{} = doc_string, nil, variable_cells, value_cells) do
+    pickle_doc_string_creator2(doc_string, nil, variable_cells, value_cells)
+  end
 
+  defp pickle_doc_string_creator(%DocStringMessage{} = doc_string, %DataTableMessage{} = data_table, variable_cells, value_cells) do
     argument_index = if data_table do
       if data_table.location.line > doc_string.location.line do
         1
@@ -258,10 +267,14 @@ defmodule CucumberGherkin.PickleCompiler do
         2
       end
     end
+    pickle_doc_string_creator2(doc_string, argument_index, variable_cells, value_cells)
+  end
 
+  defp pickle_doc_string_creator2(%DocStringMessage{} = doc_string, argument_index, variable_cells, value_cells) do
+    content = interpolate(doc_string.content, variable_cells, value_cells)
     media_type =
       case doc_string.media_type do
-        "" -> ""
+        nil -> nil
         media_type -> interpolate(media_type, variable_cells, value_cells)
       end
 

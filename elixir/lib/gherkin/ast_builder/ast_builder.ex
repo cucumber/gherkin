@@ -202,6 +202,7 @@ defmodule CucumberGherkin.AstBuilder do
 
       false ->
         example_message
+        |> add_tablebody_to([])
     end
     |> tuplize(updated_context)
   end
