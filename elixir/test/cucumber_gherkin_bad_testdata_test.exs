@@ -4,22 +4,13 @@ defmodule CucumberGherkinBadTestdataTest do
 
   @moduletag timeout: :infinity
 
-  @files [
-    "../testdata/bad/backslash_at_end_of_line_in_datatable.feature",
-    # Doesn't fail.
-    # "../testdata/bad/file_ends_with_open_docstring.feature",
-    "../testdata/bad/inconsistent_cell_count.feature",
-    "../testdata/bad/invalid_language.feature",
-    "../testdata/bad/multiple_parser_errors.feature",
-    "../testdata/bad/not_gherkin.feature",
-    "../testdata/bad/repeated_step_docstring.feature",
-    "../testdata/bad/single_parser_error.feature",
-    # Off by one
-    # "../testdata/bad/unexpected_end_of_file.feature",
-    "../testdata/bad/unexpected_eof.feature",
-    "../testdata/bad/unfinished_datatable.feature",
-    "../testdata/bad/whitespace_in_tags.feature"
-  ]
+  @files [ "..", "testdata", "bad", "*.feature"]
+         |> Path.join()
+         |> Path.wildcard()
+         # Doesn't fail.
+         |> Enum.filter(fn el -> not String.contains?(el, "file_ends_with_open_docstring.feature") end)
+         # Off by one
+         |> Enum.filter(fn el -> not String.contains?(el, "unexpected_end_of_file.feature") end)
 
   @tag :bad
   test "BAD: compare all bad testdata" do
