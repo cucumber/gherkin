@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	messages "github.com/cucumber/messages/go/v33"
+	messages "github.com/cucumber/messages/go/v34"
 )
 
 func ExamplePickles() {
