@@ -291,7 +291,7 @@ pickle_compiler::make_pickle_step(
     };
 
     std::optional<std::size_t> data_table_argument_index = {};
-    std::optional<std::size_t> doc_string_argument_index = {}
+    std::optional<std::size_t> doc_string_argument_index = {};
     if (step.data_table && step.doc_string) {
         if(step.doc_string.location.line > step.data_table.location.line) {
             data_table_argument_index = 1
