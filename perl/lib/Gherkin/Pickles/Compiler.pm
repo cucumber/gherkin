@@ -205,9 +205,19 @@ sub _pickle_step_props {
     if ($values) {
         push @{ $props{ast_node_ids} }, $values->id;
     }
+
+    my $data_table_argument_index = undef;
+    my $doc_string_argument_index = undef;
+    if ($step->data_table && $step->doc_string) {
+        my $table_first = $step->doc_string->location->line > $step->data_table->location->line;
+        $data_table_argument_index = $table_first ? 1 : 2;
+        $doc_string_argument_index = $table_first ? 2 : 1;
+    }
+
     my $data_table;
     if (my $data = $step->data_table) {
         $data_table = Cucumber::Messages::PickleTable->new(
+            argument_index => $data_table_argument_index,
             rows => [
                 map {
                     my $row = $_;
@@ -230,6 +240,7 @@ sub _pickle_step_props {
     my $doc_string;
     if (my $docstring = $step->doc_string) {
         $doc_string = Cucumber::Messages::PickleDocString->new(
+            argument_index => $doc_string_argument_index,
             media_type => $class->_interpolate( $docstring->media_type,
                                                 $variables, $value_cells),
             content    => $class->_interpolate( $docstring->content,
