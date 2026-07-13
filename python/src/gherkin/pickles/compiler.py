@@ -304,7 +304,7 @@ class Compiler:
         if "dataTable" in step:
             table: PickleArgumentDataTable = {"rows": []}
             if data_table_argument_index:
-                table["argument_index"] = data_table_argument_index
+                table["argumentIndex"] = data_table_argument_index
             for row in step["dataTable"]["rows"]:
                 cells: list[PickleArgumentDataTableCell] = [
                     {"value": self._interpolate(cell["value"], variables, values)}
@@ -322,7 +322,7 @@ class Compiler:
                 ),
             }
             if doc_string_argument_index:
-                docstring["argument_index"] = doc_string_argument_index
+                docstring["argumentIndex"] = doc_string_argument_index
             if "mediaType" in docstring_argument:
                 docstring["mediaType"] = self._interpolate(
                     docstring_argument["mediaType"],
