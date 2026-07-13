@@ -15,7 +15,7 @@
     "require": {
         "php": "^8.4",
         "ext-mbstring": "*",
-        "cucumber/messages": ">=31.0.0 <35"
+        "cucumber/messages": ">=34.0.0 <35"
     },
     "require-dev": {
         "vimeo/psalm": "6.16.1",
