@@ -5,10 +5,10 @@
 {
     switch(production.Type) {
         case ProductionRuleType.Start:
-                @:_startRule(context, RuleType.@production.RuleName.Replace("#", ""));
+                @:_startRule(context, RuleType.@(char.ToLowerInvariant(production.RuleName.Replace("#", "")[0]) + production.RuleName.Replace("#", "").Substring(1)));
             break;
         case ProductionRuleType.End:
-                @:_endRule(context, RuleType.@production.RuleName.Replace("#", ""));
+                @:_endRule(context, RuleType.@(char.ToLowerInvariant(production.RuleName.Replace("#", "")[0]) + production.RuleName.Replace("#", "").Substring(1)));
             break;
         case ProductionRuleType.Process:
                 @:_build(context, token);
@@ -48,7 +48,7 @@ enum TokenType {
   none,
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
-@:  @Raw(rule.Name.Replace("#", "")),
+@:  @Raw(char.ToLowerInvariant(rule.Name.Replace("#", "")[0]) + rule.Name.Replace("#", "").Substring(1)),
 }
 }
 
@@ -56,7 +56,7 @@ enum RuleType {
   none,
 @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
 {
-@:  @Raw(rule.Name.Replace("#", "")),
+@:  @Raw(char.ToLowerInvariant(rule.Name.Replace("#", "")[0]) + rule.Name.Replace("#", "").Substring(1)),
 }
 }
 
@@ -80,7 +80,7 @@ class @(Model.ParserClassName)<T> {
       <ParserException>[],
     );
 
-    _startRule(context, RuleType.@Model.RuleSet.StartRule.Name.Replace("#", ""));
+    _startRule(context, RuleType.@(char.ToLowerInvariant(Model.RuleSet.StartRule.Name.Replace("#", "")[0]) + Model.RuleSet.StartRule.Name.Replace("#", "").Substring(1)));
     var state = 0;
     Token token;
     do {
@@ -88,7 +88,7 @@ class @(Model.ParserClassName)<T> {
       state = _matchToken(state, token, context);
     } while (!token.isEof);
 
-    _endRule(context, RuleType.@Model.RuleSet.StartRule.Name.Replace("#", ""));
+    _endRule(context, RuleType.@(char.ToLowerInvariant(Model.RuleSet.StartRule.Name.Replace("#", "")[0]) + Model.RuleSet.StartRule.Name.Replace("#", "").Substring(1)));
 
     if (context.errors.isNotEmpty) {
       throw CompositeParserException(context.errors);

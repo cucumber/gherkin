@@ -83,7 +83,7 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
       case RuleType.none:
-      case RuleType.eof:
+      case RuleType.eOF:
       case RuleType.empty:
       case RuleType.comment:
       case RuleType.tagLine:

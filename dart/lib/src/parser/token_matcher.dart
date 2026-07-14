@@ -1,7 +1,7 @@
 import 'package:cucumber_gherkin/src/language/token.dart';
 
 abstract class TokenMatcher {
-  bool matchEof(Token token);
+  bool matchEOF(Token token);
 
   bool matchEmpty(Token token);
 

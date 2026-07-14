@@ -41,9 +41,9 @@ class GherkinTokenMatcher implements TokenMatcher {
   }
 
   @override
-  bool matchEof(Token token) {
+  bool matchEOF(Token token) {
     if (token.isEof) {
-      _setTokenMatched(token, TokenType.eof);
+      _setTokenMatched(token, TokenType.eOF);
       return true;
     }
     return false;
