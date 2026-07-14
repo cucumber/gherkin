@@ -46,7 +46,7 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
     CPMAddPackage(
         NAME cucumber_messages
         GITHUB_REPOSITORY cucumber/messages
-        GIT_TAG 094926f8110a4456849190f75e917acca5800851 #main
+        GIT_TAG fb24fffc608009530d24e2532cc866ce00082de4 #34.0.2
         SOURCE_SUBDIR cpp
         SYSTEM
         OPTIONS "CUCUMBER_MESSAGES_FETCH_DEPS ON"
