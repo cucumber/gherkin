@@ -24,6 +24,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - [PHP] BREAKING CHANGE: Require PHP 8.4
 
+
 ### Fixed
 - [JavaScript] Remove namespace imports from messages
 
