@@ -1,4 +1,5 @@
 set(NLOHMANN_JSON_VERSION 3.12.0 CACHE STRING "Version of nlohmann_json to use")
+set(CUCUMBER_MESSAGES_VERSION 34.0.2 CACHE STRING "Version of cucumber_messages to use")
 
 if(CUCUMBER_GHERKIN_FETCH_DEPS)
     if(NOT COMMAND CPMAddPackage)
@@ -46,7 +47,7 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
     CPMAddPackage(
         NAME cucumber_messages
         GITHUB_REPOSITORY cucumber/messages
-        GIT_TAG fb24fffc608009530d24e2532cc866ce00082de4 #34.0.2
+        GIT_TAG v${CUCUMBER_MESSAGES_VERSION}
         SOURCE_SUBDIR cpp
         SYSTEM
         OPTIONS "CUCUMBER_MESSAGES_FETCH_DEPS ON"
@@ -54,5 +55,5 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
 
 else()
     find_package(nlohmann_json ${NLOHMANN_JSON_VERSION} REQUIRED)
-    find_package(cucumber_messages REQUIRED)
+    find_package(cucumber_messages ${CUCUMBER_MESSAGES_VERSION} REQUIRED)
 endif()
