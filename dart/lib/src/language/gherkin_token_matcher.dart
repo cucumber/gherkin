@@ -50,7 +50,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchOther(Token token) {
-    final text = token.line.getLineText(_indentToRemove);
+    final text = token.line!.getLineText(_indentToRemove);
     _setTokenMatched(
       token,
       TokenType.other,
@@ -62,7 +62,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchEmpty(Token token) {
-    if (token.line.isEmptyLine) {
+    if (token.line!.isEmptyLine) {
       _setTokenMatched(token, TokenType.empty);
       return true;
     }
@@ -71,8 +71,8 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchComment(Token token) {
-    if (token.line.startsWith(commentPrefix)) {
-      final text = token.line.getLineText();
+    if (token.line!.startsWith(commentPrefix)) {
+      final text = token.line!.getLineText();
       _setTokenMatched(token, TokenType.comment, text: text, indent: 0);
       return true;
     }
@@ -81,7 +81,7 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchLanguage(Token token) {
-    final match = _languagePattern.firstMatch(token.line.getLineText());
+    final match = _languagePattern.firstMatch(token.line!.getLineText());
     if (match != null) {
       final language = match.group(1) ?? '';
       _setTokenMatched(token, TokenType.language, text: language);
@@ -96,8 +96,8 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchTagLine(Token token) {
-    if (token.line.startsWith(tagPrefix)) {
-      _setTokenMatched(token, TokenType.tagLine, items: token.line.tags);
+    if (token.line!.startsWith(tagPrefix)) {
+      _setTokenMatched(token, TokenType.tagLine, items: token.line!.tags);
       return true;
     }
     return false;
@@ -141,8 +141,8 @@ class GherkinTokenMatcher implements TokenMatcher {
     List<String> keywords,
   ) {
     for (final keyword in keywords) {
-      if (token.line.startsWithTitleKeyword(keyword)) {
-        final title = token.line.getRestTrimmed(
+      if (token.line!.startsWithTitleKeyword(keyword)) {
+        final title = token.line!.getRestTrimmed(
           keyword.length + titleKeywordSeparator.length,
         );
         _setTokenMatched(token, tokenType, keyword: keyword, text: title);
@@ -164,12 +164,12 @@ class GherkinTokenMatcher implements TokenMatcher {
           : _matchDocStringSeparator(token, _activeDocStringSeparator, false);
 
   bool _matchDocStringSeparator(Token token, String separator, bool isOpen) {
-    if (token.line.startsWith(separator)) {
+    if (token.line!.startsWith(separator)) {
       var mediaType = '';
       if (isOpen) {
-        mediaType = token.line.getRestTrimmed(separator.length);
+        mediaType = token.line!.getRestTrimmed(separator.length);
         _activeDocStringSeparator = separator;
-        _indentToRemove = token.line.indent;
+        _indentToRemove = token.line!.indent;
       } else {
         _activeDocStringSeparator = '';
         _indentToRemove = 0;
@@ -188,8 +188,8 @@ class GherkinTokenMatcher implements TokenMatcher {
   @override
   bool matchStepLine(Token token) {
     for (final keyword in _stepKeywordsByLengthDesc) {
-      if (token.line.startsWith(keyword)) {
-        final stepText = token.line.getRestTrimmed(keyword.length);
+      if (token.line!.startsWith(keyword)) {
+        final stepText = token.line!.getRestTrimmed(keyword.length);
         _setTokenMatched(
           token,
           TokenType.stepLine,
@@ -206,8 +206,12 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchTableRow(Token token) {
-    if (token.line.startsWith(tableCellSeparator)) {
-      _setTokenMatched(token, TokenType.tableRow, items: token.line.tableCells);
+    if (token.line!.startsWith(tableCellSeparator)) {
+      _setTokenMatched(
+        token,
+        TokenType.tableRow,
+        items: token.line!.tableCells,
+      );
       return true;
     }
     return false;
@@ -223,7 +227,9 @@ class GherkinTokenMatcher implements TokenMatcher {
     Iterable<GherkinLineSpan> items = const <GherkinLineSpan>[],
   }) {
     final matchedIndent =
-        matchedType == TokenType.empty ? 0 : indent ?? token.line.indent;
+        token.isEof || matchedType == TokenType.empty
+            ? 0
+            : indent ?? token.line!.indent;
     token
       ..matchedType = matchedType
       ..matchedKeyword = keyword

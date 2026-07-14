@@ -1,4 +1,5 @@
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -7,6 +8,14 @@ void main() {
       '\n'
       '  Scenario: minimalistic\n'
       '    Given the minimalism\n';
+
+  test('represents EOF without a line', () {
+    final token = StringTokenScanner('').read();
+
+    expect(token.isEof, isTrue);
+    expect(token.line, isNull);
+    expect(token.tokenValue, 'EOF');
+  });
 
   test('parses source into message envelopes', () {
     final envelopes = generateMessages(source, 'minimal.feature');

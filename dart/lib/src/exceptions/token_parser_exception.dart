@@ -9,7 +9,7 @@ sealed class TokenParserException extends ParserException {
         ? receivedToken.location
         : messages.Location(
           line: receivedToken.location.line,
-          column: receivedToken.line.indent + 1,
+          column: receivedToken.line!.indent + 1,
         );
   }
 }

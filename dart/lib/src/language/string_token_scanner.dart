@@ -28,6 +28,6 @@ class StringTokenScanner implements TokenScanner {
     if (_linesIterator.moveNext()) {
       return Token(GherkinLine(_linesIterator.current, _lineNumber), location);
     }
-    return Token(GherkinLine.eof(), location);
+    return Token.eof(location);
   }
 }

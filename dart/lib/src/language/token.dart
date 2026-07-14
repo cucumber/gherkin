@@ -5,7 +5,9 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 class Token {
   Token(this.line, this.location);
 
-  final GherkinLine line;
+  Token.eof(this.location) : line = null;
+
+  final GherkinLine? line;
 
   messages.Location location;
 
@@ -21,9 +23,9 @@ class Token {
 
   String? matchedLanguage;
 
-  bool get isEof => line.isEof;
+  bool get isEof => line == null;
 
-  String get tokenValue => isEof ? 'EOF' : line.getLineText(-1);
+  String get tokenValue => isEof ? 'EOF' : line!.getLineText(-1);
 
-  void detach() => line.detach();
+  void detach() => line?.detach();
 }
