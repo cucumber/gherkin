@@ -1,7 +1,7 @@
 # renovate: datasource=github-tags packageName=cpm-cmake/CPM.cmake versioning=semver
-set(CPM_DOWNLOAD_HASH_VERSION 456cb6754daaa010d57444d0c8ce6d95ecf006ab 0.43.1)
+set(CPM_DOWNLOAD_HASH_VERSION 456cb6754daaa010d57444d0c8ce6d95ecf006ab v0.43.1)
 # renovate: datasource=github-tags packageName=cucumber/messages versioning=semver
-set(CUCUMBER_MESSAGES_HASH_VERSION bc887957a1d2dca415200a9a11f196a343ddc614 34.0.0)
+set(CUCUMBER_MESSAGES_HASH_VERSION bc887957a1d2dca415200a9a11f196a343ddc614 v34.0.0)
 
 list(GET CPM_DOWNLOAD_HASH_VERSION 0 CPM_DOWNLOAD_HASH)
 list(GET CPM_DOWNLOAD_HASH_VERSION 1 CPM_DOWNLOAD_VERSION)
@@ -20,7 +20,7 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
         if(NOT EXISTS "${CPM_DOWNLOAD_LOCATION}")
             message(STATUS "Downloading CPM.cmake ${CPM_DOWNLOAD_VERSION}…")
             file(DOWNLOAD
-                "https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake"
+                "https://github.com/cpm-cmake/CPM.cmake/releases/download/${CPM_DOWNLOAD_VERSION}/CPM.cmake"
                 "${CPM_DOWNLOAD_LOCATION}"
                 TLS_VERIFY ON
             )
