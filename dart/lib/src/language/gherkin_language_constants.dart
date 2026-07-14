@@ -8,10 +8,6 @@ const titleKeywordSeparator = ':';
 
 const tableCellSeparator = '|';
 
-const tableCellEscapeChar = r'\';
-
-const tableCellNewLineEscape = 'n';
-
 const docStringSeparator = '"""';
 
 const docStringAlternativeSeparator = '```';

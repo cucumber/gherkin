@@ -102,9 +102,9 @@ class GherkinLine {
       final chr = String.fromCharCode(rune);
       if (escape) {
         switch (chr) {
-          case tableCellNewLineEscape:
+          case 'n':
             cellBuffer.write('\n');
-          case tableCellEscapeChar:
+          case r'\':
             cellBuffer.write(r'\');
           case tableCellSeparator:
             cellBuffer.write('|');
@@ -115,7 +115,7 @@ class GherkinLine {
         escape = false;
       } else {
         switch (chr) {
-          case tableCellEscapeChar:
+          case r'\':
             escape = true;
           case tableCellSeparator:
             if (beforeFirst) {
