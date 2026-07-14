@@ -27,10 +27,17 @@ token_scanner::read()
     line_++;
 
     return token{
-        .eof = r.eof,
-        .line = cucumber::gherkin::line(r.text, line_),
-        .location = {
-            .line = line_
+        r.eof,
+        cucumber::gherkin::line(r.text, line_),
+        {},
+        std::nullopt,
+        std::nullopt,
+        {},
+        {},
+        {},
+        {},
+        {
+            line_
         }
     };
 }

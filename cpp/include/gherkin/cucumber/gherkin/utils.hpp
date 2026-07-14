@@ -2,52 +2,143 @@
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable : 4996)
 #pragma warning(disable : 4244)
 #endif
 
-#include <locale>
-#include <codecvt>
+#include <cstddef>
+#include <regex>
 #include <string>
 #include <string_view>
-#include <regex>
 
 namespace cucumber::gherkin {
 
-// utility wrapper to adapt locale-bound facets for wstring/wbuffer convert
-template <class Facet>
-struct deletable_facet : Facet
-{
-    template <class... Args>
-    deletable_facet(Args&&... args)
-    : Facet(std::forward<Args>(args)...)
-    {}
+namespace detail {
 
-    ~deletable_facet()
-    {}
-};
+using utf8_ptr = const unsigned char *;
 
-inline
-std::wstring
-to_wide(const std::string& s)
-{
-    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> cv;
+// Sentinel returned by utf8_next for an invalid/incomplete byte sequence.
+inline constexpr char32_t invalid_codepoint = char32_t(-1);
 
-    auto ws = cv.from_bytes(s);
-
-    return {ws.begin(), ws.end()};
+// Decodes the next Unicode code point from a UTF-8 stream, advancing p.
+// Returns invalid_codepoint and advances p by one for invalid sequences.
+inline char32_t utf8_next(utf8_ptr &p, utf8_ptr end) {
+  if (*p < 0x80) {
+    return *p++;
+  }
+  if ((*p & 0xE0) == 0xC0 && (end - p) >= 2 && (p[1] & 0xC0) == 0x80) {
+    auto b0 = static_cast<char32_t>(*p++ & 0x1F);
+    auto b1 = static_cast<char32_t>(*p++ & 0x3F);
+    return (b0 << 6) | b1;
+  }
+  if ((*p & 0xF0) == 0xE0 && (end - p) >= 3 && (p[1] & 0xC0) == 0x80 &&
+      (p[2] & 0xC0) == 0x80) {
+    auto b0 = static_cast<char32_t>(*p++ & 0x0F);
+    auto b1 = static_cast<char32_t>(*p++ & 0x3F);
+    auto b2 = static_cast<char32_t>(*p++ & 0x3F);
+    return (b0 << 12) | (b1 << 6) | b2;
+  }
+  if ((*p & 0xF8) == 0xF0 && (end - p) >= 4 && (p[1] & 0xC0) == 0x80 &&
+      (p[2] & 0xC0) == 0x80 && (p[3] & 0xC0) == 0x80) {
+    auto b0 = static_cast<char32_t>(*p++ & 0x07);
+    auto b1 = static_cast<char32_t>(*p++ & 0x3F);
+    auto b2 = static_cast<char32_t>(*p++ & 0x3F);
+    auto b3 = static_cast<char32_t>(*p++ & 0x3F);
+    return (b0 << 18) | (b1 << 12) | (b2 << 6) | b3;
+  }
+  ++p; // skip invalid byte
+  return invalid_codepoint;
 }
 
-inline
-std::string
-to_narrow(const std::wstring& ws)
-{
-    std::wstring_convert<std::codecvt_utf8<char32_t>,char32_t> cv;
-
-    std::u32string s{ws.begin(), ws.end()};
-
-    return cv.to_bytes(s);
+// Appends a Unicode code point to a UTF-8 string.
+inline void utf8_append(std::string &out, char32_t cp) {
+  if (cp < 0x80) {
+    out += static_cast<char>(cp);
+  } else if (cp < 0x800) {
+    out += static_cast<char>(0xC0 | (cp >> 6));
+    out += static_cast<char>(0x80 | (cp & 0x3F));
+  } else if (cp < 0x10000) {
+    out += static_cast<char>(0xE0 | (cp >> 12));
+    out += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+    out += static_cast<char>(0x80 | (cp & 0x3F));
+  } else {
+    out += static_cast<char>(0xF0 | (cp >> 18));
+    out += static_cast<char>(0x80 | ((cp >> 12) & 0x3F));
+    out += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+    out += static_cast<char>(0x80 | (cp & 0x3F));
+  }
 }
+
+// Decodes the next Unicode code point from a wide string, advancing p.
+// Handles UTF-16 surrogate pairs on Windows; reads directly on Linux/macOS.
+inline char32_t wchar_next(const wchar_t *&p, const wchar_t *end) {
+  if constexpr (sizeof(wchar_t) == 2) {
+    // UTF-16 (Windows)
+    const auto w = static_cast<char32_t>(*p++);
+    if (w >= 0xD800 && w <= 0xDBFF && p < end) {
+      const auto w2 = static_cast<char32_t>(*p);
+      if (w2 >= 0xDC00 && w2 <= 0xDFFF) {
+        ++p;
+        return 0x10000 + ((w - 0xD800) << 10) + (w2 - 0xDC00);
+      }
+    }
+    return w; // lone surrogate or BMP character
+  } else {
+    // UTF-32 (Linux/macOS)
+    return static_cast<char32_t>(*p++);
+  }
+}
+
+// Appends a Unicode code point to a wide string.
+// Emits a surrogate pair on Windows; stores directly on Linux/macOS.
+inline void wchar_append(std::wstring &out, char32_t cp) {
+  if constexpr (sizeof(wchar_t) == 2) {
+    // UTF-16 (Windows)
+    if (cp < 0x10000) {
+      out += static_cast<wchar_t>(cp);
+    } else {
+      cp -= 0x10000;
+      out += static_cast<wchar_t>(0xD800 | (cp >> 10));
+      out += static_cast<wchar_t>(0xDC00 | (cp & 0x3FF));
+    }
+  } else {
+    // UTF-32 (Linux/macOS)
+    out += static_cast<wchar_t>(cp);
+  }
+}
+
+} // namespace detail
+
+inline std::wstring to_wide(const std::string &s) {
+  std::wstring result;
+  result.reserve(s.size());
+
+  const auto *p = reinterpret_cast<const unsigned char *>(s.data());
+  const auto *end = p + s.size();
+
+  while (p < end) {
+    const auto cp = detail::utf8_next(p, end);
+    if (cp != detail::invalid_codepoint) {
+      detail::wchar_append(result, cp);
+    }
+  }
+
+  return result;
+}
+
+inline std::string to_narrow(const std::wstring &ws) {
+  std::string result;
+  result.reserve(ws.size() * 3);
+
+  const auto *p = ws.data();
+  const auto *end = p + ws.size();
+
+  while (p < end) {
+    detail::utf8_append(result, detail::wchar_next(p, end));
+  }
+
+  return result;
+}
+
 
 enum class re_pattern
 {

@@ -25,6 +25,5 @@ target_link_libraries(
 set_target_properties(
     cucumber_gherkin_generate_tokens_bin
     PROPERTIES
-        CXX_STANDARD 20
         OUTPUT_NAME gherkin-generate-tokens
 )

@@ -1,0 +1,13 @@
+---
+CompileFlags:
+  CompilationDatabase: /root/.cpp/compile_commands.json
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+  ClangTidy:
+    Add: []
+    Remove: []
+InlayHints:
+  Enabled: Yes
+  ParameterNames: No
+  DeducedTypes: No

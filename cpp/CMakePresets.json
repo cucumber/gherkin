@@ -1,0 +1,40 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21
+    },
+    "configurePresets": [
+        {
+            "name": "host",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "On",
+                "CUCUMBER_GHERKIN_FETCH_DEPS": "On",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "host",
+            "configurePreset": "host"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "host",
+            "steps": [
+                {
+                    "name": "host",
+                    "type": "configure"
+                },
+                {
+                    "name": "host",
+                    "type": "build"
+                }
+            ]
+        }
+    ]
+}

@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - cpp/**
+      - Makefile
       - testdata/**
       - .github/**
   pull_request:
@@ -15,6 +16,7 @@ on:
       - main
     paths:
       - cpp/**
+      - Makefile
       - testdata/**
       - .github/**
   schedule:
@@ -27,28 +29,49 @@ concurrency:
 
 jobs:
   analyze:
+    env:
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+
     name: Analyze C++
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
     permissions:
       security-events: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache
+
+      - name: Cache CPM packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+          restore-keys: cpm-
+
+      - name: Cache ccache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ github.job }}-${{ github.ref }}
+          restore-keys: ccache-${{ github.job }}-
+
       - uses: github/codeql-action/init@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
         with:
           languages: c-cpp
           build-mode: manual
           tools: linked
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-      - name: install dependencies
+
+      - name: Configure
         working-directory: cpp
-        run: |
-          cmake -P cmake/cmate --cc=gcc install
-      - name: configure and build
-        working-directory: cpp
-        run: |
-          cmake -P cmake/cmate --cc=gcc build --release
+        run: cmake --workflow host
+
       - uses: github/codeql-action/analyze@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
         with:
           category: "/language:cpp"

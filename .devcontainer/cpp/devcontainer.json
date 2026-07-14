@@ -1,0 +1,30 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "cpp",
+	"image": "mcr.microsoft.com/devcontainers/base:resolute",
+	"features": {
+		"ghcr.io/devcontainer-community/devcontainer-features/collection-c-cpp:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"clangd.arguments": [
+					"--compile-commands-dir=${userHome}/.cpp"
+				],
+				"cmake.copyCompileCommands": "${userHome}/.cpp/compile_commands.json",
+				"cmake.ignoreCMakeListsMissing": true,
+				"cmake.sourceDirectory": "${workspaceFolder}/cpp",
+				"cmake.useCMakePresets": "auto"
+			},
+			"extensions": [
+				"llvm-vs-code-extensions.vscode-clangd",
+				"ms-vscode.cmake-tools",
+				"ms-vscode.cpptools"
+			]
+		}
+	},
+	"remoteEnv": {
+		"CPM_SOURCE_CACHE": "~/cache/.cpm"
+	}
+}

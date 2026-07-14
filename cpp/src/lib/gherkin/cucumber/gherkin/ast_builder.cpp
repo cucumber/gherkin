@@ -6,6 +6,7 @@
 #include <cucumber/gherkin/join_utils.hpp>
 #include <cucumber/gherkin/regex.hpp>
 #include <cucumber/gherkin/exceptions.hpp>
+#include <optional>
 
 namespace cucumber::gherkin {
 
@@ -47,8 +48,8 @@ ast_builder::build(const token& token)
 {
     if (token.matched_type == rule_type::comment) {
         cms::comment c{
-            .location = get_location(token),
-            .text = token.matched_text
+           get_location(token),
+           token.matched_text
         };
 
         comments_.emplace_back(std::move(c));
@@ -106,13 +107,13 @@ ast_builder::make_step(ast_node& node)
 {
     auto& step_line = node.get_token(rule_type::step_line);
 
-    cms::step m{
-        .location = get_location(step_line),
-        .keyword = step_line.matched_keyword.value_or(""),
-        .keyword_type = step_line.matched_keyword_type,
-        .text = step_line.matched_text,
-        .id = next_id()
-    };
+    cms::step m{get_location(step_line),
+                step_line.matched_keyword.value_or(""),
+                step_line.matched_keyword_type,
+                step_line.matched_text,
+                std::nullopt,
+                std::nullopt,
+                next_id()};
 
     node.set(rule_type::doc_string, m.doc_string);
     node.set(rule_type::data_table, m.data_table);
@@ -135,9 +136,10 @@ ast_builder::make_doc_string(ast_node& node)
     auto content = join("\n", svs);
 
     cms::doc_string m{
-        .location = get_location(separator_token),
-        .content = content,
-        .delimiter = separator_token.matched_keyword.value_or("")
+       get_location(separator_token),
+       std::nullopt,
+       content,
+       separator_token.matched_keyword.value_or("")
     };
 
     if (!separator_token.matched_text.empty()) {
@@ -153,7 +155,8 @@ ast_builder::make_data_table(ast_node& node)
     auto rows = get_table_rows(node);
 
     cms::data_table m{
-        .rows = std::move(rows)
+        {},
+        std::move(rows)
     };
 
     if (!m.rows.empty()) {
@@ -169,10 +172,12 @@ ast_builder::make_background(ast_node& node)
     auto& background_line = node.get_token(rule_type::background_line);
 
     cms::background m{
-        .location = get_location(background_line),
-        .keyword = background_line.matched_keyword.value_or(""),
-        .name = background_line.matched_text,
-        .id = next_id()
+       get_location(background_line),
+       background_line.matched_keyword.value_or(""),
+       background_line.matched_text,
+       {},
+       {},
+       next_id()
     };
 
     node.set(rule_type::description, m.description);
@@ -189,11 +194,14 @@ ast_builder::make_scenario_definition(ast_node& node)
     auto& scenario_line = scenario_node.get_token(rule_type::scenario_line);
 
     cms::scenario m{
-        .location = get_location(scenario_line),
-        .tags = get_tags(node),
-        .keyword = scenario_line.matched_keyword.value_or(""),
-        .name = scenario_line.matched_text,
-        .id = next_id()
+       get_location(scenario_line),
+       get_tags(node),
+       scenario_line.matched_keyword.value_or(""),
+       scenario_line.matched_text,
+       {},
+       {},
+       {},
+       next_id()
     };
 
     scenario_node.set(rule_type::description, m.description);
@@ -211,11 +219,14 @@ ast_builder::make_examples_definition(ast_node& node)
     auto& examples_line = examples_node.get_token(rule_type::examples_line);
 
     cms::examples m{
-        .location = get_location(examples_line),
-        .tags = get_tags(node),
-        .keyword = examples_line.matched_keyword.value_or(""),
-        .name = examples_line.matched_text,
-        .id = next_id()
+       get_location(examples_line),
+       get_tags(node),
+       examples_line.matched_keyword.value_or(""),
+       examples_line.matched_text,
+       {},
+       std::nullopt,
+       {},
+       next_id()
     };
 
     examples_node.set(rule_type::description, m.description);
@@ -278,11 +289,11 @@ ast_builder::make_feature(ast_node& node)
     auto& feature_line = *ptoken;
 
     cms::feature m{
-        .location = get_location(feature_line),
-        .tags = get_tags(header),
-        .language = feature_line.matched_gherkin_dialect,
-        .keyword = feature_line.matched_keyword.value_or(""),
-        .name = feature_line.matched_text
+       get_location(feature_line),
+       get_tags(header),
+       feature_line.matched_gherkin_dialect,
+       feature_line.matched_keyword.value_or(""),
+       feature_line.matched_text
     };
 
     header.set(rule_type::description, m.description);
@@ -290,14 +301,14 @@ ast_builder::make_feature(ast_node& node)
     auto pb = node.get_single<cms::background>(rule_type::background);
 
     if (pb) {
-        m.children.emplace_back(cms::feature_child{ .background = *pb });
+        m.children.emplace_back(cms::feature_child{{}, *pb });
     }
 
     auto ps = node.get_items<cms::scenario>(rule_type::scenario_definition);
 
     if (ps) {
         for (auto& scenario : *ps) {
-            m.children.emplace_back(cms::feature_child{.scenario = scenario});
+            m.children.emplace_back(cms::feature_child{std::nullopt, std::nullopt, scenario});
         }
     }
 
@@ -305,7 +316,7 @@ ast_builder::make_feature(ast_node& node)
 
     if (pr) {
         for (auto& rule : *pr) {
-            m.children.emplace_back(cms::feature_child{.rule = rule});
+            m.children.emplace_back(cms::feature_child{rule});
         }
     }
 
@@ -322,11 +333,13 @@ ast_builder::make_rule(ast_node& node)
     auto& rule_line = *ptoken;
 
     cms::rule m{
-        .location = get_location(rule_line),
-        .tags = get_tags(header),
-        .keyword = rule_line.matched_keyword.value_or(""),
-        .name = rule_line.matched_text,
-        .id = next_id()
+       get_location(rule_line),
+       get_tags(header),
+       rule_line.matched_keyword.value_or(""),
+       rule_line.matched_text,
+       {},
+       {},
+       next_id()
     };
 
     header.set(rule_type::description, m.description);
@@ -334,14 +347,14 @@ ast_builder::make_rule(ast_node& node)
     auto pb = node.get_single<cms::background>(rule_type::background);
 
     if (pb) {
-        m.children.emplace_back(cms::rule_child{ .background = *pb });
+        m.children.emplace_back(cms::rule_child{*pb });
     }
 
     auto ps = node.get_items<cms::scenario>(rule_type::scenario_definition);
 
     if (ps) {
         for (auto& scenario : *ps) {
-            m.children.emplace_back(cms::rule_child{.scenario = scenario});
+            m.children.emplace_back(cms::rule_child{std::nullopt, scenario});
         }
     }
 
@@ -352,8 +365,9 @@ cms::gherkin_document
 ast_builder::make_gherkin_document(ast_node& node)
 {
     cms::gherkin_document gd{
-        .uri = std::string(uri_),
-        .comments = comments_
+       std::string(uri_),
+       std::nullopt,
+       comments_
     };
 
     node.set(rule_type::feature, gd.feature);
@@ -368,8 +382,8 @@ ast_builder::get_location(
 ) const
 {
     cms::location m{
-        .line = token.location.line,
-        .column = column == 0 ? token.location.column : column
+       token.location.line,
+       column == 0 ? token.location.column : column
     };
 
     return m;
@@ -382,9 +396,9 @@ ast_builder::get_table_rows(const ast_node& node)
 
     for (const auto& token : node.get_tokens(rule_type::table_row)) {
         rows.emplace_back(cms::table_row{
-            .location = get_location(token),
-            .cells = get_table_cells(token),
-            .id = next_id()
+           get_location(token),
+           get_table_cells(token),
+           next_id()
         });
     }
 
@@ -408,8 +422,8 @@ ast_builder::ensure_cell_count(const table_rows& rows) const
                 ast_builder_error(
                     "inconsistent cell count within the table",
                     {
-                        .line = row.location.line,
-                        .column = row.location.column.value_or(0)
+                       row.location.line,
+                       row.location.column.value_or(0)
                     }
                 );
         }
@@ -423,8 +437,8 @@ ast_builder::get_table_cells(const token& token)
 
     for (const auto& i : token.matched_items) {
         cells.emplace_back(cms::table_cell{
-            .location = get_location(token, i.column),
-            .value = i.text
+           get_location(token, i.column),
+           i.text
         });
     }
 
@@ -444,9 +458,9 @@ ast_builder::get_tags(const ast_node& node)
         for (const auto& token : tags_node.get_tokens(rule_type::tag_line)) {
             for (auto& tag_item : token.matched_items) {
                 cms::tag t{
-                    .location = get_location(token, tag_item.column),
-                    .name = tag_item.text,
-                    .id = next_id()
+                   get_location(token, tag_item.column),
+                   tag_item.text,
+                   next_id()
                 };
 
                 ts.emplace_back(std::move(t));
