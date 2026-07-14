@@ -3,10 +3,6 @@
 @using System.Linq
 @using Berp
 @functions {
-    // Normalize an acronym-heavy PascalCase name so that fully-uppercase runs
-    // become title-case (e.g. "EOF" -> "Eof", "DocString" -> "DocString").
-    // This lets us derive Dart identifiers that follow the lowerCamelCase
-    // convention used throughout the hand-written support code.
     static string Pascal(string raw)
     {
         var name = raw.Replace("#", "");
@@ -16,8 +12,6 @@
             var c = name[i];
             if (char.IsUpper(c))
             {
-                // Keep the first letter of a run uppercase; lowercase the rest
-                // of a fully-uppercase acronym (EOF -> Eof).
                 var isRunStart = i == 0 || !char.IsUpper(name[i - 1]);
                 var isRunEnd = i + 1 >= name.Length || !char.IsLower(name[i + 1]);
                 if (isRunStart)
@@ -45,8 +39,6 @@
         return sb.ToString();
     }
 
-    // The lowerCamelCase enum member / identifier form used by Dart, e.g.
-    // "#EOF" -> "eof", "GherkinDocument" -> "gherkinDocument".
     static string Camel(string raw)
     {
         var p = Pascal(raw);
@@ -54,7 +46,6 @@
         return char.ToLowerInvariant(p[0]) + p.Substring(1);
     }
 
-    // The matcher method name for a token rule, e.g. "#TableRow" -> "matchTableRow".
     static string MatchName(string raw)
     {
         return "match" + Pascal(raw);
