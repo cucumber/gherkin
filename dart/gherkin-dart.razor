@@ -1,65 +1,14 @@
 @using System
-@using System.Text
 @using System.Linq
 @using Berp
-@functions {
-    static string Pascal(string raw)
-    {
-        var name = raw.Replace("#", "");
-        var sb = new StringBuilder();
-        for (var i = 0; i < name.Length; i++)
-        {
-            var c = name[i];
-            if (char.IsUpper(c))
-            {
-                var isRunStart = i == 0 || !char.IsUpper(name[i - 1]);
-                var isRunEnd = i + 1 >= name.Length || !char.IsLower(name[i + 1]);
-                if (isRunStart)
-                {
-                    sb.Append(c);
-                }
-                else if (isRunEnd && i + 1 < name.Length && char.IsUpper(name[i + 1]) == false)
-                {
-                    sb.Append(char.ToLowerInvariant(c));
-                }
-                else if (char.IsUpper(name[Math.Max(0, i - 1)]))
-                {
-                    sb.Append(char.ToLowerInvariant(c));
-                }
-                else
-                {
-                    sb.Append(c);
-                }
-            }
-            else
-            {
-                sb.Append(c);
-            }
-        }
-        return sb.ToString();
-    }
-
-    static string Camel(string raw)
-    {
-        var p = Pascal(raw);
-        if (p.Length == 0) return p;
-        return char.ToLowerInvariant(p[0]) + p.Substring(1);
-    }
-
-    static string MatchName(string raw)
-    {
-        return "match" + Pascal(raw);
-    }
-
-}
 @helper CallProduction(ProductionRule production)
 {
     switch(production.Type) {
         case ProductionRuleType.Start:
-                @:_startRule(context, RuleType.@Camel(production.RuleName));
+                @:_startRule(context, RuleType.@production.RuleName.Replace("#", ""));
             break;
         case ProductionRuleType.End:
-                @:_endRule(context, RuleType.@Camel(production.RuleName));
+                @:_endRule(context, RuleType.@production.RuleName.Replace("#", ""));
             break;
         case ProductionRuleType.Process:
                 @:_build(context, token);
@@ -80,7 +29,7 @@
     return @state.Id;
 </text>}
 @helper MatchToken(TokenType tokenType)
-{<text>_match@(Pascal(tokenType.ToString()))(context, token)</text>}
+{<text>_match@(tokenType.ToString().Replace("#", ""))(context, token)</text>}
 // GENERATED FILE - DO NOT MODIFY BY HAND.
 //
 // This file was generated from `gherkin-dart.razor` by
@@ -99,7 +48,7 @@ enum TokenType {
   none,
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
-@:  @Raw(Camel(rule.Name)),
+@:  @Raw(rule.Name.Replace("#", "")),
 }
 }
 
@@ -107,7 +56,7 @@ enum RuleType {
   none,
 @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
 {
-@:  @Raw(Camel(rule.Name)),
+@:  @Raw(rule.Name.Replace("#", "")),
 }
 }
 
@@ -131,7 +80,7 @@ class @(Model.ParserClassName)<T> {
       <ParserException>[],
     );
 
-    _startRule(context, RuleType.@Camel(Model.RuleSet.StartRule.Name));
+    _startRule(context, RuleType.@Model.RuleSet.StartRule.Name.Replace("#", ""));
     var state = 0;
     Token token;
     do {
@@ -139,7 +88,7 @@ class @(Model.ParserClassName)<T> {
       state = _matchToken(state, token, context);
     } while (!token.isEof);
 
-    _endRule(context, RuleType.@Camel(Model.RuleSet.StartRule.Name));
+    _endRule(context, RuleType.@Model.RuleSet.StartRule.Name.Replace("#", ""));
 
     if (context.errors.isNotEmpty) {
       throw CompositeParserException(context.errors);
@@ -201,7 +150,7 @@ class @(Model.ParserClassName)<T> {
           : context.tokenScanner.read();
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
-  bool _match@(Pascal(rule.Name))(_ParserContext context, Token token) {
+  bool _match@(rule.Name.Replace("#", ""))(_ParserContext context, Token token) {
     @if (rule.Name != "#EOF")
     {
     @:if (token.isEof) {
@@ -210,7 +159,7 @@ class @(Model.ParserClassName)<T> {
     }
     return _handleExternalError(
       context,
-      () => context.tokenMatcher.@(MatchName(rule.Name))(token),
+      () => context.tokenMatcher.match@(rule.Name.Replace("#", ""))(token),
       false,
     );
   }
