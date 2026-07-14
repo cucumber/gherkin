@@ -1,4 +1,6 @@
+# renovate: datasource=github-tags packageName=nlohmann/json versioning=semver
 set(NLOHMANN_JSON_VERSION 3.12.0 CACHE STRING "Version of nlohmann_json to use")
+# renovate: datasource=github-tags packageName=cucumber/messages versioning=semver
 set(CUCUMBER_MESSAGES_VERSION 34.0.2 CACHE STRING "Version of cucumber_messages to use")
 
 if(CUCUMBER_GHERKIN_FETCH_DEPS)
