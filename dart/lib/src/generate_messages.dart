@@ -16,7 +16,6 @@ final class GherkinOptions {
     this.includeSource = true,
     this.includeGherkinDocument = true,
     this.includePickles = true,
-    this.defaultDialect = 'en',
     this.idGenerator,
   });
 
@@ -28,9 +27,6 @@ final class GherkinOptions {
 
   /// Whether to emit pickle envelopes.
   final bool includePickles;
-
-  /// Language used when the source has no language header.
-  final String defaultDialect;
 
   /// Supplies IDs for AST elements, pickles, and pickle steps.
   final String Function()? idGenerator;
@@ -67,7 +63,7 @@ List<messages.Envelope> generateMessages(
   try {
     gherkinDocument = parser.parse(
       tokenScanner,
-      GherkinTokenMatcher(builtinDialects, options.defaultDialect),
+      GherkinTokenMatcher(builtinDialects),
     );
   } on CompositeParserException catch (e) {
     result.addAll(

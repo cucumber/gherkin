@@ -50,7 +50,6 @@ final envelopes = generateMessages(
     includeSource: true,
     includeGherkinDocument: true,
     includePickles: true,
-    defaultDialect: 'en',
     idGenerator: () => 'fixed-id', // omit for random UUIDs
   ),
 );
