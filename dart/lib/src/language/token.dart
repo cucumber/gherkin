@@ -26,5 +26,4 @@ class Token {
   bool get isEof => line == null;
 
   String get tokenValue => isEof ? 'EOF' : line!.getLineText(-1);
-
 }
