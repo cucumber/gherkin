@@ -77,8 +77,6 @@ class Parser<T> {
 
   final Builder<T> _builder;
 
-  bool stopAtFirstError = false;
-
   T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher) {
     _builder.reset();
     tokenMatcher.reset();
@@ -127,10 +125,6 @@ class Parser<T> {
     V Function() action,
     V defaultValue,
   ) {
-    if (stopAtFirstError) {
-      return action();
-    }
-
     try {
       return action();
     } on CompositeParserException catch (compositeParserException) {
@@ -477,10 +471,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 0;
   }
@@ -515,10 +505,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 1;
   }
@@ -552,10 +538,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 2;
@@ -635,10 +617,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 3;
   }
@@ -715,10 +693,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 4;
@@ -797,10 +771,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 5;
   }
@@ -876,10 +846,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 6;
@@ -968,10 +934,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 7;
@@ -1067,10 +1029,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 8;
   }
@@ -1093,10 +1051,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 9;
@@ -1180,10 +1134,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 10;
   }
@@ -1218,10 +1168,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 11;
@@ -1320,10 +1266,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 12;
   }
@@ -1421,10 +1363,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 13;
@@ -1535,10 +1473,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 14;
@@ -1658,10 +1592,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 15;
   }
@@ -1684,10 +1614,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 16;
@@ -1795,10 +1721,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 17;
   }
@@ -1833,10 +1755,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 18;
@@ -1948,10 +1866,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 19;
@@ -2065,10 +1979,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 20;
   }
@@ -2179,10 +2089,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 21;
   }
@@ -2216,10 +2122,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 22;
@@ -2302,10 +2204,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 23;
   }
@@ -2385,10 +2283,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 24;
@@ -2470,10 +2364,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 25;
   }
@@ -2552,10 +2442,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 26;
@@ -2647,10 +2533,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 27;
@@ -2749,10 +2631,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 28;
   }
@@ -2775,10 +2653,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 29;
@@ -2865,10 +2739,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 30;
   }
@@ -2903,10 +2773,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 31;
@@ -3008,10 +2874,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 32;
   }
@@ -3112,10 +2974,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 33;
@@ -3229,10 +3087,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 34;
@@ -3355,10 +3209,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 35;
   }
@@ -3381,10 +3231,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 36;
@@ -3495,10 +3341,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 37;
   }
@@ -3533,10 +3375,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 38;
@@ -3651,10 +3489,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 39;
@@ -3771,10 +3605,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 40;
   }
@@ -3888,10 +3718,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 41;
   }
@@ -3914,10 +3740,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 43;
@@ -4035,10 +3857,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 44;
   }
@@ -4153,10 +3971,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 45;
   }
@@ -4179,10 +3993,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 46;
@@ -4276,10 +4086,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 47;
   }
@@ -4370,10 +4176,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 48;
   }
@@ -4396,10 +4198,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 49;
@@ -4514,10 +4312,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 50;
   }
@@ -4629,10 +4423,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 51;
   }
@@ -4655,10 +4445,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 52;
@@ -4749,10 +4535,6 @@ class Parser<T> {
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return 53;
   }
@@ -4839,10 +4621,6 @@ class Parser<T> {
     final error = token.isEof
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
-
-    if (stopAtFirstError) {
-      throw error;
-    }
 
     _addError(context, error);
     return 54;

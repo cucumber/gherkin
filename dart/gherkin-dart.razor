@@ -85,10 +85,6 @@
         ? UnexpectedEofException(token, expectedTokens)
         : UnexpectedTokenException(token, expectedTokens);
 
-    if (stopAtFirstError) {
-      throw error;
-    }
-
     _addError(context, error);
     return @state.Id;
 </text>}
@@ -132,8 +128,6 @@ class @(Model.ParserClassName)<T> {
   @(Model.ParserClassName)(this._builder);
 
   final Builder<T> _builder;
-
-  bool stopAtFirstError = false;
 
   T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher) {
     _builder.reset();
@@ -183,10 +177,6 @@ class @(Model.ParserClassName)<T> {
     V Function() action,
     V defaultValue,
   ) {
-    if (stopAtFirstError) {
-      return action();
-    }
-
     try {
       return action();
     } on CompositeParserException catch (compositeParserException) {
