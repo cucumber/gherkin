@@ -335,24 +335,22 @@ pickle_compiler::make_pickle_step(
     }
 
     if (step.data_table || step.doc_string) {
-        auto argument = cms::pickle_step_argument{};
+        ps.argument = cms::pickle_step_argument{};
         if (step.doc_string) {
-            argument.doc_string = make_pickle_doc_string(
+            ps.argument->doc_string = make_pickle_doc_string(
                 doc_string_argument_index,
                 *step.doc_string,
                 variable_cells,
-                value_cells
-            );
+                value_cells);
         }
         if (step.data_table) {
-            argument.data_table = make_pickle_table(
+            ps.argument->data_table = make_pickle_table(
                 data_table_argument_index,
                 *step.data_table,
                 variable_cells,
                 value_cells
             );
         }
-        ps.argument = argument;
     }
 
     if (value_row_ptr) {
@@ -371,7 +369,7 @@ pickle_compiler::make_pickle_table(
 )
 {
     cms::pickle_table t {
-        .argument_index = argument_index
+        argument_index
     };
 
     for (const auto& row : dt.rows) {
