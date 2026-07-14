@@ -220,10 +220,15 @@ messages.PickleStepArgument? _pickleStepArgument(
   List<messages.TableCell> variableCells,
   List<messages.TableCell> valueCells,
 ) {
+  final hasBothArguments = step.dataTable != null && step.docString != null;
+  final dataTableFirst =
+      hasBothArguments &&
+      step.dataTable!.location.line < step.docString!.location.line;
   final dataTable =
       step.dataTable == null
           ? null
           : messages.PickleTable(
+            argumentIndex: hasBothArguments ? (dataTableFirst ? 1 : 2) : null,
             rows:
                 step.dataTable!.rows.map((row) {
                   return messages.PickleTableRow(
@@ -245,6 +250,7 @@ messages.PickleStepArgument? _pickleStepArgument(
       step.docString == null
           ? null
           : messages.PickleDocString(
+            argumentIndex: hasBothArguments ? (dataTableFirst ? 2 : 1) : null,
             mediaType:
                 step.docString!.mediaType == null
                     ? null
