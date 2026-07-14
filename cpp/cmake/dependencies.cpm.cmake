@@ -1,7 +1,5 @@
 # renovate
 set(CPM_DOWNLOAD_VERSION 0.43.1)
-# renovate: datasource=github-tags packageName=nlohmann/json versioning=semver
-set(NLOHMANN_JSON_VERSION 55f93686c01528224f448c19128836e7df245f72 3.12.0)
 # renovate: datasource=github-tags packageName=cucumber/messages versioning=semver
 set(CUCUMBER_MESSAGES_HASH_VERSION 79002c8940c9dcaa09d96db4d5a320d0f6806b7a 34.0.2)
 
