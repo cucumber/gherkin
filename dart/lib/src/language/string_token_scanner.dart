@@ -1,7 +1,7 @@
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 class StringTokenScanner implements TokenScanner {
   StringTokenScanner(String source) : _linesIterator = _splitLines(source);
@@ -24,7 +24,7 @@ class StringTokenScanner implements TokenScanner {
 
   @override
   Token read() {
-    final location = Location(++_lineNumber, 0);
+    final location = messages.Location(line: ++_lineNumber);
     if (_linesIterator.moveNext()) {
       return Token(GherkinLine(_linesIterator.current, _lineNumber), location);
     }

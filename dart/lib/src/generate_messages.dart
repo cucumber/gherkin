@@ -104,13 +104,7 @@ messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
     parseError: messages.ParseError(
       source: messages.SourceReference(
         uri: uri,
-        location:
-            loc.isEmpty || loc.line == 0
-                ? null
-                : messages.Location(
-                  line: loc.line,
-                  column: loc.column == 0 ? null : loc.column,
-                ),
+        location: loc.line <= 0 ? null : loc,
       ),
       message: error.message,
     ),

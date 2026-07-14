@@ -2,7 +2,6 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
@@ -231,7 +230,10 @@ class GherkinTokenMatcher implements TokenMatcher {
       ..matchedKeywordType = keywordType
       ..matchedText = text
       ..matchedItems = items
-      ..location = Location(token.location.line, matchedIndent + 1);
+      ..location = messages.Location(
+        line: token.location.line,
+        column: matchedIndent + 1,
+      );
     if (matchedType == TokenType.featureLine) {
       token.matchedLanguage = _currentLanguage;
     }
@@ -287,7 +289,7 @@ class GherkinTokenMatcher implements TokenMatcher {
   static GherkinLanguageKeywords _lookupKeywords(
     Map<String, GherkinLanguageKeywords> dialects,
     String language, [
-    Location location = Location.empty,
+    messages.Location location = _emptyLocation,
   ]) {
     final keywords = dialects[language];
     if (keywords == null) {
@@ -295,4 +297,6 @@ class GherkinTokenMatcher implements TokenMatcher {
     }
     return keywords;
   }
+
+  static const _emptyLocation = messages.Location(line: -1, column: 0);
 }

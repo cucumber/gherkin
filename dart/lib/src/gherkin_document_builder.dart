@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/ast_node.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
@@ -177,7 +176,7 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       if (row.cells.length != cellCount) {
         throw AstBuilderException(
           'inconsistent cell count within the table',
-          Location(row.location.line, row.location.column ?? 0),
+          row.location,
         );
       }
     }
@@ -343,10 +342,13 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
     );
   }
 
-  messages.Location _messageLocation(Location location, [int? column]) {
+  messages.Location _messageLocation(
+    messages.Location location, [
+    int? column,
+  ]) {
     return messages.Location(
       line: location.line,
-      column: column ?? (location.hasColumn ? location.column : null),
+      column: column ?? location.column,
     );
   }
 }

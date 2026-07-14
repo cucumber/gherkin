@@ -1,5 +1,4 @@
 import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
@@ -8,7 +7,7 @@ class Token {
 
   final GherkinLine line;
 
-  Location location;
+  messages.Location location;
 
   TokenType matchedType = TokenType.none;
 

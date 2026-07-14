@@ -1,7 +1,7 @@
 library;
 
-import 'package:cucumber_gherkin/src/language/location.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 part 'ast_builder_exception.dart';
 part 'composite_parser_exception.dart';

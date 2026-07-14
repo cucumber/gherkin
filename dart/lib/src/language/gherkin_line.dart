@@ -1,6 +1,6 @@
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
-import 'package:cucumber_gherkin/src/language/location.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 class GherkinLine {
   GherkinLine(this._lineText, this._lineNumber)
@@ -81,7 +81,7 @@ class GherkinLine {
       if (!_nonWhitespaceToken.hasMatch(token)) {
         throw ParserException.create(
           'A tag may not contain whitespace',
-          Location(_lineNumber, column),
+          messages.Location(line: _lineNumber, column: column),
         );
       }
       tags.add(GherkinLineSpan(column, tagPrefix + token));
