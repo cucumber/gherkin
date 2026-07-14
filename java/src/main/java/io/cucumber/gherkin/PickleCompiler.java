@@ -176,7 +176,7 @@ final class PickleCompiler {
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private PickleTable pickleDataTable(@Nullable Long argumentIndex, DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
+    private PickleTable pickleDataTable(@Nullable Integer argumentIndex, DataTable dataTable, List<TableCell> variableCells, List<TableCell> valueCells) {
         List<TableRow> rows = dataTable.getRows();
         int rowCount = rows.size();
         List<PickleTableRow> newRows = new ArrayList<>(rowCount);
@@ -195,7 +195,7 @@ final class PickleCompiler {
         return new PickleTable(argumentIndex, newRows);
     }
 
-    private PickleDocString pickleDocString(@Nullable Long argumentIndex, DocString docString, List<TableCell> variableCells, List<TableCell> valueCells) {
+    private PickleDocString pickleDocString(@Nullable Integer argumentIndex, DocString docString, List<TableCell> variableCells, List<TableCell> valueCells) {
         return new PickleDocString(
                 argumentIndex,
                 docString.getMediaType()
@@ -232,8 +232,8 @@ final class PickleCompiler {
         if (dataTable != null && docString != null) {
             boolean tableFirst = docString.getLocation().getLine() > dataTable.getLocation().getLine();
             return new PickleStepArgument(
-                    pickleDocString(tableFirst ? 2L : 1L, docString, variableCells, valueCells),
-                    pickleDataTable(tableFirst ? 1L : 2L, dataTable, variableCells, valueCells)
+                    pickleDocString(tableFirst ? 2 : 1, docString, variableCells, valueCells),
+                    pickleDataTable(tableFirst ? 1 : 2, dataTable, variableCells, valueCells)
             );
         } else if (dataTable != null) {
             return new PickleStepArgument(

@@ -40,9 +40,9 @@ public:
         reset(uri, data);
 
         context_type context{
-            .builder = builder_,
-            .scanner = scanner_,
-            .matcher = matcher_
+            builder_,
+            scanner_,
+            matcher_
         };
 
         parse(context);

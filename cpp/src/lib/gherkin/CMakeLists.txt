@@ -19,7 +19,7 @@ target_include_directories(
     cucumber_gherkin_lib
     PUBLIC
         $<BUILD_INTERFACE:${CUCUMBER_GHERKIN_LIB_INC_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/cucumber>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -34,7 +34,6 @@ target_link_libraries(
 set_target_properties(
     cucumber_gherkin_lib
     PROPERTIES
-        CXX_STANDARD 20
         VERSION ${VERSION}
         SOVERSION ${VER_MAJOR}
         EXPORT_NAME gherkin

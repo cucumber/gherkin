@@ -24,17 +24,17 @@ dialect
 get_dialect(const std::string_view& language)
 {
     return {
-        .feature_keywords = keywords(language, "feature"),
-        .rule_keywords = keywords(language, "rule"),
-        .scenario_keywords = keywords(language, "scenario"),
-        .scenario_outline_keywords = keywords(language, "scenarioOutline"),
-        .background_keywords = keywords(language, "background"),
-        .examples_keywords = keywords(language, "examples"),
-        .given_keywords = keywords(language, "given"),
-        .when_keywords = keywords(language, "when"),
-        .then_keywords = keywords(language, "then"),
-        .and_keywords = keywords(language, "and"),
-        .but_keywords = keywords(language, "but")
+       keywords(language, "feature"),
+       keywords(language, "rule"),
+       keywords(language, "scenario"),
+       keywords(language, "scenarioOutline"),
+       keywords(language, "background"),
+       keywords(language, "examples"),
+       keywords(language, "given"),
+       keywords(language, "when"),
+       keywords(language, "then"),
+       keywords(language, "and"),
+       keywords(language, "but")
     };
 }
 

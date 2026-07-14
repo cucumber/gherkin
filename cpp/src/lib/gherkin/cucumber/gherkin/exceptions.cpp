@@ -111,8 +111,8 @@ unexpected_token::make_location(const token& t) const
         t.location.column.value_or(0) > 1
         ? t.location
         : cms::location{
-            .line = t.location.line,
-            .column = t.line.indent() + 1
+           t.location.line,
+           t.line.indent() + 1
         }
         ;
 }
