@@ -17,7 +17,6 @@
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
-    token.detach();
     final expectedTokens = <String>[
       @Raw(string.Join(",\n      ", expectedTokens.Select(t => "'" + t + "'")))@(",")
     ];
@@ -209,12 +208,11 @@ class @(Model.ParserClassName)<T> {
 {
 <text>
   bool _lookahead_@(lookAheadHint.Id)(_ParserContext context, Token currentToken) {
-    currentToken.detach();
     Token token;
     final queue = Queue<Token>();
     var match = false;
     do {
-      token = _readToken(context)..detach();
+      token = _readToken(context);
       queue.add(token);
 
       if (false

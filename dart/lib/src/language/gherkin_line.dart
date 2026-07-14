@@ -38,8 +38,6 @@ class GherkinLine {
 
   bool get isEof => _isEof;
 
-  void detach() {}
-
   String getLineText([int indentToRemove = 0]) {
     if (indentToRemove < 0 || indentToRemove > indent) {
       return _trimmedLineText;

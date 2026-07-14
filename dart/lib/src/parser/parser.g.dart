@@ -458,7 +458,6 @@ class Parser<T> {
           return 0;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Language',
@@ -494,7 +493,6 @@ class Parser<T> {
           return 1;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#FeatureLine',
@@ -528,7 +526,6 @@ class Parser<T> {
           return 2;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#FeatureLine',
@@ -602,7 +599,6 @@ class Parser<T> {
           return 4;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -680,7 +676,6 @@ class Parser<T> {
           return 4;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -756,7 +751,6 @@ class Parser<T> {
           return 6;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -833,7 +827,6 @@ class Parser<T> {
           return 6;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -919,7 +912,6 @@ class Parser<T> {
           return 7;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -1013,7 +1005,6 @@ class Parser<T> {
           return 8;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -1043,7 +1034,6 @@ class Parser<T> {
           return 9;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -1120,7 +1110,6 @@ class Parser<T> {
           return 10;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#StepLine',
@@ -1158,7 +1147,6 @@ class Parser<T> {
           return 11;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#ScenarioLine',
@@ -1250,7 +1238,6 @@ class Parser<T> {
           return 13;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -1349,7 +1336,6 @@ class Parser<T> {
           return 13;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -1457,7 +1443,6 @@ class Parser<T> {
           return 14;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -1575,7 +1560,6 @@ class Parser<T> {
           return 15;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -1606,7 +1590,6 @@ class Parser<T> {
           return 16;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -1706,7 +1689,6 @@ class Parser<T> {
           return 17;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#StepLine',
@@ -1745,7 +1727,6 @@ class Parser<T> {
           return 18;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#ExamplesLine',
@@ -1851,7 +1832,6 @@ class Parser<T> {
           return 20;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -1964,7 +1944,6 @@ class Parser<T> {
           return 20;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -2074,7 +2053,6 @@ class Parser<T> {
           return 21;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -2112,7 +2090,6 @@ class Parser<T> {
           return 22;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#RuleLine',
@@ -2189,7 +2166,6 @@ class Parser<T> {
           return 24;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -2270,7 +2246,6 @@ class Parser<T> {
           return 24;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -2349,7 +2324,6 @@ class Parser<T> {
           return 26;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -2429,7 +2403,6 @@ class Parser<T> {
           return 26;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -2518,7 +2491,6 @@ class Parser<T> {
           return 27;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -2615,7 +2587,6 @@ class Parser<T> {
           return 28;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -2645,7 +2616,6 @@ class Parser<T> {
           return 29;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -2725,7 +2695,6 @@ class Parser<T> {
           return 30;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#StepLine',
@@ -2763,7 +2732,6 @@ class Parser<T> {
           return 31;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#ScenarioLine',
@@ -2858,7 +2826,6 @@ class Parser<T> {
           return 33;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -2960,7 +2927,6 @@ class Parser<T> {
           return 33;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -3071,7 +3037,6 @@ class Parser<T> {
           return 34;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -3192,7 +3157,6 @@ class Parser<T> {
           return 35;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -3223,7 +3187,6 @@ class Parser<T> {
           return 36;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -3326,7 +3289,6 @@ class Parser<T> {
           return 37;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#StepLine',
@@ -3365,7 +3327,6 @@ class Parser<T> {
           return 38;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#TagLine',
       '#ExamplesLine',
@@ -3474,7 +3435,6 @@ class Parser<T> {
           return 40;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Empty',
@@ -3590,7 +3550,6 @@ class Parser<T> {
           return 40;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#Comment',
@@ -3703,7 +3662,6 @@ class Parser<T> {
           return 41;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -3732,7 +3690,6 @@ class Parser<T> {
           return 43;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -3841,7 +3798,6 @@ class Parser<T> {
           return 44;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -3955,7 +3911,6 @@ class Parser<T> {
           return 45;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -3985,7 +3940,6 @@ class Parser<T> {
           return 46;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -4071,7 +4025,6 @@ class Parser<T> {
           return 47;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -4161,7 +4114,6 @@ class Parser<T> {
           return 48;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -4190,7 +4142,6 @@ class Parser<T> {
           return 49;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -4296,7 +4247,6 @@ class Parser<T> {
           return 50;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -4407,7 +4357,6 @@ class Parser<T> {
           return 51;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -4437,7 +4386,6 @@ class Parser<T> {
           return 52;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#DocStringSeparator',
       '#Other',
@@ -4520,7 +4468,6 @@ class Parser<T> {
           return 53;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -4607,7 +4554,6 @@ class Parser<T> {
           return 54;
     }
 
-    token.detach();
     final expectedTokens = <String>[
       '#EOF',
       '#TableRow',
@@ -4627,12 +4573,11 @@ class Parser<T> {
   }
 
   bool _lookahead_0(_ParserContext context, Token currentToken) {
-    currentToken.detach();
     Token token;
     final queue = Queue<Token>();
     var match = false;
     do {
-      token = _readToken(context)..detach();
+      token = _readToken(context);
       queue.add(token);
 
       if (false
@@ -4653,12 +4598,11 @@ class Parser<T> {
   }
 
   bool _lookahead_1(_ParserContext context, Token currentToken) {
-    currentToken.detach();
     Token token;
     final queue = Queue<Token>();
     var match = false;
     do {
-      token = _readToken(context)..detach();
+      token = _readToken(context);
       queue.add(token);
 
       if (false

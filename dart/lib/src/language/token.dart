@@ -27,5 +27,4 @@ class Token {
 
   String get tokenValue => isEof ? 'EOF' : line!.getLineText(-1);
 
-  void detach() => line?.detach();
 }
