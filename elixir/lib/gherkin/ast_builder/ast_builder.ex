@@ -1,24 +1,24 @@
 defmodule CucumberGherkin.AstBuilder do
   @moduledoc false
   alias CucumberGherkin.{ParserContext, AstNode, Token, AstBuilderError, ParserException}
-  alias CucumberMessages.GherkinDocument.Comment, as: CommentMessage
-  alias CucumberMessages.GherkinDocument.Feature.Tag, as: MessageTag
-  alias CucumberMessages.GherkinDocument.Feature.Scenario, as: MessageScenario
-  alias CucumberMessages.GherkinDocument.Feature.Step, as: StepMessage
-  alias CucumberMessages.GherkinDocument.Feature.Step.DataTable, as: DataTableMessage
-  alias CucumberMessages.GherkinDocument.Feature.TableRow, as: TableRowMessage
-  alias CucumberMessages.GherkinDocument.Feature.TableRow.TableCell, as: TableCellMessage
-  alias CucumberMessages.GherkinDocument.Feature, as: FeatureMessage
-  alias CucumberMessages.GherkinDocument.Feature.FeatureChild, as: FeatureChildMessage
+  alias CucumberMessages.Comment, as: CommentMessage
+  alias CucumberMessages.Tag, as: MessageTag
+  alias CucumberMessages.Scenario, as: MessageScenario
+  alias CucumberMessages.Step, as: StepMessage
+  alias CucumberMessages.DataTable, as: DataTableMessage
+  alias CucumberMessages.TableRow, as: TableRowMessage
+  alias CucumberMessages.TableCell, as: TableCellMessage
+  alias CucumberMessages.Feature, as: FeatureMessage
+  alias CucumberMessages.FeatureChild, as: FeatureChildMessage
   alias CucumberMessages.GherkinDocument, as: GherkinDocumentMessage
-  alias CucumberMessages.GherkinDocument.Feature.Step.DocString, as: DocStringMessage
-  alias CucumberMessages.GherkinDocument.Feature.Background, as: BackgroundMessage
-  alias CucumberMessages.GherkinDocument.Feature.Scenario.Examples, as: ExamplesMessage
-  alias CucumberMessages.GherkinDocument.Feature.FeatureChild.Rule, as: RuleMessage
+  alias CucumberMessages.DocString, as: DocStringMessage
+  alias CucumberMessages.Background, as: BackgroundMessage
+  alias CucumberMessages.Examples, as: ExamplesMessage
+  alias CucumberMessages.Rule, as: RuleMessage
 
   @me __MODULE__
 
-  defstruct stack: %Stack{}, gherkin_doc: %GherkinDocumentMessage{}, id_gen: nil
+  defstruct stack: %Stack{}, gherkin_doc: %GherkinDocumentMessage{ comments: []}, id_gen: nil
 
   def new(opts) do
     root_node = %AstNode{rule_type: None}
@@ -76,8 +76,11 @@ defmodule CucumberGherkin.AstBuilder do
     {id, updated_context} = get_id_and_update_context(context)
 
     %StepMessage{
+      data_table: nil,
+      doc_string: nil,
       id: id,
       keyword: token.matched_keyword,
+      keyword_type: token.matched_keyword_type,
       location: Token.get_location(token),
       text: token.matched_text
     }
@@ -137,9 +140,9 @@ defmodule CucumberGherkin.AstBuilder do
         location: loc,
         keyword: back_ground_line.matched_keyword,
         name: back_ground_line.matched_text,
-        steps: steps
+        steps: steps,
+        description: description
       }
-      |> add_description_to(description)
 
     tuplize(m, updated_context)
   end
@@ -180,13 +183,13 @@ defmodule CucumberGherkin.AstBuilder do
 
     example_message =
       %ExamplesMessage{
+        description: description,
         id: id,
         location: loc,
         keyword: examples_line.matched_keyword,
         name: examples_line.matched_text,
         tags: tags
       }
-      |> add_description_to(description)
 
     case rows != nil && !Enum.empty?(rows) do
       true ->
@@ -199,6 +202,7 @@ defmodule CucumberGherkin.AstBuilder do
 
       false ->
         example_message
+        |> add_tablebody_to([])
     end
     |> tuplize(updated_context)
   end
@@ -236,6 +240,7 @@ defmodule CucumberGherkin.AstBuilder do
       {tags, semi_updated_context} = get_tags(header, context)
 
       %FeatureMessage{
+        children: [],
         tags: tags,
         language: dialect,
         location: Token.get_location(fl),
@@ -270,13 +275,13 @@ defmodule CucumberGherkin.AstBuilder do
       loc = Token.get_location(rule_line)
 
       %RuleMessage{
+        description: description,
         id: id,
         location: loc,
         keyword: rule_line.matched_keyword,
         name: rule_line.matched_text,
         tags: tags
       }
-      |> add_description_to(description)
       |> add_background_to(background)
       |> add_scen_def_children_to(scenarios)
       |> tuplize(updated_context)
@@ -334,7 +339,8 @@ defmodule CucumberGherkin.AstBuilder do
 
       %TableRowMessage{} = r ->
         error = %AstBuilderError{location: r.location} |> ParserException.generate_message()
-        updated_context = %{context | errors: context.errors ++ [error]}
+        errors = if context.errors, do: context.errors, else: []
+        updated_context = %{context | errors: errors ++ [error]}
         {rs, updated_context}
     end
   end
@@ -349,7 +355,7 @@ defmodule CucumberGherkin.AstBuilder do
   end
 
   defp get_tags(node, context),
-    do: node |> AstNode.get_single(Tags, %AstNode{rule_type: None}) |> process_tags(context)
+    do: node |> AstNode.get_single(Tags, nil) |> process_tags(context)
 
   # Even possible?
   defp process_tags(nil, context), do: {[], context}
@@ -386,39 +392,39 @@ defmodule CucumberGherkin.AstBuilder do
   defp add_tablebody_to(%ExamplesMessage{} = m, nil), do: m
   defp add_tablebody_to(%ExamplesMessage{} = m, d), do: %{m | table_body: d}
 
-  defp add_description_to(m, nil), do: m
-  defp add_description_to(%{description: _} = m, d), do: %{m | description: d}
-
   defp add_mediatype_to(%DocStringMessage{} = m, nil), do: m
   defp add_mediatype_to(%DocStringMessage{} = m, d), do: %{m | media_type: d}
 
   defp add_datatable_to(%StepMessage{} = m, nil), do: m
-  defp add_datatable_to(%StepMessage{} = m, d), do: %{m | argument: {:data_table, d}}
+  defp add_datatable_to(%StepMessage{} = m, d), do: %{m | data_table: d}
 
   defp add_docstring_to(%StepMessage{} = m, nil), do: m
-  defp add_docstring_to(%StepMessage{} = m, d), do: %{m | argument: {:doc_string, d}}
+  defp add_docstring_to(%StepMessage{} = m, d), do: %{m | doc_string: d}
 
   defp add_background_to(m, nil), do: m
 
   defp add_background_to(%{__struct__: t} = m, d) when t in [FeatureMessage, RuleMessage] do
-    child = %FeatureChildMessage{value: {:background, d}}
-    %{m | children: m.children ++ [child]}
+    child = %FeatureChildMessage{background: d}
+    children = if m.children, do: m.children, else: []
+    %{m | children: children ++ [child]}
   end
 
   defp add_scen_def_children_to(%{__struct__: t} = m, scenario_definition_items)
        when t in [FeatureMessage, RuleMessage] do
     scenario_definition_items
     |> Enum.reduce(m, fn scenario_def, feature_message_acc ->
-      child = %FeatureChildMessage{value: {:scenario, scenario_def}}
-      %{feature_message_acc | children: feature_message_acc.children ++ [child]}
+      child = %FeatureChildMessage{scenario: scenario_def}
+      children = if feature_message_acc.children, do: feature_message_acc.children, else: []
+      %{feature_message_acc | children: children ++ [child]}
     end)
   end
 
   defp add_rule_children_to(%FeatureMessage{} = m, rule_items) do
     rule_items
     |> Enum.reduce(m, fn rule, feature_message_acc ->
-      child = %FeatureChildMessage{value: {:rule, rule}}
-      %{feature_message_acc | children: feature_message_acc.children ++ [child]}
+      child = %FeatureChildMessage{rule: rule}
+      children = if feature_message_acc.children, do: feature_message_acc.children, else: []
+      %{feature_message_acc | children: children ++ [child]}
     end)
   end
 

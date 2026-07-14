@@ -1,4 +1,6 @@
 import {
+  type DataTable,
+  type DocString,
   type GherkinDocument,
   type IdGenerator,
   type Pickle,
@@ -218,35 +220,63 @@ function compileScenarioOutline(
     })
 }
 
+function pickleDocString(
+  argumentIndex: number,
+  argument: DocString,
+  variableCells: readonly TableCell[],
+  valueCells: readonly TableCell[]
+): PickleDocString {
+  return {
+    argumentIndex,
+    content: interpolate(argument.content, variableCells, valueCells),
+    mediaType: argument.mediaType
+      ? interpolate(argument.mediaType, variableCells, valueCells)
+      : undefined,
+  }
+}
+
+function pickleTable(
+  argumentIndex: number,
+  argument: DataTable,
+  variableCells: readonly TableCell[],
+  valueCells: readonly TableCell[]
+): PickleTable {
+  return {
+    argumentIndex,
+    rows: argument.rows.map((row) => {
+      return {
+        cells: row.cells.map((cell) => {
+          return {
+            value: interpolate(cell.value, variableCells, valueCells),
+          }
+        }),
+      }
+    }),
+  }
+}
+
 function createPickleArguments(
   step: Step,
   variableCells: readonly TableCell[],
   valueCells: readonly TableCell[]
 ): PickleStepArgument | undefined {
-  if (step.dataTable) {
-    const argument = step.dataTable
-    const table: PickleTable = {
-      rows: argument.rows.map((row) => {
-        return {
-          cells: row.cells.map((cell) => {
-            return {
-              value: interpolate(cell.value, variableCells, valueCells),
-            }
-          }),
-        }
-      }),
+  if (step.dataTable && step.docString) {
+    const tableFirst = step.docString.location.line > step.dataTable.location.line
+    return {
+      docString: pickleDocString(tableFirst ? 2 : 1, step.docString, variableCells, valueCells),
+      dataTable: pickleTable(tableFirst ? 1 : 2, step.dataTable, variableCells, valueCells),
     }
-    return { dataTable: table }
+  } else if (step.dataTable) {
+    return {
+      dataTable: pickleTable(undefined, step.dataTable, variableCells, valueCells),
+    }
   } else if (step.docString) {
-    const argument = step.docString
-    const docString: PickleDocString = {
-      content: interpolate(argument.content, variableCells, valueCells),
+    return {
+      docString: pickleDocString(undefined, step.docString, variableCells, valueCells),
     }
-    if (argument.mediaType) {
-      docString.mediaType = interpolate(argument.mediaType, variableCells, valueCells)
-    }
-    return { docString }
   }
+
+  return undefined
 }
 
 function interpolate(

@@ -42,6 +42,7 @@ my %states_to_match_names = (
     31 => "match_token_at_31",
     32 => "match_token_at_32",
     33 => "match_token_at_33",
+    34 => "match_token_at_34",
     35 => "match_token_at_35",
     36 => "match_token_at_36",
     37 => "match_token_at_37",
@@ -49,7 +50,18 @@ my %states_to_match_names = (
     39 => "match_token_at_39",
     40 => "match_token_at_40",
     41 => "match_token_at_41",
-    42 => "match_token_at_42",
+    43 => "match_token_at_43",
+    44 => "match_token_at_44",
+    45 => "match_token_at_45",
+    46 => "match_token_at_46",
+    47 => "match_token_at_47",
+    48 => "match_token_at_48",
+    49 => "match_token_at_49",
+    50 => "match_token_at_50",
+    51 => "match_token_at_51",
+    52 => "match_token_at_52",
+    53 => "match_token_at_53",
+    54 => "match_token_at_54",
 );
 ## use critic
 
@@ -115,7 +127,7 @@ sub match_token_at_0 {
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Language($token);
     if ($ok) {
@@ -258,7 +270,7 @@ sub match_token_at_3 {
         $self->_end_rule($context, 'FeatureHeader');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -289,7 +301,7 @@ sub match_token_at_3 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -300,7 +312,7 @@ sub match_token_at_3 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -309,7 +321,7 @@ sub match_token_at_3 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -318,7 +330,7 @@ sub match_token_at_3 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
@@ -350,7 +362,7 @@ sub match_token_at_4 {
         $self->_end_rule($context, 'FeatureHeader');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -376,7 +388,7 @@ sub match_token_at_4 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -388,7 +400,7 @@ sub match_token_at_4 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -398,7 +410,7 @@ sub match_token_at_4 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -408,7 +420,7 @@ sub match_token_at_4 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
@@ -438,7 +450,7 @@ sub match_token_at_5 {
         $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -468,7 +480,7 @@ sub match_token_at_5 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -479,7 +491,7 @@ sub match_token_at_5 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -488,7 +500,7 @@ sub match_token_at_5 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -497,7 +509,7 @@ sub match_token_at_5 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
@@ -529,7 +541,7 @@ sub match_token_at_6 {
         $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -554,7 +566,7 @@ sub match_token_at_6 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -566,7 +578,7 @@ sub match_token_at_6 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -576,7 +588,7 @@ sub match_token_at_6 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -586,7 +598,7 @@ sub match_token_at_6 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
@@ -617,7 +629,7 @@ sub match_token_at_7 {
         $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
@@ -631,7 +643,7 @@ sub match_token_at_7 {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DocString');
         $self->_build($context, $token);
-        return 41;
+        return 52;
     }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
@@ -650,7 +662,7 @@ sub match_token_at_7 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -662,7 +674,7 @@ sub match_token_at_7 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -672,7 +684,7 @@ sub match_token_at_7 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -682,7 +694,7 @@ sub match_token_at_7 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -708,7 +720,7 @@ sub match_token_at_7 {
     return 7;
 }
 
-# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
 sub match_token_at_8 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -720,13 +732,21 @@ sub match_token_at_8 {
         $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 8;
+    }
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_start_rule($context, 'DocString');
+        $self->_build($context, $token);
+        return 9;
     }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
@@ -747,7 +767,7 @@ sub match_token_at_8 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -760,7 +780,7 @@ sub match_token_at_8 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -771,7 +791,7 @@ sub match_token_at_8 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -782,7 +802,7 @@ sub match_token_at_8 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -800,39 +820,25 @@ sub match_token_at_8 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0",
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0",
     );
     $self->add_error( $context, $err );
 
     return 8;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
 sub match_token_at_9 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 9;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Tags');
-        $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
         return 10;
     }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 9;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -842,26 +848,89 @@ sub match_token_at_9 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"],
-        "State: 9 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0",
+        ["#DocStringSeparator", "#Other"],
+        "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0",
     );
     $self->add_error( $context, $err );
 
     return 9;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
 sub match_token_at_10 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 7;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 10;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -869,113 +938,35 @@ sub match_token_at_10 {
         $self->_build($context, $token);
         return 10;
     }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 11;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 12;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 14;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 9;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 15;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 10;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 11;
-    }
 
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 10 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0",
+        ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0",
     );
     $self->add_error( $context, $err );
 
     return 10;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
 sub match_token_at_11 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 11;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Tags');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -983,82 +974,7 @@ sub match_token_at_11 {
         $self->_build($context, $token);
         return 11;
     }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 12;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 14;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 9;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 15;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 10;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1068,122 +984,26 @@ sub match_token_at_11 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
+        ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"],
+        "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0",
     );
     $self->add_error( $context, $err );
 
     return 11;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
 sub match_token_at_12 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'DataTable');
-        $self->_build($context, $token);
-        return 13;
-    }
-    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'DocString');
-        $self->_build($context, $token);
-        return 39;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 12;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 14;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 9;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 15;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 10;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 12;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -1191,34 +1011,115 @@ sub match_token_at_12 {
         $self->_build($context, $token);
         return 12;
     }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 13;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 14;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 13;
+    }
 
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0",
+        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0",
     );
     $self->add_error( $context, $err );
 
     return 12;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_13 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1227,92 +1128,79 @@ sub match_token_at_13 {
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 12;
+        return 14;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 14;
+        return 18;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 15;
+        return 19;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Description');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 13;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -1322,31 +1210,116 @@ sub match_token_at_13 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0",
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
     return 13;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
 sub match_token_at_14 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'DataTable');
+        $self->_build($context, $token);
+        return 15;
+    }
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'DocString');
+        $self->_build($context, $token);
+        return 49;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 14;
+    }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 14;
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Tags');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 15;
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -1364,28 +1337,130 @@ sub match_token_at_14 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"],
-        "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0",
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0",
     );
     $self->add_error( $context, $err );
 
     return 14;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
 sub match_token_at_15 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 15;
+    }
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_start_rule($context, 'DocString');
+        $self->_build($context, $token);
+        return 16;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 14;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 15;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -1393,220 +1468,27 @@ sub match_token_at_15 {
         $self->_build($context, $token);
         return 15;
     }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 16;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'ExamplesTable');
-        $self->_build($context, $token);
-        return 17;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 14;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 9;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 15;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 10;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 16;
-    }
 
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0",
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0",
     );
     $self->add_error( $context, $err );
 
     return 15;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
 sub match_token_at_16 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 16;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'ExamplesTable');
         $self->_build($context, $token);
         return 17;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 14;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 9;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 15;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 10;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
@@ -1618,114 +1500,110 @@ sub match_token_at_16 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
+        ["#DocStringSeparator", "#Other"],
+        "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0",
     );
     $self->add_error( $context, $err );
 
     return 16;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
 sub match_token_at_17 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 17;
+        return 14;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 14;
+        return 18;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 15;
+        return 19;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -1743,15 +1621,15 @@ sub match_token_at_17 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0",
+        ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0",
     );
     $self->add_error( $context, $err );
 
     return 17;
 }
 
-# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
 sub match_token_at_18 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -1761,10 +1639,11 @@ sub match_token_at_18 {
         $self->_build($context, $token);
         return 18;
     }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Tags');
+        $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
         return 19;
     }
@@ -1784,26 +1663,28 @@ sub match_token_at_18 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#TagLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 18 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0",
+        ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"],
+        "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0",
     );
     $self->add_error( $context, $err );
 
     return 18;
 }
 
-# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
 sub match_token_at_19 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'RuleHeader');
-        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -1818,54 +1699,85 @@ sub match_token_at_19 {
         $self->_build($context, $token);
         return 20;
     }
-    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Background');
+        $self->_start_rule($context, 'ExamplesTable');
         $self->_build($context, $token);
         return 21;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'ScenarioDefinition');
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
+        return 18;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'RuleHeader');
-        $self->_end_rule($context, 'Rule');
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'RuleHeader');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 26;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'RuleHeader');
-        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
@@ -1878,15 +1790,15 @@ sub match_token_at_19 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 19 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0",
+        ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0",
     );
     $self->add_error( $context, $err );
 
     return 19;
 }
 
-# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_20 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
@@ -1894,17 +1806,404 @@ sub match_token_at_20 {
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'RuleHeader');
-        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 20;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_start_rule($context, 'ExamplesTable');
+        $self->_build($context, $token);
+        return 21;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 20;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 20;
+}
+
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+sub match_token_at_21 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 21;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 21;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 21;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 21;
+}
+
+# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+sub match_token_at_22 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 22;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#TagLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 22;
+}
+
+# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+sub match_token_at_23 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 24;
+    }
+    ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Background');
+        $self->_build($context, $token);
+        return 25;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 24;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#Empty", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 23;
+}
+
+# GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+sub match_token_at_24 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'RuleHeader');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 24;
     }
     ($ok, $err) = $context->token_matcher->match_BackgroundLine($token);
     if ($ok) {
@@ -1913,7 +2212,7 @@ sub match_token_at_20 {
         $self->_end_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Background');
         $self->_build($context, $token);
-        return 21;
+        return 25;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
@@ -1924,7 +2223,7 @@ sub match_token_at_20 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
+        return 31;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -1937,7 +2236,7 @@ sub match_token_at_20 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -1947,7 +2246,7 @@ sub match_token_at_20 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 26;
+        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -1958,441 +2257,38 @@ sub match_token_at_20 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 20;
+        return 24;
     }
 
 
     $err = $self->_construct_parser_error(
         $token,
         ["#EOF", "#Comment", "#BackgroundLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 20;
-}
-
-# GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-sub match_token_at_21 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 21;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 22;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 23;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 22;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 21 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 21;
-}
-
-# GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-sub match_token_at_22 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 22;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 23;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 22;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 22;
-}
-
-# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-sub match_token_at_23 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'DataTable');
-        $self->_build($context, $token);
-        return 24;
-    }
-    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'DocString');
-        $self->_build($context, $token);
-        return 37;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 23;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 23;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 23;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 23 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 23;
-}
-
-# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-sub match_token_at_24 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 24;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 23;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 24;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 24;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 24 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0",
+        "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
     return 24;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+# GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
 sub match_token_at_25 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 25;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Tags');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 25;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
@@ -2400,278 +2296,198 @@ sub match_token_at_25 {
         $self->_build($context, $token);
         return 25;
     }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 26;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 27;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 26;
+    }
 
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"],
-        "State: 25 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0",
+        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 25 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0",
     );
     $self->add_error( $context, $err );
 
     return 25;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+# GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
 sub match_token_at_26 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Rule');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
         return 26;
     }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 27;
-    }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 28;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 30;
-        }
+        return 27;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Background');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
+        return 31;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Background');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 26;
+        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
         $self->_build($context, $token);
-        return 27;
+        return 26;
     }
 
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 26 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0",
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
     return 26;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
 sub match_token_at_27 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 27;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 28;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 30;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 27;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 27;
-}
-
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-sub match_token_at_28 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Rule');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DataTable');
         $self->_build($context, $token);
-        return 29;
+        return 28;
     }
     ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_start_rule($context, 'DocString');
         $self->_build($context, $token);
-        return 35;
+        return 46;
     }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
@@ -2679,76 +2495,163 @@ sub match_token_at_28 {
         $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 28;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 30;
-        }
+        return 27;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
         $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Background');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
+        return 31;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Background');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 26;
+        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 27;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 27;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 27;
+}
+
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
+sub match_token_at_28 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 28;
+    }
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_start_rule($context, 'DocString');
+        $self->_build($context, $token);
+        return 29;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 27;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -2766,16 +2669,545 @@ sub match_token_at_28 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 28 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0",
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0",
     );
     $self->add_error( $context, $err );
 
     return 28;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
 sub match_token_at_29 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 30;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 29;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#DocStringSeparator", "#Other"],
+        "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 29;
+}
+
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
+sub match_token_at_30 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 27;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 30;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 30;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 30;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+sub match_token_at_31 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 31;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Tags');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 31;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 31;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#TagLine", "#ScenarioLine", "#Comment", "#Empty"],
+        "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 31;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+sub match_token_at_32 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 33;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 34;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 33;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#Empty", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 32;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+sub match_token_at_33 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 33;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 34;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'Description');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 33;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#Comment", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 33;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+sub match_token_at_34 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'DataTable');
+        $self->_build($context, $token);
+        return 35;
+    }
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'DocString');
+        $self->_build($context, $token);
+        return 43;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 34;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 34;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 34;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 34;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
+sub match_token_at_35 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
@@ -2788,13 +3220,21 @@ sub match_token_at_29 {
         $self->_end_rule($context, 'Rule');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_TableRow($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 29;
+        return 35;
+    }
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_start_rule($context, 'DocString');
+        $self->_build($context, $token);
+        return 36;
     }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
@@ -2803,216 +3243,39 @@ sub match_token_at_29 {
         $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 28;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 30;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DataTable');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 29;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 29;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 29 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 29;
-}
-
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-sub match_token_at_30 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 30;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Tags');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 30;
-    }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 30;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"],
-        "State: 30 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 30;
-}
-
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-sub match_token_at_31 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
         return 34;
     }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 31;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 32;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'ExamplesTable');
-        $self->_build($context, $token);
-        return 33;
-    }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 30;
+        return 38;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
+        return 31;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Rule');
@@ -3020,331 +3283,50 @@ sub match_token_at_31 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 31;
+        return 39;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 26;
+        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_start_rule($context, 'Description');
-        $self->_build($context, $token);
-        return 32;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 31;
-}
-
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-sub match_token_at_32 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 32;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_start_rule($context, 'ExamplesTable');
-        $self->_build($context, $token);
-        return 33;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 30;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'Description');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 32;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
-        "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 32;
-}
-
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-sub match_token_at_33 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_TableRow($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 33;
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 30;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 25;
-        }
-    }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
-        $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'ExamplesDefinition');
-        $self->_start_rule($context, 'Examples');
-        $self->_build($context, $token);
-        return 31;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'ExamplesTable');
-        $self->_end_rule($context, 'Examples');
-        $self->_end_rule($context, 'ExamplesDefinition');
-        $self->_end_rule($context, 'Scenario');
-        $self->_end_rule($context, 'ScenarioDefinition');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
-    }
-    ($ok, $err) = $context->token_matcher->match_Comment($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 33;
+        return 35;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 33;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 33;
-}
-
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-sub match_token_at_35 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 36;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3354,16 +3336,44 @@ sub match_token_at_35 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#DocStringSeparator", "#Other"],
-        "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0",
+        ["#EOF", "#TableRow", "#DocStringSeparator", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0",
     );
     $self->add_error( $context, $err );
 
     return 35;
 }
 
-# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
 sub match_token_at_36 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 37;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 36;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#DocStringSeparator", "#Other"],
+        "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 36;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
+sub match_token_at_37 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
@@ -3376,7 +3386,7 @@ sub match_token_at_36 {
         $self->_end_rule($context, 'Rule');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
@@ -3385,7 +3395,7 @@ sub match_token_at_36 {
         $self->_end_rule($context, 'Step');
         $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 28;
+        return 34;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
@@ -3396,7 +3406,7 @@ sub match_token_at_36 {
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 30;
+        return 38;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -3410,7 +3420,7 @@ sub match_token_at_36 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
+        return 31;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -3425,7 +3435,7 @@ sub match_token_at_36 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
@@ -3435,7 +3445,7 @@ sub match_token_at_36 {
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 31;
+        return 39;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -3447,7 +3457,7 @@ sub match_token_at_36 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 26;
+        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -3460,43 +3470,15 @@ sub match_token_at_36 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 36;
+        return 37;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 36;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 36;
-}
-
-# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-sub match_token_at_37 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 38;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3506,86 +3488,31 @@ sub match_token_at_37 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#DocStringSeparator", "#Other"],
-        "State: 37 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0",
+        ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0",
     );
     $self->add_error( $context, $err );
 
     return 37;
 }
 
-# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
 sub match_token_at_38 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_EOF($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_end_rule($context, 'Feature');
-        $self->_build($context, $token);
-        return 34;
-    }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'Step');
-        $self->_build($context, $token);
-        return 23;
-    }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 25;
-        }
+        return 38;
     }
-    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_start_rule($context, 'Tags');
+        $self->_end_rule($context, 'Tags');
+        $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 18;
-    }
-    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_start_rule($context, 'ScenarioDefinition');
-        $self->_start_rule($context, 'Scenario');
-        $self->_build($context, $token);
-        return 26;
-    }
-    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_end_rule($context, 'Background');
-        $self->_end_rule($context, 'Rule');
-        $self->_start_rule($context, 'Rule');
-        $self->_start_rule($context, 'RuleHeader');
-        $self->_build($context, $token);
-        return 19;
+        return 39;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -3603,138 +3530,160 @@ sub match_token_at_38 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 38 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0",
+        ["#TagLine", "#ExamplesLine", "#Comment", "#Empty"],
+        "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0",
     );
     $self->add_error( $context, $err );
 
     return 38;
 }
 
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
 sub match_token_at_39 {
-    my ( $self, $token, $context ) = @_;
-    my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 40;
-    }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
-    if ($ok) {
-        $self->add_error( $context, $err ) if $err;
-        $self->_build($context, $token);
-        return 39;
-    }
-
-
-    $err = $self->_construct_parser_error(
-        $token,
-        ["#DocStringSeparator", "#Other"],
-        "State: 39 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0",
-    );
-    $self->add_error( $context, $err );
-
-    return 39;
-}
-
-# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-sub match_token_at_40 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
     }
-    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
-        $self->_start_rule($context, 'Step');
         $self->_build($context, $token);
-        return 12;
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 40;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'ExamplesTable');
+        $self->_build($context, $token);
+        return 41;
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_1($context, $token)) {
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 14;
+        return 38;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         if ($self->lookahead_0($context, $token)) {
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 31;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'ExamplesDefinition');
         $self->_start_rule($context, 'Examples');
         $self->_build($context, $token);
-        return 15;
+        return 39;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 32;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
-        $self->_end_rule($context, 'DocString');
-        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
         $self->_end_rule($context, 'Scenario');
         $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_start_rule($context, 'Description');
+        $self->_build($context, $token);
+        return 40;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#Empty", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 39;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+sub match_token_at_40 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
@@ -3742,7 +3691,96 @@ sub match_token_at_40 {
         $self->_build($context, $token);
         return 40;
     }
-    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_start_rule($context, 'ExamplesTable');
+        $self->_build($context, $token);
+        return 41;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'Description');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3752,25 +3790,125 @@ sub match_token_at_40 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 40 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0",
+        ["#EOF", "#Comment", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Other"],
+        "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0",
     );
     $self->add_error( $context, $err );
 
     return 40;
 }
 
-# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
 sub match_token_at_41 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
-    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
         return 42;
     }
-    ($ok, $err) = $context->token_matcher->match_Other($token);
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 41;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'ExamplesTable');
+        $self->_end_rule($context, 'Examples');
+        $self->_end_rule($context, 'ExamplesDefinition');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 41;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
@@ -3780,16 +3918,854 @@ sub match_token_at_41 {
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#DocStringSeparator", "#Other"],
-        "State: 41 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0",
+        ["#EOF", "#TableRow", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0",
     );
     $self->add_error( $context, $err );
 
     return 41;
 }
 
-# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-sub match_token_at_42 {
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+sub match_token_at_43 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 44;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 43;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#DocStringSeparator", "#Other"],
+        "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 43;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+sub match_token_at_44 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_start_rule($context, 'DataTable');
+        $self->_build($context, $token);
+        return 45;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 34;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 44;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 44;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 44;
+}
+
+# GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+sub match_token_at_45 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 45;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 34;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 38;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 39;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 45;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 45;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 45 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 45;
+}
+
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+sub match_token_at_46 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 47;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 46;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#DocStringSeparator", "#Other"],
+        "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 46;
+}
+
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+sub match_token_at_47 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_start_rule($context, 'DataTable');
+        $self->_build($context, $token);
+        return 48;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 27;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 47;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 47;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 47 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 47;
+}
+
+# GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+sub match_token_at_48 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 48;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 27;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 31;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 32;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Rule');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 48;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 48;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 48 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 48;
+}
+
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+sub match_token_at_49 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 50;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 49;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#DocStringSeparator", "#Other"],
+        "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 49;
+}
+
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+sub match_token_at_50 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_start_rule($context, 'DataTable');
+        $self->_build($context, $token);
+        return 51;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 14;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 50;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 50;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 50;
+}
+
+# GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+sub match_token_at_51 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 51;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 14;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_1($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 18;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ExamplesLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'ExamplesDefinition');
+        $self->_start_rule($context, 'Examples');
+        $self->_build($context, $token);
+        return 19;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Scenario');
+        $self->_end_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 51;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 51;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ExamplesLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 51 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 51;
+}
+
+# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+sub match_token_at_52 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_DocStringSeparator($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 53;
+    }
+    ($ok, $err) = $context->token_matcher->match_Other($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 52;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#DocStringSeparator", "#Other"],
+        "State: 52 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 52;
+}
+
+# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+sub match_token_at_53 {
     my ( $self, $token, $context ) = @_;
     my ( $ok, $err );
     ($ok, $err) = $context->token_matcher->match_EOF($token);
@@ -3800,7 +4776,15 @@ sub match_token_at_42 {
         $self->_end_rule($context, 'Background');
         $self->_end_rule($context, 'Feature');
         $self->_build($context, $token);
-        return 34;
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DocString');
+        $self->_start_rule($context, 'DataTable');
+        $self->_build($context, $token);
+        return 54;
     }
     ($ok, $err) = $context->token_matcher->match_StepLine($token);
     if ($ok) {
@@ -3821,7 +4805,7 @@ sub match_token_at_42 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 9;
+        return 11;
         }
     }
     ($ok, $err) = $context->token_matcher->match_TagLine($token);
@@ -3834,7 +4818,7 @@ sub match_token_at_42 {
         $self->_start_rule($context, 'RuleHeader');
         $self->_start_rule($context, 'Tags');
         $self->_build($context, $token);
-        return 18;
+        return 22;
     }
     ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
     if ($ok) {
@@ -3845,7 +4829,7 @@ sub match_token_at_42 {
         $self->_start_rule($context, 'ScenarioDefinition');
         $self->_start_rule($context, 'Scenario');
         $self->_build($context, $token);
-        return 10;
+        return 12;
     }
     ($ok, $err) = $context->token_matcher->match_RuleLine($token);
     if ($ok) {
@@ -3856,30 +4840,130 @@ sub match_token_at_42 {
         $self->_start_rule($context, 'Rule');
         $self->_start_rule($context, 'RuleHeader');
         $self->_build($context, $token);
-        return 19;
+        return 23;
     }
     ($ok, $err) = $context->token_matcher->match_Comment($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 42;
+        return 53;
     }
     ($ok, $err) = $context->token_matcher->match_Empty($token);
     if ($ok) {
         $self->add_error( $context, $err ) if $err;
         $self->_build($context, $token);
-        return 42;
+        return 53;
     }
 
 
     $err = $self->_construct_parser_error(
         $token,
-        ["#EOF", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
-        "State: 42 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0",
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 53 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0",
     );
     $self->add_error( $context, $err );
 
-    return 42;
+    return 53;
+}
+
+# GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+sub match_token_at_54 {
+    my ( $self, $token, $context ) = @_;
+    my ( $ok, $err );
+    ($ok, $err) = $context->token_matcher->match_EOF($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_end_rule($context, 'Feature');
+        $self->_build($context, $token);
+        return 42;
+    }
+    ($ok, $err) = $context->token_matcher->match_TableRow($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 54;
+    }
+    ($ok, $err) = $context->token_matcher->match_StepLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_start_rule($context, 'Step');
+        $self->_build($context, $token);
+        return 7;
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        if ($self->lookahead_0($context, $token)) {
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 11;
+        }
+    }
+    ($ok, $err) = $context->token_matcher->match_TagLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_start_rule($context, 'Tags');
+        $self->_build($context, $token);
+        return 22;
+    }
+    ($ok, $err) = $context->token_matcher->match_ScenarioLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'ScenarioDefinition');
+        $self->_start_rule($context, 'Scenario');
+        $self->_build($context, $token);
+        return 12;
+    }
+    ($ok, $err) = $context->token_matcher->match_RuleLine($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_end_rule($context, 'DataTable');
+        $self->_end_rule($context, 'Step');
+        $self->_end_rule($context, 'Background');
+        $self->_start_rule($context, 'Rule');
+        $self->_start_rule($context, 'RuleHeader');
+        $self->_build($context, $token);
+        return 23;
+    }
+    ($ok, $err) = $context->token_matcher->match_Comment($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 54;
+    }
+    ($ok, $err) = $context->token_matcher->match_Empty($token);
+    if ($ok) {
+        $self->add_error( $context, $err ) if $err;
+        $self->_build($context, $token);
+        return 54;
+    }
+
+
+    $err = $self->_construct_parser_error(
+        $token,
+        ["#EOF", "#TableRow", "#StepLine", "#TagLine", "#ScenarioLine", "#RuleLine", "#Comment", "#Empty"],
+        "State: 54 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0",
+    );
+    $self->add_error( $context, $err );
+
+    return 54;
 }
 
 ## use critic

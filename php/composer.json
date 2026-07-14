@@ -15,12 +15,12 @@
     "require": {
         "php": "^8.4",
         "ext-mbstring": "*",
-        "cucumber/messages": ">=31.0.0 <34"
+        "cucumber/messages": ">=34.0.0 <35"
     },
     "require-dev": {
         "vimeo/psalm": "6.16.1",
         "phpunit/phpunit": "13.1.14",
         "psalm/plugin-phpunit": "0.19.7",
-        "friendsofphp/php-cs-fixer": "3.95.11"
+        "friendsofphp/php-cs-fixer": "3.95.13"
     }
 }

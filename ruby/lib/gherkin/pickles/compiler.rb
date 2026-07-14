@@ -158,23 +158,26 @@ module Gherkin
         }
         props[:ast_node_ids].push(values_row.id) if values_row
 
-        if step.data_table
-          data_table = Cucumber::Messages::PickleStepArgument.new(
-            data_table: pickle_data_table(step.data_table, variable_cells, value_cells)
-          )
-          props[:argument] = data_table
+        data_table_argument_index = nil
+        doc_string_argument_index = nil
+        if step.data_table && step.doc_string
+          table_first = step.doc_string.location.line > step.data_table.location.line
+          data_table_argument_index = table_first ? 1 : 2
+          doc_string_argument_index = table_first ? 2 : 1
         end
-        if step.doc_string
-          doc_string = Cucumber::Messages::PickleStepArgument.new(
-            doc_string: pickle_doc_string(step.doc_string, variable_cells, value_cells)
+
+        if step.data_table || step.doc_string
+          props[:argument] = Cucumber::Messages::PickleStepArgument.new(
+            data_table: step.data_table ? pickle_data_table(data_table_argument_index, step.data_table, variable_cells, value_cells) : nil,
+            doc_string: step.doc_string ? pickle_doc_string(doc_string_argument_index, step.doc_string, variable_cells, value_cells) : nil
           )
-          props[:argument] = doc_string
         end
         props
       end
 
-      def pickle_data_table(data_table, variable_cells, value_cells)
+      def pickle_data_table(argument_index, data_table, variable_cells, value_cells)
         Cucumber::Messages::PickleTable.new(
+          argument_index: argument_index,
           rows: data_table.rows.map do |row|
             Cucumber::Messages::PickleTableRow.new(
               cells: row.cells.map do |cell|
@@ -187,8 +190,9 @@ module Gherkin
         )
       end
 
-      def pickle_doc_string(doc_string, variable_cells, value_cells)
+      def pickle_doc_string(argument_index, doc_string, variable_cells, value_cells)
         props = {
+          argument_index: argument_index,
           content: interpolate(doc_string.content, variable_cells, value_cells)
         }
         props[:media_type] = interpolate(doc_string.media_type, variable_cells, value_cells) if doc_string.media_type

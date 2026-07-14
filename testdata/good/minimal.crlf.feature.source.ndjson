@@ -1,7 +1,1 @@
-{
-  "source": {
-    "data": "Feature: Minimal with CRLF line endings\r\n\r\n  Scenario: minimalistic\r\n    Given the minimalism\r\n",
-    "mediaType": "text/x.cucumber.gherkin+plain",
-    "uri": "../testdata/good/minimal.crlf.feature"
-  }
-}
+{"source":{"data":"Feature: Minimal with CRLF line endings\r\n\r\n  Scenario: minimalistic\r\n    Given the minimalism\r\n","mediaType":"text/x.cucumber.gherkin+plain","uri":"../testdata/good/minimal.crlf.feature"}}

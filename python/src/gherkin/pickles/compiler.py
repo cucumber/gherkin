@@ -60,6 +60,11 @@ class PickleArgumentDocStringEnvelope(PickleArgumentEnvelope):
     docString: PickleArgumentDocString
 
 
+class PickleArgumentMixedEnvelope(PickleArgumentEnvelope):
+    dataTable: PickleArgumentDataTable
+    docString: PickleArgumentDocString
+
+
 class PickleStep(TypedDict):
     astNodeIds: list[str]
     id: str
@@ -284,28 +289,48 @@ class Compiler:
         variables: Sequence[Cell],
         values: Sequence[Cell],
     ) -> PickleArgumentEnvelope | None:
+        argument: PickleArgumentEnvelope = {}
+
+        data_table_argument_index = None
+        doc_string_argument_index = None
+        if "dataTable" in step and "docString" in step:
+            table_first = (
+                step["docString"]["location"]["line"]
+                > step["dataTable"]["location"]["line"]
+            )
+            data_table_argument_index = 1 if table_first else 2
+            doc_string_argument_index = 2 if table_first else 1
+
         if "dataTable" in step:
             table: PickleArgumentDataTable = {"rows": []}
+            if data_table_argument_index:
+                table["argumentIndex"] = data_table_argument_index
             for row in step["dataTable"]["rows"]:
                 cells: list[PickleArgumentDataTableCell] = [
                     {"value": self._interpolate(cell["value"], variables, values)}
                     for cell in row["cells"]
                 ]
                 table["rows"].append({"cells": cells})
-            return PickleArgumentDataTableEnvelope(dataTable=table)
+            argument["dataTable"] = table
         if "docString" in step:
-            argument = step["docString"]
+            docstring_argument = step["docString"]
             docstring: PickleArgumentDocString = {
-                "content": self._interpolate(argument["content"], variables, values),
+                "content": self._interpolate(
+                    docstring_argument["content"],
+                    variables,
+                    values,
+                ),
             }
-            if "mediaType" in argument:
+            if doc_string_argument_index:
+                docstring["argumentIndex"] = doc_string_argument_index
+            if "mediaType" in docstring_argument:
                 docstring["mediaType"] = self._interpolate(
-                    argument["mediaType"],
+                    docstring_argument["mediaType"],
                     variables,
                     values,
                 )
-            return PickleArgumentDocStringEnvelope(docString=docstring)
-        return None
+            argument["docString"] = docstring
+        return argument or None
 
     @overload
     def _interpolate(

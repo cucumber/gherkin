@@ -13,26 +13,35 @@ class Step implements IHasLocation, INullSafetyObject
 
   final String keyword;
 
+  final String _keywordType;
+
+  String get keywordType => _keywordType;
+
   final String text;
 
-  final StepArgument argument;
+  final DataTable _dataTable;
+  final DocString _docString;
 
-  const Step(this._location, this.keyword, this.text, this.argument,
-      {this.id=Strings.empty} );
+  const Step(this._location, this.keyword, this._keywordType, this.text,
+      {this.id=Strings.empty
+      , DataTable dataTable = DataTable.empty
+      , DocString docString = DocString.empty} )
+      : _dataTable = dataTable
+      , _docString = docString;
 
   @override
   Location get location => _location;
 
   DataTable get dataTable {
-    if( argument is DataTable ) {
-      return argument as DataTable;
+    if( _dataTable.isNotEmpty ) {
+      return _dataTable;
     }
     return DataTable.empty;
   }
 
   DocString get docString {
-    if( argument is DocString ) {
-      return argument as DocString;
+    if( _docString.isNotEmpty ) {
+      return _docString;
     }
     return DocString.empty;
   }
@@ -49,7 +58,7 @@ class Step implements IHasLocation, INullSafetyObject
 class _InvalidStep extends Step
 {
   const _InvalidStep()
-    : super(Location.empty, Strings.empty, Strings.empty, StepArgument.empty );
+    : super(Location.empty, Strings.empty, Strings.empty, Strings.empty);
 
   @override
   bool get isEmpty => true;

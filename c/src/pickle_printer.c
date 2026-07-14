@@ -51,7 +51,11 @@ static void print_table_row(FILE* file, const PickleRow* pickle_row) {
 }
 
 static void print_pickle_table(FILE* file, const PickleTable* pickle_table) {
-    fprintf(file, "\"dataTable\":{\"rows\":[");
+    fprintf(file, "\"dataTable\":{");
+    if(pickle_table->argumentIndex > 0) {
+        fprintf(file, "\"argumentIndex\":%d,", pickle_table->argumentIndex);
+    }
+    fprintf(file, "\"rows\":[");
     int i;
     for (i = 0; i < pickle_table->rows->row_count; ++i) {
         if (i > 0) {
@@ -63,7 +67,11 @@ static void print_pickle_table(FILE* file, const PickleTable* pickle_table) {
 }
 
 static void print_pickle_string(FILE* file, const PickleString* pickle_string) {
-    fprintf(file, "\"docString\": {\"content\":\"");
+    fprintf(file, "\"docString\": {");
+    if(pickle_string->argumentIndex > 0) {
+        fprintf(file, "\"argumentIndex\":%d,", pickle_string->argumentIndex);
+    }
+    fprintf(file, "\"content\":\"");
     if (pickle_string->content) {
         PrintUtilities_print_json_string(file, pickle_string->content);
     }
@@ -128,13 +136,16 @@ static void print_pickle_step(FILE* file, const PickleStep* step) {
     fprintf(file, "{");
     print_id(file, step->id);
     print_ast_node_ids(file, step->ast_node_ids);
-    if (step->argument) {
+    if (step->doc_string || step->data_table) {
         fprintf(file, ",\"argument\":{");
-        if (step->argument->type == Argument_String) {
-            print_pickle_string(file, (const PickleString*)step->argument);
+        if (step->doc_string) {
+            print_pickle_string(file, step->doc_string);
         }
-        if (step->argument->type == Argument_Table) {
-            print_pickle_table(file, (const PickleTable*)step->argument);
+        if (step->data_table) {
+            if (step->doc_string) {
+                fprintf(file, ",");
+            }
+            print_pickle_table(file, step->data_table);
         }
         fprintf(file, "}");
     }

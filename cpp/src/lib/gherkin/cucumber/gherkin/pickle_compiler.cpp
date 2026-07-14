@@ -1,6 +1,37 @@
+#include "cucumber/gherkin/cb_types.hpp"
+#include "cucumber/gherkin/id_generator.hpp"
+#include "cucumber/gherkin/msg_types.hpp"
+#include "cucumber/gherkin/pickle_compiler_context.hpp"
+#include "cucumber/gherkin/types.hpp"
+#include "cucumber/messages/data_table.hpp"
+#include "cucumber/messages/doc_string.hpp"
+#include "cucumber/messages/feature.hpp"
+#include "cucumber/messages/gherkin_document.hpp"
+#include "cucumber/messages/pickle.hpp"
+#include "cucumber/messages/pickle_doc_string.hpp"
+#include "cucumber/messages/pickle_step.hpp"
+#include "cucumber/messages/pickle_step_argument.hpp"
+#include "cucumber/messages/pickle_step_type.hpp"
+#include "cucumber/messages/pickle_table.hpp"
+#include "cucumber/messages/pickle_table_cell.hpp"
+#include "cucumber/messages/pickle_table_row.hpp"
+#include "cucumber/messages/pickle_tag.hpp"
+#include "cucumber/messages/rule.hpp"
+#include "cucumber/messages/scenario.hpp"
+#include "cucumber/messages/step.hpp"
+#include "cucumber/messages/step_keyword_type.hpp"
+#include "cucumber/messages/table_row.hpp"
+#include <algorithm>
+#include <cstddef>
 #include <cucumber/gherkin/utils.hpp>
 #include <cucumber/gherkin/regex.hpp>
 #include <cucumber/gherkin/pickle_compiler.hpp>
+#include <iterator>
+#include <memory>
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <utility>
 
 namespace cucumber::gherkin {
 
@@ -291,23 +322,37 @@ pickle_compiler::make_pickle_step(
         interpolate(step.text, variable_cells, value_cells)
     };
 
-    if (step.data_table) {
-        ps.argument = cms::pickle_step_argument{
-            std::nullopt,
-            make_pickle_table(
-                 *step.data_table,
-                 variable_cells,
-                 value_cells
-             )
-        };
-    } else if (step.doc_string) {
-        ps.argument = cms::pickle_step_argument{
-           make_pickle_doc_string(
+    std::optional<std::size_t> data_table_argument_index = {};
+    std::optional<std::size_t> doc_string_argument_index = {};
+    if (step.data_table && step.doc_string) {
+        if(step.doc_string->location.line > step.data_table->location.line) {
+            data_table_argument_index = 1;
+            doc_string_argument_index = 2;
+        } else {
+            data_table_argument_index = 2;
+            doc_string_argument_index = 1;
+        }
+    }
+
+    if (step.data_table || step.doc_string) {
+        auto argument = cms::pickle_step_argument{};
+        if (step.doc_string) {
+            argument.doc_string = make_pickle_doc_string(
+                doc_string_argument_index,
                 *step.doc_string,
                 variable_cells,
                 value_cells
-            )
-        };
+            );
+        }
+        if (step.data_table) {
+            argument.data_table = make_pickle_table(
+                data_table_argument_index,
+                *step.data_table,
+                variable_cells,
+                value_cells
+            );
+        }
+        ps.argument = argument;
     }
 
     if (value_row_ptr) {
@@ -319,12 +364,15 @@ pickle_compiler::make_pickle_step(
 
 cms::pickle_table
 pickle_compiler::make_pickle_table(
+    const std::optional<std::size_t>& argument_index,
     const cms::data_table& dt,
     const table_cells& variable_cells,
     const table_cells& value_cells
 )
 {
-    cms::pickle_table t;
+    cms::pickle_table t {
+        .argument_index = argument_index
+    };
 
     for (const auto& row : dt.rows) {
         cms::pickle_table_row r;
@@ -347,13 +395,14 @@ pickle_compiler::make_pickle_table(
 
 cms::pickle_doc_string
 pickle_compiler::make_pickle_doc_string(
+    const std::optional<std::size_t>& argument_index,
     const cms::doc_string& ds,
     const table_cells& variable_cells,
     const table_cells& value_cells
 )
 {
     cms::pickle_doc_string pds{
-        std::nullopt,
+        argument_index,
         std::nullopt,
         interpolate(ds.content, variable_cells, value_cells)
     };
