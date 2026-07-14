@@ -17,7 +17,7 @@ sealed class ParserException implements Exception {
     if (location == _emptyLocation) {
       return '(-1,0): $message';
     }
-    return '(${location.line}:${location.column}): $message';
+    return '(${location.line}:${location.column ?? 0}): $message';
   }
 
   @override
