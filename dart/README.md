@@ -46,12 +46,6 @@ import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 final envelopes = generateMessages(
   'Feature: Minimal\n\n  Scenario: minimalistic\n    Given the minimalism\n',
   'minimal.feature',
-  GherkinOptions(
-    includeSource: true,
-    includeGherkinDocument: true,
-    includePickles: true,
-    idGenerator: () => 'fixed-id', // omit for random UUIDs
-  ),
 );
 
 for (final envelope in envelopes) {
@@ -59,7 +53,7 @@ for (final envelope in envelopes) {
 }
 ```
 
-Malformed Gherkin is reported as a `parseError` envelope, not thrown.
+Malformed Gherkin is reported as a `parseError` envelope rather than being thrown.
 
 ## Development
 
