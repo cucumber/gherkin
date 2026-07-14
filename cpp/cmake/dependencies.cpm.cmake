@@ -1,7 +1,10 @@
-# renovate
-set(CPM_DOWNLOAD_VERSION 0.43.1)
+# renovate: datasource=github-tags packageName=cpm-cmake/CPM.cmake versioning=semver
+set(CPM_DOWNLOAD_HASH_VERSION 456cb6754daaa010d57444d0c8ce6d95ecf006ab 0.43.1)
 # renovate: datasource=github-tags packageName=cucumber/messages versioning=semver
 set(CUCUMBER_MESSAGES_HASH_VERSION 79002c8940c9dcaa09d96db4d5a320d0f6806b7a 34.0.2)
+
+list(GET CPM_DOWNLOAD_HASH_VERSION 0 CPM_DOWNLOAD_HASH)
+list(GET CPM_DOWNLOAD_HASH_VERSION 1 CPM_DOWNLOAD_VERSION)
 
 list(GET CUCUMBER_MESSAGES_HASH_VERSION 0 CUCUMBER_MESSAGES_HASH)
 list(GET CUCUMBER_MESSAGES_HASH_VERSION 1 CUCUMBER_MESSAGES_VERSION)
