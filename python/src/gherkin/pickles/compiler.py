@@ -290,8 +290,21 @@ class Compiler:
         values: Sequence[Cell],
     ) -> PickleArgumentEnvelope | None:
         argument: PickleArgumentEnvelope = {}
+
+        data_table_argument_index = None
+        doc_string_argument_index = None
+        if "dataTable" in step and "docString" in step:
+            table_first = (
+                step["docString"]["location"]["line"]
+                > step["dataTable"]["location"]["line"]
+            )
+            data_table_argument_index = 1 if table_first else 2
+            doc_string_argument_index = 2 if table_first else 1
+
         if "dataTable" in step:
             table: PickleArgumentDataTable = {"rows": []}
+            if data_table_argument_index:
+                table["argumentIndex"] = data_table_argument_index
             for row in step["dataTable"]["rows"]:
                 cells: list[PickleArgumentDataTableCell] = [
                     {"value": self._interpolate(cell["value"], variables, values)}
@@ -308,6 +321,8 @@ class Compiler:
                     values,
                 ),
             }
+            if doc_string_argument_index:
+                docstring["argumentIndex"] = doc_string_argument_index
             if "mediaType" in docstring_argument:
                 docstring["mediaType"] = self._interpolate(
                     docstring_argument["mediaType"],

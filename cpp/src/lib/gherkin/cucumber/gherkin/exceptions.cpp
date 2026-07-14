@@ -1,3 +1,4 @@
+#include <cstring>
 #include <sstream>
 
 #include <cucumber/gherkin/exceptions.hpp>

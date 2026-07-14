@@ -12,8 +12,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - (i18n) Added new synonyms for existing Persian keywords  ([#642](https://github.com/cucumber/gherkin/pull/642))
 
 ### Changed
+- Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599), [#643](https://github.com/cucumber/gherkin/pull/643))
+- Update dependency messages to at-least v34 ([#652](https://github.com/cucumber/gherkin/pull/652), [#643](https://github.com/cucumber/gherkin/pull/643))
 - [Dart] Revived the Dart implementation, rebuilt on cucumber_messages-native types with a Berp-generated parser and validated against the shared acceptance testdata. ([#640](https://github.com/cucumber/gherkin/pull/640))
-- Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599))
 
 ## [41.0.0] - 2026-06-20
 ### Changed

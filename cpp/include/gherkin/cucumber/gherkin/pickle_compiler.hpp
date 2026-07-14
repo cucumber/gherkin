@@ -60,12 +60,14 @@ private:
     );
 
     cms::pickle_table make_pickle_table(
+        const std::optional<std::size_t>& argument_index,
         const cms::data_table& dt,
         const table_cells& variable_cells,
         const table_cells& value_cells
     );
 
     cms::pickle_doc_string make_pickle_doc_string(
+        const std::optional<std::size_t>& argument_index,
         const cms::doc_string& ds,
         const table_cells& variable_cells,
         const table_cells& value_cells

@@ -39,7 +39,7 @@
     "typescript": "6.0.3"
   },
   "dependencies": {
-    "@cucumber/messages": ">=31.0.0 <34"
+    "@cucumber/messages": ">=34.0.0 <35"
   },
   "directories": {
     "test": "test"

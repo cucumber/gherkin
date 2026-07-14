@@ -1,8 +1,9 @@
 #include "pickle_table.h"
 #include <stdlib.h>
 
-const PickleTable* PickleTable_new(const PickleRows* rows) {
+const PickleTable* PickleTable_new(int argumentIndex, const PickleRows* rows) {
     PickleTable* pickle_table = (PickleTable*)malloc(sizeof(PickleTable));
+    pickle_table->argumentIndex = argumentIndex;
     pickle_table->rows = rows;
     return pickle_table;
 }

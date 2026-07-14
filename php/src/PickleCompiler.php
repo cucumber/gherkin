@@ -189,10 +189,19 @@ final class PickleCompiler
 
         $astNodeIds = $valuesRow ? [$step->id, $valuesRow->id] : [$step->id];
 
+        $data_table_argument_index = null;
+        $doc_string_argument_index = null;
+        if ($step->dataTable && $step->docString) {
+            $table_first = $step->docString->location->line > $step->dataTable->location->line;
+            $data_table_argument_index = $table_first ? 1 : 2;
+            $doc_string_argument_index = $table_first ? 2 : 1;
+        }
+
+
         $argument = ($step->dataTable || $step->docString)
             ? new PickleStepArgument(
-                docString: $step->docString ? $this->pickleDocString($step->docString, $variableCells, $valueCells) : null,
-                dataTable: $step->dataTable ? $this->pickleDataTable($step->dataTable, $variableCells, $valueCells) : null,
+                docString: $step->docString ? $this->pickleDocString($doc_string_argument_index, $step->docString, $variableCells, $valueCells) : null,
+                dataTable: $step->dataTable ? $this->pickleDataTable($data_table_argument_index, $step->dataTable, $variableCells, $valueCells) : null,
             )
             : null;
 
@@ -229,9 +238,10 @@ final class PickleCompiler
      * @param list<TableCell> $variableCells
      * @param list<TableCell> $valueCells
      */
-    private function pickleDataTable(DataTable $dataTable, array $variableCells, array $valueCells): PickleTable
+    private function pickleDataTable(int|null $argumentIndex, DataTable $dataTable, array $variableCells, array $valueCells): PickleTable
     {
         return new PickleTable(
+            argumentIndex: $argumentIndex,
             rows: array_map(
                 fn ($r) => new PickleTableRow(
                     cells: array_map(
@@ -250,9 +260,10 @@ final class PickleCompiler
      * @param list<TableCell> $variableCells
      * @param list<TableCell> $valueCells
      */
-    private function pickleDocString(DocString $docstring, array $variableCells, array $valueCells): PickleDocString
+    private function pickleDocString(int|null $argumentIndex, DocString $docstring, array $variableCells, array $valueCells): PickleDocString
     {
         return new PickleDocString(
+            argumentIndex: $argumentIndex,
             mediaType: $docstring->mediaType !== null ? $this->interpolate($docstring->mediaType, $variableCells, $valueCells) : null,
             content: $this->interpolate($docstring->content, $variableCells, $valueCells),
         );
