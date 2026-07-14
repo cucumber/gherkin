@@ -1,8 +1,5 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Compiles [gherkinDocument] into [messages.Pickle]s, each with [uri] set.
-///
-/// Returns an empty list when the document has no feature.
 List<messages.Pickle> compilePickles(
   messages.GherkinDocument gherkinDocument,
   String uri,
@@ -14,9 +11,6 @@ List<messages.Pickle> compilePickles(
     return pickles;
   }
 
-  // Builds pickle steps for [scenario], optionally interpolating from an
-  // examples row. Background steps are never interpolated. Step IDs are
-  // allocated here; the enclosing compile* function assigns the pickle ID next.
   List<messages.PickleStep> buildSteps(
     List<messages.Step> backgroundSteps,
     messages.Scenario scenario, [

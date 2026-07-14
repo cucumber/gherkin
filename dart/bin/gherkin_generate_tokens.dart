@@ -7,7 +7,6 @@ import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
-/// Acceptance CLI: feature paths → `*.tokens` text on stdout.
 void main(List<String> args) {
   final matcher = GherkinTokenMatcher(builtinDialects);
 
@@ -60,7 +59,6 @@ String _formatToken(Token token) {
       '$matchedType:$matchedKeywordType$matchedKeyword/${token.matchedText}/$matchedItems';
 }
 
-// Maps [TokenType] enum names to the PascalCase labels in `*.tokens` fixtures.
 String _wireName(TokenType tokenType) {
   final name = tokenType.name;
   if (name == 'eof') {

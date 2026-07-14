@@ -2,45 +2,31 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/location.dart';
 
-/// A single source line, with helpers used when matching tokens.
 class GherkinLine {
-  /// Creates a line from the given text at the given one-based line number.
   GherkinLine(this._lineText, this._lineNumber)
     : _trimmedLineText = _lineText.trimLeft(),
       _isEof = false;
 
-  /// Creates the line that marks the end of the file.
   GherkinLine.eof()
     : _lineText = '',
       _lineNumber = _unsetLineNumber,
       _trimmedLineText = '',
       _isEof = true;
 
-  // Placeholder line number for the end-of-file marker, which has no position
-  // in the source. Real line numbers are 1-based, so a negative value can
-  // never collide with one.
   static const int _unsetLineNumber = -1;
 
-  // Columns are 1-indexed.
   static const int _offset = 1;
 
-  // Matches the whitespace-preceded comment prefix that ends the tag portion
-  // of a line. Compiled once and reused across lines.
   static final RegExp _commentSuffix = RegExp(r'\s' + commentPrefix);
 
-  // Matches a token containing no whitespace. Compiled once and reused rather
-  // than rebuilt for every tag on every line.
   static final RegExp _nonWhitespaceToken = RegExp(r'^\S+$');
 
-  // Horizontal-whitespace patterns used when trimming table cells without
-  // consuming newlines.
   static final RegExp _leadingHorizontalWhitespace = RegExp(
     r'^[ \t\x0B\f\r\x85\xA0]+',
   );
   static final RegExp _trailingHorizontalWhitespace = RegExp(
     r'[ \t\x0B\f\r\x85\xA0]+$',
   );
-  // Trailing whitespace (including newlines) stripped from tag tokens.
   static final RegExp _trailingWhitespace = RegExp(
     r'[ \t\n\x0B\f\r\x85\xA0]+$',
   );
@@ -50,21 +36,10 @@ class GherkinLine {
   final String _trimmedLineText;
   final bool _isEof;
 
-  /// Whether this line is the end-of-file marker.
   bool get isEof => _isEof;
 
-  /// Releases any resources held by this line.
-  ///
-  /// No-op for this in-memory implementation.
   void detach() {}
 
-  /// Returns the line text.
-  ///
-  /// With the default [indentToRemove] of `0`, returns the full raw line
-  /// including leading indent. A negative value, or a value greater than
-  /// [indent], returns the line with all leading whitespace removed.
-  /// Otherwise returns the line starting at index [indentToRemove] (used to
-  /// strip doc-string indentation).
   String getLineText([int indentToRemove = 0]) {
     if (indentToRemove < 0 || indentToRemove > indent) {
       return _trimmedLineText;
@@ -72,28 +47,18 @@ class GherkinLine {
     return _lineText.substring(indentToRemove);
   }
 
-  /// Returns the remainder of the indent-stripped line after the first
-  /// [length] characters, trimmed on both ends.
   String getRestTrimmed(int length) =>
       _trimmedLineText.substring(length).trim();
 
-  /// The number of whitespace characters at the beginning of the line.
   int get indent => _lineText.length - _trimmedLineText.length;
 
-  /// Whether the line is empty or contains whitespace only.
   bool get isEmptyLine => _trimmedLineText.isEmpty;
 
-  /// Whether the beginning of the line (ignoring leading whitespace) matches
-  /// [prefix].
   bool startsWith(String prefix) => _trimmedLineText.startsWith(prefix);
 
-  /// Whether the beginning of the line (ignoring leading whitespace) matches
-  /// the title keyword [text] followed by a `:` separator.
   bool startsWithTitleKeyword(String text) =>
       startsWith('$text$titleKeywordSeparator');
 
-  /// Parses the line as a tag list, returning a [GherkinLineSpan] for each
-  /// tag (including its leading `@`).
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
     final commentMatch = _commentSuffix.firstMatch(_trimmedLineText);
@@ -126,8 +91,6 @@ class GherkinLine {
     return tags;
   }
 
-  /// Parses the line as a table row, returning a [GherkinLineSpan] for each
-  /// trimmed cell value.
   Iterable<GherkinLineSpan> get tableCells {
     final lineSpans = <GherkinLineSpan>[];
     var cellBuffer = StringBuffer();
@@ -135,7 +98,6 @@ class GherkinLine {
     var col = 0;
     var cellStart = 0;
     var escape = false;
-    // Columns are counted in Unicode code points.
     for (final rune in _lineText.runes) {
       final chr = String.fromCharCode(rune);
       if (escape) {
@@ -147,7 +109,6 @@ class GherkinLine {
           case tableCellSeparator:
             cellBuffer.write('|');
           default:
-            // Invalid escape; keep both the backslash and the character.
             cellBuffer.write(r'\');
             cellBuffer.write(chr);
         }
@@ -158,7 +119,6 @@ class GherkinLine {
             escape = true;
           case tableCellSeparator:
             if (beforeFirst) {
-              // Skip the first empty span
               beforeFirst = false;
             } else {
               final cell = cellBuffer.toString();
@@ -186,16 +146,10 @@ class GherkinLine {
   }
 }
 
-/// A span of text on a line together with its one-based column position.
-///
-/// Used for tags and table cells recognized while scanning a line.
 class GherkinLineSpan {
-  /// Creates a span starting at [column] containing [text].
   const GherkinLineSpan(this.column, this.text);
 
-  /// One-based column position.
   final int column;
 
-  /// Text part of the line.
   final String text;
 }

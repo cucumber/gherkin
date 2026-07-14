@@ -1,10 +1,8 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint
+// GENERATED FILE - DO NOT MODIFY BY HAND
+// dart format off
 
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 
-/// The Gherkin dialects bundled with this package, keyed by
-/// language tag, embedded from `gherkin-languages.json`.
 const Map<String, GherkinLanguageKeywords> builtinDialects = {
   "af": GherkinLanguageKeywords(
     "Afrikaans",

@@ -8,10 +8,7 @@ import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// A [Builder] that assembles parser events into a [messages.GherkinDocument].
 class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
-  /// Creates a builder that uses the given ID generator for message AST
-  /// element IDs (steps, tags, scenarios, and similar).
   GherkinDocumentBuilder(this._idGenerator) {
     reset();
   }
@@ -85,7 +82,6 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
         return _createRule(node);
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
-      // Keep this exhaustive so new rule types must be handled explicitly.
       case RuleType.none:
       case RuleType.eof:
       case RuleType.empty:
@@ -327,7 +323,6 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       children.add(messages.RuleChild(scenario: scenario));
     }
 
-    // Tag IDs precede the rule ID (tags appear earlier in the source).
     final tags = _getTags(header);
 
     return messages.Rule(

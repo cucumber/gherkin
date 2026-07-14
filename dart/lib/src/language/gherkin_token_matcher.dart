@@ -8,10 +8,7 @@ import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// The [TokenMatcher] for Gherkin (`.feature`) sources.
 class GherkinTokenMatcher implements TokenMatcher {
-  /// Creates a matcher over the given dialects map, defaulting to English
-  /// (`en`) unless another default language is supplied.
   GherkinTokenMatcher(this._dialects, [this._defaultLanguage = 'en']) {
     _useLanguage(
       _defaultLanguage,
@@ -54,7 +51,6 @@ class GherkinTokenMatcher implements TokenMatcher {
 
   @override
   bool matchOther(Token token) {
-    // Take the whole line, minus DocString indents.
     final text = token.line.getLineText(_indentToRemove);
     _setTokenMatched(
       token,
@@ -160,14 +156,12 @@ class GherkinTokenMatcher implements TokenMatcher {
   @override
   bool matchDocStringSeparator(Token token) =>
       _activeDocStringSeparator.isEmpty
-          // open
           ? _matchDocStringSeparator(token, docStringSeparator, true) ||
               _matchDocStringSeparator(
                 token,
                 docStringAlternativeSeparator,
                 true,
               )
-          // close
           : _matchDocStringSeparator(token, _activeDocStringSeparator, false);
 
   bool _matchDocStringSeparator(Token token, String separator, bool isOpen) {
@@ -220,9 +214,6 @@ class GherkinTokenMatcher implements TokenMatcher {
     return false;
   }
 
-  // Records that [token] matched [matchedType], populating its matched
-  // keyword, text, items, and location (column derived from indent when
-  // applicable).
   void _setTokenMatched(
     Token token,
     TokenType matchedType, {
@@ -241,7 +232,6 @@ class GherkinTokenMatcher implements TokenMatcher {
       ..matchedText = text
       ..matchedItems = items
       ..location = Location(token.location.line, matchedIndent + 1);
-    // Only Feature lines carry the active dialect into the AST builder.
     if (matchedType == TokenType.featureLine) {
       token.matchedLanguage = _currentLanguage;
     }
@@ -250,8 +240,6 @@ class GherkinTokenMatcher implements TokenMatcher {
   void _useLanguage(String language, GherkinLanguageKeywords keywords) {
     _currentLanguage = language;
     _currentKeywords = keywords;
-    // Longest first so a short keyword that is a prefix of a longer one cannot
-    // steal the match.
     _stepKeywordsByLengthDesc =
         <String>{
             ...keywords.given,
@@ -282,7 +270,6 @@ class GherkinTokenMatcher implements TokenMatcher {
     ) {
       for (final keyword in stepKeywords) {
         final existing = _keywordTypesMap[keyword];
-        // Ambiguous keywords (e.g. `* ` in given/when/then/and) are unknown.
         _keywordTypesMap[keyword] =
             existing == null || existing == type
                 ? type

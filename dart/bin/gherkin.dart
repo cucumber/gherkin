@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Acceptance CLI: feature paths → NDJSON envelopes on stdout.
 void main(List<String> args) {
   var includeSource = true;
   var includeAst = true;

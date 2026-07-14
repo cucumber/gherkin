@@ -9,11 +9,9 @@ import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-/// Controls which envelopes [generateMessages] emits and how IDs are assigned.
+/// Controls envelopes emitted by [generateMessages] and ID generation.
 final class GherkinOptions {
-  /// Creates options with Cucumber-compatible defaults (`source`,
-  /// `gherkinDocument`, and `pickle` envelopes included; English dialect;
-  /// random UUIDs).
+  /// Creates options with Cucumber-compatible defaults.
   const GherkinOptions({
     this.includeSource = true,
     this.includeGherkinDocument = true,
@@ -22,28 +20,23 @@ final class GherkinOptions {
     this.idGenerator,
   });
 
-  /// Whether to emit a `source` envelope for the input.
+  /// Whether to emit a source envelope.
   final bool includeSource;
 
-  /// Whether to emit a `gherkinDocument` envelope for a successful parse.
+  /// Whether to emit a Gherkin document envelope after a successful parse.
   final bool includeGherkinDocument;
 
-  /// Whether to emit `pickle` envelopes compiled from the document.
+  /// Whether to emit pickle envelopes.
   final bool includePickles;
 
-  /// Language tag used when the source does not declare `# language: …`.
+  /// Language used when the source has no language header.
   final String defaultDialect;
 
-  /// Supplies unique IDs for AST elements, pickles, and pickle steps.
-  ///
-  /// When null, each ID is a random UUID v4.
+  /// Supplies IDs for AST elements, pickles, and pickle steps.
   final String Function()? idGenerator;
 }
 
-/// Parses Gherkin [data] identified by [uri] into Cucumber message envelopes.
-///
-/// Parse failures ([ParserException] and subclasses) are reported as
-/// `parseError` envelopes rather than thrown to the caller.
+/// Parses Gherkin [data] at [uri] into Cucumber message envelopes.
 List<messages.Envelope> generateMessages(
   String data,
   String uri, [
@@ -110,8 +103,6 @@ List<messages.Envelope> generateMessages(
 }
 
 messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
-  // Error messages already include a `(line:column): ` prefix; pass through
-  // verbatim and attach a structured location when available.
   final loc = error.location;
   return messages.Envelope(
     parseError: messages.ParseError(
@@ -130,7 +121,6 @@ messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {
   );
 }
 
-// RFC 4122 UUID v4.
 String _newUuidV4() {
   final random = Random.secure();
   final bytes = List<int>.generate(16, (_) => random.nextInt(256));

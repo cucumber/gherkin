@@ -1,4 +1,3 @@
-/// The Gherkin parser error types.
 library;
 
 import 'package:cucumber_gherkin/src/language/location.dart';

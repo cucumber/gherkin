@@ -47,13 +47,11 @@ def dialect_body:
       "examples", "given", "when", "then", "and", "but"
     ] | map($d[.] | dart_list("    ")) | add);
 
-"// GENERATED CODE - DO NOT MODIFY BY HAND\n"
-+ "// ignore_for_file: type=lint\n"
+"// GENERATED FILE - DO NOT MODIFY BY HAND\n"
++ "// dart format off\n"
 + "\n"
 + "import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';\n"
 + "\n"
-+ "/// The Gherkin dialects bundled with this package, keyed by\n"
-+ "/// language tag, embedded from `gherkin-languages.json`.\n"
 + "const Map<String, GherkinLanguageKeywords> builtinDialects = {\n"
 + ([
     to_entries | sort_by(.key)[]

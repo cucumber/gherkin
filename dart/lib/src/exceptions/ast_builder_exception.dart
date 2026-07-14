@@ -1,8 +1,5 @@
 part of 'exceptions.dart';
 
-/// Raised by `GherkinDocumentBuilder` when parsed structure is invalid
-/// (for example, a data table with an inconsistent cell count).
 final class AstBuilderException extends ParserException {
-  /// Creates an exception with [message] at the given [location].
   AstBuilderException(super.message, super.location) : super.located();
 }
