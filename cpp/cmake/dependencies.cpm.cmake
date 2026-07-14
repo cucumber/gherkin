@@ -1,13 +1,16 @@
 # renovate: datasource=github-tags packageName=cpm-cmake/CPM.cmake versioning=semver
-set(CPM_DOWNLOAD_HASH_VERSION 456cb6754daaa010d57444d0c8ce6d95ecf006ab v0.43.1)
+set(CPM_DOWNLOAD_TAG_DIGEST v0.43.1 456cb6754daaa010d57444d0c8ce6d95ecf006ab)
 # renovate: datasource=github-tags packageName=cucumber/messages versioning=semver
-set(CUCUMBER_MESSAGES_HASH_VERSION bc887957a1d2dca415200a9a11f196a343ddc614 v34.0.0)
+set(CUCUMBER_MESSAGES_TAG_DIGEST v34.0.0 bc887957a1d2dca415200a9a11f196a343ddc614 )
 
-list(GET CPM_DOWNLOAD_HASH_VERSION 0 CPM_DOWNLOAD_HASH)
-list(GET CPM_DOWNLOAD_HASH_VERSION 1 CPM_DOWNLOAD_VERSION)
+list(GET CPM_DOWNLOAD_TAG_DIGEST 0 CPM_DOWNLOAD_TAG)
+list(GET CPM_DOWNLOAD_TAG_DIGEST 1 CPM_DOWNLOAD_DIGEST)
+string(SUBSTRING CPM_DOWNLOAD_TAG 1 -1 CPM_DOWNLOAD_VERSION)
 
-list(GET CUCUMBER_MESSAGES_HASH_VERSION 0 CUCUMBER_MESSAGES_HASH)
-list(GET CUCUMBER_MESSAGES_HASH_VERSION 1 CUCUMBER_MESSAGES_VERSION)
+list(GET CUCUMBER_MESSAGES_TAG_DIGEST 0 CUCUMBER_MESSAGES_TAG)
+list(GET CUCUMBER_MESSAGES_TAG_DIGEST 1 CUCUMBER_MESSAGES_DIGEST)
+string(SUBSTRING CUCUMBER_MESSAGES_TAG 1 -1 CUCUMBER_MESSAGES_VERSION)
+
 
 if(CUCUMBER_GHERKIN_FETCH_DEPS)
     if(NOT COMMAND CPMAddPackage)
@@ -20,7 +23,7 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
         if(NOT EXISTS "${CPM_DOWNLOAD_LOCATION}")
             message(STATUS "Downloading CPM.cmake ${CPM_DOWNLOAD_VERSION}…")
             file(DOWNLOAD
-                "https://github.com/cpm-cmake/CPM.cmake/releases/download/${CPM_DOWNLOAD_VERSION}/CPM.cmake"
+                "https://github.com/cpm-cmake/CPM.cmake/releases/download/${CUCUMBER_MESSAGES_TAG}/CPM.cmake"
                 "${CPM_DOWNLOAD_LOCATION}"
                 TLS_VERIFY ON
             )
@@ -33,7 +36,7 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
     # Dependencies
     # ---------------------------------------------------------------------------
     CPMAddPackage(
-        URI "gh:cucumber/messages@${CUCUMBER_MESSAGES_VERSION}#${CUCUMBER_MESSAGES_HASH}"
+        URI "gh:cucumber/messages@${CUCUMBER_MESSAGES_VERSION}#${CUCUMBER_MESSAGES_DIGEST}"
         NAME cucumber_messages
         SOURCE_SUBDIR cpp
         OPTIONS
