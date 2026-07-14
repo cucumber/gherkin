@@ -20,10 +20,10 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [testdata] removed stray \r\n line endings, replaced with \n. ([#617](https://github.com/cucumber/gherkin/pull/617))
 
+
 ## [41.0.0] - 2026-06-20
 ### Changed
 - [PHP] BREAKING CHANGE: Require PHP 8.4
-
 
 ### Fixed
 - [JavaScript] Remove namespace imports from messages
