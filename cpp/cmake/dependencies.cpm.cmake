@@ -1,14 +1,18 @@
+# renovate
+set(CPM_DOWNLOAD_VERSION 0.43.1)
 # renovate: datasource=github-tags packageName=nlohmann/json versioning=semver
-set(NLOHMANN_JSON_VERSION 3.12.0 CACHE STRING "Version of nlohmann_json to use")
+set(NLOHMANN_JSON_VERSION 55f93686c01528224f448c19128836e7df245f72 3.12.0)
 # renovate: datasource=github-tags packageName=cucumber/messages versioning=semver
-set(CUCUMBER_MESSAGES_VERSION 34.0.2 CACHE STRING "Version of cucumber_messages to use")
+set(CUCUMBER_MESSAGES_HASH_VERSION 79002c8940c9dcaa09d96db4d5a320d0f6806b7a 34.0.2)
+
+list(GET CUCUMBER_MESSAGES_HASH_VERSION 0 CUCUMBER_MESSAGES_HASH)
+list(GET CUCUMBER_MESSAGES_HASH_VERSION 1 CUCUMBER_MESSAGES_VERSION)
 
 if(CUCUMBER_GHERKIN_FETCH_DEPS)
     if(NOT COMMAND CPMAddPackage)
         # ---------------------------------------------------------------------------
         # CPM – download on first configure if not already cached (standalone only)
         # ---------------------------------------------------------------------------
-        set(CPM_DOWNLOAD_VERSION 0.40.2)
         set(CPM_USE_LOCAL_PACKAGES ON)
         set(CPM_DOWNLOAD_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
 
@@ -28,34 +32,18 @@ if(CUCUMBER_GHERKIN_FETCH_DEPS)
     # Dependencies
     # ---------------------------------------------------------------------------
     CPMAddPackage(
-        NAME nlohmann_json
-        GITHUB_REPOSITORY nlohmann/json
-        GIT_TAG v${NLOHMANN_JSON_VERSION}
-        OPTIONS "JSON_BuildTests Off" "JSON_Install ON"
-    )
-
-    if(TARGET nlohmann_json)
-        set_target_properties(nlohmann_json PROPERTIES SYSTEM ON)
-    endif()
-
-    if(nlohmann_json_ADDED)
-        # Make the generated config file discoverable by cucumber_messages' find_package()
-        list(APPEND CMAKE_PREFIX_PATH "${nlohmann_json_BINARY_DIR}")
-        if(NOT PROJECT_IS_TOP_LEVEL)
-            set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" PARENT_SCOPE)
-        endif()
-    endif()
-
-    CPMAddPackage(
+        URI "gh:cucumber/messages@${CUCUMBER_MESSAGES_VERSION}#${CUCUMBER_MESSAGES_HASH}"
         NAME cucumber_messages
-        GITHUB_REPOSITORY cucumber/messages
-        GIT_TAG v${CUCUMBER_MESSAGES_VERSION}
         SOURCE_SUBDIR cpp
-        SYSTEM
-        OPTIONS "CUCUMBER_MESSAGES_FETCH_DEPS ON"
+        OPTIONS
+            "CUCUMBER_MESSAGES_FETCH_DEPS ON"
     )
+
+    if(cucumber_messages_ADDED)
+        # Propagate cucumber_messages install rules so 'cmake --install' also installs it
+        install(SCRIPT "${cucumber_messages_BINARY_DIR}/cmake_install.cmake")
+    endif()
 
 else()
-    find_package(nlohmann_json ${NLOHMANN_JSON_VERSION} REQUIRED)
     find_package(cucumber_messages ${CUCUMBER_MESSAGES_VERSION} REQUIRED)
 endif()
