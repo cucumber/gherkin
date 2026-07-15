@@ -9,7 +9,6 @@ import 'dart:collection';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
-import 'package:cucumber_gherkin/src/parser/token_matcher.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
 enum TokenType {
@@ -70,6 +69,38 @@ enum RuleType {
 
 extension TokenTypeRuleType on TokenType {
   RuleType get ruleType => RuleType.values[index];
+}
+
+abstract class TokenMatcher {
+  bool matchEOF(Token token);
+
+  bool matchEmpty(Token token);
+
+  bool matchComment(Token token);
+
+  bool matchTagLine(Token token);
+
+  bool matchFeatureLine(Token token);
+
+  bool matchRuleLine(Token token);
+
+  bool matchBackgroundLine(Token token);
+
+  bool matchScenarioLine(Token token);
+
+  bool matchExamplesLine(Token token);
+
+  bool matchStepLine(Token token);
+
+  bool matchDocStringSeparator(Token token);
+
+  bool matchTableRow(Token token);
+
+  bool matchLanguage(Token token);
+
+  bool matchOther(Token token);
+
+  void reset();
 }
 
 class Parser<T> {
