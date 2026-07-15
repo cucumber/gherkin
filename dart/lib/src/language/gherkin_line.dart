@@ -4,16 +4,7 @@ import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 class GherkinLine {
   GherkinLine(this._lineText, this._lineNumber)
-    : _trimmedLineText = _lineText.trimLeft(),
-      _isEof = false;
-
-  GherkinLine.eof()
-    : _lineText = '',
-      _lineNumber = _unsetLineNumber,
-      _trimmedLineText = '',
-      _isEof = true;
-
-  static const int _unsetLineNumber = -1;
+    : _trimmedLineText = _lineText.trimLeft();
 
   static const int _offset = 1;
 
@@ -34,9 +25,6 @@ class GherkinLine {
   final String _lineText;
   final int _lineNumber;
   final String _trimmedLineText;
-  final bool _isEof;
-
-  bool get isEof => _isEof;
 
   String getLineText([int indentToRemove = 0]) {
     if (indentToRemove < 0 || indentToRemove > indent) {
