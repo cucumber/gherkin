@@ -1,5 +1,5 @@
-import 'package:cucumber_gherkin/src/language/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/gherkin_line.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 

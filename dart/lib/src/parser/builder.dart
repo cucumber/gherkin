@@ -1,4 +1,4 @@
-import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 
 abstract class Builder<T> {

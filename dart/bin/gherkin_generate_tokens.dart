@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
-import 'package:cucumber_gherkin/src/language/gherkin_token_matcher.dart';
+import 'package:cucumber_gherkin/src/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
-import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 

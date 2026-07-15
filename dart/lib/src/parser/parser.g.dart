@@ -7,7 +7,7 @@
 import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/language/token.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
