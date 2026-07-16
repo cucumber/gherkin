@@ -32,12 +32,12 @@ namespace cucumber::gherkin
 
     std::string parser_error::make_message(const std::string& message, const cms::Location& location) const
     {
-        std::ostringstream oss;
+        std::ostringstream stream;
 
-        oss << "(" << location.line << ":" << location.column.value_or(0) << ")"
-            << ": " << message;
+        stream << "(" << location.line << ":" << location.column.value_or(0) << ")"
+               << ": " << message;
 
-        return oss.str();
+        return stream.str();
     }
 
     bool parser_error::same_message(const parser_error& other) const
@@ -79,16 +79,16 @@ namespace cucumber::gherkin
 
     std::string unexpected_token::make_message(const token& received_token, const std::string& expected_tokens) const
     {
-        std::ostringstream oss;
+        std::ostringstream stream;
 
-        oss << "expected: " << expected_tokens << ", got '" << strip(received_token.value()) << "'";
+        stream << "expected: " << expected_tokens << ", got '" << strip(received_token.value()) << "'";
 
-        return oss.str();
+        return stream.str();
     }
 
-    cms::Location unexpected_token::make_location(const token& t) const
+    cms::Location unexpected_token::make_location(const token& received_token) const
     {
-        return t.location.column.value_or(0) > 1 ? t.location : cms::Location{ t.location.line, t.line.indent() + 1 };
+        return received_token.location.column.value_or(0) > 1 ? received_token.location : cms::Location{ received_token.location.line, received_token.line.indent() + 1 };
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -107,11 +107,11 @@ namespace cucumber::gherkin
 
     std::string unexpected_eof::make_message(const std::string& expected_tokens) const
     {
-        std::ostringstream oss;
+        std::ostringstream stream;
 
-        oss << "unexpected end of file, expected: " << expected_tokens;
+        stream << "unexpected end of file, expected: " << expected_tokens;
 
-        return oss.str();
+        return stream.str();
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -131,16 +131,16 @@ namespace cucumber::gherkin
     {
         strings errs;
 
-        for (const auto& p : ptrs)
+        for (const auto& error_pointer : ptrs)
         {
-            errs.push_back(p->what());
+            errs.push_back(error_pointer->what());
         }
 
-        std::ostringstream oss;
+        std::ostringstream stream;
 
-        oss << "Parser errors:\n" << join("\n", errs);
+        stream << "Parser errors:\n" << join("\n", errs);
 
-        return oss.str();
+        return stream.str();
     }
 
     const parser_error_ptrs& composite_parser_error::errors() const

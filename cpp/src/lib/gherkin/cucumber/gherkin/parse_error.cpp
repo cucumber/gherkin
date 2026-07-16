@@ -5,13 +5,13 @@ namespace cucumber::gherkin
 
     json parse_error::to_json() const
     {
-        json j;
+        json doc;
 
-        j["parseError"]["source"]["uri"] = uri;
-        location.to_json(j["parseError"]["source"]["location"]);
-        j["parseError"]["message"] = message;
+        doc["parseError"]["source"]["uri"] = uri;
+        location.to_json(doc["parseError"]["source"]["location"]);
+        doc["parseError"]["message"] = message;
 
-        return j;
+        return doc;
     }
 
 }

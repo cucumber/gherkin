@@ -20,7 +20,7 @@ namespace cucumber::gherkin
     }
 
     template<typename T>
-    auto declname(T&& v)
+    auto declname(T&& value)
     {
         return declname<T>();
     }

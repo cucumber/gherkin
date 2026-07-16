@@ -33,14 +33,14 @@ namespace cucumber::gherkin
                 ::UnDecorateSymbolName(name.c_str(), realname, 1024, 0);
             }
 
-            return { realname, [](char* p)
+            return { realname, [](char* ptr)
                 {
-                    ::free(p);
+                    ::free(ptr);
                 } };
 #else
-            return { abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status), [](char* p)
+            return { abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status), [](char* ptr)
                 {
-                    ::free(p);
+                    ::free(ptr);
                 } };
 #endif
         }

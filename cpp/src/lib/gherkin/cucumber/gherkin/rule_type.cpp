@@ -5,7 +5,7 @@
 namespace cucumber::gherkin
 {
 
-    std::string_view to_string(rule_type r)
+    std::string_view to_string(rule_type type)
     {
         static const std::unordered_map<rule_type, std::string_view> rmap = { { rule_type::none, "None" }, { rule_type::e_o_f, "EOF" }, { rule_type::empty, "Empty" },
             { rule_type::comment, "Comment" }, { rule_type::tag_line, "TagLine" }, { rule_type::feature_line, "FeatureLine" }, { rule_type::rule_line, "RuleLine" },
@@ -17,7 +17,7 @@ namespace cucumber::gherkin
             { rule_type::step_arg, "StepArg" }, { rule_type::data_table, "DataTable" }, { rule_type::doc_string, "DocString" }, { rule_type::tags, "Tags" },
             { rule_type::description_helper, "DescriptionHelper" }, { rule_type::description, "Description" } };
 
-        return rmap.at(r);
+        return rmap.at(type);
     }
 
 }

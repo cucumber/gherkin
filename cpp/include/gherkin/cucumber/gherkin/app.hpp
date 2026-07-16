@@ -19,16 +19,16 @@ namespace cucumber::gherkin
         app();
         virtual ~app();
 
-        void include_source(bool f);
-        void include_ast(bool f);
-        void include_pickles(bool f);
+        void include_source(bool enabled);
+        void include_ast(bool enabled);
+        void include_pickles(bool enabled);
 
-        void parse(const file& f, const callbacks& cbs = {});
-        void parse(const cms::Envelope& e, const callbacks& cbs = {});
-        void parse(const cms::Source& s, const callbacks& cbs = {});
+        void parse(const file& source_file, const callbacks& callbacks = {});
+        void parse(const cms::Envelope& envelope, const callbacks& callbacks = {});
+        void parse(const cms::Source& source, const callbacks& callbacks = {});
 
     private:
-        void send_parse_error(const std::string& uri, const parser_error& e, const callbacks& cbs) const;
+        void send_parse_error(const std::string& uri, const parser_error& error, const callbacks& callbacks) const;
 
         id_generator_ptr idp_;
         parser p_;

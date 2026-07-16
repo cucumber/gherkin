@@ -46,37 +46,37 @@ namespace cucumber::gherkin
             return "EOF";
         }
 
-        std::ostringstream oss;
+        std::ostringstream stream;
 
-        oss << "(" << token.location.line << ":" << token.location.column.value_or(0) << ")" << token.matched_type << ":";
+        stream << "(" << token.location.line << ":" << token.location.column.value_or(0) << ")" << token.matched_type << ":";
 
         if (token.matched_keyword)
         {
-            oss << "(";
+            stream << "(";
 
             if (token.matched_keyword_type)
             {
-                oss << *token.matched_keyword_type;
+                stream << *token.matched_keyword_type;
             }
 
-            oss << ")" << token.matched_keyword.value();
+            stream << ")" << token.matched_keyword.value();
         }
 
-        oss << "/" << token.matched_text << "/";
+        stream << "/" << token.matched_text << "/";
 
         if (!token.matched_items.empty())
         {
             strings items;
 
-            for (const auto& i : token.matched_items)
+            for (const auto& matched_item : token.matched_items)
             {
-                items.emplace_back(std::to_string(i.column) + ":" + i.text);
+                items.emplace_back(std::to_string(matched_item.column) + ":" + matched_item.text);
             }
 
-            oss << join(",", items);
+            stream << join(",", items);
         }
 
-        return oss.str();
+        return stream.str();
     }
 
 }

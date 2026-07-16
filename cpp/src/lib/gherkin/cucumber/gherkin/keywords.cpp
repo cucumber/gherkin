@@ -6,22 +6,22 @@
 namespace cucumber::gherkin
 {
 
-    const string_views& keywords(const std::string_view& language, const std::string_view& kw)
+    const string_views& keywords(const std::string_view& language, const std::string_view& keyword)
     {
-        return keywords(language).at(kw);
+        return all_keywords().at(language).at(keyword);
     }
 
-    string_views keywords(const std::string_view& language, const string_views& kws)
+    string_views keywords(const std::string_view& language, const string_views& keyword_names)
     {
-        string_views svs;
+        string_views views;
 
-        for (const auto& kw : kws)
+        for (const auto& keyword : keyword_names)
         {
-            auto ksvs = keywords(language, kw);
-            svs.insert(svs.end(), ksvs.begin(), ksvs.end());
+            auto keyword_views = keywords(language, keyword);
+            views.insert(views.end(), keyword_views.begin(), keyword_views.end());
         }
 
-        return svs;
+        return views;
     }
 
     dialect get_dialect(const std::string_view& language)

@@ -32,13 +32,13 @@ namespace cucumber::gherkin
 
     token token_scanner::read()
     {
-        auto r = next_line();
+        auto line_result = next_line();
 
         line_++;
 
         return token{
-            r.eof,
-            cucumber::gherkin::line(r.text, line_),
+            line_result.eof,
+            cucumber::gherkin::line(line_result.text, line_),
             {},
             std::nullopt,
             std::nullopt,
@@ -69,15 +69,15 @@ namespace cucumber::gherkin
 
     next_line_result token_scanner::next_line()
     {
-        next_line_result r;
+        next_line_result result;
         std::string line;
 
         if (ip_)
         {
             if (!input().eof())
             {
-                r.eof = !std::getline(input(), line);
-                r.text = rstrip(line, re_pattern::cr);
+                result.eof = !std::getline(input(), line);
+                result.text = rstrip(line, re_pattern::cr);
             }
             else
             {
@@ -85,7 +85,7 @@ namespace cucumber::gherkin
             }
         }
 
-        return r;
+        return result;
     }
 
     std::istream& token_scanner::input()

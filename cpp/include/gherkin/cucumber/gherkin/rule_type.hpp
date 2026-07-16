@@ -47,13 +47,13 @@ namespace cucumber::gherkin
         count
     };
 
-    std::string_view to_string(rule_type r);
+    std::string_view to_string(rule_type type);
 
-    inline std::ostream& operator<<(std::ostream& os, rule_type r)
+    inline std::ostream& operator<<(std::ostream& ostream, rule_type type)
     {
-        os << to_string(r);
+        ostream << to_string(type);
 
-        return os;
+        return ostream;
     }
 
 }

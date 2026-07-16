@@ -16,13 +16,13 @@ struct options
     bool predicatable_ids = true;
 };
 
-options parse_options(int ac, char** av)
+options parse_options(int argc, char** argv)
 {
     options opts;
 
-    for (opts.last_arg = 1; opts.last_arg < ac; ++opts.last_arg)
+    for (opts.last_arg = 1; opts.last_arg < argc; ++opts.last_arg)
     {
-        std::string_view arg(av[opts.last_arg]);
+        std::string_view arg(argv[opts.last_arg]);
 
         if (arg == "--no-source")
         {
@@ -65,19 +65,19 @@ options parse_options(int ac, char** av)
     return opts;
 }
 
-template<typename Obj>
-void print_json_obj(std::string_view key, const Obj& o)
+template<typename ObjectType>
+void print_json_obj(std::string_view key, const ObjectType& value)
 {
-    nlohmann::json j;
+    nlohmann::json json_doc;
 
-    o.to_json(j[key]);
+    value.to_json(json_doc[key]);
 
-    std::cout << j << std::endl;
+    std::cout << json_doc << std::endl;
 }
 
-int main(int ac, char** av)
+int main(int argc, char** argv)
 {
-    auto opts = parse_options(ac, av);
+    auto opts = parse_options(argc, argv);
 
     if (opts.exit)
     {
@@ -85,30 +85,30 @@ int main(int ac, char** av)
     }
 
     cucumber::gherkin::app app;
-    cucumber::gherkin::app::callbacks cbs{ [&](const auto& m)
+    cucumber::gherkin::app::callbacks cbs{ [&](const auto& msg)
         {
-            print_json_obj("source", m);
+            print_json_obj("source", msg);
         },
-        [&](const auto& m)
+        [&](const auto& msg)
         {
-            print_json_obj("gherkinDocument", m);
+            print_json_obj("gherkinDocument", msg);
         },
-        [&](const auto& m)
+        [&](const auto& msg)
         {
-            print_json_obj("pickle", m);
+            print_json_obj("pickle", msg);
         },
-        [&](const auto& m)
+        [&](const auto& msg)
         {
-            std::cout << m.to_json() << std::endl;
+            std::cout << msg.to_json() << std::endl;
         } };
 
     app.include_source(opts.include_source);
     app.include_ast(opts.include_ast);
     app.include_pickles(opts.include_pickles);
 
-    for (; opts.last_arg < ac; ++opts.last_arg)
+    for (; opts.last_arg < argc; ++opts.last_arg)
     {
-        app.parse(cucumber::gherkin::file{ av[opts.last_arg] }, cbs);
+        app.parse(cucumber::gherkin::file{ argv[opts.last_arg] }, cbs);
     }
 
     return 0;

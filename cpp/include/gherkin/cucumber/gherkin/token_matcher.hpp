@@ -51,9 +51,9 @@ namespace cucumber::gherkin
             cucumber::gherkin::items items;
         };
 
-        void set_token_matched(token& token, rule_type matched_type, const token_info& ti = {});
+        void set_token_matched(token& token, rule_type matched_type, const token_info& info = {});
 
-        const string_views& keywords(std::string_view kw) const;
+        const string_views& keywords(std::string_view keyword) const;
 
         cucumber::messages::StepKeywordType keyword_type(std::string_view keyword) const;
 

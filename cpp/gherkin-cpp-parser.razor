@@ -37,14 +37,14 @@ public static string NameOf(Rule rule)
             std::string state_comment = "State: @state.Id - @Raw(state.Comment)";
             std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
-            auto ep = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
-                throw *ep;
+                throw *error_pointer;
             }
 
-            context.add_error(std::move(ep));
+            context.add_error(std::move(error_pointer));
 
             return @state.Id;
 </text>}
@@ -90,7 +90,7 @@ namespace cucumber::gherkin
 
             if (context.has_errors())
             {
-                throw composite_parser_error(context.eptrs);
+                throw composite_parser_error(context.error_pointers);
             }
         }
 
@@ -136,15 +136,15 @@ namespace cucumber::gherkin
             }
             catch (const composite_parser_error& e)
             {
-                for (const auto& ep : e.errors())
+                for (const auto& error_pointer : e.errors())
                 {
-                    context.add_error(ep);
+                    context.add_error(error_pointer);
                 }
             }
             catch (const parser_error& e)
             {
-                auto ep = new_parser_error<parser_error>(e);
-                context.add_error(ep);
+                auto error_pointer = new_parser_error<parser_error>(e);
+                context.add_error(error_pointer);
             }
 
             return default_value;
@@ -170,9 +170,9 @@ namespace cucumber::gherkin
 </text>
 }
             return handle_external_error(context, false, token,
-                [&context](auto& t)
+                [&context](auto& tok)
                 {
-                    return context.matcher.match_@(NameOf(rule))(t);
+                    return context.matcher.match_@(NameOf(rule))(tok);
                 });
         }
 </text>

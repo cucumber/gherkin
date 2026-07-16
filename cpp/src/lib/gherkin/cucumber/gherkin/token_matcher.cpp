@@ -48,9 +48,9 @@ namespace cucumber::gherkin
 
     bool token_matcher::match_scenario_line(token& token)
     {
-        auto rt = rule_type::scenario_line;
+        auto scenario_type = rule_type::scenario_line;
 
-        return match_title_line(token, rt, keywords("scenario")) || match_title_line(token, rt, keywords("scenarioOutline"));
+        return match_title_line(token, scenario_type, keywords("scenario")) || match_title_line(token, scenario_type, keywords("scenarioOutline"));
     }
 
     bool token_matcher::match_background_line(token& token)
@@ -70,9 +70,9 @@ namespace cucumber::gherkin
             return false;
         }
 
-        token_info ti;
-        ti.items = token.line.table_cells();
-        set_token_matched(token, rule_type::table_row, ti);
+        token_info info;
+        info.items = token.line.table_cells();
+        set_token_matched(token, rule_type::table_row, info);
 
         return true;
     }
@@ -108,14 +108,14 @@ namespace cucumber::gherkin
     {
         for (const auto& keyword : keywords)
         {
-            std::string k(keyword);
+            std::string keyword_str(keyword);
 
-            if (!token.line.startswith_title_keyword(k))
+            if (!token.line.startswith_title_keyword(keyword_str))
             {
                 continue;
             }
 
-            set_token_matched(token, token_type, { token.line.get_keyword_trimmed(k), k });
+            set_token_matched(token, token_type, { token.line.get_keyword_trimmed(keyword_str), keyword_str });
 
             return true;
         }
@@ -174,16 +174,16 @@ namespace cucumber::gherkin
 
     bool token_matcher::match_step_line(token& token)
     {
-        string_views kws = { "given", "when", "then", "and", "but" };
-        auto keywords = cucumber::gherkin::keywords(dialect_name_, kws);
+        string_views step_keyword_names = { "given", "when", "then", "and", "but" };
+        auto keywords = cucumber::gherkin::keywords(dialect_name_, step_keyword_names);
 
         // Prefer the longest step keyword by sorting keywords in descending order
         // by length (in bytes, not codepoints or graphemes - adequate for dealing
         // with keywords that are prefixes of each other).
         std::sort(keywords.begin(), keywords.end(),
-            [](const std::string_view& a, const std::string_view& b)
+            [](const std::string_view& first, const std::string_view& second)
             {
-                return a.length() > b.length();
+                return first.length() > second.length();
             });
 
         for (const auto& keyword : keywords)
@@ -240,57 +240,57 @@ namespace cucumber::gherkin
         return true;
     }
 
-    void token_matcher::set_token_matched(token& token, rule_type matched_type, const token_info& ti)
+    void token_matcher::set_token_matched(token& token, rule_type matched_type, const token_info& info)
     {
         using namespace std::literals;
 
         token.matched_type = matched_type;
 
-        if (ti.text)
+        if (info.text)
         {
-            token.matched_text.assign(rstrip(*ti.text, re_pattern::crlf));
+            token.matched_text.assign(rstrip(*info.text, re_pattern::crlf));
         }
 
-        if (ti.keyword)
+        if (info.keyword)
         {
-            token.matched_keyword = *ti.keyword;
+            token.matched_keyword = *info.keyword;
         }
 
-        if (ti.keyword_type)
+        if (info.keyword_type)
         {
-            token.matched_keyword_type = *ti.keyword_type;
+            token.matched_keyword_type = *info.keyword_type;
         }
 
-        if (ti.indent)
+        if (info.indent)
         {
-            token.matched_indent = *ti.indent;
+            token.matched_indent = *info.indent;
         }
         else
         {
             token.matched_indent = token.line.indent();
         }
 
-        token.matched_items = std::move(ti.items);
+        token.matched_items = std::move(info.items);
         token.location.column = token.matched_indent + 1;
         token.matched_gherkin_dialect = dialect_name_;
     }
 
-    const string_views& token_matcher::keywords(std::string_view kw) const
+    const string_views& token_matcher::keywords(std::string_view keyword) const
     {
-        return cucumber::gherkin::keywords(dialect_name_, kw);
+        return cucumber::gherkin::keywords(dialect_name_, keyword);
     }
 
     cucumber::messages::StepKeywordType token_matcher::keyword_type(std::string_view keyword) const
     {
-        auto it = keyword_types_.find(keyword);
+        auto found = keyword_types_.find(keyword);
 
-        if (it != keyword_types_.end())
+        if (found != keyword_types_.end())
         {
-            const auto& kws = it->second;
+            const auto& keyword_list = found->second;
 
-            if (kws.size() == 1)
+            if (keyword_list.size() == 1)
             {
-                return kws[0];
+                return keyword_list[0];
             }
         }
 
@@ -306,31 +306,31 @@ namespace cucumber::gherkin
 
         dialect_name_ = dialect_name;
 
-        auto d = get_dialect(dialect_name_);
+        auto dialect = get_dialect(dialect_name_);
 
         keyword_types_.clear();
 
-        for (const auto& keyword : d.given_keywords)
+        for (const auto& keyword : dialect.given_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::CONTEXT);
         }
 
-        for (const auto& keyword : d.when_keywords)
+        for (const auto& keyword : dialect.when_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::ACTION);
         }
 
-        for (const auto& keyword : d.then_keywords)
+        for (const auto& keyword : dialect.then_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::OUTCOME);
         }
 
-        for (const auto& keyword : d.and_keywords)
+        for (const auto& keyword : dialect.and_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::CONJUNCTION);
         }
 
-        for (const auto& keyword : d.but_keywords)
+        for (const auto& keyword : dialect.but_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::CONJUNCTION);
         }
@@ -340,22 +340,22 @@ namespace cucumber::gherkin
     {
         using namespace std::literals;
 
-        std::string u;
+        std::string unescaped;
 
         if (active_doc_string_separator_ == "\"\"\"")
         {
-            u = subst(text, "\\\\\"\\\\\"\\\\\"", "\"\"\"");
+            unescaped = subst(text, "\\\\\"\\\\\"\\\\\"", "\"\"\"");
         }
         else if (active_doc_string_separator_ == "```")
         {
-            u = subst(text, "\\\\`\\\\`\\\\`", "```");
+            unescaped = subst(text, "\\\\`\\\\`\\\\`", "```");
         }
         else
         {
-            u = text;
+            unescaped = text;
         }
 
-        return u;
+        return unescaped;
     }
 
 }

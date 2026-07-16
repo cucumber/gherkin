@@ -50,9 +50,9 @@ namespace cucumber::gherkin
             return *cast();
         }
 
-        void emplace_back(const T& v)
+        void emplace_back(const T& value)
         {
-            get().emplace_back(v);
+            get().emplace_back(value);
         }
 
         std::any& ref_;
@@ -75,11 +75,11 @@ namespace cucumber::gherkin
         rule_type type() const;
 
         template<typename T>
-        void add(rule_type rule_type, const T& v)
+        void add(rule_type rule_type, const T& value)
         {
-            sub_node<T> sn(sub_items_[rule_type]);
+            sub_node<T> sub_node_ref(sub_items_[rule_type]);
 
-            sn.emplace_back(v);
+            sub_node_ref.emplace_back(value);
         }
 
         template<typename T>
@@ -90,13 +90,13 @@ namespace cucumber::gherkin
 
             ret_type ret = default_result;
 
-            auto it = sub_items_.find(rule_type);
+            auto found = sub_items_.find(rule_type);
 
-            if (it != sub_items_.end())
+            if (found != sub_items_.end())
             {
-                stype sn(const_cast<std::any&>(it->second));
+                stype sub_node_ref(const_cast<std::any&>(found->second));
 
-                ret = sn.get_ptr();
+                ret = sub_node_ref.get_ptr();
             }
 
             return ret;
@@ -126,7 +126,7 @@ namespace cucumber::gherkin
         }
 
         template<typename T, typename V = T>
-        void set_value(rule_type rule_type, V& v) const
+        void set_value(rule_type rule_type, V& value) const
         {
             using type = std::decay_t<T>;
 
@@ -140,9 +140,9 @@ namespace cucumber::gherkin
                 {
                     auto& items = *opt_items;
 
-                    for (const auto& i : items)
+                    for (const auto& element : items)
                     {
-                        v.emplace_back(i);
+                        value.emplace_back(element);
                     }
                 }
             }
@@ -152,45 +152,45 @@ namespace cucumber::gherkin
 
                 if (pitem)
                 {
-                    v = *pitem;
+                    value = *pitem;
                 }
             }
         }
 
         template<typename T, typename V = T>
-        void set_value(rule_type rule_type, std::shared_ptr<V>& v) const
+        void set_value(rule_type rule_type, std::shared_ptr<V>& value) const
         {
-            set_value<T>(rule_type, *v);
+            set_value<T>(rule_type, *value);
         }
 
         // Overload for optional<shared_ptr<T>>: retrieve T, wrap in shared_ptr
         template<typename T>
-        void set(rule_type rule_type, std::optional<std::shared_ptr<T>>& v) const
+        void set(rule_type rule_type, std::optional<std::shared_ptr<T>>& value) const
         {
             auto pitem = get_single<T>(rule_type);
             if (pitem)
             {
-                v = std::make_shared<T>(*pitem);
+                value = std::make_shared<T>(*pitem);
             }
         }
 
         // Overload for vector<shared_ptr<T>>: retrieve vector<T>, wrap each in
         // shared_ptr
         template<typename T>
-        void set(rule_type rule_type, std::vector<std::shared_ptr<T>>& v) const
+        void set(rule_type rule_type, std::vector<std::shared_ptr<T>>& value) const
         {
             auto opt_items = get_items<T>(rule_type);
             if (opt_items)
             {
                 for (const auto& item : *opt_items)
                 {
-                    v.emplace_back(std::make_shared<T>(item));
+                    value.emplace_back(std::make_shared<T>(item));
                 }
             }
         }
 
         template<typename T>
-        void set(rule_type rule_type, T& v) const
+        void set(rule_type rule_type, T& value) const
         {
             using type = std::decay_t<T>;
 
@@ -198,11 +198,11 @@ namespace cucumber::gherkin
             {
                 using value_type = typename type::value_type;
 
-                set_value<value_type>(rule_type, v);
+                set_value<value_type>(rule_type, value);
             }
             else
             {
-                set_value<type>(rule_type, v);
+                set_value<type>(rule_type, value);
             }
         }
 

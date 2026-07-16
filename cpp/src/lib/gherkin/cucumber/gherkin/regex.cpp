@@ -6,7 +6,7 @@
 namespace cucumber::gherkin
 {
 
-    void split(const std::string& re, const std::string& expr, strings& list)
+    void split(const std::string& pattern, const std::string& expr, strings& list)
     {
         list.clear();
 
@@ -15,14 +15,14 @@ namespace cucumber::gherkin
             return;
         }
 
-        std::regex delim(re);
+        std::regex delimiter(pattern);
 
-        auto cur = std::sregex_token_iterator(expr.begin(), expr.end(), delim, -1);
+        auto current = std::sregex_token_iterator(expr.begin(), expr.end(), delimiter, -1);
         auto end = std::sregex_token_iterator();
 
-        for (; cur != end; ++cur)
+        for (; current != end; ++current)
         {
-            list.push_back(*cur);
+            list.push_back(*current);
         }
 
         if (list.empty() && expr.size() > 0)
@@ -31,23 +31,23 @@ namespace cucumber::gherkin
         }
     }
 
-    strings split(const std::string& re, const std::string& expr)
+    strings split(const std::string& pattern, const std::string& expr)
     {
         strings list;
 
-        split(re, expr, list);
+        split(pattern, expr, list);
 
         return list;
     }
 
-    std::string subst(const std::string& s, const std::string& re, const std::string& what)
+    std::string subst(const std::string& source, const std::string& pattern, const std::string& what)
     {
-        return std::regex_replace(s, std::regex(re), what);
+        return std::regex_replace(source, std::regex(pattern), what);
     }
 
-    void subst(std::string& s, const std::string& re, const std::string& what)
+    void subst(std::string& source, const std::string& pattern, const std::string& what)
     {
-        s = subst(static_cast<const std::string&>(s), re, what);
+        source = subst(static_cast<const std::string&>(source), pattern, what);
     }
 
 }

@@ -13,7 +13,7 @@ namespace cucumber::gherkin
     {
         std::string next_id();
 
-        void add_pickle(cms::Pickle& p);
+        void add_pickle(cms::Pickle& pickle);
 
         id_generator_ptr idp;
         pickle_cb sink;

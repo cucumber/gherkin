@@ -43,7 +43,7 @@ namespace cucumber::gherkin
 
         std::string next_id();
 
-        void transform_node(ast_node& from, ast_node& to);
+        void transform_node(ast_node& from, ast_node& destination);
 
         cms::Step make_step(ast_node& node);
         cms::DocString make_doc_string(ast_node& node);

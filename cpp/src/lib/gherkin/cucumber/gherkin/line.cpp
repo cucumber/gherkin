@@ -28,19 +28,19 @@ namespace cucumber::gherkin
         std::size_t start_col = col + 1;
         std::wstring cell;
         bool first_cell = true;
-        auto it = wrow.begin();
+        auto current = wrow.begin();
         auto end = wrow.end();
-        auto next_ch = [](auto& it, const auto& end)
+        auto next_ch = [](auto& current, const auto& end_iter)
         {
-            return it != end ? *it++ : 0;
+            return current != end_iter ? *current++ : 0;
         };
 
         while (col < row.size())
         {
-            auto ch = next_ch(it, end);
+            auto character = next_ch(current, end);
             ++col;
 
-            if (ch == '|')
+            if (character == '|')
             {
                 if (first_cell)
                 {
@@ -54,28 +54,28 @@ namespace cucumber::gherkin
                 cell.clear();
                 start_col = col + 1;
             }
-            else if (ch == '\\')
+            else if (character == '\\')
             {
-                ch = next_ch(it, end);
+                character = next_ch(current, end);
                 ++col;
 
-                if (ch == 'n')
+                if (character == 'n')
                 {
                     cell += '\n';
                 }
                 else
                 {
-                    if (ch != '|' && ch != '\\')
+                    if (character != '|' && character != '\\')
                     {
                         cell += '\\';
                     }
 
-                    cell += ch;
+                    cell += character;
                 }
             }
-            else if (ch)
+            else if (character)
             {
-                cell += ch;
+                cell += character;
             }
         }
     }
@@ -98,15 +98,15 @@ namespace cucumber::gherkin
         return strip(trimmed_line_text_.substr(pos));
     }
 
-    std::string line::get_keyword_trimmed(std::string_view kw) const
+    std::string line::get_keyword_trimmed(std::string_view keyword) const
     {
         // Keyword ends with ':'
-        return get_rest_trimmed(kw.size() + 1);
+        return get_rest_trimmed(keyword.size() + 1);
     }
 
     std::string_view line::get_line_text(std::size_t indent_to_remove) const
     {
-        std::string_view sv;
+        std::string_view view;
 
         if (indent_to_remove == std::string::npos || indent_to_remove > indent_)
         {
@@ -114,8 +114,8 @@ namespace cucumber::gherkin
         }
         else
         {
-            sv = line_text_;
-            return sv.substr(indent_to_remove);
+            view = line_text_;
+            return view.substr(indent_to_remove);
         }
     }
 
@@ -157,14 +157,14 @@ namespace cucumber::gherkin
                 auto cell_indent = cell.size() - stripped_cell.size();
                 stripped_cell = rstrip(stripped_cell, re_pattern::spaces_no_nl);
 
-                item i{ col + indent_ + cell_indent, to_narrow(stripped_cell) };
+                item table_item{ col + indent_ + cell_indent, to_narrow(stripped_cell) };
 
-                for (const auto& p : line_unescapes)
+                for (const auto& replacement : line_unescapes)
                 {
-                    subst(i.text, p.first, p.second);
+                    subst(table_item.text, replacement.first, replacement.second);
                 }
 
-                items.emplace_back(std::move(i));
+                items.emplace_back(std::move(table_item));
             });
 
         return items;

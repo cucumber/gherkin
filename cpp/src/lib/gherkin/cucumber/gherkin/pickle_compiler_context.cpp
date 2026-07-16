@@ -11,14 +11,14 @@ namespace cucumber::gherkin
         return idp->next_id();
     }
 
-    void pickle_compiler_context::add_pickle(cms::Pickle& p)
+    void pickle_compiler_context::add_pickle(cms::Pickle& pickle)
     {
         if (sink)
         {
-            sink(p);
+            sink(pickle);
         }
 
-        pickles.emplace_back(std::move(p));
+        pickles.emplace_back(std::move(pickle));
     }
 
 }

@@ -29,23 +29,23 @@ namespace cucumber::gherkin
         return bytes;
     }
 
-    void replace(std::string& s, std::string_view what, std::string_view with)
+    void replace(std::string& source, std::string_view what, std::string_view with)
     {
         std::string::size_type pos;
 
-        while ((pos = s.find(what)) != std::string::npos)
+        while ((pos = source.find(what)) != std::string::npos)
         {
-            s.replace(pos, what.size(), with);
+            source.replace(pos, what.size(), with);
         }
     }
 
-    std::string replace(const std::string& s, std::string_view what, std::string_view with)
+    std::string replace(const std::string& source, std::string_view what, std::string_view with)
     {
-        std::string t = s;
+        std::string text = source;
 
-        replace(t, what, with);
+        replace(text, what, with);
 
-        return t;
+        return text;
     }
 
 }

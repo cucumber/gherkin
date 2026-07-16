@@ -11,21 +11,21 @@ namespace cucumber::gherkin
     {
 
         template<typename Container>
-        std::size_t join_container_impl(std::ostream& os, const std::string& sep, const Container& c)
+        std::size_t join_container_impl(std::ostream& ostream, const std::string& separator, const Container& container)
         {
-            if (!c.empty())
+            if (!container.empty())
             {
-                auto it = c.begin();
+                auto current = container.begin();
 
-                os << *it;
+                ostream << *current;
 
-                while (++it != c.end())
+                while (++current != container.end())
                 {
-                    os << sep << *it;
+                    ostream << separator << *current;
                 }
             }
 
-            return c.size();
+            return container.size();
         }
 
     }
@@ -45,7 +45,7 @@ namespace cucumber::gherkin
     constexpr bool is_joinable_container_v = is_joinable_container<T>::value;
 
     template<typename... Args>
-    void join_item_impl(std::ostream& os, const std::string& sep, Args&&... args)
+    void join_item_impl(std::ostream& ostream, const std::string& separator, Args&&... args)
     {
         std::size_t prev_count = 0;
 
@@ -57,19 +57,19 @@ namespace cucumber::gherkin
             {
                 if (prev_count && !arg.empty())
                 {
-                    os << sep;
+                    ostream << separator;
                 }
 
-                prev_count += detail::join_container_impl(os, sep, arg);
+                prev_count += detail::join_container_impl(ostream, separator, arg);
             }
             else
             {
                 if (prev_count)
                 {
-                    os << sep;
+                    ostream << separator;
                 }
 
-                os << arg;
+                ostream << arg;
                 ++prev_count;
             }
         };
@@ -78,13 +78,13 @@ namespace cucumber::gherkin
     }
 
     template<typename... Args>
-    std::string join(const std::string& sep, Args&&... args)
+    std::string join(const std::string& separator, Args&&... args)
     {
-        std::ostringstream oss;
+        std::ostringstream stream;
 
-        join_item_impl(oss, sep, std::forward<Args>(args)...);
+        join_item_impl(stream, separator, std::forward<Args>(args)...);
 
-        return oss.str();
+        return stream.str();
     }
 
 }

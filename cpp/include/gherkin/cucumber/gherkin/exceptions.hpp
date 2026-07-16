@@ -58,7 +58,7 @@ namespace cucumber::gherkin
 
         std::string make_message(const token& received_token, const std::string& expected_tokens) const;
 
-        cms::Location make_location(const token& t) const;
+        cms::Location make_location(const token& received_token) const;
 
     private:
         token received_token_;

@@ -15,7 +15,7 @@ namespace cucumber::gherkin
         Matcher& matcher;
 
         token_queue queue;
-        parser_error_ptrs eptrs;
+        parser_error_ptrs error_pointers;
         bool stop_at_first_error = false;
         std::size_t max_errors = 10;
 
@@ -26,10 +26,10 @@ namespace cucumber::gherkin
 
         token pop_token()
         {
-            auto t = std::move(queue.front());
+            auto front_token = std::move(queue.front());
             queue.pop_front();
 
-            return t;
+            return front_token;
         }
 
         token read_token()
@@ -37,21 +37,21 @@ namespace cucumber::gherkin
             return has_token() ? pop_token() : scanner.read();
         }
 
-        void push_tokens(const token_queue& q)
+        void push_tokens(const token_queue& tokens)
         {
-            queue.insert(queue.end(), q.begin(), q.end());
+            queue.insert(queue.end(), tokens.begin(), tokens.end());
         }
 
         bool has_errors() const
         {
-            return !eptrs.empty();
+            return !error_pointers.empty();
         }
 
-        void add_error(parser_error_ptr ep)
+        void add_error(parser_error_ptr error_pointer)
         {
-            for (const auto& p : eptrs)
+            for (const auto& existing : error_pointers)
             {
-                if (p->same_message(*ep))
+                if (existing->same_message(*error_pointer))
                 {
                     return;
                 }
@@ -59,11 +59,11 @@ namespace cucumber::gherkin
                 std::cerr << "not duplicate" << std::endl;
             }
 
-            eptrs.emplace_back(std::move(ep));
+            error_pointers.emplace_back(std::move(error_pointer));
 
-            if (eptrs.size() > max_errors)
+            if (error_pointers.size() > max_errors)
             {
-                throw composite_parser_error(eptrs);
+                throw composite_parser_error(error_pointers);
             }
         }
     };
