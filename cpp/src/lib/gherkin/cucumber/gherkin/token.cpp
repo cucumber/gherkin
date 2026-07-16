@@ -1,4 +1,5 @@
 #include "cucumber/gherkin/token.hpp"
+#include <string_view>
 
 namespace cucumber::gherkin
 {

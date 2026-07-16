@@ -1,6 +1,12 @@
 #include "cucumber/gherkin/token_formatter_builder.hpp"
+#include "cucumber/gherkin/id_generator.hpp"
 #include "cucumber/gherkin/join_utils.hpp"
+#include "cucumber/gherkin/rule_type.hpp"
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/types.hpp"
 #include <sstream>
+#include <string>
+#include <string_view>
 
 namespace cucumber::gherkin
 {

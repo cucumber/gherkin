@@ -1,8 +1,15 @@
 #include "cucumber/gherkin/token_scanner.hpp"
+#include "cucumber/gherkin/file.hpp"
+#include "cucumber/gherkin/line.hpp"
+#include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/utils.hpp"
 #include <fstream>
 #include <iostream>
+#include <memory>
+#include <optional>
 #include <sstream>
+#include <string>
+#include <string_view>
 
 namespace cucumber::gherkin
 {
@@ -29,7 +36,18 @@ namespace cucumber::gherkin
 
         line_++;
 
-        return token{ r.eof, cucumber::gherkin::line(r.text, line_), {}, std::nullopt, std::nullopt, {}, {}, {}, {}, { line_ } };
+        return token{
+            r.eof,
+            cucumber::gherkin::line(r.text, line_),
+            {},
+            std::nullopt,
+            std::nullopt,
+            {},
+            {},
+            {},
+            {},
+            { line_ },
+        };
     }
 
     void token_scanner::reset()

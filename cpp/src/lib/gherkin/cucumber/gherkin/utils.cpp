@@ -2,8 +2,8 @@
 #include <cwchar>
 #include <filesystem>
 #include <fstream>
-#include <locale>
-#include <regex>
+#include <ios>
+#include <string>
 #include <string_view>
 
 namespace cucumber::gherkin

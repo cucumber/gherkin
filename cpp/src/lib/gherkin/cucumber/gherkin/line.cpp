@@ -1,9 +1,15 @@
 #include "cucumber/gherkin/line.hpp"
 #include "cucumber/gherkin/exceptions.hpp"
+#include "cucumber/gherkin/items.hpp"
 #include "cucumber/gherkin/regex.hpp"
 #include "cucumber/gherkin/utils.hpp"
+#include <algorithm>
+#include <cstddef>
+#include <regex>
+#include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 namespace cucumber::gherkin
 {

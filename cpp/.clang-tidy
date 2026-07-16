@@ -1,5 +1,5 @@
 ---
-Checks: '
+Checks:          '
     bugprone-*,
     clang-analyzer-*,
     cppcoreguidelines*,
@@ -16,4 +16,17 @@ HeaderFilterRegex: '.*'
 FormatStyle: file
 CheckOptions:
     AllowSoleDefaultDtor: true
+    # readability-identifier-naming
+    readability-identifier-naming.NamespaceCase: lower_case
+    readability-identifier-naming.StructCase: CamelCase
+    readability-identifier-naming.ClassCase: CamelCase
+    readability-identifier-naming.EnumCase: CamelCase
+    readability-identifier-naming.EnumConstantCase: UPPER_CASE
+    readability-identifier-naming.MemberCase: camelBack
+    readability-identifier-naming.ParameterCase: camelBack
+    readability-identifier-naming.VariableCase: camelBack
+    readability-identifier-naming.FunctionCase: CamelCase
+    readability-identifier-naming.MethodCase: CamelCase
+    readability-identifier-naming.FunctionIgnoredRegexp: 'to_json|from_json|to_string'
+    readability-identifier-naming.MethodIgnoredRegexp: 'to_json|from_json|to_string'
 ...

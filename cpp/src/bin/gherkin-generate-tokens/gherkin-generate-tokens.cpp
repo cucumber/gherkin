@@ -2,8 +2,9 @@
 #include "cucumber/gherkin/parser.hpp"
 #include "cucumber/gherkin/token_formatter_builder.hpp"
 #include "cucumber/gherkin/utils.hpp"
+#include <cstddef>
 #include <iostream>
-#include <string_view>
+#include <string>
 
 int main(int ac, char** av)
 {

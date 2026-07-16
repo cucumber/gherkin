@@ -1,7 +1,15 @@
 #include "cucumber/gherkin/app.hpp"
+#include "cucumber/gherkin/cb_types.hpp"
 #include "cucumber/gherkin/exceptions.hpp"
+#include "cucumber/gherkin/file.hpp"
+#include "cucumber/gherkin/id_generator.hpp"
+#include "cucumber/gherkin/parse_error.hpp"
 #include "cucumber/gherkin/pickle_compiler.hpp"
 #include "cucumber/gherkin/utils.hpp"
+#include "cucumber/messages/Envelope.hpp"
+#include "cucumber/messages/Source.hpp"
+#include <memory>
+#include <string>
 
 namespace cucumber::gherkin
 {

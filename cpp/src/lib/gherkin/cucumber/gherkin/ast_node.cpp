@@ -1,4 +1,6 @@
 #include "cucumber/gherkin/ast_node.hpp"
+#include "cucumber/gherkin/rule_type.hpp"
+#include <utility>
 
 namespace cucumber::gherkin
 {

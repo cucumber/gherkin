@@ -9,7 +9,9 @@
 #endif
 
 #include "cucumber/gherkin/demangle.hpp"
-#include <stdlib.h>
+#include <cstdlib>
+#include <memory>
+#include <string>
 
 namespace cucumber::gherkin
 {

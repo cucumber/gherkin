@@ -1,4 +1,5 @@
 #include "cucumber/gherkin/id_generator.hpp"
+#include <string>
 
 namespace cucumber::gherkin
 {

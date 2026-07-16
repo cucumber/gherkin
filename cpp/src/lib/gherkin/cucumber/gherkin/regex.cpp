@@ -1,4 +1,7 @@
 #include "cucumber/gherkin/regex.hpp"
+#include "cucumber/gherkin/types.hpp"
+#include <regex>
+#include <string>
 
 namespace cucumber::gherkin
 {

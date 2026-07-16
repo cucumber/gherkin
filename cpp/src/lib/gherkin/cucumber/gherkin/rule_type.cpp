@@ -1,4 +1,5 @@
 #include "cucumber/gherkin/rule_type.hpp"
+#include <string_view>
 #include <unordered_map>
 
 namespace cucumber::gherkin

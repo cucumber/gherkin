@@ -1,8 +1,13 @@
 #include "cucumber/gherkin/exceptions.hpp"
 #include "cucumber/gherkin/join_utils.hpp"
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/types.hpp"
 #include "cucumber/gherkin/utils.hpp"
+#include "cucumber/messages/Location.hpp"
 #include <cstring>
 #include <sstream>
+#include <stdexcept>
+#include <string>
 
 namespace cucumber::gherkin
 {

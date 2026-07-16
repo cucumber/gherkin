@@ -1,6 +1,9 @@
 #include "cucumber/gherkin/app.hpp"
 #include "cucumber/gherkin/file.hpp"
 #include <iostream>
+#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+#include <string_view>
 
 struct options
 {

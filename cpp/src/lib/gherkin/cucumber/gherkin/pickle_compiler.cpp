@@ -3,7 +3,6 @@
 #include "cucumber/gherkin/id_generator.hpp"
 #include "cucumber/gherkin/msg_types.hpp"
 #include "cucumber/gherkin/pickle_compiler_context.hpp"
-#include "cucumber/gherkin/regex.hpp"
 #include "cucumber/gherkin/types.hpp"
 #include "cucumber/gherkin/utils.hpp"
 #include "cucumber/messages/DataTable.hpp"
@@ -24,9 +23,7 @@
 #include "cucumber/messages/Step.hpp"
 #include "cucumber/messages/StepKeywordType.hpp"
 #include "cucumber/messages/TableRow.hpp"
-#include <algorithm>
 #include <cstddef>
-#include <iterator>
 #include <memory>
 #include <optional>
 #include <string>

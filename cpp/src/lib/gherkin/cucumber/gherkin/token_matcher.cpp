@@ -1,10 +1,21 @@
 
 #include "cucumber/gherkin/token_matcher.hpp"
+#include "cucumber/gherkin/dialect.hpp"
 #include "cucumber/gherkin/exceptions.hpp"
 #include "cucumber/gherkin/keywords.hpp"
 #include "cucumber/gherkin/regex.hpp"
+#include "cucumber/gherkin/rule_type.hpp"
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/types.hpp"
 #include "cucumber/gherkin/utils.hpp"
+#include "cucumber/messages/StepKeywordType.hpp"
 #include <algorithm>
+#include <cucumber/messages/Location.hpp>
+#include <optional>
+#include <regex>
+#include <string>
+#include <string_view>
+#include <utility>
 
 namespace cucumber::gherkin
 {

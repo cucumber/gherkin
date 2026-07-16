@@ -1,5 +1,7 @@
 #include "cucumber/gherkin/keywords.hpp"
-#include "cucumber/gherkin/exceptions.hpp"
+#include "cucumber/gherkin/dialect.hpp"
+#include "cucumber/gherkin/types.hpp"
+#include <string_view>
 
 namespace cucumber::gherkin
 {
