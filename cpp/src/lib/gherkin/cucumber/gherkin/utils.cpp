@@ -1,52 +1,51 @@
+#include "cucumber/gherkin/utils.hpp"
 #include <cwchar>
-#include <locale>
-#include <fstream>
 #include <filesystem>
-#include <string_view>
+#include <fstream>
+#include <locale>
 #include <regex>
+#include <string_view>
 
-#include <cucumber/gherkin/utils.hpp>
-
-namespace cucumber::gherkin {
-
-std::string
-slurp(const std::string& path)
+namespace cucumber::gherkin
 {
-    namespace fs = std::filesystem;
 
-    std::string bytes;
-    std::ifstream ifs(path, std::ios::binary);
+    std::string slurp(const std::string& path)
+    {
+        namespace fs = std::filesystem;
 
-    if (ifs.is_open()) {
-        auto fsize = fs::file_size(fs::path{ path });
+        std::string bytes;
+        std::ifstream ifs(path, std::ios::binary);
 
-        bytes.resize(fsize);
+        if (ifs.is_open())
+        {
+            auto fsize = fs::file_size(fs::path{ path });
 
-        ifs.read(bytes.data(), fsize);
-        ifs.close();
+            bytes.resize(fsize);
+
+            ifs.read(bytes.data(), fsize);
+            ifs.close();
+        }
+
+        return bytes;
     }
 
-    return bytes;
-}
+    void replace(std::string& s, std::string_view what, std::string_view with)
+    {
+        std::string::size_type pos;
 
-void
-replace(std::string& s, std::string_view what, std::string_view with)
-{
-    std::string::size_type pos;
-
-    while ((pos = s.find(what)) != std::string::npos) {
-        s.replace(pos, what.size(), with);
+        while ((pos = s.find(what)) != std::string::npos)
+        {
+            s.replace(pos, what.size(), with);
+        }
     }
-}
 
-std::string
-replace(const std::string& s, std::string_view what, std::string_view with)
-{
-    std::string t = s;
+    std::string replace(const std::string& s, std::string_view what, std::string_view with)
+    {
+        std::string t = s;
 
-    replace(t, what, with);
+        replace(t, what, with);
 
-    return t;
-}
+        return t;
+    }
 
 }

@@ -1,17 +1,17 @@
-#include <cucumber/gherkin/parse_error.hpp>
+#include "cucumber/gherkin/parse_error.hpp"
 
-namespace cucumber::gherkin {
-
-json
-parse_error::to_json() const
+namespace cucumber::gherkin
 {
-    json j;
 
-    j["parseError"]["source"]["uri"] = uri;
-    location.to_json(j["parseError"]["source"]["location"]);
-    j["parseError"]["message"] = message;
+    json parse_error::to_json() const
+    {
+        json j;
 
-    return j;
-}
+        j["parseError"]["source"]["uri"] = uri;
+        location.to_json(j["parseError"]["source"]["location"]);
+        j["parseError"]["message"] = message;
+
+        return j;
+    }
 
 }

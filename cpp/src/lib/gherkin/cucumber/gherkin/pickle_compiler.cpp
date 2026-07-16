@@ -1,31 +1,31 @@
+#include "cucumber/gherkin/pickle_compiler.hpp"
 #include "cucumber/gherkin/cb_types.hpp"
 #include "cucumber/gherkin/id_generator.hpp"
 #include "cucumber/gherkin/msg_types.hpp"
 #include "cucumber/gherkin/pickle_compiler_context.hpp"
+#include "cucumber/gherkin/regex.hpp"
 #include "cucumber/gherkin/types.hpp"
-#include "cucumber/messages/data_table.hpp"
-#include "cucumber/messages/doc_string.hpp"
-#include "cucumber/messages/feature.hpp"
-#include "cucumber/messages/gherkin_document.hpp"
-#include "cucumber/messages/pickle.hpp"
-#include "cucumber/messages/pickle_doc_string.hpp"
-#include "cucumber/messages/pickle_step.hpp"
-#include "cucumber/messages/pickle_step_argument.hpp"
-#include "cucumber/messages/pickle_step_type.hpp"
-#include "cucumber/messages/pickle_table.hpp"
-#include "cucumber/messages/pickle_table_cell.hpp"
-#include "cucumber/messages/pickle_table_row.hpp"
-#include "cucumber/messages/pickle_tag.hpp"
-#include "cucumber/messages/rule.hpp"
-#include "cucumber/messages/scenario.hpp"
-#include "cucumber/messages/step.hpp"
-#include "cucumber/messages/step_keyword_type.hpp"
-#include "cucumber/messages/table_row.hpp"
+#include "cucumber/gherkin/utils.hpp"
+#include "cucumber/messages/DataTable.hpp"
+#include "cucumber/messages/DocString.hpp"
+#include "cucumber/messages/Feature.hpp"
+#include "cucumber/messages/GherkinDocument.hpp"
+#include "cucumber/messages/Pickle.hpp"
+#include "cucumber/messages/PickleDocString.hpp"
+#include "cucumber/messages/PickleStep.hpp"
+#include "cucumber/messages/PickleStepArgument.hpp"
+#include "cucumber/messages/PickleStepType.hpp"
+#include "cucumber/messages/PickleTable.hpp"
+#include "cucumber/messages/PickleTableCell.hpp"
+#include "cucumber/messages/PickleTableRow.hpp"
+#include "cucumber/messages/PickleTag.hpp"
+#include "cucumber/messages/Rule.hpp"
+#include "cucumber/messages/Scenario.hpp"
+#include "cucumber/messages/Step.hpp"
+#include "cucumber/messages/StepKeywordType.hpp"
+#include "cucumber/messages/TableRow.hpp"
 #include <algorithm>
 #include <cstddef>
-#include <cucumber/gherkin/utils.hpp>
-#include <cucumber/gherkin/regex.hpp>
-#include <cucumber/gherkin/pickle_compiler.hpp>
 #include <iterator>
 #include <memory>
 #include <optional>
@@ -33,439 +33,344 @@
 #include <unordered_map>
 #include <utility>
 
-namespace cucumber::gherkin {
-
-cms::pickle_step_type
-to_pickle_step_type(cms::step_keyword_type keyword_type)
+namespace cucumber::gherkin
 {
-    using step_map_type = std::unordered_map<
-        cms::step_keyword_type,
-        cms::pickle_step_type
-    >;
 
-    static const step_map_type smap = {
-        { cms::step_keyword_type::UNKNOWN, cms::pickle_step_type::UNKNOWN },
-        { cms::step_keyword_type::CONTEXT, cms::pickle_step_type::CONTEXT },
-        { cms::step_keyword_type::ACTION, cms::pickle_step_type::ACTION },
-        { cms::step_keyword_type::OUTCOME, cms::pickle_step_type::OUTCOME }
-    };
+    cms::PickleStepType to_pickle_step_type(cms::StepKeywordType keyword_type)
+    {
+        using step_map_type = std::unordered_map<cms::StepKeywordType, cms::PickleStepType>;
 
-    return smap.at(keyword_type);
-}
+        static const step_map_type smap = { { cms::StepKeywordType::UNKNOWN, cms::PickleStepType::UNKNOWN }, { cms::StepKeywordType::CONTEXT, cms::PickleStepType::CONTEXT },
+            { cms::StepKeywordType::ACTION, cms::PickleStepType::ACTION }, { cms::StepKeywordType::OUTCOME, cms::PickleStepType::OUTCOME } };
 
-template <typename Vector>
-void
-append(Vector& to, const Vector& from)
-{ to.insert(to.end(), from.begin(), from.end()); }
-
-pickle_compiler::pickle_compiler()
-: pickle_compiler(new_id_generator())
-{}
-
-pickle_compiler::pickle_compiler(id_generator_ptr idp)
-: idp_(idp)
-{}
-
-pickle_compiler::~pickle_compiler()
-{}
-
-pickles
-pickle_compiler::compile(
-    const cms::gherkin_document& d,
-    const std::string& uri,
-    pickle_cb sink
-)
-{
-    pickle_compiler_context ctx{idp_,sink };
-
-    if (d.feature) {
-        compile_feature(ctx, *d.feature, d.feature->language, uri);
+        return smap.at(keyword_type);
     }
 
-    return ctx.pickles;
-}
+    template<typename Vector>
+    void append(Vector& to, const Vector& from)
+    {
+        to.insert(to.end(), from.begin(), from.end());
+    }
 
-void
-pickle_compiler::compile_feature(
-    pickle_compiler_context& ctx,
-    const cms::feature& f,
-    const std::string& language,
-    const std::string& uri
-)
-{
-    auto tags = f.tags;
-    steps background_steps;
+    pickle_compiler::pickle_compiler()
+        : pickle_compiler(new_id_generator())
+    {}
 
-    for (const auto& child : f.children) {
-        if (child.background) {
-            append(background_steps, child.background->steps);
-        } else if (child.rule) {
-            compile_rule(
-                ctx,
-                *child.rule,
-                tags,
-                background_steps,
-                language,
-                uri
-            );
-        } else if (child.scenario) {
-            const auto& scenario = *child.scenario;
+    pickle_compiler::pickle_compiler(id_generator_ptr idp)
+        : idp_(idp)
+    {}
 
-            if (scenario.examples.empty()) {
-                compile_scenario(
-                    ctx,
-                    scenario,
-                    tags,
-                    background_steps,
-                    language,
-                    uri
-                );
-            } else {
-                compile_scenario_outline(
-                    ctx,
-                    scenario,
-                    tags,
-                    background_steps,
-                    language,
-                    uri
-                );
+    pickle_compiler::~pickle_compiler()
+    {}
+
+    pickles pickle_compiler::compile(const cms::GherkinDocument& d, const std::string& uri, pickle_cb sink)
+    {
+        pickle_compiler_context ctx{ idp_, sink };
+
+        if (d.feature)
+        {
+            compile_feature(ctx, *d.feature.value(), d.feature.value()->language, uri);
+        }
+
+        return ctx.pickles;
+    }
+
+    void pickle_compiler::compile_feature(pickle_compiler_context& ctx, const cms::Feature& f, const std::string& language, const std::string& uri)
+    {
+        auto tags = f.tags;
+        steps background_steps;
+
+        for (const auto& child : f.children)
+        {
+            if (child->background)
+            {
+                const auto& background_steps_temp = child->background.value()->steps;
+                for (const auto& step : background_steps_temp)
+                {
+                    background_steps.push_back(step);
+                }
+            }
+            else if (child->rule)
+            {
+                compile_rule(ctx, *child->rule.value(), tags, background_steps, language, uri);
+            }
+            else if (child->scenario)
+            {
+                const auto& scenario = *child->scenario.value();
+
+                if (scenario.examples.empty())
+                {
+                    compile_scenario(ctx, scenario, tags, background_steps, language, uri);
+                }
+                else
+                {
+                    compile_scenario_outline(ctx, scenario, tags, background_steps, language, uri);
+                }
             }
         }
     }
-}
 
-void
-pickle_compiler::compile_rule(
-    pickle_compiler_context& ctx,
-    const cms::rule& r,
-    const tags& parent_tags,
-    const steps& background_steps,
-    const std::string& language,
-    const std::string& uri
-)
-{
-    auto steps = background_steps;
-    auto tags = parent_tags;
+    void pickle_compiler::compile_rule(pickle_compiler_context& ctx, const cms::Rule& r, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
+    {
+        auto steps = background_steps;
+        auto tags = parent_tags;
 
-    append(tags, r.tags);
+        for (const auto& tag : r.tags)
+        {
+            tags.push_back(tag);
+        }
 
-    for (const auto& child : r.children) {
-        if (child.background) {
-            append(steps, child.background->steps);
-        } else if (child.scenario) {
-            const auto& scenario = *child.scenario;
+        for (const auto& child : r.children)
+        {
+            if (child->background)
+            {
+                const auto& background_steps_temp = child->background.value()->steps;
+                for (const auto& step : background_steps_temp)
+                {
+                    steps.push_back(step);
+                }
+            }
+            else if (child->scenario)
+            {
+                const auto& scenario = *child->scenario.value();
 
-            if (scenario.examples.empty()) {
-                compile_scenario(
-                    ctx,
-                    scenario,
-                    tags,
-                    steps,
-                    language,
-                    uri
-                );
-            } else {
-                compile_scenario_outline(
-                    ctx,
-                    scenario,
-                    tags,
-                    steps,
-                    language,
-                    uri
-                );
+                if (scenario.examples.empty())
+                {
+                    compile_scenario(ctx, scenario, tags, steps, language, uri);
+                }
+                else
+                {
+                    compile_scenario_outline(ctx, scenario, tags, steps, language, uri);
+                }
             }
         }
     }
-}
 
-void
-pickle_compiler::compile_scenario(
-    pickle_compiler_context& ctx,
-    const cms::scenario& s,
-    const tags& parent_tags,
-    const steps& background_steps,
-    const std::string& language,
-    const std::string& uri
-)
-{
-    auto conj = cms::step_keyword_type::CONJUNCTION;
-    pickle_steps steps;
+    void pickle_compiler::compile_scenario(
+        pickle_compiler_context& ctx, const cms::Scenario& s, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
+    {
+        auto conj = cms::StepKeywordType::CONJUNCTION;
+        pickle_steps steps;
 
-    if (!s.steps.empty()) {
-        auto ssteps = background_steps;
+        if (!s.steps.empty())
+        {
+            auto ssteps = background_steps;
 
-        append(ssteps, s.steps);
-
-        auto last_keyword_type = cms::step_keyword_type::UNKNOWN;
-
-        for (const auto& step : ssteps) {
-            if (step.keyword_type && *step.keyword_type != conj) {
-                last_keyword_type = *step.keyword_type;
+            for (const auto& step : s.steps)
+            {
+                ssteps.push_back(step);
             }
 
-            steps.push_back(make_pickle_step(step, last_keyword_type));
+            auto last_keyword_type = cms::StepKeywordType::UNKNOWN;
+
+            for (const auto& step : ssteps)
+            {
+                if (step->keywordType && *step->keywordType != conj)
+                {
+                    last_keyword_type = *step->keywordType;
+                }
+
+                steps.push_back(std::make_shared<cms::PickleStep>(make_pickle_step(*step, last_keyword_type)));
+            }
         }
+
+        auto tags = parent_tags;
+
+        for (const auto& tag : s.tags)
+        {
+            tags.push_back(tag);
+        }
+
+        strings source_ids = { s.id };
+
+        cms::Pickle p{ ctx.next_id(), uri, s.location, s.name, language, steps, make_pickle_tags(tags), source_ids };
+
+        ctx.add_pickle(p);
     }
 
-    auto tags = parent_tags;
+    void pickle_compiler::compile_scenario_outline(
+        pickle_compiler_context& ctx, const cms::Scenario& s, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
+    {
+        auto conj = cms::StepKeywordType::CONJUNCTION;
 
-    append(tags, s.tags);
+        for (const auto& es : s.examples)
+        {
+            if (!es->tableHeader)
+            {
+                continue;
+            }
 
-    strings source_ids = { s.id };
+            const auto& variable_cells = es->tableHeader.value()->cells;
+            const auto& table_body = es->tableBody;
 
-    cms::pickle p{
-       ctx.next_id(),
-       uri,
-       s.location,
-       s.name,
-       language,
-       steps,
-       make_pickle_tags(tags),
-       source_ids
-    };
+            for (const auto& values_row : table_body)
+            {
+                const auto& value_cells = values_row->cells;
 
-    ctx.add_pickle(p);
-}
+                pickle_steps steps;
+                auto last_keyword_type = cms::StepKeywordType::UNKNOWN;
 
-void
-pickle_compiler::compile_scenario_outline(
-    pickle_compiler_context& ctx,
-    const cms::scenario& s,
-    const tags& parent_tags,
-    const steps& background_steps,
-    const std::string& language,
-    const std::string& uri
-)
-{
-    auto conj = cms::step_keyword_type::CONJUNCTION;
+                if (!s.steps.empty())
+                {
+                    for (const auto& step : background_steps)
+                    {
+                        if (step->keywordType && *step->keywordType != conj)
+                        {
+                            last_keyword_type = *step->keywordType;
+                        }
 
-    for (const auto& es : s.examples) {
-        if (!es.table_header) {
-            continue;
-        }
+                        steps.push_back(std::make_shared<cms::PickleStep>(make_pickle_step(*step, last_keyword_type)));
+                    }
+                }
 
-        const auto& variable_cells = es.table_header->cells;
+                auto tags = parent_tags;
 
-        for (const auto& values_row : es.table_body) {
-            const auto& value_cells = values_row.cells;
+                for (const auto& tag : s.tags)
+                {
+                    tags.push_back(tag);
+                }
+                for (const auto& tag : es->tags)
+                {
+                    tags.push_back(tag);
+                }
 
-            pickle_steps steps;
-            auto last_keyword_type = cms::step_keyword_type::UNKNOWN;
-
-            if (!s.steps.empty()) {
-                for (const auto& step : background_steps) {
-                    if (step.keyword_type && *step.keyword_type != conj) {
-                        last_keyword_type = *step.keyword_type;
+                for (const auto& step : s.steps)
+                {
+                    if (step->keywordType && *step->keywordType != conj)
+                    {
+                        last_keyword_type = *step->keywordType;
                     }
 
-                    steps.push_back(make_pickle_step(step, last_keyword_type));
-                }
-            }
-
-            auto tags = parent_tags;
-
-            append(tags, s.tags);
-            append(tags, es.tags);
-
-            for (const auto& step : s.steps) {
-                if (step.keyword_type && *step.keyword_type != conj) {
-                    last_keyword_type = *step.keyword_type;
+                    steps.push_back(std::make_shared<cms::PickleStep>(make_pickle_step(*step, variable_cells, std::addressof(*values_row), last_keyword_type)));
                 }
 
-                steps.push_back(
-                    make_pickle_step(
-                        step,
-                        variable_cells,
-                        std::addressof(values_row),
-                        last_keyword_type
-                    )
-                );
+                strings source_ids = { s.id, values_row->id };
+
+                cms::Pickle p{ ctx.next_id(), uri, values_row->location, interpolate(s.name, variable_cells, value_cells), language, steps, make_pickle_tags(tags), source_ids };
+
+                ctx.add_pickle(p);
+            }
+        }
+    }
+
+    cms::PickleStep pickle_compiler::make_pickle_step(const cms::Step& step, const table_cells& variable_cells, const cms::TableRow* value_row_ptr, cms::StepKeywordType keyword_type)
+    {
+        const auto& value_cells = value_row_ptr ? value_row_ptr->cells : table_cells();
+
+        cms::PickleStep ps{ std::nullopt, { step.id }, next_id(), to_pickle_step_type(keyword_type), interpolate(step.text, variable_cells, value_cells) };
+
+        std::optional<std::size_t> data_table_argument_index = {};
+        std::optional<std::size_t> doc_string_argument_index = {};
+        if (step.dataTable && step.docString)
+        {
+            if (step.docString.value()->location->line > step.dataTable.value()->location->line)
+            {
+                data_table_argument_index = 1;
+                doc_string_argument_index = 2;
+            }
+            else
+            {
+                data_table_argument_index = 2;
+                doc_string_argument_index = 1;
+            }
+        }
+
+        if (step.dataTable || step.docString)
+        {
+            auto arg = std::make_shared<cms::PickleStepArgument>();
+            if (step.docString)
+            {
+                arg->docString = std::make_shared<cms::PickleDocString>(make_pickle_doc_string(doc_string_argument_index, *step.docString.value(), variable_cells, value_cells));
+            }
+            if (step.dataTable)
+            {
+                arg->dataTable = std::make_shared<cms::PickleTable>(make_pickle_table(data_table_argument_index, *step.dataTable.value(), variable_cells, value_cells));
+            }
+            ps.argument = std::move(arg);
+        }
+
+        if (value_row_ptr)
+        {
+            ps.astNodeIds.push_back(value_row_ptr->id);
+        }
+
+        return ps;
+    }
+
+    cms::PickleTable pickle_compiler::make_pickle_table(const std::optional<std::size_t>& argument_index, const cms::DataTable& dt, const table_cells& variable_cells, const table_cells& value_cells)
+    {
+        cms::PickleTable t{ argument_index };
+
+        for (const auto& row : dt.rows)
+        {
+            auto r = std::make_shared<cms::PickleTableRow>();
+
+            for (const auto& cell : row->cells)
+            {
+                auto pc = std::make_shared<cms::PickleTableCell>();
+                pc->value = interpolate(cell->value, variable_cells, value_cells);
+                r->cells.emplace_back(pc);
             }
 
-            strings source_ids = { s.id, values_row.id };
-
-            cms::pickle p{
-               ctx.next_id(),
-               uri,
-               values_row.location,
-               interpolate(s.name, variable_cells, value_cells),
-               language,
-               steps,
-               make_pickle_tags(tags),
-               source_ids
-            };
-
-            ctx.add_pickle(p);
-        }
-    }
-}
-
-cms::pickle_step
-pickle_compiler::make_pickle_step(
-    const cms::step& step,
-    const table_cells& variable_cells,
-    const cms::table_row* value_row_ptr,
-    cms::step_keyword_type keyword_type
-)
-{
-    const auto& value_cells =
-        value_row_ptr
-        ? value_row_ptr->cells
-        : table_cells()
-        ;
-
-    cms::pickle_step ps{
-        std::nullopt,
-        { step.id },
-        next_id(),
-        to_pickle_step_type(keyword_type),
-        interpolate(step.text, variable_cells, value_cells)
-    };
-
-    std::optional<std::size_t> data_table_argument_index = {};
-    std::optional<std::size_t> doc_string_argument_index = {};
-    if (step.data_table && step.doc_string) {
-        if(step.doc_string->location.line > step.data_table->location.line) {
-            data_table_argument_index = 1;
-            doc_string_argument_index = 2;
-        } else {
-            data_table_argument_index = 2;
-            doc_string_argument_index = 1;
-        }
-    }
-
-    if (step.data_table || step.doc_string) {
-        ps.argument = cms::pickle_step_argument{};
-        if (step.doc_string) {
-            ps.argument->doc_string = make_pickle_doc_string(
-                doc_string_argument_index,
-                *step.doc_string,
-                variable_cells,
-                value_cells);
-        }
-        if (step.data_table) {
-            ps.argument->data_table = make_pickle_table(
-                data_table_argument_index,
-                *step.data_table,
-                variable_cells,
-                value_cells
-            );
-        }
-    }
-
-    if (value_row_ptr) {
-        ps.ast_node_ids.push_back(value_row_ptr->id);
-    }
-
-    return ps;
-}
-
-cms::pickle_table
-pickle_compiler::make_pickle_table(
-    const std::optional<std::size_t>& argument_index,
-    const cms::data_table& dt,
-    const table_cells& variable_cells,
-    const table_cells& value_cells
-)
-{
-    cms::pickle_table t {
-        argument_index
-    };
-
-    for (const auto& row : dt.rows) {
-        cms::pickle_table_row r;
-
-        for (const auto& cell : row.cells) {
-            r.cells.emplace_back(cms::pickle_table_cell{
-               interpolate(
-                    cell.value,
-                    variable_cells,
-                    value_cells
-                )
-            });
+            t.rows.emplace_back(std::move(r));
         }
 
-        t.rows.emplace_back(std::move(r));
+        return t;
     }
 
-    return t;
-}
+    cms::PickleDocString pickle_compiler::make_pickle_doc_string(
+        const std::optional<std::size_t>& argument_index, const cms::DocString& ds, const table_cells& variable_cells, const table_cells& value_cells)
+    {
+        cms::PickleDocString pds{ argument_index, std::nullopt, interpolate(ds.content, variable_cells, value_cells) };
 
-cms::pickle_doc_string
-pickle_compiler::make_pickle_doc_string(
-    const std::optional<std::size_t>& argument_index,
-    const cms::doc_string& ds,
-    const table_cells& variable_cells,
-    const table_cells& value_cells
-)
-{
-    cms::pickle_doc_string pds{
-        argument_index,
-        std::nullopt,
-        interpolate(ds.content, variable_cells, value_cells)
-    };
-
-    if (ds.media_type) {
-        pds.media_type = interpolate(
-            *ds.media_type,
-            variable_cells,
-            value_cells
-        );
-    }
-
-    return pds;
-}
-
-cms::pickle_step
-pickle_compiler::make_pickle_step(
-    const cms::step& step,
-    cms::step_keyword_type keyword_type
-)
-{ return make_pickle_step(step, {}, nullptr, keyword_type); }
-
-pickle_tags
-pickle_compiler::make_pickle_tags(const tags& tags)
-{
-    pickle_tags ptags;
-
-    std::transform(
-        tags.cbegin(), tags.cend(),
-        std::back_inserter(ptags),
-        [](const auto& t) {
-            return
-                cms::pickle_tag{
-                   t.name,
-                   t.id
-                };
+        if (ds.mediaType)
+        {
+            pds.mediaType = interpolate(*ds.mediaType, variable_cells, value_cells);
         }
-    );
 
-    return ptags;
-}
-
-std::string
-pickle_compiler::interpolate(
-    const std::string& name,
-    const table_cells& variable_cells,
-    const table_cells& value_cells
-)
-{
-    auto iname = name;
-    std::size_t col = 0;
-    std::string header;
-
-    for (const auto& variable_cell : variable_cells) {
-        const auto& value_cell = value_cells[col++];
-        header = "<" + variable_cell.value + ">";
-
-        replace(iname, header, value_cell.value);
+        return pds;
     }
 
-    return iname;
-}
+    cms::PickleStep pickle_compiler::make_pickle_step(const cms::Step& step, cms::StepKeywordType keyword_type)
+    {
+        return make_pickle_step(step, {}, nullptr, keyword_type);
+    }
 
-std::string
-pickle_compiler::next_id()
-{ return idp_->next_id(); }
+    pickle_tags pickle_compiler::make_pickle_tags(const tags& tags)
+    {
+        pickle_tags ptags;
+
+        for (const auto& t : tags)
+        {
+            auto pt = std::make_shared<cms::PickleTag>();
+            pt->name = t->name;
+            pt->astNodeId = t->id;
+            ptags.emplace_back(pt);
+        }
+
+        return ptags;
+    }
+
+    std::string pickle_compiler::interpolate(const std::string& name, const table_cells& variable_cells, const table_cells& value_cells)
+    {
+        auto iname = name;
+        std::size_t col = 0;
+        std::string header;
+
+        for (const auto& variable_cell : variable_cells)
+        {
+            const auto& value_cell = value_cells[col++];
+            header = "<" + variable_cell->value + ">";
+
+            replace(iname, header, value_cell->value);
+        }
+
+        return iname;
+    }
+
+    std::string pickle_compiler::next_id()
+    {
+        return idp_->next_id();
+    }
 
 }

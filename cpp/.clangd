@@ -1,6 +1,6 @@
 ---
 CompileFlags:
-  CompilationDatabase: /root/.cpp/compile_commands.json
+  CompilationDatabase: ~/.cpp/compile_commands.json
 Diagnostics:
   UnusedIncludes: Strict
   MissingIncludes: Strict

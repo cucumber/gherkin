@@ -1,10 +1,9 @@
+#include "cucumber/gherkin/join_utils.hpp"
+#include "cucumber/gherkin/parser.hpp"
+#include "cucumber/gherkin/token_formatter_builder.hpp"
+#include "cucumber/gherkin/utils.hpp"
 #include <iostream>
 #include <string_view>
-
-#include <cucumber/gherkin/parser.hpp>
-#include <cucumber/gherkin/token_formatter_builder.hpp>
-#include <cucumber/gherkin/join_utils.hpp>
-#include <cucumber/gherkin/utils.hpp>
 
 int main(int ac, char** av)
 {
@@ -13,7 +12,8 @@ int main(int ac, char** av)
 
     parser p;
 
-    for (std::size_t i = 1; i < ac; ++i) {
+    for (std::size_t i = 1; i < ac; ++i)
+    {
         std::string file(av[i]);
 
         auto data = cucumber::gherkin::slurp(file);

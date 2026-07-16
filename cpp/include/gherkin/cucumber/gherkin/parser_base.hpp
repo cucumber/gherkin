@@ -1,71 +1,64 @@
 #pragma once
 
+#include "cucumber/gherkin/ast_builder.hpp"
+#include "cucumber/gherkin/id_generator.hpp"
+#include "cucumber/gherkin/parser_context.hpp"
+#include "cucumber/gherkin/token_matcher.hpp"
+#include "cucumber/gherkin/token_scanner.hpp"
+#include "cucumber/messages/Source.hpp"
 #include <string_view>
 
-#include <cucumber/messages/source.hpp>
-
-#include <cucumber/gherkin/ast_builder.hpp>
-#include <cucumber/gherkin/token_scanner.hpp>
-#include <cucumber/gherkin/token_matcher.hpp>
-#include <cucumber/gherkin/parser_context.hpp>
-#include <cucumber/gherkin/id_generator.hpp>
-
-namespace cucumber::gherkin {
-
-namespace cms = cucumber::messages;
-
-template <
-    typename Builder = ast_builder,
-    typename Scanner = token_scanner,
-    typename Matcher = token_matcher
->
-class parser_base
+namespace cucumber::gherkin
 {
-public:
-    using result_type = typename Builder::result_type;
-    using context_type = parser_context<Builder, Scanner, Matcher>;
 
-    parser_base()
-    {}
+    namespace cms = cucumber::messages;
 
-    parser_base(id_generator_ptr idp)
-    : builder_(idp)
-    {}
-
-    virtual ~parser_base()
-    {}
-
-    result_type parse(std::string_view uri, std::string_view data)
+    template<typename Builder = ast_builder, typename Scanner = token_scanner, typename Matcher = token_matcher>
+    class parser_base
     {
-        reset(uri, data);
+    public:
+        using result_type = typename Builder::result_type;
+        using context_type = parser_context<Builder, Scanner, Matcher>;
 
-        context_type context{
-            builder_,
-            scanner_,
-            matcher_
-        };
+        parser_base()
+        {}
 
-        parse(context);
+        parser_base(id_generator_ptr idp)
+            : builder_(idp)
+        {}
 
-        return get_result();
-    }
+        virtual ~parser_base()
+        {}
 
-protected:
-    void reset(std::string_view uri, std::string_view data)
-    {
-        builder_.reset(uri);
-        scanner_.reset(data);
-        matcher_.reset();
-    }
+        result_type parse(std::string_view uri, std::string_view data)
+        {
+            reset(uri, data);
 
-    result_type get_result() const
-    { return builder_.get_result(); }
+            context_type context{ builder_, scanner_, matcher_ };
 
-    virtual void parse(context_type& context) = 0;
+            parse(context);
 
-    Builder builder_;
-    Scanner scanner_;
-    Matcher matcher_;
-};
+            return get_result();
+        }
+
+    protected:
+        void reset(std::string_view uri, std::string_view data)
+        {
+            builder_.reset(uri);
+            scanner_.reset(data);
+            matcher_.reset();
+        }
+
+        result_type get_result() const
+        {
+            return builder_.get_result();
+        }
+
+        virtual void parse(context_type& context) = 0;
+
+        Builder builder_;
+        Scanner scanner_;
+        Matcher matcher_;
+    };
 
 }

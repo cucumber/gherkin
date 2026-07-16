@@ -1,51 +1,52 @@
 #pragma once
 
-#include <string_view>
+#include "cucumber/gherkin/file.hpp"
+#include "cucumber/gherkin/line.hpp"
+#include "cucumber/gherkin/token.hpp"
 #include <memory>
+#include <string_view>
 
-#include <cucumber/gherkin/file.hpp>
-#include <cucumber/gherkin/token.hpp>
-#include <cucumber/gherkin/line.hpp>
-
-namespace cucumber::gherkin {
-
-struct next_line_result
+namespace cucumber::gherkin
 {
-    bool eof = true;
-    std::string text;
-};
 
-class token_scanner
-{
-public:
-    token_scanner();
-    token_scanner(std::string_view data);
-    token_scanner(const file& file);
+    struct next_line_result
+    {
+        bool eof = true;
+        std::string text;
+    };
 
-    virtual ~token_scanner();
+    class token_scanner
+    {
+    public:
+        token_scanner();
+        token_scanner(std::string_view data);
+        token_scanner(const file& file);
 
-    void reset();
-    void reset(std::string_view data);
-    void reset(const file& file);
+        virtual ~token_scanner();
 
-    token read();
+        void reset();
+        void reset(std::string_view data);
+        void reset(const file& file);
 
-private:
-    next_line_result next_line();
+        token read();
 
-    std::istream& input();
+    private:
+        next_line_result next_line();
 
-    using input_ptr = std::unique_ptr<std::istream>;
+        std::istream& input();
 
-    std::size_t line_ = 0;
-    input_ptr ip_;
-};
+        using input_ptr = std::unique_ptr<std::istream>;
 
-using token_scanner_ptr = std::unique_ptr<token_scanner>;
+        std::size_t line_ = 0;
+        input_ptr ip_;
+    };
 
-template <typename... Args>
-token_scanner_ptr
-new_token_scanner(Args&&... args)
-{ return std::make_unique<token_scanner>(std::forward<Args>(args)...); }
+    using token_scanner_ptr = std::unique_ptr<token_scanner>;
+
+    template<typename... Args>
+    token_scanner_ptr new_token_scanner(Args&&... args)
+    {
+        return std::make_unique<token_scanner>(std::forward<Args>(args)...);
+    }
 
 }

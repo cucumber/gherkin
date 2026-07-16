@@ -1,118 +1,98 @@
 #pragma once
 
-#include <stdexcept>
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/types.hpp"
+#include "cucumber/messages/Location.hpp"
 #include <memory>
+#include <stdexcept>
 
-#include <cucumber/messages/location.hpp>
-
-#include <cucumber/gherkin/types.hpp>
-#include <cucumber/gherkin/token.hpp>
-
-namespace cucumber::gherkin {
-
-namespace cms = cucumber::messages;
-
-class parser_error : public std::runtime_error
+namespace cucumber::gherkin
 {
-public:
-    parser_error(
-        const std::string& message,
-        const cms::location& location
-    );
 
-    parser_error(const parser_error& other);
+    namespace cms = cucumber::messages;
 
-    virtual ~parser_error();
+    class parser_error : public std::runtime_error
+    {
+    public:
+        parser_error(const std::string& message, const cms::Location& location);
 
-    std::string make_message(
-        const std::string& message,
-        const cms::location& location
-    ) const;
+        parser_error(const parser_error& other);
 
-    bool same_message(const parser_error& other) const;
+        virtual ~parser_error();
 
-    const cms::location& location() const;
+        std::string make_message(const std::string& message, const cms::Location& location) const;
 
-private:
-    cms::location location_;
-};
+        bool same_message(const parser_error& other) const;
 
-using parser_error_ptr = std::shared_ptr<parser_error>;
-using parser_error_ptrs = std::vector<parser_error_ptr>;
+        const cms::Location& location() const;
 
-template <typename Error, typename... Args>
-parser_error_ptr
-new_parser_error(Args&&... args)
-{ return std::make_shared<Error>(std::forward<Args>(args)...); }
+    private:
+        cms::Location location_;
+    };
 
-using ast_builder_error = parser_error;
+    using parser_error_ptr = std::shared_ptr<parser_error>;
+    using parser_error_ptrs = std::vector<parser_error_ptr>;
 
-class no_such_language_error : public parser_error
-{
-public:
-    no_such_language_error(
-        const std::string& language,
-        const cms::location& location
-    );
+    template<typename Error, typename... Args>
+    parser_error_ptr new_parser_error(Args&&... args)
+    {
+        return std::make_shared<Error>(std::forward<Args>(args)...);
+    }
 
-    virtual ~no_such_language_error();
-};
+    using ast_builder_error = parser_error;
 
-class unexpected_token : public parser_error
-{
-public:
-    unexpected_token(
-        const token& received_token,
-        const std::string& expected_tokens,
-        const std::string& state_comment
-    );
+    class no_such_language_error : public parser_error
+    {
+    public:
+        no_such_language_error(const std::string& language, const cms::Location& location);
 
-    virtual ~unexpected_token();
+        virtual ~no_such_language_error();
+    };
 
-    std::string make_message(
-        const token& received_token,
-        const std::string& expected_tokens
-    ) const;
+    class unexpected_token : public parser_error
+    {
+    public:
+        unexpected_token(const token& received_token, const std::string& expected_tokens, const std::string& state_comment);
 
-    cms::location make_location(const token& t) const;
+        virtual ~unexpected_token();
 
-private:
-    token received_token_;
-    std::string expected_tokens_;
-    std::string state_comment_;
-};
+        std::string make_message(const token& received_token, const std::string& expected_tokens) const;
 
-class unexpected_eof : public parser_error
-{
-public:
-    unexpected_eof(
-        const token& received_token,
-        const std::string& expected_tokens,
-        const std::string& state_comment
-    );
+        cms::Location make_location(const token& t) const;
 
-    virtual ~unexpected_eof();
+    private:
+        token received_token_;
+        std::string expected_tokens_;
+        std::string state_comment_;
+    };
 
-    std::string make_message(const std::string& expected_tokens) const;
+    class unexpected_eof : public parser_error
+    {
+    public:
+        unexpected_eof(const token& received_token, const std::string& expected_tokens, const std::string& state_comment);
 
-private:
-    std::string expected_tokens_;
-    std::string state_comment_;
-};
+        virtual ~unexpected_eof();
 
-class composite_parser_error : public parser_error
-{
-public:
-    composite_parser_error(const parser_error_ptrs& ptrs);
+        std::string make_message(const std::string& expected_tokens) const;
 
-    virtual ~composite_parser_error();
+    private:
+        std::string expected_tokens_;
+        std::string state_comment_;
+    };
 
-    std::string make_message(const parser_error_ptrs& ptrs) const;
+    class composite_parser_error : public parser_error
+    {
+    public:
+        composite_parser_error(const parser_error_ptrs& ptrs);
 
-    const parser_error_ptrs& errors() const;
+        virtual ~composite_parser_error();
 
-private:
-    parser_error_ptrs ptrs_;
-};
+        std::string make_message(const parser_error_ptrs& ptrs) const;
+
+        const parser_error_ptrs& errors() const;
+
+    private:
+        parser_error_ptrs ptrs_;
+    };
 
 }

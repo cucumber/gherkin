@@ -1,13 +1,16 @@
-#include <cucumber/gherkin/token.hpp>
+#include "cucumber/gherkin/token.hpp"
 
-namespace cucumber::gherkin {
+namespace cucumber::gherkin
+{
 
-bool
-token::is_eof() const
-{ return eof; }
+    bool token::is_eof() const
+    {
+        return eof;
+    }
 
-std::string_view
-token::value() const
-{ return is_eof() ? "EOF" : line.get_line_text(); }
+    std::string_view token::value() const
+    {
+        return is_eof() ? "EOF" : line.get_line_text();
+    }
 
 }

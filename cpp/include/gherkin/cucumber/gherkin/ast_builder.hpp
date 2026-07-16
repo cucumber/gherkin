@@ -1,89 +1,86 @@
 #pragma once
 
+#include "cucumber/gherkin/ast_node.hpp"
+#include "cucumber/gherkin/id_generator.hpp"
+#include "cucumber/gherkin/msg_types.hpp"
+#include "cucumber/gherkin/rule_type.hpp"
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/messages/All.hpp"
 #include <memory>
 #include <stack>
-#include <vector>
 #include <string_view>
+#include <vector>
 
-#include <cucumber/messages/all.hpp>
-
-#include <cucumber/gherkin/token.hpp>
-#include <cucumber/gherkin/rule_type.hpp>
-#include <cucumber/gherkin/ast_node.hpp>
-#include <cucumber/gherkin/id_generator.hpp>
-
-namespace cucumber::gherkin {
-
-namespace cms = cucumber::messages;
-
-using table_rows = std::vector<cms::table_row>;
-using table_cells = std::vector<cms::table_cell>;
-using tags = std::vector<cms::tag>;
-using comments = std::vector<cms::comment>;
-
-class ast_builder
+namespace cucumber::gherkin
 {
-public:
-    using result_type = cms::gherkin_document;
 
-    ast_builder();
-    ast_builder(id_generator_ptr idp);
+    namespace cms = cucumber::messages;
 
-    virtual ~ast_builder();
+    using table_rows = std::vector<std::shared_ptr<cms::TableRow>>;
+    using tags = std::vector<std::shared_ptr<cms::Tag>>;
+    using comments = std::vector<std::shared_ptr<cms::Comment>>;
 
-    void reset(std::string_view uri);
+    class ast_builder
+    {
+    public:
+        using result_type = cms::GherkinDocument;
 
-    void start_rule(rule_type rule_type);
-    void end_rule(rule_type rule_type);
-    void build(const token& token);
+        ast_builder();
+        ast_builder(id_generator_ptr idp);
 
-    const cms::gherkin_document& get_result() const;
+        virtual ~ast_builder();
 
-private:
-    using ast_node_stack = std::stack<ast_node>;
+        void reset(std::string_view uri);
 
-    std::string next_id();
+        void start_rule(rule_type rule_type);
+        void end_rule(rule_type rule_type);
+        void build(const token& token);
 
-    void transform_node(ast_node& from, ast_node& to);
+        const cms::GherkinDocument& get_result() const;
 
-    cms::step make_step(ast_node& node);
-    cms::doc_string make_doc_string(ast_node& node);
-    cms::data_table make_data_table(ast_node& node);
-    cms::background make_background(ast_node& node);
-    cms::scenario make_scenario_definition(ast_node& node);
-    cms::examples make_examples_definition(ast_node& node);
-    table_rows make_examples_table(ast_node& node);
-    std::string make_description(ast_node& node);
-    cms::feature make_feature(ast_node& node);
-    cms::rule make_rule(ast_node& node);
-    cms::gherkin_document make_gherkin_document(ast_node& node);
+    private:
+        using ast_node_stack = std::stack<ast_node>;
 
-    cms::location get_location(
-        const token& token,
-        std::size_t column = 0
-    ) const;
+        std::string next_id();
 
-    table_rows get_table_rows(const ast_node& node);
-    void ensure_cell_count(const table_rows& rows) const;
-    table_cells get_table_cells(const token& token);
-    tags get_tags(const ast_node& node);
+        void transform_node(ast_node& from, ast_node& to);
 
-    ast_node pop_node();
-    ast_node& current_node();
-    const ast_node& current_node() const;
+        cms::Step make_step(ast_node& node);
+        cms::DocString make_doc_string(ast_node& node);
+        cms::DataTable make_data_table(ast_node& node);
+        cms::Background make_background(ast_node& node);
+        cms::Scenario make_scenario_definition(ast_node& node);
+        cms::Examples make_examples_definition(ast_node& node);
+        table_rows make_examples_table(ast_node& node);
+        std::string make_description(ast_node& node);
+        cms::Feature make_feature(ast_node& node);
+        cms::Rule make_rule(ast_node& node);
+        cms::GherkinDocument make_gherkin_document(ast_node& node);
 
-    id_generator_ptr idp_;
-    ast_node_stack stack_;
-    std::string_view uri_;
-    comments comments_;
-    cms::gherkin_document doc_;
-};
+        std::shared_ptr<cms::Location> get_location(const token& token, std::size_t column = 0) const;
 
-using ast_builder_ptr = std::unique_ptr<ast_builder>;
+        table_rows get_table_rows(const ast_node& node);
+        void ensure_cell_count(const table_rows& rows) const;
+        table_cells get_table_cells(const token& token);
+        tags get_tags(const ast_node& node);
 
-template <typename... Args>
-ast_builder_ptr
-new_ast_builder(Args&&... args)
-{ return std::make_unique<ast_builder>(std::forward<Args>(args)...); }
+        ast_node pop_node();
+        ast_node& current_node();
+        const ast_node& current_node() const;
+
+        id_generator_ptr idp_;
+        ast_node_stack stack_;
+        std::string_view uri_;
+        comments comments_;
+        cms::GherkinDocument doc_;
+    };
+
+    using ast_builder_ptr = std::unique_ptr<ast_builder>;
+
+    template<typename... Args>
+    ast_builder_ptr new_ast_builder(Args&&... args)
+    {
+        return std::make_unique<ast_builder>(std::forward<Args>(args)...);
+    }
 
 }

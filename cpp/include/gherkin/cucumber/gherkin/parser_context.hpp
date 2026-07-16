@@ -1,62 +1,71 @@
-#include <cucumber/gherkin/token.hpp>
-#include <cucumber/gherkin/types.hpp>
-#include <cucumber/gherkin/exceptions.hpp>
-#include <cucumber/gherkin/join_utils.hpp>
+#include "cucumber/gherkin/exceptions.hpp"
+#include "cucumber/gherkin/join_utils.hpp"
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/types.hpp"
+#include <iostream>
 
-namespace cucumber::gherkin {
-
-template <
-    typename Builder,
-    typename Scanner,
-    typename Matcher
->
-struct parser_context
+namespace cucumber::gherkin
 {
-    Builder& builder;
-    Scanner& scanner;
-    Matcher& matcher;
 
-    token_queue queue;
-    parser_error_ptrs eptrs;
-    bool stop_at_first_error = false;
-    std::size_t max_errors = 10;
-
-    bool has_token() const
-    { return !queue.empty(); }
-
-    token pop_token()
+    template<typename Builder, typename Scanner, typename Matcher>
+    struct parser_context
     {
-        auto t = std::move(queue.front());
-        queue.pop_front();
+        Builder& builder;
+        Scanner& scanner;
+        Matcher& matcher;
 
-        return t;
-    }
+        token_queue queue;
+        parser_error_ptrs eptrs;
+        bool stop_at_first_error = false;
+        std::size_t max_errors = 10;
 
-    token read_token()
-    { return has_token() ? pop_token() : scanner.read(); }
+        bool has_token() const
+        {
+            return !queue.empty();
+        }
 
-    void push_tokens(const token_queue& q)
-    { queue.insert(queue.end(), q.begin(), q.end()); }
+        token pop_token()
+        {
+            auto t = std::move(queue.front());
+            queue.pop_front();
 
-    bool has_errors() const
-    { return !eptrs.empty(); }
+            return t;
+        }
 
-    void add_error(parser_error_ptr ep)
-    {
-        for (const auto& p : eptrs) {
-            if (p->same_message(*ep)) {
-                return;
+        token read_token()
+        {
+            return has_token() ? pop_token() : scanner.read();
+        }
+
+        void push_tokens(const token_queue& q)
+        {
+            queue.insert(queue.end(), q.begin(), q.end());
+        }
+
+        bool has_errors() const
+        {
+            return !eptrs.empty();
+        }
+
+        void add_error(parser_error_ptr ep)
+        {
+            for (const auto& p : eptrs)
+            {
+                if (p->same_message(*ep))
+                {
+                    return;
+                }
+
+                std::cerr << "not duplicate" << std::endl;
             }
 
-            std::cerr << "not duplicate" << std::endl;
-        }
+            eptrs.emplace_back(std::move(ep));
 
-        eptrs.emplace_back(std::move(ep));
-
-        if (eptrs.size() > max_errors) {
-            throw composite_parser_error(eptrs);
+            if (eptrs.size() > max_errors)
+            {
+                throw composite_parser_error(eptrs);
+            }
         }
-    }
-};
+    };
 
 }

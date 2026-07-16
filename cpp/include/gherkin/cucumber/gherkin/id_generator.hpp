@@ -1,37 +1,39 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
-namespace cucumber::gherkin {
-
-class id_generator_base
+namespace cucumber::gherkin
 {
-public:
-    id_generator_base();
 
-    virtual ~id_generator_base();
+    class id_generator_base
+    {
+    public:
+        id_generator_base();
 
-    virtual std::string next_id() = 0;
-};
+        virtual ~id_generator_base();
 
-class id_generator : public id_generator_base
-{
-public:
-    id_generator();
-    virtual ~id_generator();
+        virtual std::string next_id() = 0;
+    };
 
-    std::string next_id() override;
+    class id_generator : public id_generator_base
+    {
+    public:
+        id_generator();
+        virtual ~id_generator();
 
-private:
-    std::size_t id_counter_ = 0;
-};
+        std::string next_id() override;
 
-using id_generator_ptr = std::shared_ptr<id_generator_base>;
+    private:
+        std::size_t id_counter_ = 0;
+    };
 
-template <typename... Args>
-id_generator_ptr
-new_id_generator(Args&&... args)
-{ return std::make_shared<id_generator>(std::forward<Args>(args)...); }
+    using id_generator_ptr = std::shared_ptr<id_generator_base>;
+
+    template<typename... Args>
+    id_generator_ptr new_id_generator(Args&&... args)
+    {
+        return std::make_shared<id_generator>(std::forward<Args>(args)...);
+    }
 
 }

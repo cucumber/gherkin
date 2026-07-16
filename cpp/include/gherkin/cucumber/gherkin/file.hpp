@@ -2,11 +2,12 @@
 
 #include <string>
 
-namespace cucumber::gherkin {
-
-struct file
+namespace cucumber::gherkin
 {
-    std::string path;
-};
+
+    struct file
+    {
+        std::string path;
+    };
 
 }

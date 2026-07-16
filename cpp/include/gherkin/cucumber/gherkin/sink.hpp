@@ -3,10 +3,11 @@
 #include <functional>
 #include <nlohmann/json.hpp>
 
-namespace cucumber::gherkin {
+namespace cucumber::gherkin
+{
 
-using json = nlohmann::json;
+    using json = nlohmann::json;
 
-using sink_cb = std::function<void (const json&)>;
+    using sink_cb = std::function<void(const json&)>;
 
 }
