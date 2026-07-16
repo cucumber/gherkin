@@ -1,3 +1,7 @@
 # Example
 
-See [Parsing](https://github.com/cucumber/gherkin/tree/main/dart#parsing).
+Run the parser example from the `dart/` directory:
+
+```sh
+dart run example/dart_example.dart
+```
