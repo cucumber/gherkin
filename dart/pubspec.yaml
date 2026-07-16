@@ -22,7 +22,7 @@ topics:
   - parser
 
 dependencies:
-  cucumber_messages: ^34.0.1
+  cucumber_messages: '>=34.0.2 <35.0.0'
 
 dev_dependencies:
   lints: ^5.1.1
