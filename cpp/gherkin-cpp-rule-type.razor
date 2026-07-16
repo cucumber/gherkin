@@ -22,27 +22,25 @@ public static string NameOf(Rule rule)
 #include <ostream>
 #include <string_view>
 
-namespace cucumber::gherkin {
-
-enum class rule_type
+namespace cucumber::gherkin
 {
-    none = 0,
-    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    @NameOf(rule),
+
+    enum class rule_type
+    {
+        none = 0,
+        @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+        {<text>        @NameOf(rule),
 </text>}
-    count
-};
+        count
+    };
 
-std::string_view
-to_string(rule_type r);
+    std::string_view to_string(rule_type r);
 
-inline
-std::ostream&
-operator<<(std::ostream& os, rule_type r)
-{
-    os << to_string(r);
+    inline std::ostream& operator<<(std::ostream& os, rule_type r)
+    {
+        os << to_string(r);
 
-    return os;
-}
+        return os;
+    }
 
 }
