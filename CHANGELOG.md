@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Added
 - (i18n) Added Persian translation of "Rule" ([#642](https://github.com/cucumber/gherkin/pull/642))
 - (i18n) Added new synonyms for existing Persian keywords  ([#642](https://github.com/cucumber/gherkin/pull/642))
+- [Dart] Revived Dart implementation as `cucumber_gherkin` ([#640](https://github.com/cucumber/gherkin/pull/640))
 
 ### Changed
 - Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599), [#643](https://github.com/cucumber/gherkin/pull/643))

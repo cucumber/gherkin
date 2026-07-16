@@ -10,6 +10,7 @@ on:
     paths:
       - dart/**
       - testdata/**
+      - gherkin-languages.json
       - .github/**
   pull_request:
     branches:
@@ -17,20 +18,51 @@ on:
     paths:
       - dart/**
       - testdata/**
+      - gherkin-languages.json
       - .github/**
 
 jobs:
   test-dart:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        dart: ["3.7.0", "3.12.0"]
+        include:
+          - os: windows-latest
+            dart: "3.12.0"
+          - os: macos-latest
+            dart: "3.12.0"
+
+    defaults:
+      run:
+        working-directory: dart
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: install dart
-        uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+        with:
+          sdk: ${{ matrix.dart }}
 
-      - name: run tests
+      - name: Install dependencies
+        run: dart pub get --enforce-lockfile
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: dart analyze
+
+      - name: Test
         run: dart test
-        working-directory: dart
+
+      - name: Run acceptance tests
+        run: make acceptance
+
+      - name: Verify publishable package
+        run: dart pub publish --dry-run

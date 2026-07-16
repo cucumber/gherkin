@@ -1,0 +1,262 @@
+@using System
+@using System.Linq
+@using Berp
+@helper CallProduction(ProductionRule production)
+{
+    switch(production.Type) {
+        case ProductionRuleType.Start:
+                @:_startRule(context, RuleType.@(char.ToLowerInvariant(production.RuleName.Replace("#", "")[0]) + production.RuleName.Replace("#", "").Substring(1)));
+            break;
+        case ProductionRuleType.End:
+                @:_endRule(context, RuleType.@(char.ToLowerInvariant(production.RuleName.Replace("#", "")[0]) + production.RuleName.Replace("#", "").Substring(1)));
+            break;
+        case ProductionRuleType.Process:
+                @:_build(context, token);
+            break;
+    }
+}
+@helper HandleParserError(IEnumerable<string> expectedTokens, State state)
+{<text>
+    final expectedTokens = <String>[
+      @Raw(string.Join(",\n      ", expectedTokens.Select(t => "'" + t + "'")))@(",")
+    ];
+    final error = token.isEof
+        ? UnexpectedEofException(token, expectedTokens)
+        : UnexpectedTokenException(token, expectedTokens);
+
+    _addError(context, error);
+    return @state.Id;
+</text>}
+@helper MatchToken(TokenType tokenType)
+{<text>_match@(tokenType.ToString().Replace("#", ""))(context, token)</text>}
+// GENERATED FILE - DO NOT MODIFY BY HAND.
+//
+// This file was generated from `gherkin-dart.razor` by
+// [Berp](https://github.com/gasparnagy/berp) using the shared `../gherkin.berp`
+// grammar.
+// dart format off
+import 'dart:collection';
+
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
+import 'package:cucumber_gherkin/src/parser/builder.dart';
+import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
+
+enum TokenType {
+  none,
+@foreach(var rule in Model.RuleSet.TokenRules)
+{
+@:  @Raw(char.ToLowerInvariant(rule.Name.Replace("#", "")[0]) + rule.Name.Replace("#", "").Substring(1)),
+}
+}
+
+enum RuleType {
+  none,
+@foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+{
+@:  @Raw(char.ToLowerInvariant(rule.Name.Replace("#", "")[0]) + rule.Name.Replace("#", "").Substring(1)),
+}
+}
+
+extension TokenTypeRuleType on TokenType {
+  RuleType get ruleType => RuleType.values[index];
+}
+
+abstract class TokenMatcher {
+@foreach(var rule in Model.RuleSet.TokenRules)
+{
+@:  bool match@(rule.Name.Replace("#", ""))(Token token);
+@:
+}
+  void reset();
+}
+
+class @(Model.ParserClassName)<T> {
+  @(Model.ParserClassName)(this._builder);
+
+  final Builder<T> _builder;
+
+  T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher) {
+    _builder.reset();
+    tokenMatcher.reset();
+
+    final context = _ParserContext(
+      tokenScanner,
+      tokenMatcher,
+      Queue<Token>(),
+      <ParserException>[],
+    );
+
+    _startRule(context, RuleType.@(char.ToLowerInvariant(Model.RuleSet.StartRule.Name.Replace("#", "")[0]) + Model.RuleSet.StartRule.Name.Replace("#", "").Substring(1)));
+    var state = 0;
+    Token token;
+    do {
+      token = _readToken(context);
+      state = _matchToken(state, token, context);
+    } while (!token.isEof);
+
+    _endRule(context, RuleType.@(char.ToLowerInvariant(Model.RuleSet.StartRule.Name.Replace("#", "")[0]) + Model.RuleSet.StartRule.Name.Replace("#", "").Substring(1)));
+
+    if (context.errors.isNotEmpty) {
+      throw CompositeParserException(context.errors);
+    }
+
+    return _builder.result;
+  }
+
+  void _addError(_ParserContext context, ParserException error) {
+    for (final e in context.errors) {
+      if (e.message == error.message) {
+        return;
+      }
+    }
+    context.errors.add(error);
+    if (context.errors.length > 10) {
+      throw CompositeParserException(context.errors);
+    }
+  }
+
+  void _handleAstError<V>(_ParserContext context, V Function() action) =>
+      _handleExternalError(context, action, null);
+
+  V _handleExternalError<V>(
+    _ParserContext context,
+    V Function() action,
+    V defaultValue,
+  ) {
+    try {
+      return action();
+    } on CompositeParserException catch (compositeParserException) {
+      for (final error in compositeParserException.errors) {
+        _addError(context, error);
+      }
+    } on ParserException catch (error) {
+      _addError(context, error);
+    }
+    return defaultValue;
+  }
+
+  void _build(_ParserContext context, Token token) =>
+      _handleAstError(context, () {
+        _builder.build(token);
+      });
+
+  void _startRule(_ParserContext context, RuleType ruleType) =>
+      _handleAstError(context, () {
+        _builder.startRule(ruleType);
+      });
+
+  void _endRule(_ParserContext context, RuleType ruleType) =>
+      _handleAstError(context, () {
+        _builder.endRule(ruleType);
+      });
+
+  Token _readToken(_ParserContext context) =>
+      context.tokenQueue.isNotEmpty
+          ? context.tokenQueue.removeFirst()
+          : context.tokenScanner.read();
+@foreach(var rule in Model.RuleSet.TokenRules)
+{<text>
+  bool _match@(rule.Name.Replace("#", ""))(_ParserContext context, Token token) {
+    @if (rule.Name != "#EOF")
+    {
+    @:if (token.isEof) {
+    @:  return false;
+    @:}
+    }
+    return _handleExternalError(
+      context,
+      () => context.tokenMatcher.match@(rule.Name.Replace("#", ""))(token),
+      false,
+    );
+  }
+</text>
+}
+
+  int _matchToken(int state, Token token, _ParserContext context) {
+    int newState;
+    switch (state) {
+    @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+    {
+      @:case @state.Id:
+      @:  newState = _matchTokenAt_@(state.Id)(token, context);
+    }
+      default:
+        throw StateError('Unknown state: $state');
+    }
+    return newState;
+  }
+@foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
+{
+<text>
+  int _matchTokenAt_@(state.Id)(Token token, _ParserContext context) {
+    @foreach(var transition in state.Transitions)
+    {
+    @:if (@MatchToken(transition.TokenType)) {
+        if (transition.LookAheadHint != null)
+        {
+        @:  if (_lookahead_@(transition.LookAheadHint.Id)(context, token)) {
+        }
+        foreach(var production in transition.Productions)
+        {
+            @CallProduction(production)
+        }
+        @:  return @transition.TargetState;
+        if (transition.LookAheadHint != null)
+        {
+        @:  }
+        }
+    @:}
+    }
+    @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)
+  }
+</text>
+}
+@foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
+{
+<text>
+  bool _lookahead_@(lookAheadHint.Id)(_ParserContext context, Token currentToken) {
+    Token token;
+    final queue = Queue<Token>();
+    var match = false;
+    do {
+      token = _readToken(context);
+      queue.add(token);
+
+      if (false
+      @foreach(var tokenType in lookAheadHint.ExpectedTokens)
+      {
+          @:    || @MatchToken(tokenType)
+      }
+      ) {
+        match = true;
+        break;
+      }
+    } while (false
+    @foreach(var tokenType in lookAheadHint.Skip)
+    {
+        @:    || @MatchToken(tokenType)
+    }
+    );
+
+    context.tokenQueue.addAll(queue);
+
+    return match;
+  }
+</text>
+}
+}
+
+final class _ParserContext {
+  _ParserContext(
+    this.tokenScanner,
+    this.tokenMatcher,
+    this.tokenQueue,
+    this.errors,
+  );
+
+  final TokenScanner tokenScanner;
+  final TokenMatcher tokenMatcher;
+  final Queue<Token> tokenQueue;
+  final List<ParserException> errors;
+}
