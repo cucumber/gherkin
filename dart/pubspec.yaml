@@ -2,7 +2,7 @@ name: cucumber_gherkin
 description: >-
   Gherkin parser and compiler for Dart. Parses .feature sources into Cucumber
   Messages envelopes.
-version: 0.0.1
+version: 41.0.0
 homepage: https://github.com/cucumber/gherkin
 repository: https://github.com/cucumber/gherkin
 issue_tracker: https://github.com/cucumber/gherkin/issues
