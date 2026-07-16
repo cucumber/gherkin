@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_UTILS_HPP
+#define CUCUMBER_GHERKIN_UTILS_HPP
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -356,4 +357,6 @@ namespace cucumber::gherkin
 
 #ifdef _MSC_VER
 #pragma warning(pop)
+#endif
+
 #endif

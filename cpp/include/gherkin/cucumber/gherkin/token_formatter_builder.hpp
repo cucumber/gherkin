@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_TOKEN_FORMATTER_BUILDER_HPP
+#define CUCUMBER_GHERKIN_TOKEN_FORMATTER_BUILDER_HPP
 
 #include "cucumber/gherkin/ast_node.hpp"
 #include "cucumber/gherkin/id_generator.hpp"
@@ -36,3 +37,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

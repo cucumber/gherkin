@@ -1,5 +1,6 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
-#pragma once
+#ifndef CUCUMBER_GHERKIN_RULE_TYPE_HPP
+#define CUCUMBER_GHERKIN_RULE_TYPE_HPP
 
 #include <ostream>
 #include <string_view>
@@ -57,3 +58,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_JOIN_UTILS_HPP
+#define CUCUMBER_GHERKIN_JOIN_UTILS_HPP
 
 #include "cucumber/gherkin/container_helpers.hpp"
 #include <sstream>
@@ -88,3 +89,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_TYPES_HPP
+#define CUCUMBER_GHERKIN_TYPES_HPP
 
 #include <set>
 #include <string>
@@ -19,3 +20,5 @@ namespace cucumber::gherkin
     using string_view_set = std::set<std::string_view>;
 
 }
+
+#endif

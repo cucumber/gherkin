@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_CB_TYPES_HPP
+#define CUCUMBER_GHERKIN_CB_TYPES_HPP
 
 #include "cucumber/gherkin/parse_error.hpp"
 #include "cucumber/messages/Pickle.hpp"
@@ -36,3 +37,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

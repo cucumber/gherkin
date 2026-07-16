@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_DEMANGLE_HPP
+#define CUCUMBER_GHERKIN_DEMANGLE_HPP
 
 #include <memory>
 #include <string>
@@ -26,3 +27,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

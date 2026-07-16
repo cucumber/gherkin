@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_PARSE_ERROR_HPP
+#define CUCUMBER_GHERKIN_PARSE_ERROR_HPP
 
 #include "cucumber/messages/Location.hpp"
 #include <nlohmann/json.hpp>
@@ -20,3 +21,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

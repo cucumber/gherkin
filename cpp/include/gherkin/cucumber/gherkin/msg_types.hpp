@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_MSG_TYPES_HPP
+#define CUCUMBER_GHERKIN_MSG_TYPES_HPP
 
 #include "cucumber/messages/All.hpp"
 #include <memory>
@@ -19,3 +20,5 @@ namespace cucumber::gherkin
     using envelopes = std::vector<cms::Envelope>;
 
 }
+
+#endif

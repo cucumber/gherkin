@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_ITEMS_HPP
+#define CUCUMBER_GHERKIN_ITEMS_HPP
 
 #include <cstddef>
 #include <string>
@@ -16,3 +17,5 @@ namespace cucumber::gherkin
     using items = std::vector<item>;
 
 }
+
+#endif

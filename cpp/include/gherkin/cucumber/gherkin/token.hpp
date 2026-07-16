@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_TOKEN_HPP
+#define CUCUMBER_GHERKIN_TOKEN_HPP
 
 #include "cucumber/gherkin/items.hpp"
 #include "cucumber/gherkin/line.hpp"
@@ -40,3 +41,5 @@ namespace cucumber::gherkin
     using token_queue = std::deque<token>;
 
 }
+
+#endif

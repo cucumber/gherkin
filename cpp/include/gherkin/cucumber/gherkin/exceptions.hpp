@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_EXCEPTIONS_HPP
+#define CUCUMBER_GHERKIN_EXCEPTIONS_HPP
 
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/types.hpp"
@@ -96,3 +97,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

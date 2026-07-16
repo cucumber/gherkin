@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_PICKLE_COMPILER_HPP
+#define CUCUMBER_GHERKIN_PICKLE_COMPILER_HPP
 
 #include "cucumber/gherkin/cb_types.hpp"
 #include "cucumber/gherkin/id_generator.hpp"
@@ -50,3 +51,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

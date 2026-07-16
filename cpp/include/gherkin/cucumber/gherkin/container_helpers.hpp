@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_CONTAINER_HELPERS_HPP
+#define CUCUMBER_GHERKIN_CONTAINER_HELPERS_HPP
 
 #include <set>
 #include <unordered_set>
@@ -50,3 +51,5 @@ namespace cucumber::gherkin
     constexpr bool is_unordered_set_v = is_unordered_set<T>::value;
 
 }
+
+#endif

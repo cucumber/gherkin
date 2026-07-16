@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_REGEX_HPP
+#define CUCUMBER_GHERKIN_REGEX_HPP
 
 #include "cucumber/gherkin/demangle.hpp"
 #include "cucumber/gherkin/log.hpp"
@@ -147,3 +148,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

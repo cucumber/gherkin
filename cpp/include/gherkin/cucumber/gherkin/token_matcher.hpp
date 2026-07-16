@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_TOKEN_MATCHER_HPP
+#define CUCUMBER_GHERKIN_TOKEN_MATCHER_HPP
 
 #include "cucumber/gherkin/dialect.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
@@ -68,3 +69,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

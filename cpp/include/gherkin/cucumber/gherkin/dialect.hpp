@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_DIALECT_HPP
+#define CUCUMBER_GHERKIN_DIALECT_HPP
 
 #include "cucumber/gherkin/types.hpp"
 #include <string_view>
@@ -35,3 +36,5 @@ namespace cucumber::gherkin
     const keywords_map& keywords(const std::string_view& language);
 
 }
+
+#endif

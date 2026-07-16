@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_ID_GENERATOR_HPP
+#define CUCUMBER_GHERKIN_ID_GENERATOR_HPP
 
 #include <memory>
 #include <string>
@@ -37,3 +38,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

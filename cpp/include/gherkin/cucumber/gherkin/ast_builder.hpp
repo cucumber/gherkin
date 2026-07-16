@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_AST_BUILDER_HPP
+#define CUCUMBER_GHERKIN_AST_BUILDER_HPP
 
 #include "cucumber/gherkin/ast_node.hpp"
 #include "cucumber/gherkin/id_generator.hpp"
@@ -84,3 +85,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

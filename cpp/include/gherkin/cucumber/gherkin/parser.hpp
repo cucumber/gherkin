@@ -1,5 +1,6 @@
 // This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
-#pragma once
+#ifndef CUCUMBER_GHERKIN_PARSER_HPP
+#define CUCUMBER_GHERKIN_PARSER_HPP
 
 #include "cucumber/gherkin/parser_base.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
@@ -5111,3 +5112,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

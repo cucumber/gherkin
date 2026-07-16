@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_LOG_HPP
+#define CUCUMBER_GHERKIN_LOG_HPP
 
 #include <iostream>
 #include <sstream>
@@ -85,3 +86,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

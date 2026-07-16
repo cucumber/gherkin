@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_TOKEN_SCANNER_HPP
+#define CUCUMBER_GHERKIN_TOKEN_SCANNER_HPP
 
 #include "cucumber/gherkin/file.hpp"
 #include "cucumber/gherkin/line.hpp"
@@ -50,3 +51,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif

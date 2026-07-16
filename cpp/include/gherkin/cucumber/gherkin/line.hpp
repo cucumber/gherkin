@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_LINE_HPP
+#define CUCUMBER_GHERKIN_LINE_HPP
 
 #include "cucumber/gherkin/items.hpp"
 #include "cucumber/gherkin/types.hpp"
@@ -39,3 +40,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

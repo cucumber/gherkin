@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CUCUMBER_GHERKIN_BUILDER_HPP
+#define CUCUMBER_GHERKIN_BUILDER_HPP
 
 #include "cucumber/gherkin/rule_type.hpp"
 #include "cucumber/gherkin/token.hpp"
@@ -41,3 +42,5 @@ namespace cucumber::gherkin
     }
 
 }
+
+#endif
