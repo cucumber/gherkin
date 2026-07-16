@@ -1,6 +1,6 @@
 . as $root |
 [
-  "#include "cucumber/gherkin/dialect.hpp"\n\n",
+  "#include \"<cucumber/gherkin/dialect.hpp\"\n\n",
   "namespace cucumber::gherkin {\n\n",
   "const keywords_maps&\n",
   "all_keywords()\n",
