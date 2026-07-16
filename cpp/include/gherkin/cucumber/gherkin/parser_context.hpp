@@ -8,7 +8,7 @@ namespace cucumber::gherkin
 {
 
     template<typename Builder, typename Scanner, typename Matcher>
-    struct parser_context
+    struct ParserContext
     {
         Builder& builder;
         Scanner& scanner;
@@ -24,7 +24,7 @@ namespace cucumber::gherkin
             return !queue.empty();
         }
 
-        token pop_token()
+        Token pop_token()
         {
             auto front_token = std::move(queue.front());
             queue.pop_front();
@@ -32,7 +32,7 @@ namespace cucumber::gherkin
             return front_token;
         }
 
-        token read_token()
+        Token read_token()
         {
             return has_token() ? pop_token() : scanner.read();
         }
@@ -63,7 +63,7 @@ namespace cucumber::gherkin
 
             if (error_pointers.size() > max_errors)
             {
-                throw composite_parser_error(error_pointers);
+                throw CompositeParserError(error_pointers);
             }
         }
     };

@@ -10,29 +10,29 @@
 namespace cucumber::gherkin
 {
 
-    class app
+    class App
     {
     public:
-        using parser = cucumber::gherkin::parser<>;
-        using parser_result = typename parser::result_type;
-        using callbacks = cucumber::gherkin::callbacks<parser_result>;
+        using Parser = cucumber::gherkin::Parser<>;
+        using parser_result = typename Parser::result_type;
+        using Callbacks = cucumber::gherkin::Callbacks<parser_result>;
 
-        app();
-        virtual ~app();
+        App();
+        virtual ~App();
 
         void include_source(bool enabled);
         void include_ast(bool enabled);
         void include_pickles(bool enabled);
 
-        void parse(const file& source_file, const callbacks& callbacks = {});
-        void parse(const cms::Envelope& envelope, const callbacks& callbacks = {});
-        void parse(const cms::Source& source, const callbacks& callbacks = {});
+        void parse(const File& source_file, const Callbacks& Callbacks = {});
+        void parse(const cms::Envelope& envelope, const Callbacks& Callbacks = {});
+        void parse(const cms::Source& source, const Callbacks& Callbacks = {});
 
     private:
-        void send_parse_error(const std::string& uri, const parser_error& error, const callbacks& callbacks) const;
+        void send_parse_error(const std::string& uri, const ParserError& error, const Callbacks& Callbacks) const;
 
         id_generator_ptr idp_;
-        parser p_;
+        Parser p_;
         bool include_source_ = true;
         bool include_ast_ = true;
         bool include_pickles_ = true;

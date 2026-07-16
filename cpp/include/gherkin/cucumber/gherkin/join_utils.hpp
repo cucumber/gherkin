@@ -32,7 +32,7 @@ namespace cucumber::gherkin
     }
 
     template<typename T>
-    struct is_joinable_container
+    struct IsJoinableContainer
     {
         using type = std::conditional_t<is_vector_v<T> || is_set_v<T> || is_unordered_set_v<T>, std::true_type, std::false_type>;
 
@@ -40,10 +40,10 @@ namespace cucumber::gherkin
     };
 
     template<typename T>
-    using is_joinable_container_t = typename is_joinable_container<T>::type;
+    using is_joinable_container_t = typename IsJoinableContainer<T>::type;
 
     template<typename T>
-    constexpr bool is_joinable_container_v = is_joinable_container<T>::value;
+    constexpr bool is_joinable_container_v = IsJoinableContainer<T>::value;
 
     template<typename... Args>
     void join_item_impl(std::ostream& ostream, const std::string& separator, Args&&... args)

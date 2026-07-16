@@ -12,18 +12,18 @@ namespace cucumber::gherkin
 
     namespace cms = cucumber::messages;
 
-    class parser_error : public std::runtime_error
+    class ParserError : public std::runtime_error
     {
     public:
-        parser_error(const std::string& message, const cms::Location& location);
+        ParserError(const std::string& message, const cms::Location& location);
 
-        parser_error(const parser_error& other);
+        ParserError(const ParserError& other);
 
-        virtual ~parser_error();
+        virtual ~ParserError();
 
         std::string make_message(const std::string& message, const cms::Location& location) const;
 
-        bool same_message(const parser_error& other) const;
+        bool same_message(const ParserError& other) const;
 
         const cms::Location& location() const;
 
@@ -31,7 +31,7 @@ namespace cucumber::gherkin
         cms::Location location_;
     };
 
-    using parser_error_ptr = std::shared_ptr<parser_error>;
+    using parser_error_ptr = std::shared_ptr<ParserError>;
     using parser_error_ptrs = std::vector<parser_error_ptr>;
 
     template<typename Error, typename... Args>
@@ -40,39 +40,39 @@ namespace cucumber::gherkin
         return std::make_shared<Error>(std::forward<Args>(args)...);
     }
 
-    using ast_builder_error = parser_error;
+    using ast_builder_error = ParserError;
 
-    class no_such_language_error : public parser_error
+    class NoSuchLanguageError : public ParserError
     {
     public:
-        no_such_language_error(const std::string& language, const cms::Location& location);
+        NoSuchLanguageError(const std::string& language, const cms::Location& location);
 
-        virtual ~no_such_language_error();
+        virtual ~NoSuchLanguageError();
     };
 
-    class unexpected_token : public parser_error
+    class UnexpectedToken : public ParserError
     {
     public:
-        unexpected_token(const token& received_token, const std::string& expected_tokens, const std::string& state_comment);
+        UnexpectedToken(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment);
 
-        virtual ~unexpected_token();
+        virtual ~UnexpectedToken();
 
-        std::string make_message(const token& received_token, const std::string& expected_tokens) const;
+        std::string make_message(const Token& received_token, const std::string& expected_tokens) const;
 
-        cms::Location make_location(const token& received_token) const;
+        cms::Location make_location(const Token& received_token) const;
 
     private:
-        token received_token_;
+        Token received_token_;
         std::string expected_tokens_;
         std::string state_comment_;
     };
 
-    class unexpected_eof : public parser_error
+    class UnexpectedEof : public ParserError
     {
     public:
-        unexpected_eof(const token& received_token, const std::string& expected_tokens, const std::string& state_comment);
+        UnexpectedEof(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment);
 
-        virtual ~unexpected_eof();
+        virtual ~UnexpectedEof();
 
         std::string make_message(const std::string& expected_tokens) const;
 
@@ -81,12 +81,12 @@ namespace cucumber::gherkin
         std::string state_comment_;
     };
 
-    class composite_parser_error : public parser_error
+    class CompositeParserError : public ParserError
     {
     public:
-        composite_parser_error(const parser_error_ptrs& ptrs);
+        CompositeParserError(const parser_error_ptrs& ptrs);
 
-        virtual ~composite_parser_error();
+        virtual ~CompositeParserError();
 
         std::string make_message(const parser_error_ptrs& ptrs) const;
 

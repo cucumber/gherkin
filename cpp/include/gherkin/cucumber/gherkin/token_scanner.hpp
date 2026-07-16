@@ -10,29 +10,29 @@
 namespace cucumber::gherkin
 {
 
-    struct next_line_result
+    struct NextLineResult
     {
         bool eof = true;
         std::string text;
     };
 
-    class token_scanner
+    class TokenScanner
     {
     public:
-        token_scanner();
-        token_scanner(std::string_view data);
-        token_scanner(const file& file);
+        TokenScanner();
+        TokenScanner(std::string_view data);
+        TokenScanner(const File& File);
 
-        virtual ~token_scanner();
+        virtual ~TokenScanner();
 
         void reset();
         void reset(std::string_view data);
-        void reset(const file& file);
+        void reset(const File& File);
 
-        token read();
+        Token read();
 
     private:
-        next_line_result next_line();
+        NextLineResult next_line();
 
         std::istream& input();
 
@@ -42,12 +42,12 @@ namespace cucumber::gherkin
         input_ptr ip_;
     };
 
-    using token_scanner_ptr = std::unique_ptr<token_scanner>;
+    using token_scanner_ptr = std::unique_ptr<TokenScanner>;
 
     template<typename... Args>
     token_scanner_ptr new_token_scanner(Args&&... args)
     {
-        return std::make_unique<token_scanner>(std::forward<Args>(args)...);
+        return std::make_unique<TokenScanner>(std::forward<Args>(args)...);
     }
 
 }

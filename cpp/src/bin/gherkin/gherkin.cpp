@@ -5,7 +5,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
 
-struct options
+struct Options
 {
     bool exit = false;
     int exit_code = 0;
@@ -16,9 +16,9 @@ struct options
     bool predicatable_ids = true;
 };
 
-options parse_options(int argc, char** argv)
+Options parse_options(int argc, char** argv)
 {
-    options opts;
+    Options opts;
 
     for (opts.last_arg = 1; opts.last_arg < argc; ++opts.last_arg)
     {
@@ -84,8 +84,8 @@ int main(int argc, char** argv)
         return opts.exit_code;
     }
 
-    cucumber::gherkin::app app;
-    cucumber::gherkin::app::callbacks cbs{ [&](const auto& msg)
+    cucumber::gherkin::App App;
+    cucumber::gherkin::App::Callbacks cbs{ [&](const auto& msg)
         {
             print_json_obj("source", msg);
         },
@@ -102,13 +102,13 @@ int main(int argc, char** argv)
             std::cout << msg.to_json() << std::endl;
         } };
 
-    app.include_source(opts.include_source);
-    app.include_ast(opts.include_ast);
-    app.include_pickles(opts.include_pickles);
+    App.include_source(opts.include_source);
+    App.include_ast(opts.include_ast);
+    App.include_pickles(opts.include_pickles);
 
     for (; opts.last_arg < argc; ++opts.last_arg)
     {
-        app.parse(cucumber::gherkin::file{ argv[opts.last_arg] }, cbs);
+        App.parse(cucumber::gherkin::File{ argv[opts.last_arg] }, cbs);
     }
 
     return 0;

@@ -10,13 +10,13 @@ namespace cucumber::gherkin
     using keywords_map = std::unordered_map<std::string_view, string_views>;
     using keywords_maps = std::unordered_map<std::string_view, keywords_map>;
 
-    struct dialect
+    struct Dialect
     {
-        ~dialect() = default;
-        dialect(const dialect&) = delete;
-        dialect(dialect&&) = delete;
-        dialect& operator=(const dialect&) = delete;
-        dialect& operator=(dialect&&) = delete;
+        ~Dialect() = default;
+        Dialect(const Dialect&) = delete;
+        Dialect(Dialect&&) = delete;
+        Dialect& operator=(const Dialect&) = delete;
+        Dialect& operator=(Dialect&&) = delete;
 
         const string_views& feature_keywords;
         const string_views& rule_keywords;

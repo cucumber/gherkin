@@ -14,23 +14,23 @@ namespace cucumber::gherkin
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    // parser error
+    // Parser error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    parser_error::parser_error(const std::string& message, const cms::Location& location)
+    ParserError::ParserError(const std::string& message, const cms::Location& location)
         : std::runtime_error(make_message(message, location))
         , location_(location)
     {}
 
-    parser_error::parser_error(const parser_error& other)
+    ParserError::ParserError(const ParserError& other)
         : std::runtime_error(other.what())
         , location_(other.location_)
     {}
 
-    parser_error::~parser_error()
+    ParserError::~ParserError()
     {}
 
-    std::string parser_error::make_message(const std::string& message, const cms::Location& location) const
+    std::string ParserError::make_message(const std::string& message, const cms::Location& location) const
     {
         std::ostringstream stream;
 
@@ -40,12 +40,12 @@ namespace cucumber::gherkin
         return stream.str();
     }
 
-    bool parser_error::same_message(const parser_error& other) const
+    bool ParserError::same_message(const ParserError& other) const
     {
         return std::strcmp(what(), other.what()) == 0;
     }
 
-    const cms::Location& parser_error::location() const
+    const cms::Location& ParserError::location() const
     {
         return location_;
     }
@@ -55,29 +55,29 @@ namespace cucumber::gherkin
     // no such language error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    no_such_language_error::no_such_language_error(const std::string& language, const cms::Location& location)
-        : parser_error("Language not supported: " + language, location)
+    NoSuchLanguageError::NoSuchLanguageError(const std::string& language, const cms::Location& location)
+        : ParserError("Language not supported: " + language, location)
     {}
 
-    no_such_language_error::~no_such_language_error()
+    NoSuchLanguageError::~NoSuchLanguageError()
     {}
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    // unexpected token
+    // unexpected Token
     //
     ///////////////////////////////////////////////////////////////////////////////
-    unexpected_token::unexpected_token(const token& received_token, const std::string& expected_tokens, const std::string& state_comment)
-        : parser_error(make_message(received_token, expected_tokens), make_location(received_token))
+    UnexpectedToken::UnexpectedToken(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment)
+        : ParserError(make_message(received_token, expected_tokens), make_location(received_token))
         , received_token_(received_token)
         , expected_tokens_(expected_tokens)
         , state_comment_(state_comment)
     {}
 
-    unexpected_token::~unexpected_token()
+    UnexpectedToken::~UnexpectedToken()
     {}
 
-    std::string unexpected_token::make_message(const token& received_token, const std::string& expected_tokens) const
+    std::string UnexpectedToken::make_message(const Token& received_token, const std::string& expected_tokens) const
     {
         std::ostringstream stream;
 
@@ -86,7 +86,7 @@ namespace cucumber::gherkin
         return stream.str();
     }
 
-    cms::Location unexpected_token::make_location(const token& received_token) const
+    cms::Location UnexpectedToken::make_location(const Token& received_token) const
     {
         return received_token.location.column.value_or(0) > 1 ? received_token.location : cms::Location{ received_token.location.line, received_token.line.indent() + 1 };
     }
@@ -96,16 +96,16 @@ namespace cucumber::gherkin
     // unexpected eof
     //
     ///////////////////////////////////////////////////////////////////////////////
-    unexpected_eof::unexpected_eof(const token& received_token, const std::string& expected_tokens, const std::string& state_comment)
-        : parser_error(make_message(expected_tokens), received_token.location)
+    UnexpectedEof::UnexpectedEof(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment)
+        : ParserError(make_message(expected_tokens), received_token.location)
         , expected_tokens_(expected_tokens)
         , state_comment_(state_comment)
     {}
 
-    unexpected_eof::~unexpected_eof()
+    UnexpectedEof::~UnexpectedEof()
     {}
 
-    std::string unexpected_eof::make_message(const std::string& expected_tokens) const
+    std::string UnexpectedEof::make_message(const std::string& expected_tokens) const
     {
         std::ostringstream stream;
 
@@ -116,18 +116,18 @@ namespace cucumber::gherkin
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    // composite parser error
+    // composite Parser error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    composite_parser_error::composite_parser_error(const parser_error_ptrs& ptrs)
-        : parser_error("", {})
+    CompositeParserError::CompositeParserError(const parser_error_ptrs& ptrs)
+        : ParserError("", {})
         , ptrs_(ptrs)
     {}
 
-    composite_parser_error::~composite_parser_error()
+    CompositeParserError::~CompositeParserError()
     {}
 
-    std::string composite_parser_error::make_message(const parser_error_ptrs& ptrs) const
+    std::string CompositeParserError::make_message(const parser_error_ptrs& ptrs) const
     {
         strings errs;
 
@@ -143,7 +143,7 @@ namespace cucumber::gherkin
         return stream.str();
     }
 
-    const parser_error_ptrs& composite_parser_error::errors() const
+    const parser_error_ptrs& CompositeParserError::errors() const
     {
         return ptrs_;
     }

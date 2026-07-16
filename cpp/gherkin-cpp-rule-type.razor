@@ -1,4 +1,4 @@
-// This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
+// This File is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 @using Berp;
 @functions {
 public static string ToSnakeCase(string str)
@@ -25,7 +25,7 @@ public static string NameOf(Rule rule)
 namespace cucumber::gherkin
 {
 
-    enum class rule_type
+    enum class RuleType
     {
         none = 0,
         @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
@@ -34,9 +34,9 @@ namespace cucumber::gherkin
         count
     };
 
-    std::string_view to_string(rule_type r);
+    std::string_view to_string(RuleType r);
 
-    inline std::ostream& operator<<(std::ostream& os, rule_type r)
+    inline std::ostream& operator<<(std::ostream& os, RuleType r)
     {
         os << to_string(r);
 

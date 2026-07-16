@@ -37,31 +37,31 @@
 namespace cucumber::gherkin
 {
 
-    ast_builder::ast_builder()
-        : ast_builder(new_id_generator())
+    AstBuilder::AstBuilder()
+        : AstBuilder(new_id_generator())
     {}
 
-    ast_builder::ast_builder(id_generator_ptr idp)
+    AstBuilder::AstBuilder(id_generator_ptr idp)
         : idp_(idp)
     {}
 
-    ast_builder::~ast_builder()
+    AstBuilder::~AstBuilder()
     {}
 
-    void ast_builder::reset(std::string_view uri)
+    void AstBuilder::reset(std::string_view uri)
     {
         stack_ = {};
-        stack_.emplace(rule_type::none);
+        stack_.emplace(RuleType::none);
         comments_.clear();
         uri_ = uri;
     }
 
-    void ast_builder::start_rule(rule_type rule_type)
+    void AstBuilder::start_rule(RuleType RuleType)
     {
-        stack_.emplace(rule_type);
+        stack_.emplace(RuleType);
     }
 
-    void ast_builder::end_rule(rule_type rule_type)
+    void AstBuilder::end_rule(RuleType RuleType)
     {
         auto node = pop_node();
         auto node_type = node.type();
@@ -69,9 +69,9 @@ namespace cucumber::gherkin
         transform_node(node, current_node());
     }
 
-    void ast_builder::build(const token& token)
+    void AstBuilder::build(const Token& token)
     {
-        if (token.matched_type == rule_type::comment)
+        if (token.matched_type == RuleType::comment)
         {
             cms::Comment comment{ get_location(token), token.matched_text };
 
@@ -83,61 +83,61 @@ namespace cucumber::gherkin
         }
     }
 
-    const cms::GherkinDocument& ast_builder::get_result() const
+    const cms::GherkinDocument& AstBuilder::get_result() const
     {
-        auto document = current_node().get_single<cms::GherkinDocument>(rule_type::gherkin_document);
+        auto document = current_node().get_single<cms::GherkinDocument>(RuleType::gherkin_document);
 
         return document ? *document : doc_;
     };
 
-    std::string ast_builder::next_id()
+    std::string AstBuilder::next_id()
     {
         return idp_->next_id();
     }
 
-    void ast_builder::transform_node(ast_node& from, ast_node& destination)
+    void AstBuilder::transform_node(AstNode& from, AstNode& destination)
     {
-        if (from.is(rule_type::step))
+        if (from.is(RuleType::step))
         {
             destination.add(from.type(), make_step(from));
         }
-        else if (from.is(rule_type::doc_string))
+        else if (from.is(RuleType::doc_string))
         {
             destination.add(from.type(), make_doc_string(from));
         }
-        else if (from.is(rule_type::data_table))
+        else if (from.is(RuleType::data_table))
         {
             destination.add(from.type(), make_data_table(from));
         }
-        else if (from.is(rule_type::background))
+        else if (from.is(RuleType::background))
         {
             destination.add(from.type(), make_background(from));
         }
-        else if (from.is(rule_type::scenario_definition))
+        else if (from.is(RuleType::scenario_definition))
         {
             destination.add(from.type(), make_scenario_definition(from));
         }
-        else if (from.is(rule_type::examples_definition))
+        else if (from.is(RuleType::examples_definition))
         {
             destination.add(from.type(), make_examples_definition(from));
         }
-        else if (from.is(rule_type::examples_table))
+        else if (from.is(RuleType::examples_table))
         {
             destination.add(from.type(), make_examples_table(from));
         }
-        else if (from.is(rule_type::description))
+        else if (from.is(RuleType::description))
         {
             destination.add(from.type(), make_description(from));
         }
-        else if (from.is(rule_type::feature))
+        else if (from.is(RuleType::feature))
         {
             destination.add(from.type(), make_feature(from));
         }
-        else if (from.is(rule_type::rule))
+        else if (from.is(RuleType::rule))
         {
             destination.add(from.type(), make_rule(from));
         }
-        else if (from.is(rule_type::gherkin_document))
+        else if (from.is(RuleType::gherkin_document))
         {
             destination.add(from.type(), make_gherkin_document(from));
         }
@@ -147,26 +147,26 @@ namespace cucumber::gherkin
         }
     }
 
-    cms::Step ast_builder::make_step(ast_node& node)
+    cms::Step AstBuilder::make_step(AstNode& node)
     {
-        auto& step_line = node.get_token(rule_type::step_line);
+        auto& step_line = node.get_token(RuleType::step_line);
 
         cms::Step step{ get_location(step_line), step_line.matched_keyword.value_or(""), step_line.matched_keyword_type, step_line.matched_text, std::nullopt, std::nullopt, next_id() };
 
-        node.set(rule_type::doc_string, step.docString);
-        node.set(rule_type::data_table, step.dataTable);
+        node.set(RuleType::doc_string, step.docString);
+        node.set(RuleType::data_table, step.dataTable);
 
         return step;
     }
 
-    cms::DocString ast_builder::make_doc_string(ast_node& node)
+    cms::DocString AstBuilder::make_doc_string(AstNode& node)
     {
-        auto& tokens = node.get_tokens(rule_type::doc_string_separator);
+        auto& tokens = node.get_tokens(RuleType::doc_string_separator);
         auto& separator_token = tokens[0];
 
         string_views line_views;
 
-        for (const auto& tok : node.get_tokens(rule_type::other))
+        for (const auto& tok : node.get_tokens(RuleType::other))
         {
             line_views.emplace_back(tok.matched_text);
         }
@@ -183,7 +183,7 @@ namespace cucumber::gherkin
         return doc_string;
     }
 
-    cms::DataTable ast_builder::make_data_table(ast_node& node)
+    cms::DataTable AstBuilder::make_data_table(AstNode& node)
     {
         auto rows = get_table_rows(node);
 
@@ -198,44 +198,44 @@ namespace cucumber::gherkin
         return data_table;
     }
 
-    cms::Background ast_builder::make_background(ast_node& node)
+    cms::Background AstBuilder::make_background(AstNode& node)
     {
-        auto& background_line = node.get_token(rule_type::background_line);
+        auto& background_line = node.get_token(RuleType::background_line);
 
         cms::Background background{ get_location(background_line), background_line.matched_keyword.value_or(""), background_line.matched_text, {}, {}, next_id() };
 
-        node.set(rule_type::description, background.description);
-        node.set(rule_type::step, background.steps);
+        node.set(RuleType::description, background.description);
+        node.set(RuleType::step, background.steps);
 
         return background;
     }
 
-    cms::Scenario ast_builder::make_scenario_definition(ast_node& node)
+    cms::Scenario AstBuilder::make_scenario_definition(AstNode& node)
     {
-        auto pnode = node.get_single<ast_node>(rule_type::scenario);
+        auto pnode = node.get_single<AstNode>(RuleType::scenario);
         auto& scenario_node = *pnode;
-        auto& scenario_line = scenario_node.get_token(rule_type::scenario_line);
+        auto& scenario_line = scenario_node.get_token(RuleType::scenario_line);
 
         cms::Scenario scenario{ get_location(scenario_line), get_tags(node), scenario_line.matched_keyword.value_or(""), scenario_line.matched_text, {}, {}, {}, next_id() };
 
-        scenario_node.set(rule_type::description, scenario.description);
-        scenario_node.set(rule_type::step, scenario.steps);
-        scenario_node.set(rule_type::examples_definition, scenario.examples);
+        scenario_node.set(RuleType::description, scenario.description);
+        scenario_node.set(RuleType::step, scenario.steps);
+        scenario_node.set(RuleType::examples_definition, scenario.examples);
 
         return scenario;
     }
 
-    cms::Examples ast_builder::make_examples_definition(ast_node& node)
+    cms::Examples AstBuilder::make_examples_definition(AstNode& node)
     {
-        auto pnode = node.get_single<ast_node>(rule_type::examples);
+        auto pnode = node.get_single<AstNode>(RuleType::examples);
         auto& examples_node = *pnode;
-        auto& examples_line = examples_node.get_token(rule_type::examples_line);
+        auto& examples_line = examples_node.get_token(RuleType::examples_line);
 
         cms::Examples examples{ get_location(examples_line), get_tags(node), examples_line.matched_keyword.value_or(""), examples_line.matched_text, {}, std::nullopt, {}, next_id() };
 
-        examples_node.set(rule_type::description, examples.description);
+        examples_node.set(RuleType::description, examples.description);
 
-        auto prows = examples_node.get_single<table_rows>(rule_type::examples_table);
+        auto prows = examples_node.get_single<table_rows>(RuleType::examples_table);
 
         if (prows)
         {
@@ -252,15 +252,15 @@ namespace cucumber::gherkin
         return examples;
     }
 
-    table_rows ast_builder::make_examples_table(ast_node& node)
+    table_rows AstBuilder::make_examples_table(AstNode& node)
     {
         return get_table_rows(node);
     }
 
-    std::string ast_builder::make_description(ast_node& node)
+    std::string AstBuilder::make_description(AstNode& node)
     {
         static const std::regex only_spaces("\\s*");
-        auto toks = node.get_tokens(rule_type::other);
+        auto toks = node.get_tokens(RuleType::other);
         std::size_t ntoks = toks.size();
 
         while (ntoks && full_match(toks[ntoks - 1].matched_text, only_spaces))
@@ -278,19 +278,19 @@ namespace cucumber::gherkin
         return join("\n", description_lines);
     }
 
-    cms::Feature ast_builder::make_feature(ast_node& node)
+    cms::Feature AstBuilder::make_feature(AstNode& node)
     {
-        auto pnode = node.get_single<ast_node>(rule_type::feature_header);
+        auto pnode = node.get_single<AstNode>(RuleType::feature_header);
         auto& header = *pnode;
 
-        auto ptoken = header.get_single<token>(rule_type::feature_line);
+        auto ptoken = header.get_single<Token>(RuleType::feature_line);
         auto& feature_line = *ptoken;
 
         cms::Feature feature{ get_location(feature_line), get_tags(header), feature_line.matched_gherkin_dialect, feature_line.matched_keyword.value_or(""), feature_line.matched_text };
 
-        header.set(rule_type::description, feature.description);
+        header.set(RuleType::description, feature.description);
 
-        auto background = node.get_single<cms::Background>(rule_type::background);
+        auto background = node.get_single<cms::Background>(RuleType::background);
 
         if (background)
         {
@@ -299,7 +299,7 @@ namespace cucumber::gherkin
             feature.children.emplace_back(std::make_shared<cms::FeatureChild>(child));
         }
 
-        auto scenarios = node.get_items<cms::Scenario>(rule_type::scenario_definition);
+        auto scenarios = node.get_items<cms::Scenario>(RuleType::scenario_definition);
 
         if (scenarios)
         {
@@ -311,7 +311,7 @@ namespace cucumber::gherkin
             }
         }
 
-        auto rules = node.get_items<cms::Rule>(rule_type::rule);
+        auto rules = node.get_items<cms::Rule>(RuleType::rule);
 
         if (rules)
         {
@@ -326,19 +326,19 @@ namespace cucumber::gherkin
         return feature;
     }
 
-    cms::Rule ast_builder::make_rule(ast_node& node)
+    cms::Rule AstBuilder::make_rule(AstNode& node)
     {
-        auto pnode = node.get_single<ast_node>(rule_type::rule_header);
+        auto pnode = node.get_single<AstNode>(RuleType::rule_header);
         auto& header = *pnode;
 
-        auto ptoken = header.get_single<token>(rule_type::rule_line);
+        auto ptoken = header.get_single<Token>(RuleType::rule_line);
         auto& rule_line = *ptoken;
 
         cms::Rule rule{ get_location(rule_line), get_tags(header), rule_line.matched_keyword.value_or(""), rule_line.matched_text, {}, {}, next_id() };
 
-        header.set(rule_type::description, rule.description);
+        header.set(RuleType::description, rule.description);
 
-        auto background = node.get_single<cms::Background>(rule_type::background);
+        auto background = node.get_single<cms::Background>(RuleType::background);
 
         if (background)
         {
@@ -347,7 +347,7 @@ namespace cucumber::gherkin
             rule.children.emplace_back(std::make_shared<cms::RuleChild>(child));
         }
 
-        auto scenarios = node.get_items<cms::Scenario>(rule_type::scenario_definition);
+        auto scenarios = node.get_items<cms::Scenario>(RuleType::scenario_definition);
 
         if (scenarios)
         {
@@ -362,26 +362,26 @@ namespace cucumber::gherkin
         return rule;
     }
 
-    cms::GherkinDocument ast_builder::make_gherkin_document(ast_node& node)
+    cms::GherkinDocument AstBuilder::make_gherkin_document(AstNode& node)
     {
         cms::GherkinDocument document{ std::string(uri_), std::nullopt, comments_ };
 
-        node.set(rule_type::feature, document.feature);
+        node.set(RuleType::feature, document.feature);
 
         return document;
     }
 
-    std::shared_ptr<cms::Location> ast_builder::get_location(const token& token, std::size_t column) const
+    std::shared_ptr<cms::Location> AstBuilder::get_location(const Token& token, std::size_t column) const
     {
         std::size_t col = column == 0 ? token.location.column.value_or(0) : column;
         return std::make_shared<cms::Location>(cms::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt });
     }
 
-    table_rows ast_builder::get_table_rows(const ast_node& node)
+    table_rows AstBuilder::get_table_rows(const AstNode& node)
     {
         table_rows rows;
 
-        for (const auto& token : node.get_tokens(rule_type::table_row))
+        for (const auto& token : node.get_tokens(RuleType::table_row))
         {
             auto row = std::make_shared<cms::TableRow>();
             row->location = get_location(token);
@@ -395,7 +395,7 @@ namespace cucumber::gherkin
         return rows;
     }
 
-    void ast_builder::ensure_cell_count(const table_rows& rows) const
+    void AstBuilder::ensure_cell_count(const table_rows& rows) const
     {
         if (rows.empty())
         {
@@ -413,7 +413,7 @@ namespace cucumber::gherkin
         }
     }
 
-    table_cells ast_builder::get_table_cells(const token& token)
+    table_cells AstBuilder::get_table_cells(const Token& token)
     {
         table_cells cells;
 
@@ -428,17 +428,17 @@ namespace cucumber::gherkin
         return cells;
     }
 
-    tags ast_builder::get_tags(const ast_node& node)
+    tags AstBuilder::get_tags(const AstNode& node)
     {
         tags tag_list;
 
-        auto pnode = node.get_single<ast_node>(rule_type::tags);
+        auto pnode = node.get_single<AstNode>(RuleType::tags);
 
         if (pnode)
         {
             auto& tags_node = *pnode;
 
-            for (const auto& token : tags_node.get_tokens(rule_type::tag_line))
+            for (const auto& token : tags_node.get_tokens(RuleType::tag_line))
             {
                 for (auto& tag_item : token.matched_items)
                 {
@@ -452,21 +452,21 @@ namespace cucumber::gherkin
         return tag_list;
     }
 
-    ast_node ast_builder::pop_node()
+    AstNode AstBuilder::pop_node()
     {
-        ast_node popped_node = std::move(current_node());
+        AstNode popped_node = std::move(current_node());
 
         stack_.pop();
 
         return popped_node;
     }
 
-    ast_node& ast_builder::current_node()
+    AstNode& AstBuilder::current_node()
     {
         return stack_.top();
     }
 
-    const ast_node& ast_builder::current_node() const
+    const AstNode& AstBuilder::current_node() const
     {
         return stack_.top();
     }

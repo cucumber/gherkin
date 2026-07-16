@@ -80,10 +80,10 @@ namespace cucumber::gherkin
         }
     }
 
-    line::line()
+    Line::Line()
     {}
 
-    line::line(const std::string& line_text, std::size_t line_number)
+    Line::Line(const std::string& line_text, std::size_t line_number)
         : line_text_(line_text)
         , line_number_(line_number)
         , trimmed_line_text_(lstrip(line_text_))
@@ -91,20 +91,20 @@ namespace cucumber::gherkin
         indent_ = line_text_.size() - trimmed_line_text_.size();
     }
 
-    std::string line::get_rest_trimmed(std::size_t length) const
+    std::string Line::get_rest_trimmed(std::size_t length) const
     {
         auto pos = std::min(length, trimmed_line_text_.size());
 
         return strip(trimmed_line_text_.substr(pos));
     }
 
-    std::string line::get_keyword_trimmed(std::string_view keyword) const
+    std::string Line::get_keyword_trimmed(std::string_view keyword) const
     {
         // Keyword ends with ':'
         return get_rest_trimmed(keyword.size() + 1);
     }
 
-    std::string_view line::get_line_text(std::size_t indent_to_remove) const
+    std::string_view Line::get_line_text(std::size_t indent_to_remove) const
     {
         std::string_view view;
 
@@ -119,32 +119,32 @@ namespace cucumber::gherkin
         }
     }
 
-    std::string_view line::line_text() const
+    std::string_view Line::line_text() const
     {
         return line_text_;
     }
 
-    std::size_t line::indent() const
+    std::size_t Line::indent() const
     {
         return indent_;
     }
 
-    bool line::is_empty() const
+    bool Line::is_empty() const
     {
         return trimmed_line_text_.empty();
     }
 
-    bool line::startswith(std::string_view prefix) const
+    bool Line::startswith(std::string_view prefix) const
     {
         return trimmed_line_text_.find(prefix) == 0;
     }
 
-    bool line::startswith_title_keyword(const std::string& keyword) const
+    bool Line::startswith_title_keyword(const std::string& keyword) const
     {
         return trimmed_line_text_.find(keyword + ":") == 0;
     }
 
-    items line::table_cells() const
+    items Line::table_cells() const
     {
         items items;
 
@@ -153,11 +153,11 @@ namespace cucumber::gherkin
             {
                 using namespace std::literals;
 
-                auto stripped_cell = lstrip(cell, re_pattern::spaces_no_nl);
+                auto stripped_cell = lstrip(cell, RePattern::spaces_no_nl);
                 auto cell_indent = cell.size() - stripped_cell.size();
-                stripped_cell = rstrip(stripped_cell, re_pattern::spaces_no_nl);
+                stripped_cell = rstrip(stripped_cell, RePattern::spaces_no_nl);
 
-                item table_item{ col + indent_ + cell_indent, to_narrow(stripped_cell) };
+                Item table_item{ col + indent_ + cell_indent, to_narrow(stripped_cell) };
 
                 for (const auto& replacement : line_unescapes)
                 {
@@ -170,7 +170,7 @@ namespace cucumber::gherkin
         return items;
     }
 
-    items line::tags() const
+    items Line::tags() const
     {
         items tags;
 
@@ -191,10 +191,10 @@ namespace cucumber::gherkin
 
             if (!full_match(sitem, no_spaces))
             {
-                throw parser_error("A tag may not contain whitespace", { line_number_, column });
+                throw ParserError("A tag may not contain whitespace", { line_number_, column });
             }
 
-            tags.emplace_back(item{ column, "@" + sitem });
+            tags.emplace_back(Item{ column, "@" + sitem });
 
             column += original_item.size() + 1;
         }

@@ -24,7 +24,7 @@ namespace cucumber::gherkin
         return views;
     }
 
-    dialect get_dialect(const std::string_view& language)
+    Dialect get_dialect(const std::string_view& language)
     {
         return { keywords(language, "feature"), keywords(language, "rule"), keywords(language, "scenario"), keywords(language, "scenarioOutline"), keywords(language, "background"),
             keywords(language, "examples"), keywords(language, "given"), keywords(language, "when"), keywords(language, "then"), keywords(language, "and"), keywords(language, "but") };

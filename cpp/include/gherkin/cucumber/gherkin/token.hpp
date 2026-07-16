@@ -17,11 +17,11 @@ namespace cucumber::gherkin
 
     namespace cms = cucumber::messages;
 
-    struct token
+    struct Token
     {
         bool eof = false;
-        cucumber::gherkin::line line;
-        rule_type matched_type;
+        cucumber::gherkin::Line line;
+        RuleType matched_type;
         std::optional<std::string> matched_keyword;
         std::optional<cms::StepKeywordType> matched_keyword_type;
         std::size_t matched_indent = 0;
@@ -37,8 +37,8 @@ namespace cucumber::gherkin
         std::string_view value() const;
     };
 
-    using tokens = std::vector<token>;
-    using token_queue = std::deque<token>;
+    using tokens = std::vector<Token>;
+    using token_queue = std::deque<Token>;
 
 }
 

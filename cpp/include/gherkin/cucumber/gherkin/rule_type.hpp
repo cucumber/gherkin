@@ -1,4 +1,4 @@
-// This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
+// This File is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 #ifndef CUCUMBER_GHERKIN_RULE_TYPE_HPP
 #define CUCUMBER_GHERKIN_RULE_TYPE_HPP
 
@@ -8,7 +8,7 @@
 namespace cucumber::gherkin
 {
 
-    enum class rule_type
+    enum class RuleType
     {
         none = 0,
         e_o_f,
@@ -48,9 +48,9 @@ namespace cucumber::gherkin
         count
     };
 
-    std::string_view to_string(rule_type type);
+    std::string_view to_string(RuleType type);
 
-    inline std::ostream& operator<<(std::ostream& ostream, rule_type type)
+    inline std::ostream& operator<<(std::ostream& ostream, RuleType type)
     {
         ostream << to_string(type);
 

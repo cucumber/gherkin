@@ -11,7 +11,7 @@
 namespace cucumber::gherkin
 {
 
-    struct regex_result
+    struct RegexResult
     {
         bool match = false;
         string_views matches;
@@ -28,10 +28,10 @@ namespace cucumber::gherkin
     namespace detail
     {
 
-        struct null_arg
+        struct NullArg
         {};
 
-        template<typename CharT, typename SubMatch, typename Arg = null_arg>
+        template<typename CharT, typename SubMatch, typename Arg = NullArg>
         auto extract_submatch(const SubMatch& submatch, Arg&& argument)
         {
             using arg_type = std::decay_t<Arg>;
@@ -53,7 +53,7 @@ namespace cucumber::gherkin
 
                 die_unless(error_code == std::errc(), "failed to convert \"", view, "\" to ", declname(argument));
             }
-            else if constexpr (!std::is_same_v<arg_type, null_arg>)
+            else if constexpr (!std::is_same_v<arg_type, NullArg>)
             {
                 die("unsupported argument: ", declname(argument));
             }

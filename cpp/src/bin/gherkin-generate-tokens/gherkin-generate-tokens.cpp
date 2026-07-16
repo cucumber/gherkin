@@ -8,18 +8,18 @@
 
 int main(int argc, char** argv)
 {
-    using builder = cucumber::gherkin::token_formatter_builder;
-    using parser = cucumber::gherkin::parser<builder>;
+    using builder = cucumber::gherkin::TokenFormatterBuilder;
+    using Parser = cucumber::gherkin::Parser<builder>;
 
-    parser token_parser;
+    Parser token_parser;
 
     for (std::size_t i = 1; i < argc; ++i)
     {
-        std::string file(argv[i]);
+        std::string File(argv[i]);
 
-        auto data = cucumber::gherkin::slurp(file);
+        auto data = cucumber::gherkin::slurp(File);
 
-        auto formatted_tokens = token_parser.parse(file, data);
+        auto formatted_tokens = token_parser.parse(File, data);
 
         std::cout << cucumber::gherkin::join("\n", formatted_tokens);
     }

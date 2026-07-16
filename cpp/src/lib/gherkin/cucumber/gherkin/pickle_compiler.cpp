@@ -49,20 +49,20 @@ namespace cucumber::gherkin
         destination.insert(destination.end(), from.begin(), from.end());
     }
 
-    pickle_compiler::pickle_compiler()
-        : pickle_compiler(new_id_generator())
+    PickleCompiler::PickleCompiler()
+        : PickleCompiler(new_id_generator())
     {}
 
-    pickle_compiler::pickle_compiler(id_generator_ptr idp)
+    PickleCompiler::PickleCompiler(id_generator_ptr idp)
         : idp_(idp)
     {}
 
-    pickle_compiler::~pickle_compiler()
+    PickleCompiler::~PickleCompiler()
     {}
 
-    pickles pickle_compiler::compile(const cms::GherkinDocument& document, const std::string& uri, pickle_cb sink)
+    pickles PickleCompiler::compile(const cms::GherkinDocument& document, const std::string& uri, pickle_cb sink)
     {
-        pickle_compiler_context context{ idp_, sink };
+        PickleCompilerContext context{ idp_, sink };
 
         if (document.feature)
         {
@@ -72,7 +72,7 @@ namespace cucumber::gherkin
         return context.pickles;
     }
 
-    void pickle_compiler::compile_feature(pickle_compiler_context& context, const cms::Feature& feature, const std::string& language, const std::string& uri)
+    void PickleCompiler::compile_feature(PickleCompilerContext& context, const cms::Feature& feature, const std::string& language, const std::string& uri)
     {
         auto tags = feature.tags;
         steps background_steps;
@@ -107,8 +107,8 @@ namespace cucumber::gherkin
         }
     }
 
-    void pickle_compiler::compile_rule(
-        pickle_compiler_context& context, const cms::Rule& rule, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
+    void PickleCompiler::compile_rule(
+        PickleCompilerContext& context, const cms::Rule& rule, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
     {
         auto steps = background_steps;
         auto tags = parent_tags;
@@ -144,8 +144,8 @@ namespace cucumber::gherkin
         }
     }
 
-    void pickle_compiler::compile_scenario(
-        pickle_compiler_context& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
+    void PickleCompiler::compile_scenario(
+        PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
     {
         auto conjunction = cms::StepKeywordType::CONJUNCTION;
         pickle_steps steps;
@@ -186,8 +186,8 @@ namespace cucumber::gherkin
         context.add_pickle(pickle);
     }
 
-    void pickle_compiler::compile_scenario_outline(
-        pickle_compiler_context& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
+    void PickleCompiler::compile_scenario_outline(
+        PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri)
     {
         auto conjunction = cms::StepKeywordType::CONJUNCTION;
 
@@ -251,7 +251,7 @@ namespace cucumber::gherkin
         }
     }
 
-    cms::PickleStep pickle_compiler::make_pickle_step(const cms::Step& step, const table_cells& variable_cells, const cms::TableRow* value_row_ptr, cms::StepKeywordType keyword_type)
+    cms::PickleStep PickleCompiler::make_pickle_step(const cms::Step& step, const table_cells& variable_cells, const cms::TableRow* value_row_ptr, cms::StepKeywordType keyword_type)
     {
         const auto& value_cells = value_row_ptr ? value_row_ptr->cells : table_cells();
 
@@ -295,7 +295,7 @@ namespace cucumber::gherkin
         return pickle_step;
     }
 
-    cms::PickleTable pickle_compiler::make_pickle_table(
+    cms::PickleTable PickleCompiler::make_pickle_table(
         const std::optional<std::size_t>& argument_index, const cms::DataTable& data_table, const table_cells& variable_cells, const table_cells& value_cells)
     {
         cms::PickleTable pickle_table{ argument_index };
@@ -317,7 +317,7 @@ namespace cucumber::gherkin
         return pickle_table;
     }
 
-    cms::PickleDocString pickle_compiler::make_pickle_doc_string(
+    cms::PickleDocString PickleCompiler::make_pickle_doc_string(
         const std::optional<std::size_t>& argument_index, const cms::DocString& doc_string, const table_cells& variable_cells, const table_cells& value_cells)
     {
         cms::PickleDocString pickle_doc_string{ argument_index, std::nullopt, interpolate(doc_string.content, variable_cells, value_cells) };
@@ -330,12 +330,12 @@ namespace cucumber::gherkin
         return pickle_doc_string;
     }
 
-    cms::PickleStep pickle_compiler::make_pickle_step(const cms::Step& step, cms::StepKeywordType keyword_type)
+    cms::PickleStep PickleCompiler::make_pickle_step(const cms::Step& step, cms::StepKeywordType keyword_type)
     {
         return make_pickle_step(step, {}, nullptr, keyword_type);
     }
 
-    pickle_tags pickle_compiler::make_pickle_tags(const tags& tags)
+    pickle_tags PickleCompiler::make_pickle_tags(const tags& tags)
     {
         pickle_tags result_tags;
 
@@ -350,7 +350,7 @@ namespace cucumber::gherkin
         return result_tags;
     }
 
-    std::string pickle_compiler::interpolate(const std::string& name, const table_cells& variable_cells, const table_cells& value_cells)
+    std::string PickleCompiler::interpolate(const std::string& name, const table_cells& variable_cells, const table_cells& value_cells)
     {
         auto interpolated_name = name;
         std::size_t col = 0;
@@ -367,7 +367,7 @@ namespace cucumber::gherkin
         return interpolated_name;
     }
 
-    std::string pickle_compiler::next_id()
+    std::string PickleCompiler::next_id()
     {
         return idp_->next_id();
     }

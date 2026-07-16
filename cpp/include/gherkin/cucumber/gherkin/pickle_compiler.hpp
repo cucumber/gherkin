@@ -11,26 +11,26 @@
 namespace cucumber::gherkin
 {
 
-    class pickle_compiler
+    class PickleCompiler
     {
     public:
-        pickle_compiler();
-        pickle_compiler(id_generator_ptr idp);
+        PickleCompiler();
+        PickleCompiler(id_generator_ptr idp);
 
-        virtual ~pickle_compiler();
+        virtual ~PickleCompiler();
 
         pickles compile(const cms::GherkinDocument& document, const std::string& uri, pickle_cb sink = {});
 
     private:
-        void compile_feature(pickle_compiler_context& context, const cms::Feature& feature, const std::string& language, const std::string& uri);
+        void compile_feature(PickleCompilerContext& context, const cms::Feature& feature, const std::string& language, const std::string& uri);
 
-        void compile_rule(pickle_compiler_context& context, const cms::Rule& rule, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
+        void compile_rule(PickleCompilerContext& context, const cms::Rule& rule, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
 
         void compile_scenario(
-            pickle_compiler_context& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
+            PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
 
         void compile_scenario_outline(
-            pickle_compiler_context& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
+            PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
 
         cms::PickleTable make_pickle_table(const std::optional<std::size_t>& argument_index, const cms::DataTable& data_table, const table_cells& variable_cells, const table_cells& value_cells);
 

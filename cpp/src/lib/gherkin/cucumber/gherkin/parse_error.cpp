@@ -3,7 +3,7 @@
 namespace cucumber::gherkin
 {
 
-    json parse_error::to_json() const
+    json ParseError::to_json() const
     {
         json doc;
 

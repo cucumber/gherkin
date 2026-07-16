@@ -8,13 +8,13 @@
 namespace cucumber::gherkin
 {
 
-    struct item
+    struct Item
     {
         std::size_t column;
         std::string text;
     };
 
-    using items = std::vector<item>;
+    using items = std::vector<Item>;
 
 }
 

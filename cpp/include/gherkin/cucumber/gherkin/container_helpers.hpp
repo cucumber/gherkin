@@ -9,46 +9,46 @@ namespace cucumber::gherkin
 {
 
     template<typename T>
-    struct is_vector : public std::false_type
+    struct IsVector : public std::false_type
     {};
 
     template<typename T>
-    struct is_vector<std::vector<T>> : public std::true_type
+    struct IsVector<std::vector<T>> : public std::true_type
     {};
 
     template<typename T>
-    using is_vector_t = typename is_vector<T>::type;
+    using is_vector_t = typename IsVector<T>::type;
 
     template<typename T>
-    constexpr bool is_vector_v = is_vector<T>::value;
+    constexpr bool is_vector_v = IsVector<T>::value;
 
     template<typename T>
-    struct is_set : public std::false_type
+    struct IsSet : public std::false_type
     {};
 
     template<typename T>
-    struct is_set<std::set<T>> : public std::true_type
+    struct IsSet<std::set<T>> : public std::true_type
     {};
 
     template<typename T>
-    using is_set_t = typename is_set<T>::type;
+    using is_set_t = typename IsSet<T>::type;
 
     template<typename T>
-    constexpr bool is_set_v = is_set<T>::value;
+    constexpr bool is_set_v = IsSet<T>::value;
 
     template<typename T>
-    struct is_unordered_set : public std::false_type
+    struct IsUnorderedSet : public std::false_type
     {};
 
     template<typename T>
-    struct is_unordered_set<std::unordered_set<T>> : public std::true_type
+    struct IsUnorderedSet<std::unordered_set<T>> : public std::true_type
     {};
 
     template<typename T>
-    using is_unordered_set_t = typename is_unordered_set<T>::type;
+    using is_unordered_set_t = typename IsUnorderedSet<T>::type;
 
     template<typename T>
-    constexpr bool is_unordered_set_v = is_unordered_set<T>::value;
+    constexpr bool is_unordered_set_v = IsUnorderedSet<T>::value;
 
 }
 

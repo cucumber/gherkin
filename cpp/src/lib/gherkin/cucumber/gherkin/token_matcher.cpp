@@ -22,62 +22,62 @@ namespace cucumber::gherkin
 
     static const std::regex language_re{ "^\\s*#\\s*language\\s*:\\s*([a-zA-Z\\-_]+)\\s*$" };
 
-    token_matcher::token_matcher(const std::string& dialect_name)
+    TokenMatcher::TokenMatcher(const std::string& dialect_name)
     {
         change_dialect(dialect_name);
     }
 
-    token_matcher::~token_matcher()
+    TokenMatcher::~TokenMatcher()
     {}
 
-    void token_matcher::reset()
+    void TokenMatcher::reset()
     {
         indent_to_remove_ = 0;
         active_doc_string_separator_.clear();
     }
 
-    bool token_matcher::match_feature_line(token& token)
+    bool TokenMatcher::match_feature_line(Token& token)
     {
-        return match_title_line(token, rule_type::feature_line, keywords("feature"));
+        return match_title_line(token, RuleType::feature_line, keywords("feature"));
     }
 
-    bool token_matcher::match_rule_line(token& token)
+    bool TokenMatcher::match_rule_line(Token& token)
     {
-        return match_title_line(token, rule_type::rule_line, keywords("rule"));
+        return match_title_line(token, RuleType::rule_line, keywords("rule"));
     }
 
-    bool token_matcher::match_scenario_line(token& token)
+    bool TokenMatcher::match_scenario_line(Token& token)
     {
-        auto scenario_type = rule_type::scenario_line;
+        auto scenario_type = RuleType::scenario_line;
 
         return match_title_line(token, scenario_type, keywords("scenario")) || match_title_line(token, scenario_type, keywords("scenarioOutline"));
     }
 
-    bool token_matcher::match_background_line(token& token)
+    bool TokenMatcher::match_background_line(Token& token)
     {
-        return match_title_line(token, rule_type::background_line, keywords("background"));
+        return match_title_line(token, RuleType::background_line, keywords("background"));
     }
 
-    bool token_matcher::match_examples_line(token& token)
+    bool TokenMatcher::match_examples_line(Token& token)
     {
-        return match_title_line(token, rule_type::examples_line, keywords("examples"));
+        return match_title_line(token, RuleType::examples_line, keywords("examples"));
     }
 
-    bool token_matcher::match_table_row(token& token)
+    bool TokenMatcher::match_table_row(Token& token)
     {
         if (!token.line.startswith("|"))
         {
             return false;
         }
 
-        token_info info;
+        TokenInfo info;
         info.items = token.line.table_cells();
-        set_token_matched(token, rule_type::table_row, info);
+        set_token_matched(token, RuleType::table_row, info);
 
         return true;
     }
 
-    bool token_matcher::match_language(token& token)
+    bool TokenMatcher::match_language(Token& token)
     {
         std::string dialect_name;
 
@@ -86,25 +86,25 @@ namespace cucumber::gherkin
             return false;
         }
 
-        set_token_matched(token, rule_type::language, { dialect_name });
+        set_token_matched(token, RuleType::language, { dialect_name });
         change_dialect(dialect_name);
 
         return true;
     }
 
-    bool token_matcher::match_tag_line(token& token)
+    bool TokenMatcher::match_tag_line(Token& token)
     {
         if (!token.line.startswith("@"))
         {
             return false;
         }
 
-        set_token_matched(token, rule_type::tag_line, { std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::move(token.line.tags()) });
+        set_token_matched(token, RuleType::tag_line, { std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::move(token.line.tags()) });
 
         return true;
     }
 
-    bool token_matcher::match_title_line(token& token, rule_type token_type, string_views keywords)
+    bool TokenMatcher::match_title_line(Token& token, RuleType token_type, string_views keywords)
     {
         for (const auto& keyword : keywords)
         {
@@ -123,31 +123,31 @@ namespace cucumber::gherkin
         return false;
     }
 
-    bool token_matcher::match_e_o_f(token& token)
+    bool TokenMatcher::match_e_o_f(Token& token)
     {
         if (!token.eof)
         {
             return false;
         }
 
-        set_token_matched(token, rule_type::e_o_f);
+        set_token_matched(token, RuleType::e_o_f);
 
         return true;
     }
 
-    bool token_matcher::match_empty(token& token)
+    bool TokenMatcher::match_empty(Token& token)
     {
         if (!token.line.is_empty())
         {
             return false;
         }
 
-        set_token_matched(token, rule_type::empty, { std::nullopt, std::nullopt, std::nullopt, 0 });
+        set_token_matched(token, RuleType::empty, { std::nullopt, std::nullopt, std::nullopt, 0 });
 
         return true;
     }
 
-    bool token_matcher::match_comment(token& token)
+    bool TokenMatcher::match_comment(Token& token)
     {
         if (!token.line.startswith("#"))
         {
@@ -158,21 +158,21 @@ namespace cucumber::gherkin
 
         subst(comment_text, "[\\r\\n]+$");
 
-        set_token_matched(token, rule_type::comment, { comment_text, std::nullopt, std::nullopt, 0 });
+        set_token_matched(token, RuleType::comment, { comment_text, std::nullopt, std::nullopt, 0 });
 
         return true;
     }
 
-    bool token_matcher::match_other(token& token)
+    bool TokenMatcher::match_other(Token& token)
     {
         std::string text = std::string(token.line.get_line_text(indent_to_remove_));
 
-        set_token_matched(token, rule_type::other, { unescape_docstring(text), std::nullopt, std::nullopt, 0 });
+        set_token_matched(token, RuleType::other, { unescape_docstring(text), std::nullopt, std::nullopt, 0 });
 
         return true;
     }
 
-    bool token_matcher::match_step_line(token& token)
+    bool TokenMatcher::match_step_line(Token& token)
     {
         string_views step_keyword_names = { "given", "when", "then", "and", "but" };
         auto keywords = cucumber::gherkin::keywords(dialect_name_, step_keyword_names);
@@ -195,7 +195,7 @@ namespace cucumber::gherkin
 
             auto title = token.line.get_rest_trimmed(keyword.size());
 
-            set_token_matched(token, rule_type::step_line, { title, std::string(keyword), keyword_type(keyword) });
+            set_token_matched(token, RuleType::step_line, { title, std::string(keyword), keyword_type(keyword) });
 
             return true;
         }
@@ -203,7 +203,7 @@ namespace cucumber::gherkin
         return false;
     }
 
-    bool token_matcher::match_doc_string_separator(token& token)
+    bool TokenMatcher::match_doc_string_separator(Token& token)
     {
         if (active_doc_string_separator_.empty())
         {
@@ -213,7 +213,7 @@ namespace cucumber::gherkin
         return match_doc_string_separator_(token, active_doc_string_separator_, false);
     }
 
-    bool token_matcher::match_doc_string_separator_(token& token, std::string_view separator, bool is_open)
+    bool TokenMatcher::match_doc_string_separator_(Token& token, std::string_view separator, bool is_open)
     {
         if (!token.line.startswith(separator))
         {
@@ -235,12 +235,12 @@ namespace cucumber::gherkin
             indent_to_remove_ = 0;
         }
 
-        set_token_matched(token, rule_type::doc_string_separator, { content_type, tseparator });
+        set_token_matched(token, RuleType::doc_string_separator, { content_type, tseparator });
 
         return true;
     }
 
-    void token_matcher::set_token_matched(token& token, rule_type matched_type, const token_info& info)
+    void TokenMatcher::set_token_matched(Token& token, RuleType matched_type, const TokenInfo& info)
     {
         using namespace std::literals;
 
@@ -248,7 +248,7 @@ namespace cucumber::gherkin
 
         if (info.text)
         {
-            token.matched_text.assign(rstrip(*info.text, re_pattern::crlf));
+            token.matched_text.assign(rstrip(*info.text, RePattern::crlf));
         }
 
         if (info.keyword)
@@ -275,12 +275,12 @@ namespace cucumber::gherkin
         token.matched_gherkin_dialect = dialect_name_;
     }
 
-    const string_views& token_matcher::keywords(std::string_view keyword) const
+    const string_views& TokenMatcher::keywords(std::string_view keyword) const
     {
         return cucumber::gherkin::keywords(dialect_name_, keyword);
     }
 
-    cucumber::messages::StepKeywordType token_matcher::keyword_type(std::string_view keyword) const
+    cucumber::messages::StepKeywordType TokenMatcher::keyword_type(std::string_view keyword) const
     {
         auto found = keyword_types_.find(keyword);
 
@@ -297,46 +297,46 @@ namespace cucumber::gherkin
         return cucumber::messages::StepKeywordType::UNKNOWN;
     }
 
-    void token_matcher::change_dialect(const std::string& dialect_name, const cms::Location& location)
+    void TokenMatcher::change_dialect(const std::string& dialect_name, const cms::Location& location)
     {
         if (all_keywords().find(dialect_name) == all_keywords().end())
         {
-            throw no_such_language_error(dialect_name, location);
+            throw NoSuchLanguageError(dialect_name, location);
         }
 
         dialect_name_ = dialect_name;
 
-        auto dialect = get_dialect(dialect_name_);
+        auto Dialect = get_dialect(dialect_name_);
 
         keyword_types_.clear();
 
-        for (const auto& keyword : dialect.given_keywords)
+        for (const auto& keyword : Dialect.given_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::CONTEXT);
         }
 
-        for (const auto& keyword : dialect.when_keywords)
+        for (const auto& keyword : Dialect.when_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::ACTION);
         }
 
-        for (const auto& keyword : dialect.then_keywords)
+        for (const auto& keyword : Dialect.then_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::OUTCOME);
         }
 
-        for (const auto& keyword : dialect.and_keywords)
+        for (const auto& keyword : Dialect.and_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::CONJUNCTION);
         }
 
-        for (const auto& keyword : dialect.but_keywords)
+        for (const auto& keyword : Dialect.but_keywords)
         {
             keyword_types_[keyword].push_back(cucumber::messages::StepKeywordType::CONJUNCTION);
         }
     }
 
-    std::string token_matcher::unescape_docstring(const std::string& text) const
+    std::string TokenMatcher::unescape_docstring(const std::string& text) const
     {
         using namespace std::literals;
 

@@ -11,7 +11,7 @@ namespace cucumber::gherkin
     using json = nlohmann::json;
     namespace cms = cucumber::messages;
 
-    struct parse_error
+    struct ParseError
     {
         std::string uri;
         cms::Location location;

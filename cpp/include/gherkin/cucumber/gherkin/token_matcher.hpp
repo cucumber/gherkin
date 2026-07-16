@@ -15,35 +15,35 @@ namespace cucumber::gherkin
     using keyword_types = std::vector<cucumber::messages::StepKeywordType>;
     using keyword_types_map = std::unordered_map<std::string_view, keyword_types>;
 
-    class token_matcher
+    class TokenMatcher
     {
     public:
-        token_matcher(const std::string& dialect_name = "en");
-        virtual ~token_matcher();
+        TokenMatcher(const std::string& dialect_name = "en");
+        virtual ~TokenMatcher();
 
         void reset();
 
-        bool match_feature_line(token& token);
-        bool match_rule_line(token& token);
-        bool match_scenario_line(token& token);
-        bool match_background_line(token& token);
-        bool match_examples_line(token& token);
-        bool match_language(token& token);
-        bool match_tag_line(token& token);
-        bool match_e_o_f(token& token);
-        bool match_empty(token& token);
-        bool match_comment(token& token);
-        bool match_other(token& token);
-        bool match_step_line(token& token);
-        bool match_doc_string_separator(token& token);
-        bool match_table_row(token& token);
+        bool match_feature_line(Token& token);
+        bool match_rule_line(Token& token);
+        bool match_scenario_line(Token& token);
+        bool match_background_line(Token& token);
+        bool match_examples_line(Token& token);
+        bool match_language(Token& token);
+        bool match_tag_line(Token& token);
+        bool match_e_o_f(Token& token);
+        bool match_empty(Token& token);
+        bool match_comment(Token& token);
+        bool match_other(Token& token);
+        bool match_step_line(Token& token);
+        bool match_doc_string_separator(Token& token);
+        bool match_table_row(Token& token);
 
     private:
-        bool match_doc_string_separator_(token& token, std::string_view separator, bool is_open);
+        bool match_doc_string_separator_(Token& token, std::string_view separator, bool is_open);
 
-        bool match_title_line(token& token, rule_type token_type, string_views keywords);
+        bool match_title_line(Token& token, RuleType token_type, string_views keywords);
 
-        struct token_info
+        struct TokenInfo
         {
             std::optional<std::string> text;
             std::optional<std::string> keyword;
@@ -52,7 +52,7 @@ namespace cucumber::gherkin
             cucumber::gherkin::items items;
         };
 
-        void set_token_matched(token& token, rule_type matched_type, const token_info& info = {});
+        void set_token_matched(Token& token, RuleType matched_type, const TokenInfo& info = {});
 
         const string_views& keywords(std::string_view keyword) const;
 

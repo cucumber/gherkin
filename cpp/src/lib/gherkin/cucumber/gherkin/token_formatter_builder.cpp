@@ -11,35 +11,35 @@
 namespace cucumber::gherkin
 {
 
-    token_formatter_builder::token_formatter_builder(id_generator_ptr idp)
+    TokenFormatterBuilder::TokenFormatterBuilder(id_generator_ptr idp)
         : idp_(idp)
     {}
 
-    token_formatter_builder::~token_formatter_builder()
+    TokenFormatterBuilder::~TokenFormatterBuilder()
     {}
 
-    void token_formatter_builder::reset(std::string_view uri)
+    void TokenFormatterBuilder::reset(std::string_view uri)
     {
         formatted_tokens_.clear();
     }
 
-    void token_formatter_builder::start_rule(rule_type rule_type)
+    void TokenFormatterBuilder::start_rule(RuleType RuleType)
     {}
 
-    void token_formatter_builder::end_rule(rule_type rule_type)
+    void TokenFormatterBuilder::end_rule(RuleType RuleType)
     {}
 
-    void token_formatter_builder::build(const token& token)
+    void TokenFormatterBuilder::build(const Token& token)
     {
         formatted_tokens_.emplace_back(format_token(token));
     }
 
-    strings token_formatter_builder::get_result() const
+    strings TokenFormatterBuilder::get_result() const
     {
         return formatted_tokens_;
     }
 
-    std::string token_formatter_builder::format_token(const token& token)
+    std::string TokenFormatterBuilder::format_token(const Token& token)
     {
         if (token.is_eof())
         {

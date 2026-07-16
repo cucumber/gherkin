@@ -7,21 +7,21 @@
 namespace cucumber::gherkin
 {
 
-    class id_generator_base
+    class IdGeneratorBase
     {
     public:
-        id_generator_base();
+        IdGeneratorBase();
 
-        virtual ~id_generator_base();
+        virtual ~IdGeneratorBase();
 
         virtual std::string next_id() = 0;
     };
 
-    class id_generator : public id_generator_base
+    class IdGenerator : public IdGeneratorBase
     {
     public:
-        id_generator();
-        virtual ~id_generator();
+        IdGenerator();
+        virtual ~IdGenerator();
 
         std::string next_id() override;
 
@@ -29,12 +29,12 @@ namespace cucumber::gherkin
         std::size_t id_counter_ = 0;
     };
 
-    using id_generator_ptr = std::shared_ptr<id_generator_base>;
+    using id_generator_ptr = std::shared_ptr<IdGeneratorBase>;
 
     template<typename... Args>
     id_generator_ptr new_id_generator(Args&&... args)
     {
-        return std::make_shared<id_generator>(std::forward<Args>(args)...);
+        return std::make_shared<IdGenerator>(std::forward<Args>(args)...);
     }
 
 }

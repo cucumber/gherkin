@@ -13,24 +13,24 @@ namespace cucumber::gherkin
 
     namespace cms = cucumber::messages;
 
-    class token_formatter_builder
+    class TokenFormatterBuilder
     {
     public:
         using result_type = strings;
 
-        token_formatter_builder(id_generator_ptr idp = {});
-        virtual ~token_formatter_builder();
+        TokenFormatterBuilder(id_generator_ptr idp = {});
+        virtual ~TokenFormatterBuilder();
 
         void reset(std::string_view uri);
 
-        void start_rule(rule_type rule_type);
-        void end_rule(rule_type rule_type);
-        void build(const token& token);
+        void start_rule(RuleType RuleType);
+        void end_rule(RuleType RuleType);
+        void build(const Token& token);
 
         strings get_result() const;
 
     private:
-        std::string format_token(const token& token);
+        std::string format_token(const Token& token);
 
         id_generator_ptr idp_;
         strings formatted_tokens_;

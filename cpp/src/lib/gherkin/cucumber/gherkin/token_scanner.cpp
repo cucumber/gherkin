@@ -14,31 +14,31 @@
 namespace cucumber::gherkin
 {
 
-    token_scanner::token_scanner()
+    TokenScanner::TokenScanner()
     {}
 
-    token_scanner::token_scanner(std::string_view data)
+    TokenScanner::TokenScanner(std::string_view data)
     {
         reset(data);
     }
 
-    token_scanner::token_scanner(const file& file)
+    TokenScanner::TokenScanner(const File& File)
     {
-        reset(file);
+        reset(File);
     }
 
-    token_scanner::~token_scanner()
+    TokenScanner::~TokenScanner()
     {}
 
-    token token_scanner::read()
+    Token TokenScanner::read()
     {
         auto line_result = next_line();
 
         line_++;
 
-        return token{
+        return Token{
             line_result.eof,
-            cucumber::gherkin::line(line_result.text, line_),
+            cucumber::gherkin::Line(line_result.text, line_),
             {},
             std::nullopt,
             std::nullopt,
@@ -50,34 +50,34 @@ namespace cucumber::gherkin
         };
     }
 
-    void token_scanner::reset()
+    void TokenScanner::reset()
     {
         line_ = 0;
     }
 
-    void token_scanner::reset(std::string_view data)
+    void TokenScanner::reset(std::string_view data)
     {
         reset();
         ip_ = std::make_unique<std::istringstream>(std::string(data));
     }
 
-    void token_scanner::reset(const file& file)
+    void TokenScanner::reset(const File& File)
     {
         reset();
-        ip_ = std::make_unique<std::ifstream>(file.path);
+        ip_ = std::make_unique<std::ifstream>(File.path);
     }
 
-    next_line_result token_scanner::next_line()
+    NextLineResult TokenScanner::next_line()
     {
-        next_line_result result;
-        std::string line;
+        NextLineResult result;
+        std::string Line;
 
         if (ip_)
         {
             if (!input().eof())
             {
-                result.eof = !std::getline(input(), line);
-                result.text = rstrip(line, re_pattern::cr);
+                result.eof = !std::getline(input(), Line);
+                result.text = rstrip(Line, RePattern::cr);
             }
             else
             {
@@ -88,7 +88,7 @@ namespace cucumber::gherkin
         return result;
     }
 
-    std::istream& token_scanner::input()
+    std::istream& TokenScanner::input()
     {
         return *ip_;
     }

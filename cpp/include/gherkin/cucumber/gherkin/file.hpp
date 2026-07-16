@@ -6,7 +6,7 @@
 namespace cucumber::gherkin
 {
 
-    struct file
+    struct File
     {
         std::string path;
     };

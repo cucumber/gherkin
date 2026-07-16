@@ -171,7 +171,7 @@ namespace cucumber::gherkin
         return result;
     }
 
-    enum class re_pattern
+    enum class RePattern
     {
         none,
         all_spaces,
@@ -183,7 +183,7 @@ namespace cucumber::gherkin
     };
 
     template<typename CharT>
-    struct re_patterns
+    struct RePatterns
     {
         static auto convert(std::string_view view)
         {
@@ -197,30 +197,30 @@ namespace cucumber::gherkin
             }
         }
 
-        static auto get(re_pattern pattern)
+        static auto get(RePattern pattern)
         {
             using namespace std::literals;
             std::string_view view;
 
             switch (pattern)
             {
-                case re_pattern::none:
+                case RePattern::none:
                     break;
-                case re_pattern::all_spaces:
+                case RePattern::all_spaces:
                     view = "[ \\t\\n\\v\\f\\r\\u0085\\u00A0]+"sv;
                     break;
-                case re_pattern::spaces_no_nl:
+                case RePattern::spaces_no_nl:
                     view = "[ \\t\\v\\f\\r\\u0085\\u00A0]+"sv;
                     break;
-                case re_pattern::crlf:
+                case RePattern::crlf:
                     view = "\\r\\n"sv;
-                case re_pattern::cr:
+                case RePattern::cr:
                     view = "\\r"sv;
                     break;
-                case re_pattern::bol:
+                case RePattern::bol:
                     view = "^"sv;
                     break;
-                case re_pattern::eol:
+                case RePattern::eol:
                     view = "$"sv;
                     break;
             }
@@ -230,34 +230,34 @@ namespace cucumber::gherkin
     };
 
     template<typename CharT>
-    struct strip_pattern
+    struct StripPattern
     {
         using s_type = std::basic_string<CharT>;
         using sv_type = std::basic_string_view<CharT>;
-        using pats = re_patterns<CharT>;
+        using pats = RePatterns<CharT>;
 
-        strip_pattern(re_pattern prefix, sv_type chars)
-            : strip_pattern(prefix, chars, re_pattern::none)
+        StripPattern(RePattern prefix, sv_type chars)
+            : StripPattern(prefix, chars, RePattern::none)
         {}
 
-        strip_pattern(sv_type chars, re_pattern suffix)
-            : strip_pattern(re_pattern::none, chars, suffix)
+        StripPattern(sv_type chars, RePattern suffix)
+            : StripPattern(RePattern::none, chars, suffix)
         {}
 
-        strip_pattern(sv_type chars)
-            : strip_pattern(re_pattern::none, chars, re_pattern::none)
+        StripPattern(sv_type chars)
+            : StripPattern(RePattern::none, chars, RePattern::none)
         {}
 
-        strip_pattern(re_pattern prefix, sv_type chars, re_pattern suffix)
+        StripPattern(RePattern prefix, sv_type chars, RePattern suffix)
         {
-            if (prefix != re_pattern::none)
+            if (prefix != RePattern::none)
             {
                 s_ = pats::get(prefix);
             }
 
             s_ += chars;
 
-            if (suffix != re_pattern::none)
+            if (suffix != RePattern::none)
             {
                 s_ += pats::get(suffix);
             }
@@ -286,7 +286,7 @@ namespace cucumber::gherkin
     std::string replace(const std::string& source, std::string_view what, std::string_view with);
 
     template<typename CharT>
-    std::basic_string<CharT> strip(std::basic_string_view<CharT> what, const strip_pattern<CharT>& pattern)
+    std::basic_string<CharT> strip(std::basic_string_view<CharT> what, const StripPattern<CharT>& pattern)
     {
         std::basic_regex<CharT> regex(pattern.str());
         std::basic_string<CharT> empty;
@@ -298,45 +298,45 @@ namespace cucumber::gherkin
     }
 
     template<typename CharT>
-    std::basic_string<CharT> lstrip(std::basic_string_view<CharT> text, re_pattern pattern = re_pattern::all_spaces)
+    std::basic_string<CharT> lstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::all_spaces)
     {
-        return strip(text, strip_pattern<CharT>(re_pattern::bol, re_patterns<CharT>::get(pattern)));
+        return strip(text, StripPattern<CharT>(RePattern::bol, RePatterns<CharT>::get(pattern)));
     }
 
     template<typename CharT>
-    std::basic_string<CharT> lstrip(const std::basic_string<CharT>& text, re_pattern pattern = re_pattern::all_spaces)
+    std::basic_string<CharT> lstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::all_spaces)
     {
         return lstrip(as_view(text), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> rstrip(std::basic_string_view<CharT> text, re_pattern pattern = re_pattern::all_spaces)
+    std::basic_string<CharT> rstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::all_spaces)
     {
-        return strip(text, strip_pattern<CharT>(re_patterns<CharT>::get(pattern), re_pattern::eol));
+        return strip(text, StripPattern<CharT>(RePatterns<CharT>::get(pattern), RePattern::eol));
     }
 
     template<typename CharT>
-    std::basic_string<CharT> rstrip(const std::basic_string<CharT>& text, re_pattern pattern = re_pattern::all_spaces)
+    std::basic_string<CharT> rstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::all_spaces)
     {
         return rstrip(as_view(text), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> strip(std::basic_string_view<CharT> text, re_pattern pattern = re_pattern::all_spaces)
+    std::basic_string<CharT> strip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::all_spaces)
     {
         return lstrip(rstrip(text, pattern), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> strip(const std::basic_string<CharT>& text, re_pattern pattern = re_pattern::all_spaces)
+    std::basic_string<CharT> strip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::all_spaces)
     {
         return strip(as_view(text), pattern);
     }
 
     template<typename C>
-    struct reverse
+    struct Reverse
     {
-        reverse(C& container)
+        Reverse(C& container)
             : c_(container)
         {}
 

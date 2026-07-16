@@ -10,7 +10,7 @@
 namespace cucumber::gherkin
 {
 
-    struct pickle_compiler_context
+    struct PickleCompilerContext
     {
         std::string next_id();
 

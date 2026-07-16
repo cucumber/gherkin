@@ -14,10 +14,10 @@ namespace cucumber::gherkin
 
     using source_cb = std::function<void(const cms::Source&)>;
     using pickle_cb = std::function<void(const cms::Pickle&)>;
-    using error_cb = std::function<void(const parse_error&)>;
+    using error_cb = std::function<void(const ParseError&)>;
 
     template<typename Ast>
-    struct callbacks
+    struct Callbacks
     {
         using ast_cb = std::function<void(const Ast&)>;
 

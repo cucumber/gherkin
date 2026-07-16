@@ -14,87 +14,87 @@
 namespace cucumber::gherkin
 {
 
-    app::app()
+    App::App()
         : idp_(new_id_generator())
         , p_(idp_)
     {}
 
-    app::~app()
+    App::~App()
     {}
 
-    void app::include_source(bool enabled)
+    void App::include_source(bool enabled)
     {
         include_source_ = enabled;
     }
 
-    void app::include_ast(bool enabled)
+    void App::include_ast(bool enabled)
     {
         include_ast_ = enabled;
     }
 
-    void app::include_pickles(bool enabled)
+    void App::include_pickles(bool enabled)
     {
         include_pickles_ = enabled;
     }
 
-    void app::parse(const file& source_file, const callbacks& callbacks)
+    void App::parse(const File& source_file, const Callbacks& Callbacks)
     {
         cms::Envelope envelope;
 
         envelope.source = std::make_shared<cms::Source>(cms::Source{ source_file.path, slurp(source_file.path) });
 
-        parse(envelope, callbacks);
+        parse(envelope, Callbacks);
     }
 
-    void app::parse(const cms::Envelope& envelope, const callbacks& callbacks)
+    void App::parse(const cms::Envelope& envelope, const Callbacks& Callbacks)
     {
-        if (include_source_ && callbacks.source && envelope.source)
+        if (include_source_ && Callbacks.source && envelope.source)
         {
-            callbacks.source(**envelope.source);
+            Callbacks.source(**envelope.source);
         }
 
         if (envelope.source)
         {
-            parse(*(*envelope.source), callbacks);
+            parse(*(*envelope.source), Callbacks);
         }
     }
 
-    void app::parse(const cms::Source& source, const callbacks& callbacks)
+    void App::parse(const cms::Source& source, const Callbacks& Callbacks)
     {
         try
         {
             auto ast = p_.parse(source.uri, source.data);
 
-            if (include_ast_ && callbacks.ast)
+            if (include_ast_ && Callbacks.ast)
             {
-                callbacks.ast(ast);
+                Callbacks.ast(ast);
             }
 
-            if (include_pickles_ && callbacks.pickle)
+            if (include_pickles_ && Callbacks.pickle)
             {
-                pickle_compiler compiler(idp_);
+                PickleCompiler compiler(idp_);
 
-                compiler.compile(ast, source.uri, callbacks.pickle);
+                compiler.compile(ast, source.uri, Callbacks.pickle);
             }
         }
-        catch (const composite_parser_error& e)
+        catch (const CompositeParserError& e)
         {
             for (const auto& error_pointer : e.errors())
             {
-                send_parse_error(source.uri, *error_pointer, callbacks);
+                send_parse_error(source.uri, *error_pointer, Callbacks);
             }
         }
-        catch (const parser_error& e)
+        catch (const ParserError& e)
         {
-            send_parse_error(source.uri, e, callbacks);
+            send_parse_error(source.uri, e, Callbacks);
         }
     }
 
-    void app::send_parse_error(const std::string& uri, const parser_error& error, const callbacks& callbacks) const
+    void App::send_parse_error(const std::string& uri, const ParserError& error, const Callbacks& Callbacks) const
     {
-        parse_error error_data{ uri, error.location(), error.what() };
+        ParseError error_data{ uri, error.location(), error.what() };
 
-        call_cb(callbacks.error, error_data);
+        call_cb(Callbacks.error, error_data);
     }
 
 }

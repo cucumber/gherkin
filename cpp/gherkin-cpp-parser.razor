@@ -22,10 +22,10 @@ public static string NameOf(Rule rule)
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:  start_rule(context, rule_type::@rname);
+      @:  start_rule(context, RuleType::@rname);
       break;
     case ProductionRuleType.End:
-      @:  end_rule(context, rule_type::@rname);
+      @:  end_rule(context, RuleType::@rname);
       break;
     case ProductionRuleType.Process:
       @:  build(context, token);
@@ -37,7 +37,7 @@ public static string NameOf(Rule rule)
             std::string state_comment = "State: @state.Id - @Raw(state.Comment)";
             std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -50,7 +50,7 @@ public static string NameOf(Rule rule)
 </text>}
 @helper MatchToken(TokenType tokenType)
 {<text>match_@(ToSnakeCase(tokenType.Name))(context, token)</text>}
-// This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
+// This File is generated. Do not edit! Edit gherkin-cpp-Parser.razor instead.
 #pragma once
 
 #include "cucumber/gherkin/parser_base.hpp"
@@ -59,11 +59,11 @@ public static string NameOf(Rule rule)
 namespace cucumber::gherkin
 {
 
-    template<typename Builder = ast_builder, typename Scanner = token_scanner, typename Matcher = token_matcher>
-    class parser : public parser_base<Builder, Scanner, Matcher>
+    template<typename Builder = AstBuilder, typename Scanner = TokenScanner, typename Matcher = TokenMatcher>
+    class Parser : public ParserBase<Builder, Scanner, Matcher>
     {
     public:
-        using parent = parser_base<Builder, Scanner, Matcher>;
+        using parent = ParserBase<Builder, Scanner, Matcher>;
         using parent::parent;
         using parent::parse;
         using context_type = typename parent::context_type;
@@ -71,7 +71,7 @@ namespace cucumber::gherkin
     protected:
         void parse(context_type& context) override
         {
-            start_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
+            start_rule(context, RuleType::@NameOf(Model.RuleSet.StartRule));
 
             std::size_t state = 0;
 
@@ -86,31 +86,31 @@ namespace cucumber::gherkin
                 }
             }
 
-            end_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
+            end_rule(context, RuleType::@NameOf(Model.RuleSet.StartRule));
 
             if (context.has_errors())
             {
-                throw composite_parser_error(context.error_pointers);
+                throw CompositeParserError(context.error_pointers);
             }
         }
 
-        void build(context_type& context, token& token)
+        void build(context_type& context, Token& token)
         {
             context.builder.build(token);
         }
 
-        void start_rule(context_type& context, rule_type rule_type)
+        void start_rule(context_type& context, RuleType ruleType)
         {
-            handle_ast_error(context, rule_type,
+            handle_ast_error(context, ruleType,
                 [&context](auto rtype)
                 {
                     context.builder.start_rule(rtype);
                 });
         }
 
-        void end_rule(context_type& context, rule_type rule_type)
+        void end_rule(context_type& context, RuleType ruleType)
         {
-            handle_ast_error(context, rule_type,
+            handle_ast_error(context, ruleType,
                 [&context](auto rtype)
                 {
                     context.builder.end_rule(rtype);
@@ -134,16 +134,16 @@ namespace cucumber::gherkin
                     return action(argument);
                 }
             }
-            catch (const composite_parser_error& e)
+            catch (const CompositeParserError& e)
             {
                 for (const auto& error_pointer : e.errors())
                 {
                     context.add_error(error_pointer);
                 }
             }
-            catch (const parser_error& e)
+            catch (const ParserError& e)
             {
-                auto error_pointer = new_parser_error<parser_error>(e);
+                auto error_pointer = new_parser_error<ParserError>(e);
                 context.add_error(error_pointer);
             }
 
@@ -158,7 +158,7 @@ namespace cucumber::gherkin
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
 <text>
-        bool match_@(NameOf(rule))(context_type& context, token& token)
+        bool match_@(NameOf(rule))(context_type& context, Token& token)
         {
 @if (rule.Name != "#EOF")
 {
@@ -180,9 +180,9 @@ namespace cucumber::gherkin
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-        bool lookahead_@(lookAheadHint.Id)(context_type& context, token& current_token)
+        bool lookahead_@(lookAheadHint.Id)(context_type& context, Token& current_token)
         {
-            token token;
+            Token token;
             token_queue queue;
             bool match = false;
 
@@ -212,7 +212,7 @@ namespace cucumber::gherkin
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
         // @Raw(state.Comment)
-        std::size_t match_token_at_@(state.Id)(token& token, context_type& context)
+        std::size_t match_token_at_@(state.Id)(Token& token, context_type& context)
         {
 @{var indent = "        ";}
     @foreach(var transition in state.Transitions)
@@ -242,7 +242,7 @@ namespace cucumber::gherkin
 </text>
 }
 
-        std::size_t match_token(std::size_t state, token& token, context_type& context)
+        std::size_t match_token(std::size_t state, Token& token, context_type& context)
         {
             switch (state)
             {

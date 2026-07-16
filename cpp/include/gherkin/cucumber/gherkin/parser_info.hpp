@@ -9,10 +9,10 @@ namespace cucumber::gherkin
 
     using id_generator_func = std::function<std::string()>;
 
-    struct parser_info
+    struct ParserInfo
     {
         std::string language = "en";
-        id_generator_func id_generator;
+        id_generator_func IdGenerator;
     };
 
 }

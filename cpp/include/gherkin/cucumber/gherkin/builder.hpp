@@ -10,20 +10,20 @@ namespace cucumber::gherkin
 {
 
     template<typename T>
-    struct builder
+    struct Builder
     {
         using result_type = T;
 
         virtual void reset(const std::string& uri = "")
         {}
 
-        virtual void start_rule(rule_type rule_type)
+        virtual void start_rule(RuleType RuleType)
         {}
 
-        virtual void end_rule(rule_type rule_type)
+        virtual void end_rule(RuleType RuleType)
         {}
 
-        virtual void build(const token& token)
+        virtual void build(const Token& token)
         {}
 
         result_type get_result() const
@@ -33,7 +33,7 @@ namespace cucumber::gherkin
     };
 
     template<typename T>
-    using builder_ptr = std::unique_ptr<builder<T>>;
+    using builder_ptr = std::unique_ptr<Builder<T>>;
 
     template<typename Builder, typename T, typename... Args>
     builder_ptr<T> new_builder(Args&&... args)

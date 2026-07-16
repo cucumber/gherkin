@@ -1,6 +1,5 @@
-// This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
-#ifndef CUCUMBER_GHERKIN_PARSER_HPP
-#define CUCUMBER_GHERKIN_PARSER_HPP
+// This File is generated. Do not edit! Edit gherkin-cpp-Parser.razor instead.
+#pragma once
 
 #include "cucumber/gherkin/parser_base.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
@@ -8,11 +7,11 @@
 namespace cucumber::gherkin
 {
 
-    template<typename Builder = ast_builder, typename Scanner = token_scanner, typename Matcher = token_matcher>
-    class parser : public parser_base<Builder, Scanner, Matcher>
+    template<typename Builder = AstBuilder, typename Scanner = TokenScanner, typename Matcher = TokenMatcher>
+    class Parser : public ParserBase<Builder, Scanner, Matcher>
     {
     public:
-        using parent = parser_base<Builder, Scanner, Matcher>;
+        using parent = ParserBase<Builder, Scanner, Matcher>;
         using parent::parent;
         using parent::parse;
         using context_type = typename parent::context_type;
@@ -20,7 +19,7 @@ namespace cucumber::gherkin
     protected:
         void parse(context_type& context) override
         {
-            start_rule(context, rule_type::gherkin_document);
+            start_rule(context, RuleType::gherkin_document);
 
             std::size_t state = 0;
 
@@ -35,31 +34,31 @@ namespace cucumber::gherkin
                 }
             }
 
-            end_rule(context, rule_type::gherkin_document);
+            end_rule(context, RuleType::gherkin_document);
 
             if (context.has_errors())
             {
-                throw composite_parser_error(context.error_pointers);
+                throw CompositeParserError(context.error_pointers);
             }
         }
 
-        void build(context_type& context, token& token)
+        void build(context_type& context, Token& token)
         {
             context.builder.build(token);
         }
 
-        void start_rule(context_type& context, rule_type rule_type)
+        void start_rule(context_type& context, RuleType ruleType)
         {
-            handle_ast_error(context, rule_type,
+            handle_ast_error(context, ruleType,
                 [&context](auto rtype)
                 {
                     context.builder.start_rule(rtype);
                 });
         }
 
-        void end_rule(context_type& context, rule_type rule_type)
+        void end_rule(context_type& context, RuleType ruleType)
         {
-            handle_ast_error(context, rule_type,
+            handle_ast_error(context, ruleType,
                 [&context](auto rtype)
                 {
                     context.builder.end_rule(rtype);
@@ -83,16 +82,16 @@ namespace cucumber::gherkin
                     return action(argument);
                 }
             }
-            catch (const composite_parser_error& e)
+            catch (const CompositeParserError& e)
             {
                 for (const auto& error_pointer : e.errors())
                 {
                     context.add_error(error_pointer);
                 }
             }
-            catch (const parser_error& e)
+            catch (const ParserError& e)
             {
-                auto error_pointer = new_parser_error<parser_error>(e);
+                auto error_pointer = new_parser_error<ParserError>(e);
                 context.add_error(error_pointer);
             }
 
@@ -105,7 +104,7 @@ namespace cucumber::gherkin
             handle_external_error(context, true, argument, action);
         }
 
-        bool match_e_o_f(context_type& context, token& token)
+        bool match_e_o_f(context_type& context, Token& token)
         {
             return handle_external_error(context, false, token,
                 [&context](auto& tok)
@@ -114,7 +113,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_empty(context_type& context, token& token)
+        bool match_empty(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -128,7 +127,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_comment(context_type& context, token& token)
+        bool match_comment(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -142,7 +141,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_tag_line(context_type& context, token& token)
+        bool match_tag_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -156,7 +155,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_feature_line(context_type& context, token& token)
+        bool match_feature_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -170,7 +169,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_rule_line(context_type& context, token& token)
+        bool match_rule_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -184,7 +183,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_background_line(context_type& context, token& token)
+        bool match_background_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -198,7 +197,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_scenario_line(context_type& context, token& token)
+        bool match_scenario_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -212,7 +211,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_examples_line(context_type& context, token& token)
+        bool match_examples_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -226,7 +225,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_step_line(context_type& context, token& token)
+        bool match_step_line(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -240,7 +239,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_doc_string_separator(context_type& context, token& token)
+        bool match_doc_string_separator(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -254,7 +253,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_table_row(context_type& context, token& token)
+        bool match_table_row(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -268,7 +267,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_language(context_type& context, token& token)
+        bool match_language(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -282,7 +281,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool match_other(context_type& context, token& token)
+        bool match_other(context_type& context, Token& token)
         {
             if (token.is_eof())
             {
@@ -296,9 +295,9 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool lookahead_0(context_type& context, token& current_token)
+        bool lookahead_0(context_type& context, Token& current_token)
         {
-            token token;
+            Token token;
             token_queue queue;
             bool match = false;
 
@@ -324,9 +323,9 @@ namespace cucumber::gherkin
             return match;
         }
 
-        bool lookahead_1(context_type& context, token& current_token)
+        bool lookahead_1(context_type& context, Token& current_token)
         {
-            token token;
+            Token token;
             token_queue queue;
             bool match = false;
 
@@ -353,7 +352,7 @@ namespace cucumber::gherkin
         }
 
         // Start
-        std::size_t match_token_at_0(token& token, context_type& context)
+        std::size_t match_token_at_0(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
@@ -362,23 +361,23 @@ namespace cucumber::gherkin
             }
             if (match_language(context, token))
             {
-                start_rule(context, rule_type::feature);
-                start_rule(context, rule_type::feature_header);
+                start_rule(context, RuleType::feature);
+                start_rule(context, RuleType::feature_header);
                 build(context, token);
                 return 1;
             }
             if (match_tag_line(context, token))
             {
-                start_rule(context, rule_type::feature);
-                start_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::tags);
+                start_rule(context, RuleType::feature);
+                start_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 2;
             }
             if (match_feature_line(context, token))
             {
-                start_rule(context, rule_type::feature);
-                start_rule(context, rule_type::feature_header);
+                start_rule(context, RuleType::feature);
+                start_rule(context, RuleType::feature_header);
                 build(context, token);
                 return 3;
             }
@@ -396,7 +395,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 0 - Start";
             std::string expected_tokens = "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -409,11 +408,11 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
-        std::size_t match_token_at_1(token& token, context_type& context)
+        std::size_t match_token_at_1(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
-                start_rule(context, rule_type::tags);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 2;
             }
@@ -436,7 +435,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0";
             std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -449,7 +448,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
-        std::size_t match_token_at_2(token& token, context_type& context)
+        std::size_t match_token_at_2(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
@@ -458,7 +457,7 @@ namespace cucumber::gherkin
             }
             if (match_feature_line(context, token))
             {
-                end_rule(context, rule_type::tags);
+                end_rule(context, RuleType::tags);
                 build(context, token);
                 return 3;
             }
@@ -476,7 +475,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0";
             std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -489,12 +488,12 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
-        std::size_t match_token_at_3(token& token, context_type& context)
+        std::size_t match_token_at_3(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::feature_header);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::feature_header);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -505,14 +504,14 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 4;
             }
             if (match_background_line(context, token))
             {
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::background);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::background);
                 build(context, token);
                 return 5;
             }
@@ -520,41 +519,41 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::feature_header);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::feature_header);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 4;
             }
@@ -562,7 +561,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -575,13 +574,13 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_4(token& token, context_type& context)
+        std::size_t match_token_at_4(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::feature_header);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::feature_header);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -592,9 +591,9 @@ namespace cucumber::gherkin
             }
             if (match_background_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::background);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::background);
                 build(context, token);
                 return 5;
             }
@@ -602,39 +601,39 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::feature_header);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::feature_header);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::feature_header);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::feature_header);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -647,7 +646,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -660,12 +659,12 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
-        std::size_t match_token_at_5(token& token, context_type& context)
+        std::size_t match_token_at_5(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -676,13 +675,13 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 6;
             }
             if (match_step_line(context, token))
             {
-                start_rule(context, rule_type::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -690,41 +689,41 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 6;
             }
@@ -732,7 +731,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -745,13 +744,13 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_6(token& token, context_type& context)
+        std::size_t match_token_at_6(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -762,8 +761,8 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -771,39 +770,39 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -816,7 +815,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -829,32 +828,32 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
-        std::size_t match_token_at_7(token& token, context_type& context)
+        std::size_t match_token_at_7(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                start_rule(context, rule_type::data_table);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 8;
             }
             if (match_doc_string_separator(context, token))
             {
-                start_rule(context, rule_type::doc_string);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 52;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -862,39 +861,39 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -912,7 +911,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -925,14 +924,14 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t match_token_at_8(token& token, context_type& context)
+        std::size_t match_token_at_8(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -943,16 +942,16 @@ namespace cucumber::gherkin
             }
             if (match_doc_string_separator(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                start_rule(context, rule_type::doc_string);
+                end_rule(context, RuleType::data_table);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 9;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -960,43 +959,43 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -1014,7 +1013,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1027,7 +1026,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_9(token& token, context_type& context)
+        std::size_t match_token_at_9(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -1043,7 +1042,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1056,22 +1055,22 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_10(token& token, context_type& context)
+        std::size_t match_token_at_10(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -1079,43 +1078,43 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -1133,7 +1132,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1146,7 +1145,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-        std::size_t match_token_at_11(token& token, context_type& context)
+        std::size_t match_token_at_11(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
@@ -1155,8 +1154,8 @@ namespace cucumber::gherkin
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::tags);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
@@ -1174,7 +1173,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
             std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1187,13 +1186,13 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-        std::size_t match_token_at_12(token& token, context_type& context)
+        std::size_t match_token_at_12(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -1204,13 +1203,13 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 13;
             }
             if (match_step_line(context, token))
             {
-                start_rule(context, rule_type::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -1218,8 +1217,8 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1228,52 +1227,52 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 13;
             }
@@ -1281,7 +1280,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1294,14 +1293,14 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_13(token& token, context_type& context)
+        std::size_t match_token_at_13(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -1312,8 +1311,8 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -1321,9 +1320,9 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1332,51 +1331,51 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -1389,7 +1388,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1402,33 +1401,33 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-        std::size_t match_token_at_14(token& token, context_type& context)
+        std::size_t match_token_at_14(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                start_rule(context, rule_type::data_table);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 15;
             }
             if (match_doc_string_separator(context, token))
             {
-                start_rule(context, rule_type::doc_string);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 49;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -1436,9 +1435,9 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1447,51 +1446,51 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -1509,7 +1508,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1522,15 +1521,15 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t match_token_at_15(token& token, context_type& context)
+        std::size_t match_token_at_15(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -1541,16 +1540,16 @@ namespace cucumber::gherkin
             }
             if (match_doc_string_separator(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                start_rule(context, rule_type::doc_string);
+                end_rule(context, RuleType::data_table);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 16;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -1558,10 +1557,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1570,56 +1569,56 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -1637,7 +1636,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1650,7 +1649,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_16(token& token, context_type& context)
+        std::size_t match_token_at_16(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -1666,7 +1665,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1679,23 +1678,23 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_17(token& token, context_type& context)
+        std::size_t match_token_at_17(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -1703,10 +1702,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1715,56 +1714,56 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -1782,7 +1781,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1795,7 +1794,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-        std::size_t match_token_at_18(token& token, context_type& context)
+        std::size_t match_token_at_18(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
@@ -1804,8 +1803,8 @@ namespace cucumber::gherkin
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::tags);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
@@ -1823,7 +1822,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
             std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1836,15 +1835,15 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-        std::size_t match_token_at_19(token& token, context_type& context)
+        std::size_t match_token_at_19(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -1855,13 +1854,13 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 20;
             }
             if (match_table_row(context, token))
             {
-                start_rule(context, rule_type::examples_table);
+                start_rule(context, RuleType::examples_table);
                 build(context, token);
                 return 21;
             }
@@ -1869,10 +1868,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1881,62 +1880,62 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 20;
             }
@@ -1944,7 +1943,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -1957,16 +1956,16 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_20(token& token, context_type& context)
+        std::size_t match_token_at_20(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -1977,8 +1976,8 @@ namespace cucumber::gherkin
             }
             if (match_table_row(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::examples_table);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examples_table);
                 build(context, token);
                 return 21;
             }
@@ -1986,11 +1985,11 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -1999,61 +1998,61 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2066,7 +2065,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2079,16 +2078,16 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-        std::size_t match_token_at_21(token& token, context_type& context)
+        std::size_t match_token_at_21(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2101,11 +2100,11 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::examples_table);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples_table);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -2114,61 +2113,61 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::examples_table);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples_table);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2186,7 +2185,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2199,7 +2198,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
-        std::size_t match_token_at_22(token& token, context_type& context)
+        std::size_t match_token_at_22(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
@@ -2208,7 +2207,7 @@ namespace cucumber::gherkin
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::tags);
+                end_rule(context, RuleType::tags);
                 build(context, token);
                 return 23;
             }
@@ -2226,7 +2225,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
             std::string expected_tokens = "#TagLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2239,13 +2238,13 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
-        std::size_t match_token_at_23(token& token, context_type& context)
+        std::size_t match_token_at_23(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::rule_header);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::rule_header);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2256,14 +2255,14 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 24;
             }
             if (match_background_line(context, token))
             {
-                end_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::background);
+                end_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::background);
                 build(context, token);
                 return 25;
             }
@@ -2271,43 +2270,43 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::rule_header);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::rule_header);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::rule_header);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::rule_header);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::rule_header);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::rule_header);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 24;
             }
@@ -2315,7 +2314,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2328,14 +2327,14 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_24(token& token, context_type& context)
+        std::size_t match_token_at_24(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::rule_header);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::rule_header);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2346,9 +2345,9 @@ namespace cucumber::gherkin
             }
             if (match_background_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::background);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::background);
                 build(context, token);
                 return 25;
             }
@@ -2356,41 +2355,41 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::rule_header);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::rule_header);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::rule_header);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::rule_header);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::rule_header);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::rule_header);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2403,7 +2402,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2416,13 +2415,13 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-        std::size_t match_token_at_25(token& token, context_type& context)
+        std::size_t match_token_at_25(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2433,13 +2432,13 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 26;
             }
             if (match_step_line(context, token))
             {
-                start_rule(context, rule_type::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -2447,43 +2446,43 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 26;
             }
@@ -2491,7 +2490,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2504,14 +2503,14 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_26(token& token, context_type& context)
+        std::size_t match_token_at_26(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2522,8 +2521,8 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -2531,41 +2530,41 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2578,7 +2577,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2591,33 +2590,33 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-        std::size_t match_token_at_27(token& token, context_type& context)
+        std::size_t match_token_at_27(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                start_rule(context, rule_type::data_table);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 28;
             }
             if (match_doc_string_separator(context, token))
             {
-                start_rule(context, rule_type::doc_string);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 46;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -2625,41 +2624,41 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2677,7 +2676,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2690,15 +2689,15 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t match_token_at_28(token& token, context_type& context)
+        std::size_t match_token_at_28(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2709,16 +2708,16 @@ namespace cucumber::gherkin
             }
             if (match_doc_string_separator(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                start_rule(context, rule_type::doc_string);
+                end_rule(context, RuleType::data_table);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 29;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -2726,45 +2725,45 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2782,7 +2781,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2795,7 +2794,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_29(token& token, context_type& context)
+        std::size_t match_token_at_29(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -2811,7 +2810,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2824,23 +2823,23 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_30(token& token, context_type& context)
+        std::size_t match_token_at_30(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -2848,45 +2847,45 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -2904,7 +2903,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2917,7 +2916,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-        std::size_t match_token_at_31(token& token, context_type& context)
+        std::size_t match_token_at_31(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
@@ -2926,8 +2925,8 @@ namespace cucumber::gherkin
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::tags);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
@@ -2945,7 +2944,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
             std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -2958,14 +2957,14 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-        std::size_t match_token_at_32(token& token, context_type& context)
+        std::size_t match_token_at_32(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -2976,13 +2975,13 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 33;
             }
             if (match_step_line(context, token))
             {
-                start_rule(context, rule_type::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -2990,8 +2989,8 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3000,54 +2999,54 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 33;
             }
@@ -3055,7 +3054,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3068,15 +3067,15 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_33(token& token, context_type& context)
+        std::size_t match_token_at_33(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -3087,8 +3086,8 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -3096,9 +3095,9 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3107,53 +3106,53 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -3166,7 +3165,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3179,34 +3178,34 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-        std::size_t match_token_at_34(token& token, context_type& context)
+        std::size_t match_token_at_34(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                start_rule(context, rule_type::data_table);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 35;
             }
             if (match_doc_string_separator(context, token))
             {
-                start_rule(context, rule_type::doc_string);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 43;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -3214,9 +3213,9 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3225,53 +3224,53 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -3289,7 +3288,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3302,16 +3301,16 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t match_token_at_35(token& token, context_type& context)
+        std::size_t match_token_at_35(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -3322,16 +3321,16 @@ namespace cucumber::gherkin
             }
             if (match_doc_string_separator(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                start_rule(context, rule_type::doc_string);
+                end_rule(context, RuleType::data_table);
+                start_rule(context, RuleType::doc_string);
                 build(context, token);
                 return 36;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -3339,10 +3338,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3351,58 +3350,58 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -3420,7 +3419,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3433,7 +3432,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_36(token& token, context_type& context)
+        std::size_t match_token_at_36(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -3449,7 +3448,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3462,24 +3461,24 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_37(token& token, context_type& context)
+        std::size_t match_token_at_37(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -3487,10 +3486,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3499,58 +3498,58 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -3568,7 +3567,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3581,7 +3580,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-        std::size_t match_token_at_38(token& token, context_type& context)
+        std::size_t match_token_at_38(Token& token, context_type& context)
         {
             if (match_tag_line(context, token))
             {
@@ -3590,8 +3589,8 @@ namespace cucumber::gherkin
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::tags);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
@@ -3609,7 +3608,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
             std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3622,16 +3621,16 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-        std::size_t match_token_at_39(token& token, context_type& context)
+        std::size_t match_token_at_39(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -3642,13 +3641,13 @@ namespace cucumber::gherkin
             }
             if (match_comment(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 40;
             }
             if (match_table_row(context, token))
             {
-                start_rule(context, rule_type::examples_table);
+                start_rule(context, RuleType::examples_table);
                 build(context, token);
                 return 41;
             }
@@ -3656,10 +3655,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3668,64 +3667,64 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
             if (match_other(context, token))
             {
-                start_rule(context, rule_type::description);
+                start_rule(context, RuleType::description);
                 build(context, token);
                 return 40;
             }
@@ -3733,7 +3732,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
             std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3746,17 +3745,17 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t match_token_at_40(token& token, context_type& context)
+        std::size_t match_token_at_40(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -3767,8 +3766,8 @@ namespace cucumber::gherkin
             }
             if (match_table_row(context, token))
             {
-                end_rule(context, rule_type::description);
-                start_rule(context, rule_type::examples_table);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examples_table);
                 build(context, token);
                 return 41;
             }
@@ -3776,11 +3775,11 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3789,63 +3788,63 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::description);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::description);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -3858,7 +3857,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3871,17 +3870,17 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-        std::size_t match_token_at_41(token& token, context_type& context)
+        std::size_t match_token_at_41(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -3894,11 +3893,11 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::examples_table);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples_table);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -3907,63 +3906,63 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::examples_table);
-                    end_rule(context, rule_type::examples);
-                    end_rule(context, rule_type::examples_definition);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::examples_table);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examples_definition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::examples_table);
-                end_rule(context, rule_type::examples);
-                end_rule(context, rule_type::examples_definition);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::examples_table);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examples_definition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -3981,7 +3980,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -3994,7 +3993,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_43(token& token, context_type& context)
+        std::size_t match_token_at_43(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -4010,7 +4009,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4023,31 +4022,31 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_44(token& token, context_type& context)
+        std::size_t match_token_at_44(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                start_rule(context, rule_type::data_table);
+                end_rule(context, RuleType::doc_string);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 45;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -4055,10 +4054,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -4067,58 +4066,58 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4136,7 +4135,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4149,16 +4148,16 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t match_token_at_45(token& token, context_type& context)
+        std::size_t match_token_at_45(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -4169,9 +4168,9 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 34;
             }
@@ -4179,10 +4178,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 38;
                 }
@@ -4191,58 +4190,58 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 39;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4260,7 +4259,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 45 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4273,7 +4272,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_46(token& token, context_type& context)
+        std::size_t match_token_at_46(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -4289,7 +4288,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4302,30 +4301,30 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_47(token& token, context_type& context)
+        std::size_t match_token_at_47(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                start_rule(context, rule_type::data_table);
+                end_rule(context, RuleType::doc_string);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 48;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -4333,45 +4332,45 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4389,7 +4388,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 47 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4402,15 +4401,15 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t match_token_at_48(token& token, context_type& context)
+        std::size_t match_token_at_48(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -4421,9 +4420,9 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 27;
             }
@@ -4431,45 +4430,45 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 31;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 32;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4487,7 +4486,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 48 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4500,7 +4499,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_49(token& token, context_type& context)
+        std::size_t match_token_at_49(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -4516,7 +4515,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4529,30 +4528,30 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_50(token& token, context_type& context)
+        std::size_t match_token_at_50(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                start_rule(context, rule_type::data_table);
+                end_rule(context, RuleType::doc_string);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 51;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -4560,10 +4559,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -4572,56 +4571,56 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4639,7 +4638,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4652,15 +4651,15 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t match_token_at_51(token& token, context_type& context)
+        std::size_t match_token_at_51(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -4671,9 +4670,9 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 14;
             }
@@ -4681,10 +4680,10 @@ namespace cucumber::gherkin
             {
                 if (lookahead_1(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    start_rule(context, rule_type::examples_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examples_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 18;
                 }
@@ -4693,56 +4692,56 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::scenario);
-                    end_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_examples_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::examples_definition);
-                start_rule(context, rule_type::examples);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examples_definition);
+                start_rule(context, RuleType::examples);
                 build(context, token);
                 return 19;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::scenario);
-                end_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4760,7 +4759,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 51 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4773,7 +4772,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t match_token_at_52(token& token, context_type& context)
+        std::size_t match_token_at_52(Token& token, context_type& context)
         {
             if (match_doc_string_separator(context, token))
             {
@@ -4789,7 +4788,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 52 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4802,29 +4801,29 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t match_token_at_53(token& token, context_type& context)
+        std::size_t match_token_at_53(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
             if (match_table_row(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                start_rule(context, rule_type::data_table);
+                end_rule(context, RuleType::doc_string);
+                start_rule(context, RuleType::data_table);
                 build(context, token);
                 return 54;
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -4832,43 +4831,43 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::doc_string);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::doc_string);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::doc_string);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::doc_string);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4886,7 +4885,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 53 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4899,14 +4898,14 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t match_token_at_54(token& token, context_type& context)
+        std::size_t match_token_at_54(Token& token, context_type& context)
         {
             if (match_e_o_f(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                end_rule(context, rule_type::feature);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
                 build(context, token);
                 return 42;
             }
@@ -4917,9 +4916,9 @@ namespace cucumber::gherkin
             }
             if (match_step_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                start_rule(context, rule_type::step);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
                 build(context, token);
                 return 7;
             }
@@ -4927,43 +4926,43 @@ namespace cucumber::gherkin
             {
                 if (lookahead_0(context, token))
                 {
-                    end_rule(context, rule_type::data_table);
-                    end_rule(context, rule_type::step);
-                    end_rule(context, rule_type::background);
-                    start_rule(context, rule_type::scenario_definition);
-                    start_rule(context, rule_type::tags);
+                    end_rule(context, RuleType::data_table);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenario_definition);
+                    start_rule(context, RuleType::tags);
                     build(context, token);
                     return 11;
                 }
             }
             if (match_tag_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
-                start_rule(context, rule_type::tags);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
+                start_rule(context, RuleType::tags);
                 build(context, token);
                 return 22;
             }
             if (match_scenario_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::scenario_definition);
-                start_rule(context, rule_type::scenario);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenario_definition);
+                start_rule(context, RuleType::scenario);
                 build(context, token);
                 return 12;
             }
             if (match_rule_line(context, token))
             {
-                end_rule(context, rule_type::data_table);
-                end_rule(context, rule_type::step);
-                end_rule(context, rule_type::background);
-                start_rule(context, rule_type::rule);
-                start_rule(context, rule_type::rule_header);
+                end_rule(context, RuleType::data_table);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule_header);
                 build(context, token);
                 return 23;
             }
@@ -4981,7 +4980,7 @@ namespace cucumber::gherkin
             std::string state_comment = "State: 54 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<unexpected_eof>(token, expected_tokens, state_comment) : new_parser_error<unexpected_token>(token, expected_tokens, state_comment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
             if (context.stop_at_first_error)
             {
@@ -4993,7 +4992,7 @@ namespace cucumber::gherkin
             return 54;
         }
 
-        std::size_t match_token(std::size_t state, token& token, context_type& context)
+        std::size_t match_token(std::size_t state, Token& token, context_type& context)
         {
             switch (state)
             {
@@ -5112,5 +5111,3 @@ namespace cucumber::gherkin
     };
 
 }
-
-#endif
