@@ -9,80 +9,80 @@ namespace cucumber::gherkin
 {
 
     template<typename... Args>
-    std::string log_string(Args&&... args)
+    std::string LogString(Args&&... args)
     {
         std::ostringstream oss;
 
-        (oss << ... << args);
+        (oss << ... << std::forward<Args>(args)); // NOLINT(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
 
         return oss.str();
     }
 
     template<typename... Args>
-    void log(Args&&... args)
+    void Log(Args&&... args)
     {
-        std::cout << log_string(std::forward<Args>(args)...) << std::endl;
+        std::cout << LogString(std::forward<Args>(args)...) << std::endl;
     }
 
     template<typename... Args>
-    void warn(Args&&... args)
+    void Warn(Args&&... args)
     {
-        log("W: ", std::forward<Args>(args)...);
+        Log("W: ", std::forward<Args>(args)...);
     }
 
     template<typename... Args>
-    void error(Args&&... args)
+    void Error(Args&&... args)
     {
-        log("E: ", std::forward<Args>(args)...);
+        Log("E: ", std::forward<Args>(args)...);
     }
 
     template<typename... Args>
-    void die(Args&&... args)
+    void Die(Args&&... args)
     {
-        throw std::runtime_error(log_string(std::forward<Args>(args)...));
+        throw std::runtime_error(LogString(std::forward<Args>(args)...));
     }
 
     template<typename... Args>
-    void die_if(bool cond, Args&&... args)
+    void DieIf(bool cond, Args&&... args)
     {
         if (!cond)
         {
             return;
         }
 
-        die(std::forward<Args>(args)...);
+        Die(std::forward<Args>(args)...);
     }
 
     template<typename... Args>
-    void die_unless(bool cond, Args&&... args)
+    void DieUnless(bool cond, Args&&... args)
     {
-        die_if(!cond, std::forward<Args>(args)...);
+        DieIf(!cond, std::forward<Args>(args)...);
     }
 
     template<typename... Args>
-    void sysdie(Args&&... args)
+    void Sysdie(Args&&... args)
     {
         auto err = errno;
         auto econd = std::system_category().default_error_condition(err);
 
-        die(std::forward<Args>(args)..., ": ", econd.message());
+        Die(std::forward<Args>(args)..., ": ", econd.message());
     }
 
     template<typename... Args>
-    void sysdie_if(bool cond, Args&&... args)
+    void SysdieIf(bool cond, Args&&... args)
     {
         if (!cond)
         {
             return;
         }
 
-        sysdie(std::forward<Args>(args)...);
+        Sysdie(std::forward<Args>(args)...);
     }
 
     template<typename... Args>
-    void sysdie_unless(bool cond, Args&&... args)
+    void SysdieUnless(bool cond, Args&&... args)
     {
-        sysdie_if(!cond, std::forward<Args>(args)...);
+        SysdieIf(!cond, std::forward<Args>(args)...);
     }
 
 }

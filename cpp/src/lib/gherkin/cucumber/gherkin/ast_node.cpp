@@ -5,47 +5,46 @@
 namespace cucumber::gherkin
 {
 
-    AstNode::AstNode(RuleType RuleType)
-        : rule_type_(RuleType)
+    AstNode::AstNode(RuleType ruleType)
+        : ruleType(ruleType)
     {}
 
     AstNode::AstNode(const AstNode& other)
-        : rule_type_(other.rule_type_)
-        , sub_items_(other.sub_items_)
+        : ruleType(other.ruleType)
+        , subItems(other.subItems)
     {}
 
-    AstNode::AstNode(AstNode&& other)
-        : rule_type_(std::move(other.rule_type_))
-        , sub_items_(std::move(other.sub_items_))
+    AstNode::AstNode(AstNode&& other) noexcept
+        : ruleType(other.ruleType)
+        , subItems(std::move(other.subItems))
     {}
 
-    AstNode::~AstNode()
-    {}
+    AstNode::~AstNode() = default;
 
     AstNode& AstNode::operator=(const AstNode& other)
     {
-        rule_type_ = other.rule_type_;
-        sub_items_ = other.sub_items_;
+        ruleType = other.ruleType;
+        subItems = other.subItems;
 
         return *this;
     }
 
-    AstNode& AstNode::operator=(AstNode&& other)
+    AstNode& AstNode::operator=(AstNode&& other) noexcept
     {
-        rule_type_ = std::move(other.rule_type_);
-        sub_items_ = std::move(other.sub_items_);
+        ruleType = other.ruleType;
+        subItems = std::move(other.subItems);
 
         return *this;
     }
 
-    bool AstNode::is(RuleType RuleType) const
+    bool AstNode::Is(RuleType ruleType)
     {
-        return rule_type_ == RuleType;
+        return this->ruleType == ruleType;
     }
 
-    RuleType AstNode::type() const
+    RuleType AstNode::Type() const
     {
-        return rule_type_;
+        return ruleType;
     }
 
 }

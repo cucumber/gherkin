@@ -7,6 +7,7 @@
 #endif
 
 #include <cstddef>
+#include <cstdint>
 #include <regex>
 #include <string>
 #include <string_view>
@@ -16,15 +17,16 @@ namespace cucumber::gherkin
 
     namespace detail
     {
+        // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
         using utf8_ptr = const unsigned char*;
 
         // Sentinel returned by utf8_next for an invalid/incomplete byte sequence.
-        inline constexpr char32_t invalid_codepoint = char32_t(-1);
+        inline constexpr char32_t invalidCodepoint = char32_t(-1);
 
         // Decodes the next Unicode code point from a UTF-8 stream, advancing ptr.
         // Returns invalid_codepoint and advances ptr by one for invalid sequences.
-        inline char32_t utf8_next(utf8_ptr& ptr, utf8_ptr end)
+        inline char32_t Utf8Next(utf8_ptr& ptr, utf8_ptr end)
         {
             if (*ptr < 0x80)
             {
@@ -52,11 +54,11 @@ namespace cucumber::gherkin
                 return (byte0 << 18) | (byte1 << 12) | (byte2 << 6) | byte3;
             }
             ++ptr; // skip invalid byte
-            return invalid_codepoint;
+            return invalidCodepoint;
         }
 
         // Appends a Unicode code point to a UTF-8 string.
-        inline void utf8_append(std::string& out, char32_t codepoint)
+        inline void Utf8Append(std::string& out, char32_t codepoint)
         {
             if (codepoint < 0x80)
             {
@@ -84,22 +86,22 @@ namespace cucumber::gherkin
 
         // Decodes the next Unicode code point from a wide string, advancing ptr.
         // Handles UTF-16 surrogate pairs on Windows; reads directly on Linux/macOS.
-        inline char32_t wchar_next(const wchar_t*& ptr, const wchar_t* end)
+        inline char32_t WcharNext(const wchar_t*& ptr, const wchar_t* end)
         {
             if constexpr (sizeof(wchar_t) == 2)
             {
                 // UTF-16 (Windows)
-                const auto wide_char = static_cast<char32_t>(*ptr++);
-                if (wide_char >= 0xD800 && wide_char <= 0xDBFF && ptr < end)
+                const auto wideChar = static_cast<char32_t>(*ptr++);
+                if (wideChar >= 0xD800 && wideChar <= 0xDBFF && ptr < end)
                 {
-                    const auto surrogate_low = static_cast<char32_t>(*ptr);
-                    if (surrogate_low >= 0xDC00 && surrogate_low <= 0xDFFF)
+                    const auto surrogateLow = static_cast<char32_t>(*ptr);
+                    if (surrogateLow >= 0xDC00 && surrogateLow <= 0xDFFF)
                     {
                         ++ptr;
-                        return 0x10000 + ((wide_char - 0xD800) << 10) + (surrogate_low - 0xDC00);
+                        return 0x10000 + ((wideChar - 0xD800) << 10) + (surrogateLow - 0xDC00);
                     }
                 }
-                return wide_char; // lone surrogate or BMP character
+                return wideChar; // lone surrogate or BMP character
             }
             else
             {
@@ -110,7 +112,7 @@ namespace cucumber::gherkin
 
         // Appends a Unicode code point to a wide string.
         // Emits a surrogate pair on Windows; stores directly on Linux/macOS.
-        inline void wchar_append(std::wstring& out, char32_t codepoint)
+        inline void WcharAppend(std::wstring& out, char32_t codepoint)
         {
             if constexpr (sizeof(wchar_t) == 2)
             {
@@ -135,7 +137,10 @@ namespace cucumber::gherkin
 
     }
 
-    inline std::wstring to_wide(const std::string& source)
+    // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,cppcoreguidelines-pro-bounds-pointer-arithmetic)
+
+    // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic,cppcoreguidelines-pro-type-reinterpret-cast)
+    inline std::wstring ToWide(const std::string& source)
     {
         std::wstring result;
         result.reserve(source.size());
@@ -145,51 +150,52 @@ namespace cucumber::gherkin
 
         while (ptr < end)
         {
-            const auto codepoint = detail::utf8_next(ptr, end);
-            if (codepoint != detail::invalid_codepoint)
+            const auto codepoint = detail::Utf8Next(ptr, end);
+            if (codepoint != detail::invalidCodepoint)
             {
-                detail::wchar_append(result, codepoint);
+                detail::WcharAppend(result, codepoint);
             }
         }
 
         return result;
     }
 
-    inline std::string to_narrow(const std::wstring& wide_string)
+    inline std::string ToNarrow(const std::wstring& wideString)
     {
         std::string result;
-        result.reserve(wide_string.size() * 3);
+        result.reserve(wideString.size() * 3);
 
-        const auto* ptr = wide_string.data();
-        const auto* end = ptr + wide_string.size();
+        const auto* ptr = wideString.data();
+        const auto* end = ptr + wideString.size();
 
         while (ptr < end)
         {
-            detail::utf8_append(result, detail::wchar_next(ptr, end));
+            detail::Utf8Append(result, detail::WcharNext(ptr, end));
         }
 
         return result;
     }
+    // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic,cppcoreguidelines-pro-type-reinterpret-cast)
 
-    enum class RePattern
+    enum class RePattern : std::uint8_t
     {
-        none,
-        all_spaces,
-        spaces_no_nl,
-        crlf,
-        cr,
-        bol,
-        eol
+        NONE,
+        ALL_SPACES,
+        SPACES_NO_NL,
+        CRLF,
+        CR,
+        BOL,
+        EOL
     };
 
     template<typename CharT>
     struct RePatterns
     {
-        static auto convert(std::string_view view)
+        static auto Convert(std::string_view view)
         {
             if constexpr (sizeof(CharT) > sizeof(char))
             {
-                return to_wide(std::string(view));
+                return ToWide(std::string(view));
             }
             else
             {
@@ -197,35 +203,35 @@ namespace cucumber::gherkin
             }
         }
 
-        static auto get(RePattern pattern)
+        static auto Get(RePattern pattern)
         {
             using namespace std::literals;
             std::string_view view;
 
             switch (pattern)
             {
-                case RePattern::none:
+                case RePattern::NONE:
                     break;
-                case RePattern::all_spaces:
-                    view = "[ \\t\\n\\v\\f\\r\\u0085\\u00A0]+"sv;
+                case RePattern::ALL_SPACES:
+                    view = R"([ \t\n\v\f\r\u0085\u00A0]+)";
                     break;
-                case RePattern::spaces_no_nl:
-                    view = "[ \\t\\v\\f\\r\\u0085\\u00A0]+"sv;
+                case RePattern::SPACES_NO_NL:
+                    view = R"([ \t\v\f\r\u0085\u00A0]+)";
                     break;
-                case RePattern::crlf:
-                    view = "\\r\\n"sv;
-                case RePattern::cr:
-                    view = "\\r"sv;
+                case RePattern::CRLF:
+                    view = R"(\r\n)";
+                case RePattern::CR:
+                    view = R"(\r)";
                     break;
-                case RePattern::bol:
+                case RePattern::BOL:
                     view = "^"sv;
                     break;
-                case RePattern::eol:
+                case RePattern::EOL:
                     view = "$"sv;
                     break;
             }
 
-            return convert(view);
+            return Convert(view);
         }
     };
 
@@ -237,59 +243,59 @@ namespace cucumber::gherkin
         using pats = RePatterns<CharT>;
 
         StripPattern(RePattern prefix, sv_type chars)
-            : StripPattern(prefix, chars, RePattern::none)
+            : StripPattern(prefix, chars, RePattern::NONE)
         {}
 
         StripPattern(sv_type chars, RePattern suffix)
-            : StripPattern(RePattern::none, chars, suffix)
+            : StripPattern(RePattern::NONE, chars, suffix)
         {}
 
         StripPattern(sv_type chars)
-            : StripPattern(RePattern::none, chars, RePattern::none)
+            : StripPattern(RePattern::NONE, chars, RePattern::NONE)
         {}
 
         StripPattern(RePattern prefix, sv_type chars, RePattern suffix)
         {
-            if (prefix != RePattern::none)
+            if (prefix != RePattern::NONE)
             {
-                s_ = pats::get(prefix);
+                s = pats::Get(prefix);
             }
 
-            s_ += chars;
+            s += chars;
 
-            if (suffix != RePattern::none)
+            if (suffix != RePattern::NONE)
             {
-                s_ += pats::get(suffix);
+                s += pats::Get(suffix);
             }
         }
 
-        const s_type& str() const
+        [[nodiscard]] const s_type& Str() const
         {
-            return s_;
+            return s;
         }
 
-        s_type s_;
+        s_type s;
     };
 
     template<typename CharT>
-    std::basic_string_view<CharT> as_view(const std::basic_string<CharT>& source)
+    std::basic_string_view<CharT> AsView(const std::basic_string<CharT>& source)
     {
         return { source.data(), source.size() };
     }
 
-    std::size_t codepoint_count(std::string_view text);
+    std::size_t CodepointCount(std::string_view text);
 
-    std::string slurp(const std::string& path);
+    std::string Slurp(const std::string& path);
 
-    void replace(std::string& source, std::string_view what, std::string_view with);
+    void Replace(std::string& source, std::string_view what, std::string_view with);
 
-    std::string replace(const std::string& source, std::string_view what, std::string_view with);
+    std::string Replace(const std::string& source, std::string_view what, std::string_view with);
 
     template<typename CharT>
-    std::basic_string<CharT> strip(std::basic_string_view<CharT> what, const StripPattern<CharT>& pattern)
+    std::basic_string<CharT> Strip(std::basic_string_view<CharT> what, const StripPattern<CharT>& pattern)
     {
-        std::basic_regex<CharT> regex(pattern.str());
-        std::basic_string<CharT> empty;
+        std::basic_regex<CharT> const regex(pattern.Str());
+        std::basic_string<CharT> const empty;
         std::basic_string<CharT> result;
 
         std::regex_replace(std::back_inserter(result), what.begin(), what.end(), regex, empty);
@@ -298,59 +304,59 @@ namespace cucumber::gherkin
     }
 
     template<typename CharT>
-    std::basic_string<CharT> lstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::all_spaces)
+    std::basic_string<CharT> Lstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::ALL_SPACES)
     {
-        return strip(text, StripPattern<CharT>(RePattern::bol, RePatterns<CharT>::get(pattern)));
+        return Strip(text, StripPattern<CharT>(RePattern::BOL, RePatterns<CharT>::Get(pattern)));
     }
 
     template<typename CharT>
-    std::basic_string<CharT> lstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::all_spaces)
+    std::basic_string<CharT> Lstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::ALL_SPACES)
     {
-        return lstrip(as_view(text), pattern);
+        return Lstrip(AsView(text), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> rstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::all_spaces)
+    std::basic_string<CharT> Rstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::ALL_SPACES)
     {
-        return strip(text, StripPattern<CharT>(RePatterns<CharT>::get(pattern), RePattern::eol));
+        return Strip(text, StripPattern<CharT>(RePatterns<CharT>::Get(pattern), RePattern::EOL));
     }
 
     template<typename CharT>
-    std::basic_string<CharT> rstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::all_spaces)
+    std::basic_string<CharT> Rstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::ALL_SPACES)
     {
-        return rstrip(as_view(text), pattern);
+        return Rstrip(AsView(text), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> strip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::all_spaces)
+    std::basic_string<CharT> Strip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::ALL_SPACES)
     {
-        return lstrip(rstrip(text, pattern), pattern);
+        return Lstrip(Rstrip(text, pattern), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> strip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::all_spaces)
+    std::basic_string<CharT> Strip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::ALL_SPACES)
     {
-        return strip(as_view(text), pattern);
+        return Strip(AsView(text), pattern);
     }
 
     template<typename C>
     struct Reverse
     {
         Reverse(C& container)
-            : c_(container)
+            : c(container)
         {}
 
-        auto begin()
+        auto Begin()
         {
-            return c_.rbegin();
+            return c.rbegin();
         }
 
-        auto end()
+        auto End()
         {
-            return c_.rend();
+            return c.rend();
         }
 
-        C& c_;
+        C& c; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     };
 
 }

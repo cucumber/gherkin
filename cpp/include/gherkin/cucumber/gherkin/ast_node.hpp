@@ -21,124 +21,124 @@ namespace cucumber::gherkin
         using vector_type = std::vector<type>;
         using ptr_type = std::shared_ptr<vector_type>;
 
-        SubNode(std::any& sub_item)
-            : ref_(sub_item)
+        SubNode(std::any& subItem)
+            : ref(subItem)
         {
-            if (!ref_.has_value())
+            if (!ref.has_value())
             {
-                ref_ = make();
+                ref = Make();
             }
         }
 
-        static auto make()
+        static auto Make()
         {
             return std::make_shared<vector_type>();
         }
 
-        auto& cast()
+        auto& Cast()
         {
-            return std::any_cast<ptr_type&>(ref_);
+            return std::any_cast<ptr_type&>(ref);
         }
 
-        auto get_ptr()
+        auto GetPtr()
         {
-            return cast().get();
+            return Cast().get();
         }
 
-        auto& get()
+        auto& Get()
         {
-            return *cast();
+            return *Cast();
         }
 
-        void emplace_back(const T& value)
+        void EmplaceBack(const T& value)
         {
-            get().emplace_back(value);
+            Get().emplace_back(value);
         }
 
-        std::any& ref_;
+        std::any& ref; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     };
 
     class AstNode
     {
     public:
-        AstNode(RuleType RuleType = RuleType::none);
+        AstNode(RuleType ruleType = RuleType::NONE);
         AstNode(const AstNode& other);
-        AstNode(AstNode&& other);
+        AstNode(AstNode&& other) noexcept;
 
         virtual ~AstNode();
 
         AstNode& operator=(const AstNode& other);
-        AstNode& operator=(AstNode&& other);
+        AstNode& operator=(AstNode&& other) noexcept;
 
-        bool is(RuleType RuleType) const;
+        bool Is(RuleType ruleType);
 
-        RuleType type() const;
+        RuleType Type() const;
 
         template<typename T>
-        void add(RuleType RuleType, const T& value)
+        void Add(RuleType ruleType, const T& value)
         {
-            SubNode<T> sub_node_ref(sub_items_[RuleType]);
+            SubNode<T> subNodeRef(subItems[ruleType]);
 
-            sub_node_ref.emplace_back(value);
+            subNodeRef.EmplaceBack(value);
         }
 
         template<typename T>
-        auto get_items(RuleType RuleType, const std::vector<T>* default_result = nullptr) const
+        auto GetItems(RuleType ruleType, const std::vector<T>* defaultResult = nullptr) const
         {
             using stype = SubNode<T>;
             using ret_type = const typename stype::vector_type*;
 
-            ret_type ret = default_result;
+            ret_type ret = defaultResult;
 
-            auto found = sub_items_.find(RuleType);
+            auto found = subItems.find(ruleType);
 
-            if (found != sub_items_.end())
+            if (found != subItems.end())
             {
-                stype sub_node_ref(const_cast<std::any&>(found->second));
+                stype subNodeRef(const_cast<std::any&>(found->second)); // NOLINT(cppcoreguidelines-pro-type-const-cast)
 
-                ret = sub_node_ref.get_ptr();
+                ret = subNodeRef.GetPtr();
             }
 
             return ret;
         }
 
         template<typename T>
-        const T* get_single(RuleType RuleType, const T* default_result = nullptr) const
+        const T* GetSingle(RuleType ruleType, const T* defaultResult = nullptr) const
         {
-            auto items = get_items<T>(RuleType);
+            auto items = GetItems<T>(ruleType);
 
             if (items && !items->empty())
             {
                 return std::addressof(items->at(0));
             }
 
-            return default_result;
+            return defaultResult;
         }
 
-        const auto& get_tokens(RuleType RuleType) const
+        const auto& GetTokens(RuleType ruleType) const
         {
-            return *get_items<Token>(RuleType, &empty_tokens_);
+            return *GetItems<Token>(ruleType, &emptyTokens);
         }
 
-        const auto& get_token(RuleType RuleType) const
+        const auto& GetToken(RuleType ruleType) const
         {
-            return *get_single<Token>(RuleType, &null_token_);
+            return *GetSingle<Token>(ruleType, &nullToken);
         }
 
         template<typename T, typename V = T>
-        void set_value(RuleType RuleType, V& value) const
+        void SetValue(RuleType ruleType, V& value) const
         {
             using type = std::decay_t<T>;
 
-            if constexpr (is_specialization_of_v<type, std::vector>)
+            if constexpr (isSpecializationOfV<type, std::vector>)
             {
                 using value_type = typename type::value_type;
 
-                auto opt_items = get_items<value_type>(RuleType);
+                auto optItems = GetItems<value_type>(ruleType);
 
-                if (opt_items)
+                if (optItems)
                 {
-                    auto& items = *opt_items;
+                    auto& items = *optItems;
 
                     for (const auto& element : items)
                     {
@@ -148,7 +148,7 @@ namespace cucumber::gherkin
             }
             else
             {
-                auto pitem = get_single<type>(RuleType);
+                auto pitem = GetSingle<type>(ruleType);
 
                 if (pitem)
                 {
@@ -158,16 +158,16 @@ namespace cucumber::gherkin
         }
 
         template<typename T, typename V = T>
-        void set_value(RuleType RuleType, std::shared_ptr<V>& value) const
+        void SetValue(RuleType ruleType, std::shared_ptr<V>& value) const
         {
-            set_value<T>(RuleType, *value);
+            SetValue<T>(ruleType, *value);
         }
 
         // Overload for optional<shared_ptr<T>>: retrieve T, wrap in shared_ptr
         template<typename T>
-        void set(RuleType RuleType, std::optional<std::shared_ptr<T>>& value) const
+        void Set(RuleType ruleType, std::optional<std::shared_ptr<T>>& value) const
         {
-            auto pitem = get_single<T>(RuleType);
+            auto pitem = GetSingle<T>(ruleType);
             if (pitem)
             {
                 value = std::make_shared<T>(*pitem);
@@ -177,42 +177,42 @@ namespace cucumber::gherkin
         // Overload for vector<shared_ptr<T>>: retrieve vector<T>, wrap each in
         // shared_ptr
         template<typename T>
-        void set(RuleType RuleType, std::vector<std::shared_ptr<T>>& value) const
+        void Set(RuleType ruleType, std::vector<std::shared_ptr<T>>& value) const
         {
-            auto opt_items = get_items<T>(RuleType);
-            if (opt_items)
+            auto optItems = GetItems<T>(ruleType);
+            if (optItems)
             {
-                for (const auto& Item : *opt_items)
+                for (const auto& item : *optItems)
                 {
-                    value.emplace_back(std::make_shared<T>(Item));
+                    value.emplace_back(std::make_shared<T>(item));
                 }
             }
         }
 
         template<typename T>
-        void set(RuleType RuleType, T& value) const
+        void Set(RuleType ruleType, T& value) const
         {
             using type = std::decay_t<T>;
 
-            if constexpr (is_specialization_of_v<type, std::optional>)
+            if constexpr (isSpecializationOfV<type, std::optional>)
             {
                 using value_type = typename type::value_type;
 
-                set_value<value_type>(RuleType, value);
+                SetValue<value_type>(ruleType, value);
             }
             else
             {
-                set_value<type>(RuleType, value);
+                SetValue<type>(ruleType, value);
             }
         }
 
     private:
         using sub_items = std::unordered_map<RuleType, std::any>;
 
-        RuleType rule_type_;
-        sub_items sub_items_;
-        Token null_token_;
-        std::vector<Token> empty_tokens_;
+        RuleType ruleType;
+        sub_items subItems;
+        Token nullToken;
+        std::vector<Token> emptyTokens;
     };
 
 }

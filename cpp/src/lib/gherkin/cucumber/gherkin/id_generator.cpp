@@ -4,21 +4,17 @@
 namespace cucumber::gherkin
 {
 
-    IdGeneratorBase::IdGeneratorBase()
-    {}
+    IdGeneratorBase::IdGeneratorBase() = default;
 
-    IdGeneratorBase::~IdGeneratorBase()
-    {}
+    IdGeneratorBase::~IdGeneratorBase() = default;
 
-    IdGenerator::IdGenerator()
-    {}
+    IdGenerator::IdGenerator() = default;
 
-    IdGenerator::~IdGenerator()
-    {}
+    IdGenerator::~IdGenerator() = default;
 
-    std::string IdGenerator::next_id()
+    std::string IdGenerator::NextId()
     {
-        return std::to_string(id_counter_++);
+        return std::to_string(idCounter++);
     }
 
 }

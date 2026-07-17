@@ -31,36 +31,39 @@ namespace cucumber::gherkin
         PickleCompiler(id_generator_ptr idp);
 
         virtual ~PickleCompiler();
+        PickleCompiler(const PickleCompiler&) = delete;
+        PickleCompiler& operator=(const PickleCompiler&) = delete;
+        PickleCompiler(PickleCompiler&&) = delete;
+        PickleCompiler& operator=(PickleCompiler&&) = delete;
 
-        pickles compile(const cms::GherkinDocument& document, const std::string& uri, pickle_cb sink = {});
+        pickles Compile(const cms::GherkinDocument& document, const std::string& uri, pickle_cb sink = {});
 
     private:
-        void compile_feature(PickleCompilerContext& context, const cms::Feature& feature, const std::string& language, const std::string& uri);
+        void CompileFeature(PickleCompilerContext& context, const cms::Feature& feature, const std::string& language, const std::string& uri);
 
-        void compile_rule(PickleCompilerContext& context, const cms::Rule& rule, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
+        void CompileRule(PickleCompilerContext& context, const cms::Rule& rule, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
 
-        void compile_scenario(
-            PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
+        void CompileScenario(PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
 
-        void compile_scenario_outline(
-            PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parent_tags, const steps& background_steps, const std::string& language, const std::string& uri);
+        void CompileScenarioOutline(
+            PickleCompilerContext& context, const cms::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
 
-        cms::PickleTable make_pickle_table(const std::optional<std::size_t>& argument_index, const cms::DataTable& data_table, const table_cells& variable_cells, const table_cells& value_cells);
+        static cms::PickleTable MakePickleTable(const std::optional<std::size_t>& argumentIndex, const cms::DataTable& dataTable, const table_cells& variableCells, const table_cells& valueCells);
 
-        cms::PickleDocString make_pickle_doc_string(
-            const std::optional<std::size_t>& argument_index, const cms::DocString& doc_string, const table_cells& variable_cells, const table_cells& value_cells);
+        static cms::PickleDocString MakePickleDocString(
+            const std::optional<std::size_t>& argumentIndex, const cms::DocString& docString, const table_cells& variableCells, const table_cells& valueCells);
 
-        cms::PickleStep make_pickle_step(const cms::Step& step, const table_cells& variable_cells, const cms::TableRow* value_row_ptr, cms::StepKeywordType keyword_type);
+        cms::PickleStep MakePickleStep(const cms::Step& step, const table_cells& variableCells, const cms::TableRow* valueRowPtr, cms::StepKeywordType keywordType);
 
-        cms::PickleStep make_pickle_step(const cms::Step& step, cms::StepKeywordType keyword_type);
+        cms::PickleStep MakePickleStep(const cms::Step& step, cms::StepKeywordType keywordType);
 
-        pickle_tags make_pickle_tags(const tags& tags);
+        static pickle_tags MakePickleTags(const tags& tags);
 
-        std::string interpolate(const std::string& name, const table_cells& variable_cells, const table_cells& value_cells);
+        static std::string Interpolate(const std::string& name, const table_cells& variableCells, const table_cells& valueCells);
 
-        std::string next_id();
+        std::string NextId();
 
-        id_generator_ptr idp_;
+        id_generator_ptr idp;
     };
 
 }

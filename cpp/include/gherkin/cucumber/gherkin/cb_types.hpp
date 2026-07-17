@@ -28,7 +28,7 @@ namespace cucumber::gherkin
     };
 
     template<typename Callback, typename Msg>
-    void call_cb(Callback& callback, const Msg& message)
+    void CallCb(Callback& callback, const Msg& message)
     {
         if (callback)
         {

@@ -21,45 +21,47 @@ namespace cucumber::gherkin
         using result_type = typename Builder::result_type;
         using context_type = ParserContext<Builder, Scanner, Matcher>;
 
-        ParserBase()
-        {}
+        ParserBase() = default;
 
         ParserBase(id_generator_ptr idp)
-            : builder_(idp)
+            : builder(idp)
         {}
 
-        virtual ~ParserBase()
-        {}
+        virtual ~ParserBase() = default;
+        ParserBase(const ParserBase&) = delete;
+        ParserBase& operator=(const ParserBase&) = delete;
+        ParserBase(ParserBase&&) = delete;
+        ParserBase& operator=(ParserBase&&) = delete;
 
-        result_type parse(std::string_view uri, std::string_view data)
+        result_type Parse(std::string_view uri, std::string_view data)
         {
-            reset(uri, data);
+            Reset(uri, data);
 
-            context_type context{ builder_, scanner_, matcher_ };
+            context_type context{ builder, scanner, matcher };
 
-            parse(context);
+            Parse(context);
 
-            return get_result();
+            return GetResult();
         }
 
     protected:
-        void reset(std::string_view uri, std::string_view data)
+        void Reset(std::string_view uri, std::string_view data) // NOLINT(bugprone-easily-swappable-parameters)
         {
-            builder_.reset(uri);
-            scanner_.reset(data);
-            matcher_.reset();
+            builder.Reset(uri);
+            scanner.Reset(data);
+            matcher.Reset();
         }
 
-        result_type get_result() const
+        result_type GetResult() const
         {
-            return builder_.get_result();
+            return builder.GetResult();
         }
 
-        virtual void parse(context_type& context) = 0;
+        virtual void Parse(context_type& context) = 0;
 
-        Builder builder_;
-        Scanner scanner_;
-        Matcher matcher_;
+        Builder builder; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+        Scanner scanner; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+        Matcher matcher; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
     };
 
 }

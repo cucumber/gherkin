@@ -4,14 +4,14 @@
 namespace cucumber::gherkin
 {
 
-    bool Token::is_eof() const
+    bool Token::IsEof() const
     {
         return eof;
     }
 
-    std::string_view Token::value() const
+    std::string_view Token::Value() const
     {
-        return is_eof() ? "EOF" : line.get_line_text();
+        return IsEof() ? "EOF" : line.GetLineText();
     }
 
 }

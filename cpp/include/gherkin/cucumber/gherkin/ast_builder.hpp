@@ -21,7 +21,7 @@ namespace cucumber::gherkin
 
     using table_rows = std::vector<std::shared_ptr<cms::TableRow>>;
     using tags = std::vector<std::shared_ptr<cms::Tag>>;
-    using comments = std::vector<std::shared_ptr<cms::Comment>>;
+    using Comments = std::vector<std::shared_ptr<cms::Comment>>;
 
     class AstBuilder
     {
@@ -32,56 +32,60 @@ namespace cucumber::gherkin
         AstBuilder(id_generator_ptr idp);
 
         virtual ~AstBuilder();
+        AstBuilder(const AstBuilder&) = delete;
+        AstBuilder& operator=(const AstBuilder&) = delete;
+        AstBuilder(AstBuilder&&) = delete;
+        AstBuilder& operator=(AstBuilder&&) = delete;
 
-        void reset(std::string_view uri);
+        void Reset(std::string_view uri);
 
-        void start_rule(RuleType RuleType);
-        void end_rule(RuleType RuleType);
-        void build(const Token& token);
+        void StartRule(RuleType ruleType);
+        void EndRule(RuleType ruleType);
+        void Build(const Token& token);
 
-        const cms::GherkinDocument& get_result() const;
+        [[nodiscard]] const cms::GherkinDocument& GetResult() const;
 
     private:
         using ast_node_stack = std::stack<AstNode>;
 
-        std::string next_id();
+        std::string NextId();
 
-        void transform_node(AstNode& from, AstNode& destination);
+        void TransformNode(AstNode& from, AstNode& destination);
 
-        cms::Step make_step(AstNode& node);
-        cms::DocString make_doc_string(AstNode& node);
-        cms::DataTable make_data_table(AstNode& node);
-        cms::Background make_background(AstNode& node);
-        cms::Scenario make_scenario_definition(AstNode& node);
-        cms::Examples make_examples_definition(AstNode& node);
-        table_rows make_examples_table(AstNode& node);
-        std::string make_description(AstNode& node);
-        cms::Feature make_feature(AstNode& node);
-        cms::Rule make_rule(AstNode& node);
-        cms::GherkinDocument make_gherkin_document(AstNode& node);
+        cms::Step MakeStep(AstNode& node);
+        static cms::DocString MakeDocString(AstNode& node);
+        cms::DataTable MakeDataTable(AstNode& node);
+        cms::Background MakeBackground(AstNode& node);
+        cms::Scenario MakeScenarioDefinition(AstNode& node);
+        cms::Examples MakeExamplesDefinition(AstNode& node);
+        table_rows MakeExamplesTable(AstNode& node);
+        static std::string MakeDescription(AstNode& node);
+        cms::Feature MakeFeature(AstNode& node);
+        cms::Rule MakeRule(AstNode& node);
+        cms::GherkinDocument MakeGherkinDocument(AstNode& node);
 
-        std::shared_ptr<cms::Location> get_location(const Token& token, std::size_t column = 0) const;
+        static std::shared_ptr<cms::Location> GetLocation(const Token& token, std::size_t column = 0);
 
-        table_rows get_table_rows(const AstNode& node);
-        void ensure_cell_count(const table_rows& rows) const;
-        table_cells get_table_cells(const Token& token);
-        tags get_tags(const AstNode& node);
+        table_rows GetTableRows(const AstNode& node);
+        static void EnsureCellCount(const table_rows& rows);
+        static table_cells GetTableCells(const Token& token);
+        tags GetTags(const AstNode& node);
 
-        AstNode pop_node();
-        AstNode& current_node();
-        const AstNode& current_node() const;
+        AstNode PopNode();
+        AstNode& CurrentNode();
+        [[nodiscard]] const AstNode& CurrentNode() const;
 
-        id_generator_ptr idp_;
-        ast_node_stack stack_;
-        std::string_view uri_;
-        comments comments_;
-        cms::GherkinDocument doc_;
+        id_generator_ptr idp;
+        ast_node_stack stack;
+        std::string_view uri;
+        Comments comments;
+        cms::GherkinDocument doc;
     };
 
     using ast_builder_ptr = std::unique_ptr<AstBuilder>;
 
     template<typename... Args>
-    ast_builder_ptr new_ast_builder(Args&&... args)
+    ast_builder_ptr NewAstBuilder(Args&&... args)
     {
         return std::make_unique<AstBuilder>(std::forward<Args>(args)...);
     }

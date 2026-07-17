@@ -18,23 +18,22 @@ namespace cucumber::gherkin
         Dialect& operator=(const Dialect&) = delete;
         Dialect& operator=(Dialect&&) = delete;
 
-        const string_views& feature_keywords;
-        const string_views& rule_keywords;
-        const string_views& scenario_keywords;
-        const string_views& scenario_outline_keywords;
-        const string_views& background_keywords;
-        const string_views& examples_keywords;
-        const string_views& given_keywords;
-        const string_views& when_keywords;
-        const string_views& then_keywords;
-        const string_views& and_keywords;
-        const string_views& but_keywords;
+        const string_views& featureKeywords;
+        const string_views& ruleKeywords;
+        const string_views& scenarioKeywords;
+        const string_views& scenarioOutlineKeywords;
+        const string_views& backgroundKeywords;
+        const string_views& examplesKeywords;
+        const string_views& givenKeywords;
+        const string_views& whenKeywords;
+        const string_views& thenKeywords;
+        const string_views& andKeywords;
+        const string_views& butKeywords;
     };
 
-    const keywords_maps& all_keywords();
+    const keywords_maps& AllKeywords();
 
-    const keywords_map& keywords(const std::string_view& language);
-
+    const keywords_map& Keywords(const std::string_view& language);
 }
 
 #endif

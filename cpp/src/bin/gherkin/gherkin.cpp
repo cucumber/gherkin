@@ -8,51 +8,51 @@
 struct Options
 {
     bool exit = false;
-    int exit_code = 0;
-    int last_arg = 0;
-    bool include_source = true;
-    bool include_ast = true;
-    bool include_pickles = true;
-    bool predicatable_ids = true;
+    int exitCode = 0;
+    int lastArg = 0;
+    bool includeSource = true;
+    bool includeAst = true;
+    bool includePickles = true;
+    bool predicatableIds = true;
 };
 
-Options parse_options(int argc, char** argv)
+Options ParseOptions(int argc, char** argv)
 {
     Options opts;
 
-    for (opts.last_arg = 1; opts.last_arg < argc; ++opts.last_arg)
+    for (opts.lastArg = 1; opts.lastArg < argc; ++opts.lastArg)
     {
-        std::string_view arg(argv[opts.last_arg]);
+        std::string_view const arg(argv[opts.lastArg]); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
         if (arg == "--no-source")
         {
-            opts.include_source = false;
+            opts.includeSource = false;
         }
         else if (arg == "--no-ast")
         {
-            opts.include_ast = false;
+            opts.includeAst = false;
         }
         else if (arg == "--no-pickles")
         {
-            opts.include_pickles = false;
+            opts.includePickles = false;
         }
         else if (arg == "--predictable-ids")
         {
-            opts.predicatable_ids = true;
+            opts.predicatableIds = true;
         }
         else if (arg.find('-') == 0)
         {
             if (arg != "-h" && arg != "--help")
             {
-                std::cout << "Unknown option: " << arg << std::endl;
-                opts.exit_code = 1;
+                std::cout << "Unknown option: " << arg << '\n';
+                opts.exitCode = 1;
             }
 
             std::cout << "Usage: gherkin [options] FILE...\n"
                       << "    -h, --help       You're looking at it.\n"
                       << "    --no-ast         Do not emit Ast events.\n"
                       << "    --no-pickles     Do not emit Pickle events.\n"
-                      << "    --no-source      Do not emit Source events." << std::endl;
+                      << "    --no-source      Do not emit Source events." << '\n';
 
             opts.exit = true;
         }
@@ -66,49 +66,49 @@ Options parse_options(int argc, char** argv)
 }
 
 template<typename ObjectType>
-void print_json_obj(std::string_view key, const ObjectType& value)
+void PrintJsonObj(std::string_view key, const ObjectType& value)
 {
-    nlohmann::json json_doc;
+    nlohmann::json jsonDoc;
 
-    value.to_json(json_doc[key]);
+    value.to_json(jsonDoc[key]);
 
-    std::cout << json_doc << std::endl;
+    std::cout << jsonDoc << '\n';
 }
 
 int main(int argc, char** argv)
 {
-    auto opts = parse_options(argc, argv);
+    auto opts = ParseOptions(argc, argv);
 
     if (opts.exit)
     {
-        return opts.exit_code;
+        return opts.exitCode;
     }
 
-    cucumber::gherkin::App App;
-    cucumber::gherkin::App::Callbacks cbs{ [&](const auto& msg)
+    cucumber::gherkin::App app;
+    cucumber::gherkin::App::Callbacks const cbs{ [&](const auto& msg)
         {
-            print_json_obj("source", msg);
+            PrintJsonObj("source", msg);
         },
         [&](const auto& msg)
         {
-            print_json_obj("gherkinDocument", msg);
+            PrintJsonObj("gherkinDocument", msg);
         },
         [&](const auto& msg)
         {
-            print_json_obj("pickle", msg);
+            PrintJsonObj("pickle", msg);
         },
         [&](const auto& msg)
         {
             std::cout << msg.to_json() << std::endl;
         } };
 
-    App.include_source(opts.include_source);
-    App.include_ast(opts.include_ast);
-    App.include_pickles(opts.include_pickles);
+    app.IncludeSource(opts.includeSource);
+    app.IncludeAst(opts.includeAst);
+    app.IncludePickles(opts.includePickles);
 
-    for (; opts.last_arg < argc; ++opts.last_arg)
+    for (; opts.lastArg < argc; ++opts.lastArg)
     {
-        App.parse(cucumber::gherkin::File{ argv[opts.last_arg] }, cbs);
+        app.Parse(cucumber::gherkin::File{ argv[opts.lastArg] }, cbs); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     }
 
     return 0;

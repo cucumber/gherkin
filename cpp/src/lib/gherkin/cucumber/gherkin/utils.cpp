@@ -9,7 +9,7 @@
 namespace cucumber::gherkin
 {
 
-    std::string slurp(const std::string& path)
+    std::string Slurp(const std::string& path)
     {
         namespace fs = std::filesystem;
 
@@ -22,16 +22,16 @@ namespace cucumber::gherkin
 
             bytes.resize(fsize);
 
-            ifs.read(bytes.data(), fsize);
+            ifs.read(bytes.data(), static_cast<std::streamsize>(fsize));
             ifs.close();
         }
 
         return bytes;
     }
 
-    void replace(std::string& source, std::string_view what, std::string_view with)
+    void Replace(std::string& source, std::string_view what, std::string_view with)
     {
-        std::string::size_type pos;
+        std::string::size_type pos = std::string::npos;
 
         while ((pos = source.find(what)) != std::string::npos)
         {
@@ -39,11 +39,11 @@ namespace cucumber::gherkin
         }
     }
 
-    std::string replace(const std::string& source, std::string_view what, std::string_view with)
+    std::string Replace(const std::string& source, std::string_view what, std::string_view with)
     {
         std::string text = source;
 
-        replace(text, what, with);
+        Replace(text, what, with);
 
         return text;
     }

@@ -15,6 +15,5 @@ namespace cucumber::gherkin
     using is_specialization_of_t = IsSpecializationOf<T, Primary>;
 
     template<typename T, template<typename...> class Primary>
-    inline constexpr bool is_specialization_of_v = is_specialization_of_t<T, Primary>::value;
-
+    inline constexpr bool isSpecializationOfV = is_specialization_of_t<T, Primary>::value;
 }

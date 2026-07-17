@@ -14,31 +14,29 @@
 namespace cucumber::gherkin
 {
 
-    TokenScanner::TokenScanner()
-    {}
+    TokenScanner::TokenScanner() = default;
 
     TokenScanner::TokenScanner(std::string_view data)
     {
-        reset(data);
+        Reset(data);
     }
 
-    TokenScanner::TokenScanner(const File& File)
+    TokenScanner::TokenScanner(const File& file)
     {
-        reset(File);
+        Reset(file);
     }
 
-    TokenScanner::~TokenScanner()
-    {}
+    TokenScanner::~TokenScanner() = default;
 
-    Token TokenScanner::read()
+    Token TokenScanner::Read()
     {
-        auto line_result = next_line();
+        auto lineResult = NextLine();
 
-        line_++;
+        line++;
 
         return Token{
-            line_result.eof,
-            cucumber::gherkin::Line(line_result.text, line_),
+            lineResult.eof,
+            cucumber::gherkin::Line(lineResult.text, line),
             {},
             std::nullopt,
             std::nullopt,
@@ -46,51 +44,51 @@ namespace cucumber::gherkin
             {},
             {},
             {},
-            { line_ },
+            { line },
         };
     }
 
-    void TokenScanner::reset()
+    void TokenScanner::Reset()
     {
-        line_ = 0;
+        line = 0;
     }
 
-    void TokenScanner::reset(std::string_view data)
+    void TokenScanner::Reset(std::string_view data)
     {
-        reset();
-        ip_ = std::make_unique<std::istringstream>(std::string(data));
+        Reset();
+        ip = std::make_unique<std::istringstream>(std::string(data));
     }
 
-    void TokenScanner::reset(const File& File)
+    void TokenScanner::Reset(const File& file)
     {
-        reset();
-        ip_ = std::make_unique<std::ifstream>(File.path);
+        Reset();
+        ip = std::make_unique<std::ifstream>(file.path);
     }
 
-    NextLineResult TokenScanner::next_line()
+    NextLineResult TokenScanner::NextLine()
     {
         NextLineResult result;
-        std::string Line;
+        std::string line;
 
-        if (ip_)
+        if (ip)
         {
-            if (!input().eof())
+            if (!Input().eof())
             {
-                result.eof = !std::getline(input(), Line);
-                result.text = rstrip(Line, RePattern::cr);
+                result.eof = !std::getline(Input(), line);
+                result.text = Rstrip(line, RePattern::CR);
             }
             else
             {
-                ip_.reset();
+                ip.reset();
             }
         }
 
         return result;
     }
 
-    std::istream& TokenScanner::input()
+    std::istream& TokenScanner::Input()
     {
-        return *ip_;
+        return *ip;
     }
 
 }

@@ -10,60 +10,60 @@ namespace cucumber::gherkin
     template<typename Builder, typename Scanner, typename Matcher>
     struct ParserContext
     {
-        Builder& builder;
-        Scanner& scanner;
-        Matcher& matcher;
+        Builder& builder; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+        Scanner& scanner; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+        Matcher& matcher; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 
         token_queue queue;
-        parser_error_ptrs error_pointers;
-        bool stop_at_first_error = false;
-        std::size_t max_errors = 10;
+        parser_error_ptrs errorPointers;
+        bool stopAtFirstError = false;
+        std::size_t maxErrors = 10; // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
 
-        bool has_token() const
+        [[nodiscard]] bool HasToken() const
         {
             return !queue.empty();
         }
 
-        Token pop_token()
+        Token PopToken()
         {
-            auto front_token = std::move(queue.front());
+            auto frontToken = std::move(queue.front());
             queue.pop_front();
 
-            return front_token;
+            return frontToken;
         }
 
-        Token read_token()
+        Token ReadToken()
         {
-            return has_token() ? pop_token() : scanner.read();
+            return HasToken() ? PopToken() : scanner.Read();
         }
 
-        void push_tokens(const token_queue& tokens)
+        void PushTokens(const token_queue& tokens)
         {
             queue.insert(queue.end(), tokens.begin(), tokens.end());
         }
 
-        bool has_errors() const
+        [[nodiscard]] bool HasErrors() const
         {
-            return !error_pointers.empty();
+            return !errorPointers.empty();
         }
 
-        void add_error(parser_error_ptr error_pointer)
+        void AddError(parser_error_ptr errorPointer)
         {
-            for (const auto& existing : error_pointers)
+            for (const auto& existing : errorPointers)
             {
-                if (existing->same_message(*error_pointer))
+                if (existing->SameMessage(*errorPointer))
                 {
                     return;
                 }
 
-                std::cerr << "not duplicate" << std::endl;
+                std::cerr << "not duplicate" << '\n';
             }
 
-            error_pointers.emplace_back(std::move(error_pointer));
+            errorPointers.emplace_back(std::move(errorPointer));
 
-            if (error_pointers.size() > max_errors)
+            if (errorPointers.size() > maxErrors)
             {
-                throw CompositeParserError(error_pointers);
+                throw CompositeParserError(errorPointers);
             }
         }
     };

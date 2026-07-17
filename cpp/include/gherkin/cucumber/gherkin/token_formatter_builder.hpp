@@ -20,20 +20,24 @@ namespace cucumber::gherkin
 
         TokenFormatterBuilder(id_generator_ptr idp = {});
         virtual ~TokenFormatterBuilder();
+        TokenFormatterBuilder(const TokenFormatterBuilder&) = delete;
+        TokenFormatterBuilder& operator=(const TokenFormatterBuilder&) = delete;
+        TokenFormatterBuilder(TokenFormatterBuilder&&) = delete;
+        TokenFormatterBuilder& operator=(TokenFormatterBuilder&&) = delete;
 
-        void reset(std::string_view uri);
+        void Reset(std::string_view uri);
 
-        void start_rule(RuleType RuleType);
-        void end_rule(RuleType RuleType);
-        void build(const Token& token);
+        void StartRule(RuleType ruleType);
+        void EndRule(RuleType ruleType);
+        void Build(const Token& token);
 
-        strings get_result() const;
+        [[nodiscard]] strings GetResult() const;
 
     private:
-        std::string format_token(const Token& token);
+        static std::string FormatToken(const Token& token);
 
-        id_generator_ptr idp_;
-        strings formatted_tokens_;
+        id_generator_ptr idp;
+        strings formattedTokens;
     };
 
 }

@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 namespace cucumber::gherkin
 {
@@ -18,19 +19,18 @@ namespace cucumber::gherkin
     //
     ///////////////////////////////////////////////////////////////////////////////
     ParserError::ParserError(const std::string& message, const cms::Location& location)
-        : std::runtime_error(make_message(message, location))
-        , location_(location)
+        : std::runtime_error(MakeMessage(message, location))
+        , location(location)
     {}
 
     ParserError::ParserError(const ParserError& other)
         : std::runtime_error(other.what())
-        , location_(other.location_)
+        , location(other.location)
     {}
 
-    ParserError::~ParserError()
-    {}
+    ParserError::~ParserError() = default;
 
-    std::string ParserError::make_message(const std::string& message, const cms::Location& location) const
+    std::string ParserError::MakeMessage(const std::string& message, const cms::Location& location)
     {
         std::ostringstream stream;
 
@@ -40,14 +40,14 @@ namespace cucumber::gherkin
         return stream.str();
     }
 
-    bool ParserError::same_message(const ParserError& other) const
+    bool ParserError::SameMessage(const ParserError& other) const
     {
         return std::strcmp(what(), other.what()) == 0;
     }
 
-    const cms::Location& ParserError::location() const
+    const cms::Location& ParserError::Location() const
     {
-        return location_;
+        return location;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -59,36 +59,34 @@ namespace cucumber::gherkin
         : ParserError("Language not supported: " + language, location)
     {}
 
-    NoSuchLanguageError::~NoSuchLanguageError()
-    {}
+    NoSuchLanguageError::~NoSuchLanguageError() = default;
 
     ///////////////////////////////////////////////////////////////////////////////
     //
     // unexpected Token
     //
     ///////////////////////////////////////////////////////////////////////////////
-    UnexpectedToken::UnexpectedToken(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment)
-        : ParserError(make_message(received_token, expected_tokens), make_location(received_token))
-        , received_token_(received_token)
-        , expected_tokens_(expected_tokens)
-        , state_comment_(state_comment)
+    UnexpectedToken::UnexpectedToken(const Token& receivedToken, const std::string& expectedTokens, std::string stateComment) // NOLINT(bugprone-easily-swappable-parameters)
+        : ParserError(MakeMessage(receivedToken, expectedTokens), MakeLocation(receivedToken))
+        , receivedToken(receivedToken)
+        , expectedTokens(expectedTokens)
+        , stateComment(std::move(stateComment))
     {}
 
-    UnexpectedToken::~UnexpectedToken()
-    {}
+    UnexpectedToken::~UnexpectedToken() = default;
 
-    std::string UnexpectedToken::make_message(const Token& received_token, const std::string& expected_tokens) const
+    std::string UnexpectedToken::MakeMessage(const Token& receivedToken, const std::string& expectedTokens)
     {
         std::ostringstream stream;
 
-        stream << "expected: " << expected_tokens << ", got '" << strip(received_token.value()) << "'";
+        stream << "expected: " << expectedTokens << ", got '" << Strip(receivedToken.Value()) << "'";
 
         return stream.str();
     }
 
-    cms::Location UnexpectedToken::make_location(const Token& received_token) const
+    cms::Location UnexpectedToken::MakeLocation(const Token& receivedToken)
     {
-        return received_token.location.column.value_or(0) > 1 ? received_token.location : cms::Location{ received_token.location.line, received_token.line.indent() + 1 };
+        return receivedToken.location.column.value_or(0) > 1 ? receivedToken.location : cms::Location{ receivedToken.location.line, receivedToken.line.Indent() + 1 };
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -96,20 +94,19 @@ namespace cucumber::gherkin
     // unexpected eof
     //
     ///////////////////////////////////////////////////////////////////////////////
-    UnexpectedEof::UnexpectedEof(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment)
-        : ParserError(make_message(expected_tokens), received_token.location)
-        , expected_tokens_(expected_tokens)
-        , state_comment_(state_comment)
+    UnexpectedEof::UnexpectedEof(const Token& receivedToken, const std::string& expectedTokens, std::string stateComment) // NOLINT(bugprone-easily-swappable-parameters)
+        : ParserError(MakeMessage(expectedTokens), receivedToken.location)
+        , expectedTokens(expectedTokens)
+        , stateComment(std::move(stateComment))
     {}
 
-    UnexpectedEof::~UnexpectedEof()
-    {}
+    UnexpectedEof::~UnexpectedEof() = default;
 
-    std::string UnexpectedEof::make_message(const std::string& expected_tokens) const
+    std::string UnexpectedEof::MakeMessage(const std::string& expectedTokens)
     {
         std::ostringstream stream;
 
-        stream << "unexpected end of file, expected: " << expected_tokens;
+        stream << "unexpected end of file, expected: " << expectedTokens;
 
         return stream.str();
     }
@@ -119,33 +116,32 @@ namespace cucumber::gherkin
     // composite Parser error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    CompositeParserError::CompositeParserError(const parser_error_ptrs& ptrs)
+    CompositeParserError::CompositeParserError(parser_error_ptrs ptrs)
         : ParserError("", {})
-        , ptrs_(ptrs)
+        , ptrs(std::move(ptrs))
     {}
 
-    CompositeParserError::~CompositeParserError()
-    {}
+    CompositeParserError::~CompositeParserError() = default;
 
-    std::string CompositeParserError::make_message(const parser_error_ptrs& ptrs) const
+    std::string CompositeParserError::MakeMessage(const parser_error_ptrs& ptrs)
     {
         strings errs;
 
-        for (const auto& error_pointer : ptrs)
+        for (const auto& errorPointer : ptrs)
         {
-            errs.push_back(error_pointer->what());
+            errs.emplace_back(errorPointer->what());
         }
 
         std::ostringstream stream;
 
-        stream << "Parser errors:\n" << join("\n", errs);
+        stream << "Parser errors:\n" << Join("\n", errs);
 
         return stream.str();
     }
 
-    const parser_error_ptrs& CompositeParserError::errors() const
+    const parser_error_ptrs& CompositeParserError::Errors() const
     {
-        return ptrs_;
+        return ptrs;
     }
 
 }

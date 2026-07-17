@@ -20,7 +20,7 @@ namespace cucumber::gherkin
     using is_vector_t = typename IsVector<T>::type;
 
     template<typename T>
-    constexpr bool is_vector_v = IsVector<T>::value;
+    constexpr bool isVectorV = IsVector<T>::value;
 
     template<typename T>
     struct IsSet : public std::false_type
@@ -34,7 +34,7 @@ namespace cucumber::gherkin
     using is_set_t = typename IsSet<T>::type;
 
     template<typename T>
-    constexpr bool is_set_v = IsSet<T>::value;
+    constexpr bool isSetV = IsSet<T>::value;
 
     template<typename T>
     struct IsUnorderedSet : public std::false_type
@@ -48,8 +48,7 @@ namespace cucumber::gherkin
     using is_unordered_set_t = typename IsUnorderedSet<T>::type;
 
     template<typename T>
-    constexpr bool is_unordered_set_v = IsUnorderedSet<T>::value;
-
+    constexpr bool isUnorderedSetV = IsUnorderedSet<T>::value;
 }
 
 #endif

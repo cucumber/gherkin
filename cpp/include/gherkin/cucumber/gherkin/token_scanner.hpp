@@ -21,31 +21,35 @@ namespace cucumber::gherkin
     public:
         TokenScanner();
         TokenScanner(std::string_view data);
-        TokenScanner(const File& File);
+        TokenScanner(const File& file);
 
         virtual ~TokenScanner();
+        TokenScanner(const TokenScanner&) = delete;
+        TokenScanner& operator=(const TokenScanner&) = delete;
+        TokenScanner(TokenScanner&&) = delete;
+        TokenScanner& operator=(TokenScanner&&) = delete;
 
-        void reset();
-        void reset(std::string_view data);
-        void reset(const File& File);
+        void Reset();
+        void Reset(std::string_view data);
+        void Reset(const File& file);
 
-        Token read();
+        Token Read();
 
     private:
-        NextLineResult next_line();
+        NextLineResult NextLine();
 
-        std::istream& input();
+        std::istream& Input();
 
         using input_ptr = std::unique_ptr<std::istream>;
 
-        std::size_t line_ = 0;
-        input_ptr ip_;
+        std::size_t line = 0;
+        input_ptr ip;
     };
 
     using token_scanner_ptr = std::unique_ptr<TokenScanner>;
 
     template<typename... Args>
-    token_scanner_ptr new_token_scanner(Args&&... args)
+    token_scanner_ptr NewTokenScanner(Args&&... args)
     {
         return std::make_unique<TokenScanner>(std::forward<Args>(args)...);
     }

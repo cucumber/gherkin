@@ -13,14 +13,14 @@ namespace cucumber::gherkin
 
     struct PickleCompilerContext
     {
-        std::string next_id();
+        std::string NextId();
 
-        void add_pickle(cms::Pickle& pickle);
+        void AddPickle(cms::Pickle& pickle);
 
         id_generator_ptr idp;
         pickle_cb sink;
         cucumber::gherkin::pickles pickles;
-        std::size_t id_counter_ = 0;
+        std::size_t idCounter = 0;
     };
 
 }

@@ -17,7 +17,7 @@ namespace cucumber::gherkin
         cms::Location location;
         std::string message;
 
-        json to_json() const;
+        [[nodiscard]] json to_json() const;
     };
 
 }

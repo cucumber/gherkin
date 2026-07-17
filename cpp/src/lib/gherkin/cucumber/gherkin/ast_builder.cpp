@@ -38,208 +38,206 @@ namespace cucumber::gherkin
 {
 
     AstBuilder::AstBuilder()
-        : AstBuilder(new_id_generator())
+        : AstBuilder(NewIdGenerator())
     {}
 
     AstBuilder::AstBuilder(id_generator_ptr idp)
-        : idp_(idp)
+        : idp(std::move(std::move(idp)))
     {}
 
-    AstBuilder::~AstBuilder()
-    {}
+    AstBuilder::~AstBuilder() = default;
 
-    void AstBuilder::reset(std::string_view uri)
+    void AstBuilder::Reset(std::string_view uri)
     {
-        stack_ = {};
-        stack_.emplace(RuleType::none);
-        comments_.clear();
-        uri_ = uri;
+        stack = {};
+        stack.emplace(RuleType::NONE);
+        comments.clear();
+        this->uri = uri;
     }
 
-    void AstBuilder::start_rule(RuleType RuleType)
+    void AstBuilder::StartRule(RuleType ruleType)
     {
-        stack_.emplace(RuleType);
+        stack.emplace(ruleType);
     }
 
-    void AstBuilder::end_rule(RuleType RuleType)
+    void AstBuilder::EndRule([[maybe_unused]] RuleType ruleType)
     {
-        auto node = pop_node();
-        auto node_type = node.type();
+        auto node = PopNode();
 
-        transform_node(node, current_node());
+        TransformNode(node, CurrentNode());
     }
 
-    void AstBuilder::build(const Token& token)
+    void AstBuilder::Build(const Token& token)
     {
-        if (token.matched_type == RuleType::comment)
+        if (token.matchedType == RuleType::COMMENT)
         {
-            cms::Comment comment{ get_location(token), token.matched_text };
+            cms::Comment comment{ GetLocation(token), token.matchedText };
 
-            comments_.emplace_back(std::make_shared<cms::Comment>(std::move(comment)));
+            comments.emplace_back(std::make_shared<cms::Comment>(std::move(comment)));
         }
         else
         {
-            current_node().add(token.matched_type, token);
+            CurrentNode().Add(token.matchedType, token);
         }
     }
 
-    const cms::GherkinDocument& AstBuilder::get_result() const
+    const cms::GherkinDocument& AstBuilder::GetResult() const
     {
-        auto document = current_node().get_single<cms::GherkinDocument>(RuleType::gherkin_document);
+        const auto* document = CurrentNode().GetSingle<cms::GherkinDocument>(RuleType::GHERKIN_DOCUMENT);
 
-        return document ? *document : doc_;
+        return (document != nullptr) ? *document : doc;
     };
 
-    std::string AstBuilder::next_id()
+    std::string AstBuilder::NextId()
     {
-        return idp_->next_id();
+        return idp->NextId();
     }
 
-    void AstBuilder::transform_node(AstNode& from, AstNode& destination)
+    void AstBuilder::TransformNode(AstNode& from, AstNode& destination)
     {
-        if (from.is(RuleType::step))
+        if (from.Is(RuleType::STEP))
         {
-            destination.add(from.type(), make_step(from));
+            destination.Add(from.Type(), MakeStep(from));
         }
-        else if (from.is(RuleType::doc_string))
+        else if (from.Is(RuleType::DOC_STRING))
         {
-            destination.add(from.type(), make_doc_string(from));
+            destination.Add(from.Type(), MakeDocString(from));
         }
-        else if (from.is(RuleType::data_table))
+        else if (from.Is(RuleType::DATA_TABLE))
         {
-            destination.add(from.type(), make_data_table(from));
+            destination.Add(from.Type(), MakeDataTable(from));
         }
-        else if (from.is(RuleType::background))
+        else if (from.Is(RuleType::BACKGROUND))
         {
-            destination.add(from.type(), make_background(from));
+            destination.Add(from.Type(), MakeBackground(from));
         }
-        else if (from.is(RuleType::scenario_definition))
+        else if (from.Is(RuleType::SCENARIO_DEFINITION))
         {
-            destination.add(from.type(), make_scenario_definition(from));
+            destination.Add(from.Type(), MakeScenarioDefinition(from));
         }
-        else if (from.is(RuleType::examples_definition))
+        else if (from.Is(RuleType::EXAMPLES_DEFINITION))
         {
-            destination.add(from.type(), make_examples_definition(from));
+            destination.Add(from.Type(), MakeExamplesDefinition(from));
         }
-        else if (from.is(RuleType::examples_table))
+        else if (from.Is(RuleType::EXAMPLES_TABLE))
         {
-            destination.add(from.type(), make_examples_table(from));
+            destination.Add(from.Type(), MakeExamplesTable(from));
         }
-        else if (from.is(RuleType::description))
+        else if (from.Is(RuleType::DESCRIPTION))
         {
-            destination.add(from.type(), make_description(from));
+            destination.Add(from.Type(), MakeDescription(from));
         }
-        else if (from.is(RuleType::feature))
+        else if (from.Is(RuleType::FEATURE))
         {
-            destination.add(from.type(), make_feature(from));
+            destination.Add(from.Type(), MakeFeature(from));
         }
-        else if (from.is(RuleType::rule))
+        else if (from.Is(RuleType::RULE))
         {
-            destination.add(from.type(), make_rule(from));
+            destination.Add(from.Type(), MakeRule(from));
         }
-        else if (from.is(RuleType::gherkin_document))
+        else if (from.Is(RuleType::GHERKIN_DOCUMENT))
         {
-            destination.add(from.type(), make_gherkin_document(from));
+            destination.Add(from.Type(), MakeGherkinDocument(from));
         }
         else
         {
-            destination.add(from.type(), from);
+            destination.Add(from.Type(), from);
         }
     }
 
-    cms::Step AstBuilder::make_step(AstNode& node)
+    cms::Step AstBuilder::MakeStep(AstNode& node)
     {
-        auto& step_line = node.get_token(RuleType::step_line);
+        const auto& stepLine = node.GetToken(RuleType::STEP_LINE);
 
-        cms::Step step{ get_location(step_line), step_line.matched_keyword.value_or(""), step_line.matched_keyword_type, step_line.matched_text, std::nullopt, std::nullopt, next_id() };
+        cms::Step step{ GetLocation(stepLine), stepLine.matchedKeyword.value_or(""), stepLine.matchedKeywordType, stepLine.matchedText, std::nullopt, std::nullopt, NextId() };
 
-        node.set(RuleType::doc_string, step.docString);
-        node.set(RuleType::data_table, step.dataTable);
+        node.Set(RuleType::DOC_STRING, step.docString);
+        node.Set(RuleType::DATA_TABLE, step.dataTable);
 
         return step;
     }
 
-    cms::DocString AstBuilder::make_doc_string(AstNode& node)
+    cms::DocString AstBuilder::MakeDocString(AstNode& node)
     {
-        auto& tokens = node.get_tokens(RuleType::doc_string_separator);
-        auto& separator_token = tokens[0];
+        const auto& tokens = node.GetTokens(RuleType::DOC_STRING_SEPARATOR);
+        const auto& separatorToken = tokens[0];
 
-        string_views line_views;
+        string_views lineViews;
 
-        for (const auto& tok : node.get_tokens(RuleType::other))
+        for (const auto& tok : node.GetTokens(RuleType::OTHER))
         {
-            line_views.emplace_back(tok.matched_text);
+            lineViews.emplace_back(tok.matchedText);
         }
 
-        auto content = join("\n", line_views);
+        auto content = Join("\n", lineViews);
 
-        cms::DocString doc_string{ get_location(separator_token), std::nullopt, content, separator_token.matched_keyword.value_or("") };
+        cms::DocString docString{ GetLocation(separatorToken), std::nullopt, content, separatorToken.matchedKeyword.value_or("") };
 
-        if (!separator_token.matched_text.empty())
+        if (!separatorToken.matchedText.empty())
         {
-            doc_string.mediaType = separator_token.matched_text;
+            docString.mediaType = separatorToken.matchedText;
         }
 
-        return doc_string;
+        return docString;
     }
 
-    cms::DataTable AstBuilder::make_data_table(AstNode& node)
+    cms::DataTable AstBuilder::MakeDataTable(AstNode& node)
     {
-        auto rows = get_table_rows(node);
+        auto rows = GetTableRows(node);
 
-        cms::DataTable data_table;
-        data_table.rows = std::move(rows);
+        cms::DataTable dataTable;
+        dataTable.rows = std::move(rows);
 
-        if (!data_table.rows.empty() && data_table.rows.front()->location)
+        if (!dataTable.rows.empty() && dataTable.rows.front()->location)
         {
-            data_table.location = data_table.rows.front()->location;
+            dataTable.location = dataTable.rows.front()->location;
         }
 
-        return data_table;
+        return dataTable;
     }
 
-    cms::Background AstBuilder::make_background(AstNode& node)
+    cms::Background AstBuilder::MakeBackground(AstNode& node)
     {
-        auto& background_line = node.get_token(RuleType::background_line);
+        const auto& backgroundLine = node.GetToken(RuleType::BACKGROUND_LINE);
 
-        cms::Background background{ get_location(background_line), background_line.matched_keyword.value_or(""), background_line.matched_text, {}, {}, next_id() };
+        cms::Background background{ GetLocation(backgroundLine), backgroundLine.matchedKeyword.value_or(""), backgroundLine.matchedText, {}, {}, NextId() };
 
-        node.set(RuleType::description, background.description);
-        node.set(RuleType::step, background.steps);
+        node.Set(RuleType::DESCRIPTION, background.description);
+        node.Set(RuleType::STEP, background.steps);
 
         return background;
     }
 
-    cms::Scenario AstBuilder::make_scenario_definition(AstNode& node)
+    cms::Scenario AstBuilder::MakeScenarioDefinition(AstNode& node)
     {
-        auto pnode = node.get_single<AstNode>(RuleType::scenario);
-        auto& scenario_node = *pnode;
-        auto& scenario_line = scenario_node.get_token(RuleType::scenario_line);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::SCENARIO);
+        const auto& scenarioNode = *pnode;
+        const auto& scenarioLine = scenarioNode.GetToken(RuleType::SCENARIO_LINE);
 
-        cms::Scenario scenario{ get_location(scenario_line), get_tags(node), scenario_line.matched_keyword.value_or(""), scenario_line.matched_text, {}, {}, {}, next_id() };
+        cms::Scenario scenario{ GetLocation(scenarioLine), GetTags(node), scenarioLine.matchedKeyword.value_or(""), scenarioLine.matchedText, {}, {}, {}, NextId() };
 
-        scenario_node.set(RuleType::description, scenario.description);
-        scenario_node.set(RuleType::step, scenario.steps);
-        scenario_node.set(RuleType::examples_definition, scenario.examples);
+        scenarioNode.Set(RuleType::DESCRIPTION, scenario.description);
+        scenarioNode.Set(RuleType::STEP, scenario.steps);
+        scenarioNode.Set(RuleType::EXAMPLES_DEFINITION, scenario.examples);
 
         return scenario;
     }
 
-    cms::Examples AstBuilder::make_examples_definition(AstNode& node)
+    cms::Examples AstBuilder::MakeExamplesDefinition(AstNode& node)
     {
-        auto pnode = node.get_single<AstNode>(RuleType::examples);
-        auto& examples_node = *pnode;
-        auto& examples_line = examples_node.get_token(RuleType::examples_line);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::EXAMPLES);
+        const auto& examplesNode = *pnode;
+        const auto& examplesLine = examplesNode.GetToken(RuleType::EXAMPLES_LINE);
 
-        cms::Examples examples{ get_location(examples_line), get_tags(node), examples_line.matched_keyword.value_or(""), examples_line.matched_text, {}, std::nullopt, {}, next_id() };
+        cms::Examples examples{ GetLocation(examplesLine), GetTags(node), examplesLine.matchedKeyword.value_or(""), examplesLine.matchedText, {}, std::nullopt, {}, NextId() };
 
-        examples_node.set(RuleType::description, examples.description);
+        examplesNode.Set(RuleType::DESCRIPTION, examples.description);
 
-        auto prows = examples_node.get_single<table_rows>(RuleType::examples_table);
+        const auto* prows = examplesNode.GetSingle<table_rows>(RuleType::EXAMPLES_TABLE);
 
-        if (prows)
+        if (prows != nullptr)
         {
-            auto& rows = *prows;
+            const auto& rows = *prows;
 
             examples.tableHeader = rows.front();
 
@@ -252,58 +250,58 @@ namespace cucumber::gherkin
         return examples;
     }
 
-    table_rows AstBuilder::make_examples_table(AstNode& node)
+    table_rows AstBuilder::MakeExamplesTable(AstNode& node)
     {
-        return get_table_rows(node);
+        return GetTableRows(node);
     }
 
-    std::string AstBuilder::make_description(AstNode& node)
+    std::string AstBuilder::MakeDescription(AstNode& node)
     {
-        static const std::regex only_spaces("\\s*");
-        auto toks = node.get_tokens(RuleType::other);
+        static const std::regex onlySpaces("\\s*");
+        auto toks = node.GetTokens(RuleType::OTHER);
         std::size_t ntoks = toks.size();
 
-        while (ntoks && full_match(toks[ntoks - 1].matched_text, only_spaces))
+        while ((ntoks != 0U) && FullMatch(toks[ntoks - 1].matchedText, onlySpaces))
         {
             --ntoks;
         }
 
-        string_views description_lines;
+        string_views descriptionLines;
 
         for (std::size_t i = 0; i < ntoks; ++i)
         {
-            description_lines.emplace_back(toks[i].matched_text);
+            descriptionLines.emplace_back(toks[i].matchedText);
         }
 
-        return join("\n", description_lines);
+        return Join("\n", descriptionLines);
     }
 
-    cms::Feature AstBuilder::make_feature(AstNode& node)
+    cms::Feature AstBuilder::MakeFeature(AstNode& node)
     {
-        auto pnode = node.get_single<AstNode>(RuleType::feature_header);
-        auto& header = *pnode;
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::FEATURE_HEADER);
+        const auto& header = *pnode;
 
-        auto ptoken = header.get_single<Token>(RuleType::feature_line);
-        auto& feature_line = *ptoken;
+        const auto* ptoken = header.GetSingle<Token>(RuleType::FEATURE_LINE);
+        const auto& featureLine = *ptoken;
 
-        cms::Feature feature{ get_location(feature_line), get_tags(header), feature_line.matched_gherkin_dialect, feature_line.matched_keyword.value_or(""), feature_line.matched_text };
+        cms::Feature feature{ GetLocation(featureLine), GetTags(header), featureLine.matchedGherkinDialect, featureLine.matchedKeyword.value_or(""), featureLine.matchedText };
 
-        header.set(RuleType::description, feature.description);
+        header.Set(RuleType::DESCRIPTION, feature.description);
 
-        auto background = node.get_single<cms::Background>(RuleType::background);
+        const auto* background = node.GetSingle<cms::Background>(RuleType::BACKGROUND);
 
-        if (background)
+        if (background != nullptr)
         {
             cms::FeatureChild child;
             child.background = std::make_shared<cms::Background>(*background);
             feature.children.emplace_back(std::make_shared<cms::FeatureChild>(child));
         }
 
-        auto scenarios = node.get_items<cms::Scenario>(RuleType::scenario_definition);
+        const auto* scenarios = node.GetItems<cms::Scenario>(RuleType::SCENARIO_DEFINITION);
 
-        if (scenarios)
+        if (scenarios != nullptr)
         {
-            for (auto& scenario : *scenarios)
+            for (const auto& scenario : *scenarios)
             {
                 cms::FeatureChild child;
                 child.scenario = std::make_shared<cms::Scenario>(scenario);
@@ -311,11 +309,11 @@ namespace cucumber::gherkin
             }
         }
 
-        auto rules = node.get_items<cms::Rule>(RuleType::rule);
+        const auto* rules = node.GetItems<cms::Rule>(RuleType::RULE);
 
-        if (rules)
+        if (rules != nullptr)
         {
-            for (auto& rule : *rules)
+            for (const auto& rule : *rules)
             {
                 cms::FeatureChild child;
                 child.rule = std::make_shared<cms::Rule>(rule);
@@ -326,32 +324,32 @@ namespace cucumber::gherkin
         return feature;
     }
 
-    cms::Rule AstBuilder::make_rule(AstNode& node)
+    cms::Rule AstBuilder::MakeRule(AstNode& node)
     {
-        auto pnode = node.get_single<AstNode>(RuleType::rule_header);
-        auto& header = *pnode;
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::RULE_HEADER);
+        const auto& header = *pnode;
 
-        auto ptoken = header.get_single<Token>(RuleType::rule_line);
-        auto& rule_line = *ptoken;
+        const auto* ptoken = header.GetSingle<Token>(RuleType::RULE_LINE);
+        const auto& ruleLine = *ptoken;
 
-        cms::Rule rule{ get_location(rule_line), get_tags(header), rule_line.matched_keyword.value_or(""), rule_line.matched_text, {}, {}, next_id() };
+        cms::Rule rule{ GetLocation(ruleLine), GetTags(header), ruleLine.matchedKeyword.value_or(""), ruleLine.matchedText, {}, {}, NextId() };
 
-        header.set(RuleType::description, rule.description);
+        header.Set(RuleType::DESCRIPTION, rule.description);
 
-        auto background = node.get_single<cms::Background>(RuleType::background);
+        const auto* background = node.GetSingle<cms::Background>(RuleType::BACKGROUND);
 
-        if (background)
+        if (background != nullptr)
         {
             cms::RuleChild child;
             child.background = std::make_shared<cms::Background>(*background);
             rule.children.emplace_back(std::make_shared<cms::RuleChild>(child));
         }
 
-        auto scenarios = node.get_items<cms::Scenario>(RuleType::scenario_definition);
+        const auto* scenarios = node.GetItems<cms::Scenario>(RuleType::SCENARIO_DEFINITION);
 
-        if (scenarios)
+        if (scenarios != nullptr)
         {
-            for (auto& scenario : *scenarios)
+            for (const auto& scenario : *scenarios)
             {
                 cms::RuleChild child;
                 child.scenario = std::make_shared<cms::Scenario>(scenario);
@@ -362,113 +360,113 @@ namespace cucumber::gherkin
         return rule;
     }
 
-    cms::GherkinDocument AstBuilder::make_gherkin_document(AstNode& node)
+    cms::GherkinDocument AstBuilder::MakeGherkinDocument(AstNode& node)
     {
-        cms::GherkinDocument document{ std::string(uri_), std::nullopt, comments_ };
+        cms::GherkinDocument document{ std::string(uri), std::nullopt, comments };
 
-        node.set(RuleType::feature, document.feature);
+        node.Set(RuleType::FEATURE, document.feature);
 
         return document;
     }
 
-    std::shared_ptr<cms::Location> AstBuilder::get_location(const Token& token, std::size_t column) const
+    std::shared_ptr<cms::Location> AstBuilder::GetLocation(const Token& token, std::size_t column)
     {
         std::size_t col = column == 0 ? token.location.column.value_or(0) : column;
         return std::make_shared<cms::Location>(cms::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt });
     }
 
-    table_rows AstBuilder::get_table_rows(const AstNode& node)
+    table_rows AstBuilder::GetTableRows(const AstNode& node)
     {
         table_rows rows;
 
-        for (const auto& token : node.get_tokens(RuleType::table_row))
+        for (const auto& token : node.GetTokens(RuleType::TABLE_ROW))
         {
             auto row = std::make_shared<cms::TableRow>();
-            row->location = get_location(token);
-            row->cells = get_table_cells(token);
-            row->id = next_id();
+            row->location = GetLocation(token);
+            row->cells = GetTableCells(token);
+            row->id = NextId();
             rows.emplace_back(row);
         }
 
-        ensure_cell_count(rows);
+        EnsureCellCount(rows);
 
         return rows;
     }
 
-    void AstBuilder::ensure_cell_count(const table_rows& rows) const
+    void AstBuilder::EnsureCellCount(const table_rows& rows)
     {
         if (rows.empty())
         {
             return;
         }
 
-        std::size_t cell_count = rows.front()->cells.size();
+        std::size_t const cellCount = rows.front()->cells.size();
 
         for (const auto& row : rows)
         {
-            if (row->cells.size() != cell_count)
+            if (row->cells.size() != cellCount)
             {
                 throw ast_builder_error("inconsistent cell count within the table", { row->location->line, row->location->column.value_or(0) });
             }
         }
     }
 
-    table_cells AstBuilder::get_table_cells(const Token& token)
+    table_cells AstBuilder::GetTableCells(const Token& token)
     {
         table_cells cells;
 
-        for (const auto& cell_item : token.matched_items)
+        for (const auto& cellItem : token.matchedItems)
         {
             auto cell = std::make_shared<cms::TableCell>();
-            cell->location = get_location(token, cell_item.column);
-            cell->value = cell_item.text;
+            cell->location = GetLocation(token, cellItem.column);
+            cell->value = cellItem.text;
             cells.emplace_back(cell);
         }
 
         return cells;
     }
 
-    tags AstBuilder::get_tags(const AstNode& node)
+    tags AstBuilder::GetTags(const AstNode& node)
     {
-        tags tag_list;
+        tags tagList;
 
-        auto pnode = node.get_single<AstNode>(RuleType::tags);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::TAGS);
 
-        if (pnode)
+        if (pnode != nullptr)
         {
-            auto& tags_node = *pnode;
+            const auto& tagsNode = *pnode;
 
-            for (const auto& token : tags_node.get_tokens(RuleType::tag_line))
+            for (const auto& token : tagsNode.GetTokens(RuleType::TAG_LINE))
             {
-                for (auto& tag_item : token.matched_items)
+                for (const auto& tagItem : token.matchedItems)
                 {
-                    cms::Tag tag{ get_location(token, tag_item.column), tag_item.text, next_id() };
+                    cms::Tag tag{ GetLocation(token, tagItem.column), tagItem.text, NextId() };
 
-                    tag_list.emplace_back(std::make_shared<cms::Tag>(std::move(tag)));
+                    tagList.emplace_back(std::make_shared<cms::Tag>(std::move(tag)));
                 }
             }
         }
 
-        return tag_list;
+        return tagList;
     }
 
-    AstNode AstBuilder::pop_node()
+    AstNode AstBuilder::PopNode()
     {
-        AstNode popped_node = std::move(current_node());
+        AstNode poppedNode = std::move(CurrentNode());
 
-        stack_.pop();
+        stack.pop();
 
-        return popped_node;
+        return poppedNode;
     }
 
-    AstNode& AstBuilder::current_node()
+    AstNode& AstBuilder::CurrentNode()
     {
-        return stack_.top();
+        return stack.top();
     }
 
-    const AstNode& AstBuilder::current_node() const
+    const AstNode& AstBuilder::CurrentNode() const
     {
-        return stack_.top();
+        return stack.top();
     }
 
 }

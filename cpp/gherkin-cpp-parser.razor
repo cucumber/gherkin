@@ -13,11 +13,11 @@ public static string ToSnakeCase(string str)
 }
 
 public static string NameOf(Rule rule)
-{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+{ return ToSnakeCase(rule.Name.Replace("#", "")).ToUpper(); }
 }
 @helper CallProduction(ProductionRule production)
 {
-  var rname = ToSnakeCase(production.RuleName);
+  var rname = ToSnakeCase(production.RuleName).ToUpper();
 
   switch(production.Type)
   {
@@ -51,10 +51,20 @@ public static string NameOf(Rule rule)
 @helper MatchToken(TokenType tokenType)
 {<text>match_@(ToSnakeCase(tokenType.Name))(context, token)</text>}
 // This File is generated. Do not edit! Edit gherkin-cpp-Parser.razor instead.
-#pragma once
+#ifndef CUCUMBER_GHERKIN_PARSER_HPP
+#define CUCUMBER_GHERKIN_PARSER_HPP
 
+#include "cucumber/gherkin/ast_builder.hpp"
+#include "cucumber/gherkin/exceptions.hpp"
 #include "cucumber/gherkin/parser_base.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
+#include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/token_matcher.hpp"
+#include "cucumber/gherkin/token_scanner.hpp"
+#include <cstddef>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
 namespace cucumber::gherkin
 {
@@ -258,3 +268,5 @@ namespace cucumber::gherkin
     };
 
 }
+
+#endif

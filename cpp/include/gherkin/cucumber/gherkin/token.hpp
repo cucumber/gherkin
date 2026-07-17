@@ -22,20 +22,20 @@ namespace cucumber::gherkin
     {
         bool eof = false;
         cucumber::gherkin::Line line;
-        RuleType matched_type;
-        std::optional<std::string> matched_keyword;
-        std::optional<cms::StepKeywordType> matched_keyword_type;
-        std::size_t matched_indent = 0;
-        cucumber::gherkin::items matched_items;
-        std::string matched_text;
-        std::string matched_gherkin_dialect;
+        RuleType matchedType = RuleType::NONE;
+        std::optional<std::string> matchedKeyword;
+        std::optional<cms::StepKeywordType> matchedKeywordType;
+        std::size_t matchedIndent = 0;
+        cucumber::gherkin::items matchedItems;
+        std::string matchedText;
+        std::string matchedGherkinDialect;
         cms::Location location;
 
-        bool is_eof() const;
+        [[nodiscard]] bool IsEof() const;
 
-        void detach();
+        void Detach();
 
-        std::string_view value() const;
+        [[nodiscard]] std::string_view Value() const;
     };
 
     using tokens = std::vector<Token>;

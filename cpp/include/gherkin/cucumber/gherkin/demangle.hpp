@@ -10,20 +10,19 @@ namespace cucumber::gherkin
     namespace detail
     {
 
-        auto demangle(std::string&& name) -> std::unique_ptr<char, void (*)(char*)>;
-
+        auto Demangle(const std::string& name) -> std::unique_ptr<char, void (*)(char*)>;
     }
 
     template<typename T>
-    auto declname()
+    auto Declname()
     {
-        return detail::demangle(typeid(T).name());
+        return detail::Demangle(typeid(T).name());
     }
 
     template<typename T>
-    auto declname(T&& value)
+    auto Declname([[maybe_unused]] T&& /*value*/) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        return declname<T>();
+        return Declname<T>();
     }
 
 }

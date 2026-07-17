@@ -15,7 +15,7 @@ namespace cucumber::gherkin
     {
 
         template<typename Container>
-        std::size_t join_container_impl(std::ostream& ostream, const std::string& separator, const Container& container)
+        std::size_t JoinContainerImpl(std::ostream& ostream, const std::string& separator, const Container& container)
         {
             if (!container.empty())
             {
@@ -37,7 +37,7 @@ namespace cucumber::gherkin
     template<typename T>
     struct IsJoinableContainer
     {
-        using type = std::conditional_t<is_vector_v<T> || is_set_v<T> || is_unordered_set_v<T>, std::true_type, std::false_type>;
+        using type = std::conditional_t<isVectorV<T> || isSetV<T> || isUnorderedSetV<T>, std::true_type, std::false_type>;
 
         static constexpr typename type::value_type value = type::value;
     };
@@ -46,47 +46,47 @@ namespace cucumber::gherkin
     using is_joinable_container_t = typename IsJoinableContainer<T>::type;
 
     template<typename T>
-    constexpr bool is_joinable_container_v = IsJoinableContainer<T>::value;
+    constexpr bool isJoinableContainerV = IsJoinableContainer<T>::value;
 
     template<typename... Args>
-    void join_item_impl(std::ostream& ostream, const std::string& separator, Args&&... args)
+    void JoinItemImpl(std::ostream& ostream, const std::string& separator, Args&&... args)
     {
-        std::size_t prev_count = 0;
+        std::size_t prevCount = 0;
 
-        auto join_arg = [&](auto&& arg)
+        auto joinArg = [&](auto&& arg)
         {
             using type = std::decay_t<decltype(arg)>;
 
-            if constexpr (is_joinable_container_v<type>)
+            if constexpr (isJoinableContainerV<type>)
             {
-                if (prev_count && !arg.empty())
+                if (prevCount && !arg.empty())
                 {
                     ostream << separator;
                 }
 
-                prev_count += detail::join_container_impl(ostream, separator, arg);
+                prevCount += detail::JoinContainerImpl(ostream, separator, arg);
             }
             else
             {
-                if (prev_count)
+                if (prevCount)
                 {
                     ostream << separator;
                 }
 
                 ostream << arg;
-                ++prev_count;
+                ++prevCount;
             }
         };
 
-        (join_arg(std::forward<Args>(args)), ...);
+        (joinArg(std::forward<Args>(args)), ...);
     }
 
     template<typename... Args>
-    std::string join(const std::string& separator, Args&&... args)
+    std::string Join(const std::string& separator, Args&&... args)
     {
         std::ostringstream stream;
 
-        join_item_impl(stream, separator, std::forward<Args>(args)...);
+        JoinItemImpl(stream, separator, std::forward<Args>(args)...);
 
         return stream.str();
     }

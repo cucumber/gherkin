@@ -6,7 +6,7 @@
 
 namespace cucumber::gherkin
 {
-    const keywords_maps& all_keywords()
+    const keywords_maps& AllKeywords()
     {
         static const keywords_maps kwms = {
             {
@@ -1294,9 +1294,9 @@ namespace cucumber::gherkin
         return kwms;
     }
 
-    const keywords_map& keywords(const std::string_view& language)
+    const keywords_map& Keywords(const std::string_view& language)
     {
-        return all_keywords().at(language);
+        return AllKeywords().at(language);
     }
 }
 

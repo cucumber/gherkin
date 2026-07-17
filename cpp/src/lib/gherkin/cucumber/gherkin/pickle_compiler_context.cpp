@@ -6,12 +6,12 @@
 namespace cucumber::gherkin
 {
 
-    std::string PickleCompilerContext::next_id()
+    std::string PickleCompilerContext::NextId()
     {
-        return idp->next_id();
+        return idp->NextId();
     }
 
-    void PickleCompilerContext::add_pickle(cms::Pickle& pickle)
+    void PickleCompilerContext::AddPickle(cms::Pickle& pickle)
     {
         if (sink)
         {

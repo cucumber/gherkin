@@ -23,54 +23,58 @@ namespace cucumber::gherkin
     class TokenMatcher
     {
     public:
-        TokenMatcher(const std::string& dialect_name = "en");
+        TokenMatcher(const std::string& dialectName = "en");
         virtual ~TokenMatcher();
+        TokenMatcher(const TokenMatcher&) = delete;
+        TokenMatcher& operator=(const TokenMatcher&) = delete;
+        TokenMatcher(TokenMatcher&&) = delete;
+        TokenMatcher& operator=(TokenMatcher&&) = delete;
 
-        void reset();
+        void Reset();
 
-        bool match_feature_line(Token& token);
-        bool match_rule_line(Token& token);
-        bool match_scenario_line(Token& token);
-        bool match_background_line(Token& token);
-        bool match_examples_line(Token& token);
-        bool match_language(Token& token);
-        bool match_tag_line(Token& token);
-        bool match_e_o_f(Token& token);
-        bool match_empty(Token& token);
-        bool match_comment(Token& token);
-        bool match_other(Token& token);
-        bool match_step_line(Token& token);
-        bool match_doc_string_separator(Token& token);
-        bool match_table_row(Token& token);
+        bool MatchFeatureLine(Token& token);
+        bool MatchRuleLine(Token& token);
+        bool MatchScenarioLine(Token& token);
+        bool MatchBackgroundLine(Token& token);
+        bool MatchExamplesLine(Token& token);
+        bool MatchLanguage(Token& token);
+        bool MatchTagLine(Token& token);
+        bool MatchEOF(Token& token);
+        bool MatchEmpty(Token& token);
+        bool MatchComment(Token& token);
+        bool MatchOther(Token& token);
+        bool MatchStepLine(Token& token);
+        bool MatchDocStringSeparator(Token& token);
+        bool MatchTableRow(Token& token);
 
     private:
-        bool match_doc_string_separator_(Token& token, std::string_view separator, bool is_open);
+        bool MatchDocStringSeparator(Token& token, std::string_view separator, bool isOpen);
 
-        bool match_title_line(Token& token, RuleType token_type, string_views keywords);
+        bool MatchTitleLine(Token& token, RuleType tokenType, const string_views& keywords);
 
         struct TokenInfo
         {
             std::optional<std::string> text;
             std::optional<std::string> keyword;
-            std::optional<cms::StepKeywordType> keyword_type;
+            std::optional<cms::StepKeywordType> keywordType;
             std::optional<std::size_t> indent;
             cucumber::gherkin::items items;
         };
 
-        void set_token_matched(Token& token, RuleType matched_type, const TokenInfo& info = {});
+        void SetTokenMatched(Token& token, RuleType matchedType, const TokenInfo& info = {});
 
-        const string_views& keywords(std::string_view keyword) const;
+        const string_views& Keywords(std::string_view keyword) const;
 
-        cucumber::messages::StepKeywordType keyword_type(std::string_view keyword) const;
+        cucumber::messages::StepKeywordType KeywordType(std::string_view keyword) const;
 
-        void change_dialect(const std::string& dialect_name, const cms::Location& location = { 1, 1 });
+        void ChangeDialect(const std::string& dialectName, const cms::Location& location = { 1, 1 });
 
-        std::string unescape_docstring(const std::string& text) const;
+        std::string UnescapeDocstring(const std::string& text) const;
 
-        std::string dialect_name_;
-        keyword_types_map keyword_types_;
-        std::string active_doc_string_separator_;
-        std::size_t indent_to_remove_;
+        std::string dialectName;
+        keyword_types_map keywordTypes;
+        std::string activeDocStringSeparator;
+        std::size_t indentToRemove = 0;
     };
 
 }

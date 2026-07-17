@@ -22,13 +22,13 @@ namespace cucumber::gherkin
         string_views matches;
     };
 
-    void split(const std::string& pattern, const std::string& expr, strings& list);
+    void Split(const std::string& pattern, const std::string& expr, strings& list);
 
-    strings split(const std::string& pattern, const std::string& expr);
+    strings Split(const std::string& pattern, const std::string& expr);
 
-    std::string subst(const std::string& source, const std::string& pattern, const std::string& what = {});
+    std::string Subst(const std::string& source, const std::string& pattern, const std::string& what = {});
 
-    void subst(std::string& source, const std::string& pattern, const std::string& what = {});
+    void Subst(std::string& source, const std::string& pattern, const std::string& what = {});
 
     namespace detail
     {
@@ -37,93 +37,93 @@ namespace cucumber::gherkin
         {};
 
         template<typename CharT, typename SubMatch, typename Arg = NullArg>
-        auto extract_submatch(const SubMatch& submatch, Arg&& argument)
+        auto ExtractSubmatch(const SubMatch& submatch, Arg&& argument) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             using arg_type = std::decay_t<Arg>;
             using sv_type = std::basic_string_view<CharT>;
 
-            constexpr bool is_string = std::is_same_v<arg_type, std::basic_string<CharT>> || std::is_same_v<arg_type, std::basic_string_view<CharT>>;
+            constexpr bool isString = std::is_same_v<arg_type, std::basic_string<CharT>> || std::is_same_v<arg_type, std::basic_string_view<CharT>>;
 
-            constexpr bool is_number = std::is_integral_v<arg_type> || std::is_floating_point_v<arg_type>;
+            constexpr bool isNumber = std::is_integral_v<arg_type> || std::is_floating_point_v<arg_type>;
 
-            sv_type view{ submatch.first, static_cast<std::size_t>(submatch.length()) };
+            sv_type const view{ submatch.first, static_cast<std::size_t>(submatch.length()) };
 
-            if constexpr (is_string)
+            if constexpr (isString)
             {
                 argument.assign(view);
             }
-            else if constexpr (is_number)
+            else if constexpr (isNumber)
             {
                 auto [ptr, error_code] = std::from_chars(view.begin(), view.end(), argument);
 
-                die_unless(error_code == std::errc(), "failed to convert \"", view, "\" to ", declname(argument));
+                DieUnless(error_code == std::errc(), "failed to convert \"", view, "\" to ", Declname(argument));
             }
             else if constexpr (!std::is_same_v<arg_type, NullArg>)
             {
-                die("unsupported argument: ", declname(argument));
+                die("unsupported argument: ", Declname(argument));
             }
 
             return view;
         }
 
         template<std::size_t N, typename MatchResult>
-        void check_match_args(MatchResult&& match_result)
+        void CheckMatchArgs(const MatchResult& matchResult)
         {
             if constexpr (N > 0)
             {
-                auto expected = match_result.size() - 1;
+                auto expected = matchResult.size() - 1;
 
-                die_unless(N == expected, "incorrect match args: ", "expected ", expected, ", got ", N);
+                DieUnless(N == expected, "incorrect match args: ", "expected ", expected, ", got ", N);
             }
         }
 
         template<typename CharT, typename MatchResult, typename... Args>
-        void extract_submatches(MatchResult&& match_result, Args&&... args)
+        void ExtractSubmatches(const MatchResult& matchResult, Args&&... args)
         {
             constexpr auto nargs = sizeof...(args);
 
-            check_match_args<nargs>(match_result);
+            CheckMatchArgs<nargs>(matchResult);
 
-            auto match_iter = match_result.begin();
+            auto matchIter = matchResult.begin();
 
             if constexpr (nargs > 0)
             {
-                (extract_submatch<CharT>(*++match_iter, std::forward<Args>(args)), ...);
+                (ExtractSubmatch<CharT>(*++matchIter, std::forward<Args>(args)), ...);
             }
         }
 
         template<typename CharT, typename Traits, typename MatchResult>
-        void extract_submatches(MatchResult&& match_result, std::vector<std::basic_string_view<CharT, Traits>>& views)
+        void ExtractSubmatches(const MatchResult& matchResult, std::vector<std::basic_string_view<CharT, Traits>>& views)
         {
-            auto match_iter = match_result.begin();
+            auto matchIter = matchResult.begin();
 
-            while (++match_iter != match_result.end())
+            while (++matchIter != matchResult.end())
             {
-                views.push_back(std::basic_string_view<CharT, Traits>{ match_iter->first, match_iter->second });
+                views.push_back(std::basic_string_view<CharT, Traits>{ matchIter->first, matchIter->second });
             }
         }
 
     }
 
     template<typename CharT, typename Traits, typename ReTraits, typename... Args>
-    bool full_match(std::basic_string_view<CharT, Traits> expression, const std::basic_regex<CharT, ReTraits>& regex, Args&&... args)
+    bool FullMatch(std::basic_string_view<CharT, Traits> expression, const std::basic_regex<CharT, ReTraits>& regex, Args&&... args)
     {
-        std::match_results<const CharT*> match_result;
-        auto begin_ptr = expression.data();
-        auto end_ptr = expression.data() + expression.size();
+        std::match_results<const CharT*> matchResult;
+        auto beginPtr = expression.data();
+        auto endPtr = expression.data() + expression.size();
 
-        bool match = std::regex_match(begin_ptr, end_ptr, match_result, regex);
+        bool const match = std::regex_match(beginPtr, endPtr, matchResult, regex);
 
         if (match)
         {
-            detail::extract_submatches<CharT>(match_result, std::forward<Args>(args)...);
+            detail::ExtractSubmatches<CharT>(matchResult, std::forward<Args>(args)...);
         }
 
         return match;
     }
 
     template<typename CharT, typename Traits, typename... Args>
-    bool full_match(std::basic_string_view<CharT, Traits> expression, std::basic_string_view<CharT, Traits> pat, Args&&... args)
+    bool FullMatch(std::basic_string_view<CharT, Traits> expression, std::basic_string_view<CharT, Traits> pat, Args&&... args) // NOLINT(bugprone-easily-swappable-parameters)
     {
         std::basic_regex<CharT> regex(pat.data(), pat.size());
 
@@ -131,22 +131,22 @@ namespace cucumber::gherkin
     }
 
     template<typename CharT, typename Traits, typename Allocator, typename... Args>
-    bool full_match(const std::basic_string<CharT, Traits, Allocator>& expression, Args&&... args)
+    bool FullMatch(const std::basic_string<CharT, Traits, Allocator>& expression, Args&&... args)
     {
-        return full_match(std::basic_string_view<CharT, Traits>{ expression.data(), expression.size() }, std::forward<Args>(args)...);
+        return FullMatch(std::basic_string_view<CharT, Traits>{ expression.data(), expression.size() }, std::forward<Args>(args)...);
     }
 
     template<typename CharT, typename Traits, typename... Args>
-    bool partial_match(std::basic_string_view<CharT, Traits> expression, std::basic_string_view<CharT, Traits> pat, Args&&... args)
+    bool PartialMatch(std::basic_string_view<CharT, Traits> expression, std::basic_string_view<CharT, Traits> pat, Args&&... args) // NOLINT(bugprone-easily-swappable-parameters)
     {
-        std::match_results<const CharT*> match_result;
+        std::match_results<const CharT*> matchResult;
         std::regex regex(pat.data(), pat.size());
 
-        bool match = std::regex_search(expression.begin(), expression.end(), match_result, regex);
+        bool match = std::regex_search(expression.begin(), expression.end(), matchResult, regex);
 
         if (match)
         {
-            detail::extract_submatches(match_result, std::forward<Args>(args)...);
+            detail::ExtractSubmatches(matchResult, std::forward<Args>(args)...);
         }
 
         return match;

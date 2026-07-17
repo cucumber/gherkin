@@ -7,73 +7,73 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <utility>
 
 namespace cucumber::gherkin
 {
 
     TokenFormatterBuilder::TokenFormatterBuilder(id_generator_ptr idp)
-        : idp_(idp)
+        : idp(std::move(std::move(idp)))
     {}
 
-    TokenFormatterBuilder::~TokenFormatterBuilder()
-    {}
+    TokenFormatterBuilder::~TokenFormatterBuilder() = default;
 
-    void TokenFormatterBuilder::reset(std::string_view uri)
+    void TokenFormatterBuilder::Reset([[maybe_unused]] std::string_view uri)
     {
-        formatted_tokens_.clear();
+        formattedTokens.clear();
     }
 
-    void TokenFormatterBuilder::start_rule(RuleType RuleType)
+    void TokenFormatterBuilder::StartRule(RuleType ruleType)
     {}
 
-    void TokenFormatterBuilder::end_rule(RuleType RuleType)
+    void TokenFormatterBuilder::EndRule(RuleType ruleType)
     {}
 
-    void TokenFormatterBuilder::build(const Token& token)
+    void TokenFormatterBuilder::Build(const Token& token)
     {
-        formatted_tokens_.emplace_back(format_token(token));
+        formattedTokens.emplace_back(FormatToken(token));
     }
 
-    strings TokenFormatterBuilder::get_result() const
+    strings TokenFormatterBuilder::GetResult() const
     {
-        return formatted_tokens_;
+        return formattedTokens;
     }
 
-    std::string TokenFormatterBuilder::format_token(const Token& token)
+    std::string TokenFormatterBuilder::FormatToken(const Token& token)
     {
-        if (token.is_eof())
+        if (token.IsEof())
         {
             return "EOF";
         }
 
         std::ostringstream stream;
 
-        stream << "(" << token.location.line << ":" << token.location.column.value_or(0) << ")" << token.matched_type << ":";
+        stream << "(" << token.location.line << ":" << token.location.column.value_or(0) << ")" << token.matchedType << ":";
 
-        if (token.matched_keyword)
+        if (token.matchedKeyword)
         {
             stream << "(";
 
-            if (token.matched_keyword_type)
+            if (token.matchedKeywordType)
             {
-                stream << *token.matched_keyword_type;
+                stream << *token.matchedKeywordType;
             }
 
-            stream << ")" << token.matched_keyword.value();
+            stream << ")" << token.matchedKeyword.value();
         }
 
-        stream << "/" << token.matched_text << "/";
+        stream << "/" << token.matchedText << "/";
 
-        if (!token.matched_items.empty())
+        if (!token.matchedItems.empty())
         {
             strings items;
 
-            for (const auto& matched_item : token.matched_items)
+            for (const auto& matchedItem : token.matchedItems)
             {
-                items.emplace_back(std::to_string(matched_item.column) + ":" + matched_item.text);
+                items.emplace_back(std::to_string(matchedItem.column) + ":" + matchedItem.text);
             }
 
-            stream << join(",", items);
+            stream << Join(",", items);
         }
 
         return stream.str();

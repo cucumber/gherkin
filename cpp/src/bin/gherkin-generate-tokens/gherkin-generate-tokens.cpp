@@ -11,20 +11,20 @@ int main(int argc, char** argv)
     using builder = cucumber::gherkin::TokenFormatterBuilder;
     using Parser = cucumber::gherkin::Parser<builder>;
 
-    Parser token_parser;
+    Parser tokenParser;
 
     for (std::size_t i = 1; i < argc; ++i)
     {
-        std::string File(argv[i]);
+        std::string const file(argv[i]); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
-        auto data = cucumber::gherkin::slurp(File);
+        auto data = cucumber::gherkin::Slurp(file);
 
-        auto formatted_tokens = token_parser.parse(File, data);
+        auto formattedTokens = tokenParser.Parse(file, data);
 
-        std::cout << cucumber::gherkin::join("\n", formatted_tokens);
+        std::cout << cucumber::gherkin::Join("\n", formattedTokens);
     }
 
-    std::cout << std::endl;
+    std::cout << '\n';
 
     return 0;
 }

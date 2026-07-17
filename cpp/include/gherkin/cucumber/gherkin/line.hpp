@@ -13,31 +13,31 @@ namespace cucumber::gherkin
     {
     public:
         Line();
-        Line(const std::string& line_text, std::size_t line_number);
+        Line(const std::string& lineText, std::size_t lineNumber);
 
-        std::string get_rest_trimmed(std::size_t length) const;
-        std::string get_keyword_trimmed(std::string_view keyword) const;
+        [[nodiscard]] std::string GetRestTrimmed(std::size_t length) const;
+        [[nodiscard]] std::string GetKeywordTrimmed(std::string_view keyword) const;
 
-        std::string_view get_line_text(std::size_t indent_to_remove = std::string::npos) const;
+        [[nodiscard]] std::string_view GetLineText(std::size_t indentToRemove = std::string::npos) const;
 
-        std::string_view line_text() const;
+        [[nodiscard]] std::string_view LineText() const;
 
-        std::size_t indent() const;
+        [[nodiscard]] std::size_t Indent() const;
 
-        bool is_empty() const;
+        [[nodiscard]] bool IsEmpty() const;
 
-        bool startswith(std::string_view prefix) const;
-        bool startswith_title_keyword(const std::string& keyword) const;
+        [[nodiscard]] bool Startswith(std::string_view prefix) const;
+        [[nodiscard]] bool StartswithTitleKeyword(const std::string& keyword) const;
 
-        items table_cells() const;
+        [[nodiscard]] items TableCells() const;
 
-        items tags() const;
+        [[nodiscard]] items Tags() const;
 
     private:
-        std::string line_text_;
-        std::size_t line_number_ = 0;
-        std::size_t indent_ = 0;
-        std::string trimmed_line_text_;
+        std::string lineText;
+        std::size_t lineNumber = 0;
+        std::size_t indent = 0;
+        std::string trimmedLineText;
     };
 
 }

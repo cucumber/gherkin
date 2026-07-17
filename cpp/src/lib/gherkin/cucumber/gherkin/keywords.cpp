@@ -6,28 +6,28 @@
 namespace cucumber::gherkin
 {
 
-    const string_views& keywords(const std::string_view& language, const std::string_view& keyword)
+    const string_views& Keywords(const std::string_view& language, const std::string_view& keyword)
     {
-        return all_keywords().at(language).at(keyword);
+        return AllKeywords().at(language).at(keyword);
     }
 
-    string_views keywords(const std::string_view& language, const string_views& keyword_names)
+    string_views Keywords(const std::string_view& language, const string_views& keywordNames)
     {
         string_views views;
 
-        for (const auto& keyword : keyword_names)
+        for (const auto& keyword : keywordNames)
         {
-            auto keyword_views = keywords(language, keyword);
-            views.insert(views.end(), keyword_views.begin(), keyword_views.end());
+            auto keywordViews = Keywords(language, keyword);
+            views.insert(views.end(), keywordViews.begin(), keywordViews.end());
         }
 
         return views;
     }
 
-    Dialect get_dialect(const std::string_view& language)
+    Dialect GetDialect(const std::string_view& language)
     {
-        return { keywords(language, "feature"), keywords(language, "rule"), keywords(language, "scenario"), keywords(language, "scenarioOutline"), keywords(language, "background"),
-            keywords(language, "examples"), keywords(language, "given"), keywords(language, "when"), keywords(language, "then"), keywords(language, "and"), keywords(language, "but") };
+        return { Keywords(language, "feature"), Keywords(language, "rule"), Keywords(language, "scenario"), Keywords(language, "scenarioOutline"), Keywords(language, "background"),
+            Keywords(language, "examples"), Keywords(language, "given"), Keywords(language, "when"), Keywords(language, "then"), Keywords(language, "and"), Keywords(language, "but") };
     }
 
 }

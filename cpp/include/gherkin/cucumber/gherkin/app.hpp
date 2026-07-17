@@ -22,23 +22,27 @@ namespace cucumber::gherkin
 
         App();
         virtual ~App();
+        App(const App&) = delete;
+        App& operator=(const App&) = delete;
+        App(App&&) = delete;
+        App& operator=(App&&) = delete;
 
-        void include_source(bool enabled);
-        void include_ast(bool enabled);
-        void include_pickles(bool enabled);
+        void IncludeSource(bool enabled);
+        void IncludeAst(bool enabled);
+        void IncludePickles(bool enabled);
 
-        void parse(const File& source_file, const Callbacks& Callbacks = {});
-        void parse(const cms::Envelope& envelope, const Callbacks& Callbacks = {});
-        void parse(const cms::Source& source, const Callbacks& Callbacks = {});
+        void Parse(const File& sourceFile, const Callbacks& callbacks = {});
+        void Parse(const cms::Envelope& envelope, const Callbacks& callbacks = {});
+        void Parse(const cms::Source& source, const Callbacks& callbacks = {});
 
     private:
-        void send_parse_error(const std::string& uri, const ParserError& error, const Callbacks& Callbacks) const;
+        static void SendParseError(const std::string& uri, const ParserError& error, const Callbacks& callbacks);
 
-        id_generator_ptr idp_;
-        Parser p_;
-        bool include_source_ = true;
-        bool include_ast_ = true;
-        bool include_pickles_ = true;
+        id_generator_ptr idp;
+        Parser p;
+        bool includeSource = true;
+        bool includeAst = true;
+        bool includePickles = true;
     };
 
 }

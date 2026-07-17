@@ -19,24 +19,27 @@ namespace cucumber::gherkin
         ParserError(const std::string& message, const cms::Location& location);
 
         ParserError(const ParserError& other);
+        ParserError& operator=(const ParserError&) = default;
+        ParserError(ParserError&&) = default;
+        ParserError& operator=(ParserError&&) = default;
 
-        virtual ~ParserError();
+        ~ParserError() override;
 
-        std::string make_message(const std::string& message, const cms::Location& location) const;
+        static std::string MakeMessage(const std::string& message, const cms::Location& location);
 
-        bool same_message(const ParserError& other) const;
+        [[nodiscard]] bool SameMessage(const ParserError& other) const;
 
-        const cms::Location& location() const;
+        [[nodiscard]] const cms::Location& Location() const;
 
     private:
-        cms::Location location_;
+        cms::Location location;
     };
 
     using parser_error_ptr = std::shared_ptr<ParserError>;
     using parser_error_ptrs = std::vector<parser_error_ptr>;
 
     template<typename Error, typename... Args>
-    parser_error_ptr new_parser_error(Args&&... args)
+    parser_error_ptr NewParserError(Args&&... args)
     {
         return std::make_shared<Error>(std::forward<Args>(args)...);
     }
@@ -48,53 +51,69 @@ namespace cucumber::gherkin
     public:
         NoSuchLanguageError(const std::string& language, const cms::Location& location);
 
-        virtual ~NoSuchLanguageError();
+        ~NoSuchLanguageError() override;
+        NoSuchLanguageError(const NoSuchLanguageError&) = default;
+        NoSuchLanguageError& operator=(const NoSuchLanguageError&) = default;
+        NoSuchLanguageError(NoSuchLanguageError&&) = default;
+        NoSuchLanguageError& operator=(NoSuchLanguageError&&) = default;
     };
 
     class UnexpectedToken : public ParserError
     {
     public:
-        UnexpectedToken(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment);
+        UnexpectedToken(const Token& receivedToken, const std::string& expectedTokens, std::string stateComment);
 
-        virtual ~UnexpectedToken();
+        ~UnexpectedToken() override;
+        UnexpectedToken(const UnexpectedToken&) = default;
+        UnexpectedToken& operator=(const UnexpectedToken&) = default;
+        UnexpectedToken(UnexpectedToken&&) = default;
+        UnexpectedToken& operator=(UnexpectedToken&&) = default;
 
-        std::string make_message(const Token& received_token, const std::string& expected_tokens) const;
+        static std::string MakeMessage(const Token& receivedToken, const std::string& expectedTokens);
 
-        cms::Location make_location(const Token& received_token) const;
+        static cms::Location MakeLocation(const Token& receivedToken);
 
     private:
-        Token received_token_;
-        std::string expected_tokens_;
-        std::string state_comment_;
+        Token receivedToken;
+        std::string expectedTokens;
+        std::string stateComment;
     };
 
     class UnexpectedEof : public ParserError
     {
     public:
-        UnexpectedEof(const Token& received_token, const std::string& expected_tokens, const std::string& state_comment);
+        UnexpectedEof(const Token& receivedToken, const std::string& expectedTokens, std::string stateComment);
 
-        virtual ~UnexpectedEof();
+        ~UnexpectedEof() override;
+        UnexpectedEof(const UnexpectedEof&) = default;
+        UnexpectedEof& operator=(const UnexpectedEof&) = default;
+        UnexpectedEof(UnexpectedEof&&) = default;
+        UnexpectedEof& operator=(UnexpectedEof&&) = default;
 
-        std::string make_message(const std::string& expected_tokens) const;
+        static std::string MakeMessage(const std::string& expectedTokens);
 
     private:
-        std::string expected_tokens_;
-        std::string state_comment_;
+        std::string expectedTokens;
+        std::string stateComment;
     };
 
     class CompositeParserError : public ParserError
     {
     public:
-        CompositeParserError(const parser_error_ptrs& ptrs);
+        CompositeParserError(parser_error_ptrs ptrs);
 
-        virtual ~CompositeParserError();
+        ~CompositeParserError() override;
+        CompositeParserError(const CompositeParserError&) = default;
+        CompositeParserError& operator=(const CompositeParserError&) = default;
+        CompositeParserError(CompositeParserError&&) = default;
+        CompositeParserError& operator=(CompositeParserError&&) = default;
 
-        std::string make_message(const parser_error_ptrs& ptrs) const;
+        static std::string MakeMessage(const parser_error_ptrs& ptrs);
 
-        const parser_error_ptrs& errors() const;
+        [[nodiscard]] const parser_error_ptrs& Errors() const;
 
     private:
-        parser_error_ptrs ptrs_;
+        parser_error_ptrs ptrs;
     };
 
 }

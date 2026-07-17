@@ -17,46 +17,46 @@ namespace cucumber::gherkin
     using unescape_pair = std::pair<std::string, std::string>;
     using unescapes = std::vector<unescape_pair>;
 
-    static const unescapes line_unescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
+    static const unescapes lineUnescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
 
     template<typename Callabble>
-    void split_table_cells(std::string_view row, Callabble&& cell_cb)
+    void SplitTableCells(std::string_view row, Callabble&& cellCb)
     {
-        auto wrow = to_wide(std::string(row));
+        auto wrow = ToWide(std::string(row));
 
         std::size_t col = 0;
-        std::size_t start_col = col + 1;
+        std::size_t startCol = col + 1;
         std::wstring cell;
-        bool first_cell = true;
+        bool firstCell = true;
         auto current = wrow.begin();
         auto end = wrow.end();
-        auto next_ch = [](auto& current, const auto& end_iter)
+        auto nextCh = [](auto& current, const auto& endIter)
         {
-            return current != end_iter ? *current++ : 0;
+            return current != endIter ? *current++ : 0;
         };
 
         while (col < row.size())
         {
-            auto character = next_ch(current, end);
+            auto character = nextCh(current, end);
             ++col;
 
             if (character == '|')
             {
-                if (first_cell)
+                if (firstCell)
                 {
-                    first_cell = false;
+                    firstCell = false;
                 }
                 else
                 {
-                    cell_cb(cell, start_col);
+                    std::forward<Callabble>(cellCb)(cell, startCol);
                 }
 
                 cell.clear();
-                start_col = col + 1;
+                startCol = col + 1;
             }
             else if (character == '\\')
             {
-                character = next_ch(current, end);
+                character = nextCh(current, end);
                 ++col;
 
                 if (character == 'n')
@@ -80,123 +80,119 @@ namespace cucumber::gherkin
         }
     }
 
-    Line::Line()
-    {}
+    Line::Line() = default;
 
-    Line::Line(const std::string& line_text, std::size_t line_number)
-        : line_text_(line_text)
-        , line_number_(line_number)
-        , trimmed_line_text_(lstrip(line_text_))
+    Line::Line(const std::string& lineText, std::size_t lineNumber)
+        : lineText(lineText)
+        , lineNumber(lineNumber)
+        , trimmedLineText(Lstrip(lineText))
     {
-        indent_ = line_text_.size() - trimmed_line_text_.size();
+        indent = lineText.size() - trimmedLineText.size();
     }
 
-    std::string Line::get_rest_trimmed(std::size_t length) const
+    std::string Line::GetRestTrimmed(std::size_t length) const
     {
-        auto pos = std::min(length, trimmed_line_text_.size());
+        auto pos = std::min(length, trimmedLineText.size());
 
-        return strip(trimmed_line_text_.substr(pos));
+        return Strip(trimmedLineText.substr(pos));
     }
 
-    std::string Line::get_keyword_trimmed(std::string_view keyword) const
+    std::string Line::GetKeywordTrimmed(std::string_view keyword) const
     {
         // Keyword ends with ':'
-        return get_rest_trimmed(keyword.size() + 1);
+        return GetRestTrimmed(keyword.size() + 1);
     }
 
-    std::string_view Line::get_line_text(std::size_t indent_to_remove) const
+    std::string_view Line::GetLineText(std::size_t indentToRemove) const
     {
         std::string_view view;
 
-        if (indent_to_remove == std::string::npos || indent_to_remove > indent_)
+        if (indentToRemove == std::string::npos || indentToRemove > indent)
         {
-            return trimmed_line_text_;
+            return trimmedLineText;
         }
-        else
-        {
-            view = line_text_;
-            return view.substr(indent_to_remove);
-        }
+        view = lineText;
+        return view.substr(indentToRemove);
     }
 
-    std::string_view Line::line_text() const
+    std::string_view Line::LineText() const
     {
-        return line_text_;
+        return lineText;
     }
 
-    std::size_t Line::indent() const
+    std::size_t Line::Indent() const
     {
-        return indent_;
+        return indent;
     }
 
-    bool Line::is_empty() const
+    bool Line::IsEmpty() const
     {
-        return trimmed_line_text_.empty();
+        return trimmedLineText.empty();
     }
 
-    bool Line::startswith(std::string_view prefix) const
+    bool Line::Startswith(std::string_view prefix) const
     {
-        return trimmed_line_text_.find(prefix) == 0;
+        return trimmedLineText.find(prefix) == 0;
     }
 
-    bool Line::startswith_title_keyword(const std::string& keyword) const
+    bool Line::StartswithTitleKeyword(const std::string& keyword) const
     {
-        return trimmed_line_text_.find(keyword + ":") == 0;
+        return trimmedLineText.find(keyword + ":") == 0;
     }
 
-    items Line::table_cells() const
+    items Line::TableCells() const
     {
         items items;
 
-        split_table_cells(trimmed_line_text_,
+        SplitTableCells(trimmedLineText,
             [&](const auto& cell, auto col)
             {
                 using namespace std::literals;
 
-                auto stripped_cell = lstrip(cell, RePattern::spaces_no_nl);
-                auto cell_indent = cell.size() - stripped_cell.size();
-                stripped_cell = rstrip(stripped_cell, RePattern::spaces_no_nl);
+                auto strippedCell = Lstrip(cell, RePattern::SPACES_NO_NL);
+                auto cellIndent = cell.size() - strippedCell.size();
+                strippedCell = Rstrip(strippedCell, RePattern::SPACES_NO_NL);
 
-                Item table_item{ col + indent_ + cell_indent, to_narrow(stripped_cell) };
+                Item tableItem{ col + indent + cellIndent, ToNarrow(strippedCell) };
 
-                for (const auto& replacement : line_unescapes)
+                for (const auto& replacement : lineUnescapes)
                 {
-                    subst(table_item.text, replacement.first, replacement.second);
+                    Subst(tableItem.text, replacement.first, replacement.second);
                 }
 
-                items.emplace_back(std::move(table_item));
+                items.emplace_back(std::move(tableItem));
             });
 
         return items;
     }
 
-    items Line::tags() const
+    items Line::Tags() const
     {
         items tags;
 
-        auto column = indent_ + 1;
-        auto items_line = subst(trimmed_line_text_, "\\s+(?:#.*)?$", "");
-        auto items = split("@", items_line);
-        std::regex no_spaces("^\\S+$");
+        auto column = indent + 1;
+        auto itemsLine = Subst(trimmedLineText, "\\s+(?:#.*)?$", "");
+        auto items = Split("@", itemsLine);
+        std::regex const noSpaces("^\\S+$");
 
         for (std::size_t i = 1; i < items.size(); ++i)
         {
-            auto original_item = items[i];
-            auto sitem = strip(items[i]);
+            auto originalItem = items[i];
+            auto sitem = Strip(items[i]);
 
             if (sitem.empty())
             {
                 continue;
             }
 
-            if (!full_match(sitem, no_spaces))
+            if (!FullMatch(sitem, noSpaces))
             {
-                throw ParserError("A tag may not contain whitespace", { line_number_, column });
+                throw ParserError("A tag may not contain whitespace", { lineNumber, column });
             }
 
             tags.emplace_back(Item{ column, "@" + sitem });
 
-            column += original_item.size() + 1;
+            column += originalItem.size() + 1;
         }
 
         return tags;
