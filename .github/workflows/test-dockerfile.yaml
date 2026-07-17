@@ -8,12 +8,12 @@ on:
       - main
       - renovate/**
     paths:
-#      - Dockerfile
+      - Dockerfile
   pull_request:
     branches:
       - main
     paths:
-#      - Dockerfile
+      - Dockerfile
 
 jobs:
   test-codegen:
@@ -28,4 +28,6 @@ jobs:
         run: docker build --tag berp-env .
 
       - name: test dockerfile
+        # A zero exit code should be sufficient confirmation that the docker file
+        # works.
         run: docker run --interactive berp-env berp --version
