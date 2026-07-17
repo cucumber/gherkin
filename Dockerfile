@@ -6,6 +6,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 RUN apt-get update \
     && apt-get install --assume-yes \
@@ -19,8 +20,7 @@ WORKDIR /app
 RUN dotnet --list-sdks
 
 # Install Berp (dotnet tool installs are user-global; not system global)
-RUN dotnet tool install --global Berp --version 1.6.0 \
-    && echo 'export PATH="$PATH:/root/.dotnet/tools"' >> ~/.bashrc
+RUN dotnet tool install --global Berp --version 1.6.0
 
 WORKDIR /app
 

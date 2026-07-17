@@ -1,56 +1,45 @@
 import 'dart:io';
 
-import 'package:gherkin/Gherkin.dart';
-import 'package:gherkin/exceptions.dart';
-import 'package:gherkin/language.dart';
-import 'package:gherkin/messages.dart';
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
-void main(List<String> args) async
-{
+void main(List<String> args) {
   var includeSource = true;
   var includeAst = true;
   var includePickles = true;
-  var paths = <String>[];
-  var idGenerator = IdGenerator.uuidGenerator;
+  String Function()? idGenerator;
+  var nextId = 0;
+  final paths = <String>[];
 
-  for( var arg in args ) {
-    switch(arg) {
+  for (final arg in args) {
+    switch (arg) {
       case '--no-source':
         includeSource = false;
-        break;
       case '--no-ast':
         includeAst = false;
-        break;
       case '--no-pickles':
         includePickles = false;
-        break;
       case '--predictable-ids':
-        idGenerator = IdGenerator.incrementingGenerator;
-        break;
+        idGenerator = () => (nextId++).toString();
       default:
         paths.add(arg);
     }
+  }
 
-    var messageWriter = makeMessageWriter();
+  final options = GherkinOptions(
+    includeSource: includeSource,
+    includeGherkinDocument: includeAst,
+    includePickles: includePickles,
+    idGenerator: idGenerator,
+  );
 
-    var messages = Gherkin.fromPaths(paths, includeSource
-        , includeAst, includePickles, idGenerator);
-    printMessages(messageWriter, messages);
+  for (final path in paths) {
+    for (final envelope in generateMessages(
+      File(path).readAsStringSync(),
+      path,
+      options,
+    )) {
+      stdout.write('${messages.envelopeToJsonString(envelope)}\n');
+    }
   }
 }
-
-IMessageWriter makeMessageWriter() {
-  return MessageToNdjsonWriter(stdout);
-}
-
-void printMessages(IMessageWriter messageWriter, Stream<Envelope> messages) {
-  messages.forEach((envelope) {
-    try {
-      messageWriter.write(envelope);
-    }
-    on IOException catch (e) {
-      throw GherkinException("Couldn't print messages", e);
-    }
-  });
-}
-

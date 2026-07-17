@@ -14,6 +14,7 @@ export class GherkinException extends Error {
       Object.setPrototypeOf(this, actualProto)
     } else {
       // @ts-expect-error
+      // biome-ignore lint/suspicious/noProto: Object.setPrototypeOf is used if available
       this.__proto__ = actualProto
     }
   }
@@ -22,7 +23,6 @@ export class GherkinException extends Error {
     const column = location != null ? location.column || 0 : -1
     const line = location != null ? location.line || 0 : -1
     const m = `(${line}:${column}): ${message}`
-    // biome-ignore lint/complexity/noThisInStatic: subclasses rely on `this` resolving to the calling constructor
     const err = new this(m)
     err.location = location
     return err

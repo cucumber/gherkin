@@ -1,0 +1,60 @@
+name: test-python
+
+permissions: {}
+
+defaults:
+  run:
+    working-directory: python
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - python/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - python/**
+      - testdata/**
+      - .github/**
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.14"
+          - "3.13"
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+          version: "0.11.29"
+
+      - name: Lint code
+        run: uv run pre-commit run --all-files
+
+      - name: Run tests
+        run: uv run --no-editable coverage run -m pytest
+
+      - name: Run acceptance tests
+        run: make acceptance
+
+      - name: Build package
+        run: uv build

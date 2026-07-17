@@ -1,0 +1,57 @@
+name: test-go
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - go/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - go/**
+      - testdata/**
+      - .github/**
+
+jobs:
+  test-go:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        go: ['1.20.x', '1.21.x']
+        include:
+          - os: windows-latest
+            go: '1.21.x'
+          - os: macos-latest
+            go: '1.24.x'
+
+    steps:
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Set up Go
+      uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+      with:
+        go-version: ${{ matrix.go }}
+        cache-dependency-path: go/go.sum
+
+    - name: lint
+      working-directory: go
+      run: gofmt -w .
+
+    - name: test
+      working-directory: go
+      run: go test --v ./...
+
+    - name: run acceptance tests
+      run: make acceptance
+      working-directory: go
