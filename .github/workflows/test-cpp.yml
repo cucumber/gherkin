@@ -32,18 +32,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { os: ubuntu-22.04, cxx: g++,      version: 10 }
-          - { os: ubuntu-22.04, cxx: g++,      version: 11 }
-          - { os: ubuntu-22.04, cxx: g++,      version: 12 }
           - { os: ubuntu-24.04, cxx: g++,      version: 12 }
           - { os: ubuntu-24.04, cxx: g++,      version: 13 }
           - { os: ubuntu-24.04, cxx: g++,      version: 14 }
           - { os: ubuntu-26.04, cxx: g++,      version: 13 }
           - { os: ubuntu-26.04, cxx: g++,      version: 14 }
           - { os: ubuntu-26.04, cxx: g++,      version: 15 }
-          - { os: ubuntu-22.04, cxx: clang++,  version: 13 }
-          - { os: ubuntu-22.04, cxx: clang++,  version: 14 }
-          - { os: ubuntu-22.04, cxx: clang++,  version: 15 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 16 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 17 }
           - { os: ubuntu-24.04, cxx: clang++,  version: 18 }
