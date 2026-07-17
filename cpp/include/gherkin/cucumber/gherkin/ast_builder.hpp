@@ -7,8 +7,10 @@
 #include "cucumber/gherkin/rule_type.hpp"
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/messages/All.hpp"
+#include <cstddef>
 #include <memory>
 #include <stack>
+#include <string>
 #include <string_view>
 #include <vector>
 

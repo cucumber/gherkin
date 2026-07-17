@@ -4,7 +4,8 @@
 #include "cucumber/gherkin/cb_types.hpp"
 #include "cucumber/gherkin/id_generator.hpp"
 #include "cucumber/gherkin/msg_types.hpp"
-#include <functional>
+#include <cstddef>
+#include <cucumber/messages/Pickle.hpp>
 #include <string>
 
 namespace cucumber::gherkin

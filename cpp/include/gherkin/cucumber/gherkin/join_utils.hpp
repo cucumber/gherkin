@@ -2,7 +2,10 @@
 #define CUCUMBER_GHERKIN_JOIN_UTILS_HPP
 
 #include "cucumber/gherkin/container_helpers.hpp"
+#include <cstddef>
+#include <ostream>
 #include <sstream>
+#include <string>
 #include <type_traits>
 
 namespace cucumber::gherkin

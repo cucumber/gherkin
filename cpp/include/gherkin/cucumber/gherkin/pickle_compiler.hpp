@@ -5,8 +5,21 @@
 #include "cucumber/gherkin/id_generator.hpp"
 #include "cucumber/gherkin/msg_types.hpp"
 #include "cucumber/gherkin/pickle_compiler_context.hpp"
-#include "cucumber/gherkin/types.hpp"
-#include <vector>
+#include <cstddef>
+#include <cucumber/messages/DataTable.hpp>
+#include <cucumber/messages/DocString.hpp>
+#include <cucumber/messages/Feature.hpp>
+#include <cucumber/messages/GherkinDocument.hpp>
+#include <cucumber/messages/PickleDocString.hpp>
+#include <cucumber/messages/PickleStep.hpp>
+#include <cucumber/messages/PickleTable.hpp>
+#include <cucumber/messages/Rule.hpp>
+#include <cucumber/messages/Scenario.hpp>
+#include <cucumber/messages/Step.hpp>
+#include <cucumber/messages/StepKeywordType.hpp>
+#include <cucumber/messages/TableRow.hpp>
+#include <optional>
+#include <string>
 
 namespace cucumber::gherkin
 {

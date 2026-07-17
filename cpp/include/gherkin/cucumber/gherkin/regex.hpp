@@ -4,9 +4,14 @@
 #include "cucumber/gherkin/demangle.hpp"
 #include "cucumber/gherkin/log.hpp"
 #include "cucumber/gherkin/types.hpp"
-#include "cucumber/gherkin/utils.hpp"
 #include <charconv>
+#include <cstddef>
 #include <regex>
+#include <string>
+#include <string_view>
+#include <system_error>
+#include <type_traits>
+#include <vector>
 
 namespace cucumber::gherkin
 {

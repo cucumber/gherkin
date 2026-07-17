@@ -56,6 +56,7 @@ clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
 
 mostlyclean:
 	rm -rf .built .configured
+	rm -rf install
 	rm -rf acceptance
 	rm -rf build
 .PHONY: mostlyclean

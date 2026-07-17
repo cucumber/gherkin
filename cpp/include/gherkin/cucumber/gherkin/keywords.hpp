@@ -1,4 +1,6 @@
 #include "cucumber/gherkin/dialect.hpp"
+#include "cucumber/gherkin/types.hpp"
+#include <string_view>
 
 namespace cucumber::gherkin
 {

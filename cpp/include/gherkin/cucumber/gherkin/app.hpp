@@ -2,10 +2,13 @@
 #define CUCUMBER_GHERKIN_APP_HPP
 
 #include "cucumber/gherkin/cb_types.hpp"
+#include "cucumber/gherkin/exceptions.hpp"
 #include "cucumber/gherkin/file.hpp"
 #include "cucumber/gherkin/id_generator.hpp"
 #include "cucumber/gherkin/parser.hpp"
 #include "cucumber/messages/Envelope.hpp"
+#include <cucumber/messages/Source.hpp>
+#include <string>
 
 namespace cucumber::gherkin
 {

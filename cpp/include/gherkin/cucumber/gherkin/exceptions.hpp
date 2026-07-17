@@ -2,10 +2,11 @@
 #define CUCUMBER_GHERKIN_EXCEPTIONS_HPP
 
 #include "cucumber/gherkin/token.hpp"
-#include "cucumber/gherkin/types.hpp"
 #include "cucumber/messages/Location.hpp"
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace cucumber::gherkin
 {

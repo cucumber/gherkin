@@ -2,8 +2,9 @@
 #define CUCUMBER_GHERKIN_LINE_HPP
 
 #include "cucumber/gherkin/items.hpp"
-#include "cucumber/gherkin/types.hpp"
+#include <cstddef>
 #include <string>
+#include <string_view>
 
 namespace cucumber::gherkin
 {

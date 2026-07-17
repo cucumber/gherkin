@@ -1,13 +1,18 @@
 #ifndef CUCUMBER_GHERKIN_TOKEN_MATCHER_HPP
 #define CUCUMBER_GHERKIN_TOKEN_MATCHER_HPP
 
-#include "cucumber/gherkin/dialect.hpp"
+#include "cucumber/gherkin/items.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/types.hpp"
 #include "cucumber/messages/StepKeywordType.hpp"
+#include <cstddef>
+#include <cucumber/messages/Location.hpp>
 #include <optional>
 #include <string>
+#include <string_view>
+#include <unordered_map>
+#include <vector>
 
 namespace cucumber::gherkin
 {

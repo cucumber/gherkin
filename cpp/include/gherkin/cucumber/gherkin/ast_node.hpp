@@ -5,10 +5,9 @@
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/type_traits.hpp"
 #include <any>
-#include <iostream>
 #include <memory>
 #include <optional>
-#include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
 

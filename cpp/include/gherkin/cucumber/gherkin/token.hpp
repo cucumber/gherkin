@@ -10,6 +10,7 @@
 #include <deque>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace cucumber::gherkin
