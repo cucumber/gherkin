@@ -8,7 +8,6 @@
 
 namespace cucumber::gherkin
 {
-
     class Line
     {
     public:
