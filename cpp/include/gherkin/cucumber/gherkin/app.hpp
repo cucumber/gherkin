@@ -16,8 +16,8 @@ namespace cucumber::gherkin
     class App
     {
     public:
-        using Parser = cucumber::gherkin::Parser<>;
-        using parser_result = typename Parser::result_type;
+        using Parser = cucumber::gherkin::Parser<AstBuilder>;
+        using parser_result = cms::GherkinDocument;
         using Callbacks = cucumber::gherkin::Callbacks<parser_result>;
 
         App();

@@ -16,7 +16,6 @@
 
 namespace cucumber::gherkin
 {
-
     namespace cms = cucumber::messages;
 
     using table_rows = std::vector<std::shared_ptr<cms::TableRow>>;
@@ -43,7 +42,7 @@ namespace cucumber::gherkin
         void EndRule(RuleType ruleType);
         void Build(const Token& token);
 
-        [[nodiscard]] const cms::GherkinDocument& GetResult() const;
+        [[nodiscard]] const result_type& GetResult() const;
 
     private:
         using ast_node_stack = std::stack<AstNode>;
@@ -62,7 +61,7 @@ namespace cucumber::gherkin
         static std::string MakeDescription(AstNode& node);
         cms::Feature MakeFeature(AstNode& node);
         cms::Rule MakeRule(AstNode& node);
-        cms::GherkinDocument MakeGherkinDocument(AstNode& node);
+        result_type MakeGherkinDocument(AstNode& node);
 
         static std::shared_ptr<cms::Location> GetLocation(const Token& token, std::size_t column = 0);
 
@@ -79,7 +78,7 @@ namespace cucumber::gherkin
         ast_node_stack stack;
         std::string_view uri;
         Comments comments;
-        cms::GherkinDocument doc;
+        result_type doc;
     };
 
     using ast_builder_ptr = std::unique_ptr<AstBuilder>;

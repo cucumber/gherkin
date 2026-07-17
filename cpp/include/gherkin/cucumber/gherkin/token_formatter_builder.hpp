@@ -10,9 +10,6 @@
 
 namespace cucumber::gherkin
 {
-
-    namespace cms = cucumber::messages;
-
     class TokenFormatterBuilder
     {
     public:

@@ -1,5 +1,7 @@
 #include "cucumber/gherkin/exceptions.hpp"
 #include "cucumber/gherkin/token.hpp"
+#include "cucumber/gherkin/token_matcher.hpp"
+#include "cucumber/gherkin/token_scanner.hpp"
 #include <cstddef>
 #include <iostream>
 #include <utility>
@@ -7,12 +9,12 @@
 namespace cucumber::gherkin
 {
 
-    template<typename Builder, typename Scanner, typename Matcher>
+    template<typename BuilderType>
     struct ParserContext
     {
-        Builder& builder; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-        Scanner& scanner; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-        Matcher& matcher; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+        BuilderType& builder;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+        TokenScanner& scanner; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+        TokenMatcher& matcher; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 
         token_queue queue;
         parser_error_ptrs errorPointers;

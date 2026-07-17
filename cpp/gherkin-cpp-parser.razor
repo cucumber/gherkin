@@ -76,12 +76,11 @@ public static string NameOf(Rule rule)
 
 namespace cucumber::gherkin
 {
-
-    template<typename Builder = AstBuilder, typename Scanner = TokenScanner, typename Matcher = TokenMatcher>
-    class Parser : public ParserBase<Builder, Scanner, Matcher>
+    template<typename BuilderType>
+    class Parser : public ParserBase<BuilderType>
     {
     public:
-        using parent = ParserBase<Builder, Scanner, Matcher>;
+        using parent = ParserBase<BuilderType>;
         using parent::parent;
         using parent::parse;
         using context_type = typename parent::context_type;

@@ -5,7 +5,6 @@
 
 namespace cucumber::gherkin
 {
-
     std::string PickleCompilerContext::NextId()
     {
         return idp->NextId();
@@ -20,5 +19,4 @@ namespace cucumber::gherkin
 
         pickles.emplace_back(std::move(pickle));
     }
-
 }
