@@ -31,9 +31,9 @@ namespace cucumber::gherkin
         const StringViews& butKeywords;
     };
 
-    const KeywordsMaps& AllKeywords();
+    [[nodiscard]] const KeywordsMaps& AllKeywords();
 
-    const KeywordsMap& Keywords(const std::string_view& language);
+    [[nodiscard]] const KeywordsMap& Keywords(const std::string_view& language);
 }
 
 #endif

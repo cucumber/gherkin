@@ -283,13 +283,13 @@ namespace cucumber::gherkin
         return { source.data(), source.size() };
     }
 
-    std::size_t CodepointCount(std::string_view text);
+    [[nodiscard]] std::size_t CodepointCount(std::string_view text);
 
-    std::string Slurp(const std::string& path);
+    [[nodiscard]] std::string Slurp(const std::string& path);
 
     void Replace(std::string& source, std::string_view what, std::string_view with);
 
-    std::string Replace(const std::string& source, std::string_view what, std::string_view with);
+    [[nodiscard]] std::string Replace(const std::string& source, std::string_view what, std::string_view with);
 
     template<typename CharT>
     std::basic_string<CharT> Strip(std::basic_string_view<CharT> what, const StripPattern<CharT>& pattern)
@@ -338,27 +338,6 @@ namespace cucumber::gherkin
     {
         return Strip(AsView(text), pattern);
     }
-
-    template<typename C>
-    struct Reverse
-    {
-        Reverse(C& container)
-            : c(container)
-        {}
-
-        auto Begin()
-        {
-            return c.rbegin();
-        }
-
-        auto End()
-        {
-            return c.rend();
-        }
-
-        C& c; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-    };
-
 }
 
 #ifdef _MSC_VER

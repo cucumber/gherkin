@@ -24,9 +24,9 @@ namespace cucumber::gherkin
 
     void Split(const std::string& pattern, const std::string& expr, Strings& list);
 
-    Strings Split(const std::string& pattern, const std::string& expr);
+    [[nodiscard]] Strings Split(const std::string& pattern, const std::string& expr);
 
-    std::string Subst(const std::string& source, const std::string& pattern, const std::string& what = {});
+    [[nodiscard]] std::string Subst(const std::string& source, const std::string& pattern, const std::string& what = {});
 
     void Subst(std::string& source, const std::string& pattern, const std::string& what = {});
 

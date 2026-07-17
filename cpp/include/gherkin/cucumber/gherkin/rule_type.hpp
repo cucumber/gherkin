@@ -50,7 +50,7 @@ namespace cucumber::gherkin
         count
     };
 
-    std::string_view to_string(RuleType type);
+    [[nodiscard]] std::string_view to_string(RuleType type);
 
     inline std::ostream& operator<<(std::ostream& ostream, RuleType type)
     {
