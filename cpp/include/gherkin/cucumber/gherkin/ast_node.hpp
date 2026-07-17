@@ -5,7 +5,6 @@
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/type_traits.hpp"
 #include <any>
-#include <memory>
 #include <optional>
 #include <type_traits>
 #include <unordered_map>
@@ -13,51 +12,6 @@
 
 namespace cucumber::gherkin
 {
-
-    template<typename T>
-    struct SubNode
-    {
-        using Type = std::decay_t<T>;
-        using VectorType = std::vector<Type>;
-        using PtrType = std::shared_ptr<VectorType>;
-
-        SubNode(std::any& subItem)
-            : ref(subItem)
-        {
-            if (!ref.has_value())
-            {
-                ref = Make();
-            }
-        }
-
-        static auto Make()
-        {
-            return std::make_shared<VectorType>();
-        }
-
-        auto& Cast()
-        {
-            return std::any_cast<PtrType&>(ref);
-        }
-
-        auto GetPtr()
-        {
-            return Cast().get();
-        }
-
-        auto& Get()
-        {
-            return *Cast();
-        }
-
-        void EmplaceBack(const T& value)
-        {
-            Get().emplace_back(value);
-        }
-
-        std::any& ref; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-    };
-
     class AstNode
     {
     public:
@@ -77,29 +31,27 @@ namespace cucumber::gherkin
         template<typename T>
         void Add(RuleType ruleType, const T& value)
         {
-            SubNode<T> subNodeRef(subItems[ruleType]);
+            auto& entry = subItems[ruleType];
 
-            subNodeRef.EmplaceBack(value);
+            if (!entry.has_value())
+            {
+                entry = std::vector<T>{};
+            }
+
+            std::any_cast<std::vector<T>&>(entry).push_back(value);
         }
 
         template<typename T>
-        auto GetItems(RuleType ruleType, const std::vector<T>* defaultResult = nullptr) const
+        const std::vector<T>* GetItems(RuleType ruleType, const std::vector<T>* defaultResult = nullptr) const
         {
-            using SType = SubNode<T>;
-            using RetType = const typename SType::VectorType*;
-
-            RetType ret = defaultResult;
-
             auto found = subItems.find(ruleType);
 
             if (found != subItems.end())
             {
-                SType subNodeRef(const_cast<std::any&>(found->second)); // NOLINT(cppcoreguidelines-pro-type-const-cast)
-
-                ret = subNodeRef.GetPtr();
+                return std::any_cast<std::vector<T>>(&found->second);
             }
 
-            return ret;
+            return defaultResult;
         }
 
         template<typename T>
