@@ -218,47 +218,38 @@ messages.PickleStepArgument? _pickleStepArgument(
   final dataTableFirst =
       hasBothArguments &&
       step.dataTable!.location.line < step.docString!.location.line;
-  final dataTable =
-      step.dataTable == null
-          ? null
-          : messages.PickleTable(
-            argumentIndex: hasBothArguments ? (dataTableFirst ? 1 : 2) : null,
-            rows:
-                step.dataTable!.rows.map((row) {
-                  return messages.PickleTableRow(
-                    cells:
-                        row.cells.map((cell) {
-                          return messages.PickleTableCell(
-                            value: _interpolate(
-                              cell.value,
-                              variableCells,
-                              valueCells,
-                            ),
-                          );
-                        }).toList(),
-                  );
-                }).toList(),
-          );
+  final dataTable = step.dataTable == null
+      ? null
+      : messages.PickleTable(
+          argumentIndex: hasBothArguments ? (dataTableFirst ? 1 : 2) : null,
+          rows: step.dataTable!.rows.map((row) {
+            return messages.PickleTableRow(
+              cells: row.cells.map((cell) {
+                return messages.PickleTableCell(
+                  value: _interpolate(cell.value, variableCells, valueCells),
+                );
+              }).toList(),
+            );
+          }).toList(),
+        );
 
-  final docString =
-      step.docString == null
-          ? null
-          : messages.PickleDocString(
-            argumentIndex: hasBothArguments ? (dataTableFirst ? 2 : 1) : null,
-            mediaType:
-                step.docString!.mediaType == null
-                    ? null
-                    : _interpolate(
-                      step.docString!.mediaType!,
-                      variableCells,
-                      valueCells,
-                    ),
-            content: _interpolate(
-              step.docString!.content,
-              variableCells,
-              valueCells,
-            ),
-          );
+  final docString = step.docString == null
+      ? null
+      : messages.PickleDocString(
+          argumentIndex: hasBothArguments ? (dataTableFirst ? 2 : 1) : null,
+          mediaType: step.docString!.mediaType == null
+              ? null
+              : _interpolate(
+                  step.docString!.mediaType!,
+                  variableCells,
+                  valueCells,
+                ),
+          content: _interpolate(
+            step.docString!.content,
+            variableCells,
+            valueCells,
+          ),
+        );
 
   if (dataTable != null || docString != null) {
     return messages.PickleStepArgument(
@@ -269,10 +260,9 @@ messages.PickleStepArgument? _pickleStepArgument(
   return null;
 }
 
-List<messages.PickleTag> _pickleTags(List<messages.Tag> tags) =>
-    tags
-        .map((tag) => messages.PickleTag(name: tag.name, astNodeId: tag.id))
-        .toList();
+List<messages.PickleTag> _pickleTags(List<messages.Tag> tags) => tags
+    .map((tag) => messages.PickleTag(name: tag.name, astNodeId: tag.id))
+    .toList();
 
 String _interpolate(
   String value,

@@ -124,8 +124,9 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
 
   messages.DocString _createDocString(AstNode node) {
     final separatorToken = node.getTokens(TokenType.docStringSeparator).first;
-    final mediaType =
-        separatorToken.matchedText.isEmpty ? null : separatorToken.matchedText;
+    final mediaType = separatorToken.matchedText.isEmpty
+        ? null
+        : separatorToken.matchedText;
     final lineTokens = node.getTokens(TokenType.other);
     final content = lineTokens.map((token) => token.matchedText).join('\n');
     return messages.DocString(
@@ -143,29 +144,27 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
 
   List<messages.TableRow> _getTableRows(AstNode node) {
     final tokens = node.getTokens(TokenType.tableRow);
-    final rows =
-        tokens
-            .map(
-              (token) => messages.TableRow(
-                id: _idGenerator(),
-                location: _messageLocation(token.location),
-                cells: _getCells(token),
-              ),
-            )
-            .toList();
+    final rows = tokens
+        .map(
+          (token) => messages.TableRow(
+            id: _idGenerator(),
+            location: _messageLocation(token.location),
+            cells: _getCells(token),
+          ),
+        )
+        .toList();
     _checkCellCountConsistency(rows);
     return rows;
   }
 
-  List<messages.TableCell> _getCells(Token token) =>
-      token.matchedItems
-          .map(
-            (item) => messages.TableCell(
-              location: _messageLocation(token.location, item.column),
-              value: item.text,
-            ),
-          )
-          .toList();
+  List<messages.TableCell> _getCells(Token token) => token.matchedItems
+      .map(
+        (item) => messages.TableCell(
+          location: _messageLocation(token.location, item.column),
+          value: item.text,
+        ),
+      )
+      .toList();
 
   void _checkCellCountConsistency(List<messages.TableRow> rows) {
     if (rows.isEmpty) {
@@ -235,8 +234,9 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       name: examplesLine.matchedText,
       description: _getDescription(examplesNode),
       tableHeader: allRows.isEmpty ? null : allRows.first,
-      tableBody:
-          allRows.isEmpty ? <messages.TableRow>[] : allRows.skip(1).toList(),
+      tableBody: allRows.isEmpty
+          ? <messages.TableRow>[]
+          : allRows.skip(1).toList(),
     );
   }
 

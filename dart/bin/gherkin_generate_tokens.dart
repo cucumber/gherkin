@@ -49,12 +49,11 @@ String _formatToken(Token token) {
       .join(',');
   final matchedType = _wireName(token.matchedType);
   final matchedKeyword = token.matchedKeyword;
-  final matchedKeywordType =
-      matchedKeyword.isEmpty
-          ? ''
-          : token.matchedKeywordType == null
-          ? '()'
-          : '(${token.matchedKeywordType!.value})';
+  final matchedKeywordType = matchedKeyword.isEmpty
+      ? ''
+      : token.matchedKeywordType == null
+      ? '()'
+      : '(${token.matchedKeywordType!.value})';
   return '(${token.location.line}:${token.location.column})'
       '$matchedType:$matchedKeywordType$matchedKeyword/${token.matchedText}/$matchedItems';
 }

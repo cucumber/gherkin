@@ -152,15 +152,10 @@ class GherkinTokenMatcher implements TokenMatcher {
   }
 
   @override
-  bool matchDocStringSeparator(Token token) =>
-      _activeDocStringSeparator.isEmpty
-          ? _matchDocStringSeparator(token, docStringSeparator, true) ||
-              _matchDocStringSeparator(
-                token,
-                docStringAlternativeSeparator,
-                true,
-              )
-          : _matchDocStringSeparator(token, _activeDocStringSeparator, false);
+  bool matchDocStringSeparator(Token token) => _activeDocStringSeparator.isEmpty
+      ? _matchDocStringSeparator(token, docStringSeparator, true) ||
+            _matchDocStringSeparator(token, docStringAlternativeSeparator, true)
+      : _matchDocStringSeparator(token, _activeDocStringSeparator, false);
 
   bool _matchDocStringSeparator(Token token, String separator, bool isOpen) {
     if (token.line!.startsWith(separator)) {
@@ -225,10 +220,9 @@ class GherkinTokenMatcher implements TokenMatcher {
     int? indent,
     Iterable<GherkinLineSpan> items = const <GherkinLineSpan>[],
   }) {
-    final matchedIndent =
-        token.isEof || matchedType == TokenType.empty
-            ? 0
-            : indent ?? token.line!.indent;
+    final matchedIndent = token.isEof || matchedType == TokenType.empty
+        ? 0
+        : indent ?? token.line!.indent;
     token
       ..matchedType = matchedType
       ..matchedKeyword = keyword
@@ -247,15 +241,13 @@ class GherkinTokenMatcher implements TokenMatcher {
   void _useLanguage(String language, GherkinLanguageKeywords keywords) {
     _currentLanguage = language;
     _currentKeywords = keywords;
-    _stepKeywordsByLengthDesc =
-        <String>{
-            ...keywords.given,
-            ...keywords.when,
-            ...keywords.then,
-            ...keywords.and,
-            ...keywords.but,
-          }.toList()
-          ..sort((a, b) => b.length - a.length);
+    _stepKeywordsByLengthDesc = <String>{
+      ...keywords.given,
+      ...keywords.when,
+      ...keywords.then,
+      ...keywords.and,
+      ...keywords.but,
+    }.toList()..sort((a, b) => b.length - a.length);
     _initializeKeywordTypes(keywords);
   }
 
@@ -277,10 +269,9 @@ class GherkinTokenMatcher implements TokenMatcher {
     ) {
       for (final keyword in stepKeywords) {
         final existing = _keywordTypesMap[keyword];
-        _keywordTypesMap[keyword] =
-            existing == null || existing == type
-                ? type
-                : messages.StepKeywordType.unknown;
+        _keywordTypesMap[keyword] = existing == null || existing == type
+            ? type
+            : messages.StepKeywordType.unknown;
       }
     }
 
