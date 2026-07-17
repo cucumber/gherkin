@@ -1,8 +1,10 @@
 // https://gist.github.com/bwoods/bbc6bd26b73fa37e94ac
 
 #if defined(_MSC_VER)
+// clang-format off
+#include <windows.h>  // must come before dbghelp.h
 #include <dbghelp.h>
-#include <windows.h>
+// clang-format on
 #pragma comment(lib, "dbghelp.lib")
 #else
 #include <cxxabi.h> // gcc and clang…

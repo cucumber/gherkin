@@ -6,10 +6,8 @@
 
 namespace cucumber::gherkin
 {
-
     namespace detail
     {
-
         auto Demangle(const std::string& name) -> std::unique_ptr<char, void (*)(char*)>;
     }
 
@@ -24,7 +22,6 @@ namespace cucumber::gherkin
     {
         return Declname<T>();
     }
-
 }
 
 #endif
