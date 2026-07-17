@@ -5,74 +5,77 @@
 #include <nlohmann/json_fwd.hpp>
 #include <string_view>
 
-struct Options
+namespace
 {
-    bool exit = false;
-    int exitCode = 0;
-    int lastArg = 0;
-    bool includeSource = true;
-    bool includeAst = true;
-    bool includePickles = true;
-    bool predicatableIds = true;
-};
-
-Options ParseOptions(int argc, char** argv)
-{
-    Options opts;
-
-    for (opts.lastArg = 1; opts.lastArg < argc; ++opts.lastArg)
+    struct Options
     {
-        std::string_view const arg(argv[opts.lastArg]); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+        bool exit = false;
+        int exitCode = 0;
+        int lastArg = 0;
+        bool includeSource = true;
+        bool includeAst = true;
+        bool includePickles = true;
+        bool predicatableIds = true;
+    };
 
-        if (arg == "--no-source")
+    Options ParseOptions(int argc, char** argv)
+    {
+        Options opts;
+
+        for (opts.lastArg = 1; opts.lastArg < argc; ++opts.lastArg)
         {
-            opts.includeSource = false;
-        }
-        else if (arg == "--no-ast")
-        {
-            opts.includeAst = false;
-        }
-        else if (arg == "--no-pickles")
-        {
-            opts.includePickles = false;
-        }
-        else if (arg == "--predictable-ids")
-        {
-            opts.predicatableIds = true;
-        }
-        else if (arg.find('-') == 0)
-        {
-            if (arg != "-h" && arg != "--help")
+            std::string_view const arg(argv[opts.lastArg]); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+
+            if (arg == "--no-source")
             {
-                std::cout << "Unknown option: " << arg << '\n';
-                opts.exitCode = 1;
+                opts.includeSource = false;
             }
+            else if (arg == "--no-ast")
+            {
+                opts.includeAst = false;
+            }
+            else if (arg == "--no-pickles")
+            {
+                opts.includePickles = false;
+            }
+            else if (arg == "--predictable-ids")
+            {
+                opts.predicatableIds = true;
+            }
+            else if (arg.find('-') == 0)
+            {
+                if (arg != "-h" && arg != "--help")
+                {
+                    std::cout << "Unknown option: " << arg << '\n';
+                    opts.exitCode = 1;
+                }
 
-            std::cout << "Usage: gherkin [options] FILE...\n"
-                      << "    -h, --help       You're looking at it.\n"
-                      << "    --no-ast         Do not emit Ast events.\n"
-                      << "    --no-pickles     Do not emit Pickle events.\n"
-                      << "    --no-source      Do not emit Source events." << '\n';
+                std::cout << "Usage: gherkin [options] FILE...\n"
+                          << "    -h, --help       You're looking at it.\n"
+                          << "    --no-ast         Do not emit Ast events.\n"
+                          << "    --no-pickles     Do not emit Pickle events.\n"
+                          << "    --no-source      Do not emit Source events." << '\n';
 
-            opts.exit = true;
+                opts.exit = true;
+            }
+            else
+            {
+                break;
+            }
         }
-        else
-        {
-            break;
-        }
+
+        return opts;
     }
 
-    return opts;
-}
+    template<typename ObjectType>
+    void PrintJsonObj(std::string_view key, const ObjectType& value)
+    {
+        nlohmann::json jsonDoc;
 
-template<typename ObjectType>
-void PrintJsonObj(std::string_view key, const ObjectType& value)
-{
-    nlohmann::json jsonDoc;
+        value.to_json(jsonDoc[key]);
 
-    value.to_json(jsonDoc[key]);
-
-    std::cout << jsonDoc << '\n';
+        std::cout << jsonDoc << '\n';
+    }
 }
 
 int main(int argc, char** argv)

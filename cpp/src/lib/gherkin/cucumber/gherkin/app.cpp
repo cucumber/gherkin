@@ -13,6 +13,15 @@
 
 namespace cucumber::gherkin
 {
+    namespace
+    {
+        void SendParseError(const std::string& uri, const ParserError& error, const App::Callbacks& callbacks)
+        {
+            ParseError const errorData{ uri, error.Location(), error.what() };
+
+            CallCb(callbacks.error, errorData);
+        }
+    }
 
     App::App()
         : idp(NewIdGenerator())
@@ -85,13 +94,6 @@ namespace cucumber::gherkin
         {
             SendParseError(source.uri, e, callbacks);
         }
-    }
-
-    void App::SendParseError(const std::string& uri, const ParserError& error, const Callbacks& callbacks)
-    {
-        ParseError const errorData{ uri, error.Location(), error.what() };
-
-        CallCb(callbacks.error, errorData);
     }
 
 }

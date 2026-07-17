@@ -1,13 +1,10 @@
 #ifndef CUCUMBER_GHERKIN_PARSER_HPP
 #define CUCUMBER_GHERKIN_PARSER_HPP
 
-#include "cucumber/gherkin/ast_builder.hpp"
 #include "cucumber/gherkin/exceptions.hpp"
 #include "cucumber/gherkin/parser_base.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
 #include "cucumber/gherkin/token.hpp"
-#include "cucumber/gherkin/token_matcher.hpp"
-#include "cucumber/gherkin/token_scanner.hpp"
 #include <cstddef>
 #include <stdexcept>
 #include <string>
@@ -1673,7 +1670,8 @@ namespace cucumber::gherkin
                 return 16;
             }
 
-            std::string state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -1789,7 +1787,8 @@ namespace cucumber::gherkin
                 return 17;
             }
 
-            std::string state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -3456,7 +3455,8 @@ namespace cucumber::gherkin
                 return 36;
             }
 
-            std::string state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -3575,7 +3575,8 @@ namespace cucumber::gherkin
                 return 37;
             }
 
-            std::string state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -3865,7 +3866,8 @@ namespace cucumber::gherkin
                 return 40;
             }
 
-            std::string state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string state_comment =
+                "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4017,7 +4019,8 @@ namespace cucumber::gherkin
                 return 43;
             }
 
-            std::string state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4143,7 +4146,8 @@ namespace cucumber::gherkin
                 return 44;
             }
 
-            std::string state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4523,7 +4527,8 @@ namespace cucumber::gherkin
                 return 49;
             }
 
-            std::string state_comment = "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4646,7 +4651,8 @@ namespace cucumber::gherkin
                 return 50;
             }
 
-            std::string state_comment = "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string state_comment =
+                "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);

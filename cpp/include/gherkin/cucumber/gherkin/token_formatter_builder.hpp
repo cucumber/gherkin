@@ -5,7 +5,6 @@
 #include "cucumber/gherkin/rule_type.hpp"
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/types.hpp"
-#include <string>
 #include <string_view>
 
 namespace cucumber::gherkin
@@ -31,8 +30,6 @@ namespace cucumber::gherkin
         [[nodiscard]] Strings GetResult() const;
 
     private:
-        static std::string FormatToken(const Token& token);
-
         IdGeneratorPtr idp;
         Strings formattedTokens;
     };

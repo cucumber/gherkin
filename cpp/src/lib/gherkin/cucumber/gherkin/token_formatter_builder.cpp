@@ -11,6 +11,48 @@
 
 namespace cucumber::gherkin
 {
+    namespace
+    {
+        std::string FormatToken(const Token& token)
+        {
+            if (token.IsEof())
+            {
+                return "EOF";
+            }
+
+            std::ostringstream stream;
+
+            stream << "(" << token.location.line << ":" << token.location.column.value_or(0) << ")" << token.matchedType << ":";
+
+            if (token.matchedKeyword)
+            {
+                stream << "(";
+
+                if (token.matchedKeywordType)
+                {
+                    stream << *token.matchedKeywordType;
+                }
+
+                stream << ")" << token.matchedKeyword.value();
+            }
+
+            stream << "/" << token.matchedText << "/";
+
+            if (!token.matchedItems.empty())
+            {
+                Strings items;
+
+                for (const auto& matchedItem : token.matchedItems)
+                {
+                    items.emplace_back(std::to_string(matchedItem.column) + ":" + matchedItem.text);
+                }
+
+                stream << Join(",", items);
+            }
+
+            return stream.str();
+        }
+    }
 
     TokenFormatterBuilder::TokenFormatterBuilder(IdGeneratorPtr idp)
         : idp(std::move(std::move(idp)))
@@ -35,46 +77,6 @@ namespace cucumber::gherkin
     Strings TokenFormatterBuilder::GetResult() const
     {
         return formattedTokens;
-    }
-
-    std::string TokenFormatterBuilder::FormatToken(const Token& token)
-    {
-        if (token.IsEof())
-        {
-            return "EOF";
-        }
-
-        std::ostringstream stream;
-
-        stream << "(" << token.location.line << ":" << token.location.column.value_or(0) << ")" << token.matchedType << ":";
-
-        if (token.matchedKeyword)
-        {
-            stream << "(";
-
-            if (token.matchedKeywordType)
-            {
-                stream << *token.matchedKeywordType;
-            }
-
-            stream << ")" << token.matchedKeyword.value();
-        }
-
-        stream << "/" << token.matchedText << "/";
-
-        if (!token.matchedItems.empty())
-        {
-            Strings items;
-
-            for (const auto& matchedItem : token.matchedItems)
-            {
-                items.emplace_back(std::to_string(matchedItem.column) + ":" + matchedItem.text);
-            }
-
-            stream << Join(",", items);
-        }
-
-        return stream.str();
     }
 
 }

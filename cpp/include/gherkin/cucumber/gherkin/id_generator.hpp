@@ -1,6 +1,7 @@
 #ifndef CUCUMBER_GHERKIN_ID_GENERATOR_HPP
 #define CUCUMBER_GHERKIN_ID_GENERATOR_HPP
 
+#include <cstddef>
 #include <memory>
 #include <string>
 

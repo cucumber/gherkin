@@ -12,7 +12,7 @@ namespace cucumber::gherkin
     struct ParserInfo
     {
         std::string language = "en";
-        IdGeneratorFunc IdGenerator;
+        IdGeneratorFunc idGenerator;
     };
 
 }

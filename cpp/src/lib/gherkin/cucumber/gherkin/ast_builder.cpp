@@ -36,6 +36,92 @@
 
 namespace cucumber::gherkin
 {
+    namespace
+    {
+        std::shared_ptr<messages::Location> GetLocation(const Token& token, std::size_t column = 0)
+        {
+            std::size_t col = column == 0 ? token.location.column.value_or(0) : column;
+            return std::make_shared<messages::Location>(messages::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt });
+        }
+
+        void EnsureCellCount(const TableRows& rows)
+        {
+            if (rows.empty())
+            {
+                return;
+            }
+
+            std::size_t const cellCount = rows.front()->cells.size();
+
+            for (const auto& row : rows)
+            {
+                if (row->cells.size() != cellCount)
+                {
+                    throw AstBuilderError("inconsistent cell count within the table", { row->location->line, row->location->column.value_or(0) });
+                }
+            }
+        }
+
+        TableCells GetTableCells(const Token& token)
+        {
+            TableCells cells;
+
+            for (const auto& cellItem : token.matchedItems)
+            {
+                auto cell = std::make_shared<messages::TableCell>();
+                cell->location = GetLocation(token, cellItem.column);
+                cell->value = cellItem.text;
+                cells.emplace_back(cell);
+            }
+
+            return cells;
+        }
+
+        messages::DocString MakeDocString(AstNode& node)
+        {
+            const auto& tokens = node.GetTokens(RuleType::docStringSeparator);
+            const auto& separatorToken = tokens[0];
+
+            StringViews lineViews;
+
+            for (const auto& tok : node.GetTokens(RuleType::other))
+            {
+                lineViews.emplace_back(tok.matchedText);
+            }
+
+            auto content = Join("\n", lineViews);
+
+            messages::DocString docString{ GetLocation(separatorToken), std::nullopt, content, separatorToken.matchedKeyword.value_or("") };
+
+            if (!separatorToken.matchedText.empty())
+            {
+                docString.mediaType = separatorToken.matchedText;
+            }
+
+            return docString;
+        }
+
+        std::string MakeDescription(AstNode& node)
+        {
+            static const std::regex onlySpaces("\\s*");
+            auto toks = node.GetTokens(RuleType::other);
+            std::size_t ntoks = toks.size();
+
+            while ((ntoks != 0U) && FullMatch(toks[ntoks - 1].matchedText, onlySpaces))
+            {
+                --ntoks;
+            }
+
+            StringViews descriptionLines;
+
+            for (std::size_t i = 0; i < ntoks; ++i)
+            {
+                descriptionLines.emplace_back(toks[i].matchedText);
+            }
+
+            return Join("\n", descriptionLines);
+        }
+    }
 
     AstBuilder::AstBuilder()
         : AstBuilder(NewIdGenerator())
@@ -155,30 +241,6 @@ namespace cucumber::gherkin
         return step;
     }
 
-    messages::DocString AstBuilder::MakeDocString(AstNode& node)
-    {
-        const auto& Tokens = node.GetTokens(RuleType::docStringSeparator);
-        const auto& separatorToken = Tokens[0];
-
-        StringViews lineViews;
-
-        for (const auto& tok : node.GetTokens(RuleType::other))
-        {
-            lineViews.emplace_back(tok.matchedText);
-        }
-
-        auto content = Join("\n", lineViews);
-
-        messages::DocString docString{ GetLocation(separatorToken), std::nullopt, content, separatorToken.matchedKeyword.value_or("") };
-
-        if (!separatorToken.matchedText.empty())
-        {
-            docString.mediaType = separatorToken.matchedText;
-        }
-
-        return docString;
-    }
-
     messages::DataTable AstBuilder::MakeDataTable(AstNode& node)
     {
         auto rows = GetTableRows(node);
@@ -251,27 +313,6 @@ namespace cucumber::gherkin
     TableRows AstBuilder::MakeExamplesTable(AstNode& node)
     {
         return GetTableRows(node);
-    }
-
-    std::string AstBuilder::MakeDescription(AstNode& node)
-    {
-        static const std::regex onlySpaces("\\s*");
-        auto toks = node.GetTokens(RuleType::other);
-        std::size_t ntoks = toks.size();
-
-        while ((ntoks != 0U) && FullMatch(toks[ntoks - 1].matchedText, onlySpaces))
-        {
-            --ntoks;
-        }
-
-        StringViews descriptionLines;
-
-        for (std::size_t i = 0; i < ntoks; ++i)
-        {
-            descriptionLines.emplace_back(toks[i].matchedText);
-        }
-
-        return Join("\n", descriptionLines);
     }
 
     messages::Feature AstBuilder::MakeFeature(AstNode& node)
@@ -367,12 +408,6 @@ namespace cucumber::gherkin
         return document;
     }
 
-    std::shared_ptr<messages::Location> AstBuilder::GetLocation(const Token& token, std::size_t column)
-    {
-        std::size_t col = column == 0 ? token.location.column.value_or(0) : column;
-        return std::make_shared<messages::Location>(messages::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt });
-    }
-
     TableRows AstBuilder::GetTableRows(const AstNode& node)
     {
         TableRows rows;
@@ -389,39 +424,6 @@ namespace cucumber::gherkin
         EnsureCellCount(rows);
 
         return rows;
-    }
-
-    void AstBuilder::EnsureCellCount(const TableRows& rows)
-    {
-        if (rows.empty())
-        {
-            return;
-        }
-
-        std::size_t const cellCount = rows.front()->cells.size();
-
-        for (const auto& row : rows)
-        {
-            if (row->cells.size() != cellCount)
-            {
-                throw AstBuilderError("inconsistent cell count within the table", { row->location->line, row->location->column.value_or(0) });
-            }
-        }
-    }
-
-    TableCells AstBuilder::GetTableCells(const Token& token)
-    {
-        TableCells cells;
-
-        for (const auto& cellItem : token.matchedItems)
-        {
-            auto cell = std::make_shared<messages::TableCell>();
-            cell->location = GetLocation(token, cellItem.column);
-            cell->value = cellItem.text;
-            cells.emplace_back(cell);
-        }
-
-        return cells;
     }
 
     Tags AstBuilder::GetTags(const AstNode& node)

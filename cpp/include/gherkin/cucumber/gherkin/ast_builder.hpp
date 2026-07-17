@@ -7,7 +7,6 @@
 #include "cucumber/gherkin/rule_type.hpp"
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/messages/All.hpp"
-#include <cstddef>
 #include <memory>
 #include <stack>
 #include <string>
@@ -50,22 +49,16 @@ namespace cucumber::gherkin
         void TransformNode(AstNode& from, AstNode& destination);
 
         messages::Step MakeStep(AstNode& node);
-        static messages::DocString MakeDocString(AstNode& node);
         messages::DataTable MakeDataTable(AstNode& node);
         messages::Background MakeBackground(AstNode& node);
         messages::Scenario MakeScenarioDefinition(AstNode& node);
         messages::Examples MakeExamplesDefinition(AstNode& node);
         TableRows MakeExamplesTable(AstNode& node);
-        static std::string MakeDescription(AstNode& node);
         messages::Feature MakeFeature(AstNode& node);
         messages::Rule MakeRule(AstNode& node);
         ResultType MakeGherkinDocument(AstNode& node);
 
-        static std::shared_ptr<messages::Location> GetLocation(const Token& token, std::size_t column = 0);
-
         TableRows GetTableRows(const AstNode& node);
-        static void EnsureCellCount(const TableRows& rows);
-        static TableCells GetTableCells(const Token& token);
         Tags GetTags(const AstNode& node);
 
         AstNode PopNode();

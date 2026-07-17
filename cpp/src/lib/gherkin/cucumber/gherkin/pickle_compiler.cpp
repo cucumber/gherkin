@@ -33,21 +33,89 @@
 // NOLINTBEGIN(bugprone-unchecked-optional-access)
 namespace cucumber::gherkin
 {
-
-    messages::PickleStepType ToPickleStepType(messages::StepKeywordType keywordType)
+    namespace
     {
-        using StepMapType = std::unordered_map<messages::StepKeywordType, messages::PickleStepType>;
+        messages::PickleStepType ToPickleStepType(messages::StepKeywordType keywordType)
+        {
+            using StepMapType = std::unordered_map<messages::StepKeywordType, messages::PickleStepType>;
 
-        static const StepMapType smap = { { messages::StepKeywordType::UNKNOWN, messages::PickleStepType::UNKNOWN }, { messages::StepKeywordType::CONTEXT, messages::PickleStepType::CONTEXT },
-            { messages::StepKeywordType::ACTION, messages::PickleStepType::ACTION }, { messages::StepKeywordType::OUTCOME, messages::PickleStepType::OUTCOME } };
+            static const StepMapType smap = { { messages::StepKeywordType::UNKNOWN, messages::PickleStepType::UNKNOWN }, { messages::StepKeywordType::CONTEXT, messages::PickleStepType::CONTEXT },
+                { messages::StepKeywordType::ACTION, messages::PickleStepType::ACTION }, { messages::StepKeywordType::OUTCOME, messages::PickleStepType::OUTCOME } };
 
-        return smap.at(keywordType);
-    }
+            return smap.at(keywordType);
+        }
 
-    template<typename Vector>
-    void Append(Vector& destination, const Vector& from)
-    {
-        destination.insert(destination.end(), from.begin(), from.end());
+        template<typename Vector>
+        void Append(Vector& destination, const Vector& from)
+        {
+            destination.insert(destination.end(), from.begin(), from.end());
+        }
+
+        PickleTags MakePickleTags(const Tags& tags)
+        {
+            PickleTags resultTags;
+
+            for (const auto& sourceTag : tags)
+            {
+                auto pickleTag = std::make_shared<messages::PickleTag>();
+                pickleTag->name = sourceTag->name;
+                pickleTag->astNodeId = sourceTag->id;
+                resultTags.emplace_back(pickleTag);
+            }
+
+            return resultTags;
+        }
+
+        std::string Interpolate(const std::string& name, const TableCells& variableCells, const TableCells& valueCells) // NOLINT(bugprone-easily-swappable-parameters)
+        {
+            auto interpolatedName = name;
+            std::size_t col = 0;
+            std::string header;
+
+            for (const auto& variableCell : variableCells)
+            {
+                const auto& valueCell = valueCells[col++];
+                header = "<" + variableCell->value + ">";
+
+                Replace(interpolatedName, header, valueCell->value);
+            }
+
+            return interpolatedName;
+        }
+
+        messages::PickleTable MakePickleTable(const std::optional<std::size_t>& argumentIndex, const messages::DataTable& dataTable, const TableCells& variableCells, const TableCells& valueCells)
+        {
+            messages::PickleTable pickleTable{ argumentIndex };
+
+            for (const auto& row : dataTable.rows)
+            {
+                auto pickleRow = std::make_shared<messages::PickleTableRow>();
+
+                for (const auto& cell : row->cells)
+                {
+                    auto pickleCell = std::make_shared<messages::PickleTableCell>();
+                    pickleCell->value = Interpolate(cell->value, variableCells, valueCells);
+                    pickleRow->cells.emplace_back(pickleCell);
+                }
+
+                pickleTable.rows.emplace_back(std::move(pickleRow));
+            }
+
+            return pickleTable;
+        }
+
+        messages::PickleDocString MakePickleDocString(
+            const std::optional<std::size_t>& argumentIndex, const messages::DocString& docString, const TableCells& variableCells, const TableCells& valueCells)
+        {
+            messages::PickleDocString pickleDocString{ argumentIndex, std::nullopt, Interpolate(docString.content, variableCells, valueCells) };
+
+            if (docString.mediaType)
+            {
+                pickleDocString.mediaType = Interpolate(*docString.mediaType, variableCells, valueCells);
+            }
+
+            return pickleDocString;
+        }
     }
 
     PickleCompiler::PickleCompiler()
@@ -294,76 +362,9 @@ namespace cucumber::gherkin
         return pickleStep;
     }
 
-    messages::PickleTable PickleCompiler::MakePickleTable(
-        const std::optional<std::size_t>& argumentIndex, const messages::DataTable& dataTable, const TableCells& variableCells, const TableCells& valueCells)
-    {
-        messages::PickleTable pickleTable{ argumentIndex };
-
-        for (const auto& row : dataTable.rows)
-        {
-            auto pickleRow = std::make_shared<messages::PickleTableRow>();
-
-            for (const auto& cell : row->cells)
-            {
-                auto pickleCell = std::make_shared<messages::PickleTableCell>();
-                pickleCell->value = Interpolate(cell->value, variableCells, valueCells);
-                pickleRow->cells.emplace_back(pickleCell);
-            }
-
-            pickleTable.rows.emplace_back(std::move(pickleRow));
-        }
-
-        return pickleTable;
-    }
-
-    messages::PickleDocString PickleCompiler::MakePickleDocString(
-        const std::optional<std::size_t>& argumentIndex, const messages::DocString& docString, const TableCells& variableCells, const TableCells& valueCells)
-    {
-        messages::PickleDocString pickleDocString{ argumentIndex, std::nullopt, Interpolate(docString.content, variableCells, valueCells) };
-
-        if (docString.mediaType)
-        {
-            pickleDocString.mediaType = Interpolate(*docString.mediaType, variableCells, valueCells);
-        }
-
-        return pickleDocString;
-    }
-
     messages::PickleStep PickleCompiler::MakePickleStep(const messages::Step& step, messages::StepKeywordType keywordType)
     {
         return MakePickleStep(step, {}, nullptr, keywordType);
-    }
-
-    PickleTags PickleCompiler::MakePickleTags(const Tags& tags)
-    {
-        PickleTags resultTags;
-
-        for (const auto& sourceTag : tags)
-        {
-            auto pickleTag = std::make_shared<messages::PickleTag>();
-            pickleTag->name = sourceTag->name;
-            pickleTag->astNodeId = sourceTag->id;
-            resultTags.emplace_back(pickleTag);
-        }
-
-        return resultTags;
-    }
-
-    std::string PickleCompiler::Interpolate(const std::string& name, const TableCells& variableCells, const TableCells& valueCells) // NOLINT(bugprone-easily-swappable-parameters)
-    {
-        auto interpolatedName = name;
-        std::size_t col = 0;
-        std::string header;
-
-        for (const auto& variableCell : variableCells)
-        {
-            const auto& valueCell = valueCells[col++];
-            header = "<" + variableCell->value + ">";
-
-            Replace(interpolatedName, header, valueCell->value);
-        }
-
-        return interpolatedName;
     }
 
     std::string PickleCompiler::NextId()

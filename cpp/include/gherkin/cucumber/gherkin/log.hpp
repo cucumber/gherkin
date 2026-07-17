@@ -1,9 +1,12 @@
 #ifndef CUCUMBER_GHERKIN_LOG_HPP
 #define CUCUMBER_GHERKIN_LOG_HPP
 
+#include <cerrno>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <system_error>
 
 namespace cucumber::gherkin
 {

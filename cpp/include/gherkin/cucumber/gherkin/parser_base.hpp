@@ -34,7 +34,7 @@ namespace cucumber::gherkin
 
         [[nodiscard]] ResultType GetResult() const;
 
-        virtual void parse(ContextType& context) = 0;
+        virtual void parse(ContextType& context) = 0; // NOLINT(readability-identifier-naming)
 
         BuilderType builder;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
         TokenScanner scanner; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)

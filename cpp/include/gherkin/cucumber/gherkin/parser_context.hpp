@@ -39,9 +39,9 @@ namespace cucumber::gherkin
             return HasToken() ? PopToken() : scanner.Read();
         }
 
-        void PushTokens(const TokenQueue& Tokens)
+        void PushTokens(const TokenQueue& tokens)
         {
-            queue.insert(queue.end(), Tokens.begin(), Tokens.end());
+            queue.insert(queue.end(), tokens.begin(), tokens.end());
         }
 
         [[nodiscard]] bool HasErrors() const

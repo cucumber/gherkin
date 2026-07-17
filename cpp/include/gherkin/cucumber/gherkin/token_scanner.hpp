@@ -2,9 +2,11 @@
 #define CUCUMBER_GHERKIN_TOKEN_SCANNER_HPP
 
 #include "cucumber/gherkin/file.hpp"
-#include "cucumber/gherkin/line.hpp"
 #include "cucumber/gherkin/token.hpp"
+#include <cstddef>
+#include <istream>
 #include <memory>
+#include <string>
 #include <string_view>
 
 namespace cucumber::gherkin
