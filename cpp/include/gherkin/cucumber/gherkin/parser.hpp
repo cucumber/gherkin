@@ -1,6 +1,5 @@
-// This File is generated. Do not edit! Edit gherkin-cpp-Parser.razor instead.
-// NOLINTBEGIN
-#pragma once
+#ifndef CUCUMBER_GHERKIN_PARSER_HPP
+#define CUCUMBER_GHERKIN_PARSER_HPP
 
 #include "cucumber/gherkin/ast_builder.hpp"
 #include "cucumber/gherkin/exceptions.hpp"
@@ -14,6 +13,9 @@
 #include <string>
 #include <utility>
 
+// This File is generated. Do not edit! Edit gherkin-cpp-Parser.razor instead.
+// NOLINTBEGIN
+
 namespace cucumber::gherkin
 {
 
@@ -23,60 +25,60 @@ namespace cucumber::gherkin
     public:
         using parent = ParserBase<Builder, Scanner, Matcher>;
         using parent::parent;
-        using parent::Parse;
+        using parent::parse;
         using context_type = typename parent::context_type;
 
     protected:
-        void Parse(context_type& context) override
+        void parse(context_type& context) override
         {
-            StartRule(context, RuleType::GHERKIN_DOCUMENT);
+            start_rule(context, RuleType::gherkinDocument);
 
             std::size_t state = 0;
 
             while (true)
             {
-                auto token = context.ReadToken();
-                state = MatchToken(state, token, context);
+                auto token = context.read_token();
+                state = match_token(state, token, context);
 
-                if (token.IsEof())
+                if (token.is_eof())
                 {
                     break;
                 }
             }
 
-            EndRule(context, RuleType::GHERKIN_DOCUMENT);
+            end_rule(context, RuleType::gherkinDocument);
 
-            if (context.HasErrors())
+            if (context.has_errors())
             {
-                throw CompositeParserError(context.errorPointers);
+                throw CompositeParserError(context.error_pointers);
             }
         }
 
-        void Build(context_type& context, Token& token)
+        void build(context_type& context, Token& token)
         {
-            context.builder.Build(token);
+            context.builder.build(token);
         }
 
-        void StartRule(context_type& context, RuleType ruleType)
+        void start_rule(context_type& context, RuleType ruleType)
         {
-            HandleAstError(context, ruleType,
+            handle_ast_error(context, ruleType,
                 [&context](auto rtype)
                 {
-                    context.builder.StartRule(rtype);
+                    context.builder.start_rule(rtype);
                 });
         }
 
-        void EndRule(context_type& context, RuleType ruleType)
+        void end_rule(context_type& context, RuleType ruleType)
         {
-            HandleAstError(context, ruleType,
+            handle_ast_error(context, ruleType,
                 [&context](auto rtype)
                 {
-                    context.builder.EndRule(rtype);
+                    context.builder.end_rule(rtype);
                 });
         }
 
         template<typename Argument, typename Action>
-        bool HandleExternalError(context_type& context, bool defaultValue, Argument&& argument, Action&& action)
+        bool handle_external_error(context_type& context, bool default_value, Argument&& argument, Action&& action)
         {
             using ret_type = decltype(action(argument));
 
@@ -85,7 +87,7 @@ namespace cucumber::gherkin
                 if constexpr (std::is_same_v<ret_type, void>)
                 {
                     action(argument);
-                    return defaultValue;
+                    return default_value;
                 }
                 else
                 {
@@ -94,218 +96,218 @@ namespace cucumber::gherkin
             }
             catch (const CompositeParserError& e)
             {
-                for (const auto& errorPointer : e.Errors())
+                for (const auto& error_pointer : e.errors())
                 {
-                    context.AddError(errorPointer);
+                    context.add_error(error_pointer);
                 }
             }
             catch (const ParserError& e)
             {
-                auto errorPointer = NewParserError<ParserError>(e);
-                context.AddError(errorPointer);
+                auto error_pointer = new_parser_error<ParserError>(e);
+                context.add_error(error_pointer);
             }
 
-            return defaultValue;
+            return default_value;
         }
 
         template<typename Argument, typename Action>
-        void HandleAstError(context_type& context, Argument&& argument, Action&& action)
+        void handle_ast_error(context_type& context, Argument&& argument, Action&& action)
         {
-            HandleExternalError(context, true, argument, action);
+            handle_external_error(context, true, argument, action);
         }
 
-        bool MatchEOF(context_type& context, Token& token)
+        bool match_e_o_f(context_type& context, Token& token)
         {
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchEOF(tok);
+                    return context.matcher.match_e_o_f(tok);
                 });
         }
 
-        bool MatchEmpty(context_type& context, Token& token)
+        bool match_empty(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchEmpty(tok);
+                    return context.matcher.match_empty(tok);
                 });
         }
 
-        bool MatchComment(context_type& context, Token& token)
+        bool match_comment(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchComment(tok);
+                    return context.matcher.match_comment(tok);
                 });
         }
 
-        bool MatchTagLine(context_type& context, Token& token)
+        bool match_tag_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchTagLine(tok);
+                    return context.matcher.match_tag_line(tok);
                 });
         }
 
-        bool MatchFeatureLine(context_type& context, Token& token)
+        bool match_feature_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchFeatureLine(tok);
+                    return context.matcher.match_feature_line(tok);
                 });
         }
 
-        bool MatchRuleLine(context_type& context, Token& token)
+        bool match_rule_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchRuleLine(tok);
+                    return context.matcher.match_rule_line(tok);
                 });
         }
 
-        bool MatchBackgroundLine(context_type& context, Token& token)
+        bool match_background_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchBackgroundLine(tok);
+                    return context.matcher.match_background_line(tok);
                 });
         }
 
-        bool MatchScenarioLine(context_type& context, Token& token)
+        bool match_scenario_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchScenarioLine(tok);
+                    return context.matcher.match_scenario_line(tok);
                 });
         }
 
-        bool MatchExamplesLine(context_type& context, Token& token)
+        bool match_examples_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchExamplesLine(tok);
+                    return context.matcher.match_examples_line(tok);
                 });
         }
 
-        bool MatchStepLine(context_type& context, Token& token)
+        bool match_step_line(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchStepLine(tok);
+                    return context.matcher.match_step_line(tok);
                 });
         }
 
-        bool MatchDocStringSeparator(context_type& context, Token& token)
+        bool match_doc_string_separator(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchDocStringSeparator(tok);
+                    return context.matcher.match_doc_string_separator(tok);
                 });
         }
 
-        bool MatchTableRow(context_type& context, Token& token)
+        bool match_table_row(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchTableRow(tok);
+                    return context.matcher.match_table_row(tok);
                 });
         }
 
-        bool MatchLanguage(context_type& context, Token& token)
+        bool match_language(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchLanguage(tok);
+                    return context.matcher.match_language(tok);
                 });
         }
 
-        bool MatchOther(context_type& context, Token& token)
+        bool match_other(context_type& context, Token& token)
         {
-            if (token.IsEof())
+            if (token.is_eof())
             {
                 return false;
             }
 
-            return HandleExternalError(context, false, token,
+            return handle_external_error(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.MatchOther(tok);
+                    return context.matcher.match_other(tok);
                 });
         }
 
-        bool Lookahead0(context_type& context, Token& currentToken)
+        bool lookahead_0(context_type& context, Token& current_token)
         {
             Token token;
             token_queue queue;
@@ -313,27 +315,27 @@ namespace cucumber::gherkin
 
             while (true)
             {
-                token = context.ReadToken();
+                token = context.read_token();
                 queue.push_back(token);
 
-                if (MatchScenarioLine(context, token) || false)
+                if (match_scenario_line(context, token) || false)
                 {
                     match = true;
                     break;
                 }
 
-                if (!(MatchEmpty(context, token) || MatchComment(context, token) || MatchTagLine(context, token) || false))
+                if (!(match_empty(context, token) || match_comment(context, token) || match_tag_line(context, token) || false))
                 {
                     break;
                 }
             }
 
-            context.PushTokens(queue);
+            context.push_tokens(queue);
 
             return match;
         }
 
-        bool Lookahead1(context_type& context, Token& currentToken)
+        bool lookahead_1(context_type& context, Token& current_token)
         {
             Token token;
             token_queue queue;
@@ -341,4788 +343,4779 @@ namespace cucumber::gherkin
 
             while (true)
             {
-                token = context.ReadToken();
+                token = context.read_token();
                 queue.push_back(token);
 
-                if (MatchExamplesLine(context, token) || false)
+                if (match_examples_line(context, token) || false)
                 {
                     match = true;
                     break;
                 }
 
-                if (!(MatchEmpty(context, token) || MatchComment(context, token) || MatchTagLine(context, token) || false))
+                if (!(match_empty(context, token) || match_comment(context, token) || match_tag_line(context, token) || false))
                 {
                     break;
                 }
             }
 
-            context.PushTokens(queue);
+            context.push_tokens(queue);
 
             return match;
         }
 
         // Start
-        std::size_t MatchTokenAt0(Token& token, context_type& context)
+        std::size_t match_token_at_0(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 42;
             }
-            if (MatchLanguage(context, token))
+            if (match_language(context, token))
             {
-                StartRule(context, RuleType::FEATURE);
-                StartRule(context, RuleType::FEATURE_HEADER);
-                Build(context, token);
+                start_rule(context, RuleType::feature);
+                start_rule(context, RuleType::featureHeader);
+                build(context, token);
                 return 1;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                StartRule(context, RuleType::FEATURE);
-                StartRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                start_rule(context, RuleType::feature);
+                start_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 2;
             }
-            if (MatchFeatureLine(context, token))
+            if (match_feature_line(context, token))
             {
-                StartRule(context, RuleType::FEATURE);
-                StartRule(context, RuleType::FEATURE_HEADER);
-                Build(context, token);
+                start_rule(context, RuleType::feature);
+                start_rule(context, RuleType::featureHeader);
+                build(context, token);
                 return 3;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 0;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 0;
             }
 
-            std::string stateComment = "State: 0 - Start";
-            std::string expectedTokens = "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty";
+            std::string state_comment = "State: 0 - Start";
+            std::string expected_tokens = "#EOF, #Language, #TagLine, #FeatureLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 0;
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
-        std::size_t MatchTokenAt1(Token& token, context_type& context)
+        std::size_t match_token_at_1(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 2;
             }
-            if (MatchFeatureLine(context, token))
+            if (match_feature_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 3;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 1;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 1;
             }
 
-            std::string stateComment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0";
-            std::string expectedTokens = "#TagLine, #FeatureLine, #Comment, #Empty";
+            std::string state_comment = "State: 1 - GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0";
+            std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 1;
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt2(Token& token, context_type& context)
+        std::size_t match_token_at_2(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 2;
             }
-            if (MatchFeatureLine(context, token))
+            if (match_feature_line(context, token))
             {
-                EndRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::tags);
+                build(context, token);
                 return 3;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 2;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 2;
             }
 
-            std::string stateComment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0";
-            std::string expectedTokens = "#TagLine, #FeatureLine, #Comment, #Empty";
+            std::string state_comment = "State: 2 - GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0";
+            std::string expected_tokens = "#TagLine, #FeatureLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 2;
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
-        std::size_t MatchTokenAt3(Token& token, context_type& context)
+        std::size_t match_token_at_3(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::FEATURE_HEADER);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::featureHeader);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 3;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 4;
             }
-            if (MatchBackgroundLine(context, token))
+            if (match_background_line(context, token))
             {
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::BACKGROUND);
-                Build(context, token);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::background);
+                build(context, token);
                 return 5;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::FEATURE_HEADER);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::featureHeader);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 4;
             }
 
-            std::string stateComment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 3 - GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 3;
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt4(Token& token, context_type& context)
+        std::size_t match_token_at_4(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::FEATURE_HEADER);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::featureHeader);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 4;
             }
-            if (MatchBackgroundLine(context, token))
+            if (match_background_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::BACKGROUND);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::background);
+                build(context, token);
                 return 5;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::FEATURE_HEADER);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::featureHeader);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::FEATURE_HEADER);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::featureHeader);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 4;
             }
 
-            std::string stateComment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 4 - GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 4;
         }
 
         // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
-        std::size_t MatchTokenAt5(Token& token, context_type& context)
+        std::size_t match_token_at_5(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 5;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 6;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 6;
             }
 
-            std::string stateComment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 5 - GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 5;
         }
 
         // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt6(Token& token, context_type& context)
+        std::size_t match_token_at_6(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 6;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 6;
             }
 
-            std::string stateComment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 6 - GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 6;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt7(Token& token, context_type& context)
+        std::size_t match_token_at_7(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 8;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 52;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 7;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 7;
             }
 
-            std::string stateComment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 7 - GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 7;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt8(Token& token, context_type& context)
+        std::size_t match_token_at_8(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 8;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 9;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 8;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 8;
             }
 
-            std::string stateComment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 8;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt9(Token& token, context_type& context)
+        std::size_t match_token_at_9(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 10;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 9;
             }
 
-            std::string stateComment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 9;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt10(Token& token, context_type& context)
+        std::size_t match_token_at_10(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 10;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 10;
             }
 
-            std::string stateComment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 10;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt11(Token& token, context_type& context)
+        std::size_t match_token_at_11(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 11;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::TAGS);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 11;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 11;
             }
 
-            std::string stateComment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
-            std::string expectedTokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
+            std::string state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
+            std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 11;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-        std::size_t MatchTokenAt12(Token& token, context_type& context)
+        std::size_t match_token_at_12(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 12;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 13;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 13;
             }
 
-            std::string stateComment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 12;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt13(Token& token, context_type& context)
+        std::size_t match_token_at_13(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 13;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 13;
             }
 
-            std::string stateComment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 13;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt14(Token& token, context_type& context)
+        std::size_t match_token_at_14(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 15;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 49;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 14;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 14;
             }
 
-            std::string stateComment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 14;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt15(Token& token, context_type& context)
+        std::size_t match_token_at_15(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 15;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 16;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 15;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 15;
             }
 
-            std::string stateComment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 15;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt16(Token& token, context_type& context)
+        std::size_t match_token_at_16(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 17;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 16;
             }
 
-            std::string stateComment =
-                "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 16;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt17(Token& token, context_type& context)
+        std::size_t match_token_at_17(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 17;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 17;
             }
 
-            std::string stateComment =
-                "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 17;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt18(Token& token, context_type& context)
+        std::size_t match_token_at_18(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 18;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::TAGS);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 18;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 18;
             }
 
-            std::string stateComment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
-            std::string expectedTokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
+            std::string state_comment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
+            std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 18;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-        std::size_t MatchTokenAt19(Token& token, context_type& context)
+        std::size_t match_token_at_19(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 19;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 20;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                StartRule(context, RuleType::EXAMPLES_TABLE);
-                Build(context, token);
+                start_rule(context, RuleType::examplesTable);
+                build(context, token);
                 return 21;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 20;
             }
 
-            std::string stateComment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 19;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt20(Token& token, context_type& context)
+        std::size_t match_token_at_20(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 20;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::EXAMPLES_TABLE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examplesTable);
+                build(context, token);
                 return 21;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 20;
             }
 
-            std::string stateComment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 20;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-        std::size_t MatchTokenAt21(Token& token, context_type& context)
+        std::size_t match_token_at_21(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 21;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES_TABLE);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examplesTable);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES_TABLE);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examplesTable);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 21;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 21;
             }
 
-            std::string stateComment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 21;
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt22(Token& token, context_type& context)
+        std::size_t match_token_at_22(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 22;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::tags);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 22;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 22;
             }
 
-            std::string stateComment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
-            std::string expectedTokens = "#TagLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0";
+            std::string expected_tokens = "#TagLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 22;
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
-        std::size_t MatchTokenAt23(Token& token, context_type& context)
+        std::size_t match_token_at_23(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::RULE_HEADER);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::ruleHeader);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 24;
             }
-            if (MatchBackgroundLine(context, token))
+            if (match_background_line(context, token))
             {
-                EndRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::BACKGROUND);
-                Build(context, token);
+                end_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::background);
+                build(context, token);
                 return 25;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::RULE_HEADER);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::ruleHeader);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::RULE_HEADER);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::ruleHeader);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::RULE_HEADER);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::ruleHeader);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 24;
             }
 
-            std::string stateComment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 23;
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt24(Token& token, context_type& context)
+        std::size_t match_token_at_24(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::RULE_HEADER);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::ruleHeader);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 24;
             }
-            if (MatchBackgroundLine(context, token))
+            if (match_background_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::BACKGROUND);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::background);
+                build(context, token);
                 return 25;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::RULE_HEADER);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::ruleHeader);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::RULE_HEADER);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::ruleHeader);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::RULE_HEADER);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::ruleHeader);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 24;
             }
 
-            std::string stateComment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #BackgroundLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 24;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-        std::size_t MatchTokenAt25(Token& token, context_type& context)
+        std::size_t match_token_at_25(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 25;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 26;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 26;
             }
 
-            std::string stateComment = "State: 25 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 25;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt26(Token& token, context_type& context)
+        std::size_t match_token_at_26(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 26;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 26;
             }
 
-            std::string stateComment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 26;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt27(Token& token, context_type& context)
+        std::size_t match_token_at_27(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 28;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 46;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 27;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 27;
             }
 
-            std::string stateComment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 27;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt28(Token& token, context_type& context)
+        std::size_t match_token_at_28(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 28;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 29;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 28;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 28;
             }
 
-            std::string stateComment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 28;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt29(Token& token, context_type& context)
+        std::size_t match_token_at_29(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 30;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 29;
             }
 
-            std::string stateComment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 29;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt30(Token& token, context_type& context)
+        std::size_t match_token_at_30(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 30;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 30;
             }
 
-            std::string stateComment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 30;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt31(Token& token, context_type& context)
+        std::size_t match_token_at_31(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 31;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::TAGS);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 31;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 31;
             }
 
-            std::string stateComment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
-            std::string expectedTokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
+            std::string state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0";
+            std::string expected_tokens = "#TagLine, #ScenarioLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 31;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-        std::size_t MatchTokenAt32(Token& token, context_type& context)
+        std::size_t match_token_at_32(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 32;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 33;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 33;
             }
 
-            std::string stateComment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 32;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt33(Token& token, context_type& context)
+        std::size_t match_token_at_33(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 33;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 33;
             }
 
-            std::string stateComment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 33;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt34(Token& token, context_type& context)
+        std::size_t match_token_at_34(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 35;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 43;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 34;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 34;
             }
 
-            std::string stateComment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 34;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt35(Token& token, context_type& context)
+        std::size_t match_token_at_35(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 35;
             }
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                StartRule(context, RuleType::DOC_STRING);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                start_rule(context, RuleType::docString);
+                build(context, token);
                 return 36;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 35;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 35;
             }
 
-            std::string stateComment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #DocStringSeparator, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 35;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt36(Token& token, context_type& context)
+        std::size_t match_token_at_36(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 37;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 36;
             }
 
-            std::string stateComment =
-                "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 36;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt37(Token& token, context_type& context)
+        std::size_t match_token_at_37(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 37;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 37;
             }
 
-            std::string stateComment =
-                "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 37;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt38(Token& token, context_type& context)
+        std::size_t match_token_at_38(Token& token, context_type& context)
         {
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 38;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::TAGS);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::tags);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 38;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 38;
             }
 
-            std::string stateComment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
-            std::string expectedTokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
+            std::string state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0";
+            std::string expected_tokens = "#TagLine, #ExamplesLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 38;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-        std::size_t MatchTokenAt39(Token& token, context_type& context)
+        std::size_t match_token_at_39(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 39;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 40;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                StartRule(context, RuleType::EXAMPLES_TABLE);
-                Build(context, token);
+                start_rule(context, RuleType::examplesTable);
+                build(context, token);
                 return 41;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                StartRule(context, RuleType::DESCRIPTION);
-                Build(context, token);
+                start_rule(context, RuleType::description);
+                build(context, token);
                 return 40;
             }
 
-            std::string stateComment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
-            std::string expectedTokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0";
+            std::string expected_tokens = "#EOF, #Empty, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 39;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt40(Token& token, context_type& context)
+        std::size_t match_token_at_40(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 40;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                StartRule(context, RuleType::EXAMPLES_TABLE);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                start_rule(context, RuleType::examplesTable);
+                build(context, token);
                 return 41;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DESCRIPTION);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::description);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DESCRIPTION);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::description);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 40;
             }
 
-            std::string stateComment =
-                "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
-            std::string expectedTokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
+            std::string state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 40;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-        std::size_t MatchTokenAt41(Token& token, context_type& context)
+        std::size_t match_token_at_41(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 41;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES_TABLE);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examplesTable);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::EXAMPLES_TABLE);
-                    EndRule(context, RuleType::EXAMPLES);
-                    EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::examplesTable);
+                    end_rule(context, RuleType::examples);
+                    end_rule(context, RuleType::examplesDefinition);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::EXAMPLES_TABLE);
-                EndRule(context, RuleType::EXAMPLES);
-                EndRule(context, RuleType::EXAMPLES_DEFINITION);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::examplesTable);
+                end_rule(context, RuleType::examples);
+                end_rule(context, RuleType::examplesDefinition);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 41;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 41;
             }
 
-            std::string stateComment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 41;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt43(Token& token, context_type& context)
+        std::size_t match_token_at_43(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 44;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 43;
             }
 
-            std::string stateComment =
-                "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 43;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt44(Token& token, context_type& context)
+        std::size_t match_token_at_44(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 45;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 44;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 44;
             }
 
-            std::string stateComment =
-                "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 44;
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt45(Token& token, context_type& context)
+        std::size_t match_token_at_45(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 45;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 34;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 38;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 39;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 45;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 45;
             }
 
-            std::string stateComment = "State: 45 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 45 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 45;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt46(Token& token, context_type& context)
+        std::size_t match_token_at_46(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 47;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 46;
             }
 
-            std::string stateComment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 46;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt47(Token& token, context_type& context)
+        std::size_t match_token_at_47(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 48;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 47;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 47;
             }
 
-            std::string stateComment = "State: 47 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 47 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 47;
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt48(Token& token, context_type& context)
+        std::size_t match_token_at_48(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 48;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 27;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 31;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 32;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::rule);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 48;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 48;
             }
 
-            std::string stateComment = "State: 48 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 48 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 48;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt49(Token& token, context_type& context)
+        std::size_t match_token_at_49(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 50;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 49;
             }
 
-            std::string stateComment =
-                "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 49;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt50(Token& token, context_type& context)
+        std::size_t match_token_at_50(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 51;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 50;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 50;
             }
 
-            std::string stateComment =
-                "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 50;
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt51(Token& token, context_type& context)
+        std::size_t match_token_at_51(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 51;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 14;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead1(context, token))
+                if (lookahead_1(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    start_rule(context, RuleType::examplesDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 18;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::SCENARIO);
-                    EndRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::scenario);
+                    end_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchExamplesLine(context, token))
+            if (match_examples_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::EXAMPLES_DEFINITION);
-                StartRule(context, RuleType::EXAMPLES);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::examplesDefinition);
+                start_rule(context, RuleType::examples);
+                build(context, token);
                 return 19;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::SCENARIO);
-                EndRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::scenario);
+                end_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 51;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 51;
             }
 
-            std::string stateComment = "State: 51 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 51 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 51;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt52(Token& token, context_type& context)
+        std::size_t match_token_at_52(Token& token, context_type& context)
         {
-            if (MatchDocStringSeparator(context, token))
+            if (match_doc_string_separator(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 53;
             }
-            if (MatchOther(context, token))
+            if (match_other(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 52;
             }
 
-            std::string stateComment = "State: 52 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
-            std::string expectedTokens = "#DocStringSeparator, #Other";
+            std::string state_comment = "State: 52 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string expected_tokens = "#DocStringSeparator, #Other";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 52;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt53(Token& token, context_type& context)
+        std::size_t match_token_at_53(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                StartRule(context, RuleType::DATA_TABLE);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                start_rule(context, RuleType::dataTable);
+                build(context, token);
                 return 54;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DOC_STRING);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::docString);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DOC_STRING);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::docString);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 53;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 53;
             }
 
-            std::string stateComment = "State: 53 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 53 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 53;
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt54(Token& token, context_type& context)
+        std::size_t match_token_at_54(Token& token, context_type& context)
         {
-            if (MatchEOF(context, token))
+            if (match_e_o_f(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                EndRule(context, RuleType::FEATURE);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                end_rule(context, RuleType::feature);
+                build(context, token);
                 return 42;
             }
-            if (MatchTableRow(context, token))
+            if (match_table_row(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 54;
             }
-            if (MatchStepLine(context, token))
+            if (match_step_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                StartRule(context, RuleType::STEP);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                start_rule(context, RuleType::step);
+                build(context, token);
                 return 7;
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                if (Lookahead0(context, token))
+                if (lookahead_0(context, token))
                 {
-                    EndRule(context, RuleType::DATA_TABLE);
-                    EndRule(context, RuleType::STEP);
-                    EndRule(context, RuleType::BACKGROUND);
-                    StartRule(context, RuleType::SCENARIO_DEFINITION);
-                    StartRule(context, RuleType::TAGS);
-                    Build(context, token);
+                    end_rule(context, RuleType::dataTable);
+                    end_rule(context, RuleType::step);
+                    end_rule(context, RuleType::background);
+                    start_rule(context, RuleType::scenarioDefinition);
+                    start_rule(context, RuleType::tags);
+                    build(context, token);
                     return 11;
                 }
             }
-            if (MatchTagLine(context, token))
+            if (match_tag_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                StartRule(context, RuleType::TAGS);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                start_rule(context, RuleType::tags);
+                build(context, token);
                 return 22;
             }
-            if (MatchScenarioLine(context, token))
+            if (match_scenario_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::SCENARIO_DEFINITION);
-                StartRule(context, RuleType::SCENARIO);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::scenarioDefinition);
+                start_rule(context, RuleType::scenario);
+                build(context, token);
                 return 12;
             }
-            if (MatchRuleLine(context, token))
+            if (match_rule_line(context, token))
             {
-                EndRule(context, RuleType::DATA_TABLE);
-                EndRule(context, RuleType::STEP);
-                EndRule(context, RuleType::BACKGROUND);
-                StartRule(context, RuleType::RULE);
-                StartRule(context, RuleType::RULE_HEADER);
-                Build(context, token);
+                end_rule(context, RuleType::dataTable);
+                end_rule(context, RuleType::step);
+                end_rule(context, RuleType::background);
+                start_rule(context, RuleType::rule);
+                start_rule(context, RuleType::ruleHeader);
+                build(context, token);
                 return 23;
             }
-            if (MatchComment(context, token))
+            if (match_comment(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 54;
             }
-            if (MatchEmpty(context, token))
+            if (match_empty(context, token))
             {
-                Build(context, token);
+                build(context, token);
                 return 54;
             }
 
-            std::string stateComment = "State: 54 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
-            std::string expectedTokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
+            std::string state_comment = "State: 54 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0";
+            std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
-            auto errorPointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expectedTokens, stateComment) : NewParserError<UnexpectedToken>(token, expectedTokens, stateComment);
+            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stopAtFirstError)
+            if (context.stop_at_first_error)
             {
-                throw *errorPointer;
+                throw *error_pointer;
             }
 
-            context.AddError(std::move(errorPointer));
+            context.add_error(std::move(error_pointer));
 
             return 54;
         }
 
-        std::size_t MatchToken(std::size_t state, Token& token, context_type& context)
+        std::size_t match_token(std::size_t state, Token& token, context_type& context)
         {
             switch (state)
             {
                 case 0:
-                    return MatchTokenAt0(token, context);
+                    return match_token_at_0(token, context);
                 case 1:
-                    return MatchTokenAt1(token, context);
+                    return match_token_at_1(token, context);
                 case 2:
-                    return MatchTokenAt2(token, context);
+                    return match_token_at_2(token, context);
                 case 3:
-                    return MatchTokenAt3(token, context);
+                    return match_token_at_3(token, context);
                 case 4:
-                    return MatchTokenAt4(token, context);
+                    return match_token_at_4(token, context);
                 case 5:
-                    return MatchTokenAt5(token, context);
+                    return match_token_at_5(token, context);
                 case 6:
-                    return MatchTokenAt6(token, context);
+                    return match_token_at_6(token, context);
                 case 7:
-                    return MatchTokenAt7(token, context);
+                    return match_token_at_7(token, context);
                 case 8:
-                    return MatchTokenAt8(token, context);
+                    return match_token_at_8(token, context);
                 case 9:
-                    return MatchTokenAt9(token, context);
+                    return match_token_at_9(token, context);
                 case 10:
-                    return MatchTokenAt10(token, context);
+                    return match_token_at_10(token, context);
                 case 11:
-                    return MatchTokenAt11(token, context);
+                    return match_token_at_11(token, context);
                 case 12:
-                    return MatchTokenAt12(token, context);
+                    return match_token_at_12(token, context);
                 case 13:
-                    return MatchTokenAt13(token, context);
+                    return match_token_at_13(token, context);
                 case 14:
-                    return MatchTokenAt14(token, context);
+                    return match_token_at_14(token, context);
                 case 15:
-                    return MatchTokenAt15(token, context);
+                    return match_token_at_15(token, context);
                 case 16:
-                    return MatchTokenAt16(token, context);
+                    return match_token_at_16(token, context);
                 case 17:
-                    return MatchTokenAt17(token, context);
+                    return match_token_at_17(token, context);
                 case 18:
-                    return MatchTokenAt18(token, context);
+                    return match_token_at_18(token, context);
                 case 19:
-                    return MatchTokenAt19(token, context);
+                    return match_token_at_19(token, context);
                 case 20:
-                    return MatchTokenAt20(token, context);
+                    return match_token_at_20(token, context);
                 case 21:
-                    return MatchTokenAt21(token, context);
+                    return match_token_at_21(token, context);
                 case 22:
-                    return MatchTokenAt22(token, context);
+                    return match_token_at_22(token, context);
                 case 23:
-                    return MatchTokenAt23(token, context);
+                    return match_token_at_23(token, context);
                 case 24:
-                    return MatchTokenAt24(token, context);
+                    return match_token_at_24(token, context);
                 case 25:
-                    return MatchTokenAt25(token, context);
+                    return match_token_at_25(token, context);
                 case 26:
-                    return MatchTokenAt26(token, context);
+                    return match_token_at_26(token, context);
                 case 27:
-                    return MatchTokenAt27(token, context);
+                    return match_token_at_27(token, context);
                 case 28:
-                    return MatchTokenAt28(token, context);
+                    return match_token_at_28(token, context);
                 case 29:
-                    return MatchTokenAt29(token, context);
+                    return match_token_at_29(token, context);
                 case 30:
-                    return MatchTokenAt30(token, context);
+                    return match_token_at_30(token, context);
                 case 31:
-                    return MatchTokenAt31(token, context);
+                    return match_token_at_31(token, context);
                 case 32:
-                    return MatchTokenAt32(token, context);
+                    return match_token_at_32(token, context);
                 case 33:
-                    return MatchTokenAt33(token, context);
+                    return match_token_at_33(token, context);
                 case 34:
-                    return MatchTokenAt34(token, context);
+                    return match_token_at_34(token, context);
                 case 35:
-                    return MatchTokenAt35(token, context);
+                    return match_token_at_35(token, context);
                 case 36:
-                    return MatchTokenAt36(token, context);
+                    return match_token_at_36(token, context);
                 case 37:
-                    return MatchTokenAt37(token, context);
+                    return match_token_at_37(token, context);
                 case 38:
-                    return MatchTokenAt38(token, context);
+                    return match_token_at_38(token, context);
                 case 39:
-                    return MatchTokenAt39(token, context);
+                    return match_token_at_39(token, context);
                 case 40:
-                    return MatchTokenAt40(token, context);
+                    return match_token_at_40(token, context);
                 case 41:
-                    return MatchTokenAt41(token, context);
+                    return match_token_at_41(token, context);
                 case 43:
-                    return MatchTokenAt43(token, context);
+                    return match_token_at_43(token, context);
                 case 44:
-                    return MatchTokenAt44(token, context);
+                    return match_token_at_44(token, context);
                 case 45:
-                    return MatchTokenAt45(token, context);
+                    return match_token_at_45(token, context);
                 case 46:
-                    return MatchTokenAt46(token, context);
+                    return match_token_at_46(token, context);
                 case 47:
-                    return MatchTokenAt47(token, context);
+                    return match_token_at_47(token, context);
                 case 48:
-                    return MatchTokenAt48(token, context);
+                    return match_token_at_48(token, context);
                 case 49:
-                    return MatchTokenAt49(token, context);
+                    return match_token_at_49(token, context);
                 case 50:
-                    return MatchTokenAt50(token, context);
+                    return match_token_at_50(token, context);
                 case 51:
-                    return MatchTokenAt51(token, context);
+                    return match_token_at_51(token, context);
                 case 52:
-                    return MatchTokenAt52(token, context);
+                    return match_token_at_52(token, context);
                 case 53:
-                    return MatchTokenAt53(token, context);
+                    return match_token_at_53(token, context);
                 case 54:
-                    return MatchTokenAt54(token, context);
+                    return match_token_at_54(token, context);
                 default:
                     throw std::runtime_error("invalid operation: " + std::to_string(state));
             }
@@ -5132,3 +5125,4 @@ namespace cucumber::gherkin
 }
 
 // NOLINTEND
+#endif

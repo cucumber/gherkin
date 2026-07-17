@@ -39,7 +39,7 @@ namespace cucumber::gherkin
 
             context_type context{ builder, scanner, matcher };
 
-            Parse(context);
+            parse(context);
 
             return GetResult();
         }
@@ -57,7 +57,7 @@ namespace cucumber::gherkin
             return builder.GetResult();
         }
 
-        virtual void Parse(context_type& context) = 0;
+        virtual void parse(context_type& context) = 0;
 
         Builder builder; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
         Scanner scanner; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)

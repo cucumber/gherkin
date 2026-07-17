@@ -7,14 +7,14 @@ namespace cucumber::gherkin
 
     std::string_view to_string(RuleType type)
     {
-        static const std::unordered_map<RuleType, std::string_view> rmap = { { RuleType::NONE, "None" }, { RuleType::E_O_F, "EOF" }, { RuleType::EMPTY, "Empty" }, { RuleType::COMMENT, "Comment" },
-            { RuleType::TAG_LINE, "TagLine" }, { RuleType::FEATURE_LINE, "FeatureLine" }, { RuleType::RULE_LINE, "RuleLine" }, { RuleType::BACKGROUND_LINE, "BackgroundLine" },
-            { RuleType::SCENARIO_LINE, "ScenarioLine" }, { RuleType::EXAMPLES_LINE, "ExamplesLine" }, { RuleType::STEP_LINE, "StepLine" }, { RuleType::DOC_STRING_SEPARATOR, "DocStringSeparator" },
-            { RuleType::TABLE_ROW, "TableRow" }, { RuleType::LANGUAGE, "Language" }, { RuleType::OTHER, "Other" }, { RuleType::GHERKIN_DOCUMENT, "GherkinDocument" }, { RuleType::FEATURE, "Feature" },
-            { RuleType::FEATURE_HEADER, "FeatureHeader" }, { RuleType::RULE, "Rule" }, { RuleType::RULE_HEADER, "RuleHeader" }, { RuleType::BACKGROUND, "Background" },
-            { RuleType::SCENARIO_DEFINITION, "ScenarioDefinition" }, { RuleType::SCENARIO, "Scenario" }, { RuleType::EXAMPLES_DEFINITION, "ExamplesDefinition" }, { RuleType::EXAMPLES, "Examples" },
-            { RuleType::EXAMPLES_TABLE, "ExamplesTable" }, { RuleType::STEP, "Step" }, { RuleType::STEP_ARG, "StepArg" }, { RuleType::DATA_TABLE, "DataTable" }, { RuleType::DOC_STRING, "DocString" },
-            { RuleType::TAGS, "Tags" }, { RuleType::DESCRIPTION_HELPER, "DescriptionHelper" }, { RuleType::DESCRIPTION, "Description" } };
+        static const std::unordered_map<RuleType, std::string_view> rmap = { { RuleType::none, "None" }, { RuleType::eOF, "EOF" }, { RuleType::empty, "Empty" }, { RuleType::comment, "Comment" },
+            { RuleType::tagLine, "TagLine" }, { RuleType::featureLine, "FeatureLine" }, { RuleType::ruleLine, "RuleLine" }, { RuleType::backgroundLine, "BackgroundLine" },
+            { RuleType::scenarioLine, "ScenarioLine" }, { RuleType::examplesLine, "ExamplesLine" }, { RuleType::stepLine, "StepLine" }, { RuleType::docStringSeparator, "DocStringSeparator" },
+            { RuleType::tableRow, "TableRow" }, { RuleType::language, "Language" }, { RuleType::other, "Other" }, { RuleType::gherkinDocument, "GherkinDocument" }, { RuleType::feature, "Feature" },
+            { RuleType::featureHeader, "FeatureHeader" }, { RuleType::rule, "Rule" }, { RuleType::ruleHeader, "RuleHeader" }, { RuleType::background, "Background" },
+            { RuleType::scenarioDefinition, "ScenarioDefinition" }, { RuleType::scenario, "Scenario" }, { RuleType::examplesDefinition, "ExamplesDefinition" }, { RuleType::examples, "Examples" },
+            { RuleType::examplesTable, "ExamplesTable" }, { RuleType::step, "Step" }, { RuleType::stepArg, "StepArg" }, { RuleType::dataTable, "DataTable" }, { RuleType::docString, "DocString" },
+            { RuleType::tags, "Tags" }, { RuleType::descriptionHelper, "DescriptionHelper" }, { RuleType::description, "Description" } };
 
         return rmap.at(type);
     }

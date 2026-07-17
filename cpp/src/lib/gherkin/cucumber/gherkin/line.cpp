@@ -149,9 +149,9 @@ namespace cucumber::gherkin
             {
                 using namespace std::literals;
 
-                auto strippedCell = Lstrip(cell, RePattern::SPACES_NO_NL);
+                auto strippedCell = Lstrip(cell, RePattern::spacesNoNl);
                 auto cellIndent = cell.size() - strippedCell.size();
-                strippedCell = Rstrip(strippedCell, RePattern::SPACES_NO_NL);
+                strippedCell = Rstrip(strippedCell, RePattern::spacesNoNl);
 
                 Item tableItem{ col + indent + cellIndent, ToNarrow(strippedCell) };
 

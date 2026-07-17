@@ -179,13 +179,13 @@ namespace cucumber::gherkin
 
     enum class RePattern : std::uint8_t
     {
-        NONE,
-        ALL_SPACES,
-        SPACES_NO_NL,
-        CRLF,
-        CR,
-        BOL,
-        EOL
+        none,
+        allSpaces,
+        spacesNoNl,
+        crlf,
+        cr,
+        bol,
+        eol
     };
 
     template<typename CharT>
@@ -210,23 +210,23 @@ namespace cucumber::gherkin
 
             switch (pattern)
             {
-                case RePattern::NONE:
+                case RePattern::none:
                     break;
-                case RePattern::ALL_SPACES:
+                case RePattern::allSpaces:
                     view = R"([ \t\n\v\f\r\u0085\u00A0]+)";
                     break;
-                case RePattern::SPACES_NO_NL:
+                case RePattern::spacesNoNl:
                     view = R"([ \t\v\f\r\u0085\u00A0]+)";
                     break;
-                case RePattern::CRLF:
+                case RePattern::crlf:
                     view = R"(\r\n)";
-                case RePattern::CR:
+                case RePattern::cr:
                     view = R"(\r)";
                     break;
-                case RePattern::BOL:
+                case RePattern::bol:
                     view = "^"sv;
                     break;
-                case RePattern::EOL:
+                case RePattern::eol:
                     view = "$"sv;
                     break;
             }
@@ -243,27 +243,27 @@ namespace cucumber::gherkin
         using pats = RePatterns<CharT>;
 
         StripPattern(RePattern prefix, sv_type chars)
-            : StripPattern(prefix, chars, RePattern::NONE)
+            : StripPattern(prefix, chars, RePattern::none)
         {}
 
         StripPattern(sv_type chars, RePattern suffix)
-            : StripPattern(RePattern::NONE, chars, suffix)
+            : StripPattern(RePattern::none, chars, suffix)
         {}
 
         StripPattern(sv_type chars)
-            : StripPattern(RePattern::NONE, chars, RePattern::NONE)
+            : StripPattern(RePattern::none, chars, RePattern::none)
         {}
 
         StripPattern(RePattern prefix, sv_type chars, RePattern suffix)
         {
-            if (prefix != RePattern::NONE)
+            if (prefix != RePattern::none)
             {
                 s = pats::Get(prefix);
             }
 
             s += chars;
 
-            if (suffix != RePattern::NONE)
+            if (suffix != RePattern::none)
             {
                 s += pats::Get(suffix);
             }
@@ -304,37 +304,37 @@ namespace cucumber::gherkin
     }
 
     template<typename CharT>
-    std::basic_string<CharT> Lstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::ALL_SPACES)
+    std::basic_string<CharT> Lstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::allSpaces)
     {
-        return Strip(text, StripPattern<CharT>(RePattern::BOL, RePatterns<CharT>::Get(pattern)));
+        return Strip(text, StripPattern<CharT>(RePattern::bol, RePatterns<CharT>::Get(pattern)));
     }
 
     template<typename CharT>
-    std::basic_string<CharT> Lstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::ALL_SPACES)
+    std::basic_string<CharT> Lstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::allSpaces)
     {
         return Lstrip(AsView(text), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> Rstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::ALL_SPACES)
+    std::basic_string<CharT> Rstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::allSpaces)
     {
-        return Strip(text, StripPattern<CharT>(RePatterns<CharT>::Get(pattern), RePattern::EOL));
+        return Strip(text, StripPattern<CharT>(RePatterns<CharT>::Get(pattern), RePattern::eol));
     }
 
     template<typename CharT>
-    std::basic_string<CharT> Rstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::ALL_SPACES)
+    std::basic_string<CharT> Rstrip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::allSpaces)
     {
         return Rstrip(AsView(text), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> Strip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::ALL_SPACES)
+    std::basic_string<CharT> Strip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::allSpaces)
     {
         return Lstrip(Rstrip(text, pattern), pattern);
     }
 
     template<typename CharT>
-    std::basic_string<CharT> Strip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::ALL_SPACES)
+    std::basic_string<CharT> Strip(const std::basic_string<CharT>& text, RePattern pattern = RePattern::allSpaces)
     {
         return Strip(AsView(text), pattern);
     }

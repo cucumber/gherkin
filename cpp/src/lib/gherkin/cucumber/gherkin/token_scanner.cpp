@@ -75,7 +75,7 @@ namespace cucumber::gherkin
             if (!Input().eof())
             {
                 result.eof = !std::getline(Input(), line);
-                result.text = Rstrip(line, RePattern::CR);
+                result.text = Rstrip(line, RePattern::cr);
             }
             else
             {

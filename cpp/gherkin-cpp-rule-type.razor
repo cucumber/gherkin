@@ -1,20 +1,14 @@
 // This File is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 @using Berp;
 @functions {
-public static string ToSnakeCase(string str)
+public static string ToCamelCase(string str)
 {
-    return
-        string.Concat(
-            str.Select(
-                (x, i) => i > 0 && char.IsUpper(x)
-                ? "_" + x
-                : x.ToString()
-            )
-        ).ToLower();
+    if (string.IsNullOrEmpty(str)) return str;
+    return char.ToLower(str[0]) + str.Substring(1);
 }
 
 public static string NameOf(Rule rule)
-{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+{ return ToCamelCase(rule.Name.Replace("#", "")); }
 
 }
 #pragma once

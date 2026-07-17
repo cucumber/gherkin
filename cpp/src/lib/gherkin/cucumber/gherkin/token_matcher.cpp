@@ -37,29 +37,29 @@ namespace cucumber::gherkin
 
     bool TokenMatcher::MatchFeatureLine(Token& token)
     {
-        return MatchTitleLine(token, RuleType::FEATURE_LINE, Keywords("feature"));
+        return MatchTitleLine(token, RuleType::featureLine, Keywords("feature"));
     }
 
     bool TokenMatcher::MatchRuleLine(Token& token)
     {
-        return MatchTitleLine(token, RuleType::RULE_LINE, Keywords("rule"));
+        return MatchTitleLine(token, RuleType::ruleLine, Keywords("rule"));
     }
 
     bool TokenMatcher::MatchScenarioLine(Token& token)
     {
-        auto scenarioType = RuleType::SCENARIO_LINE;
+        auto scenarioType = RuleType::scenarioLine;
 
         return MatchTitleLine(token, scenarioType, Keywords("scenario")) || MatchTitleLine(token, scenarioType, Keywords("scenarioOutline"));
     }
 
     bool TokenMatcher::MatchBackgroundLine(Token& token)
     {
-        return MatchTitleLine(token, RuleType::BACKGROUND_LINE, Keywords("background"));
+        return MatchTitleLine(token, RuleType::backgroundLine, Keywords("background"));
     }
 
     bool TokenMatcher::MatchExamplesLine(Token& token)
     {
-        return MatchTitleLine(token, RuleType::EXAMPLES_LINE, Keywords("examples"));
+        return MatchTitleLine(token, RuleType::examplesLine, Keywords("examples"));
     }
 
     bool TokenMatcher::MatchTableRow(Token& token)
@@ -71,7 +71,7 @@ namespace cucumber::gherkin
 
         TokenInfo info;
         info.items = token.line.TableCells();
-        SetTokenMatched(token, RuleType::TABLE_ROW, info);
+        SetTokenMatched(token, RuleType::tableRow, info);
 
         return true;
     }
@@ -85,7 +85,7 @@ namespace cucumber::gherkin
             return false;
         }
 
-        SetTokenMatched(token, RuleType::LANGUAGE, { dialectName });
+        SetTokenMatched(token, RuleType::language, { dialectName });
         ChangeDialect(dialectName);
 
         return true;
@@ -98,7 +98,7 @@ namespace cucumber::gherkin
             return false;
         }
 
-        SetTokenMatched(token, RuleType::TAG_LINE, { std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::move(token.line.Tags()) });
+        SetTokenMatched(token, RuleType::tagLine, { std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::move(token.line.Tags()) });
 
         return true;
     }
@@ -129,7 +129,7 @@ namespace cucumber::gherkin
             return false;
         }
 
-        SetTokenMatched(token, RuleType::E_O_F);
+        SetTokenMatched(token, RuleType::eOF);
 
         return true;
     }
@@ -141,7 +141,7 @@ namespace cucumber::gherkin
             return false;
         }
 
-        SetTokenMatched(token, RuleType::EMPTY, { std::nullopt, std::nullopt, std::nullopt, 0 });
+        SetTokenMatched(token, RuleType::empty, { std::nullopt, std::nullopt, std::nullopt, 0 });
 
         return true;
     }
@@ -157,7 +157,7 @@ namespace cucumber::gherkin
 
         Subst(commentText, "[\\r\\n]+$");
 
-        SetTokenMatched(token, RuleType::COMMENT, { commentText, std::nullopt, std::nullopt, 0 });
+        SetTokenMatched(token, RuleType::comment, { commentText, std::nullopt, std::nullopt, 0 });
 
         return true;
     }
@@ -166,7 +166,7 @@ namespace cucumber::gherkin
     {
         std::string const text = std::string(token.line.GetLineText(indentToRemove));
 
-        SetTokenMatched(token, RuleType::OTHER, { UnescapeDocstring(text), std::nullopt, std::nullopt, 0 });
+        SetTokenMatched(token, RuleType::other, { UnescapeDocstring(text), std::nullopt, std::nullopt, 0 });
 
         return true;
     }
@@ -194,7 +194,7 @@ namespace cucumber::gherkin
 
             auto title = token.line.GetRestTrimmed(keyword.size());
 
-            SetTokenMatched(token, RuleType::STEP_LINE, { title, std::string(keyword), KeywordType(keyword) });
+            SetTokenMatched(token, RuleType::stepLine, { title, std::string(keyword), KeywordType(keyword) });
 
             return true;
         }
@@ -234,7 +234,7 @@ namespace cucumber::gherkin
             indentToRemove = 0;
         }
 
-        SetTokenMatched(token, RuleType::DOC_STRING_SEPARATOR, { contentType, tseparator });
+        SetTokenMatched(token, RuleType::docStringSeparator, { contentType, tseparator });
 
         return true;
     }
@@ -247,7 +247,7 @@ namespace cucumber::gherkin
 
         if (info.text)
         {
-            token.matchedText.assign(Rstrip(*info.text, RePattern::CRLF));
+            token.matchedText.assign(Rstrip(*info.text, RePattern::crlf));
         }
 
         if (info.keyword)

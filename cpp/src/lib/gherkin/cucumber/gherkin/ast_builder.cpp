@@ -50,7 +50,7 @@ namespace cucumber::gherkin
     void AstBuilder::Reset(std::string_view uri)
     {
         stack = {};
-        stack.emplace(RuleType::NONE);
+        stack.emplace(RuleType::none);
         comments.clear();
         this->uri = uri;
     }
@@ -69,7 +69,7 @@ namespace cucumber::gherkin
 
     void AstBuilder::Build(const Token& token)
     {
-        if (token.matchedType == RuleType::COMMENT)
+        if (token.matchedType == RuleType::comment)
         {
             cms::Comment comment{ GetLocation(token), token.matchedText };
 
@@ -83,7 +83,7 @@ namespace cucumber::gherkin
 
     const cms::GherkinDocument& AstBuilder::GetResult() const
     {
-        const auto* document = CurrentNode().GetSingle<cms::GherkinDocument>(RuleType::GHERKIN_DOCUMENT);
+        const auto* document = CurrentNode().GetSingle<cms::GherkinDocument>(RuleType::gherkinDocument);
 
         return (document != nullptr) ? *document : doc;
     };
@@ -95,47 +95,47 @@ namespace cucumber::gherkin
 
     void AstBuilder::TransformNode(AstNode& from, AstNode& destination)
     {
-        if (from.Is(RuleType::STEP))
+        if (from.Is(RuleType::step))
         {
             destination.Add(from.Type(), MakeStep(from));
         }
-        else if (from.Is(RuleType::DOC_STRING))
+        else if (from.Is(RuleType::docString))
         {
             destination.Add(from.Type(), MakeDocString(from));
         }
-        else if (from.Is(RuleType::DATA_TABLE))
+        else if (from.Is(RuleType::dataTable))
         {
             destination.Add(from.Type(), MakeDataTable(from));
         }
-        else if (from.Is(RuleType::BACKGROUND))
+        else if (from.Is(RuleType::background))
         {
             destination.Add(from.Type(), MakeBackground(from));
         }
-        else if (from.Is(RuleType::SCENARIO_DEFINITION))
+        else if (from.Is(RuleType::scenarioDefinition))
         {
             destination.Add(from.Type(), MakeScenarioDefinition(from));
         }
-        else if (from.Is(RuleType::EXAMPLES_DEFINITION))
+        else if (from.Is(RuleType::examplesDefinition))
         {
             destination.Add(from.Type(), MakeExamplesDefinition(from));
         }
-        else if (from.Is(RuleType::EXAMPLES_TABLE))
+        else if (from.Is(RuleType::examplesTable))
         {
             destination.Add(from.Type(), MakeExamplesTable(from));
         }
-        else if (from.Is(RuleType::DESCRIPTION))
+        else if (from.Is(RuleType::description))
         {
             destination.Add(from.Type(), MakeDescription(from));
         }
-        else if (from.Is(RuleType::FEATURE))
+        else if (from.Is(RuleType::feature))
         {
             destination.Add(from.Type(), MakeFeature(from));
         }
-        else if (from.Is(RuleType::RULE))
+        else if (from.Is(RuleType::rule))
         {
             destination.Add(from.Type(), MakeRule(from));
         }
-        else if (from.Is(RuleType::GHERKIN_DOCUMENT))
+        else if (from.Is(RuleType::gherkinDocument))
         {
             destination.Add(from.Type(), MakeGherkinDocument(from));
         }
@@ -147,24 +147,24 @@ namespace cucumber::gherkin
 
     cms::Step AstBuilder::MakeStep(AstNode& node)
     {
-        const auto& stepLine = node.GetToken(RuleType::STEP_LINE);
+        const auto& stepLine = node.GetToken(RuleType::stepLine);
 
         cms::Step step{ GetLocation(stepLine), stepLine.matchedKeyword.value_or(""), stepLine.matchedKeywordType, stepLine.matchedText, std::nullopt, std::nullopt, NextId() };
 
-        node.Set(RuleType::DOC_STRING, step.docString);
-        node.Set(RuleType::DATA_TABLE, step.dataTable);
+        node.Set(RuleType::docString, step.docString);
+        node.Set(RuleType::dataTable, step.dataTable);
 
         return step;
     }
 
     cms::DocString AstBuilder::MakeDocString(AstNode& node)
     {
-        const auto& tokens = node.GetTokens(RuleType::DOC_STRING_SEPARATOR);
+        const auto& tokens = node.GetTokens(RuleType::docStringSeparator);
         const auto& separatorToken = tokens[0];
 
         string_views lineViews;
 
-        for (const auto& tok : node.GetTokens(RuleType::OTHER))
+        for (const auto& tok : node.GetTokens(RuleType::other))
         {
             lineViews.emplace_back(tok.matchedText);
         }
@@ -198,42 +198,42 @@ namespace cucumber::gherkin
 
     cms::Background AstBuilder::MakeBackground(AstNode& node)
     {
-        const auto& backgroundLine = node.GetToken(RuleType::BACKGROUND_LINE);
+        const auto& backgroundLine = node.GetToken(RuleType::backgroundLine);
 
         cms::Background background{ GetLocation(backgroundLine), backgroundLine.matchedKeyword.value_or(""), backgroundLine.matchedText, {}, {}, NextId() };
 
-        node.Set(RuleType::DESCRIPTION, background.description);
-        node.Set(RuleType::STEP, background.steps);
+        node.Set(RuleType::description, background.description);
+        node.Set(RuleType::step, background.steps);
 
         return background;
     }
 
     cms::Scenario AstBuilder::MakeScenarioDefinition(AstNode& node)
     {
-        const auto* pnode = node.GetSingle<AstNode>(RuleType::SCENARIO);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::scenario);
         const auto& scenarioNode = *pnode;
-        const auto& scenarioLine = scenarioNode.GetToken(RuleType::SCENARIO_LINE);
+        const auto& scenarioLine = scenarioNode.GetToken(RuleType::scenarioLine);
 
         cms::Scenario scenario{ GetLocation(scenarioLine), GetTags(node), scenarioLine.matchedKeyword.value_or(""), scenarioLine.matchedText, {}, {}, {}, NextId() };
 
-        scenarioNode.Set(RuleType::DESCRIPTION, scenario.description);
-        scenarioNode.Set(RuleType::STEP, scenario.steps);
-        scenarioNode.Set(RuleType::EXAMPLES_DEFINITION, scenario.examples);
+        scenarioNode.Set(RuleType::description, scenario.description);
+        scenarioNode.Set(RuleType::step, scenario.steps);
+        scenarioNode.Set(RuleType::examplesDefinition, scenario.examples);
 
         return scenario;
     }
 
     cms::Examples AstBuilder::MakeExamplesDefinition(AstNode& node)
     {
-        const auto* pnode = node.GetSingle<AstNode>(RuleType::EXAMPLES);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::examples);
         const auto& examplesNode = *pnode;
-        const auto& examplesLine = examplesNode.GetToken(RuleType::EXAMPLES_LINE);
+        const auto& examplesLine = examplesNode.GetToken(RuleType::examplesLine);
 
         cms::Examples examples{ GetLocation(examplesLine), GetTags(node), examplesLine.matchedKeyword.value_or(""), examplesLine.matchedText, {}, std::nullopt, {}, NextId() };
 
-        examplesNode.Set(RuleType::DESCRIPTION, examples.description);
+        examplesNode.Set(RuleType::description, examples.description);
 
-        const auto* prows = examplesNode.GetSingle<table_rows>(RuleType::EXAMPLES_TABLE);
+        const auto* prows = examplesNode.GetSingle<table_rows>(RuleType::examplesTable);
 
         if (prows != nullptr)
         {
@@ -258,7 +258,7 @@ namespace cucumber::gherkin
     std::string AstBuilder::MakeDescription(AstNode& node)
     {
         static const std::regex onlySpaces("\\s*");
-        auto toks = node.GetTokens(RuleType::OTHER);
+        auto toks = node.GetTokens(RuleType::other);
         std::size_t ntoks = toks.size();
 
         while ((ntoks != 0U) && FullMatch(toks[ntoks - 1].matchedText, onlySpaces))
@@ -278,17 +278,17 @@ namespace cucumber::gherkin
 
     cms::Feature AstBuilder::MakeFeature(AstNode& node)
     {
-        const auto* pnode = node.GetSingle<AstNode>(RuleType::FEATURE_HEADER);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::featureHeader);
         const auto& header = *pnode;
 
-        const auto* ptoken = header.GetSingle<Token>(RuleType::FEATURE_LINE);
+        const auto* ptoken = header.GetSingle<Token>(RuleType::featureLine);
         const auto& featureLine = *ptoken;
 
         cms::Feature feature{ GetLocation(featureLine), GetTags(header), featureLine.matchedGherkinDialect, featureLine.matchedKeyword.value_or(""), featureLine.matchedText };
 
-        header.Set(RuleType::DESCRIPTION, feature.description);
+        header.Set(RuleType::description, feature.description);
 
-        const auto* background = node.GetSingle<cms::Background>(RuleType::BACKGROUND);
+        const auto* background = node.GetSingle<cms::Background>(RuleType::background);
 
         if (background != nullptr)
         {
@@ -297,7 +297,7 @@ namespace cucumber::gherkin
             feature.children.emplace_back(std::make_shared<cms::FeatureChild>(child));
         }
 
-        const auto* scenarios = node.GetItems<cms::Scenario>(RuleType::SCENARIO_DEFINITION);
+        const auto* scenarios = node.GetItems<cms::Scenario>(RuleType::scenarioDefinition);
 
         if (scenarios != nullptr)
         {
@@ -309,7 +309,7 @@ namespace cucumber::gherkin
             }
         }
 
-        const auto* rules = node.GetItems<cms::Rule>(RuleType::RULE);
+        const auto* rules = node.GetItems<cms::Rule>(RuleType::rule);
 
         if (rules != nullptr)
         {
@@ -326,17 +326,17 @@ namespace cucumber::gherkin
 
     cms::Rule AstBuilder::MakeRule(AstNode& node)
     {
-        const auto* pnode = node.GetSingle<AstNode>(RuleType::RULE_HEADER);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::ruleHeader);
         const auto& header = *pnode;
 
-        const auto* ptoken = header.GetSingle<Token>(RuleType::RULE_LINE);
+        const auto* ptoken = header.GetSingle<Token>(RuleType::ruleLine);
         const auto& ruleLine = *ptoken;
 
         cms::Rule rule{ GetLocation(ruleLine), GetTags(header), ruleLine.matchedKeyword.value_or(""), ruleLine.matchedText, {}, {}, NextId() };
 
-        header.Set(RuleType::DESCRIPTION, rule.description);
+        header.Set(RuleType::description, rule.description);
 
-        const auto* background = node.GetSingle<cms::Background>(RuleType::BACKGROUND);
+        const auto* background = node.GetSingle<cms::Background>(RuleType::background);
 
         if (background != nullptr)
         {
@@ -345,7 +345,7 @@ namespace cucumber::gherkin
             rule.children.emplace_back(std::make_shared<cms::RuleChild>(child));
         }
 
-        const auto* scenarios = node.GetItems<cms::Scenario>(RuleType::SCENARIO_DEFINITION);
+        const auto* scenarios = node.GetItems<cms::Scenario>(RuleType::scenarioDefinition);
 
         if (scenarios != nullptr)
         {
@@ -364,7 +364,7 @@ namespace cucumber::gherkin
     {
         cms::GherkinDocument document{ std::string(uri), std::nullopt, comments };
 
-        node.Set(RuleType::FEATURE, document.feature);
+        node.Set(RuleType::feature, document.feature);
 
         return document;
     }
@@ -379,7 +379,7 @@ namespace cucumber::gherkin
     {
         table_rows rows;
 
-        for (const auto& token : node.GetTokens(RuleType::TABLE_ROW))
+        for (const auto& token : node.GetTokens(RuleType::tableRow))
         {
             auto row = std::make_shared<cms::TableRow>();
             row->location = GetLocation(token);
@@ -430,13 +430,13 @@ namespace cucumber::gherkin
     {
         tags tagList;
 
-        const auto* pnode = node.GetSingle<AstNode>(RuleType::TAGS);
+        const auto* pnode = node.GetSingle<AstNode>(RuleType::tags);
 
         if (pnode != nullptr)
         {
             const auto& tagsNode = *pnode;
 
-            for (const auto& token : tagsNode.GetTokens(RuleType::TAG_LINE))
+            for (const auto& token : tagsNode.GetTokens(RuleType::tagLine))
             {
                 for (const auto& tagItem : token.matchedItems)
                 {

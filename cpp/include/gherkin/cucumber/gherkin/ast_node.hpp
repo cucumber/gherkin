@@ -61,7 +61,7 @@ namespace cucumber::gherkin
     class AstNode
     {
     public:
-        AstNode(RuleType ruleType = RuleType::NONE);
+        AstNode(RuleType ruleType = RuleType::none);
         AstNode(const AstNode& other);
         AstNode(AstNode&& other) noexcept;
 

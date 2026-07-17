@@ -12,12 +12,18 @@ public static string ToSnakeCase(string str)
         ).ToLower();
 }
 
+public static string ToCamelCase(string str)
+{
+    if (string.IsNullOrEmpty(str)) return str;
+    return char.ToLower(str[0]) + str.Substring(1);
+}
+
 public static string NameOf(Rule rule)
-{ return ToSnakeCase(rule.Name.Replace("#", "")).ToUpper(); }
+{ return ToSnakeCase(rule.Name.Replace("#", "")); }
 }
 @helper CallProduction(ProductionRule production)
 {
-  var rname = ToSnakeCase(production.RuleName).ToUpper();
+  var rname = ToCamelCase(production.RuleName);
 
   switch(production.Type)
   {
@@ -83,7 +89,7 @@ namespace cucumber::gherkin
     protected:
         void parse(context_type& context) override
         {
-            start_rule(context, RuleType::@NameOf(Model.RuleSet.StartRule));
+            start_rule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
 
             std::size_t state = 0;
 
@@ -98,7 +104,7 @@ namespace cucumber::gherkin
                 }
             }
 
-            end_rule(context, RuleType::@NameOf(Model.RuleSet.StartRule));
+            end_rule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
 
             if (context.has_errors())
             {

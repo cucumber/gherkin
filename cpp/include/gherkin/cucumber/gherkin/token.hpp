@@ -22,7 +22,7 @@ namespace cucumber::gherkin
     {
         bool eof = false;
         cucumber::gherkin::Line line;
-        RuleType matchedType = RuleType::NONE;
+        RuleType matchedType = RuleType::none;
         std::optional<std::string> matchedKeyword;
         std::optional<cms::StepKeywordType> matchedKeywordType;
         std::size_t matchedIndent = 0;
