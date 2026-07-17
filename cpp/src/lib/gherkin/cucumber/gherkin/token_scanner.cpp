@@ -13,7 +13,6 @@
 
 namespace cucumber::gherkin
 {
-
     TokenScanner::TokenScanner(std::string_view data)
     {
         Reset(data);
@@ -52,13 +51,13 @@ namespace cucumber::gherkin
     void TokenScanner::Reset(std::string_view data)
     {
         Reset();
-        ip = std::make_unique<std::istringstream>(std::string(data));
+        inputPtr = std::make_unique<std::istringstream>(std::string(data));
     }
 
     void TokenScanner::Reset(const File& file)
     {
         Reset();
-        ip = std::make_unique<std::ifstream>(file.path);
+        inputPtr = std::make_unique<std::ifstream>(file.path);
     }
 
     NextLineResult TokenScanner::NextLine()
@@ -66,7 +65,7 @@ namespace cucumber::gherkin
         NextLineResult result;
         std::string line;
 
-        if (ip)
+        if (inputPtr)
         {
             if (!Input().eof())
             {
@@ -75,7 +74,7 @@ namespace cucumber::gherkin
             }
             else
             {
-                ip.reset();
+                inputPtr.reset();
             }
         }
 
@@ -84,7 +83,6 @@ namespace cucumber::gherkin
 
     std::istream& TokenScanner::Input()
     {
-        return *ip;
+        return *inputPtr;
     }
-
 }

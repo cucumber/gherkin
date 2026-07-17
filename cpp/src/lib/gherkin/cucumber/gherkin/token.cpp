@@ -3,7 +3,6 @@
 
 namespace cucumber::gherkin
 {
-
     bool Token::IsEof() const
     {
         return eof;
@@ -13,5 +12,4 @@ namespace cucumber::gherkin
     {
         return IsEof() ? "EOF" : line.GetLineText();
     }
-
 }

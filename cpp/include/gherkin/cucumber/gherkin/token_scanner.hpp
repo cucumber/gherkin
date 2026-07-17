@@ -45,7 +45,7 @@ namespace cucumber::gherkin
         using InputPtr = std::unique_ptr<std::istream>;
 
         std::size_t line = 0;
-        InputPtr ip;
+        InputPtr inputPtr;
     };
 
     using TokenScannerPtr = std::unique_ptr<TokenScanner>;

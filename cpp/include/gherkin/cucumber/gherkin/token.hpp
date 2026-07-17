@@ -30,14 +30,11 @@ namespace cucumber::gherkin
 
         [[nodiscard]] bool IsEof() const;
 
-        void Detach();
-
         [[nodiscard]] std::string_view Value() const;
     };
 
     using Tokens = std::vector<Token>;
     using TokenQueue = std::deque<Token>;
-
 }
 
 #endif
