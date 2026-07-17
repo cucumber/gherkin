@@ -5,6 +5,7 @@
 #include "cucumber/gherkin/token.hpp"
 #include "cucumber/gherkin/type_traits.hpp"
 #include <any>
+#include <memory>
 #include <optional>
 #include <type_traits>
 #include <unordered_map>
@@ -67,12 +68,12 @@ namespace cucumber::gherkin
             return defaultResult;
         }
 
-        const auto& GetTokens(RuleType ruleType) const
+        const std::vector<Token>& GetTokens(RuleType ruleType) const
         {
             return *GetItems<Token>(ruleType, &emptyTokens);
         }
 
-        const auto& GetToken(RuleType ruleType) const
+        const Token& GetToken(RuleType ruleType) const
         {
             return *GetSingle<Token>(ruleType, &nullToken);
         }
