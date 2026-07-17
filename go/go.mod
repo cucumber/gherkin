@@ -1,7 +1,7 @@
 module github.com/cucumber/gherkin/go/v41
 
 require (
-	github.com/cucumber/messages/go/v34 v34.0.2
+	github.com/cucumber/messages/go/v34 v34.1.0
 	github.com/stretchr/testify v1.11.1
 )
 
