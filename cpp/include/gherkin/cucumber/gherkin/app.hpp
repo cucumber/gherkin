@@ -14,7 +14,6 @@
 
 namespace cucumber::gherkin
 {
-
     class App
     {
     public:
@@ -34,8 +33,8 @@ namespace cucumber::gherkin
         void IncludePickles(bool enabled);
 
         void Parse(const File& sourceFile, const Callbacks& callbacks = {});
-        void Parse(const cms::Envelope& envelope, const Callbacks& callbacks = {});
-        void Parse(const cms::Source& source, const Callbacks& callbacks = {});
+        void Parse(const cucumber::messages::Envelope& envelope, const Callbacks& callbacks = {});
+        void Parse(const cucumber::messages::Source& source, const Callbacks& callbacks = {});
 
     private:
         static void SendParseError(const std::string& uri, const ParserError& error, const Callbacks& callbacks);

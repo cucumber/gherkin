@@ -10,7 +10,7 @@ namespace cucumber::gherkin
         return idp->NextId();
     }
 
-    void PickleCompilerContext::AddPickle(cms::Pickle& pickle)
+    void PickleCompilerContext::AddPickle(cucumber::messages::Pickle& pickle)
     {
         if (sink)
         {

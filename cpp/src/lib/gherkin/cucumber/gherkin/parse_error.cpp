@@ -1,11 +1,12 @@
 #include "cucumber/gherkin/parse_error.hpp"
+#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 namespace cucumber::gherkin
 {
-
-    json ParseError::to_json() const
+    nlohmann::json ParseError::to_json() const
     {
-        json doc;
+        nlohmann::json doc;
 
         doc["parseError"]["source"]["uri"] = uri;
         location.to_json(doc["parseError"]["source"]["location"]);

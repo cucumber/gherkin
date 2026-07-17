@@ -15,21 +15,18 @@
 
 namespace cucumber::gherkin
 {
-
-    namespace cms = cucumber::messages;
-
     struct Token
     {
         bool eof = false;
         cucumber::gherkin::Line line;
         RuleType matchedType = RuleType::none;
         std::optional<std::string> matchedKeyword;
-        std::optional<cms::StepKeywordType> matchedKeywordType;
+        std::optional<cucumber::messages::StepKeywordType> matchedKeywordType;
         std::size_t matchedIndent = 0;
         cucumber::gherkin::items matchedItems;
         std::string matchedText;
         std::string matchedGherkinDialect;
-        cms::Location location;
+        cucumber::messages::Location location;
 
         [[nodiscard]] bool IsEof() const;
 

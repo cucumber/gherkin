@@ -56,7 +56,7 @@ namespace cucumber::gherkin
         {
             std::optional<std::string> text;
             std::optional<std::string> keyword;
-            std::optional<cms::StepKeywordType> keywordType;
+            std::optional<cucumber::messages::StepKeywordType> keywordType;
             std::optional<std::size_t> indent;
             cucumber::gherkin::items items;
         };
@@ -67,7 +67,7 @@ namespace cucumber::gherkin
 
         cucumber::messages::StepKeywordType KeywordType(std::string_view keyword) const;
 
-        void ChangeDialect(const std::string& dialectName, const cms::Location& location = { 1, 1 });
+        void ChangeDialect(const std::string& dialectName, const cucumber::messages::Location& location = { 1, 1 });
 
         std::string UnescapeDocstring(const std::string& text) const;
 

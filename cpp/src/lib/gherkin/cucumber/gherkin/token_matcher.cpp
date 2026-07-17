@@ -293,7 +293,7 @@ namespace cucumber::gherkin
         return cucumber::messages::StepKeywordType::UNKNOWN;
     }
 
-    void TokenMatcher::ChangeDialect(const std::string& dialectName, const cms::Location& location)
+    void TokenMatcher::ChangeDialect(const std::string& dialectName, const cucumber::messages::Location& location)
     {
         if (AllKeywords().find(dialectName) == AllKeywords().end())
         {

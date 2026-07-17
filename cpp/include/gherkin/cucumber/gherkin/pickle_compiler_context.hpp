@@ -15,7 +15,7 @@ namespace cucumber::gherkin
     {
         std::string NextId();
 
-        void AddPickle(cms::Pickle& pickle);
+        void AddPickle(cucumber::messages::Pickle& pickle);
 
         id_generator_ptr idp;
         pickle_cb sink;

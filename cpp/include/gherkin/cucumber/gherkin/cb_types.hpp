@@ -9,11 +9,8 @@
 
 namespace cucumber::gherkin
 {
-
-    namespace cms = cucumber::messages;
-
-    using source_cb = std::function<void(const cms::Source&)>;
-    using pickle_cb = std::function<void(const cms::Pickle&)>;
+    using source_cb = std::function<void(const cucumber::messages::Source&)>;
+    using pickle_cb = std::function<void(const cucumber::messages::Pickle&)>;
     using error_cb = std::function<void(const ParseError&)>;
 
     template<typename Ast>
