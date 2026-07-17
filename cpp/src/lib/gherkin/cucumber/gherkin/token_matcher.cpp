@@ -276,7 +276,7 @@ namespace cucumber::gherkin
         return cucumber::gherkin::Keywords(dialectName, keyword);
     }
 
-    cucumber::messages::StepKeywordType TokenMatcher::KeywordType(std::string_view keyword) const
+    messages::StepKeywordType TokenMatcher::KeywordType(std::string_view keyword) const
     {
         auto found = keywordTypes.find(keyword);
 
@@ -290,10 +290,10 @@ namespace cucumber::gherkin
             }
         }
 
-        return cucumber::messages::StepKeywordType::UNKNOWN;
+        return messages::StepKeywordType::UNKNOWN;
     }
 
-    void TokenMatcher::ChangeDialect(const std::string& dialectName, const cucumber::messages::Location& location)
+    void TokenMatcher::ChangeDialect(const std::string& dialectName, const messages::Location& location)
     {
         if (AllKeywords().find(dialectName) == AllKeywords().end())
         {
@@ -308,27 +308,27 @@ namespace cucumber::gherkin
 
         for (const auto& keyword : dialect.givenKeywords)
         {
-            keywordTypes[keyword].push_back(cucumber::messages::StepKeywordType::CONTEXT);
+            keywordTypes[keyword].push_back(messages::StepKeywordType::CONTEXT);
         }
 
         for (const auto& keyword : dialect.whenKeywords)
         {
-            keywordTypes[keyword].push_back(cucumber::messages::StepKeywordType::ACTION);
+            keywordTypes[keyword].push_back(messages::StepKeywordType::ACTION);
         }
 
         for (const auto& keyword : dialect.thenKeywords)
         {
-            keywordTypes[keyword].push_back(cucumber::messages::StepKeywordType::OUTCOME);
+            keywordTypes[keyword].push_back(messages::StepKeywordType::OUTCOME);
         }
 
         for (const auto& keyword : dialect.andKeywords)
         {
-            keywordTypes[keyword].push_back(cucumber::messages::StepKeywordType::CONJUNCTION);
+            keywordTypes[keyword].push_back(messages::StepKeywordType::CONJUNCTION);
         }
 
         for (const auto& keyword : dialect.butKeywords)
         {
-            keywordTypes[keyword].push_back(cucumber::messages::StepKeywordType::CONJUNCTION);
+            keywordTypes[keyword].push_back(messages::StepKeywordType::CONJUNCTION);
         }
     }
 

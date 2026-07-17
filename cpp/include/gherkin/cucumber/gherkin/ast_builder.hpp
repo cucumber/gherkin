@@ -16,14 +16,14 @@
 
 namespace cucumber::gherkin
 {
-    using table_rows = std::vector<std::shared_ptr<cucumber::messages::TableRow>>;
-    using tags = std::vector<std::shared_ptr<cucumber::messages::Tag>>;
-    using Comments = std::vector<std::shared_ptr<cucumber::messages::Comment>>;
+    using table_rows = std::vector<std::shared_ptr<messages::TableRow>>;
+    using tags = std::vector<std::shared_ptr<messages::Tag>>;
+    using Comments = std::vector<std::shared_ptr<messages::Comment>>;
 
     class AstBuilder
     {
     public:
-        using result_type = cucumber::messages::GherkinDocument;
+        using result_type = messages::GherkinDocument;
 
         AstBuilder();
         AstBuilder(id_generator_ptr idp);
@@ -49,19 +49,19 @@ namespace cucumber::gherkin
 
         void TransformNode(AstNode& from, AstNode& destination);
 
-        cucumber::messages::Step MakeStep(AstNode& node);
-        static cucumber::messages::DocString MakeDocString(AstNode& node);
-        cucumber::messages::DataTable MakeDataTable(AstNode& node);
-        cucumber::messages::Background MakeBackground(AstNode& node);
-        cucumber::messages::Scenario MakeScenarioDefinition(AstNode& node);
-        cucumber::messages::Examples MakeExamplesDefinition(AstNode& node);
+        messages::Step MakeStep(AstNode& node);
+        static messages::DocString MakeDocString(AstNode& node);
+        messages::DataTable MakeDataTable(AstNode& node);
+        messages::Background MakeBackground(AstNode& node);
+        messages::Scenario MakeScenarioDefinition(AstNode& node);
+        messages::Examples MakeExamplesDefinition(AstNode& node);
         table_rows MakeExamplesTable(AstNode& node);
         static std::string MakeDescription(AstNode& node);
-        cucumber::messages::Feature MakeFeature(AstNode& node);
-        cucumber::messages::Rule MakeRule(AstNode& node);
+        messages::Feature MakeFeature(AstNode& node);
+        messages::Rule MakeRule(AstNode& node);
         result_type MakeGherkinDocument(AstNode& node);
 
-        static std::shared_ptr<cucumber::messages::Location> GetLocation(const Token& token, std::size_t column = 0);
+        static std::shared_ptr<messages::Location> GetLocation(const Token& token, std::size_t column = 0);
 
         table_rows GetTableRows(const AstNode& node);
         static void EnsureCellCount(const table_rows& rows);

@@ -13,7 +13,7 @@ namespace cucumber::gherkin
     class ParserError : public std::runtime_error
     {
     public:
-        ParserError(const std::string& message, const cucumber::messages::Location& location);
+        ParserError(const std::string& message, const messages::Location& location);
 
         ParserError(const ParserError& other);
         ParserError& operator=(const ParserError&) = default;
@@ -22,14 +22,14 @@ namespace cucumber::gherkin
 
         ~ParserError() override;
 
-        static std::string MakeMessage(const std::string& message, const cucumber::messages::Location& location);
+        static std::string MakeMessage(const std::string& message, const messages::Location& location);
 
         [[nodiscard]] bool SameMessage(const ParserError& other) const;
 
-        [[nodiscard]] const cucumber::messages::Location& Location() const;
+        [[nodiscard]] const messages::Location& Location() const;
 
     private:
-        cucumber::messages::Location location;
+        messages::Location location;
     };
 
     using parser_error_ptr = std::shared_ptr<ParserError>;
@@ -46,7 +46,7 @@ namespace cucumber::gherkin
     class NoSuchLanguageError : public ParserError
     {
     public:
-        NoSuchLanguageError(const std::string& language, const cucumber::messages::Location& location);
+        NoSuchLanguageError(const std::string& language, const messages::Location& location);
 
         ~NoSuchLanguageError() override;
         NoSuchLanguageError(const NoSuchLanguageError&) = default;
@@ -68,7 +68,7 @@ namespace cucumber::gherkin
 
         static std::string MakeMessage(const Token& receivedToken, const std::string& expectedTokens);
 
-        static cucumber::messages::Location MakeLocation(const Token& receivedToken);
+        static messages::Location MakeLocation(const Token& receivedToken);
 
     private:
         Token receivedToken;

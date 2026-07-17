@@ -34,13 +34,12 @@
 namespace cucumber::gherkin
 {
 
-    cucumber::messages::PickleStepType ToPickleStepType(cucumber::messages::StepKeywordType keywordType)
+    messages::PickleStepType ToPickleStepType(messages::StepKeywordType keywordType)
     {
-        using step_map_type = std::unordered_map<cucumber::messages::StepKeywordType, cucumber::messages::PickleStepType>;
+        using step_map_type = std::unordered_map<messages::StepKeywordType, messages::PickleStepType>;
 
-        static const step_map_type smap = { { cucumber::messages::StepKeywordType::UNKNOWN, cucumber::messages::PickleStepType::UNKNOWN },
-            { cucumber::messages::StepKeywordType::CONTEXT, cucumber::messages::PickleStepType::CONTEXT }, { cucumber::messages::StepKeywordType::ACTION, cucumber::messages::PickleStepType::ACTION },
-            { cucumber::messages::StepKeywordType::OUTCOME, cucumber::messages::PickleStepType::OUTCOME } };
+        static const step_map_type smap = { { messages::StepKeywordType::UNKNOWN, messages::PickleStepType::UNKNOWN }, { messages::StepKeywordType::CONTEXT, messages::PickleStepType::CONTEXT },
+            { messages::StepKeywordType::ACTION, messages::PickleStepType::ACTION }, { messages::StepKeywordType::OUTCOME, messages::PickleStepType::OUTCOME } };
 
         return smap.at(keywordType);
     }
@@ -61,7 +60,7 @@ namespace cucumber::gherkin
 
     PickleCompiler::~PickleCompiler() = default;
 
-    pickles PickleCompiler::Compile(const cucumber::messages::GherkinDocument& document, const std::string& uri, pickle_cb sink)
+    pickles PickleCompiler::Compile(const messages::GherkinDocument& document, const std::string& uri, pickle_cb sink)
     {
         PickleCompilerContext context{ idp, std::move(sink) };
 
@@ -73,7 +72,7 @@ namespace cucumber::gherkin
         return context.pickles;
     }
 
-    void PickleCompiler::CompileFeature(PickleCompilerContext& context, const cucumber::messages::Feature& feature, const std::string& language, const std::string& uri)
+    void PickleCompiler::CompileFeature(PickleCompilerContext& context, const messages::Feature& feature, const std::string& language, const std::string& uri)
     {
         auto tags = feature.tags;
         steps backgroundSteps;
@@ -109,7 +108,7 @@ namespace cucumber::gherkin
     }
 
     void PickleCompiler::CompileRule(
-        PickleCompilerContext& context, const cucumber::messages::Rule& rule, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
+        PickleCompilerContext& context, const messages::Rule& rule, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
     {
         auto steps = backgroundSteps;
         auto tags = parentTags;
@@ -146,9 +145,9 @@ namespace cucumber::gherkin
     }
 
     void PickleCompiler::CompileScenario(
-        PickleCompilerContext& context, const cucumber::messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
+        PickleCompilerContext& context, const messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
     {
-        auto conjunction = cucumber::messages::StepKeywordType::CONJUNCTION;
+        auto conjunction = messages::StepKeywordType::CONJUNCTION;
         pickle_steps steps;
 
         if (!scenario.steps.empty())
@@ -160,7 +159,7 @@ namespace cucumber::gherkin
                 allSteps.push_back(step);
             }
 
-            auto lastKeywordType = cucumber::messages::StepKeywordType::UNKNOWN;
+            auto lastKeywordType = messages::StepKeywordType::UNKNOWN;
 
             for (const auto& step : allSteps)
             {
@@ -169,7 +168,7 @@ namespace cucumber::gherkin
                     lastKeywordType = *step->keywordType;
                 }
 
-                steps.push_back(std::make_shared<cucumber::messages::PickleStep>(MakePickleStep(*step, lastKeywordType)));
+                steps.push_back(std::make_shared<messages::PickleStep>(MakePickleStep(*step, lastKeywordType)));
             }
         }
 
@@ -182,16 +181,16 @@ namespace cucumber::gherkin
 
         strings const sourceIds = { scenario.id };
 
-        cucumber::messages::Pickle pickle{ context.NextId(), uri, scenario.location, scenario.name, language, steps, MakePickleTags(tags), sourceIds };
+        messages::Pickle pickle{ context.NextId(), uri, scenario.location, scenario.name, language, steps, MakePickleTags(tags), sourceIds };
 
         context.AddPickle(pickle);
     }
 
     // NOLINTNEXTLINE(readability-function-cognitive-complexity)
     void PickleCompiler::CompileScenarioOutline(
-        PickleCompilerContext& context, const cucumber::messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
+        PickleCompilerContext& context, const messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
     {
-        auto conjunction = cucumber::messages::StepKeywordType::CONJUNCTION;
+        auto conjunction = messages::StepKeywordType::CONJUNCTION;
 
         for (const auto& example : scenario.examples)
         {
@@ -208,7 +207,7 @@ namespace cucumber::gherkin
                 const auto& valueCells = valuesRow->cells;
 
                 pickle_steps steps;
-                auto lastKeywordType = cucumber::messages::StepKeywordType::UNKNOWN;
+                auto lastKeywordType = messages::StepKeywordType::UNKNOWN;
 
                 if (!scenario.steps.empty())
                 {
@@ -219,7 +218,7 @@ namespace cucumber::gherkin
                             lastKeywordType = *step->keywordType;
                         }
 
-                        steps.push_back(std::make_shared<cucumber::messages::PickleStep>(MakePickleStep(*step, lastKeywordType)));
+                        steps.push_back(std::make_shared<messages::PickleStep>(MakePickleStep(*step, lastKeywordType)));
                     }
                 }
 
@@ -241,25 +240,23 @@ namespace cucumber::gherkin
                         lastKeywordType = *step->keywordType;
                     }
 
-                    steps.push_back(std::make_shared<cucumber::messages::PickleStep>(MakePickleStep(*step, variableCells, std::addressof(*valuesRow), lastKeywordType)));
+                    steps.push_back(std::make_shared<messages::PickleStep>(MakePickleStep(*step, variableCells, std::addressof(*valuesRow), lastKeywordType)));
                 }
 
                 strings const sourceIds = { scenario.id, valuesRow->id };
 
-                cucumber::messages::Pickle pickle{ context.NextId(), uri, valuesRow->location, Interpolate(scenario.name, variableCells, valueCells), language, steps, MakePickleTags(tags),
-                    sourceIds };
+                messages::Pickle pickle{ context.NextId(), uri, valuesRow->location, Interpolate(scenario.name, variableCells, valueCells), language, steps, MakePickleTags(tags), sourceIds };
 
                 context.AddPickle(pickle);
             }
         }
     }
 
-    cucumber::messages::PickleStep PickleCompiler::MakePickleStep(
-        const cucumber::messages::Step& step, const table_cells& variableCells, const cucumber::messages::TableRow* valueRowPtr, cucumber::messages::StepKeywordType keywordType)
+    messages::PickleStep PickleCompiler::MakePickleStep(const messages::Step& step, const table_cells& variableCells, const messages::TableRow* valueRowPtr, messages::StepKeywordType keywordType)
     {
         const auto& valueCells = (valueRowPtr != nullptr) ? valueRowPtr->cells : table_cells();
 
-        cucumber::messages::PickleStep pickleStep{ std::nullopt, { step.id }, NextId(), ToPickleStepType(keywordType), Interpolate(step.text, variableCells, valueCells) };
+        messages::PickleStep pickleStep{ std::nullopt, { step.id }, NextId(), ToPickleStepType(keywordType), Interpolate(step.text, variableCells, valueCells) };
 
         std::optional<std::size_t> dataTableArgumentIndex = {};
         std::optional<std::size_t> docStringArgumentIndex = {};
@@ -279,14 +276,14 @@ namespace cucumber::gherkin
 
         if (step.dataTable || step.docString)
         {
-            auto arg = std::make_shared<cucumber::messages::PickleStepArgument>();
+            auto arg = std::make_shared<messages::PickleStepArgument>();
             if (step.docString)
             {
-                arg->docString = std::make_shared<cucumber::messages::PickleDocString>(MakePickleDocString(docStringArgumentIndex, *step.docString.value(), variableCells, valueCells));
+                arg->docString = std::make_shared<messages::PickleDocString>(MakePickleDocString(docStringArgumentIndex, *step.docString.value(), variableCells, valueCells));
             }
             if (step.dataTable)
             {
-                arg->dataTable = std::make_shared<cucumber::messages::PickleTable>(MakePickleTable(dataTableArgumentIndex, *step.dataTable.value(), variableCells, valueCells));
+                arg->dataTable = std::make_shared<messages::PickleTable>(MakePickleTable(dataTableArgumentIndex, *step.dataTable.value(), variableCells, valueCells));
             }
             pickleStep.argument = std::move(arg);
         }
@@ -299,18 +296,18 @@ namespace cucumber::gherkin
         return pickleStep;
     }
 
-    cucumber::messages::PickleTable PickleCompiler::MakePickleTable(
-        const std::optional<std::size_t>& argumentIndex, const cucumber::messages::DataTable& dataTable, const table_cells& variableCells, const table_cells& valueCells)
+    messages::PickleTable PickleCompiler::MakePickleTable(
+        const std::optional<std::size_t>& argumentIndex, const messages::DataTable& dataTable, const table_cells& variableCells, const table_cells& valueCells)
     {
-        cucumber::messages::PickleTable pickleTable{ argumentIndex };
+        messages::PickleTable pickleTable{ argumentIndex };
 
         for (const auto& row : dataTable.rows)
         {
-            auto pickleRow = std::make_shared<cucumber::messages::PickleTableRow>();
+            auto pickleRow = std::make_shared<messages::PickleTableRow>();
 
             for (const auto& cell : row->cells)
             {
-                auto pickleCell = std::make_shared<cucumber::messages::PickleTableCell>();
+                auto pickleCell = std::make_shared<messages::PickleTableCell>();
                 pickleCell->value = Interpolate(cell->value, variableCells, valueCells);
                 pickleRow->cells.emplace_back(pickleCell);
             }
@@ -321,10 +318,10 @@ namespace cucumber::gherkin
         return pickleTable;
     }
 
-    cucumber::messages::PickleDocString PickleCompiler::MakePickleDocString(
-        const std::optional<std::size_t>& argumentIndex, const cucumber::messages::DocString& docString, const table_cells& variableCells, const table_cells& valueCells)
+    messages::PickleDocString PickleCompiler::MakePickleDocString(
+        const std::optional<std::size_t>& argumentIndex, const messages::DocString& docString, const table_cells& variableCells, const table_cells& valueCells)
     {
-        cucumber::messages::PickleDocString pickleDocString{ argumentIndex, std::nullopt, Interpolate(docString.content, variableCells, valueCells) };
+        messages::PickleDocString pickleDocString{ argumentIndex, std::nullopt, Interpolate(docString.content, variableCells, valueCells) };
 
         if (docString.mediaType)
         {
@@ -334,7 +331,7 @@ namespace cucumber::gherkin
         return pickleDocString;
     }
 
-    cucumber::messages::PickleStep PickleCompiler::MakePickleStep(const cucumber::messages::Step& step, cucumber::messages::StepKeywordType keywordType)
+    messages::PickleStep PickleCompiler::MakePickleStep(const messages::Step& step, messages::StepKeywordType keywordType)
     {
         return MakePickleStep(step, {}, nullptr, keywordType);
     }
@@ -345,7 +342,7 @@ namespace cucumber::gherkin
 
         for (const auto& sourceTag : tags)
         {
-            auto pickleTag = std::make_shared<cucumber::messages::PickleTag>();
+            auto pickleTag = std::make_shared<messages::PickleTag>();
             pickleTag->name = sourceTag->name;
             pickleTag->astNodeId = sourceTag->id;
             resultTags.emplace_back(pickleTag);

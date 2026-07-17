@@ -17,7 +17,7 @@
 namespace cucumber::gherkin
 {
 
-    using keyword_types = std::vector<cucumber::messages::StepKeywordType>;
+    using keyword_types = std::vector<messages::StepKeywordType>;
     using keyword_types_map = std::unordered_map<std::string_view, keyword_types>;
 
     class TokenMatcher
@@ -56,7 +56,7 @@ namespace cucumber::gherkin
         {
             std::optional<std::string> text;
             std::optional<std::string> keyword;
-            std::optional<cucumber::messages::StepKeywordType> keywordType;
+            std::optional<messages::StepKeywordType> keywordType;
             std::optional<std::size_t> indent;
             cucumber::gherkin::items items;
         };
@@ -65,9 +65,9 @@ namespace cucumber::gherkin
 
         const string_views& Keywords(std::string_view keyword) const;
 
-        cucumber::messages::StepKeywordType KeywordType(std::string_view keyword) const;
+        messages::StepKeywordType KeywordType(std::string_view keyword) const;
 
-        void ChangeDialect(const std::string& dialectName, const cucumber::messages::Location& location = { 1, 1 });
+        void ChangeDialect(const std::string& dialectName, const messages::Location& location = { 1, 1 });
 
         std::string UnescapeDocstring(const std::string& text) const;
 

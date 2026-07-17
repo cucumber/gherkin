@@ -18,7 +18,7 @@ namespace cucumber::gherkin
     // Parser error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    ParserError::ParserError(const std::string& message, const cucumber::messages::Location& location)
+    ParserError::ParserError(const std::string& message, const messages::Location& location)
         : std::runtime_error(MakeMessage(message, location))
         , location(location)
     {}
@@ -30,7 +30,7 @@ namespace cucumber::gherkin
 
     ParserError::~ParserError() = default;
 
-    std::string ParserError::MakeMessage(const std::string& message, const cucumber::messages::Location& location)
+    std::string ParserError::MakeMessage(const std::string& message, const messages::Location& location)
     {
         std::ostringstream stream;
 
@@ -45,7 +45,7 @@ namespace cucumber::gherkin
         return std::strcmp(what(), other.what()) == 0;
     }
 
-    const cucumber::messages::Location& ParserError::Location() const
+    const messages::Location& ParserError::Location() const
     {
         return location;
     }
@@ -55,7 +55,7 @@ namespace cucumber::gherkin
     // no such language error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    NoSuchLanguageError::NoSuchLanguageError(const std::string& language, const cucumber::messages::Location& location)
+    NoSuchLanguageError::NoSuchLanguageError(const std::string& language, const messages::Location& location)
         : ParserError("Language not supported: " + language, location)
     {}
 
@@ -84,9 +84,9 @@ namespace cucumber::gherkin
         return stream.str();
     }
 
-    cucumber::messages::Location UnexpectedToken::MakeLocation(const Token& receivedToken)
+    messages::Location UnexpectedToken::MakeLocation(const Token& receivedToken)
     {
-        return receivedToken.location.column.value_or(0) > 1 ? receivedToken.location : cucumber::messages::Location{ receivedToken.location.line, receivedToken.line.Indent() + 1 };
+        return receivedToken.location.column.value_or(0) > 1 ? receivedToken.location : messages::Location{ receivedToken.location.line, receivedToken.line.Indent() + 1 };
     }
 
     ///////////////////////////////////////////////////////////////////////////////

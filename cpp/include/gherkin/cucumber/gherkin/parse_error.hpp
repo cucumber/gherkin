@@ -10,7 +10,7 @@ namespace cucumber::gherkin
     struct ParseError
     {
         std::string uri;
-        cucumber::messages::Location location;
+        messages::Location location;
         std::string message;
 
         [[nodiscard]] nlohmann::json to_json() const;

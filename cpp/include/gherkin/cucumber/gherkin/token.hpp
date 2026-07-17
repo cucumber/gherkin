@@ -21,12 +21,12 @@ namespace cucumber::gherkin
         cucumber::gherkin::Line line;
         RuleType matchedType = RuleType::none;
         std::optional<std::string> matchedKeyword;
-        std::optional<cucumber::messages::StepKeywordType> matchedKeywordType;
+        std::optional<messages::StepKeywordType> matchedKeywordType;
         std::size_t matchedIndent = 0;
         cucumber::gherkin::items matchedItems;
         std::string matchedText;
         std::string matchedGherkinDialect;
-        cucumber::messages::Location location;
+        messages::Location location;
 
         [[nodiscard]] bool IsEof() const;
 

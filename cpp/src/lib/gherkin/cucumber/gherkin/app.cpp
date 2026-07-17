@@ -38,14 +38,14 @@ namespace cucumber::gherkin
 
     void App::Parse(const File& sourceFile, const Callbacks& callbacks)
     {
-        cucumber::messages::Envelope envelope;
+        messages::Envelope envelope;
 
-        envelope.source = std::make_shared<cucumber::messages::Source>(cucumber::messages::Source{ sourceFile.path, Slurp(sourceFile.path) });
+        envelope.source = std::make_shared<messages::Source>(messages::Source{ sourceFile.path, Slurp(sourceFile.path) });
 
         Parse(envelope, callbacks);
     }
 
-    void App::Parse(const cucumber::messages::Envelope& envelope, const Callbacks& callbacks)
+    void App::Parse(const messages::Envelope& envelope, const Callbacks& callbacks)
     {
         if (includeSource && callbacks.source && envelope.source)
         {
@@ -58,7 +58,7 @@ namespace cucumber::gherkin
         }
     }
 
-    void App::Parse(const cucumber::messages::Source& source, const Callbacks& callbacks)
+    void App::Parse(const messages::Source& source, const Callbacks& callbacks)
     {
         try
         {

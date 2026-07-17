@@ -36,30 +36,28 @@ namespace cucumber::gherkin
         PickleCompiler(PickleCompiler&&) = delete;
         PickleCompiler& operator=(PickleCompiler&&) = delete;
 
-        pickles Compile(const cucumber::messages::GherkinDocument& document, const std::string& uri, pickle_cb sink = {});
+        pickles Compile(const messages::GherkinDocument& document, const std::string& uri, pickle_cb sink = {});
 
     private:
-        void CompileFeature(PickleCompilerContext& context, const cucumber::messages::Feature& feature, const std::string& language, const std::string& uri);
+        void CompileFeature(PickleCompilerContext& context, const messages::Feature& feature, const std::string& language, const std::string& uri);
 
-        void CompileRule(
-            PickleCompilerContext& context, const cucumber::messages::Rule& rule, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
+        void CompileRule(PickleCompilerContext& context, const messages::Rule& rule, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
 
         void CompileScenario(
-            PickleCompilerContext& context, const cucumber::messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
+            PickleCompilerContext& context, const messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
 
         void CompileScenarioOutline(
-            PickleCompilerContext& context, const cucumber::messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
+            PickleCompilerContext& context, const messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri);
 
-        static cucumber::messages::PickleTable MakePickleTable(
-            const std::optional<std::size_t>& argumentIndex, const cucumber::messages::DataTable& dataTable, const table_cells& variableCells, const table_cells& valueCells);
+        static messages::PickleTable MakePickleTable(
+            const std::optional<std::size_t>& argumentIndex, const messages::DataTable& dataTable, const table_cells& variableCells, const table_cells& valueCells);
 
-        static cucumber::messages::PickleDocString MakePickleDocString(
-            const std::optional<std::size_t>& argumentIndex, const cucumber::messages::DocString& docString, const table_cells& variableCells, const table_cells& valueCells);
+        static messages::PickleDocString MakePickleDocString(
+            const std::optional<std::size_t>& argumentIndex, const messages::DocString& docString, const table_cells& variableCells, const table_cells& valueCells);
 
-        cucumber::messages::PickleStep MakePickleStep(
-            const cucumber::messages::Step& step, const table_cells& variableCells, const cucumber::messages::TableRow* valueRowPtr, cucumber::messages::StepKeywordType keywordType);
+        messages::PickleStep MakePickleStep(const messages::Step& step, const table_cells& variableCells, const messages::TableRow* valueRowPtr, messages::StepKeywordType keywordType);
 
-        cucumber::messages::PickleStep MakePickleStep(const cucumber::messages::Step& step, cucumber::messages::StepKeywordType keywordType);
+        messages::PickleStep MakePickleStep(const messages::Step& step, messages::StepKeywordType keywordType);
 
         static pickle_tags MakePickleTags(const tags& tags);
 
