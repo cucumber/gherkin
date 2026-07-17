@@ -8,9 +8,9 @@
   "\n",
   "namespace cucumber::gherkin\n",
   "{\n",
-  "    const keywords_maps& all_keywords()\n",
+  "    const KeywordsMaps& AllKeywords()\n",
   "    {\n",
-  "        static const keywords_maps kwms = {\n",
+  "        static const KeywordsMaps kwms = {\n",
   "            ",
   (
     [
@@ -43,9 +43,9 @@
   "        return kwms;\n",
   "    }\n",
   "\n",
-  "    const keywords_map& keywords(const std::string_view& language)\n",
+  "    const KeywordsMap& Keywords(const std::string_view& language)\n",
   "    {\n",
-  "        return all_keywords().at(language);\n",
+  "        return AllKeywords().at(language);\n",
   "    }\n",
   "}\n",
   "\n",

@@ -19,7 +19,7 @@ public static string ToCamelCase(string str)
 }
 
 public static string NameOf(Rule rule)
-{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+{ return rule.Name.Replace("#", ""); }
 }
 @helper CallProduction(ProductionRule production)
 {
@@ -28,13 +28,13 @@ public static string NameOf(Rule rule)
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:  start_rule(context, RuleType::@rname);
+      @:  StartRule(context, RuleType::@rname);
       break;
     case ProductionRuleType.End:
-      @:  end_rule(context, RuleType::@rname);
+      @:  EndRule(context, RuleType::@rname);
       break;
     case ProductionRuleType.Process:
-      @:  build(context, token);
+      @:  Build(context, token);
       break;
   }
 }
@@ -43,19 +43,19 @@ public static string NameOf(Rule rule)
             std::string state_comment = "State: @state.Id - @Raw(state.Comment)";
             std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
-            auto error_pointer = token.is_eof() ? new_parser_error<UnexpectedEof>(token, expected_tokens, state_comment) : new_parser_error<UnexpectedToken>(token, expected_tokens, state_comment);
+            auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
 
-            if (context.stop_at_first_error)
+            if (context.stopAtFirstError)
             {
                 throw *error_pointer;
             }
 
-            context.add_error(std::move(error_pointer));
+            context.AddError(std::move(error_pointer));
 
             return @state.Id;
 </text>}
 @helper MatchToken(TokenType tokenType)
-{<text>match_@(ToSnakeCase(tokenType.Name))(context, token)</text>}
+{<text>Match@(tokenType.Name)(context, token)</text>}
 #ifndef CUCUMBER_GHERKIN_PARSER_HPP
 #define CUCUMBER_GHERKIN_PARSER_HPP
 
@@ -89,54 +89,54 @@ namespace cucumber::gherkin
     protected:
         void parse(context_type& context) override
         {
-            start_rule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
+            StartRule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
 
             std::size_t state = 0;
 
             while (true)
             {
-                auto token = context.read_token();
-                state = match_token(state, token, context);
+                auto token = context.ReadToken();
+                state = MatchToken(state, token, context);
 
-                if (token.is_eof())
+                if (token.IsEof())
                 {
                     break;
                 }
             }
 
-            end_rule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
+            EndRule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
 
-            if (context.has_errors())
+            if (context.HasErrors())
             {
-                throw CompositeParserError(context.error_pointers);
+                throw CompositeParserError(context.errorPointers);
             }
         }
 
-        void build(context_type& context, Token& token)
+        void Build(context_type& context, Token& token)
         {
-            context.builder.build(token);
+            context.builder.Build(token);
         }
 
-        void start_rule(context_type& context, RuleType ruleType)
+        void StartRule(context_type& context, RuleType ruleType)
         {
-            handle_ast_error(context, ruleType,
+            HandleAstError(context, ruleType,
                 [&context](auto rtype)
                 {
-                    context.builder.start_rule(rtype);
+                    context.builder.StartRule(rtype);
                 });
         }
 
-        void end_rule(context_type& context, RuleType ruleType)
+        void EndRule(context_type& context, RuleType ruleType)
         {
-            handle_ast_error(context, ruleType,
+            HandleAstError(context, ruleType,
                 [&context](auto rtype)
                 {
-                    context.builder.end_rule(rtype);
+                    context.builder.EndRule(rtype);
                 });
         }
 
         template<typename Argument, typename Action>
-        bool handle_external_error(context_type& context, bool default_value, Argument&& argument, Action&& action)
+        bool HandleExternalError(context_type& context, bool default_value, Argument&& argument, Action&& action)
         {
             using ret_type = decltype(action(argument));
 
@@ -154,43 +154,43 @@ namespace cucumber::gherkin
             }
             catch (const CompositeParserError& e)
             {
-                for (const auto& error_pointer : e.errors())
+                for (const auto& error_pointer : e.Errors())
                 {
-                    context.add_error(error_pointer);
+                    context.AddError(error_pointer);
                 }
             }
             catch (const ParserError& e)
             {
-                auto error_pointer = new_parser_error<ParserError>(e);
-                context.add_error(error_pointer);
+                auto error_pointer = NewParserError<ParserError>(e);
+                context.AddError(error_pointer);
             }
 
             return default_value;
         }
 
         template<typename Argument, typename Action>
-        void handle_ast_error(context_type& context, Argument&& argument, Action&& action)
+        void HandleAstError(context_type& context, Argument&& argument, Action&& action)
         {
-            handle_external_error(context, true, argument, action);
+            HandleExternalError(context, true, argument, action);
         }
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
 <text>
-        bool match_@(NameOf(rule))(context_type& context, Token& token)
+        bool Match@(NameOf(rule))(context_type& context, Token& token)
         {
 @if (rule.Name != "#EOF")
 {
-<text>            if (token.is_eof())
+<text>            if (token.IsEof())
             {
                 return false;
             }
 
 </text>
 }
-            return handle_external_error(context, false, token,
+            return HandleExternalError(context, false, token,
                 [&context](auto& tok)
                 {
-                    return context.matcher.match_@(NameOf(rule))(tok);
+                    return context.matcher.Match@(NameOf(rule))(tok);
                 });
         }
 </text>
@@ -198,7 +198,7 @@ namespace cucumber::gherkin
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-        bool lookahead_@(lookAheadHint.Id)(context_type& context, Token& current_token)
+        bool LookAhead@(lookAheadHint.Id)(context_type& context, Token& current_token)
         {
             Token token;
             token_queue queue;
@@ -206,7 +206,7 @@ namespace cucumber::gherkin
 
             while (true)
             {
-                token = context.read_token();
+                token = context.ReadToken();
                 queue.push_back(token);
 
                 if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>@MatchToken(tokenType) || </text>}false)
@@ -221,7 +221,7 @@ namespace cucumber::gherkin
                 }
             }
 
-            context.push_tokens(queue);
+            context.PushTokens(queue);
 
             return match;
         }
@@ -230,7 +230,7 @@ namespace cucumber::gherkin
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
         // @Raw(state.Comment)
-        std::size_t match_token_at_@(state.Id)(Token& token, context_type& context)
+        std::size_t MatchTokenAt@(state.Id)(Token& token, context_type& context)
         {
 @{var indent = "        ";}
     @foreach(var transition in state.Transitions)
@@ -239,7 +239,7 @@ namespace cucumber::gherkin
             @:{
             if (transition.LookAheadHint != null)
             {
-                @:if (lookahead_@(transition.LookAheadHint.Id)(context, token))
+                @:if (LookAhead@(transition.LookAheadHint.Id)(context, token))
                 @:{
                 indent = "            ";
             }
@@ -260,14 +260,14 @@ namespace cucumber::gherkin
 </text>
 }
 
-        std::size_t match_token(std::size_t state, Token& token, context_type& context)
+        std::size_t MatchToken(std::size_t state, Token& token, context_type& context)
         {
             switch (state)
             {
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
     {
                 @:case @state.Id:
-                    @:return match_token_at_@(state.Id)(token, context);
+                    @:return MatchTokenAt@(state.Id)(token, context);
     }
                 default:
                     throw std::runtime_error("invalid operation: " + std::to_string(state));

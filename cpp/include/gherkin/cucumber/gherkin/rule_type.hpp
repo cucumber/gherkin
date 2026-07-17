@@ -1,10 +1,11 @@
-// This File is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 #ifndef CUCUMBER_GHERKIN_RULE_TYPE_HPP
 #define CUCUMBER_GHERKIN_RULE_TYPE_HPP
 
 #include <cstdint>
 #include <ostream>
 #include <string_view>
+
+// This File is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 
 namespace cucumber::gherkin
 {

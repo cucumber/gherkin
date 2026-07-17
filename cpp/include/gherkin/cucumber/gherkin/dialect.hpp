@@ -7,8 +7,8 @@
 
 namespace cucumber::gherkin
 {
-    using keywords_map = std::unordered_map<std::string_view, string_views>;
-    using keywords_maps = std::unordered_map<std::string_view, keywords_map>;
+    using KeywordsMap = std::unordered_map<std::string_view, string_views>;
+    using KeywordsMaps = std::unordered_map<std::string_view, KeywordsMap>;
 
     struct Dialect
     {
@@ -31,9 +31,9 @@ namespace cucumber::gherkin
         const string_views& butKeywords;
     };
 
-    const keywords_maps& AllKeywords();
+    const KeywordsMaps& AllKeywords();
 
-    const keywords_map& Keywords(const std::string_view& language);
+    const KeywordsMap& Keywords(const std::string_view& language);
 }
 
 #endif
