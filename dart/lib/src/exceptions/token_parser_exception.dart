@@ -8,8 +8,8 @@ sealed class TokenParserException extends ParserException {
     return receivedToken.isEof || receivedToken.location.column != null
         ? receivedToken.location
         : messages.Location(
-          line: receivedToken.location.line,
-          column: receivedToken.line!.indent + 1,
-        );
+            line: receivedToken.location.line,
+            column: receivedToken.line!.indent + 1,
+          );
   }
 }

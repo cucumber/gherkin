@@ -48,10 +48,9 @@ class GherkinLine {
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
     final commentMatch = _commentSuffix.firstMatch(_trimmedLineText);
-    final uncommentedLine =
-        commentMatch == null
-            ? _trimmedLineText
-            : _trimmedLineText.substring(0, commentMatch.start);
+    final uncommentedLine = commentMatch == null
+        ? _trimmedLineText
+        : _trimmedLineText.substring(0, commentMatch.start);
 
     var indexInUncommentedLine = 0;
     final elements = uncommentedLine.split(tagPrefix);
@@ -61,8 +60,9 @@ class GherkinLine {
       if (token.isEmpty) {
         continue;
       }
-      final symbolLength =
-          uncommentedLine.substring(0, indexInUncommentedLine).length;
+      final symbolLength = uncommentedLine
+          .substring(0, indexInUncommentedLine)
+          .length;
       final column = indent + symbolLength + 1;
       if (!_nonWhitespaceToken.hasMatch(token)) {
         throw ParserException.create(
