@@ -26,9 +26,9 @@ namespace cucumber::gherkin
 
     [[nodiscard]] Strings Split(const std::string& pattern, const std::string& expr);
 
-    [[nodiscard]] std::string Subst(const std::string& source, const std::string& pattern, const std::string& what = {});
+    [[nodiscard]] std::string Substitute(const std::string& source, const std::string& pattern, const std::string& what = {});
 
-    void Subst(std::string& source, const std::string& pattern, const std::string& what = {});
+    void Substitute(std::string& source, const std::string& pattern, const std::string& what = {});
 
     namespace detail
     {
@@ -57,10 +57,6 @@ namespace cucumber::gherkin
                 auto [ptr, error_code] = std::from_chars(view.begin(), view.end(), argument);
 
                 DieUnless(error_code == std::errc(), "failed to convert \"", view, "\" to ", Declname(argument));
-            }
-            else if constexpr (!std::is_same_v<ArgType, NullArg>)
-            {
-                die("unsupported argument: ", Declname(argument));
             }
 
             return view;

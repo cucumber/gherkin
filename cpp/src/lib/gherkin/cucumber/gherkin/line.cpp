@@ -157,7 +157,7 @@ namespace cucumber::gherkin
 
                 for (const auto& replacement : lineUnescapes)
                 {
-                    Subst(tableItem.text, replacement.first, replacement.second);
+                    Substitute(tableItem.text, replacement.first, replacement.second);
                 }
 
                 items.emplace_back(std::move(tableItem));
@@ -171,7 +171,7 @@ namespace cucumber::gherkin
         Items tags;
 
         auto column = indent + 1;
-        const auto itemsLine = Subst(trimmedLineText, "\\s+(?:#.*)?$", "");
+        const auto itemsLine = Substitute(trimmedLineText, "\\s+(?:#.*)?$", "");
         const auto items = Split("@", itemsLine);
         const std::regex noSpaces("^\\S+$");
 

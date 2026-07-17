@@ -153,7 +153,7 @@ namespace cucumber::gherkin
 
         auto commentText = std::string(token.line.GetLineText(0));
 
-        Subst(commentText, "[\\r\\n]+$");
+        Substitute(commentText, "[\\r\\n]+$");
 
         SetTokenMatched(token, RuleType::comment, { commentText, std::nullopt, std::nullopt, 0 });
 
@@ -338,11 +338,11 @@ namespace cucumber::gherkin
 
         if (activeDocStringSeparator == R"(""")")
         {
-            unescaped = Subst(text, R"(\\"\\"\\")", R"(""")");
+            unescaped = Substitute(text, R"(\\"\\"\\")", R"(""")");
         }
         else if (activeDocStringSeparator == "```")
         {
-            unescaped = Subst(text, R"(\\`\\`\\`)", "```");
+            unescaped = Substitute(text, R"(\\`\\`\\`)", "```");
         }
         else
         {

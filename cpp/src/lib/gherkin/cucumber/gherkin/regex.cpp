@@ -40,14 +40,14 @@ namespace cucumber::gherkin
         return list;
     }
 
-    std::string Subst(const std::string& source, const std::string& pattern, const std::string& what)
+    std::string Substitute(const std::string& source, const std::string& pattern, const std::string& what)
     {
         return std::regex_replace(source, std::regex(pattern), what);
     }
 
-    void Subst(std::string& source, const std::string& pattern, const std::string& what)
+    void Substitute(std::string& source, const std::string& pattern, const std::string& what)
     {
-        source = Subst(static_cast<const std::string&>(source), pattern, what);
+        source = Substitute(static_cast<const std::string&>(source), pattern, what);
     }
 
 }
