@@ -27,20 +27,20 @@ namespace cucumber::gherkin
 
         bool Is(RuleType ruleType);
 
-        RuleType Type() const;
+        [[nodiscard]] RuleType Type() const;
 
         template<typename T>
         void Add(RuleType ruleType, const T& value);
 
         template<typename T>
-        const std::vector<T>* GetItems(RuleType ruleType, const std::vector<T>* defaultResult = nullptr) const;
+        [[nodiscard]] const std::vector<T>* GetItems(RuleType ruleType, const std::vector<T>* defaultResult = nullptr) const;
 
         template<typename T>
-        const T* GetSingle(RuleType ruleType, const T* defaultResult = nullptr) const;
+        [[nodiscard]] const T* GetSingle(RuleType ruleType, const T* defaultResult = nullptr) const;
 
-        const std::vector<Token>& GetTokens(RuleType ruleType) const;
+        [[nodiscard]] const std::vector<Token>& GetTokens(RuleType ruleType) const;
 
-        const Token& GetToken(RuleType ruleType) const;
+        [[nodiscard]] const Token& GetToken(RuleType ruleType) const;
 
         template<typename T, typename V = T>
         void SetValue(RuleType ruleType, V& value) const;

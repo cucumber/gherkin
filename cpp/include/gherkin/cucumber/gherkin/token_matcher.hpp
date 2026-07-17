@@ -63,13 +63,13 @@ namespace cucumber::gherkin
 
         void SetTokenMatched(Token& token, RuleType matchedType, const TokenInfo& info = {});
 
-        const StringViews& Keywords(std::string_view keyword) const;
+        [[nodiscard]] const StringViews& Keywords(std::string_view keyword) const;
 
-        messages::StepKeywordType KeywordType(std::string_view keyword) const;
+        [[nodiscard]] messages::StepKeywordType KeywordType(std::string_view keyword) const;
 
         void ChangeDialect(const std::string& dialectName, const messages::Location& location = { 1, 1 });
 
-        std::string UnescapeDocstring(const std::string& text) const;
+        [[nodiscard]] std::string UnescapeDocstring(const std::string& text) const;
 
         std::string dialectName;
         KeywordTypesMap keywordTypes;

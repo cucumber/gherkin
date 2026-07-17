@@ -32,7 +32,7 @@ namespace cucumber::gherkin
     protected:
         void Reset(std::string_view uri, std::string_view data);
 
-        ResultType GetResult() const;
+        [[nodiscard]] ResultType GetResult() const;
 
         virtual void parse(ContextType& context) = 0;
 
