@@ -13,69 +13,71 @@
 
 namespace cucumber::gherkin
 {
-
-    using UnescapePair = std::pair<std::string, std::string>;
-    using Unescapes = std::vector<UnescapePair>;
-
-    static const Unescapes lineUnescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
-
-    template<typename Callabble>
-    void SplitTableCells(std::string_view row, Callabble&& cellCb)
+    namespace
     {
-        auto wrow = ToWide(std::string(row));
+        using UnescapePair = std::pair<std::string, std::string>;
+        using Unescapes = std::vector<UnescapePair>;
 
-        std::size_t col = 0;
-        std::size_t startCol = col + 1;
-        std::wstring cell;
-        bool firstCell = true;
-        auto current = wrow.begin();
-        auto end = wrow.end();
-        auto nextCh = [](auto& current, const auto& endIter)
+        const Unescapes lineUnescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
+
+        template<typename Callabble>
+        void SplitTableCells(std::string_view row, Callabble&& cellCb)
         {
-            return current != endIter ? *current++ : 0;
-        };
+            auto wrow = ToWide(std::string(row));
 
-        while (col < row.size())
-        {
-            auto character = nextCh(current, end);
-            ++col;
-
-            if (character == '|')
+            std::size_t col = 0;
+            std::size_t startCol = col + 1;
+            std::wstring cell;
+            bool firstCell = true;
+            auto current = wrow.begin();
+            auto end = wrow.end();
+            auto nextCh = [](auto& current, const auto& endIter)
             {
-                if (firstCell)
-                {
-                    firstCell = false;
-                }
-                else
-                {
-                    std::forward<Callabble>(cellCb)(cell, startCol);
-                }
+                return current != endIter ? *current++ : 0;
+            };
 
-                cell.clear();
-                startCol = col + 1;
-            }
-            else if (character == '\\')
+            while (col < row.size())
             {
-                character = nextCh(current, end);
+                auto character = nextCh(current, end);
                 ++col;
 
-                if (character == 'n')
+                if (character == '|')
                 {
-                    cell += '\n';
-                }
-                else
-                {
-                    if (character != '|' && character != '\\')
+                    if (firstCell)
                     {
-                        cell += '\\';
+                        firstCell = false;
+                    }
+                    else
+                    {
+                        std::forward<Callabble>(cellCb)(cell, startCol);
                     }
 
+                    cell.clear();
+                    startCol = col + 1;
+                }
+                else if (character == '\\')
+                {
+                    character = nextCh(current, end);
+                    ++col;
+
+                    if (character == 'n')
+                    {
+                        cell += '\n';
+                    }
+                    else
+                    {
+                        if (character != '|' && character != '\\')
+                        {
+                            cell += '\\';
+                        }
+
+                        cell += character;
+                    }
+                }
+                else if (character)
+                {
                     cell += character;
                 }
-            }
-            else if (character)
-            {
-                cell += character;
             }
         }
     }
@@ -169,13 +171,13 @@ namespace cucumber::gherkin
         Items tags;
 
         auto column = indent + 1;
-        auto itemsLine = Subst(trimmedLineText, "\\s+(?:#.*)?$", "");
-        auto items = Split("@", itemsLine);
-        std::regex const noSpaces("^\\S+$");
+        const auto itemsLine = Subst(trimmedLineText, "\\s+(?:#.*)?$", "");
+        const auto items = Split("@", itemsLine);
+        const std::regex noSpaces("^\\S+$");
 
         for (std::size_t i = 1; i < items.size(); ++i)
         {
-            auto originalItem = items[i];
+            const auto originalItemSize = items[i].size();
             auto sitem = Strip(items[i]);
 
             if (sitem.empty())
@@ -190,7 +192,7 @@ namespace cucumber::gherkin
 
             tags.emplace_back(Item{ column, "@" + sitem });
 
-            column += originalItem.size() + 1;
+            column += originalItemSize + 1;
         }
 
         return tags;
