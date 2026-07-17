@@ -18,12 +18,12 @@ namespace cucumber::gherkin
     struct Token
     {
         bool eof = false;
-        cucumber::gherkin::Line line;
+        Line line;
         RuleType matchedType = RuleType::none;
         std::optional<std::string> matchedKeyword;
         std::optional<messages::StepKeywordType> matchedKeywordType;
         std::size_t matchedIndent = 0;
-        cucumber::gherkin::Items matchedItems;
+        Items matchedItems;
         std::string matchedText;
         std::string matchedGherkinDialect;
         messages::Location location;

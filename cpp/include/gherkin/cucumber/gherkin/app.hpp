@@ -18,8 +18,7 @@ namespace cucumber::gherkin
     {
     public:
         using Parser = cucumber::gherkin::Parser<AstBuilder>;
-        using ParserResult = Parser::ResultType;
-        using Callbacks = cucumber::gherkin::Callbacks<ParserResult>;
+        using Callbacks = cucumber::gherkin::Callbacks<Parser::ResultType>;
 
         App();
         virtual ~App();

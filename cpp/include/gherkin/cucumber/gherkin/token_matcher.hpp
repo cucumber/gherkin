@@ -58,7 +58,7 @@ namespace cucumber::gherkin
             std::optional<std::string> keyword;
             std::optional<messages::StepKeywordType> keywordType;
             std::optional<std::size_t> indent;
-            cucumber::gherkin::Items items;
+            Items items;
         };
 
         void SetTokenMatched(Token& token, RuleType matchedType, const TokenInfo& info = {});
