@@ -28,4 +28,4 @@ jobs:
         run: docker build --tag berp-env .
 
       - name: test dockerfile
-        run: docker run --interactive berp-env berp
+        run: docker run --interactive berp-env berp --version
