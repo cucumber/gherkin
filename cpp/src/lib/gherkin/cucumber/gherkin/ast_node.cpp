@@ -1,6 +1,8 @@
 #include "cucumber/gherkin/ast_node.hpp"
 #include "cucumber/gherkin/rule_type.hpp"
+#include "cucumber/gherkin/token.hpp"
 #include <utility>
+#include <vector>
 
 namespace cucumber::gherkin
 {
@@ -45,6 +47,16 @@ namespace cucumber::gherkin
     RuleType AstNode::Type() const
     {
         return ruleType;
+    }
+
+    const std::vector<Token>& AstNode::GetTokens(RuleType ruleType) const
+    {
+        return *GetItems<Token>(ruleType, &emptyTokens);
+    }
+
+    const Token& AstNode::GetToken(RuleType ruleType) const
+    {
+        return *GetSingle<Token>(ruleType, &nullToken);
     }
 
 }
