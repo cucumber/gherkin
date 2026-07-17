@@ -3,10 +3,10 @@ SHELL := /usr/bin/env bash
 SUB_DIR = gherkin/cucumber/gherkin
 
 GRAMMAR_GENERATED = \
-	include/$(SUB_DIR)/rule_type.hpp \
-	include/$(SUB_DIR)/parser.hpp
+	include/$(SUB_DIR)/RuleType.hpp \
+	include/$(SUB_DIR)/Parser.hpp
 LANGUAGE_GENERATED = \
-	src/lib/$(SUB_DIR)/dialect.cpp
+	src/lib/$(SUB_DIR)/Dialect.cpp
 ALL_GENERATED := $(GRAMMAR_GENERATED) $(LANGUAGE_GENERATED)
 ALL_SOURCE_FILES = $(shell find include src -name "*.[ch]*")
 SOURCE_FILES := $(filter-out $(ALL_GENERATED),$(ALL_SOURCE_FILES))
@@ -77,13 +77,13 @@ define berp-generate-parser =
 berp -g ../gherkin.berp -t $< -o $@ --noBOM
 endef
 
-include/$(SUB_DIR)/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
+include/$(SUB_DIR)/RuleType.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-include/$(SUB_DIR)/parser.hpp: gherkin-cpp-parser.razor ../gherkin.berp
+include/$(SUB_DIR)/Parser.hpp: gherkin-cpp-parser.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-src/lib/$(SUB_DIR)/dialect.cpp: ../gherkin-languages.json dialect.cpp.jq
+src/lib/$(SUB_DIR)/Dialect.cpp: ../gherkin-languages.json dialect.cpp.jq
 	jq -f dialect.cpp.jq -r -c < $< > $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
