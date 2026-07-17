@@ -19,7 +19,7 @@ namespace cucumber::gherkin
 
         id_generator_ptr idp;
         pickle_cb sink;
-        cucumber::gherkin::pickles pickles;
+        cucumber::gherkin::Pickles pickles;
         std::size_t idCounter = 0;
     };
 

@@ -411,9 +411,9 @@ namespace cucumber::gherkin
         }
     }
 
-    table_cells AstBuilder::GetTableCells(const Token& token)
+    TableCells AstBuilder::GetTableCells(const Token& token)
     {
-        table_cells cells;
+        TableCells cells;
 
         for (const auto& cellItem : token.matchedItems)
         {
@@ -426,9 +426,9 @@ namespace cucumber::gherkin
         return cells;
     }
 
-    tags AstBuilder::GetTags(const AstNode& node)
+    Tags AstBuilder::GetTags(const AstNode& node)
     {
-        tags tagList;
+        Tags tagList;
 
         const auto* pnode = node.GetSingle<AstNode>(RuleType::tags);
 

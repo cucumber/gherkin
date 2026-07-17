@@ -7,15 +7,14 @@
 
 namespace cucumber::gherkin
 {
-    using pickles = std::vector<messages::Pickle>;
-    using pickle_steps = std::vector<std::shared_ptr<messages::PickleStep>>;
-    using pickle_tags = std::vector<std::shared_ptr<messages::PickleTag>>;
-    using pickle_table_cells = std::vector<std::shared_ptr<messages::PickleTableCell>>;
-    using steps = std::vector<std::shared_ptr<messages::Step>>;
-    using tags = std::vector<std::shared_ptr<messages::Tag>>;
-    using table_cells = std::vector<std::shared_ptr<messages::TableCell>>;
-    using envelopes = std::vector<messages::Envelope>;
-
+    using Pickles = std::vector<messages::Pickle>;
+    using PickleSteps = std::vector<std::shared_ptr<messages::PickleStep>>;
+    using PickleTags = std::vector<std::shared_ptr<messages::PickleTag>>;
+    using PickleTableCells = std::vector<std::shared_ptr<messages::PickleTableCell>>;
+    using Steps = std::vector<std::shared_ptr<messages::Step>>;
+    using Tags = std::vector<std::shared_ptr<messages::Tag>>;
+    using TableCells = std::vector<std::shared_ptr<messages::TableCell>>;
+    using Envelopes = std::vector<messages::Envelope>;
 }
 
 #endif

@@ -17,7 +17,7 @@
 namespace cucumber::gherkin
 {
     using table_rows = std::vector<std::shared_ptr<messages::TableRow>>;
-    using tags = std::vector<std::shared_ptr<messages::Tag>>;
+    using Tags = std::vector<std::shared_ptr<messages::Tag>>;
     using Comments = std::vector<std::shared_ptr<messages::Comment>>;
 
     class AstBuilder
@@ -65,8 +65,8 @@ namespace cucumber::gherkin
 
         table_rows GetTableRows(const AstNode& node);
         static void EnsureCellCount(const table_rows& rows);
-        static table_cells GetTableCells(const Token& token);
-        tags GetTags(const AstNode& node);
+        static TableCells GetTableCells(const Token& token);
+        Tags GetTags(const AstNode& node);
 
         AstNode PopNode();
         AstNode& CurrentNode();

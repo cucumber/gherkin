@@ -60,7 +60,7 @@ namespace cucumber::gherkin
 
     PickleCompiler::~PickleCompiler() = default;
 
-    pickles PickleCompiler::Compile(const messages::GherkinDocument& document, const std::string& uri, pickle_cb sink)
+    Pickles PickleCompiler::Compile(const messages::GherkinDocument& document, const std::string& uri, pickle_cb sink)
     {
         PickleCompilerContext context{ idp, std::move(sink) };
 
@@ -75,7 +75,7 @@ namespace cucumber::gherkin
     void PickleCompiler::CompileFeature(PickleCompilerContext& context, const messages::Feature& feature, const std::string& language, const std::string& uri)
     {
         auto tags = feature.tags;
-        steps backgroundSteps;
+        Steps backgroundSteps;
 
         for (const auto& child : feature.children)
         {
@@ -108,7 +108,7 @@ namespace cucumber::gherkin
     }
 
     void PickleCompiler::CompileRule(
-        PickleCompilerContext& context, const messages::Rule& rule, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
+        PickleCompilerContext& context, const messages::Rule& rule, const Tags& parentTags, const Steps& backgroundSteps, const std::string& language, const std::string& uri)
     {
         auto steps = backgroundSteps;
         auto tags = parentTags;
@@ -145,10 +145,10 @@ namespace cucumber::gherkin
     }
 
     void PickleCompiler::CompileScenario(
-        PickleCompilerContext& context, const messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
+        PickleCompilerContext& context, const messages::Scenario& scenario, const Tags& parentTags, const Steps& backgroundSteps, const std::string& language, const std::string& uri)
     {
         auto conjunction = messages::StepKeywordType::CONJUNCTION;
-        pickle_steps steps;
+        PickleSteps steps;
 
         if (!scenario.steps.empty())
         {
@@ -188,7 +188,7 @@ namespace cucumber::gherkin
 
     // NOLINTNEXTLINE(readability-function-cognitive-complexity)
     void PickleCompiler::CompileScenarioOutline(
-        PickleCompilerContext& context, const messages::Scenario& scenario, const tags& parentTags, const steps& backgroundSteps, const std::string& language, const std::string& uri)
+        PickleCompilerContext& context, const messages::Scenario& scenario, const Tags& parentTags, const Steps& backgroundSteps, const std::string& language, const std::string& uri)
     {
         auto conjunction = messages::StepKeywordType::CONJUNCTION;
 
@@ -206,7 +206,7 @@ namespace cucumber::gherkin
             {
                 const auto& valueCells = valuesRow->cells;
 
-                pickle_steps steps;
+                PickleSteps steps;
                 auto lastKeywordType = messages::StepKeywordType::UNKNOWN;
 
                 if (!scenario.steps.empty())
@@ -252,9 +252,9 @@ namespace cucumber::gherkin
         }
     }
 
-    messages::PickleStep PickleCompiler::MakePickleStep(const messages::Step& step, const table_cells& variableCells, const messages::TableRow* valueRowPtr, messages::StepKeywordType keywordType)
+    messages::PickleStep PickleCompiler::MakePickleStep(const messages::Step& step, const TableCells& variableCells, const messages::TableRow* valueRowPtr, messages::StepKeywordType keywordType)
     {
-        const auto& valueCells = (valueRowPtr != nullptr) ? valueRowPtr->cells : table_cells();
+        const auto& valueCells = (valueRowPtr != nullptr) ? valueRowPtr->cells : TableCells();
 
         messages::PickleStep pickleStep{ std::nullopt, { step.id }, NextId(), ToPickleStepType(keywordType), Interpolate(step.text, variableCells, valueCells) };
 
@@ -297,7 +297,7 @@ namespace cucumber::gherkin
     }
 
     messages::PickleTable PickleCompiler::MakePickleTable(
-        const std::optional<std::size_t>& argumentIndex, const messages::DataTable& dataTable, const table_cells& variableCells, const table_cells& valueCells)
+        const std::optional<std::size_t>& argumentIndex, const messages::DataTable& dataTable, const TableCells& variableCells, const TableCells& valueCells)
     {
         messages::PickleTable pickleTable{ argumentIndex };
 
@@ -319,7 +319,7 @@ namespace cucumber::gherkin
     }
 
     messages::PickleDocString PickleCompiler::MakePickleDocString(
-        const std::optional<std::size_t>& argumentIndex, const messages::DocString& docString, const table_cells& variableCells, const table_cells& valueCells)
+        const std::optional<std::size_t>& argumentIndex, const messages::DocString& docString, const TableCells& variableCells, const TableCells& valueCells)
     {
         messages::PickleDocString pickleDocString{ argumentIndex, std::nullopt, Interpolate(docString.content, variableCells, valueCells) };
 
@@ -336,9 +336,9 @@ namespace cucumber::gherkin
         return MakePickleStep(step, {}, nullptr, keywordType);
     }
 
-    pickle_tags PickleCompiler::MakePickleTags(const tags& tags)
+    PickleTags PickleCompiler::MakePickleTags(const Tags& tags)
     {
-        pickle_tags resultTags;
+        PickleTags resultTags;
 
         for (const auto& sourceTag : tags)
         {
@@ -351,7 +351,7 @@ namespace cucumber::gherkin
         return resultTags;
     }
 
-    std::string PickleCompiler::Interpolate(const std::string& name, const table_cells& variableCells, const table_cells& valueCells) // NOLINT(bugprone-easily-swappable-parameters)
+    std::string PickleCompiler::Interpolate(const std::string& name, const TableCells& variableCells, const TableCells& valueCells) // NOLINT(bugprone-easily-swappable-parameters)
     {
         auto interpolatedName = name;
         std::size_t col = 0;
