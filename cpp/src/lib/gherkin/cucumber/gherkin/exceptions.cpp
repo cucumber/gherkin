@@ -116,16 +116,16 @@ namespace cucumber::gherkin
     // composite Parser error
     //
     ///////////////////////////////////////////////////////////////////////////////
-    CompositeParserError::CompositeParserError(parser_error_ptrs ptrs)
+    CompositeParserError::CompositeParserError(ParserErrorPtrs ptrs)
         : ParserError("", {})
         , ptrs(std::move(ptrs))
     {}
 
     CompositeParserError::~CompositeParserError() = default;
 
-    std::string CompositeParserError::MakeMessage(const parser_error_ptrs& ptrs)
+    std::string CompositeParserError::MakeMessage(const ParserErrorPtrs& ptrs)
     {
-        strings errs;
+        Strings errs;
 
         for (const auto& errorPointer : ptrs)
         {
@@ -139,7 +139,7 @@ namespace cucumber::gherkin
         return stream.str();
     }
 
-    const parser_error_ptrs& CompositeParserError::Errors() const
+    const ParserErrorPtrs& CompositeParserError::Errors() const
     {
         return ptrs;
     }

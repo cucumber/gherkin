@@ -15,11 +15,11 @@ namespace cucumber::gherkin
     class ParserBase
     {
     public:
-        using result_type = typename BuilderType::result_type;
-        using context_type = ParserContext<BuilderType>;
+        using ResultType = typename BuilderType::ResultType;
+        using ContextType = ParserContext<BuilderType>;
 
         ParserBase() = default;
-        explicit ParserBase(id_generator_ptr idp);
+        explicit ParserBase(IdGeneratorPtr idp);
 
         virtual ~ParserBase() = default;
         ParserBase(const ParserBase&) = delete;
@@ -27,14 +27,14 @@ namespace cucumber::gherkin
         ParserBase(ParserBase&&) = delete;
         ParserBase& operator=(ParserBase&&) = delete;
 
-        result_type Parse(std::string_view uri, std::string_view data);
+        ResultType Parse(std::string_view uri, std::string_view data);
 
     protected:
         void Reset(std::string_view uri, std::string_view data);
 
-        result_type GetResult() const;
+        ResultType GetResult() const;
 
-        virtual void parse(context_type& context) = 0;
+        virtual void parse(ContextType& context) = 0;
 
         BuilderType builder;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
         TokenScanner scanner; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
@@ -42,16 +42,16 @@ namespace cucumber::gherkin
     };
 
     template<typename BuilderType>
-    ParserBase<BuilderType>::ParserBase(id_generator_ptr idp)
+    ParserBase<BuilderType>::ParserBase(IdGeneratorPtr idp)
         : builder{ std::move(idp) }
     {}
 
     template<typename BuilderType>
-    auto ParserBase<BuilderType>::Parse(std::string_view uri, std::string_view data) -> result_type
+    auto ParserBase<BuilderType>::Parse(std::string_view uri, std::string_view data) -> ResultType
     {
         Reset(uri, data);
 
-        context_type context{ builder, scanner, matcher };
+        ContextType context{ builder, scanner, matcher };
 
         parse(context);
 
@@ -67,7 +67,7 @@ namespace cucumber::gherkin
     }
 
     template<typename BuilderType>
-    auto ParserBase<BuilderType>::GetResult() const -> result_type
+    auto ParserBase<BuilderType>::GetResult() const -> ResultType
     {
         return builder.GetResult();
     }

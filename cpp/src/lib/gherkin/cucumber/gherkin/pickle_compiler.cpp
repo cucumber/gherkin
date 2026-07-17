@@ -36,9 +36,9 @@ namespace cucumber::gherkin
 
     messages::PickleStepType ToPickleStepType(messages::StepKeywordType keywordType)
     {
-        using step_map_type = std::unordered_map<messages::StepKeywordType, messages::PickleStepType>;
+        using StepMapType = std::unordered_map<messages::StepKeywordType, messages::PickleStepType>;
 
-        static const step_map_type smap = { { messages::StepKeywordType::UNKNOWN, messages::PickleStepType::UNKNOWN }, { messages::StepKeywordType::CONTEXT, messages::PickleStepType::CONTEXT },
+        static const StepMapType smap = { { messages::StepKeywordType::UNKNOWN, messages::PickleStepType::UNKNOWN }, { messages::StepKeywordType::CONTEXT, messages::PickleStepType::CONTEXT },
             { messages::StepKeywordType::ACTION, messages::PickleStepType::ACTION }, { messages::StepKeywordType::OUTCOME, messages::PickleStepType::OUTCOME } };
 
         return smap.at(keywordType);
@@ -54,13 +54,13 @@ namespace cucumber::gherkin
         : PickleCompiler(NewIdGenerator())
     {}
 
-    PickleCompiler::PickleCompiler(id_generator_ptr idp)
+    PickleCompiler::PickleCompiler(IdGeneratorPtr idp)
         : idp(std::move(std::move(idp)))
     {}
 
     PickleCompiler::~PickleCompiler() = default;
 
-    Pickles PickleCompiler::Compile(const messages::GherkinDocument& document, const std::string& uri, pickle_cb sink)
+    Pickles PickleCompiler::Compile(const messages::GherkinDocument& document, const std::string& uri, PickleCb sink)
     {
         PickleCompilerContext context{ idp, std::move(sink) };
 
@@ -179,7 +179,7 @@ namespace cucumber::gherkin
             tags.push_back(tag);
         }
 
-        strings const sourceIds = { scenario.id };
+        Strings const sourceIds = { scenario.id };
 
         messages::Pickle pickle{ context.NextId(), uri, scenario.location, scenario.name, language, steps, MakePickleTags(tags), sourceIds };
 
@@ -243,7 +243,7 @@ namespace cucumber::gherkin
                     steps.push_back(std::make_shared<messages::PickleStep>(MakePickleStep(*step, variableCells, std::addressof(*valuesRow), lastKeywordType)));
                 }
 
-                strings const sourceIds = { scenario.id, valuesRow->id };
+                Strings const sourceIds = { scenario.id, valuesRow->id };
 
                 messages::Pickle pickle{ context.NextId(), uri, valuesRow->location, Interpolate(scenario.name, variableCells, valueCells), language, steps, MakePickleTags(tags), sourceIds };
 

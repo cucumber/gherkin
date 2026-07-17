@@ -17,8 +17,8 @@ namespace cucumber::gherkin
 
         void AddPickle(messages::Pickle& pickle);
 
-        id_generator_ptr idp;
-        pickle_cb sink;
+        IdGeneratorPtr idp;
+        PickleCb sink;
         cucumber::gherkin::Pickles pickles;
         std::size_t idCounter = 0;
     };

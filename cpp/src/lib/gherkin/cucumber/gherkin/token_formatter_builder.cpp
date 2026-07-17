@@ -12,7 +12,7 @@
 namespace cucumber::gherkin
 {
 
-    TokenFormatterBuilder::TokenFormatterBuilder(id_generator_ptr idp)
+    TokenFormatterBuilder::TokenFormatterBuilder(IdGeneratorPtr idp)
         : idp(std::move(std::move(idp)))
     {}
 
@@ -34,7 +34,7 @@ namespace cucumber::gherkin
         formattedTokens.emplace_back(FormatToken(token));
     }
 
-    strings TokenFormatterBuilder::GetResult() const
+    Strings TokenFormatterBuilder::GetResult() const
     {
         return formattedTokens;
     }
@@ -66,7 +66,7 @@ namespace cucumber::gherkin
 
         if (!token.matchedItems.empty())
         {
-            strings items;
+            Strings items;
 
             for (const auto& matchedItem : token.matchedItems)
             {

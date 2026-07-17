@@ -37,10 +37,10 @@ namespace cucumber::gherkin
         std::size_t idCounter = 0;
     };
 
-    using id_generator_ptr = std::shared_ptr<IdGeneratorBase>;
+    using IdGeneratorPtr = std::shared_ptr<IdGeneratorBase>;
 
     template<typename... Args>
-    id_generator_ptr NewIdGenerator(Args&&... args)
+    IdGeneratorPtr NewIdGenerator(Args&&... args)
     {
         return std::make_shared<IdGenerator>(std::forward<Args>(args)...);
     }

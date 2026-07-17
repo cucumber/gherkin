@@ -40,16 +40,16 @@ namespace cucumber::gherkin
 
         std::istream& Input();
 
-        using input_ptr = std::unique_ptr<std::istream>;
+        using InputPtr = std::unique_ptr<std::istream>;
 
         std::size_t line = 0;
-        input_ptr ip;
+        InputPtr ip;
     };
 
-    using token_scanner_ptr = std::unique_ptr<TokenScanner>;
+    using TokenScannerPtr = std::unique_ptr<TokenScanner>;
 
     template<typename... Args>
-    token_scanner_ptr NewTokenScanner(Args&&... args)
+    TokenScannerPtr NewTokenScanner(Args&&... args)
     {
         return std::make_unique<TokenScanner>(std::forward<Args>(args)...);
     }

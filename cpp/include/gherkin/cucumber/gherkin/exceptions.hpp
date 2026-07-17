@@ -32,16 +32,16 @@ namespace cucumber::gherkin
         messages::Location location;
     };
 
-    using parser_error_ptr = std::shared_ptr<ParserError>;
-    using parser_error_ptrs = std::vector<parser_error_ptr>;
+    using ParserErrorPtr = std::shared_ptr<ParserError>;
+    using ParserErrorPtrs = std::vector<ParserErrorPtr>;
 
     template<typename Error, typename... Args>
-    parser_error_ptr NewParserError(Args&&... args)
+    ParserErrorPtr NewParserError(Args&&... args)
     {
         return std::make_shared<Error>(std::forward<Args>(args)...);
     }
 
-    using ast_builder_error = ParserError;
+    using AstBuilderError = ParserError;
 
     class NoSuchLanguageError : public ParserError
     {
@@ -97,7 +97,7 @@ namespace cucumber::gherkin
     class CompositeParserError : public ParserError
     {
     public:
-        CompositeParserError(parser_error_ptrs ptrs);
+        CompositeParserError(ParserErrorPtrs ptrs);
 
         ~CompositeParserError() override;
         CompositeParserError(const CompositeParserError&) = default;
@@ -105,12 +105,12 @@ namespace cucumber::gherkin
         CompositeParserError(CompositeParserError&&) = default;
         CompositeParserError& operator=(CompositeParserError&&) = default;
 
-        static std::string MakeMessage(const parser_error_ptrs& ptrs);
+        static std::string MakeMessage(const ParserErrorPtrs& ptrs);
 
-        [[nodiscard]] const parser_error_ptrs& Errors() const;
+        [[nodiscard]] const ParserErrorPtrs& Errors() const;
 
     private:
-        parser_error_ptrs ptrs;
+        ParserErrorPtrs ptrs;
     };
 
 }

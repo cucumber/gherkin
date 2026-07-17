@@ -22,13 +22,13 @@ namespace cucumber::gherkin
     class Parser : public ParserBase<BuilderType>
     {
     public:
-        using parent = ParserBase<BuilderType>;
-        using parent::parent;
-        using parent::parse;
-        using context_type = typename parent::context_type;
+        using Parent = ParserBase<BuilderType>;
+        using Parent::Parent;
+        using Parent::parse;
+        using ContextType = typename Parent::ContextType;
 
     protected:
-        void parse(context_type& context) override
+        void parse(ContextType& context) override
         {
             StartRule(context, RuleType::gherkinDocument);
 
@@ -53,12 +53,12 @@ namespace cucumber::gherkin
             }
         }
 
-        void Build(context_type& context, Token& token)
+        void Build(ContextType& context, Token& token)
         {
             context.builder.Build(token);
         }
 
-        void StartRule(context_type& context, RuleType ruleType)
+        void StartRule(ContextType& context, RuleType ruleType)
         {
             HandleAstError(context, ruleType,
                 [&context](auto rtype)
@@ -67,7 +67,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        void EndRule(context_type& context, RuleType ruleType)
+        void EndRule(ContextType& context, RuleType ruleType)
         {
             HandleAstError(context, ruleType,
                 [&context](auto rtype)
@@ -77,13 +77,13 @@ namespace cucumber::gherkin
         }
 
         template<typename Argument, typename Action>
-        bool HandleExternalError(context_type& context, bool default_value, Argument&& argument, Action&& action)
+        bool HandleExternalError(ContextType& context, bool default_value, Argument&& argument, Action&& action)
         {
-            using ret_type = decltype(action(argument));
+            using RetType = decltype(action(argument));
 
             try
             {
-                if constexpr (std::is_same_v<ret_type, void>)
+                if constexpr (std::is_same_v<RetType, void>)
                 {
                     action(argument);
                     return default_value;
@@ -110,12 +110,12 @@ namespace cucumber::gherkin
         }
 
         template<typename Argument, typename Action>
-        void HandleAstError(context_type& context, Argument&& argument, Action&& action)
+        void HandleAstError(ContextType& context, Argument&& argument, Action&& action)
         {
             HandleExternalError(context, true, argument, action);
         }
 
-        bool MatchEOF(context_type& context, Token& token)
+        bool MatchEOF(ContextType& context, Token& token)
         {
             return HandleExternalError(context, false, token,
                 [&context](auto& tok)
@@ -124,7 +124,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchEmpty(context_type& context, Token& token)
+        bool MatchEmpty(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -138,7 +138,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchComment(context_type& context, Token& token)
+        bool MatchComment(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -152,7 +152,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchTagLine(context_type& context, Token& token)
+        bool MatchTagLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -166,7 +166,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchFeatureLine(context_type& context, Token& token)
+        bool MatchFeatureLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -180,7 +180,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchRuleLine(context_type& context, Token& token)
+        bool MatchRuleLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -194,7 +194,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchBackgroundLine(context_type& context, Token& token)
+        bool MatchBackgroundLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -208,7 +208,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchScenarioLine(context_type& context, Token& token)
+        bool MatchScenarioLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -222,7 +222,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchExamplesLine(context_type& context, Token& token)
+        bool MatchExamplesLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -236,7 +236,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchStepLine(context_type& context, Token& token)
+        bool MatchStepLine(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -250,7 +250,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchDocStringSeparator(context_type& context, Token& token)
+        bool MatchDocStringSeparator(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -264,7 +264,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchTableRow(context_type& context, Token& token)
+        bool MatchTableRow(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -278,7 +278,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchLanguage(context_type& context, Token& token)
+        bool MatchLanguage(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -292,7 +292,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool MatchOther(context_type& context, Token& token)
+        bool MatchOther(ContextType& context, Token& token)
         {
             if (token.IsEof())
             {
@@ -306,10 +306,10 @@ namespace cucumber::gherkin
                 });
         }
 
-        bool LookAhead0(context_type& context, Token& current_token)
+        bool LookAhead0(ContextType& context, Token& current_token)
         {
             Token token;
-            token_queue queue;
+            TokenQueue queue;
             bool match = false;
 
             while (true)
@@ -334,10 +334,10 @@ namespace cucumber::gherkin
             return match;
         }
 
-        bool LookAhead1(context_type& context, Token& current_token)
+        bool LookAhead1(ContextType& context, Token& current_token)
         {
             Token token;
-            token_queue queue;
+            TokenQueue queue;
             bool match = false;
 
             while (true)
@@ -363,7 +363,7 @@ namespace cucumber::gherkin
         }
 
         // Start
-        std::size_t MatchTokenAt0(Token& token, context_type& context)
+        std::size_t MatchTokenAt0(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -419,7 +419,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
-        std::size_t MatchTokenAt1(Token& token, context_type& context)
+        std::size_t MatchTokenAt1(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -459,7 +459,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt2(Token& token, context_type& context)
+        std::size_t MatchTokenAt2(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -499,7 +499,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
-        std::size_t MatchTokenAt3(Token& token, context_type& context)
+        std::size_t MatchTokenAt3(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -585,7 +585,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt4(Token& token, context_type& context)
+        std::size_t MatchTokenAt4(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -670,7 +670,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
-        std::size_t MatchTokenAt5(Token& token, context_type& context)
+        std::size_t MatchTokenAt5(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -755,7 +755,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt6(Token& token, context_type& context)
+        std::size_t MatchTokenAt6(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -839,7 +839,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt7(Token& token, context_type& context)
+        std::size_t MatchTokenAt7(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -935,7 +935,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt8(Token& token, context_type& context)
+        std::size_t MatchTokenAt8(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1037,7 +1037,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt9(Token& token, context_type& context)
+        std::size_t MatchTokenAt9(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -1066,7 +1066,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt10(Token& token, context_type& context)
+        std::size_t MatchTokenAt10(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1156,7 +1156,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt11(Token& token, context_type& context)
+        std::size_t MatchTokenAt11(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -1197,7 +1197,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-        std::size_t MatchTokenAt12(Token& token, context_type& context)
+        std::size_t MatchTokenAt12(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1304,7 +1304,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt13(Token& token, context_type& context)
+        std::size_t MatchTokenAt13(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1412,7 +1412,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt14(Token& token, context_type& context)
+        std::size_t MatchTokenAt14(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1532,7 +1532,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt15(Token& token, context_type& context)
+        std::size_t MatchTokenAt15(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1660,7 +1660,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt16(Token& token, context_type& context)
+        std::size_t MatchTokenAt16(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -1673,8 +1673,7 @@ namespace cucumber::gherkin
                 return 16;
             }
 
-            std::string state_comment =
-                "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -1690,7 +1689,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt17(Token& token, context_type& context)
+        std::size_t MatchTokenAt17(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1790,8 +1789,7 @@ namespace cucumber::gherkin
                 return 17;
             }
 
-            std::string state_comment =
-                "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -1807,7 +1805,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt18(Token& token, context_type& context)
+        std::size_t MatchTokenAt18(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -1848,7 +1846,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-        std::size_t MatchTokenAt19(Token& token, context_type& context)
+        std::size_t MatchTokenAt19(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -1969,7 +1967,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt20(Token& token, context_type& context)
+        std::size_t MatchTokenAt20(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2091,7 +2089,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-        std::size_t MatchTokenAt21(Token& token, context_type& context)
+        std::size_t MatchTokenAt21(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2211,7 +2209,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt22(Token& token, context_type& context)
+        std::size_t MatchTokenAt22(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -2251,7 +2249,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
-        std::size_t MatchTokenAt23(Token& token, context_type& context)
+        std::size_t MatchTokenAt23(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2340,7 +2338,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt24(Token& token, context_type& context)
+        std::size_t MatchTokenAt24(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2428,7 +2426,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-        std::size_t MatchTokenAt25(Token& token, context_type& context)
+        std::size_t MatchTokenAt25(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2516,7 +2514,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt26(Token& token, context_type& context)
+        std::size_t MatchTokenAt26(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2603,7 +2601,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt27(Token& token, context_type& context)
+        std::size_t MatchTokenAt27(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2702,7 +2700,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt28(Token& token, context_type& context)
+        std::size_t MatchTokenAt28(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2807,7 +2805,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt29(Token& token, context_type& context)
+        std::size_t MatchTokenAt29(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -2836,7 +2834,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt30(Token& token, context_type& context)
+        std::size_t MatchTokenAt30(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -2929,7 +2927,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt31(Token& token, context_type& context)
+        std::size_t MatchTokenAt31(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -2970,7 +2968,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-        std::size_t MatchTokenAt32(Token& token, context_type& context)
+        std::size_t MatchTokenAt32(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3080,7 +3078,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt33(Token& token, context_type& context)
+        std::size_t MatchTokenAt33(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3191,7 +3189,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-        std::size_t MatchTokenAt34(Token& token, context_type& context)
+        std::size_t MatchTokenAt34(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3314,7 +3312,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt35(Token& token, context_type& context)
+        std::size_t MatchTokenAt35(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3445,7 +3443,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt36(Token& token, context_type& context)
+        std::size_t MatchTokenAt36(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -3458,8 +3456,7 @@ namespace cucumber::gherkin
                 return 36;
             }
 
-            std::string state_comment =
-                "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
+            std::string state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -3475,7 +3472,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt37(Token& token, context_type& context)
+        std::size_t MatchTokenAt37(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3578,8 +3575,7 @@ namespace cucumber::gherkin
                 return 37;
             }
 
-            std::string state_comment =
-                "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
+            std::string state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -3595,7 +3591,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-        std::size_t MatchTokenAt38(Token& token, context_type& context)
+        std::size_t MatchTokenAt38(Token& token, ContextType& context)
         {
             if (MatchTagLine(context, token))
             {
@@ -3636,7 +3632,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-        std::size_t MatchTokenAt39(Token& token, context_type& context)
+        std::size_t MatchTokenAt39(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3760,7 +3756,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-        std::size_t MatchTokenAt40(Token& token, context_type& context)
+        std::size_t MatchTokenAt40(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -3869,8 +3865,7 @@ namespace cucumber::gherkin
                 return 40;
             }
 
-            std::string state_comment =
-                "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
+            std::string state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0";
             std::string expected_tokens = "#EOF, #Comment, #TableRow, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -3886,7 +3881,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-        std::size_t MatchTokenAt41(Token& token, context_type& context)
+        std::size_t MatchTokenAt41(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4009,7 +4004,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt43(Token& token, context_type& context)
+        std::size_t MatchTokenAt43(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -4022,8 +4017,7 @@ namespace cucumber::gherkin
                 return 43;
             }
 
-            std::string state_comment =
-                "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4039,7 +4033,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt44(Token& token, context_type& context)
+        std::size_t MatchTokenAt44(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4149,8 +4143,7 @@ namespace cucumber::gherkin
                 return 44;
             }
 
-            std::string state_comment =
-                "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4166,7 +4159,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt45(Token& token, context_type& context)
+        std::size_t MatchTokenAt45(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4290,7 +4283,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt46(Token& token, context_type& context)
+        std::size_t MatchTokenAt46(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -4319,7 +4312,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt47(Token& token, context_type& context)
+        std::size_t MatchTokenAt47(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4419,7 +4412,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt48(Token& token, context_type& context)
+        std::size_t MatchTokenAt48(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4517,7 +4510,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt49(Token& token, context_type& context)
+        std::size_t MatchTokenAt49(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -4530,8 +4523,7 @@ namespace cucumber::gherkin
                 return 49;
             }
 
-            std::string state_comment =
-                "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
+            std::string state_comment = "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0";
             std::string expected_tokens = "#DocStringSeparator, #Other";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4547,7 +4539,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt50(Token& token, context_type& context)
+        std::size_t MatchTokenAt50(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4654,8 +4646,7 @@ namespace cucumber::gherkin
                 return 50;
             }
 
-            std::string state_comment =
-                "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
+            std::string state_comment = "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0";
             std::string expected_tokens = "#EOF, #TableRow, #StepLine, #TagLine, #ExamplesLine, #ScenarioLine, #RuleLine, #Comment, #Empty";
 
             auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
@@ -4671,7 +4662,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt51(Token& token, context_type& context)
+        std::size_t MatchTokenAt51(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4792,7 +4783,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-        std::size_t MatchTokenAt52(Token& token, context_type& context)
+        std::size_t MatchTokenAt52(Token& token, ContextType& context)
         {
             if (MatchDocStringSeparator(context, token))
             {
@@ -4821,7 +4812,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-        std::size_t MatchTokenAt53(Token& token, context_type& context)
+        std::size_t MatchTokenAt53(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -4918,7 +4909,7 @@ namespace cucumber::gherkin
         }
 
         // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-        std::size_t MatchTokenAt54(Token& token, context_type& context)
+        std::size_t MatchTokenAt54(Token& token, ContextType& context)
         {
             if (MatchEOF(context, token))
             {
@@ -5012,7 +5003,7 @@ namespace cucumber::gherkin
             return 54;
         }
 
-        std::size_t MatchToken(std::size_t state, Token& token, context_type& context)
+        std::size_t MatchToken(std::size_t state, Token& token, ContextType& context)
         {
             switch (state)
             {

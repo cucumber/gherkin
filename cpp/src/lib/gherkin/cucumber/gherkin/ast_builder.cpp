@@ -41,7 +41,7 @@ namespace cucumber::gherkin
         : AstBuilder(NewIdGenerator())
     {}
 
-    AstBuilder::AstBuilder(id_generator_ptr idp)
+    AstBuilder::AstBuilder(IdGeneratorPtr idp)
         : idp(std::move(std::move(idp)))
     {}
 
@@ -159,10 +159,10 @@ namespace cucumber::gherkin
 
     messages::DocString AstBuilder::MakeDocString(AstNode& node)
     {
-        const auto& tokens = node.GetTokens(RuleType::docStringSeparator);
-        const auto& separatorToken = tokens[0];
+        const auto& Tokens = node.GetTokens(RuleType::docStringSeparator);
+        const auto& separatorToken = Tokens[0];
 
-        string_views lineViews;
+        StringViews lineViews;
 
         for (const auto& tok : node.GetTokens(RuleType::other))
         {
@@ -233,7 +233,7 @@ namespace cucumber::gherkin
 
         examplesNode.Set(RuleType::description, examples.description);
 
-        const auto* prows = examplesNode.GetSingle<table_rows>(RuleType::examplesTable);
+        const auto* prows = examplesNode.GetSingle<TableRows>(RuleType::examplesTable);
 
         if (prows != nullptr)
         {
@@ -250,7 +250,7 @@ namespace cucumber::gherkin
         return examples;
     }
 
-    table_rows AstBuilder::MakeExamplesTable(AstNode& node)
+    TableRows AstBuilder::MakeExamplesTable(AstNode& node)
     {
         return GetTableRows(node);
     }
@@ -266,7 +266,7 @@ namespace cucumber::gherkin
             --ntoks;
         }
 
-        string_views descriptionLines;
+        StringViews descriptionLines;
 
         for (std::size_t i = 0; i < ntoks; ++i)
         {
@@ -375,9 +375,9 @@ namespace cucumber::gherkin
         return std::make_shared<messages::Location>(messages::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt });
     }
 
-    table_rows AstBuilder::GetTableRows(const AstNode& node)
+    TableRows AstBuilder::GetTableRows(const AstNode& node)
     {
-        table_rows rows;
+        TableRows rows;
 
         for (const auto& token : node.GetTokens(RuleType::tableRow))
         {
@@ -393,7 +393,7 @@ namespace cucumber::gherkin
         return rows;
     }
 
-    void AstBuilder::EnsureCellCount(const table_rows& rows)
+    void AstBuilder::EnsureCellCount(const TableRows& rows)
     {
         if (rows.empty())
         {
@@ -406,7 +406,7 @@ namespace cucumber::gherkin
         {
             if (row->cells.size() != cellCount)
             {
-                throw ast_builder_error("inconsistent cell count within the table", { row->location->line, row->location->column.value_or(0) });
+                throw AstBuilderError("inconsistent cell count within the table", { row->location->line, row->location->column.value_or(0) });
             }
         }
     }

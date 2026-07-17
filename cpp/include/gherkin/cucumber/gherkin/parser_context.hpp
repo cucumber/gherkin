@@ -16,8 +16,8 @@ namespace cucumber::gherkin
         TokenScanner& scanner; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
         TokenMatcher& matcher; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 
-        token_queue queue;
-        parser_error_ptrs errorPointers;
+        TokenQueue queue;
+        ParserErrorPtrs errorPointers;
         bool stopAtFirstError = false;
         std::size_t maxErrors = 10; // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
 
@@ -39,9 +39,9 @@ namespace cucumber::gherkin
             return HasToken() ? PopToken() : scanner.Read();
         }
 
-        void PushTokens(const token_queue& tokens)
+        void PushTokens(const TokenQueue& Tokens)
         {
-            queue.insert(queue.end(), tokens.begin(), tokens.end());
+            queue.insert(queue.end(), Tokens.begin(), Tokens.end());
         }
 
         [[nodiscard]] bool HasErrors() const
@@ -49,7 +49,7 @@ namespace cucumber::gherkin
             return !errorPointers.empty();
         }
 
-        void AddError(parser_error_ptr errorPointer)
+        void AddError(ParserErrorPtr errorPointer)
         {
             for (const auto& existing : errorPointers)
             {

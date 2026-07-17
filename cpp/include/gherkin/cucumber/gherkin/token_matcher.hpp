@@ -17,8 +17,8 @@
 namespace cucumber::gherkin
 {
 
-    using keyword_types = std::vector<messages::StepKeywordType>;
-    using keyword_types_map = std::unordered_map<std::string_view, keyword_types>;
+    using KeywordTypes = std::vector<messages::StepKeywordType>;
+    using KeywordTypesMap = std::unordered_map<std::string_view, KeywordTypes>;
 
     class TokenMatcher
     {
@@ -50,7 +50,7 @@ namespace cucumber::gherkin
     private:
         bool MatchDocStringSeparator(Token& token, std::string_view separator, bool isOpen);
 
-        bool MatchTitleLine(Token& token, RuleType tokenType, const string_views& keywords);
+        bool MatchTitleLine(Token& token, RuleType tokenType, const StringViews& keywords);
 
         struct TokenInfo
         {
@@ -58,12 +58,12 @@ namespace cucumber::gherkin
             std::optional<std::string> keyword;
             std::optional<messages::StepKeywordType> keywordType;
             std::optional<std::size_t> indent;
-            cucumber::gherkin::items items;
+            cucumber::gherkin::Items items;
         };
 
         void SetTokenMatched(Token& token, RuleType matchedType, const TokenInfo& info = {});
 
-        const string_views& Keywords(std::string_view keyword) const;
+        const StringViews& Keywords(std::string_view keyword) const;
 
         messages::StepKeywordType KeywordType(std::string_view keyword) const;
 
@@ -72,7 +72,7 @@ namespace cucumber::gherkin
         std::string UnescapeDocstring(const std::string& text) const;
 
         std::string dialectName;
-        keyword_types_map keywordTypes;
+        KeywordTypesMap keywordTypes;
         std::string activeDocStringSeparator;
         std::size_t indentToRemove = 0;
     };

@@ -14,10 +14,10 @@
 namespace cucumber::gherkin
 {
 
-    using unescape_pair = std::pair<std::string, std::string>;
-    using unescapes = std::vector<unescape_pair>;
+    using UnescapePair = std::pair<std::string, std::string>;
+    using Unescapes = std::vector<UnescapePair>;
 
-    static const unescapes lineUnescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
+    static const Unescapes lineUnescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
 
     template<typename Callabble>
     void SplitTableCells(std::string_view row, Callabble&& cellCb)
@@ -140,9 +140,9 @@ namespace cucumber::gherkin
         return trimmedLineText.find(keyword + ":") == 0;
     }
 
-    items Line::TableCells() const
+    Items Line::TableCells() const
     {
-        items items;
+        Items items;
 
         SplitTableCells(trimmedLineText,
             [&](const auto& cell, auto col)
@@ -166,9 +166,9 @@ namespace cucumber::gherkin
         return items;
     }
 
-    items Line::Tags() const
+    Items Line::Tags() const
     {
-        items tags;
+        Items tags;
 
         auto column = indent + 1;
         auto itemsLine = Subst(trimmedLineText, "\\s+(?:#.*)?$", "");

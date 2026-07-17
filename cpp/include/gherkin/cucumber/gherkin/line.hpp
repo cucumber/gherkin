@@ -29,9 +29,9 @@ namespace cucumber::gherkin
         [[nodiscard]] bool Startswith(std::string_view prefix) const;
         [[nodiscard]] bool StartswithTitleKeyword(const std::string& keyword) const;
 
-        [[nodiscard]] items TableCells() const;
+        [[nodiscard]] Items TableCells() const;
 
-        [[nodiscard]] items Tags() const;
+        [[nodiscard]] Items Tags() const;
 
     private:
         std::string lineText;

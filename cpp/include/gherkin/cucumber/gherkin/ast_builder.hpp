@@ -16,17 +16,17 @@
 
 namespace cucumber::gherkin
 {
-    using table_rows = std::vector<std::shared_ptr<messages::TableRow>>;
+    using TableRows = std::vector<std::shared_ptr<messages::TableRow>>;
     using Tags = std::vector<std::shared_ptr<messages::Tag>>;
     using Comments = std::vector<std::shared_ptr<messages::Comment>>;
 
     class AstBuilder
     {
     public:
-        using result_type = messages::GherkinDocument;
+        using ResultType = messages::GherkinDocument;
 
         AstBuilder();
-        AstBuilder(id_generator_ptr idp);
+        AstBuilder(IdGeneratorPtr idp);
 
         virtual ~AstBuilder();
         AstBuilder(const AstBuilder&) = delete;
@@ -40,10 +40,10 @@ namespace cucumber::gherkin
         void EndRule(RuleType ruleType);
         void Build(const Token& token);
 
-        [[nodiscard]] const result_type& GetResult() const;
+        [[nodiscard]] const ResultType& GetResult() const;
 
     private:
-        using ast_node_stack = std::stack<AstNode>;
+        using AstNodeStack = std::stack<AstNode>;
 
         std::string NextId();
 
@@ -55,16 +55,16 @@ namespace cucumber::gherkin
         messages::Background MakeBackground(AstNode& node);
         messages::Scenario MakeScenarioDefinition(AstNode& node);
         messages::Examples MakeExamplesDefinition(AstNode& node);
-        table_rows MakeExamplesTable(AstNode& node);
+        TableRows MakeExamplesTable(AstNode& node);
         static std::string MakeDescription(AstNode& node);
         messages::Feature MakeFeature(AstNode& node);
         messages::Rule MakeRule(AstNode& node);
-        result_type MakeGherkinDocument(AstNode& node);
+        ResultType MakeGherkinDocument(AstNode& node);
 
         static std::shared_ptr<messages::Location> GetLocation(const Token& token, std::size_t column = 0);
 
-        table_rows GetTableRows(const AstNode& node);
-        static void EnsureCellCount(const table_rows& rows);
+        TableRows GetTableRows(const AstNode& node);
+        static void EnsureCellCount(const TableRows& rows);
         static TableCells GetTableCells(const Token& token);
         Tags GetTags(const AstNode& node);
 
@@ -72,17 +72,17 @@ namespace cucumber::gherkin
         AstNode& CurrentNode();
         [[nodiscard]] const AstNode& CurrentNode() const;
 
-        id_generator_ptr idp;
-        ast_node_stack stack;
+        IdGeneratorPtr idp;
+        AstNodeStack stack;
         std::string_view uri;
         Comments comments;
-        result_type doc;
+        ResultType doc;
     };
 
-    using ast_builder_ptr = std::unique_ptr<AstBuilder>;
+    using AstBuilderPtr = std::unique_ptr<AstBuilder>;
 
     template<typename... Args>
-    ast_builder_ptr NewAstBuilder(Args&&... args)
+    AstBuilderPtr NewAstBuilder(Args&&... args)
     {
         return std::make_unique<AstBuilder>(std::forward<Args>(args)...);
     }

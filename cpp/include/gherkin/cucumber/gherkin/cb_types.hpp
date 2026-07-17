@@ -9,19 +9,19 @@
 
 namespace cucumber::gherkin
 {
-    using source_cb = std::function<void(const messages::Source&)>;
-    using pickle_cb = std::function<void(const messages::Pickle&)>;
-    using error_cb = std::function<void(const ParseError&)>;
+    using SourceCb = std::function<void(const messages::Source&)>;
+    using PickleCb = std::function<void(const messages::Pickle&)>;
+    using ErrorCb = std::function<void(const ParseError&)>;
 
     template<typename Ast>
     struct Callbacks
     {
-        using ast_cb = std::function<void(const Ast&)>;
+        using AstCb = std::function<void(const Ast&)>;
 
-        source_cb source;
-        ast_cb ast;
-        pickle_cb pickle;
-        error_cb error;
+        SourceCb source;
+        AstCb ast;
+        PickleCb pickle;
+        ErrorCb error;
     };
 
     template<typename Callback, typename Msg>

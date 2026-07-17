@@ -13,9 +13,9 @@ namespace cucumber::gherkin
     class TokenFormatterBuilder
     {
     public:
-        using result_type = strings;
+        using ResultType = Strings;
 
-        TokenFormatterBuilder(id_generator_ptr idp = {});
+        TokenFormatterBuilder(IdGeneratorPtr idp = {});
         virtual ~TokenFormatterBuilder();
         TokenFormatterBuilder(const TokenFormatterBuilder&) = delete;
         TokenFormatterBuilder& operator=(const TokenFormatterBuilder&) = delete;
@@ -28,13 +28,13 @@ namespace cucumber::gherkin
         void EndRule(RuleType ruleType);
         void Build(const Token& token);
 
-        [[nodiscard]] strings GetResult() const;
+        [[nodiscard]] Strings GetResult() const;
 
     private:
         static std::string FormatToken(const Token& token);
 
-        id_generator_ptr idp;
-        strings formattedTokens;
+        IdGeneratorPtr idp;
+        Strings formattedTokens;
     };
 
 }

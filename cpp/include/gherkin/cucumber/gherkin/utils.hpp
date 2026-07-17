@@ -19,14 +19,14 @@ namespace cucumber::gherkin
     {
         // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
-        using utf8_ptr = const unsigned char*;
+        using Utf8Ptr = const unsigned char*;
 
         // Sentinel returned by utf8_next for an invalid/incomplete byte sequence.
         inline constexpr char32_t invalidCodepoint = char32_t(-1);
 
         // Decodes the next Unicode code point from a UTF-8 stream, advancing ptr.
         // Returns invalid_codepoint and advances ptr by one for invalid sequences.
-        inline char32_t Utf8Next(utf8_ptr& ptr, utf8_ptr end)
+        inline char32_t Utf8Next(Utf8Ptr& ptr, Utf8Ptr end)
         {
             if (*ptr < 0x80)
             {
@@ -238,43 +238,43 @@ namespace cucumber::gherkin
     template<typename CharT>
     struct StripPattern
     {
-        using s_type = std::basic_string<CharT>;
-        using sv_type = std::basic_string_view<CharT>;
-        using pats = RePatterns<CharT>;
+        using SType = std::basic_string<CharT>;
+        using SvType = std::basic_string_view<CharT>;
+        using Pats = RePatterns<CharT>;
 
-        StripPattern(RePattern prefix, sv_type chars)
+        StripPattern(RePattern prefix, SvType chars)
             : StripPattern(prefix, chars, RePattern::none)
         {}
 
-        StripPattern(sv_type chars, RePattern suffix)
+        StripPattern(SvType chars, RePattern suffix)
             : StripPattern(RePattern::none, chars, suffix)
         {}
 
-        StripPattern(sv_type chars)
+        StripPattern(SvType chars)
             : StripPattern(RePattern::none, chars, RePattern::none)
         {}
 
-        StripPattern(RePattern prefix, sv_type chars, RePattern suffix)
+        StripPattern(RePattern prefix, SvType chars, RePattern suffix)
         {
             if (prefix != RePattern::none)
             {
-                s = pats::Get(prefix);
+                s = Pats::Get(prefix);
             }
 
             s += chars;
 
             if (suffix != RePattern::none)
             {
-                s += pats::Get(suffix);
+                s += Pats::Get(suffix);
             }
         }
 
-        [[nodiscard]] const s_type& Str() const
+        [[nodiscard]] const SType& Str() const
         {
             return s;
         }
 
-        s_type s;
+        SType s;
     };
 
     template<typename CharT>

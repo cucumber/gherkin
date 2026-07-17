@@ -6,7 +6,7 @@
 namespace cucumber::gherkin
 {
 
-    void Split(const std::string& pattern, const std::string& expr, strings& list) // NOLINT(bugprone-easily-swappable-parameters)
+    void Split(const std::string& pattern, const std::string& expr, Strings& list) // NOLINT(bugprone-easily-swappable-parameters)
     {
         list.clear();
 
@@ -31,9 +31,9 @@ namespace cucumber::gherkin
         }
     }
 
-    strings Split(const std::string& pattern, const std::string& expr)
+    Strings Split(const std::string& pattern, const std::string& expr)
     {
-        strings list;
+        Strings list;
 
         Split(pattern, expr, list);
 

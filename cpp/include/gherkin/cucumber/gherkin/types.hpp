@@ -10,14 +10,14 @@
 namespace cucumber::gherkin
 {
 
-    using strings = std::vector<std::string>;
-    using strings_map = std::unordered_map<std::string, strings>;
-    using string_set = std::set<std::string>;
-    using string_set_map = std::unordered_map<std::string, string_set>;
-    using string_map = std::unordered_map<std::string, std::string>;
+    using Strings = std::vector<std::string>;
+    using StringsMap = std::unordered_map<std::string, Strings>;
+    using StringSet = std::set<std::string>;
+    using StringSetMap = std::unordered_map<std::string, StringSet>;
+    using StringMap = std::unordered_map<std::string, std::string>;
 
-    using string_views = std::vector<std::string_view>;
-    using string_view_set = std::set<std::string_view>;
+    using StringViews = std::vector<std::string_view>;
+    using StringViewSet = std::set<std::string_view>;
 
 }
 

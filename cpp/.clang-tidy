@@ -27,6 +27,8 @@ CheckOptions:
     readability-identifier-naming.VariableCase: camelBack
     readability-identifier-naming.FunctionCase: CamelCase
     readability-identifier-naming.MethodCase: CamelCase
+    readability-identifier-naming.TypeAliasCase: CamelCase
+    readability-identifier-naming.TypedefCase: CamelCase
     readability-identifier-naming.FunctionIgnoredRegexp: 'to_json|from_json|to_string'
     readability-identifier-naming.MethodIgnoredRegexp: 'to_json|from_json|to_string'
 ...

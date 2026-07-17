@@ -14,7 +14,7 @@ namespace cucumber::gherkin
         std::string text;
     };
 
-    using items = std::vector<Item>;
+    using Items = std::vector<Item>;
 
 }
 

@@ -8,8 +8,8 @@
 
 int main(int argc, char** argv)
 {
-    using builder = cucumber::gherkin::TokenFormatterBuilder;
-    using Parser = cucumber::gherkin::Parser<builder>;
+    using Builder = cucumber::gherkin::TokenFormatterBuilder;
+    using Parser = cucumber::gherkin::Parser<Builder>;
 
     Parser tokenParser;
 

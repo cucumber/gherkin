@@ -28,7 +28,7 @@ namespace cucumber::gherkin
     {
     public:
         PickleCompiler();
-        PickleCompiler(id_generator_ptr idp);
+        PickleCompiler(IdGeneratorPtr idp);
 
         virtual ~PickleCompiler();
         PickleCompiler(const PickleCompiler&) = delete;
@@ -36,7 +36,7 @@ namespace cucumber::gherkin
         PickleCompiler(PickleCompiler&&) = delete;
         PickleCompiler& operator=(PickleCompiler&&) = delete;
 
-        Pickles Compile(const messages::GherkinDocument& document, const std::string& uri, pickle_cb sink = {});
+        Pickles Compile(const messages::GherkinDocument& document, const std::string& uri, PickleCb sink = {});
 
     private:
         void CompileFeature(PickleCompilerContext& context, const messages::Feature& feature, const std::string& language, const std::string& uri);
@@ -65,7 +65,7 @@ namespace cucumber::gherkin
 
         std::string NextId();
 
-        id_generator_ptr idp;
+        IdGeneratorPtr idp;
     };
 
 }

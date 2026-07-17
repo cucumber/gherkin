@@ -18,8 +18,8 @@ namespace cucumber::gherkin
     {
     public:
         using Parser = cucumber::gherkin::Parser<AstBuilder>;
-        using parser_result = Parser::result_type;
-        using Callbacks = cucumber::gherkin::Callbacks<parser_result>;
+        using ParserResult = Parser::ResultType;
+        using Callbacks = cucumber::gherkin::Callbacks<ParserResult>;
 
         App();
         virtual ~App();
@@ -39,7 +39,7 @@ namespace cucumber::gherkin
     private:
         static void SendParseError(const std::string& uri, const ParserError& error, const Callbacks& callbacks);
 
-        id_generator_ptr idp;
+        IdGeneratorPtr idp;
         Parser p;
         bool includeSource = true;
         bool includeAst = true;

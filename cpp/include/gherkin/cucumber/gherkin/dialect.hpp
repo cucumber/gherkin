@@ -7,7 +7,7 @@
 
 namespace cucumber::gherkin
 {
-    using KeywordsMap = std::unordered_map<std::string_view, string_views>;
+    using KeywordsMap = std::unordered_map<std::string_view, StringViews>;
     using KeywordsMaps = std::unordered_map<std::string_view, KeywordsMap>;
 
     struct Dialect
@@ -18,17 +18,17 @@ namespace cucumber::gherkin
         Dialect& operator=(const Dialect&) = delete;
         Dialect& operator=(Dialect&&) = delete;
 
-        const string_views& featureKeywords;
-        const string_views& ruleKeywords;
-        const string_views& scenarioKeywords;
-        const string_views& scenarioOutlineKeywords;
-        const string_views& backgroundKeywords;
-        const string_views& examplesKeywords;
-        const string_views& givenKeywords;
-        const string_views& whenKeywords;
-        const string_views& thenKeywords;
-        const string_views& andKeywords;
-        const string_views& butKeywords;
+        const StringViews& featureKeywords;
+        const StringViews& ruleKeywords;
+        const StringViews& scenarioKeywords;
+        const StringViews& scenarioOutlineKeywords;
+        const StringViews& backgroundKeywords;
+        const StringViews& examplesKeywords;
+        const StringViews& givenKeywords;
+        const StringViews& whenKeywords;
+        const StringViews& thenKeywords;
+        const StringViews& andKeywords;
+        const StringViews& butKeywords;
     };
 
     const KeywordsMaps& AllKeywords();

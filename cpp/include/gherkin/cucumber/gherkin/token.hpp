@@ -23,7 +23,7 @@ namespace cucumber::gherkin
         std::optional<std::string> matchedKeyword;
         std::optional<messages::StepKeywordType> matchedKeywordType;
         std::size_t matchedIndent = 0;
-        cucumber::gherkin::items matchedItems;
+        cucumber::gherkin::Items matchedItems;
         std::string matchedText;
         std::string matchedGherkinDialect;
         messages::Location location;
@@ -35,8 +35,8 @@ namespace cucumber::gherkin
         [[nodiscard]] std::string_view Value() const;
     };
 
-    using tokens = std::vector<Token>;
-    using token_queue = std::deque<Token>;
+    using Tokens = std::vector<Token>;
+    using TokenQueue = std::deque<Token>;
 
 }
 

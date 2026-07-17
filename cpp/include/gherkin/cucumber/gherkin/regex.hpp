@@ -19,12 +19,12 @@ namespace cucumber::gherkin
     struct RegexResult
     {
         bool match = false;
-        string_views matches;
+        StringViews matches;
     };
 
-    void Split(const std::string& pattern, const std::string& expr, strings& list);
+    void Split(const std::string& pattern, const std::string& expr, Strings& list);
 
-    strings Split(const std::string& pattern, const std::string& expr);
+    Strings Split(const std::string& pattern, const std::string& expr);
 
     std::string Subst(const std::string& source, const std::string& pattern, const std::string& what = {});
 
@@ -39,14 +39,14 @@ namespace cucumber::gherkin
         template<typename CharT, typename SubMatch, typename Arg = NullArg>
         auto ExtractSubmatch(const SubMatch& submatch, Arg&& argument) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            using arg_type = std::decay_t<Arg>;
-            using sv_type = std::basic_string_view<CharT>;
+            using ArgType = std::decay_t<Arg>;
+            using SvType = std::basic_string_view<CharT>;
 
-            constexpr bool isString = std::is_same_v<arg_type, std::basic_string<CharT>> || std::is_same_v<arg_type, std::basic_string_view<CharT>>;
+            constexpr bool isString = std::is_same_v<ArgType, std::basic_string<CharT>> || std::is_same_v<ArgType, std::basic_string_view<CharT>>;
 
-            constexpr bool isNumber = std::is_integral_v<arg_type> || std::is_floating_point_v<arg_type>;
+            constexpr bool isNumber = std::is_integral_v<ArgType> || std::is_floating_point_v<ArgType>;
 
-            sv_type const view{ submatch.first, static_cast<std::size_t>(submatch.length()) };
+            SvType const view{ submatch.first, static_cast<std::size_t>(submatch.length()) };
 
             if constexpr (isString)
             {
@@ -58,7 +58,7 @@ namespace cucumber::gherkin
 
                 DieUnless(error_code == std::errc(), "failed to convert \"", view, "\" to ", Declname(argument));
             }
-            else if constexpr (!std::is_same_v<arg_type, NullArg>)
+            else if constexpr (!std::is_same_v<ArgType, NullArg>)
             {
                 die("unsupported argument: ", Declname(argument));
             }

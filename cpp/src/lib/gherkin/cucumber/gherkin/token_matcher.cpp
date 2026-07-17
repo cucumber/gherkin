@@ -103,7 +103,7 @@ namespace cucumber::gherkin
         return true;
     }
 
-    bool TokenMatcher::MatchTitleLine(Token& token, RuleType tokenType, const string_views& keywords)
+    bool TokenMatcher::MatchTitleLine(Token& token, RuleType tokenType, const StringViews& keywords)
     {
         for (const auto& keyword : keywords)
         {
@@ -173,7 +173,7 @@ namespace cucumber::gherkin
 
     bool TokenMatcher::MatchStepLine(Token& token)
     {
-        string_views const stepKeywordNames = { "given", "when", "then", "and", "but" };
+        StringViews const stepKeywordNames = { "given", "when", "then", "and", "but" };
         auto keywords = cucumber::gherkin::Keywords(dialectName, stepKeywordNames);
 
         // Prefer the longest step keyword by sorting keywords in descending order
@@ -271,7 +271,7 @@ namespace cucumber::gherkin
         token.matchedGherkinDialect = dialectName;
     }
 
-    const string_views& TokenMatcher::Keywords(std::string_view keyword) const
+    const StringViews& TokenMatcher::Keywords(std::string_view keyword) const
     {
         return cucumber::gherkin::Keywords(dialectName, keyword);
     }

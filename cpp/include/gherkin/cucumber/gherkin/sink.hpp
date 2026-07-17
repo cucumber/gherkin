@@ -7,9 +7,9 @@
 namespace cucumber::gherkin
 {
 
-    using json = nlohmann::json;
+    using Json = nlohmann::json;
 
-    using sink_cb = std::function<void(const json&)>;
+    using SinkCb = std::function<void(const json&)>;
 
 }
 

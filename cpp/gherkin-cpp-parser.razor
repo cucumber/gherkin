@@ -80,13 +80,13 @@ namespace cucumber::gherkin
     class Parser : public ParserBase<BuilderType>
     {
     public:
-        using parent = ParserBase<BuilderType>;
-        using parent::parent;
-        using parent::parse;
-        using context_type = typename parent::context_type;
+        using Parent = ParserBase<BuilderType>;
+        using Parent::Parent;
+        using Parent::parse;
+        using ContextType = typename Parent::ContextType;
 
     protected:
-        void parse(context_type& context) override
+        void parse(ContextType& context) override
         {
             StartRule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
 
@@ -111,12 +111,12 @@ namespace cucumber::gherkin
             }
         }
 
-        void Build(context_type& context, Token& token)
+        void Build(ContextType& context, Token& token)
         {
             context.builder.Build(token);
         }
 
-        void StartRule(context_type& context, RuleType ruleType)
+        void StartRule(ContextType& context, RuleType ruleType)
         {
             HandleAstError(context, ruleType,
                 [&context](auto rtype)
@@ -125,7 +125,7 @@ namespace cucumber::gherkin
                 });
         }
 
-        void EndRule(context_type& context, RuleType ruleType)
+        void EndRule(ContextType& context, RuleType ruleType)
         {
             HandleAstError(context, ruleType,
                 [&context](auto rtype)
@@ -135,13 +135,13 @@ namespace cucumber::gherkin
         }
 
         template<typename Argument, typename Action>
-        bool HandleExternalError(context_type& context, bool default_value, Argument&& argument, Action&& action)
+        bool HandleExternalError(ContextType& context, bool default_value, Argument&& argument, Action&& action)
         {
-            using ret_type = decltype(action(argument));
+            using RetType = decltype(action(argument));
 
             try
             {
-                if constexpr (std::is_same_v<ret_type, void>)
+                if constexpr (std::is_same_v<RetType, void>)
                 {
                     action(argument);
                     return default_value;
@@ -168,14 +168,14 @@ namespace cucumber::gherkin
         }
 
         template<typename Argument, typename Action>
-        void HandleAstError(context_type& context, Argument&& argument, Action&& action)
+        void HandleAstError(ContextType& context, Argument&& argument, Action&& action)
         {
             HandleExternalError(context, true, argument, action);
         }
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
 <text>
-        bool Match@(NameOf(rule))(context_type& context, Token& token)
+        bool Match@(NameOf(rule))(ContextType& context, Token& token)
         {
 @if (rule.Name != "#EOF")
 {
@@ -197,10 +197,10 @@ namespace cucumber::gherkin
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-        bool LookAhead@(lookAheadHint.Id)(context_type& context, Token& current_token)
+        bool LookAhead@(lookAheadHint.Id)(ContextType& context, Token& current_token)
         {
             Token token;
-            token_queue queue;
+            TokenQueue queue;
             bool match = false;
 
             while (true)
@@ -229,7 +229,7 @@ namespace cucumber::gherkin
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
         // @Raw(state.Comment)
-        std::size_t MatchTokenAt@(state.Id)(Token& token, context_type& context)
+        std::size_t MatchTokenAt@(state.Id)(Token& token, ContextType& context)
         {
 @{var indent = "        ";}
     @foreach(var transition in state.Transitions)
@@ -259,7 +259,7 @@ namespace cucumber::gherkin
 </text>
 }
 
-        std::size_t MatchToken(std::size_t state, Token& token, context_type& context)
+        std::size_t MatchToken(std::size_t state, Token& token, ContextType& context)
         {
             switch (state)
             {

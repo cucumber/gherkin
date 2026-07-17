@@ -5,9 +5,9 @@
 namespace cucumber::gherkin
 {
 
-    const string_views& Keywords(const std::string_view& language, const std::string_view& keyword);
+    const StringViews& Keywords(const std::string_view& language, const std::string_view& keyword);
 
-    string_views Keywords(const std::string_view& language, const string_views& keywordNames);
+    StringViews Keywords(const std::string_view& language, const StringViews& keywordNames);
 
     Dialect GetDialect(const std::string_view& language);
 }

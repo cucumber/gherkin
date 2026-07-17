@@ -17,9 +17,9 @@ namespace cucumber::gherkin
     template<typename T>
     struct SubNode
     {
-        using type = std::decay_t<T>;
-        using vector_type = std::vector<type>;
-        using ptr_type = std::shared_ptr<vector_type>;
+        using Type = std::decay_t<T>;
+        using VectorType = std::vector<Type>;
+        using PtrType = std::shared_ptr<VectorType>;
 
         SubNode(std::any& subItem)
             : ref(subItem)
@@ -32,12 +32,12 @@ namespace cucumber::gherkin
 
         static auto Make()
         {
-            return std::make_shared<vector_type>();
+            return std::make_shared<VectorType>();
         }
 
         auto& Cast()
         {
-            return std::any_cast<ptr_type&>(ref);
+            return std::any_cast<PtrType&>(ref);
         }
 
         auto GetPtr()
@@ -85,16 +85,16 @@ namespace cucumber::gherkin
         template<typename T>
         auto GetItems(RuleType ruleType, const std::vector<T>* defaultResult = nullptr) const
         {
-            using stype = SubNode<T>;
-            using ret_type = const typename stype::vector_type*;
+            using SType = SubNode<T>;
+            using RetType = const typename SType::VectorType*;
 
-            ret_type ret = defaultResult;
+            RetType ret = defaultResult;
 
             auto found = subItems.find(ruleType);
 
             if (found != subItems.end())
             {
-                stype subNodeRef(const_cast<std::any&>(found->second)); // NOLINT(cppcoreguidelines-pro-type-const-cast)
+                SType subNodeRef(const_cast<std::any&>(found->second)); // NOLINT(cppcoreguidelines-pro-type-const-cast)
 
                 ret = subNodeRef.GetPtr();
             }
@@ -128,13 +128,13 @@ namespace cucumber::gherkin
         template<typename T, typename V = T>
         void SetValue(RuleType ruleType, V& value) const
         {
-            using type = std::decay_t<T>;
+            using Type = std::decay_t<T>;
 
-            if constexpr (isSpecializationOfV<type, std::vector>)
+            if constexpr (isSpecializationOfV<Type, std::vector>)
             {
-                using value_type = typename type::value_type;
+                using ValueType = typename Type::ValueType;
 
-                auto optItems = GetItems<value_type>(ruleType);
+                auto optItems = GetItems<ValueType>(ruleType);
 
                 if (optItems)
                 {
@@ -148,7 +148,7 @@ namespace cucumber::gherkin
             }
             else
             {
-                auto pitem = GetSingle<type>(ruleType);
+                auto pitem = GetSingle<Type>(ruleType);
 
                 if (pitem)
                 {
@@ -192,25 +192,25 @@ namespace cucumber::gherkin
         template<typename T>
         void Set(RuleType ruleType, T& value) const
         {
-            using type = std::decay_t<T>;
+            using Type = std::decay_t<T>;
 
-            if constexpr (isSpecializationOfV<type, std::optional>)
+            if constexpr (isSpecializationOfV<Type, std::optional>)
             {
-                using value_type = typename type::value_type;
+                using ValueType = typename Type::ValueType;
 
-                SetValue<value_type>(ruleType, value);
+                SetValue<ValueType>(ruleType, value);
             }
             else
             {
-                SetValue<type>(ruleType, value);
+                SetValue<Type>(ruleType, value);
             }
         }
 
     private:
-        using sub_items = std::unordered_map<RuleType, std::any>;
+        using SubItems = std::unordered_map<RuleType, std::any>;
 
         RuleType ruleType;
-        sub_items subItems;
+        SubItems subItems;
         Token nullToken;
         std::vector<Token> emptyTokens;
     };
