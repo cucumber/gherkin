@@ -1,0 +1,34 @@
+name: test-codegen
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+#      - Dockerfile
+  pull_request:
+    branches:
+      - main
+    paths:
+#      - Dockerfile
+
+jobs:
+  test-codegen:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: install berp
+        run: |
+          docker build --tag berp-env . 
+
+      - name: test berp
+        run: |
+          docker run --interactive --volume ".:/app" berp-env make clean-generate
+          docker run --interactive --volume ".:/app" berp-env make generate
