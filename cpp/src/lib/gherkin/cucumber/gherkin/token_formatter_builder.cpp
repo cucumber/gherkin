@@ -16,8 +16,6 @@ namespace cucumber::gherkin
         : idp(std::move(std::move(idp)))
     {}
 
-    TokenFormatterBuilder::~TokenFormatterBuilder() = default;
-
     void TokenFormatterBuilder::Reset([[maybe_unused]] std::string_view uri)
     {
         formattedTokens.clear();

@@ -14,8 +14,6 @@
 namespace cucumber::gherkin
 {
 
-    TokenScanner::TokenScanner() = default;
-
     TokenScanner::TokenScanner(std::string_view data)
     {
         Reset(data);
@@ -25,8 +23,6 @@ namespace cucumber::gherkin
     {
         Reset(file);
     }
-
-    TokenScanner::~TokenScanner() = default;
 
     Token TokenScanner::Read()
     {

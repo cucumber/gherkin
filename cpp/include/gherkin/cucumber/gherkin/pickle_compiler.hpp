@@ -30,7 +30,7 @@ namespace cucumber::gherkin
         PickleCompiler();
         PickleCompiler(IdGeneratorPtr idp);
 
-        virtual ~PickleCompiler();
+        virtual ~PickleCompiler() = default;
         PickleCompiler(const PickleCompiler&) = delete;
         PickleCompiler& operator=(const PickleCompiler&) = delete;
         PickleCompiler(PickleCompiler&&) = delete;

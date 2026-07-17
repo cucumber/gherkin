@@ -80,8 +80,6 @@ namespace cucumber::gherkin
         }
     }
 
-    Line::Line() = default;
-
     Line::Line(const std::string& lineText, std::size_t lineNumber)
         : lineText(lineText)
         , lineNumber(lineNumber)

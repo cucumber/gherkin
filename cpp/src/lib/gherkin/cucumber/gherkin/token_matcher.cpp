@@ -27,8 +27,6 @@ namespace cucumber::gherkin
         ChangeDialect(dialectName);
     }
 
-    TokenMatcher::~TokenMatcher() = default;
-
     void TokenMatcher::Reset()
     {
         indentToRemove = 0;

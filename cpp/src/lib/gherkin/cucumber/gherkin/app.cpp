@@ -19,8 +19,6 @@ namespace cucumber::gherkin
         , p(idp)
     {}
 
-    App::~App() = default;
-
     void App::IncludeSource(bool enabled)
     {
         includeSource = enabled;

@@ -21,8 +21,6 @@ namespace cucumber::gherkin
         , subItems(std::move(other.subItems))
     {}
 
-    AstNode::~AstNode() = default;
-
     AstNode& AstNode::operator=(const AstNode& other)
     {
         ruleType = other.ruleType;

@@ -28,7 +28,7 @@ namespace cucumber::gherkin
         AstBuilder();
         AstBuilder(IdGeneratorPtr idp);
 
-        virtual ~AstBuilder();
+        virtual ~AstBuilder() = default;
         AstBuilder(const AstBuilder&) = delete;
         AstBuilder& operator=(const AstBuilder&) = delete;
         AstBuilder(AstBuilder&&) = delete;

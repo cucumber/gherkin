@@ -28,8 +28,6 @@ namespace cucumber::gherkin
         , location(other.location)
     {}
 
-    ParserError::~ParserError() = default;
-
     std::string ParserError::MakeMessage(const std::string& message, const messages::Location& location)
     {
         std::ostringstream stream;
@@ -59,8 +57,6 @@ namespace cucumber::gherkin
         : ParserError("Language not supported: " + language, location)
     {}
 
-    NoSuchLanguageError::~NoSuchLanguageError() = default;
-
     ///////////////////////////////////////////////////////////////////////////////
     //
     // unexpected Token
@@ -72,8 +68,6 @@ namespace cucumber::gherkin
         , expectedTokens(expectedTokens)
         , stateComment(std::move(stateComment))
     {}
-
-    UnexpectedToken::~UnexpectedToken() = default;
 
     std::string UnexpectedToken::MakeMessage(const Token& receivedToken, const std::string& expectedTokens)
     {
@@ -100,8 +94,6 @@ namespace cucumber::gherkin
         , stateComment(std::move(stateComment))
     {}
 
-    UnexpectedEof::~UnexpectedEof() = default;
-
     std::string UnexpectedEof::MakeMessage(const std::string& expectedTokens)
     {
         std::ostringstream stream;
@@ -120,8 +112,6 @@ namespace cucumber::gherkin
         : ParserError("", {})
         , ptrs(std::move(ptrs))
     {}
-
-    CompositeParserError::~CompositeParserError() = default;
 
     std::string CompositeParserError::MakeMessage(const ParserErrorPtrs& ptrs)
     {

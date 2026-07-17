@@ -12,7 +12,7 @@ namespace cucumber::gherkin
     class Line
     {
     public:
-        Line();
+        Line() = default;
         Line(const std::string& lineText, std::size_t lineNumber);
 
         [[nodiscard]] std::string GetRestTrimmed(std::size_t length) const;

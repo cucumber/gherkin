@@ -45,8 +45,6 @@ namespace cucumber::gherkin
         : idp(std::move(std::move(idp)))
     {}
 
-    AstBuilder::~AstBuilder() = default;
-
     void AstBuilder::Reset(std::string_view uri)
     {
         stack = {};

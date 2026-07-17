@@ -24,7 +24,7 @@ namespace cucumber::gherkin
     {
     public:
         TokenMatcher(const std::string& dialectName = "en");
-        virtual ~TokenMatcher();
+        virtual ~TokenMatcher() = default;
         TokenMatcher(const TokenMatcher&) = delete;
         TokenMatcher& operator=(const TokenMatcher&) = delete;
         TokenMatcher(TokenMatcher&&) = delete;

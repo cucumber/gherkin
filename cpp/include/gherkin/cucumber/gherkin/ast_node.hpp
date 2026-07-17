@@ -20,7 +20,7 @@ namespace cucumber::gherkin
         AstNode(const AstNode& other);
         AstNode(AstNode&& other) noexcept;
 
-        virtual ~AstNode();
+        virtual ~AstNode() = default;
 
         AstNode& operator=(const AstNode& other);
         AstNode& operator=(AstNode&& other) noexcept;

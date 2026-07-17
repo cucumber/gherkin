@@ -19,11 +19,11 @@ namespace cucumber::gherkin
     class TokenScanner
     {
     public:
-        TokenScanner();
+        TokenScanner() = default;
         TokenScanner(std::string_view data);
         TokenScanner(const File& file);
 
-        virtual ~TokenScanner();
+        virtual ~TokenScanner() = default;
         TokenScanner(const TokenScanner&) = delete;
         TokenScanner& operator=(const TokenScanner&) = delete;
         TokenScanner(TokenScanner&&) = delete;

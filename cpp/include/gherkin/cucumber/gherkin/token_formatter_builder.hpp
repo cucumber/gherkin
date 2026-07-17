@@ -16,7 +16,7 @@ namespace cucumber::gherkin
         using ResultType = Strings;
 
         TokenFormatterBuilder(IdGeneratorPtr idp = {});
-        virtual ~TokenFormatterBuilder();
+        virtual ~TokenFormatterBuilder() = default;
         TokenFormatterBuilder(const TokenFormatterBuilder&) = delete;
         TokenFormatterBuilder& operator=(const TokenFormatterBuilder&) = delete;
         TokenFormatterBuilder(TokenFormatterBuilder&&) = delete;

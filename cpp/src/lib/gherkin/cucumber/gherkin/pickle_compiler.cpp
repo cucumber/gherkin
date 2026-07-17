@@ -58,8 +58,6 @@ namespace cucumber::gherkin
         : idp(std::move(std::move(idp)))
     {}
 
-    PickleCompiler::~PickleCompiler() = default;
-
     Pickles PickleCompiler::Compile(const messages::GherkinDocument& document, const std::string& uri, PickleCb sink)
     {
         PickleCompilerContext context{ idp, std::move(sink) };

@@ -21,7 +21,7 @@ namespace cucumber::gherkin
         using Callbacks = cucumber::gherkin::Callbacks<Parser::ResultType>;
 
         App();
-        virtual ~App();
+        virtual ~App() = default;
         App(const App&) = delete;
         App& operator=(const App&) = delete;
         App(App&&) = delete;

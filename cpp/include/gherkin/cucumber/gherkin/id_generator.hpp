@@ -10,9 +10,9 @@ namespace cucumber::gherkin
     class IdGeneratorBase
     {
     public:
-        IdGeneratorBase();
+        IdGeneratorBase() = default;
 
-        virtual ~IdGeneratorBase();
+        virtual ~IdGeneratorBase() = default;
         IdGeneratorBase(const IdGeneratorBase&) = delete;
         IdGeneratorBase& operator=(const IdGeneratorBase&) = delete;
         IdGeneratorBase(IdGeneratorBase&&) = delete;
@@ -24,8 +24,8 @@ namespace cucumber::gherkin
     class IdGenerator : public IdGeneratorBase
     {
     public:
-        IdGenerator();
-        ~IdGenerator() override;
+        IdGenerator() = default;
+        ~IdGenerator() override = default;
         IdGenerator(const IdGenerator&) = delete;
         IdGenerator& operator=(const IdGenerator&) = delete;
         IdGenerator(IdGenerator&&) = delete;

@@ -20,7 +20,7 @@ namespace cucumber::gherkin
         ParserError(ParserError&&) = default;
         ParserError& operator=(ParserError&&) = default;
 
-        ~ParserError() override;
+        ~ParserError() override = default;
 
         static std::string MakeMessage(const std::string& message, const messages::Location& location);
 
@@ -48,7 +48,7 @@ namespace cucumber::gherkin
     public:
         NoSuchLanguageError(const std::string& language, const messages::Location& location);
 
-        ~NoSuchLanguageError() override;
+        ~NoSuchLanguageError() override = default;
         NoSuchLanguageError(const NoSuchLanguageError&) = default;
         NoSuchLanguageError& operator=(const NoSuchLanguageError&) = default;
         NoSuchLanguageError(NoSuchLanguageError&&) = default;
@@ -60,7 +60,7 @@ namespace cucumber::gherkin
     public:
         UnexpectedToken(const Token& receivedToken, const std::string& expectedTokens, std::string stateComment);
 
-        ~UnexpectedToken() override;
+        ~UnexpectedToken() override = default;
         UnexpectedToken(const UnexpectedToken&) = default;
         UnexpectedToken& operator=(const UnexpectedToken&) = default;
         UnexpectedToken(UnexpectedToken&&) = default;
@@ -81,7 +81,7 @@ namespace cucumber::gherkin
     public:
         UnexpectedEof(const Token& receivedToken, const std::string& expectedTokens, std::string stateComment);
 
-        ~UnexpectedEof() override;
+        ~UnexpectedEof() override = default;
         UnexpectedEof(const UnexpectedEof&) = default;
         UnexpectedEof& operator=(const UnexpectedEof&) = default;
         UnexpectedEof(UnexpectedEof&&) = default;
@@ -99,7 +99,7 @@ namespace cucumber::gherkin
     public:
         CompositeParserError(ParserErrorPtrs ptrs);
 
-        ~CompositeParserError() override;
+        ~CompositeParserError() override = default;
         CompositeParserError(const CompositeParserError&) = default;
         CompositeParserError& operator=(const CompositeParserError&) = default;
         CompositeParserError(CompositeParserError&&) = default;
