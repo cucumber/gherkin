@@ -16,7 +16,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599), [#643](https://github.com/cucumber/gherkin/pull/643))
 - Update dependency messages to at-least v34 ([#652](https://github.com/cucumber/gherkin/pull/652), [#643](https://github.com/cucumber/gherkin/pull/643))
 - [cpp] Removed cmate and all related files. ([#617](https://github.com/cucumber/gherkin/pull/617))
-- [Ruby] BREAKING CHANGE: Require Ruby 3.3
+- [Ruby] Require Ruby 3.3
 
 ### Fixed
 - [testdata] removed stray \r\n line endings, replaced with \n. ([#617](https://github.com/cucumber/gherkin/pull/617))
