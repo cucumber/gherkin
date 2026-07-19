@@ -1,6 +1,6 @@
 # Changelog
 
-## 41.0.0
+## 42.0.0
 
 See the repository root [CHANGELOG.md](https://github.com/cucumber/gherkin/blob/main/CHANGELOG.md).
 
