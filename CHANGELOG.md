@@ -25,7 +25,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [41.0.0] - 2026-06-20
 ### Changed
-- [PHP] BREAKING CHANGE: Require PHP 8.4
+- [PHP] Require PHP 8.4
 
 ### Fixed
 - [JavaScript] Remove namespace imports from messages
@@ -33,7 +33,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [40.0.0] - 2026-06-10
 ### Changed
 - [.Net] Replaced FluentAssertions with AwesomeAssertions
-- [JavaScript] BREAKING CHANGE: Switch to ESM ([#610](https://github.com/cucumber/gherkin/pull/610))
+- [JavaScript] Switch to ESM ([#610](https://github.com/cucumber/gherkin/pull/610))
 
 ## [39.1.0] - 2026-05-06
 ### Added
@@ -80,7 +80,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
 
 ### Changed
-- BREAKING CHANGE: Require messages v31 or greater
+- Require messages v31 or greater
 
 ### Fixed
 - [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder` ([#497](https://github.com/cucumber/gherkin/pull/497)).
@@ -187,7 +187,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
 - [Ruby] Update minimum ruby requirement from 3.0 to 3.2
 - [Ruby] Introduce rubocop subgems to facilitate optimisations
-- [JavaScript] BREAKING CHANGE: Update supported Node.js versions to 18, 20, 22 and 23 ([#365](https://github.com/cucumber/gherkin/pull/365))
+- [JavaScript] Update supported Node.js versions to 18, 20, 22 and 23 ([#365](https://github.com/cucumber/gherkin/pull/365))
 
 ### Fixed
 - [.NET] Fix NuGet package generation
