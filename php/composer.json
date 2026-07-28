@@ -20,7 +20,7 @@
     "require-dev": {
         "vimeo/psalm": "^6",
         "phpunit/phpunit": "^13",
-        "psalm/plugin-phpunit": "^0.19",
+        "psalm/plugin-phpunit": "^0.20",
         "friendsofphp/php-cs-fixer": "^3"
     }
 }
