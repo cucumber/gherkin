@@ -57,10 +57,9 @@ jobs:
       - name: Install dependencies
         working-directory: php
         run: |
+          composer install
           if [[ "${{ matrix.composer-mode }}" = "low-deps" ]]; then
-            composer update --prefer-lowest
-          else
-            composer install
+            composer update --with-dependencies cucumber/messages --prefer-lowest
           fi
 
       - name: Run tests
