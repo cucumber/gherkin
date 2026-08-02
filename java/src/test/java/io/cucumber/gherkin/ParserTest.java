@@ -1,6 +1,6 @@
 package io.cucumber.gherkin;
 
-import io.cucumber.messages.IdGenerator;
+import io.cucumber.gherkin.GherkinParser.IdGenerator;
 import io.cucumber.messages.types.GherkinDocument;
 import org.junit.jupiter.api.Test;
 
