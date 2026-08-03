@@ -34,7 +34,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup Perl environment
-        uses: shogo82148/actions-setup-perl@3d3cb73ca65d657a809d97eab324d4e4f140bf5e # v1.42.0
+        uses: shogo82148/actions-setup-perl@05e67354f08b143fe5bd8495e9b80657a3086754 # v1.43.0
         with:
           perl-version: ${{ matrix.perl }}
           install-modules-with: cpanm
