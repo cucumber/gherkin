@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [Java] Use version range for `org.jspecify:jspecify`
+
 ### Added
 - [Java] Added builder option to use non-deprecated `IdGenerator`.
 
