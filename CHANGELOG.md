@@ -7,11 +7,13 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Fixed
-- [Java] Use version range for `org.jspecify:jspecify`
 
+## [42.0.1] - 2026-08-05
 ### Added
 - [Java] Added builder option to use non-deprecated `IdGenerator`.
+
+### Fixed
+- [Java] Use version range for `org.jspecify:jspecify`
 
 ## [42.0.0] - 2026-07-19
 ### Added
@@ -943,7 +945,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v42.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v42.0.1...HEAD
+[42.0.1]: https://github.com/cucumber/gherkin/compare/v42.0.0...v42.0.1
 [42.0.0]: https://github.com/cucumber/gherkin/compare/v41.0.0...v42.0.0
 [41.0.0]: https://github.com/cucumber/gherkin/compare/v40.0.0...v41.0.0
 [40.0.0]: https://github.com/cucumber/gherkin/compare/v39.1.0...v40.0.0
