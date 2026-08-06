@@ -70,7 +70,7 @@
             <groupId>io.cucumber</groupId>
             <artifactId>messages-ndjson</artifactId>
             <scope>test</scope>
-            <version>0.5.1</version>
+            <version>0.5.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.cucumber</groupId>
