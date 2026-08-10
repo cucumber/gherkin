@@ -1,9 +1,11 @@
 # Contributing to Gherkin
 
-Gherkin is implemented in several languages. Each implementation is
-in a separate subdirectory in this repository.
+Please read [cucumber/.github/CONTRIBUTING.md](https://github.com/cucumber/.github/blob/main/CONTRIBUTING.md) first.
 
 ## Project organisation
+
+Gherkin is implemented in several languages. Each implementation is
+in a separate subdirectory in this repository.
 
 Each subdirectory is a stand-alone project using the preferred tools for
 that language, you can find more detailed information in `<language>/CONTRIBUTING.md`.
