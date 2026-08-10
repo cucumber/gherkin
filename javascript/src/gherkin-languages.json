@@ -700,6 +700,109 @@
       "Wenn "
     ]
   },
+  "de-bar": {
+    "and": [
+      "* ",
+      "Und ",
+      "Aa no "
+    ],
+    "background": [
+      "Grundlog",
+      "Vurgschicht"
+    ],
+    "but": [
+      "* ",
+      "Oba ",
+      "Bloß leida "
+    ],
+    "examples": [
+      "Beispuie",
+      "A so schauts aus"
+    ],
+    "feature": [
+      "Mogst a Feature",
+      "Aufgb"
+    ],
+    "given": [
+      "* ",
+      "Gsetzt den Fall ",
+      "Mia ham scho "
+    ],
+    "name": "German Bavarian",
+    "native": "Bairisch",
+    "rule": [
+      "Vaordnung"
+    ],
+    "scenario": [
+      "Gschicht",
+      "Beispui"
+    ],
+    "scenarioOutline": [
+      "Gschicht-Schablone",
+      "Beispui-Vorlog"
+    ],
+    "then": [
+      "* ",
+      "Nacha ",
+      "Dann gschiachts, dass "
+    ],
+    "when": [
+      "* ",
+      "Sobald ",
+      "Wenn oana "
+    ]
+  },
+  "de-fra": {
+    "and": [
+      "* ",
+      "Ah ",
+      "Und aa no "
+    ],
+    "background": [
+      "Vorgschicht",
+      "Grundlaach"
+    ],
+    "but": [
+      "* ",
+      "Aber freilich ned, wenn "
+    ],
+    "examples": [
+      "Beispiele",
+      "Beischbiele wie des hier"
+    ],
+    "feature": [
+      "Sach mer amoi",
+      "Feature"
+    ],
+    "given": [
+      "* ",
+      "Ma stell sich vor ",
+      "Es is halt so, dass "
+    ],
+    "name": "German Franconian",
+    "native": "Fränkisch",
+    "rule": [
+      "Regel, Grundsätzlich"
+    ],
+    "scenario": [
+      "Fall",
+      "Beispiel"
+    ],
+    "scenarioOutline": [
+      "Fall-Schablone",
+      "Beispiel-Vorlaach"
+    ],
+    "then": [
+      "* ",
+      "Nou is ",
+      "Kummt bei raus, dass "
+    ],
+    "when": [
+      "* ",
+      "Sobald ",
+      "Wenn amoi "
+    ]
+  },
   "el": {
     "and": [
       "* ",
