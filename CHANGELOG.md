@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Fixed
-- (i18n) Removed an erroneous trailing space from the `Rule` keyword in the `en-tx` (Texas) dialect so `Rule:` is recognised, consistent with every other dialect
+- (i18n) Removed an erroneous trailing space from the `Rule` keyword in the `en-tx` (Texas) dialect so `Rule:` is recognised, consistent with every other dialect ([#690](https://github.com/cucumber/gherkin/pull/690))
 
 ## [42.0.1] - 2026-08-05
 ### Added
