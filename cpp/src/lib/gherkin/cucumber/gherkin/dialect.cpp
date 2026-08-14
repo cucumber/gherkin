@@ -383,7 +383,7 @@ all_keywords()
             { "examples", { "Now that's a story longer than a cattle drive in July" } },
             { "feature", { "This ain’t my first rodeo", "All gussied up" } },
             { "given", { "Fixin' to ", "All git out " } },
-            { "rule", { "Rule " } },
+            { "rule", { "Rule" } },
             { "scenario", { "All hat and no cattle" } },
             { "scenarioOutline", { "Serious as a snake bite", "Busy as a hound in flea season" } },
             { "then", { "There’s no tree but bears some fruit " } },

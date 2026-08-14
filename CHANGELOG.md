@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- (i18n) Removed an erroneous trailing space from the `Rule` keyword in the `en-tx` (Texas) dialect so `Rule:` is recognised, consistent with every other dialect
 
 ## [42.0.1] - 2026-08-05
 ### Added

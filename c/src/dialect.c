@@ -1099,7 +1099,7 @@ static const Keywords en_tx_feature_keywords = { 2, en_tx_feature_KEYWORDS };
 static const wchar_t* const en_tx_given_KEYWORDS[] = { L"Fixin' to ", L"All git out " };
 static const Keywords en_tx_given_keywords = { 2, en_tx_given_KEYWORDS };
 
-static const wchar_t* const en_tx_rule_KEYWORDS[] = { L"Rule " };
+static const wchar_t* const en_tx_rule_KEYWORDS[] = { L"Rule" };
 static const Keywords en_tx_rule_keywords = { 1, en_tx_rule_KEYWORDS };
 
 static const wchar_t* const en_tx_scenario_KEYWORDS[] = { L"All hat and no cattle" };
