@@ -1,0 +1,8 @@
+(1:1)Language:/en-tx/
+(2:1)FeatureLine:()This ain’t my first rodeo/lone star rules/
+(3:3)RuleLine:()Rule/cattle must be branded/
+(4:5)ScenarioLine:()All hat and no cattle/a branded steer/
+(5:7)StepLine:(Context)Fixin' to /a steer exists/
+(6:7)StepLine:(Action)Quick out of the chute /the hand brands it/
+(7:7)StepLine:(Outcome)There’s no tree but bears some fruit /the steer is branded/
+EOF
