@@ -46,12 +46,11 @@ clean-generate: ## Remove generated Gherkin parser files ## Generate gherkin par
 	rm -f $(GRAMMAR_GENERATED)
 .PHONY: clean-generate
 
-copy-gherkin-languages:
-	echo "Nothing to do"
+copy-gherkin-languages: $(LANGUAGE_GENERATED)
 .PHONY: copy-gherkin-languages
 
 clean-gherkin-languages: ## Remove gherkin-languages.json and any derived files
-	echo "Nothing to do"
+	rm $(LANGUAGE_GENERATED)
 .PHONY: clean-gherkin-languages
 
 mostlyclean:
@@ -82,7 +81,7 @@ include/$(SUB_DIR)/rule_type.hpp: gherkin-cpp-rule-type.razor ../gherkin.berp
 include/$(SUB_DIR)/parser.hpp: gherkin-cpp-parser.razor ../gherkin.berp
 	$(berp-generate-parser)
 
-src/lib/$(SUB_DIR)/dialect.cpp: ../gherkin-languages.json dialect.cpp.jq
+$(LANGUAGE_GENERATED): ../gherkin-languages.json dialect.cpp.jq
 	jq -f dialect.cpp.jq -r -c < $< > $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens
