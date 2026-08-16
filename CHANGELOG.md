@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- (i18n) Remove trailing space from Texan Rule keyword.
 
 ## [42.0.1] - 2026-08-05
 ### Added
