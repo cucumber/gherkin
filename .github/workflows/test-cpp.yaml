@@ -78,10 +78,6 @@ jobs:
         working-directory: cpp
         run: cmake --workflow --preset host-system
 
-      - name: Install gherkin
-        working-directory: cpp
-        run: sudo cmake --install build/host-system
-
       - name: Acceptance tests
         working-directory: cpp
         run: make acceptance
@@ -120,10 +116,6 @@ jobs:
       - name: Build gherkin
         working-directory: cpp
         run: cmake --workflow --preset host-system
-
-      - name: Install gherkin
-        working-directory: cpp
-        run: sudo cmake --install build/host-system
 
       - name: Acceptance tests
         working-directory: cpp
