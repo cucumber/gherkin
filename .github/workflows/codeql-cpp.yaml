@@ -29,30 +29,34 @@ concurrency:
 
 jobs:
   analyze:
-    env:
-      CCACHE_BASEDIR: ${{ github.workspace }}
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
-
     name: Analyze C++
     runs-on: ubuntu-latest
     permissions:
       security-events: write
+    env:
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to
+      # build against. Must match the version required in cpp/CMakeLists.txt and
+      # cpp/conanfile.py, or the messages branch under test.
+      MESSAGES_REF: eebd9f2f48ae94e0ada14ab01d53e1ecaaecb172
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: Install build tools
+      - name: Checkout cucumber/messages
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
+          path: messages-src
+          persist-credentials: false
+
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ccache
-
-      - name: Cache CPM packages
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ env.CPM_SOURCE_CACHE }}
-          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+          sudo apt-get install -y ccache nlohmann-json3-dev
 
       - name: Cache ccache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -60,6 +64,12 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ github.job }}-${{ github.ref }}
           restore-keys: ccache-${{ github.job }}-
+
+      - name: Build and install cucumber_messages
+        working-directory: messages-src/cpp
+        run: |
+          cmake --workflow --preset host-system
+          sudo cmake --install build/host-system
 
       - uses: github/codeql-action/init@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
         with:
@@ -69,7 +79,7 @@ jobs:
 
       - name: Configure
         working-directory: cpp
-        run: cmake --workflow host
+        run: cmake --workflow --preset host-system
 
       - uses: github/codeql-action/analyze@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
         with:

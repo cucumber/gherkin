@@ -24,8 +24,6 @@ if (POLICY CMP0077)
     cmake_policy(SET CMP0077 NEW)
 endif ()
 
-option(CUCUMBER_GHERKIN_FETCH_DEPS "Fetch dependencies via FetchContent." Off)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -51,7 +49,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 # CMake dependencies
-include(cmake/dependencies.cpm.cmake)
+find_package(nlohmann_json 3.11 REQUIRED)
+find_package(cucumber_messages 34.2.1 REQUIRED)
 
 # Targets
 add_subdirectory(src/lib/gherkin)
