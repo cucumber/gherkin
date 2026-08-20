@@ -381,7 +381,7 @@ const Map<String, GherkinLanguageKeywords> builtinDialects = {
     "Texas",
     "Texas",
     ["This ain’t my first rodeo", "All gussied up"],
-    ["Rule "],
+    ["Rule"],
     ["Lemme tell y'all a story"],
     ["All hat and no cattle"],
     ["Serious as a snake bite", "Busy as a hound in flea season"],

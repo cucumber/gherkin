@@ -6,7 +6,7 @@ defmodule CucumberGherkin.MixProject do
   def project do
     [
       app: :cucumber_gherkin,
-      version: "41.0.0",
+      version: "42.0.1",
       name: "CucumberGherkin",
       description: description(),
       package: package(),
@@ -28,7 +28,7 @@ defmodule CucumberGherkin.MixProject do
     [
       {:elixir_uuid, "~> 1.2"},
       {:cucumber_messages, ">= 34.0.0 and < 35.0.0"},
-      {:ex_doc, "~> 0.40", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.40.3", only: :dev, runtime: false}
     ]
   end
 

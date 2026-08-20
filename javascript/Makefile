@@ -61,7 +61,7 @@ dist:
 $(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 
-$(GHERKIN_LANGUAGES_JSON):
+$(GHERKIN_LANGUAGES_JSON): ../gherkin-languages.json
 	cp ../gherkin-languages.json $@
 
 acceptance/testdata/%.ast.ndjson: ../testdata/% ../testdata/%.ast.ndjson

@@ -1,7 +1,6 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.gherkin.ParserException.CompositeParserException;
-import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.ParseError;
@@ -172,6 +171,13 @@ public final class GherkinParser {
             return this;
         }
 
+        @Deprecated
+        public Builder idGenerator(io.cucumber.messages.IdGenerator idGenerator) {
+            requireNonNull(idGenerator);
+            this.idGenerator = idGenerator::newId;
+            return this;
+        }
+
         public Builder idGenerator(IdGenerator idGenerator) {
             this.idGenerator = requireNonNull(idGenerator);
             return this;
@@ -181,5 +187,9 @@ public final class GherkinParser {
             return new GherkinParser(includeSource, includeGherkinDocument, includePickles, idGenerator);
         }
 
+    }
+
+    public interface IdGenerator {
+        String newId();
     }
 }

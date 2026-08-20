@@ -1568,7 +1568,7 @@ var builtinDialects = gherkinDialectMap{
 				"All gussied up",
 			},
 			rule: {
-				"Rule ",
+				"Rule",
 			},
 			background: {
 				"Lemme tell y'all a story",

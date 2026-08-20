@@ -1,5 +1,6 @@
 package io.cucumber.gherkin;
 
+import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.Feature;
 import io.cucumber.messages.types.GherkinDocument;
@@ -98,6 +99,39 @@ class GherkinParserTest {
 
         Feature feature = gherkinDocument.getFeature().get();
         assertEquals("Minimal", feature.getName());
+    }
+
+    @Test
+    void uses_gherkin_parser_id_generator() {
+        var pickle = GherkinParser.builder()
+                .includeSource(false)
+                .includePickles(true)
+                .idGenerator((GherkinParser.IdGenerator) () -> "id")
+                .build()
+                .parse(envelope)
+                .map(Envelope::getPickle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst().get();
+
+        assertEquals("id", pickle.getId());
+    }
+
+    @Test
+    @Deprecated
+    void uses_id_generator() {
+        var pickle = GherkinParser.builder()
+                .includeSource(false)
+                .includePickles(true)
+                .idGenerator((IdGenerator) () -> "id")
+                .build()
+                .parse(envelope)
+                .map(Envelope::getPickle)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst().get();
+
+        assertEquals("id", pickle.getId());
     }
 
     @Test
