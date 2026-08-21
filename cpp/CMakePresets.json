@@ -20,7 +20,7 @@
             "description": "Build and install the library using C++ dependencies already installed on the system. Does not use Conan and does not build tests. Used on machines that have the dependencies but not Conan.",
             "inherits": "base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -30,7 +30,7 @@
             "inherits": "base",
             "cacheVariables": {
                 "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/cmake/conan_provider.cmake",
-                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_BUILD_TYPE": "Debug",
                 "CONAN_INSTALL_ARGS": "--build=missing"
             }
         }
