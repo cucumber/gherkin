@@ -24,6 +24,14 @@ if (POLICY CMP0077)
     cmake_policy(SET CMP0077 NEW)
 endif ()
 
+if(PROJECT_IS_TOP_LEVEL AND CMAKE_EXPORT_COMPILE_COMMANDS)
+    add_custom_target(clangd_compile_commands ALL
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+            "${CMAKE_BINARY_DIR}/compile_commands.json"
+            "${CMAKE_SOURCE_DIR}/compile_commands.json"
+        VERBATIM)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -49,8 +57,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 # CMake dependencies
-find_package(nlohmann_json 3.11 REQUIRED)
-find_package(cucumber_messages 34.2.1 REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(cucumber_messages QUIET)
+if (NOT cucumber_messages_FOUND AND NOT TARGET cucumber::messages)
+    message(FATAL_ERROR "cucumber::messages not found")
+endif()
 
 # Targets
 add_subdirectory(src/lib/gherkin)

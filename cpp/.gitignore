@@ -1,5 +1,6 @@
 ext/
 build/
+compile_commands.json
 acceptance/
 install/
 .cenv/
