@@ -12,225 +12,232 @@ public static string ToSnakeCase(string str)
         ).ToLower();
 }
 
+public static string ToCamelCase(string str)
+{
+    if (string.IsNullOrEmpty(str)) return str;
+    return char.ToLower(str[0]) + str.Substring(1);
+}
+
 public static string NameOf(Rule rule)
-{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+{ return rule.Name.Replace("#", ""); }
 }
 @helper CallProduction(ProductionRule production)
 {
-  var rname = ToSnakeCase(production.RuleName);
+  var rname = ToCamelCase(production.RuleName);
 
   switch(production.Type)
   {
     case ProductionRuleType.Start:
-      @:  start_rule(context, rule_type::@rname);
+      @:  StartRule(context, RuleType::@rname);
       break;
     case ProductionRuleType.End:
-      @:  end_rule(context, rule_type::@rname);
+      @:  EndRule(context, RuleType::@rname);
       break;
     case ProductionRuleType.Process:
-      @:  build(context, token);
+      @:  Build(context, token);
       break;
   }
 }
 @helper HandleParserError(IEnumerable<string> expectedTokens, State state)
 {<text>
-        std::string state_comment = "State: @state.Id - @Raw(state.Comment)";
-        std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
+            std::string state_comment = "State: @state.Id - @Raw(state.Comment)";
+            std::string expected_tokens = "@Raw(string.Join(", ", expectedTokens))";
 
-        auto ep =
-            token.is_eof()
-            ? new_parser_error<unexpected_eof>(
-                token, expected_tokens, state_comment
-            )
-            : new_parser_error<unexpected_token>(
-                token, expected_tokens, state_comment
-            )
-            ;
+            auto error_pointer = token.IsEof() ? NewParserError<UnexpectedEof>(token, expected_tokens, state_comment) : NewParserError<UnexpectedToken>(token, expected_tokens, state_comment);
 
-        if (context.stop_at_first_error) {
-            throw *ep;
-        }
+            if (context.stopAtFirstError)
+            {
+                throw *error_pointer;
+            }
 
-        context.add_error(std::move(ep));
+            context.AddError(std::move(error_pointer));
 
-        return @state.Id;
+            return @state.Id;
 </text>}
 @helper MatchToken(TokenType tokenType)
-{<text>match_@(ToSnakeCase(tokenType.Name))(context, token)</text>}
-// This file is generated. Do not edit! Edit gherkin-cpp-parser.razor instead.
-#pragma once
+{<text>Match@(tokenType.Name)(context, token)</text>}
+#ifndef CUCUMBER_GHERKIN_PARSER_HPP
+#define CUCUMBER_GHERKIN_PARSER_HPP
 
-#include <cucumber/gherkin/parser_base.hpp>
-#include <cucumber/gherkin/rule_type.hpp>
+#include "cucumber/gherkin/Exceptions.hpp"
+#include "cucumber/gherkin/ParserBase.hpp"
+#include "cucumber/gherkin/RuleType.hpp"
+#include "cucumber/gherkin/Token.hpp"
+#include <cstddef>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
-namespace cucumber::gherkin {
+// This File is generated. Do not edit! Edit gherkin-cpp-Parser.razor instead.
+// NOLINTBEGIN
 
-template <
-    typename Builder = ast_builder,
-    typename Scanner = token_scanner,
-    typename Matcher = token_matcher
->
-class parser : public parser_base<Builder, Scanner, Matcher>
+namespace cucumber::gherkin
 {
-public:
-    using parent = parser_base<Builder, Scanner, Matcher>;
-    using parent::parent;
-    using parent::parse;
-    using context_type = typename parent::context_type;
-
-protected:
-    void parse(context_type& context) override
+    template<typename BuilderType>
+    class Parser : public ParserBase<BuilderType>
     {
-        start_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
+    public:
+        using Parent = ParserBase<BuilderType>;
+        using Parent::Parent;
+        using Parent::parse;
+        using ContextType = typename Parent::ContextType;
 
-        std::size_t state = 0;
+    protected:
+        void parse(ContextType& context) override
+        {
+            StartRule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
 
-        while (true) {
-            auto token = context.read_token();
-            state = match_token(state, token, context);
+            std::size_t state = 0;
 
-            if (token.is_eof()) {
-                break;
+            while (true)
+            {
+                auto token = context.ReadToken();
+                state = MatchToken(state, token, context);
+
+                if (token.IsEof())
+                {
+                    break;
+                }
+            }
+
+            EndRule(context, RuleType::@ToCamelCase(Model.RuleSet.StartRule.Name.Replace("#", "")));
+
+            if (context.HasErrors())
+            {
+                throw CompositeParserError(context.errorPointers);
             }
         }
 
-        end_rule(context, rule_type::@NameOf(Model.RuleSet.StartRule));
-
-        if (context.has_errors()) {
-            throw composite_parser_error(context.eptrs);
-        }
-    }
-
-    void build(context_type& context, token& token)
-    { context.builder.build(token); }
-
-    void start_rule(context_type& context, rule_type rule_type)
-    {
-        handle_ast_error(
-            context,
-            rule_type,
-            [&context](auto rtype) {
-                context.builder.start_rule(rtype);
-            }
-        );
-    }
-
-    void end_rule(context_type& context, rule_type rule_type)
-    {
-        handle_ast_error(
-            context,
-            rule_type,
-            [&context](auto rtype) {
-                context.builder.end_rule(rtype);
-            }
-        );
-    }
-
-    template <typename Argument, typename Action>
-    bool handle_external_error(
-        context_type& context,
-        bool default_value,
-        Argument&& argument,
-        Action&& action
-    )
-    {
-        using ret_type = decltype(action(argument));
-
-        try {
-            if constexpr (std::is_same_v<ret_type, void>) {
-                action(argument);
-                return default_value;
-            } else {
-                return action(argument);
-            }
-        } catch (const composite_parser_error& e) {
-            for (const auto& ep : e.errors()) {
-                context.add_error(ep);
-            }
-        } catch (const parser_error& e) {
-            auto ep = new_parser_error<parser_error>(e);
-            context.add_error(ep);
+        void Build(ContextType& context, Token& token)
+        {
+            context.builder.Build(token);
         }
 
-        return default_value;
-    }
+        void StartRule(ContextType& context, RuleType ruleType)
+        {
+            HandleAstError(context, ruleType,
+                [&context](auto rtype)
+                {
+                    context.builder.StartRule(rtype);
+                });
+        }
 
-    template <typename Argument, typename Action>
-    void handle_ast_error(
-        context_type& context,
-        Argument&& argument,
-        Action&& action
-    )
-    { handle_external_error(context, true, argument, action); }
+        void EndRule(ContextType& context, RuleType ruleType)
+        {
+            HandleAstError(context, ruleType,
+                [&context](auto rtype)
+                {
+                    context.builder.EndRule(rtype);
+                });
+        }
 
+        template<typename Argument, typename Action>
+        bool HandleExternalError(ContextType& context, bool default_value, Argument&& argument, Action&& action)
+        {
+            using RetType = decltype(action(argument));
+
+            try
+            {
+                if constexpr (std::is_same_v<RetType, void>)
+                {
+                    action(argument);
+                    return default_value;
+                }
+                else
+                {
+                    return action(argument);
+                }
+            }
+            catch (const CompositeParserError& e)
+            {
+                for (const auto& error_pointer : e.Errors())
+                {
+                    context.AddError(error_pointer);
+                }
+            }
+            catch (const ParserError& e)
+            {
+                auto error_pointer = NewParserError<ParserError>(e);
+                context.AddError(error_pointer);
+            }
+
+            return default_value;
+        }
+
+        template<typename Argument, typename Action>
+        void HandleAstError(ContextType& context, Argument&& argument, Action&& action)
+        {
+            HandleExternalError(context, true, argument, action);
+        }
 @foreach(var rule in Model.RuleSet.TokenRules)
 {
 <text>
-    bool match_@(NameOf(rule))(context_type& context, token& token)
-    {
-    @if (rule.Name != "#EOF")
-    {
-        @:if (token.is_eof()) {
-        @:    return false;
-        @:}
-        @:
-    }
-        return
-            handle_external_error(
-                context,
-                false,
-                token,
-                [&context](auto& t) {
-                    return context.matcher.match_@(NameOf(rule))(t);
-                }
-            );
-    }
+        bool Match@(NameOf(rule))(ContextType& context, Token& token)
+        {
+@if (rule.Name != "#EOF")
+{
+<text>            if (token.IsEof())
+            {
+                return false;
+            }
+
 </text>
 }
-
+            return HandleExternalError(context, false, token,
+                [&context](auto& tok)
+                {
+                    return context.matcher.Match@(NameOf(rule))(tok);
+                });
+        }
+</text>
+}
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-    bool lookahead_@(lookAheadHint.Id)(context_type& context, token& current_token)
-    {
-        token token;
-        token_queue queue;
-        bool match = false;
+        bool LookAhead@(lookAheadHint.Id)(ContextType& context, Token& current_token)
+        {
+            Token token;
+            TokenQueue queue;
+            bool match = false;
 
-        while (true) {
-            token = context.read_token();
-            queue.push_back(token);
+            while (true)
+            {
+                token = context.ReadToken();
+                queue.push_back(token);
 
-            if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>@MatchToken(tokenType) || </text>}false) {
-                match = true;
-                break;
+                if (@foreach(var tokenType in lookAheadHint.ExpectedTokens) {<text>@MatchToken(tokenType) || </text>}false)
+                {
+                    match = true;
+                    break;
+                }
+
+                if (!(@foreach(var tokenType in lookAheadHint.Skip) {<text>@MatchToken(tokenType) || </text>}false))
+                {
+                    break;
+                }
             }
 
-            if (!(@foreach(var tokenType in lookAheadHint.Skip) {<text>@MatchToken(tokenType) || </text>}false)) {
-                break;
-            }
+            context.PushTokens(queue);
+
+            return match;
         }
-
-        context.push_tokens(queue);
-
-        return match;
-    }
 </text>
 }
-
 @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
 {<text>
-    // @Raw(state.Comment)
-    std::size_t match_token_at_@(state.Id)(token& token, context_type& context)
-    {
-@{var indent = "    ";}
+        // @Raw(state.Comment)
+        std::size_t MatchTokenAt@(state.Id)(Token& token, ContextType& context)
+        {
+@{var indent = "        ";}
     @foreach(var transition in state.Transitions)
     {
-        @:if (@MatchToken(transition.TokenType)) {
+            @:if (@MatchToken(transition.TokenType))
+            @:{
             if (transition.LookAheadHint != null)
             {
-            @:if (lookahead_@(transition.LookAheadHint.Id)(context, token)) {
-                indent = "        ";
+                @:if (LookAhead@(transition.LookAheadHint.Id)(context, token))
+                @:{
+                indent = "            ";
             }
             foreach(var production in transition.Productions)
             {
@@ -239,31 +246,32 @@ protected:
         @:@(indent)return @transition.TargetState;
             if (transition.LookAheadHint != null)
             {
-                indent = "    ";
-            @:}
+                indent = "        ";
+                @:}
             }
-        @:}
+            @:}
     }
         @HandleParserError(state.Transitions.Select(t => "#" + t.TokenType.ToString()).Distinct(), state)
-    }
+        }
 </text>
 }
 
-    std::size_t match_token(std::size_t state, token& token, context_type& context)
-    {
-        switch (state) {
+        std::size_t MatchToken(std::size_t state, Token& token, ContextType& context)
+        {
+            switch (state)
+            {
     @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
     {
-        @:case @state.Id:
-            @:return match_token_at_@(state.Id)(token, context);
+                @:case @state.Id:
+                    @:return MatchTokenAt@(state.Id)(token, context);
     }
-        default:
-            throw
-                std::runtime_error(
-                    "invalid operation: " + std::to_string(state)
-                );
+                default:
+                    throw std::runtime_error("invalid operation: " + std::to_string(state));
+            }
         }
-    }
-};
+    };
 
 }
+
+// NOLINTEND
+#endif

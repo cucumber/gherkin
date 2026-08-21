@@ -13,8 +13,6 @@ on:
       - testdata/**
       - .github/**
   pull_request:
-    branches:
-      - main
     paths:
       - cpp/**
       - Makefile
@@ -22,133 +20,191 @@ on:
       - .github/**
 
 env:
-  CCACHE_BASEDIR: ${{ github.workspace }}
-  CCACHE_DIR: ${{ github.workspace }}/.ccache
-  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+  # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to build
+  # against. For releases use a tag matching the version required in
+  # cpp/CMakeLists.txt (find_package) and cpp/conanfile.py; for cross-repo
+  # feature work, set this to the messages branch under test.
+  MESSAGES_REF: eebd9f2f48ae94e0ada14ab01d53e1ecaaecb172
 
 jobs:
-  test-cpp:
+  test-cpp-system-packages-linux:
+    runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
       matrix:
         config:
-          - { os: ubuntu-24.04, cxx: g++,      version: 12 }
-          - { os: ubuntu-24.04, cxx: g++,      version: 13 }
-          - { os: ubuntu-24.04, cxx: g++,      version: 14 }
-          - { os: ubuntu-26.04, cxx: g++,      version: 13 }
-          - { os: ubuntu-26.04, cxx: g++,      version: 14 }
-          - { os: ubuntu-26.04, cxx: g++,      version: 15 }
-          - { os: ubuntu-24.04, cxx: clang++,  version: 16 }
-          - { os: ubuntu-24.04, cxx: clang++,  version: 17 }
-          - { os: ubuntu-24.04, cxx: clang++,  version: 18 }
-          - { os: ubuntu-26.04, cxx: clang++,  version: 20 }
-          - { os: ubuntu-26.04, cxx: clang++,  version: 21 }
-          - { os: ubuntu-26.04, cxx: clang++,  version: 22 }
-          - { os: macos-latest, cxx: clang++,  version: 17 }
-          - { os: windows-latest, cxx: cl }
-
-    runs-on: ${{ matrix.config.os }}
+          - { os: ubuntu-24.04, cxx: g++, version: 12 }
+          - { os: ubuntu-24.04, cxx: g++, version: 13 }
+          - { os: ubuntu-26.04, cxx: g++, version: 14 }
+          - { os: ubuntu-26.04, cxx: g++, version: 15 }
+          - { os: ubuntu-24.04, cxx: clang++, version: 16 }
+          - { os: ubuntu-24.04, cxx: clang++, version: 17 }
+          - { os: ubuntu-26.04, cxx: clang++, version: 21 }
+          - { os: ubuntu-26.04, cxx: clang++, version: 22 }
+    env:
+      CXX: ${{ matrix.config.cxx }}-${{ matrix.config.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-        if: startsWith(matrix.config.os, 'windows')
-
-      - name: Install build tools (ubuntu)
-        if: startsWith(matrix.config.os, 'ubuntu')
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ccache
-
-      - name: Install build tools (macos)
-        if: startsWith(matrix.config.os, 'macos')
-        run: brew install ccache llvm@${{ matrix.config.version }}
-
-      - name: Cache CPM packages
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Checkout cucumber/messages
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          path: ${{ env.CPM_SOURCE_CACHE }}
-          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
-
-      - name: Cache ccache
-        if: "!startsWith(matrix.config.os, 'windows')"
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
-          restore-keys: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-
-
-      - name: Set CXX (ubuntu)
-        if: startsWith(matrix.config.os, 'ubuntu')
-        run: echo "CXX=${{ matrix.config.cxx }}-${{ matrix.config.version }}" >> $GITHUB_ENV
-
-      - name: Set CXX (macos)
-        if: startsWith(matrix.config.os, 'macos')
-        run: echo "CXX=$(brew --prefix llvm@${{ matrix.config.version }})/bin/clang++" >> $GITHUB_ENV
-
-      - name: Build
-        working-directory: cpp
-        run: cmake --workflow host
-
-      - name: Install (Unix)
-        if: ${{ matrix.config.os != 'windows-latest' }}
-        working-directory: cpp
-        run: sudo cmake --install build/host
-
-      - name: Install (Windows)
-        if: ${{ matrix.config.os == 'windows-latest' }}
-        working-directory: cpp
-        run: cmake --install build/host
-
-  test-cpp-acceptance:
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - os: ubuntu-latest
-            cxx: g++
-          - os: ubuntu-latest
-            cxx: clang++
-          - os: macos-latest
-            cxx: clang++
-          - os: windows-latest
-            cc: cl
-
-    runs-on: ${{ matrix.config.os }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
+          path: messages-src
           persist-credentials: false
 
-      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-        if: startsWith(matrix.config.os, 'windows')
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+        with:
+          key: ${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
+          append-timestamp: false
+          save: ${{ github.ref == 'refs/heads/main' }}
 
-      - name: Install build tools (ubuntu)
-        if: startsWith(matrix.config.os, 'ubuntu')
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ccache
+          sudo apt-get install -y nlohmann-json3-dev
 
-      - name: Install build tools (macos)
-        if: startsWith(matrix.config.os, 'macos')
-        run: brew install ccache
+      - name: Build and install cucumber_messages
+        working-directory: messages-src/cpp
+        run: |
+          cmake --workflow --preset host-system
+          sudo cmake --install build/host-system
 
-      - name: Cache CPM packages
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ env.CPM_SOURCE_CACHE }}
-          key: cpm-${{ hashFiles('cpp/cmake/dependencies.cpm.cmake') }}
+      - name: Build gherkin
+        working-directory: cpp
+        run: cmake --workflow --preset host-system
 
-      - name: Cache ccache
-        if: "!startsWith(matrix.config.os, 'windows')"
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ github.ref }}
-          restore-keys: ccache-${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-
-
-      - name: run acceptance tests
+      - name: Acceptance tests
         working-directory: cpp
         run: make acceptance
+
+  test-cpp-system-packages-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Checkout cucumber/messages
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
+          path: messages-src
+          persist-credentials: false
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+        with:
+          key: ${{ github.job }}-${{ github.ref }}
+          append-timestamp: false
+          save: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Install dependencies
+        run: brew install nlohmann-json
+
+      - name: Build and install cucumber_messages
+        working-directory: messages-src/cpp
+        run: |
+          cmake --workflow --preset host-system
+          sudo cmake --install build/host-system
+
+      - name: Build gherkin
+        working-directory: cpp
+        run: cmake --workflow --preset host-system
+
+      - name: Acceptance tests
+        working-directory: cpp
+        run: make acceptance
+
+  test-cpp-system-packages-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Checkout cucumber/messages
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
+          path: messages-src
+          persist-credentials: false
+
+      - name: Install build tools
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          vcpkg install nlohmann-json --triplet x64-windows
+          # Expose the vcpkg toolchain so find_package() locates the packages.
+          echo "CMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
+
+      - name: Build and install cucumber_messages
+        working-directory: messages-src/cpp
+        run: |
+          cmake --workflow --preset host-system
+          cmake --install build/host-system
+
+      - name: Build gherkin
+        working-directory: cpp
+        run: cmake --workflow --preset host-system
+
+      - name: Install gherkin
+        working-directory: cpp
+        run: cmake --install build/host-system
+
+  test-cpp-conan:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Checkout cucumber/messages
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
+          path: messages-src
+          persist-credentials: false
+
+      - name: Install build tools (windows)
+        if: startsWith(matrix.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+        with:
+          key: ${{ github.job }}-${{ matrix.os }}-${{ github.ref }}
+          append-timestamp: false
+          save: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.x'
+
+      - name: Install Conan
+        run: python -m pip install --upgrade "conan>=2,<3"
+
+      - name: Detect Conan profile
+        run: conan profile detect --force
+
+      - name: Create cucumber_messages Conan package
+        working-directory: messages-src/cpp
+        run: conan create . --build=missing -s compiler.cppstd=17
+
+      - name: Build gherkin (Conan dependencies)
+        working-directory: cpp
+        run: cmake --workflow --preset host-conan

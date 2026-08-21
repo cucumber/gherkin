@@ -2,9 +2,10 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
 	"name": "cpp",
-	"image": "mcr.microsoft.com/devcontainers/base:resolute",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
 	"features": {
-		"ghcr.io/devcontainer-community/devcontainer-features/collection-c-cpp:1": {}
+		"ghcr.io/devcontainer-community/devcontainer-features/collection-c-cpp:1": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 	"customizations": {
 		"vscode": {

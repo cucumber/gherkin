@@ -72,6 +72,11 @@
       "version": "1.0.2",
       "resolved": "ghcr.io/devcontainer-community/devcontainer-features/vcpkg.io@sha256:aa1c839509ab397336da9c187c89b16e5cb85666f1c8756a2919f401ed3b44ae",
       "integrity": "sha256:aa1c839509ab397336da9c187c89b16e5cb85666f1c8756a2919f401ed3b44ae"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "1.10.0",
+      "resolved": "ghcr.io/devcontainers/features/docker-outside-of-docker@sha256:c2c2cf829505ead8e4892c88c31b6594ae94a2bbb209e16e1fac456c1a3a624e",
+      "integrity": "sha256:c2c2cf829505ead8e4892c88c31b6594ae94a2bbb209e16e1fac456c1a3a624e"
     }
   }
 }
