@@ -52,6 +52,9 @@ jobs:
       - name: Install dependencies
         run: dart pub get --enforce-lockfile
 
+      - name: Install coverage tools
+        run: dart pub global activate coverage 1.15.0
+
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
