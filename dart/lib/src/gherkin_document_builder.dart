@@ -35,7 +35,7 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
   @override
   void endRule(RuleType ruleType) {
     final node = _stack.removeLast();
-    final transformedNode = _transformNode(node);
+    final transformedNode = transformNode(node);
     _currentNode.add(node.ruleType, transformedNode);
   }
 
@@ -57,7 +57,7 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
   @override
   void startRule(RuleType ruleType) => _stack.addLast(AstNode(ruleType));
 
-  Object? _transformNode(AstNode node) {
+  Object? transformNode(AstNode node) {
     switch (node.ruleType) {
       case RuleType.step:
         return _createStep(node);
@@ -105,8 +105,9 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
       case RuleType.docStringAndMaybeDataTable:
       case RuleType.tags:
       case RuleType.descriptionHelper:
-        return node;
+        break;
     }
+    return node;
   }
 
   messages.Step _createStep(AstNode node) {

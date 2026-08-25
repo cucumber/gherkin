@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/src/compile_pickles.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
@@ -52,6 +53,10 @@ void main() {
 
   test('does not create pickles for a document without a feature', () {
     expect(_pickles('# only a comment\n'), isEmpty);
+  });
+
+  test('does not assign a pickle step type to conjunctions', () {
+    expect(pickleStepType(messages.StepKeywordType.conjunction), isNull);
   });
 }
 

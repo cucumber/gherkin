@@ -1,6 +1,8 @@
 import 'dart:io';
 
-import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
+import 'package:cucumber_gherkin/src/generate_messages.dart';
+import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 import 'package:test/test.dart';
 
 void main() {
@@ -135,5 +137,19 @@ void main() {
     expect(envelopes, hasLength(1));
     expect(envelopes.single.parseError, isNotNull);
     expect(envelopes.single.parseError!.source.uri, 'broken.feature');
+  });
+
+  test('reports a parser error raised by the parser seam', () {
+    final envelopes = generateMessagesWithParser(
+      'source',
+      'broken.feature',
+      (_, _) => throw ParserException.create(
+        'broken',
+        const messages.Location(line: 3, column: 2),
+      ),
+      const GherkinOptions(includeSource: false),
+    );
+
+    expect(envelopes.single.parseError!.message, '(3:2): broken');
   });
 }
