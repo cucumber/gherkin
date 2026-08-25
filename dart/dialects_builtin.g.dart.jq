@@ -49,6 +49,7 @@ def dialect_body:
 
 "// GENERATED FILE - DO NOT MODIFY BY HAND\n"
 + "// dart format off\n"
++ "// coverage:ignore-file\n"
 + "\n"
 + "import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';\n"
 + "\n"

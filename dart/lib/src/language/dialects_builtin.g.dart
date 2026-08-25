@@ -1,5 +1,6 @@
 // GENERATED FILE - DO NOT MODIFY BY HAND
 // dart format off
+// coverage:ignore-file
 
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 
