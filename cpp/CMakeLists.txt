@@ -50,9 +50,8 @@ endif()
 
 # CMake dependencies
 find_package(nlohmann_json REQUIRED)
-find_package(cucumber_messages QUIET)
-if (NOT cucumber_messages_FOUND AND NOT TARGET cucumber::messages)
-    message(FATAL_ERROR "cucumber::messages not found")
+if (NOT TARGET cucumber::messages)
+    find_package(cucumber_messages REQUIRED)
 endif()
 
 # Targets
