@@ -61,7 +61,7 @@ jobs:
           key: ccache-${{ github.job }}-${{ github.ref }}
           restore-keys: ccache-${{ github.job }}-
 
-      - uses: github/codeql-action/init@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+      - uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           languages: c-cpp
           build-mode: manual
@@ -71,6 +71,6 @@ jobs:
         working-directory: cpp
         run: cmake --workflow host
 
-      - uses: github/codeql-action/analyze@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+      - uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           category: "/language:cpp"
