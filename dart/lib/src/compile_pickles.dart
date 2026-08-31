@@ -203,7 +203,7 @@ messages.PickleStep _pickleStep(
   return messages.PickleStep(
     id: idGenerator(),
     text: _interpolate(step.text, variableCells, valueCells),
-    type: pickleStepType(keywordType),
+    type: _pickleStepType(keywordType),
     argument: _pickleStepArgument(step, variableCells, valueCells),
     astNodeIds: astNodeIds,
   );
@@ -290,7 +290,7 @@ messages.StepKeywordType _effectiveKeywordType(
   return current;
 }
 
-messages.PickleStepType? pickleStepType(messages.StepKeywordType keywordType) {
+messages.PickleStepType? _pickleStepType(messages.StepKeywordType keywordType) {
   switch (keywordType) {
     case messages.StepKeywordType.context:
       return messages.PickleStepType.context;

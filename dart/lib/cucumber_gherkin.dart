@@ -21,5 +21,4 @@
 /// ```
 library;
 
-export 'src/generate_messages.dart'
-    hide GherkinDocumentParser, generateMessagesWithParser;
+export 'src/generate_messages.dart';

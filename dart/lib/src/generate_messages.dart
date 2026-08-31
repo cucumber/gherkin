@@ -32,23 +32,10 @@ final class GherkinOptions {
   final String Function()? idGenerator;
 }
 
-typedef GherkinDocumentParser =
-    messages.GherkinDocument Function(
-      String data,
-      String Function() idGenerator,
-    );
-
 /// Parses Gherkin [data] at [uri] into Cucumber message envelopes.
 List<messages.Envelope> generateMessages(
   String data,
   String uri, [
-  GherkinOptions options = const GherkinOptions(),
-]) => generateMessagesWithParser(data, uri, _parseGherkinDocument, options);
-
-List<messages.Envelope> generateMessagesWithParser(
-  String data,
-  String uri,
-  GherkinDocumentParser parser, [
   GherkinOptions options = const GherkinOptions(),
 ]) {
   final idGenerator = options.idGenerator ?? _newUuidV4;
@@ -68,9 +55,16 @@ List<messages.Envelope> generateMessagesWithParser(
     return result;
   }
 
+  final builder = GherkinDocumentBuilder(idGenerator);
+  final parser = Parser<messages.GherkinDocument>(builder);
+  final tokenScanner = StringTokenScanner(source.data);
+
   final messages.GherkinDocument gherkinDocument;
   try {
-    gherkinDocument = parser(source.data, idGenerator);
+    gherkinDocument = parser.parse(
+      tokenScanner,
+      GherkinTokenMatcher(builtinDialects),
+    );
   } on CompositeParserException catch (e) {
     result.addAll(
       e.errors.map((error) => _parseErrorEnvelope(error, source.uri)),
@@ -102,18 +96,6 @@ List<messages.Envelope> generateMessagesWithParser(
   }
 
   return result;
-}
-
-messages.GherkinDocument _parseGherkinDocument(
-  String data,
-  String Function() idGenerator,
-) {
-  final builder = GherkinDocumentBuilder(idGenerator);
-  final parser = Parser<messages.GherkinDocument>(builder);
-  return parser.parse(
-    StringTokenScanner(data),
-    GherkinTokenMatcher(builtinDialects),
-  );
 }
 
 messages.Envelope _parseErrorEnvelope(ParserException error, String uri) {

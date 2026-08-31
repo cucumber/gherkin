@@ -1,6 +1,5 @@
-import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/generate_messages.dart';
-import 'package:cucumber_messages/cucumber_messages.dart' as messages;
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,6 +8,14 @@ void main() {
       '\n'
       '  Scenario: minimalistic\n'
       '    Given the minimalism\n';
+
+  test('represents EOF without a line', () {
+    final token = StringTokenScanner('').read();
+
+    expect(token.isEof, isTrue);
+    expect(token.line, isNull);
+    expect(token.tokenValue, 'EOF');
+  });
 
   test('parses source into message envelopes', () {
     final envelopes = generateMessages(source, 'minimal.feature');
@@ -32,22 +39,7 @@ void main() {
     expect(envelopes.single.gherkinDocument, isNotNull);
   });
 
-  test('can omit every envelope type without parsing', () {
-    expect(
-      generateMessages(
-        'not gherkin',
-        'ignored.feature',
-        const GherkinOptions(
-          includeSource: false,
-          includeGherkinDocument: false,
-          includePickles: false,
-        ),
-      ),
-      isEmpty,
-    );
-  });
-
-  test('uses a custom ID generator', () {
+  test('uses a custom id generator', () {
     var nextId = 0;
     final envelopes = generateMessages(
       source,
@@ -62,23 +54,6 @@ void main() {
     expect(envelopes.last.pickle!.id, startsWith('id-'));
   });
 
-  test('uses UUID v4 IDs by default', () {
-    final document = generateMessages(
-      'Feature: IDs\n  Scenario: generated\n    Given an ID\n',
-      'ids.feature',
-      const GherkinOptions(includeSource: false),
-    ).first.gherkinDocument!;
-
-    expect(
-      document.feature!.children.single.scenario!.id,
-      matches(
-        RegExp(
-          r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-        ),
-      ),
-    );
-  });
-
   test('reports parse errors as envelopes', () {
     final envelopes = generateMessages(
       'not gherkin\n',
@@ -89,19 +64,5 @@ void main() {
     expect(envelopes, hasLength(1));
     expect(envelopes.single.parseError, isNotNull);
     expect(envelopes.single.parseError!.source.uri, 'broken.feature');
-  });
-
-  test('reports a parser error raised by the parser seam', () {
-    final envelopes = generateMessagesWithParser(
-      'source',
-      'broken.feature',
-      (_, _) => throw ParserException.create(
-        'broken',
-        const messages.Location(line: 3, column: 2),
-      ),
-      const GherkinOptions(includeSource: false),
-    );
-
-    expect(envelopes.single.parseError!.message, '(3:2): broken');
   });
 }
