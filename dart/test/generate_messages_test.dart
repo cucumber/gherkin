@@ -65,4 +65,13 @@ void main() {
     expect(envelopes.single.parseError, isNotNull);
     expect(envelopes.single.parseError!.source.uri, 'broken.feature');
   });
+
+  test('preserves comments in a document without a feature', () {
+    final envelopes = generateMessages('# a standalone comment\n', 'empty.feature');
+
+    expect(envelopes, hasLength(2));
+    final document = envelopes.last.gherkinDocument!;
+    expect(document.feature, isNull);
+    expect(document.comments.single.text, '# a standalone comment');
+  });
 }
