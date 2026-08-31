@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/generate_messages.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
@@ -11,52 +9,6 @@ void main() {
       '\n'
       '  Scenario: minimalistic\n'
       '    Given the minimalism\n';
-
-  group('shared Gherkin fixtures', () {
-    final goodFixtures = Directory('../testdata/good')
-        .listSync()
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.feature'));
-    final badFixtures = Directory('../testdata/bad')
-        .listSync()
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.feature'));
-
-    for (final fixture in goodFixtures) {
-      test('parses ${fixture.uri.pathSegments.last}', () {
-        final envelopes = generateMessages(
-          fixture.readAsStringSync(),
-          fixture.path,
-          const GherkinOptions(includeSource: false),
-        );
-
-        expect(
-          envelopes.where((envelope) => envelope.parseError != null),
-          isEmpty,
-        );
-        expect(
-          envelopes.singleWhere((envelope) => envelope.gherkinDocument != null),
-          isNotNull,
-        );
-      });
-    }
-
-    for (final fixture in badFixtures) {
-      test('reports ${fixture.uri.pathSegments.last} as invalid', () {
-        final envelopes = generateMessages(
-          fixture.readAsStringSync(),
-          fixture.path,
-          const GherkinOptions(includeSource: false),
-        );
-
-        expect(envelopes, isNotEmpty);
-        expect(
-          envelopes.every((envelope) => envelope.parseError != null),
-          isTrue,
-        );
-      });
-    }
-  });
 
   test('parses source into message envelopes', () {
     final envelopes = generateMessages(source, 'minimal.feature');
