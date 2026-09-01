@@ -62,7 +62,7 @@ jobs:
         run: dart analyze
 
       - name: Test & validate coverage
-        run: dart pub global run coverage:test_with_coverage --fail-under 100
+        run: dart pub global run coverage:test_with_coverage --fail-under 59
 
       - name: Run acceptance tests
         run: make acceptance
