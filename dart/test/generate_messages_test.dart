@@ -66,8 +66,30 @@ void main() {
     expect(envelopes.single.parseError!.source.uri, 'broken.feature');
   });
 
+  test('maps several parser errors onto individual parseError envelopes', () {
+    final envelopes = generateMessages(
+      'oops one\n'
+          '\n'
+          'Feature: f\n'
+          '\n'
+          '  Scenario: s\n'
+          '    Given a step\n'
+          '\n'
+          'oops two\n',
+      'multi.feature',
+      const GherkinOptions(includeSource: false),
+    );
+
+    expect(envelopes.length, greaterThan(1));
+    expect(envelopes.every((envelope) => envelope.parseError != null), isTrue);
+    expect(envelopes.first.parseError!.source.uri, 'multi.feature');
+  });
+
   test('preserves comments in a document without a feature', () {
-    final envelopes = generateMessages('# a standalone comment\n', 'empty.feature');
+    final envelopes = generateMessages(
+      '# a standalone comment\n',
+      'empty.feature',
+    );
 
     expect(envelopes, hasLength(2));
     final document = envelopes.last.gherkinDocument!;

@@ -70,9 +70,6 @@ List<messages.Envelope> generateMessages(
       e.errors.map((error) => _parseErrorEnvelope(error, source.uri)),
     );
     return result;
-  } on ParserException catch (e) {
-    result.add(_parseErrorEnvelope(e, source.uri));
-    return result;
   }
 
   final gherkinDocumentWithUri = messages.GherkinDocument(
