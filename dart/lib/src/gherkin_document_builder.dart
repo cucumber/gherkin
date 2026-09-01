@@ -81,7 +81,30 @@ class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
         return _createRule(node);
       case RuleType.gherkinDocument:
         return _createGherkinDocument(node);
-      default:
+      case RuleType.none:
+      case RuleType.eOF:
+      case RuleType.empty:
+      case RuleType.comment:
+      case RuleType.tagLine:
+      case RuleType.featureLine:
+      case RuleType.ruleLine:
+      case RuleType.backgroundLine:
+      case RuleType.scenarioLine:
+      case RuleType.examplesLine:
+      case RuleType.stepLine:
+      case RuleType.docStringSeparator:
+      case RuleType.tableRow:
+      case RuleType.language:
+      case RuleType.other:
+      case RuleType.featureHeader:
+      case RuleType.ruleHeader:
+      case RuleType.scenario:
+      case RuleType.examples:
+      case RuleType.stepArg:
+      case RuleType.dataTableAndMaybeDocString:
+      case RuleType.docStringAndMaybeDataTable:
+      case RuleType.tags:
+      case RuleType.descriptionHelper:
         return node;
     }
   }
