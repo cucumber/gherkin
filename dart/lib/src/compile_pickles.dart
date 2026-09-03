@@ -203,7 +203,7 @@ messages.PickleStep _pickleStep(
   return messages.PickleStep(
     id: idGenerator(),
     text: _interpolate(step.text, variableCells, valueCells),
-    type: _pickleStepType(keywordType),
+    type: _pickleStepTypes[keywordType],
     argument: _pickleStepArgument(step, variableCells, valueCells),
     astNodeIds: astNodeIds,
   );
@@ -290,17 +290,10 @@ messages.StepKeywordType _effectiveKeywordType(
   return current;
 }
 
-messages.PickleStepType? _pickleStepType(messages.StepKeywordType keywordType) {
-  switch (keywordType) {
-    case messages.StepKeywordType.context:
-      return messages.PickleStepType.context;
-    case messages.StepKeywordType.action:
-      return messages.PickleStepType.action;
-    case messages.StepKeywordType.outcome:
-      return messages.PickleStepType.outcome;
-    case messages.StepKeywordType.unknown:
-      return messages.PickleStepType.unknown;
-    case messages.StepKeywordType.conjunction:
-      return null;
-  }
-}
+const Map<messages.StepKeywordType, messages.PickleStepType> _pickleStepTypes =
+    <messages.StepKeywordType, messages.PickleStepType>{
+      messages.StepKeywordType.context: messages.PickleStepType.context,
+      messages.StepKeywordType.action: messages.PickleStepType.action,
+      messages.StepKeywordType.outcome: messages.PickleStepType.outcome,
+      messages.StepKeywordType.unknown: messages.PickleStepType.unknown,
+    };

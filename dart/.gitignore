@@ -16,4 +16,8 @@ acceptance/
 
 # Directory created by dartdoc
 doc/api/
+
+# Directory created by dart test --coverage
+coverage/
+
 *.iml
