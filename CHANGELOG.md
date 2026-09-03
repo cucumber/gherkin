@@ -9,8 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
-- [Ruby] Substitute example values into scenario outlines literally, as the other implementations
-  do, instead of reading them as replacement patterns.
+- [Ruby] Substitute example values into scenario outlines literally, as the other implementations do, instead of reading them as replacement patterns. ([#697](https://github.com/cucumber/gherkin/pull/697))
 
 ## [42.0.1] - 2026-08-05
 ### Added
