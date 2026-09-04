@@ -17,21 +17,10 @@
         {
             "name": "host-system",
             "displayName": "Host build (system dependencies)",
-            "description": "Build and install the library using C++ dependencies already installed on the system. Does not use Conan and does not build tests. Used on machines that have the dependencies but not Conan.",
+            "description": "Build and install the library using C++ dependencies already installed on the system.",
             "inherits": "base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "host-conan",
-            "displayName": "Host build (Conan dependencies)",
-            "description": "Build and install the library using Conan-provided dependencies. Requires 'conan install --output-folder=build/host-conan' first. Used by CI. Does not build tests.",
-            "inherits": "base",
-            "cacheVariables": {
-                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/cmake/conan_provider.cmake",
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CONAN_INSTALL_ARGS": "--build=missing"
             }
         }
     ],
@@ -39,10 +28,6 @@
         {
             "name": "host-system",
             "configurePreset": "host-system"
-        },
-        {
-            "name": "host-conan",
-            "configurePreset": "host-conan"
         }
     ],
     "workflowPresets": [
@@ -55,19 +40,6 @@
                 },
                 {
                     "name": "host-system",
-                    "type": "build"
-                }
-            ]
-        },
-        {
-            "name": "host-conan",
-            "steps": [
-                {
-                    "name": "host-conan",
-                    "type": "configure"
-                },
-                {
-                    "name": "host-conan",
                     "type": "build"
                 }
             ]

@@ -36,10 +36,8 @@ jobs:
     env:
       CCACHE_BASEDIR: ${{ github.workspace }}
       CCACHE_DIR: ${{ github.workspace }}/.ccache
-      # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to
-      # build against. Must match the version required in cpp/CMakeLists.txt and
-      # cpp/conanfile.py, or the messages branch under test.
-      MESSAGES_REF: eebd9f2f48ae94e0ada14ab01d53e1ecaaecb172
+      # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to build against.
+      MESSAGES_REF: e85a9eaf3fa3787c25bc62b6ea67672e709ee4fa
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

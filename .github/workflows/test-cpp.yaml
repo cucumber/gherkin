@@ -20,11 +20,8 @@ on:
       - .github/**
 
 env:
-  # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to build
-  # against. For releases use a tag matching the version required in
-  # cpp/CMakeLists.txt (find_package) and cpp/conanfile.py; for cross-repo
-  # feature work, set this to the messages branch under test.
-  MESSAGES_REF: eebd9f2f48ae94e0ada14ab01d53e1ecaaecb172
+  # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to build against.
+  MESSAGES_REF: e85a9eaf3fa3787c25bc62b6ea67672e709ee4fa
 
 jobs:
   test-cpp-system-packages-linux:
@@ -159,52 +156,3 @@ jobs:
       - name: Install gherkin
         working-directory: cpp
         run: cmake --install build/host-system
-
-  test-cpp-conan:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04, ubuntu-26.04, macos-latest, windows-latest]
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          persist-credentials: false
-
-      - name: Checkout cucumber/messages
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: cucumber/messages
-          ref: ${{ env.MESSAGES_REF }}
-          path: messages-src
-          persist-credentials: false
-
-      - name: Install build tools (windows)
-        if: startsWith(matrix.os, 'windows')
-        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
-
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
-        with:
-          key: ${{ github.job }}-${{ matrix.os }}-${{ github.ref }}
-          append-timestamp: false
-          save: ${{ github.ref == 'refs/heads/main' }}
-
-      - name: Setup Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: '3.x'
-
-      - name: Install Conan
-        run: python -m pip install --upgrade "conan>=2,<3"
-
-      - name: Detect Conan profile
-        run: conan profile detect --force
-
-      - name: Create cucumber_messages Conan package
-        working-directory: messages-src/cpp
-        run: conan create . --build=missing -s compiler.cppstd=17
-
-      - name: Build gherkin (Conan dependencies)
-        working-directory: cpp
-        run: cmake --workflow --preset host-conan
