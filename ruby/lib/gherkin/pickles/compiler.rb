@@ -143,7 +143,7 @@ module Gherkin
       def interpolate(name, variable_cells, value_cells)
         variable_cells.each_with_index do |variable_cell, n|
           value_cell = value_cells[n]
-          name = name.gsub('<' + variable_cell.value + '>', value_cell.value)
+          name = name.gsub('<' + variable_cell.value + '>') { value_cell.value }
         end
         name
       end

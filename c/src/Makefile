@@ -1,29 +1,27 @@
-GCC_FLAGS=-c -Wall -Werror -g -fPIC 
-CLANG_FLAGS=-c -Wall -Werror -g -fPIC 
-GCC_SO_FLAGS=-shared
-MINGW_FLAGS=-c -Wall -Werror -g 
+# Compiler and tools. These already default to something sensible for the
+# current OS (make's built-in CC is "cc", AR is "ar"), so only set them here
+# if they're not already set - this lets you override them on the command
+# line or via the environment, e.g. `make CC=clang` or
+# `CC=arm-linux-gnueabihf-gcc make`.
+CC ?= gcc
+AR ?= ar
+LD = $(CC)
 
+CFLAGS ?= -Wall -Werror -g -fPIC
+LDFLAGS ?=
+ARFLAGS ?= cr
+SOFLAGS ?= -shared
+
+# Cross-compiling for Windows using mingw needs a few adjustments: no
+# -fPIC, a dedicated archiver, and an .exe extension on the binaries.
 ifeq ($(CC),i686-w64-mingw32-gcc)
-	CC=i686-w64-mingw32-gcc
-	LD=i686-w64-mingw32-gcc
-	CC_FLAGS=$(MINGW_FLAGS)
-	AR=i686-w64-mingw32-ar
-	EXT=.exe
-else ifeq ($(CC),clang)
-	CC=clang
-	LD=clang
-	CC_FLAGS=$(CLANG_FLAGS)
-	AR=ar
-else
-	CC=gcc
-	LD=gcc
-	CC_FLAGS=$(GCC_FLAGS)
-	AR=ar
+	AR = i686-w64-mingw32-ar
+	CFLAGS = -Wall -Werror -g
+	EXT = .exe
 endif
+
 GENERATE_DEPS_FLAGS=-MMD -MP -MF $(basename $@).d
-AR_FLAGS=cr
-LD_FLAGS=
-LD_LIBS=-lm
+LDLIBS=-lm
 RM_CMD=rm -rf
 MKDIR_CMD=mkdir -p
 
@@ -127,20 +125,20 @@ GHERKIN_CLI_OBJS= \
 
 ../objs/%.o: %.c Makefile
 	$(MKDIR_CMD) $(dir $@)
-	$(CC) $(CC_FLAGS) $(GENERATE_DEPS_FLAGS) -I ../include -I . $< -o $@
+	$(CC) -c $(CFLAGS) $(GENERATE_DEPS_FLAGS) -I ../include -I . $< -o $@
 
 ../libs/libgherkin.a: $(UTILITIES_OBJS) $(PARSER_OBJS) $(AST_OBJS) $(COMPILER_OBJS) $(PICKLES_OBJS) $(EVENT_OBJS) Makefile
 	$(MKDIR_CMD) $(dir $@)
-	$(AR) $(AR_FLAGS) $@ $(UTILITIES_OBJS) $(PARSER_OBJS) $(AST_OBJS) $(COMPILER_OBJS) $(PICKLES_OBJS) $(EVENT_OBJS)
+	$(AR) $(ARFLAGS) $@ $(UTILITIES_OBJS) $(PARSER_OBJS) $(AST_OBJS) $(COMPILER_OBJS) $(PICKLES_OBJS) $(EVENT_OBJS)
 
 ../libs/libgherkin.so.$(VERSION): $(UTILITIES_OBJS) $(PARSER_OBJS) $(AST_OBJS) $(COMPILER_OBJS) $(PICKLES_OBJS) $(EVENT_OBJS) Makefile
 	$(MKDIR_CMD) $(dir $@)
-	$(CC) $(GCC_SO_FLAGS) $(UTILITIES_OBJS) $(PARSER_OBJS) $(AST_OBJS) $(COMPILER_OBJS) $(PICKLES_OBJS) $(EVENT_OBJS) -o $@
+	$(CC) $(SOFLAGS) $(UTILITIES_OBJS) $(PARSER_OBJS) $(AST_OBJS) $(COMPILER_OBJS) $(PICKLES_OBJS) $(EVENT_OBJS) -o $@
 
 ../bin/gherkin_generate_tokens$(EXT): ../libs/libgherkin.a $(GENERATE_TOKEN_OBJS) Makefile
 	$(MKDIR_CMD) $(dir $@)
-	$(LD) $(LD_FLAGS) $(GENERATE_TOKEN_OBJS) -L../libs/ -lgherkin $(LD_LIBS) -o $@
+	$(LD) $(LDFLAGS) $(GENERATE_TOKEN_OBJS) -L../libs/ -lgherkin $(LDLIBS) -o $@
 
 ../bin/gherkin$(EXT): ../libs/libgherkin.a $(GHERKIN_CLI_OBJS) Makefile
 	$(MKDIR_CMD) $(dir $@)
-	$(LD) $(LD_FLAGS) $(GHERKIN_CLI_OBJS) -L../libs/ -lgherkin $(LD_LIBS) -o $@
+	$(LD) $(LDFLAGS) $(GHERKIN_CLI_OBJS) -L../libs/ -lgherkin $(LDLIBS) -o $@
