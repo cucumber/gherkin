@@ -15,9 +15,9 @@
 
 namespace cucumber::gherkin
 {
-    using TableRows = std::vector<std::shared_ptr<messages::TableRow>>;
-    using Tags = std::vector<std::shared_ptr<messages::Tag>>;
-    using Comments = std::vector<std::shared_ptr<messages::Comment>>;
+    using TableRows = std::vector<messages::TableRow>;
+    using Tags = std::vector<messages::Tag>;
+    using Comments = std::vector<messages::Comment>;
 
     class AstBuilder
     {

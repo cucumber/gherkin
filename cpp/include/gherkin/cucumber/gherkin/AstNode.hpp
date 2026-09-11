@@ -5,7 +5,6 @@
 #include "cucumber/gherkin/Token.hpp"
 #include "cucumber/gherkin/TypeTraits.hpp"
 #include <any>
-#include <memory>
 #include <optional>
 #include <type_traits>
 #include <unordered_map>
@@ -44,17 +43,6 @@ namespace cucumber::gherkin
 
         template<typename T, typename V = T>
         void SetValue(RuleType ruleType, V& value) const;
-
-        template<typename T, typename V = T>
-        void SetValue(RuleType ruleType, std::shared_ptr<V>& value) const;
-
-        // Overload for optional<shared_ptr<T>>: retrieve T, wrap in shared_ptr
-        template<typename T>
-        void Set(RuleType ruleType, std::optional<std::shared_ptr<T>>& value) const;
-
-        // Overload for vector<shared_ptr<T>>: retrieve vector<T>, wrap each in shared_ptr
-        template<typename T>
-        void Set(RuleType ruleType, std::vector<std::shared_ptr<T>>& value) const;
 
         template<typename T>
         void Set(RuleType ruleType, T& value) const;
@@ -114,7 +102,7 @@ namespace cucumber::gherkin
 
         if constexpr (isSpecializationOfV<Type, std::vector>)
         {
-            using ValueType = typename Type::ValueType;
+            using ValueType = typename Type::value_type;
 
             auto optItems = GetItems<ValueType>(ruleType);
 
@@ -139,38 +127,6 @@ namespace cucumber::gherkin
         }
     }
 
-    template<typename T, typename V>
-    void AstNode::SetValue(RuleType ruleType, std::shared_ptr<V>& value) const
-    {
-        SetValue<T>(ruleType, *value);
-    }
-
-    // Overload for optional<shared_ptr<T>>: retrieve T, wrap in shared_ptr
-    template<typename T>
-    void AstNode::Set(RuleType ruleType, std::optional<std::shared_ptr<T>>& value) const
-    {
-        auto pitem = GetSingle<T>(ruleType);
-        if (pitem)
-        {
-            value = std::make_shared<T>(*pitem);
-        }
-    }
-
-    // Overload for vector<shared_ptr<T>>: retrieve vector<T>, wrap each in
-    // shared_ptr
-    template<typename T>
-    void AstNode::Set(RuleType ruleType, std::vector<std::shared_ptr<T>>& value) const
-    {
-        auto optItems = GetItems<T>(ruleType);
-        if (optItems)
-        {
-            for (const auto& item : *optItems)
-            {
-                value.emplace_back(std::make_shared<T>(item));
-            }
-        }
-    }
-
     template<typename T>
     void AstNode::Set(RuleType ruleType, T& value) const
     {
@@ -178,7 +134,7 @@ namespace cucumber::gherkin
 
         if constexpr (isSpecializationOfV<Type, std::optional>)
         {
-            using ValueType = typename Type::ValueType;
+            using ValueType = typename Type::value_type;
 
             SetValue<ValueType>(ruleType, value);
         }

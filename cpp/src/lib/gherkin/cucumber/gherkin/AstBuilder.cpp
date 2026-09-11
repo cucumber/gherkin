@@ -27,7 +27,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <iterator>
-#include <memory>
 #include <optional>
 #include <regex>
 #include <string>
@@ -38,10 +37,10 @@ namespace cucumber::gherkin
 {
     namespace
     {
-        std::shared_ptr<messages::Location> GetLocation(const Token& token, std::size_t column = 0)
+        messages::Location GetLocation(const Token& token, std::size_t column = 0)
         {
             std::size_t col = column == 0 ? token.location.column.value_or(0) : column;
-            return std::make_shared<messages::Location>(messages::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt });
+            return messages::Location{ token.location.line, col > 0 ? std::optional(col) : std::nullopt };
         }
 
         void EnsureCellCount(const TableRows& rows)
@@ -51,13 +50,13 @@ namespace cucumber::gherkin
                 return;
             }
 
-            std::size_t const cellCount = rows.front()->cells.size();
+            std::size_t const cellCount = rows.front().cells.size();
 
             for (const auto& row : rows)
             {
-                if (row->cells.size() != cellCount)
+                if (row.cells.size() != cellCount)
                 {
-                    throw AstBuilderError("inconsistent cell count within the table", { row->location->line, row->location->column.value_or(0) });
+                    throw AstBuilderError("inconsistent cell count within the table", { row.location.line, row.location.column.value_or(0) });
                 }
             }
         }
@@ -68,10 +67,10 @@ namespace cucumber::gherkin
 
             for (const auto& cellItem : token.matchedItems)
             {
-                auto cell = std::make_shared<messages::TableCell>();
-                cell->location = GetLocation(token, cellItem.column);
-                cell->value = cellItem.text;
-                cells.emplace_back(cell);
+                messages::TableCell cell;
+                cell.location = GetLocation(token, cellItem.column);
+                cell.value = cellItem.text;
+                cells.emplace_back(std::move(cell));
             }
 
             return cells;
@@ -157,7 +156,7 @@ namespace cucumber::gherkin
         {
             messages::Comment comment{ GetLocation(token), token.matchedText };
 
-            comments.emplace_back(std::make_shared<messages::Comment>(std::move(comment)));
+            comments.emplace_back(std::move(comment));
         }
         else
         {
@@ -248,9 +247,9 @@ namespace cucumber::gherkin
         messages::DataTable dataTable;
         dataTable.rows = std::move(rows);
 
-        if (!dataTable.rows.empty() && dataTable.rows.front()->location)
+        if (!dataTable.rows.empty())
         {
-            dataTable.location = dataTable.rows.front()->location;
+            dataTable.location = dataTable.rows.front().location;
         }
 
         return dataTable;
@@ -332,8 +331,8 @@ namespace cucumber::gherkin
         if (background != nullptr)
         {
             messages::FeatureChild child;
-            child.background = std::make_shared<messages::Background>(*background);
-            feature.children.emplace_back(std::make_shared<messages::FeatureChild>(child));
+            child.background = *background;
+            feature.children.emplace_back(std::move(child));
         }
 
         const auto* scenarios = node.GetItems<messages::Scenario>(RuleType::scenarioDefinition);
@@ -343,8 +342,8 @@ namespace cucumber::gherkin
             for (const auto& scenario : *scenarios)
             {
                 messages::FeatureChild child;
-                child.scenario = std::make_shared<messages::Scenario>(scenario);
-                feature.children.emplace_back(std::make_shared<messages::FeatureChild>(child));
+                child.scenario = scenario;
+                feature.children.emplace_back(std::move(child));
             }
         }
 
@@ -355,8 +354,8 @@ namespace cucumber::gherkin
             for (const auto& rule : *rules)
             {
                 messages::FeatureChild child;
-                child.rule = std::make_shared<messages::Rule>(rule);
-                feature.children.emplace_back(std::make_shared<messages::FeatureChild>(child));
+                child.rule = rule;
+                feature.children.emplace_back(std::move(child));
             }
         }
 
@@ -380,8 +379,8 @@ namespace cucumber::gherkin
         if (background != nullptr)
         {
             messages::RuleChild child;
-            child.background = std::make_shared<messages::Background>(*background);
-            rule.children.emplace_back(std::make_shared<messages::RuleChild>(child));
+            child.background = *background;
+            rule.children.emplace_back(std::move(child));
         }
 
         const auto* scenarios = node.GetItems<messages::Scenario>(RuleType::scenarioDefinition);
@@ -391,8 +390,8 @@ namespace cucumber::gherkin
             for (const auto& scenario : *scenarios)
             {
                 messages::RuleChild child;
-                child.scenario = std::make_shared<messages::Scenario>(scenario);
-                rule.children.emplace_back(std::make_shared<messages::RuleChild>(child));
+                child.scenario = scenario;
+                rule.children.emplace_back(std::move(child));
             }
         }
 
@@ -414,11 +413,11 @@ namespace cucumber::gherkin
 
         for (const auto& token : node.GetTokens(RuleType::tableRow))
         {
-            auto row = std::make_shared<messages::TableRow>();
-            row->location = GetLocation(token);
-            row->cells = GetTableCells(token);
-            row->id = NextId();
-            rows.emplace_back(row);
+            messages::TableRow row;
+            row.location = GetLocation(token);
+            row.cells = GetTableCells(token);
+            row.id = NextId();
+            rows.emplace_back(std::move(row));
         }
 
         EnsureCellCount(rows);
@@ -442,7 +441,7 @@ namespace cucumber::gherkin
                 {
                     messages::Tag tag{ GetLocation(token, tagItem.column), tagItem.text, NextId() };
 
-                    tagList.emplace_back(std::make_shared<messages::Tag>(std::move(tag)));
+                    tagList.emplace_back(std::move(tag));
                 }
             }
         }

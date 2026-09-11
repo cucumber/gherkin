@@ -8,7 +8,6 @@
 #include "cucumber/gherkin/Utils.hpp"
 #include "cucumber/messages/Envelope.hpp"
 #include "cucumber/messages/Source.hpp"
-#include <memory>
 #include <string>
 
 namespace cucumber::gherkin
@@ -47,7 +46,7 @@ namespace cucumber::gherkin
     {
         messages::Envelope envelope;
 
-        envelope.source = std::make_shared<messages::Source>(messages::Source{ sourceFile.path, Slurp(sourceFile.path) });
+        envelope.source = messages::Source{ sourceFile.path, Slurp(sourceFile.path) };
 
         Parse(envelope, callbacks);
     }
@@ -56,12 +55,12 @@ namespace cucumber::gherkin
     {
         if (includeSource && callbacks.source && envelope.source)
         {
-            callbacks.source(**envelope.source);
+            callbacks.source(*envelope.source);
         }
 
         if (envelope.source)
         {
-            Parse(*(*envelope.source), callbacks);
+            Parse(*envelope.source, callbacks);
         }
     }
 
