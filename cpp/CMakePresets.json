@@ -6,32 +6,40 @@
     },
     "configurePresets": [
         {
-            "name": "host",
+            "name": "base",
+            "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "On",
-                "CUCUMBER_GHERKIN_FETCH_DEPS": "On",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "On"
+            }
+        },
+        {
+            "name": "host-system",
+            "displayName": "Host build (system dependencies)",
+            "description": "Build and install the library using C++ dependencies already installed on the system.",
+            "inherits": "base",
+            "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "host",
-            "configurePreset": "host"
+            "name": "host-system",
+            "configurePreset": "host-system"
         }
     ],
     "workflowPresets": [
         {
-            "name": "host",
+            "name": "host-system",
             "steps": [
                 {
-                    "name": "host",
+                    "name": "host-system",
                     "type": "configure"
                 },
                 {
-                    "name": "host",
+                    "name": "host-system",
                     "type": "build"
                 }
             ]

@@ -22,7 +22,6 @@ RUN dotnet --list-sdks
 # Install Berp (dotnet tool installs are user-global; not system global)
 RUN dotnet tool install --global Berp --version 1.6.0
 
-
 WORKDIR /app
 
 CMD ["/bin/bash"]

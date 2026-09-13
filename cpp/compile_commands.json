@@ -1,0 +1,578 @@
+[
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Attachment.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Attachment.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Attachment.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Attachment.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/AttachmentContentEncoding.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/AttachmentContentEncoding.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/AttachmentContentEncoding.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/AttachmentContentEncoding.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Background.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Background.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Background.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Background.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Ci.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Ci.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Ci.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Ci.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Comment.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Comment.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Comment.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Comment.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/DataTable.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/DataTable.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/DataTable.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/DataTable.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/DocString.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/DocString.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/DocString.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/DocString.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Duration.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Duration.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Duration.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Duration.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Envelope.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Envelope.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Envelope.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Envelope.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Examples.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Examples.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Examples.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Examples.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Exception.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Exception.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Exception.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Exception.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/ExternalAttachment.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/ExternalAttachment.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/ExternalAttachment.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/ExternalAttachment.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Feature.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Feature.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Feature.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Feature.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/FeatureChild.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/FeatureChild.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/FeatureChild.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/FeatureChild.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/GherkinDocument.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/GherkinDocument.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/GherkinDocument.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/GherkinDocument.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Git.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Git.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Git.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Git.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Group.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Group.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Group.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Group.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Hook.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Hook.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Hook.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Hook.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/HookType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/HookType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/HookType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/HookType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/JavaMethod.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/JavaMethod.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/JavaMethod.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/JavaMethod.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/JavaStackTraceElement.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/JavaStackTraceElement.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/JavaStackTraceElement.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/JavaStackTraceElement.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Location.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Location.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Location.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Location.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Meta.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Meta.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Meta.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Meta.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/ParameterType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/ParameterType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/ParameterType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/ParameterType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/ParseError.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/ParseError.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/ParseError.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/ParseError.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Pickle.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Pickle.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Pickle.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Pickle.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleDocString.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleDocString.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleDocString.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleDocString.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleStep.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleStep.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleStep.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleStep.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleStepArgument.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleStepArgument.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleStepArgument.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleStepArgument.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleStepType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleStepType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleStepType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleStepType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTable.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTable.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTable.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTable.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTableCell.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTableCell.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTableCell.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTableCell.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTableRow.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTableRow.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTableRow.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTableRow.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTag.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTag.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/PickleTag.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/PickleTag.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Product.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Product.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Product.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Product.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Rule.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Rule.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Rule.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Rule.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/RuleChild.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/RuleChild.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/RuleChild.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/RuleChild.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Scenario.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Scenario.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Scenario.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Scenario.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Snippet.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Snippet.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Snippet.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Snippet.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Source.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Source.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Source.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Source.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/SourceMediaType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/SourceMediaType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/SourceMediaType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/SourceMediaType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/SourceReference.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/SourceReference.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/SourceReference.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/SourceReference.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Step.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Step.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Step.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Step.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepDefinition.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepDefinition.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepDefinition.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepDefinition.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepDefinitionPattern.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepDefinitionPattern.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepDefinitionPattern.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepDefinitionPattern.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepDefinitionPatternType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepDefinitionPatternType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepDefinitionPatternType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepDefinitionPatternType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepKeywordType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepKeywordType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepKeywordType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepKeywordType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepMatchArgument.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepMatchArgument.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepMatchArgument.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepMatchArgument.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepMatchArgumentsList.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepMatchArgumentsList.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/StepMatchArgumentsList.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/StepMatchArgumentsList.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Suggestion.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Suggestion.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Suggestion.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Suggestion.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TableCell.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TableCell.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TableCell.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TableCell.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TableRow.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TableRow.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TableRow.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TableRow.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Tag.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Tag.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Tag.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Tag.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestCase.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestCase.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestCase.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestCase.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestCaseFinished.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestCaseFinished.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestCaseFinished.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestCaseFinished.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestCaseStarted.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestCaseStarted.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestCaseStarted.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestCaseStarted.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunFinished.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunFinished.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunFinished.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunFinished.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunHookFinished.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunHookFinished.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunHookFinished.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunHookFinished.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunHookStarted.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunHookStarted.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunHookStarted.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunHookStarted.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunStarted.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunStarted.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestRunStarted.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestRunStarted.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStep.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStep.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStep.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStep.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepFinished.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepFinished.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepFinished.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepFinished.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepResult.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepResult.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepResult.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepResult.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepResultStatus.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepResultStatus.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepResultStatus.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepResultStatus.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepStarted.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepStarted.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/TestStepStarted.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/TestStepStarted.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Timestamp.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Timestamp.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/Timestamp.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/Timestamp.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/UndefinedParameterType.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/UndefinedParameterType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/generated/cucumber/messages/UndefinedParameterType.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/generated/cucumber/messages/UndefinedParameterType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -I/workspaces/cucumber-cpp-development/messages/cpp/src/messages -O3 -DNDEBUG -std=c++17 -o messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/messages/cucumber/messages/DurationUtil.cpp.o -c /workspaces/cucumber-cpp-development/messages/cpp/src/messages/cucumber/messages/DurationUtil.cpp",
+  "file": "/workspaces/cucumber-cpp-development/messages/cpp/src/messages/cucumber/messages/DurationUtil.cpp",
+  "output": "messages/cpp/CMakeFiles/cucumber_messages_lib.dir/src/messages/cucumber/messages/DurationUtil.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/App.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/App.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/App.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/App.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/AstBuilder.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/AstBuilder.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/AstBuilder.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/AstBuilder.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/AstNode.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/AstNode.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/AstNode.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/AstNode.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Demangle.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Demangle.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Demangle.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Demangle.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Dialect.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Dialect.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Dialect.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Dialect.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Exceptions.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Exceptions.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Exceptions.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Exceptions.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/IdGenerator.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/IdGenerator.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/IdGenerator.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/IdGenerator.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Keywords.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Keywords.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Keywords.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Keywords.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Line.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Line.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Line.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Line.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/ParseError.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/ParseError.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/ParseError.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/ParseError.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/PickleCompiler.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/PickleCompiler.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/PickleCompiler.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/PickleCompiler.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/PickleCompilerContext.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/PickleCompilerContext.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/PickleCompilerContext.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/PickleCompilerContext.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Regex.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Regex.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Regex.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Regex.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/RuleType.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/RuleType.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/RuleType.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/RuleType.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Token.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Token.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Token.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Token.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/TokenFormatterBuilder.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/TokenFormatterBuilder.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/TokenFormatterBuilder.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/TokenFormatterBuilder.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/TokenMatcher.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/TokenMatcher.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/TokenMatcher.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/TokenMatcher.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/TokenScanner.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/TokenScanner.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/TokenScanner.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/TokenScanner.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Utils.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Utils.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/lib/gherkin/cucumber/gherkin/Utils.cpp",
+  "output": "gherkin/cpp/src/lib/gherkin/CMakeFiles/cucumber_gherkin_lib.dir/cucumber/gherkin/Utils.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/bin/gherkin -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/bin/gherkin/CMakeFiles/cucumber_gherkin_bin.dir/Gherkin.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/bin/gherkin/Gherkin.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/bin/gherkin/Gherkin.cpp",
+  "output": "gherkin/cpp/src/bin/gherkin/CMakeFiles/cucumber_gherkin_bin.dir/Gherkin.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/gherkin/cpp/src/bin/gherkin-generate-tokens -I/workspaces/cucumber-cpp-development/gherkin/cpp/include/gherkin -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o gherkin/cpp/src/bin/gherkin-generate-tokens/CMakeFiles/cucumber_gherkin_generate_tokens_bin.dir/GherkinGenerateTokens.cpp.o -c /workspaces/cucumber-cpp-development/gherkin/cpp/src/bin/gherkin-generate-tokens/GherkinGenerateTokens.cpp",
+  "file": "/workspaces/cucumber-cpp-development/gherkin/cpp/src/bin/gherkin-generate-tokens/GherkinGenerateTokens.cpp",
+  "output": "gherkin/cpp/src/bin/gherkin-generate-tokens/CMakeFiles/cucumber_gherkin_generate_tokens_bin.dir/GherkinGenerateTokens.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/query/cpp/include -I/workspaces/cucumber-cpp-development/query/cpp/src/query -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o query/cpp/CMakeFiles/cucumber_query_lib.dir/src/query/Lineage.cpp.o -c /workspaces/cucumber-cpp-development/query/cpp/src/query/Lineage.cpp",
+  "file": "/workspaces/cucumber-cpp-development/query/cpp/src/query/Lineage.cpp",
+  "output": "query/cpp/CMakeFiles/cucumber_query_lib.dir/src/query/Lineage.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/query/cpp/include -I/workspaces/cucumber-cpp-development/query/cpp/src/query -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o query/cpp/CMakeFiles/cucumber_query_lib.dir/src/query/Query.cpp.o -c /workspaces/cucumber-cpp-development/query/cpp/src/query/Query.cpp",
+  "file": "/workspaces/cucumber-cpp-development/query/cpp/src/query/Query.cpp",
+  "output": "query/cpp/CMakeFiles/cucumber_query_lib.dir/src/query/Query.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/query/cpp/include -I/workspaces/cucumber-cpp-development/query/cpp/src/query -I/workspaces/cucumber-cpp-development/messages/cpp/include/util -I/workspaces/cucumber-cpp-development/messages/cpp/include/generated -O3 -DNDEBUG -std=c++17 -o query/cpp/CMakeFiles/cucumber_query_lib.dir/src/query/NamingStrategy.cpp.o -c /workspaces/cucumber-cpp-development/query/cpp/src/query/NamingStrategy.cpp",
+  "file": "/workspaces/cucumber-cpp-development/query/cpp/src/query/NamingStrategy.cpp",
+  "output": "query/cpp/CMakeFiles/cucumber_query_lib.dir/src/query/NamingStrategy.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/include -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/src -O3 -DNDEBUG -std=c++17 -o tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Error.cpp.o -c /workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Error.cpp",
+  "file": "/workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Error.cpp",
+  "output": "tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Error.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/include -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/src -O3 -DNDEBUG -std=c++17 -o tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Model.cpp.o -c /workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Model.cpp",
+  "file": "/workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Model.cpp",
+  "output": "tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Model.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/include -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/src -O3 -DNDEBUG -std=c++17 -o tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Parser.cpp.o -c /workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Parser.cpp",
+  "file": "/workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Parser.cpp",
+  "output": "tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Parser.cpp.o"
+},
+{
+  "directory": "/workspaces/cucumber-cpp-development/build/host-system",
+  "command": "/usr/bin/c++ -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/include -I/workspaces/cucumber-cpp-development/tag-expressions/cpp/src -O3 -DNDEBUG -std=c++17 -o tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Token.cpp.o -c /workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Token.cpp",
+  "file": "/workspaces/cucumber-cpp-development/tag-expressions/cpp/src/cucumber/tag-expressions/Token.cpp",
+  "output": "tag-expressions/cpp/CMakeFiles/cucumber_tag_expressions_lib.dir/src/cucumber/tag-expressions/Token.cpp.o"
+}
+]
