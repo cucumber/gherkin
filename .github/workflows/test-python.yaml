@@ -45,7 +45,7 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-          version: "0.12.13"
+          version: "0.12.14"
 
       - name: Lint code
         run: uv run pre-commit run --all-files
