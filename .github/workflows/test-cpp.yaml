@@ -45,14 +45,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Checkout cucumber/messages
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: cucumber/messages
-          ref: ${{ env.MESSAGES_REF }}
-          path: messages-src
-          persist-credentials: false
-
       - name: ccache
         uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
         with:
@@ -65,11 +57,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nlohmann-json3-dev
 
-      - name: Build and install cucumber_messages
-        working-directory: messages-src/cpp
-        run: |
-          cmake --workflow --preset host-system
-          sudo cmake --install build/host-system
+      - name: Install cucumber/messages
+        uses: cucumber/ci-actions/install-cpp-dep@9ba4a623ec838b1358e18683a85a0914f3779363
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
 
       - name: Build gherkin
         working-directory: cpp
@@ -86,14 +78,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Checkout cucumber/messages
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: cucumber/messages
-          ref: ${{ env.MESSAGES_REF }}
-          path: messages-src
-          persist-credentials: false
-
       - name: ccache
         uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
         with:
@@ -104,11 +88,11 @@ jobs:
       - name: Install dependencies
         run: brew install nlohmann-json
 
-      - name: Build and install cucumber_messages
-        working-directory: messages-src/cpp
-        run: |
-          cmake --workflow --preset host-system
-          sudo cmake --install build/host-system
+      - name: Install cucumber/messages
+        uses: cucumber/ci-actions/install-cpp-dep@9ba4a623ec838b1358e18683a85a0914f3779363
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
 
       - name: Build gherkin
         working-directory: cpp
@@ -123,14 +107,6 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          persist-credentials: false
-
-      - name: Checkout cucumber/messages
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          repository: cucumber/messages
-          ref: ${{ env.MESSAGES_REF }}
-          path: messages-src
           persist-credentials: false
 
       - name: Install build tools
