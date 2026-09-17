@@ -119,11 +119,11 @@ jobs:
           # Expose the vcpkg toolchain so find_package() locates the packages.
           echo "CMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
 
-      - name: Build and install cucumber_messages
-        working-directory: messages-src/cpp
-        run: |
-          cmake --workflow --preset host-system
-          cmake --install build/host-system
+      - name: Install cucumber/messages
+        uses: cucumber/ci-actions/install-cpp-dep@9ba4a623ec838b1358e18683a85a0914f3779363
+        with:
+          repository: cucumber/messages
+          ref: ${{ env.MESSAGES_REF }}
 
       - name: Build gherkin
         working-directory: cpp
