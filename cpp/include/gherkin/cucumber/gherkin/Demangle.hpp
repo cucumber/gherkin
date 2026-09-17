@@ -8,7 +8,7 @@ namespace cucumber::gherkin
 {
     namespace detail
     {
-        auto Demangle(const std::string& name) -> std::unique_ptr<char, void (*)(char*)>;
+        std::unique_ptr<char, void (*)(char*)> Demangle(const std::string& name);
     }
 
     template<typename T>
