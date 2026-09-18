@@ -21,7 +21,7 @@ on:
 
 env:
   # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to build against.
-  MESSAGES_REF: cpp-breaking-change-use-shared_ptrs-for-messages
+  MESSAGES_REF: main
 
 jobs:
   test-cpp-system-packages-linux:

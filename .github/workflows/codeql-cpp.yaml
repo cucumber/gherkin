@@ -37,7 +37,7 @@ jobs:
       CCACHE_BASEDIR: ${{ github.workspace }}
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       # Git ref (tag, branch, or SHA) of the cucumber_messages dependency to build against.
-      MESSAGES_REF: cpp-breaking-change-use-shared_ptrs-for-messages
+      MESSAGES_REF: main
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
