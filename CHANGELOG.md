@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
+
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
 - [Ruby] Substitute example values into scenario outlines literally, as the other implementations do, instead of reading them as replacement patterns. ([#697](https://github.com/cucumber/gherkin/pull/697))
