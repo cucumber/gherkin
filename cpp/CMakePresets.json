@@ -6,32 +6,94 @@
     },
     "configurePresets": [
         {
-            "name": "host",
+            "name": "base",
+            "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "On",
-                "CUCUMBER_GHERKIN_FETCH_DEPS": "On",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "On"
+            }
+        },
+        {
+            "name": "host-system",
+            "displayName": "Host build (system dependencies)",
+            "description": "Build and install the library using C++ dependencies already installed on the system.",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "test-system",
+            "displayName": "Test build (system dependencies)",
+            "description": "Build with unit tests and sanitizers enabled using system dependencies. Used by CI to build and run the test suite.",
+            "inherits": "base",
+            "cacheVariables": {
+                "CUCUMBER_GHERKIN_ENABLE_SANITIZERS": "On",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "tidy",
+            "displayName": "Lint build (clang-tidy, system dependencies)",
+            "description": "Build with unit tests and clang-tidy enabled using system dependencies.",
+            "inherits": "base",
+            "cacheVariables": {
+                "CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY": "On",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "host",
-            "configurePreset": "host"
+            "name": "host-system",
+            "configurePreset": "host-system"
+        },
+        {
+            "name": "test-system",
+            "configurePreset": "test-system"
+        },
+        {
+            "name": "tidy",
+            "configurePreset": "tidy"
         }
     ],
     "workflowPresets": [
         {
-            "name": "host",
+            "name": "host-system",
             "steps": [
                 {
-                    "name": "host",
+                    "name": "host-system",
                     "type": "configure"
                 },
                 {
-                    "name": "host",
+                    "name": "host-system",
+                    "type": "build"
+                }
+            ]
+        },
+        {
+            "name": "test-system",
+            "steps": [
+                {
+                    "name": "test-system",
+                    "type": "configure"
+                },
+                {
+                    "name": "test-system",
+                    "type": "build"
+                }
+            ]
+        },
+        {
+            "name": "tidy",
+            "steps": [
+                {
+                    "name": "tidy",
+                    "type": "configure"
+                },
+                {
+                    "name": "tidy",
                     "type": "build"
                 }
             ]

@@ -24,7 +24,33 @@ if (POLICY CMP0077)
     cmake_policy(SET CMP0077 NEW)
 endif ()
 
-option(CUCUMBER_GHERKIN_FETCH_DEPS "Fetch dependencies via FetchContent." Off)
+option(CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY "Run clang-tidy as part of the build." Off)
+option(CUCUMBER_GHERKIN_ENABLE_COVERAGE "Enable compiler flags for code coverage measurements." Off)
+option(CUCUMBER_GHERKIN_ENABLE_SANITIZERS "Enable compiler flags for the address and undefined behaviour sanitizers." Off)
+
+if(CUCUMBER_GHERKIN_ENABLE_SANITIZERS AND CUCUMBER_GHERKIN_ENABLE_COVERAGE)
+    message(FATAL_ERROR "CUCUMBER_GHERKIN_ENABLE_SANITIZERS and CUCUMBER_GHERKIN_ENABLE_COVERAGE are mutually exclusive.")
+endif()
+
+if(CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_PROGRAM clang-tidy REQUIRED)
+endif()
+
+if(CUCUMBER_GHERKIN_ENABLE_COVERAGE)
+    find_program(GCOVR_PROGRAM gcovr REQUIRED)
+
+    add_custom_target(
+        generate-lcov-report
+        COMMAND ${GCOVR_PROGRAM} --version
+        COMMAND ${GCOVR_PROGRAM} --root ${CMAKE_CURRENT_SOURCE_DIR} --merge-lines --delete --exclude-unreachable-branches --exclude-throw-branches --exclude-noncode-lines --filter include/ --filter src/
+            --txt-summary
+            --lcov ${CMAKE_CURRENT_BINARY_DIR}/lcov.info
+            --cobertura ${CMAKE_CURRENT_BINARY_DIR}/cobertura.xml --cobertura-pretty
+            --markdown-summary ${CMAKE_CURRENT_BINARY_DIR}/coverage-summary.md
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating code coverage reports"
+    )
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -51,7 +77,35 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 # CMake dependencies
-include(cmake/dependencies.cpm.cmake)
+find_package(nlohmann_json REQUIRED)
+if (NOT TARGET cucumber::messages)
+    find_package(cucumber_messages REQUIRED)
+endif()
+
+# Target options
+if(CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY)
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_PROGRAM}")
+endif()
+
+if(CUCUMBER_GHERKIN_ENABLE_COVERAGE)
+    add_compile_options(
+        -g -O0 --coverage -fprofile-arcs -ftest-coverage -fno-inline
+        $<$<COMPILE_LANGUAGE:CXX>:-fno-elide-constructors>
+    )
+
+    if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        link_libraries(gcov)
+    else()
+        add_link_options(--coverage)
+    endif()
+endif()
+
+if(CUCUMBER_GHERKIN_ENABLE_SANITIZERS)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-fsanitize=address -fsanitize=undefined)
+        add_link_options(-fsanitize=address -fsanitize=undefined)
+    endif()
+endif()
 
 # Targets
 add_subdirectory(src/lib/gherkin)

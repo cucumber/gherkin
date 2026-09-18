@@ -15,7 +15,7 @@ Each gherkin implementation depends on two common files.
  * `gherkin.berp` from which a parser is generated.
 
 To reduce the complexity of common tasks: copying and/or generating
-localisations and generating the parser is done separately from building each project.  
+localisations and generating the parser is done separately from building each project.
 
 ## Contributing changes
 
@@ -29,8 +29,16 @@ localisations and generating the parser is done separately from building each pr
 *Either* start a docker container
 
 ```shell
-docker build --tag berp-env . 
+docker build --tag berp-env .
 docker run --rm --interactive --tty --volume ".:/app" berp-env
+```
+
+When using Docker outside of Docker in a devcontainer, the workspace might be a
+Docker volume rather than a host directory. In that case, share this
+devcontainer's mounts instead:
+
+```shell
+docker run --rm --interactive --tty --volumes-from "$(hostname)" --workdir "$(pwd)" berp-env
 ```
 
 *Or* install on your system
@@ -143,7 +151,7 @@ pass!
 
 Then send us a pull-request :-)
 
-And if you're stuck - please shoot message to the #commiters channel in the 
+And if you're stuck - please shoot message to the #commiters channel in the
 [Cucumber Discord](https://cucumber.io/docs/community/get-in-touch/#discord).
 
 ## Make a release
