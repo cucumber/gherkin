@@ -4,6 +4,7 @@
 // [Berp](https://github.com/gasparnagy/berp) using the shared `../gherkin.berp`
 // grammar.
 // dart format off
+// coverage:ignore-file
 import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
