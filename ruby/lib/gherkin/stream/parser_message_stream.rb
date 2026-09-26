@@ -13,12 +13,16 @@ module Gherkin
       PLAIN_MEDIA_TYPE = 'text/x.cucumber.gherkin+plain'
       MARKDOWN_MEDIA_TYPE = 'text/x.cucumber.gherkin+markdown'
 
+      def self.markdown_uri?(uri)
+        uri.to_s.end_with?('.feature.md')
+      end
+
       def self.media_type_for_uri(uri)
-        uri.to_s.end_with?('.feature.md') ? MARKDOWN_MEDIA_TYPE : PLAIN_MEDIA_TYPE
+        markdown_uri?(uri) ? MARKDOWN_MEDIA_TYPE : PLAIN_MEDIA_TYPE
       end
 
       def self.markdown_source?(source)
-        source.media_type == MARKDOWN_MEDIA_TYPE || source.uri.to_s.end_with?('.feature.md')
+        source.media_type == MARKDOWN_MEDIA_TYPE || markdown_uri?(source.uri)
       end
 
       def initialize(paths: [], sources: [], options: {})
@@ -89,12 +93,23 @@ module Gherkin
               data: File.open(path, 'r:UTF-8', &:read),
               media_type: self.class.media_type_for_uri(path)
             )
-            yielder.yield(source)
+            yielder.yield(source_with_markdown_media_type(source))
           end
           @sources.each do |source|
-            yielder.yield(source)
+            yielder.yield(source_with_markdown_media_type(source))
           end
         end
+      end
+
+      def source_with_markdown_media_type(source)
+        return source unless self.class.markdown_uri?(source.uri)
+        return source if source.media_type == MARKDOWN_MEDIA_TYPE
+
+        Cucumber::Messages::Source.new(
+          uri: source.uri,
+          data: source.data,
+          media_type: MARKDOWN_MEDIA_TYPE
+        )
       end
 
       def build_gherkin_document(source)

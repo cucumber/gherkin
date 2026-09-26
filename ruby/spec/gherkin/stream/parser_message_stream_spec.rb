@@ -69,9 +69,25 @@ describe Gherkin::Stream::ParserMessageStream do
           step_location: { line: 3, column: 3 }
         }
       end
+      let(:source_message) do
+        described_class.new(
+          sources: [source_feature],
+          options: { include_source: true, include_gherkin_document: false, include_pickles: false }
+        ).messages.first.source
+      end
 
       it 'parses Markdown headings and bullet steps with source locations' do
         expect(markdown_parse_result).to eq(expected_markdown_parse_result)
+      end
+
+      it 'emits the Markdown media type for a .feature.md source URI' do
+        expect(
+          emitted_media_type: source_message.media_type,
+          input_media_type: source_feature.media_type
+        ).to eq(
+          emitted_media_type: 'text/x.cucumber.gherkin+markdown',
+          input_media_type: 'text/x.cucumber.gherkin+plain'
+        )
       end
     end
 
