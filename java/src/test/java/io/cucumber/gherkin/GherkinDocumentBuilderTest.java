@@ -19,7 +19,7 @@ class GherkinDocumentBuilderTest {
     private final IdGenerator idGenerator = new IncrementingIdGenerator();
 
     @Test
-    void is_reusable() {
+    void is_reusable() throws Exception {
         var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinTokenMatcher matcher = new GherkinTokenMatcher();
 
@@ -31,7 +31,7 @@ class GherkinDocumentBuilderTest {
     }
 
     @Test
-    void parses_rules() {
+    void parses_rules() throws Exception {
         var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         String data = """
                 Feature: Some rules
@@ -71,7 +71,7 @@ class GherkinDocumentBuilderTest {
     }
 
     @Test
-    void parses_just_comments() {
+    void parses_just_comments() throws Exception {
         var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinDocument doc = parser.parse("# Just a comment", "test.feature");
         List<Comment> children = doc.getComments();
@@ -79,7 +79,7 @@ class GherkinDocumentBuilderTest {
     }
 
     @Test
-    void sets_empty_table_cells() {
+    void sets_empty_table_cells() throws Exception {
         var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
         GherkinDocument doc = parser.parse("""
                         Feature:
@@ -103,7 +103,7 @@ class GherkinDocumentBuilderTest {
         var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
 
         // When
-        ParserException.CompositeParserException compositeParserException = assertThrows(ParserException.CompositeParserException.class, () -> parser.parse("""
+        ParserException compositeParserException = assertThrows(ParserException.class, () -> parser.parse("""
                         Feature:
                           Scenario:
                             Given a table
@@ -117,7 +117,7 @@ class GherkinDocumentBuilderTest {
         Assertions.assertThat(compositeParserException).hasMessageContaining("inconsistent cell count within the table");
         Assertions.assertThat(compositeParserException.errors)
                 .singleElement()
-                .extracting(e -> e.location)
+                .extracting(ParserError::getLocation)
                         .isEqualTo(new Location(5, 7));
     }
 
