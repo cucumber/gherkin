@@ -19,19 +19,19 @@ final class Parser<T> {
         this.builder = builder;
     }
 
-    T parse(String source, String uri) throws CompositeParserException {
+    T parse(String source, String uri) throws ParserException {
         return parse(new TokenScanner(source), uri);
     }
 
-    T parse(TokenScanner tokenScanner, String uri) throws CompositeParserException {
+    T parse(TokenScanner tokenScanner, String uri) throws ParserException {
         return parse(tokenScanner, new GherkinTokenMatcher(), uri);
     }
 
-    T parse(String source, TokenMatcher tokenMatcher, String uri) throws CompositeParserException {
+    T parse(String source, TokenMatcher tokenMatcher, String uri) throws ParserException {
         return parse(new TokenScanner(source), tokenMatcher, uri);
     }
 
-    T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher, String uri) throws CompositeParserException {
+    T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher, String uri) throws ParserException {
         builder.reset(uri);
         tokenMatcher.reset();
 
@@ -53,13 +53,13 @@ final class Parser<T> {
         endRule(context, RuleType.GherkinDocument);
 
         if (!context.errors.isEmpty()) {
-            throw new CompositeParserException(context.errors);
+            throw new ParserException(context.errors);
         }
 
         return builder.getResult();
     }
 
-    private void addError(ParserContext context, ParserError error) throws CompositeParserException {
+    private void addError(ParserContext context, ParserError error) throws ParserException {
         String newErrorMessage = error.getMessage();
         for (ParserError e : context.errors) {
             if (Objects.equals(e.getMessage(), newErrorMessage)) {
@@ -68,40 +68,40 @@ final class Parser<T> {
         }
         context.errors.add(error);
         if (context.errors.size() > 10)
-            throw new CompositeParserException(context.errors);
+            throw new ParserException(context.errors);
     }
 
-    private <V> void handleAstError(ParserContext context, V value, Builder<T> b, final ThrowingBiConsumer<Builder<T>, V> action) throws CompositeParserException {
+    private <V> void handleAstError(ParserContext context, V value, Builder<T> b, final ThrowingBiConsumer<Builder<T>, V> action) throws ParserException {
         try {
             action.accept(b, value);
-        } catch (CompositeParserException compositeParserException) {
-            for (ParserError error : compositeParserException.errors) {
+        } catch (ParserException parserException) {
+            for (ParserError error : parserException.errors) {
                 addError(context, error);
             }
         }
     }
 
     private boolean handleExternalError(ParserContext context, Token token,
-                                        ThrowingBiPredicate<TokenMatcher, Token> action) throws CompositeParserException {
+                                        ThrowingBiPredicate<TokenMatcher, Token> action) throws ParserException {
         try {
             return action.test(context.tokenMatcher, token);
-        } catch (CompositeParserException compositeParserException) {
-            for (ParserError error : compositeParserException.errors) {
+        } catch (ParserException parserException) {
+            for (ParserError error : parserException.errors) {
                 addError(context, error);
             }
         }
         return false;
     }
 
-    private void build(final ParserContext context, final Token token) throws CompositeParserException {
+    private void build(final ParserContext context, final Token token) throws ParserException {
         handleAstError(context, token, builder, Builder::build);
     }
 
-    private void startRule(final ParserContext context, final RuleType ruleType) throws CompositeParserException {
+    private void startRule(final ParserContext context, final RuleType ruleType) throws ParserException {
         handleAstError(context, ruleType, builder, Builder::startRule);
     }
 
-    private void endRule(final ParserContext context, final RuleType ruleType) throws CompositeParserException {
+    private void endRule(final ParserContext context, final RuleType ruleType) throws ParserException {
         handleAstError(context, ruleType, builder, Builder::endRule);
     }
 
@@ -109,76 +109,76 @@ final class Parser<T> {
         return context.tokenQueue.isEmpty() ? context.tokenScanner.read() : context.tokenQueue.remove();
     }
 
-    private boolean match_EOF(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_EOF(final ParserContext context, final Token token) throws ParserException {
         return handleExternalError(context, token, TokenMatcher::match_EOF);
     }
 
-    private boolean match_Empty(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_Empty(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_Empty);
     }
 
-    private boolean match_Comment(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_Comment(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_Comment);
     }
 
-    private boolean match_TagLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_TagLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_TagLine);
     }
 
-    private boolean match_FeatureLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_FeatureLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_FeatureLine);
     }
 
-    private boolean match_RuleLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_RuleLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_RuleLine);
     }
 
-    private boolean match_BackgroundLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_BackgroundLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_BackgroundLine);
     }
 
-    private boolean match_ScenarioLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_ScenarioLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_ScenarioLine);
     }
 
-    private boolean match_ExamplesLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_ExamplesLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_ExamplesLine);
     }
 
-    private boolean match_StepLine(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_StepLine(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_StepLine);
     }
 
-    private boolean match_DocStringSeparator(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_DocStringSeparator(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_DocStringSeparator);
     }
 
-    private boolean match_TableRow(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_TableRow(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_TableRow);
     }
 
-    private boolean match_Language(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_Language(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_Language);
     }
 
-    private boolean match_Other(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_Other(final ParserContext context, final Token token) throws ParserException {
         if (token.isEOF()) return false;
         return handleExternalError(context, token, TokenMatcher::match_Other);
     }
 
-    private int matchToken(int state, Token token, ParserContext context) throws CompositeParserException {
+    private int matchToken(int state, Token token, ParserContext context) throws ParserException {
         int newState = switch (state) {
             case 0 -> matchTokenAt_0(token, context);
             case 1 -> matchTokenAt_1(token, context);
@@ -242,7 +242,7 @@ final class Parser<T> {
     }
 
     // Start
-    private int matchTokenAt_0(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_0(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 build(context, token);
@@ -292,7 +292,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:0>FeatureHeader:0>#Language:0
-    private int matchTokenAt_1(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_1(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 startRule(context, RuleType.Tags);
@@ -326,7 +326,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:0>FeatureHeader:1>Tags:0>#TagLine:0
-    private int matchTokenAt_2(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_2(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 build(context, token);
@@ -360,7 +360,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:0>FeatureHeader:2>#FeatureLine:0
-    private int matchTokenAt_3(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_3(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.FeatureHeader);
@@ -440,7 +440,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:0>FeatureHeader:3>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_4(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_4(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -519,7 +519,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:0>#BackgroundLine:0
-    private int matchTokenAt_5(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_5(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Background);
@@ -598,7 +598,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_6(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_6(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -676,7 +676,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:0>#StepLine:0
-    private int matchTokenAt_7(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_7(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Step);
@@ -766,7 +766,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-    private int matchTokenAt_8(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_8(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -862,7 +862,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_9(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_9(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -885,7 +885,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_10(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_10(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -969,7 +969,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-    private int matchTokenAt_11(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_11(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 build(context, token);
@@ -1004,7 +1004,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-    private int matchTokenAt_12(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_12(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Scenario);
@@ -1105,7 +1105,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_13(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_13(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -1207,7 +1207,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-    private int matchTokenAt_14(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_14(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Step);
@@ -1321,7 +1321,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-    private int matchTokenAt_15(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_15(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -1443,7 +1443,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_16(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_16(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -1466,7 +1466,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_17(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_17(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -1576,7 +1576,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-    private int matchTokenAt_18(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_18(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 build(context, token);
@@ -1611,7 +1611,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-    private int matchTokenAt_19(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_19(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Examples);
@@ -1726,7 +1726,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_20(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_20(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -1842,7 +1842,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-    private int matchTokenAt_21(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_21(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.ExamplesTable);
@@ -1956,7 +1956,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
-    private int matchTokenAt_22(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_22(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 build(context, token);
@@ -1990,7 +1990,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
-    private int matchTokenAt_23(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_23(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.RuleHeader);
@@ -2073,7 +2073,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_24(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_24(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -2155,7 +2155,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-    private int matchTokenAt_25(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_25(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Background);
@@ -2237,7 +2237,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_26(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_26(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -2318,7 +2318,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-    private int matchTokenAt_27(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_27(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Step);
@@ -2411,7 +2411,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-    private int matchTokenAt_28(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_28(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -2510,7 +2510,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_29(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_29(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -2533,7 +2533,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_30(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_30(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -2620,7 +2620,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
-    private int matchTokenAt_31(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_31(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 build(context, token);
@@ -2655,7 +2655,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
-    private int matchTokenAt_32(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_32(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Scenario);
@@ -2759,7 +2759,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_33(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_33(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -2864,7 +2864,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-    private int matchTokenAt_34(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_34(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Step);
@@ -2981,7 +2981,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
-    private int matchTokenAt_35(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_35(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -3106,7 +3106,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_36(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_36(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -3129,7 +3129,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_37(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_37(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -3242,7 +3242,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-    private int matchTokenAt_38(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_38(Token token, ParserContext context) throws ParserException {
         if (match_TagLine(context, token))
         {
                 build(context, token);
@@ -3277,7 +3277,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-    private int matchTokenAt_39(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_39(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Examples);
@@ -3395,7 +3395,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    private int matchTokenAt_40(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_40(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.Description);
@@ -3514,7 +3514,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
-    private int matchTokenAt_41(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_41(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.ExamplesTable);
@@ -3631,7 +3631,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_43(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_43(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -3654,7 +3654,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_44(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_44(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -3774,7 +3774,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-    private int matchTokenAt_45(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_45(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -3892,7 +3892,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_46(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_46(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -3915,7 +3915,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_47(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_47(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -4009,7 +4009,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-    private int matchTokenAt_48(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_48(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -4101,7 +4101,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_49(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_49(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -4124,7 +4124,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_50(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_50(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -4241,7 +4241,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-    private int matchTokenAt_51(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_51(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -4356,7 +4356,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
-    private int matchTokenAt_52(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_52(Token token, ParserContext context) throws ParserException {
         if (match_DocStringSeparator(context, token))
         {
                 build(context, token);
@@ -4379,7 +4379,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
-    private int matchTokenAt_53(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_53(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DocString);
@@ -4470,7 +4470,7 @@ final class Parser<T> {
     }
 
     // GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
-    private int matchTokenAt_54(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_54(Token token, ParserContext context) throws ParserException {
         if (match_EOF(context, token))
         {
                 endRule(context, RuleType.DataTable);
@@ -4559,7 +4559,7 @@ final class Parser<T> {
     }
 
 
-    private boolean lookahead_0(ParserContext context) throws CompositeParserException {
+    private boolean lookahead_0(ParserContext context) throws ParserException {
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;
@@ -4586,7 +4586,7 @@ final class Parser<T> {
         return match;
     }
 
-    private boolean lookahead_1(ParserContext context) throws CompositeParserException {
+    private boolean lookahead_1(ParserContext context) throws ParserException {
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;
@@ -4614,11 +4614,11 @@ final class Parser<T> {
     }
 
     interface Builder<T> {
-        void build(Token token) throws CompositeParserException;
+        void build(Token token) throws ParserException;
 
-        void startRule(RuleType ruleType) throws CompositeParserException;
+        void startRule(RuleType ruleType) throws ParserException;
 
-        void endRule(RuleType ruleType) throws CompositeParserException;
+        void endRule(RuleType ruleType) throws ParserException;
 
         T getResult();
 
@@ -4626,33 +4626,33 @@ final class Parser<T> {
     }
 
     interface TokenMatcher {
-        boolean match_EOF(Token token) throws CompositeParserException;
+        boolean match_EOF(Token token) throws ParserException;
         
-        boolean match_Empty(Token token) throws CompositeParserException;
+        boolean match_Empty(Token token) throws ParserException;
         
-        boolean match_Comment(Token token) throws CompositeParserException;
+        boolean match_Comment(Token token) throws ParserException;
         
-        boolean match_TagLine(Token token) throws CompositeParserException;
+        boolean match_TagLine(Token token) throws ParserException;
         
-        boolean match_FeatureLine(Token token) throws CompositeParserException;
+        boolean match_FeatureLine(Token token) throws ParserException;
         
-        boolean match_RuleLine(Token token) throws CompositeParserException;
+        boolean match_RuleLine(Token token) throws ParserException;
         
-        boolean match_BackgroundLine(Token token) throws CompositeParserException;
+        boolean match_BackgroundLine(Token token) throws ParserException;
         
-        boolean match_ScenarioLine(Token token) throws CompositeParserException;
+        boolean match_ScenarioLine(Token token) throws ParserException;
         
-        boolean match_ExamplesLine(Token token) throws CompositeParserException;
+        boolean match_ExamplesLine(Token token) throws ParserException;
         
-        boolean match_StepLine(Token token) throws CompositeParserException;
+        boolean match_StepLine(Token token) throws ParserException;
         
-        boolean match_DocStringSeparator(Token token) throws CompositeParserException;
+        boolean match_DocStringSeparator(Token token) throws ParserException;
         
-        boolean match_TableRow(Token token) throws CompositeParserException;
+        boolean match_TableRow(Token token) throws ParserException;
         
-        boolean match_Language(Token token) throws CompositeParserException;
+        boolean match_Language(Token token) throws ParserException;
         
-        boolean match_Other(Token token) throws CompositeParserException;
+        boolean match_Other(Token token) throws ParserException;
         
         void reset();
     }

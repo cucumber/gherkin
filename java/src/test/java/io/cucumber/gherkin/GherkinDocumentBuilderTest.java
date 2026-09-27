@@ -103,7 +103,7 @@ class GherkinDocumentBuilderTest {
         var parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));
 
         // When
-        CompositeParserException compositeParserException = assertThrows(CompositeParserException.class, () -> parser.parse("""
+        ParserException compositeParserException = assertThrows(ParserException.class, () -> parser.parse("""
                         Feature:
                           Scenario:
                             Given a table

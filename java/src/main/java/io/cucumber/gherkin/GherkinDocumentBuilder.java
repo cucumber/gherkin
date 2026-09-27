@@ -69,13 +69,13 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     @Override
-    public void endRule(RuleType ruleType) throws CompositeParserException {
+    public void endRule(RuleType ruleType) throws ParserException {
         AstNode node = stack.pop();
         Object transformedNode = getTransformedNode(node);
         requiredCurrentNode().add(node.ruleType, transformedNode);
     }
 
-    private Object getTransformedNode(AstNode node) throws CompositeParserException {
+    private Object getTransformedNode(AstNode node) throws ParserException {
         return switch (node.ruleType) {
             case Step -> {
                 Token stepLine = node.getToken(TokenType.StepLine);
@@ -249,7 +249,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private List<TableRow> getTableRows(AstNode node) throws CompositeParserException {
+    private List<TableRow> getTableRows(AstNode node) throws ParserException {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
         int tokenSize = tokens.size();
         List<TableRow> rows = new ArrayList<>(tokenSize);
@@ -263,7 +263,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private void ensureCellCount(List<TableRow> rows) throws CompositeParserException {
+    private void ensureCellCount(List<TableRow> rows) throws ParserException {
         if (rows.isEmpty())
             return;
 
@@ -273,7 +273,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
             TableRow row = rows.get(i);
             if (row.getCells().size() != firstRowCellsSize) {
                 var error = new ParserError.InConsistentCellCount(row.getLocation());
-                throw new CompositeParserException(error);
+                throw new ParserException(error);
             }
         }
     }

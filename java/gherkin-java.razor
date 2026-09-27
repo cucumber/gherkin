@@ -47,19 +47,19 @@ final class @Model.ParserClassName<T> {
         this.builder = builder;
     }
 
-    T parse(String source, String uri) throws CompositeParserException {
+    T parse(String source, String uri) throws ParserException {
         return parse(new TokenScanner(source), uri);
     }
 
-    T parse(TokenScanner tokenScanner, String uri) throws CompositeParserException {
+    T parse(TokenScanner tokenScanner, String uri) throws ParserException {
         return parse(tokenScanner, new GherkinTokenMatcher(), uri);
     }
 
-    T parse(String source, TokenMatcher tokenMatcher, String uri) throws CompositeParserException {
+    T parse(String source, TokenMatcher tokenMatcher, String uri) throws ParserException {
         return parse(new TokenScanner(source), tokenMatcher, uri);
     }
 
-    T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher, String uri) throws CompositeParserException {
+    T parse(TokenScanner tokenScanner, TokenMatcher tokenMatcher, String uri) throws ParserException {
         builder.reset(uri);
         tokenMatcher.reset();
 
@@ -81,13 +81,13 @@ final class @Model.ParserClassName<T> {
         endRule(context, RuleType.@Model.RuleSet.StartRule.Name);
 
         if (!context.errors.isEmpty()) {
-            throw new CompositeParserException(context.errors);
+            throw new ParserException(context.errors);
         }
 
         return builder.getResult();
     }
 
-    private void addError(ParserContext context, ParserError error) throws CompositeParserException {
+    private void addError(ParserContext context, ParserError error) throws ParserException {
         String newErrorMessage = error.getMessage();
         for (ParserError e : context.errors) {
             if (Objects.equals(e.getMessage(), newErrorMessage)) {
@@ -96,40 +96,40 @@ final class @Model.ParserClassName<T> {
         }
         context.errors.add(error);
         if (context.errors.size() > 10)
-            throw new CompositeParserException(context.errors);
+            throw new ParserException(context.errors);
     }
 
-    private <V> void handleAstError(ParserContext context, V value, Builder<T> b, final ThrowingBiConsumer<Builder<T>, V> action) throws CompositeParserException {
+    private <V> void handleAstError(ParserContext context, V value, Builder<T> b, final ThrowingBiConsumer<Builder<T>, V> action) throws ParserException {
         try {
             action.accept(b, value);
-        } catch (CompositeParserException compositeParserException) {
-            for (ParserError error : compositeParserException.errors) {
+        } catch (ParserException parserException) {
+            for (ParserError error : parserException.errors) {
                 addError(context, error);
             }
         }
     }
 
     private boolean handleExternalError(ParserContext context, Token token,
-                                        ThrowingBiPredicate<TokenMatcher, Token> action) throws CompositeParserException {
+                                        ThrowingBiPredicate<TokenMatcher, Token> action) throws ParserException {
         try {
             return action.test(context.tokenMatcher, token);
-        } catch (CompositeParserException compositeParserException) {
-            for (ParserError error : compositeParserException.errors) {
+        } catch (ParserException parserException) {
+            for (ParserError error : parserException.errors) {
                 addError(context, error);
             }
         }
         return false;
     }
 
-    private void build(final ParserContext context, final Token token) throws CompositeParserException {
+    private void build(final ParserContext context, final Token token) throws ParserException {
         handleAstError(context, token, builder, Builder::build);
     }
 
-    private void startRule(final ParserContext context, final RuleType ruleType) throws CompositeParserException {
+    private void startRule(final ParserContext context, final RuleType ruleType) throws ParserException {
         handleAstError(context, ruleType, builder, Builder::startRule);
     }
 
-    private void endRule(final ParserContext context, final RuleType ruleType) throws CompositeParserException {
+    private void endRule(final ParserContext context, final RuleType ruleType) throws ParserException {
         handleAstError(context, ruleType, builder, Builder::endRule);
     }
 
@@ -138,7 +138,7 @@ final class @Model.ParserClassName<T> {
     }
 @foreach(var rule in Model.RuleSet.TokenRules)
 {<text>
-    private boolean match_@(rule.Name.Replace("#", ""))(final ParserContext context, final Token token) throws CompositeParserException {
+    private boolean match_@(rule.Name.Replace("#", ""))(final ParserContext context, final Token token) throws ParserException {
         @if (rule.Name != "#EOF")
         {
         @:if (token.isEOF()) return false;
@@ -148,7 +148,7 @@ final class @Model.ParserClassName<T> {
 </text>
 }
 
-    private int matchToken(int state, Token token, ParserContext context) throws CompositeParserException {
+    private int matchToken(int state, Token token, ParserContext context) throws ParserException {
         int newState = switch (state) {
         @foreach(var state in Model.States.Values.Where(s => !s.IsEndState))
         {
@@ -164,7 +164,7 @@ final class @Model.ParserClassName<T> {
 {
 <text>
     // @Raw(state.Comment)
-    private int matchTokenAt_@(state.Id)(Token token, ParserContext context) throws CompositeParserException {
+    private int matchTokenAt_@(state.Id)(Token token, ParserContext context) throws ParserException {
         @foreach(var transition in state.Transitions)
         {
         @:if (@matchToken(transition.TokenType))
@@ -193,7 +193,7 @@ final class @Model.ParserClassName<T> {
 @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
 {
 <text>
-    private boolean lookahead_@(lookAheadHint.Id)(ParserContext context) throws CompositeParserException {
+    private boolean lookahead_@(lookAheadHint.Id)(ParserContext context) throws ParserException {
         Token token;
         Queue<Token> queue = new ArrayDeque<Token>();
         boolean match = false;
@@ -227,11 +227,11 @@ final class @Model.ParserClassName<T> {
 }
 
     interface Builder<T> {
-        void build(Token token) throws CompositeParserException;
+        void build(Token token) throws ParserException;
 
-        void startRule(RuleType ruleType) throws CompositeParserException;
+        void startRule(RuleType ruleType) throws ParserException;
 
-        void endRule(RuleType ruleType) throws CompositeParserException;
+        void endRule(RuleType ruleType) throws ParserException;
 
         T getResult();
 
@@ -241,7 +241,7 @@ final class @Model.ParserClassName<T> {
     interface TokenMatcher {
         @foreach(var rule in Model.RuleSet.TokenRules)
         {
-        @:boolean match_@(rule.Name.Replace("#", ""))(Token token) throws CompositeParserException;
+        @:boolean match_@(rule.Name.Replace("#", ""))(Token token) throws ParserException;
         @:
         }
         void reset();

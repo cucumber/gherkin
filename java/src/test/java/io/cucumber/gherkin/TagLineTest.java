@@ -38,12 +38,12 @@ class TagLineTest {
 
     @Test
     void throws_on_tags_with_spaces() {
-        assertThrows(CompositeParserException.class, () -> parse(0, "@this @is @a space separated @tag", line));
+        assertThrows(ParserException.class, () -> parse(0, "@this @is @a space separated @tag", line));
     }
 
     @Test
     void throws_on_tags_with_leading_spaces() {
-        assertThrows(CompositeParserException.class, () -> parse(0, "@ leadingSpace", line));
+        assertThrows(ParserException.class, () -> parse(0, "@ leadingSpace", line));
     }
 
     @Test

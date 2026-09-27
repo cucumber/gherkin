@@ -4,14 +4,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-final class CompositeParserException extends Exception {
+final class ParserException extends Exception {
     final List<ParserError> errors;
 
-    CompositeParserException(ParserError error) {
+    ParserException(ParserError error) {
         this(Collections.singletonList(error));
     }
 
-    CompositeParserException(List<ParserError> errors) {
+    ParserException(List<ParserError> errors) {
         super(getMessage(errors));
         this.errors = List.copyOf(errors);
     }

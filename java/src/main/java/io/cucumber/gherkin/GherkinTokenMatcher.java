@@ -1,11 +1,11 @@
 package io.cucumber.gherkin;
 
 import io.cucumber.gherkin.Parser.TokenMatcher;
+import io.cucumber.gherkin.ParserError.NoSuchLanguage;
 import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.StepKeywordType;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,14 +54,13 @@ final class GherkinTokenMatcher implements TokenMatcher {
         currentKeywordMatcher = requireNonNull(activeKeywordMatchers.computeIfAbsent(defaultLanguage, KeywordMatchers::of));
     }
 
-    private void setLanguageMatched(String language, @Nullable Location location) throws CompositeParserException {
+    private void setLanguageMatched(String language, @Nullable Location location) throws ParserException {
         if (language.equals(currentLanguage)) {
             return;
         }
         KeywordMatcher keywordMatcher = activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
         if (keywordMatcher == null) {
-            var error = new ParserError.NoSuchLanguage(language, location);
-            throw new CompositeParserException(error);
+            throw new ParserException(new NoSuchLanguage(language, location));
         }
         currentLanguage = language;
         currentKeywordMatcher = keywordMatcher;
@@ -115,7 +114,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     @Override
-    public boolean match_Language(Token token) throws CompositeParserException {
+    public boolean match_Language(Token token) throws ParserException {
         Line line = token.getRequiredLine();
         if (!line.startsWith(COMMENT_PREFIX_CHAR)) {
             return false;
@@ -131,7 +130,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     @Override
-    public boolean match_TagLine(Token token) throws CompositeParserException {
+    public boolean match_TagLine(Token token) throws ParserException {
         Line line = token.getRequiredLine();
         if (!line.startsWith(TAG_PREFIX_CHAR)) {
             return false;
