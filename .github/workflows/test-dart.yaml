@@ -52,14 +52,17 @@ jobs:
       - name: Install dependencies
         run: dart pub get --enforce-lockfile
 
+      - name: Install coverage tools
+        run: dart pub global activate coverage 1.15.0
+
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze
         run: dart analyze
 
-      - name: Test
-        run: dart test
+      - name: Test & validate coverage
+        run: dart pub global run coverage:test_with_coverage --fail-under 60
 
       - name: Run acceptance tests
         run: make acceptance
