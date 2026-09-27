@@ -1,8 +1,6 @@
 package io.cucumber.gherkin;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import io.cucumber.messages.types.Location;
 import org.jspecify.annotations.Nullable;
@@ -11,17 +9,17 @@ import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static java.util.Objects.requireNonNull;
 
-class ParserException extends Exception {
+class ParserException {
+    private final String message;
     final @Nullable Location location;
 
     protected ParserException(String message, @Nullable Location location) {
-        super(createMessage(message, location));
+        this.message = createMessage(message, location);
         this.location = location;
     }
 
-    @Override
     public String getMessage() {
-        return Objects.requireNonNull(super.getMessage());
+        return message;
     }
 
     private static String createMessage(String message, @Nullable Location location) {

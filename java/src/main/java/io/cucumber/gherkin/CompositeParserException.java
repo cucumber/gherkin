@@ -16,7 +16,7 @@ final class CompositeParserException extends Exception {
             return errors.get(0).getMessage();
         }
         return "Parser errors:\n" + errors.stream()
-                .map(Throwable::getMessage)
+                .map(ParserException::getMessage)
                 .collect(Collectors.joining("\n"));
     }
 }
