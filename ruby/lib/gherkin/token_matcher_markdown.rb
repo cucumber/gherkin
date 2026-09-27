@@ -62,12 +62,9 @@ module Gherkin
       true
     end
 
-    def match_Comment(token)
-      return false unless token.line.start_with?('|')
-      return false unless gfm_table_separator?(token.line.table_cells)
-
-      set_token_matched(token, :Empty, nil, nil, 0)
-      true
+    def match_Comment(_token)
+      # Do not enter Gherkin's Comment grammar for Markdown prose or table separators.
+      false
     end
 
     def match_Empty(token)

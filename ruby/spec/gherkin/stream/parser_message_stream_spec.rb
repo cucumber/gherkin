@@ -91,6 +91,101 @@ describe Gherkin::Stream::ParserMessageStream do
       end
     end
 
+    context 'when an unindented Markdown table appears before a Rule' do
+      let(:source_feature) do
+        Cucumber::Messages::Source.new(
+          uri: 'unindented-table.feature.md',
+          data: feature_content,
+          media_type: 'text/x.cucumber.gherkin+markdown'
+        )
+      end
+      let(:feature_content) do
+        <<~CONTENT
+          # Feature: Cheese
+
+          This table is not picked up by Gherkin (not indented 2+ spaces)
+
+          | foo | bar |
+          | --- | --- |
+          | boz | boo |
+
+          ## Rule: Nom nom nom
+        CONTENT
+      end
+
+      it 'does not add the table body row to the feature description' do
+        feature = gherkin_document.feature
+
+        expect(feature.description).to eq('')
+        expect(feature.children.first.rule.name).to eq('Nom nom nom')
+      end
+    end
+
+    context 'when a properly indented Examples table has a GFM separator' do
+      let(:source_feature) do
+        Cucumber::Messages::Source.new(
+          uri: 'examples.feature.md',
+          data: feature_content,
+          media_type: 'text/x.cucumber.gherkin+markdown'
+        )
+      end
+      let(:feature_content) do
+        <<~CONTENT
+          # Feature: Table example
+
+          ## Scenario Outline: table
+          * Given <value>
+
+          #### Examples: values
+
+            | value |
+            | ----- |
+            | a     |
+        CONTENT
+      end
+
+      let(:example_table_result) do
+        feature = gherkin_document.feature
+        example = feature.children.first.scenario.examples.first
+
+        {
+          feature_description: feature.description,
+          header_cells: example.table_header.cells.map(&:value),
+          body_rows: example.table_body.map { |row| row.cells.map(&:value) }
+        }
+      end
+
+      it 'skips the separator and retains the Examples rows' do
+        expect(example_table_result).to eq(
+          feature_description: '',
+          header_cells: ['value'],
+          body_rows: [['a']]
+        )
+      end
+    end
+
+    context 'when selected by a classic .feature URI' do
+      let(:source_feature) do
+        Cucumber::Messages::Source.new(
+          uri: 'classic.feature',
+          data: feature_content,
+          media_type: 'text/x.cucumber.gherkin+plain'
+        )
+      end
+      let(:feature_content) do
+        <<~CONTENT
+          Feature: Classic feature
+          # This is a Gherkin comment
+          Scenario: a scenario
+            Given a classic step
+        CONTENT
+      end
+
+      it 'continues to preserve classic Gherkin comments' do
+        expect(gherkin_document.comments.map(&:text)).to eq(['# This is a Gherkin comment'])
+      end
+    end
+
     context 'when the MDG table has inconsistent cells' do
       let(:source_feature) do
         Cucumber::Messages::Source.new(
