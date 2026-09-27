@@ -3,6 +3,7 @@ package io.cucumber.gherkin;
 import io.cucumber.messages.types.Location;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static io.cucumber.gherkin.Constants.COMMENT_PREFIX_CHAR;
@@ -17,7 +18,7 @@ final class TagLine {
 
     }
 
-    static List<LineSpan> parse(int indent, String text, Location location) {
+    static List<LineSpan> parse(int indent, String text, Location location) throws CompositeParserException {
         int textLength = text.length();
         // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
         // so there is always at least one tag, and it sits at the start of the
@@ -54,7 +55,8 @@ final class TagLine {
                 indexStartPreviousTag = indexStartCurrentTag;
                 int column = indent + totalCodePointCount + COLUMN_OFFSET;
                 if (containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)) {
-                    throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+                    var exception = new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+                    throw new CompositeParserException(Collections.singletonList(exception));
                 }
                 // build the line span
                 String token = text.substring(indexStartCurrentTag, indexEndCurrentTag);

@@ -69,13 +69,13 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     @Override
-    public void endRule(RuleType ruleType) {
+    public void endRule(RuleType ruleType) throws CompositeParserException {
         AstNode node = stack.pop();
         Object transformedNode = getTransformedNode(node);
         requiredCurrentNode().add(node.ruleType, transformedNode);
     }
 
-    private Object getTransformedNode(AstNode node) {
+    private Object getTransformedNode(AstNode node) throws CompositeParserException {
         return switch (node.ruleType) {
             case Step -> {
                 Token stepLine = node.getToken(TokenType.StepLine);
@@ -249,7 +249,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private List<TableRow> getTableRows(AstNode node) {
+    private List<TableRow> getTableRows(AstNode node) throws CompositeParserException {
         List<Token> tokens = node.getTokens(TokenType.TableRow);
         int tokenSize = tokens.size();
         List<TableRow> rows = new ArrayList<>(tokenSize);
@@ -263,7 +263,7 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
     }
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    private void ensureCellCount(List<TableRow> rows) {
+    private void ensureCellCount(List<TableRow> rows) throws CompositeParserException {
         if (rows.isEmpty())
             return;
 
@@ -272,7 +272,8 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
             TableRow row = rows.get(i);
             if (row.getCells().size() != firstRowCellsSize) {
-                throw new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
+                var error = new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
+                throw new CompositeParserException(Collections.singletonList(error));
             }
         }
     }

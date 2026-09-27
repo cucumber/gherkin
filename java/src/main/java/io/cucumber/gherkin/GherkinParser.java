@@ -1,6 +1,5 @@
 package io.cucumber.gherkin;
 
-import io.cucumber.gherkin.ParserException.CompositeParserException;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.ParseError;
@@ -127,8 +126,6 @@ public final class GherkinParser {
             messages.addAll(composite.errors.stream()
                     .map(error -> createParseError(error, uri))
                     .collect(toList()));
-        } catch (ParserException error) {
-            messages.add(createParseError(error, uri));
         }
         return messages;
     }

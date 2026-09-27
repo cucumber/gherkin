@@ -15,7 +15,7 @@ class TagLineTest {
     final Location line = Locations.atLine(12);
 
     @Test
-    void allows_any_non_space_characters_in_a_tag() {
+    void allows_any_non_space_characters_in_a_tag() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(3, "@foo:bar  @zap\uD83E\uDD52yo", line);
 
         assertEquals(asList(
@@ -25,7 +25,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags() {
+    void finds_tags() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@this @is @a @tag", line);
 
         assertEquals(asList(
@@ -38,28 +38,28 @@ class TagLineTest {
 
     @Test
     void throws_on_tags_with_spaces() {
-        assertThrows(ParserException.class, () -> parse(0, "@this @is @a space separated @tag", line));
+        assertThrows(CompositeParserException.class, () -> parse(0, "@this @is @a space separated @tag", line));
     }
 
     @Test
     void throws_on_tags_with_leading_spaces() {
-        assertThrows(ParserException.class, () -> parse(0, "@ leadingSpace", line));
+        assertThrows(CompositeParserException.class, () -> parse(0, "@ leadingSpace", line));
     }
 
     @Test
-    void ignores_empty_tag() {
+    void ignores_empty_tag() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@", line);
         assertEquals(Collections.emptyList(), gherkinLineSpans);
     }
 
     @Test
-    void ignores_empty_tags() {
+    void ignores_empty_tags() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@@", line);
         assertEquals(Collections.emptyList(), gherkinLineSpans);
     }
 
     @Test
-    void finds_tags__trim_whitespace() {
+    void finds_tags__trim_whitespace() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(4, "@this @is  @a @tag", line);
         assertEquals(asList(
                 new LineSpan(5, "@this"),
@@ -70,7 +70,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags__comment_after_tag() {
+    void finds_tags__comment_after_tag() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@this @is #acomment", line);
         assertEquals(asList(
                 new LineSpan(1, "@this"),
@@ -79,7 +79,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags__comment_inside_tag_preceded_by_nbsp() {
+    void finds_tags__comment_inside_tag_preceded_by_nbsp() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@this @is\u202F#acomment", line);
         assertEquals(asList(
                 new LineSpan(1, "@this"),
@@ -88,7 +88,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags__comment_inside_tag() {
+    void finds_tags__comment_inside_tag() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@comment_tag#2 #a comment", line);
         assertEquals(asList(
                 new LineSpan(1, "@comment_tag#2")
@@ -96,7 +96,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags__commented_before_tag() {
+    void finds_tags__commented_before_tag() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@this @is #@a commented tag", line);
         assertEquals(asList(
                 new LineSpan(1, "@this"),
@@ -105,7 +105,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags__commented_multiple_tags() {
+    void finds_tags__commented_multiple_tags() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@this @is #@a @commented @sequence of tags", line);
         assertEquals(asList(
                 new LineSpan(1, "@this"),
@@ -114,7 +114,7 @@ class TagLineTest {
     }
 
     @Test
-    void finds_tags_with_number() {
+    void finds_tags_with_number() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "@ISSUE#123", line);
         assertEquals(asList(
                 new LineSpan(1, "@ISSUE#123")
@@ -122,13 +122,13 @@ class TagLineTest {
     }
 
     @Test
-    void parse_returns_empty_list_when_empty_line() {
+    void parse_returns_empty_list_when_empty_line() throws Exception {
         List<LineSpan> gherkinLineSpans = parse(0, "", line);
         assertEquals(Collections.emptyList(), gherkinLineSpans);
     }
 
     @Test
-    void parse_computes_codepoint_column_properly() {
+    void parse_computes_codepoint_column_properly() throws Exception {
         // each emoji here is two chars in UTF-16, but one column in Gherkin
         List<LineSpan> gherkinLineSpans = parse(0, " @😭 @😁 @💺🙄", line);
         assertEquals(2, gherkinLineSpans.get(0).column);

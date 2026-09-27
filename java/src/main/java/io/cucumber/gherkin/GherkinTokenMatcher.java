@@ -5,6 +5,7 @@ import io.cucumber.messages.types.Location;
 import io.cucumber.messages.types.StepKeywordType;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import static io.cucumber.gherkin.Constants.TAG_PREFIX_CHAR;
 import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static io.cucumber.gherkin.Parser.TokenType;
+import static java.util.Objects.requireNonNull;
 
 final class GherkinTokenMatcher implements TokenMatcher {
 
@@ -35,7 +37,6 @@ final class GherkinTokenMatcher implements TokenMatcher {
 
     GherkinTokenMatcher(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
-        this.currentKeywordMatcher = requireKeywordMatcher(defaultLanguage, new Location(0, 0));
         reset();
     }
 
@@ -49,24 +50,21 @@ final class GherkinTokenMatcher implements TokenMatcher {
         // It could be called only once, but there is no measurable impact with the profiler
         activeDocStringSeparator = null;
         indentToRemove = 0;
-        setLanguageMatched(defaultLanguage, null);
+        currentLanguage = defaultLanguage;
+        currentKeywordMatcher = requireNonNull(activeKeywordMatchers.computeIfAbsent(defaultLanguage, KeywordMatchers::of));
     }
 
-    private void setLanguageMatched(String language, @Nullable Location location) {
+    private void setLanguageMatched(String language, @Nullable Location location) throws CompositeParserException {
         if (language.equals(currentLanguage)) {
             return;
         }
-        KeywordMatcher keywordMatcher = requireKeywordMatcher(language, location);
-        currentLanguage = language;
-        currentKeywordMatcher = keywordMatcher;
-    }
-
-    private KeywordMatcher requireKeywordMatcher(String language, @Nullable Location location) {
         KeywordMatcher keywordMatcher = activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
         if (keywordMatcher == null) {
-            throw new ParserException.NoSuchLanguageException(language, location);
+            var error = new ParserException.NoSuchLanguageException(language, location);
+            throw new CompositeParserException(Collections.singletonList(error));
         }
-        return keywordMatcher;
+        currentLanguage = language;
+        currentKeywordMatcher = keywordMatcher;
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, @Nullable String text, @Nullable String keyword, int indent, @Nullable StepKeywordType keywordType, @Nullable List<LineSpan> items) {
@@ -117,7 +115,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     @Override
-    public boolean match_Language(Token token) {
+    public boolean match_Language(Token token) throws CompositeParserException {
         Line line = token.getRequiredLine();
         if (!line.startsWith(COMMENT_PREFIX_CHAR)) {
             return false;
@@ -133,7 +131,7 @@ final class GherkinTokenMatcher implements TokenMatcher {
     }
 
     @Override
-    public boolean match_TagLine(Token token) {
+    public boolean match_TagLine(Token token) throws CompositeParserException {
         Line line = token.getRequiredLine();
         if (!line.startsWith(TAG_PREFIX_CHAR)) {
             return false;

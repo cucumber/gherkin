@@ -1,6 +1,7 @@
 package io.cucumber.gherkin;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.cucumber.messages.types.Location;
@@ -10,17 +11,17 @@ import static io.cucumber.gherkin.Locations.COLUMN_OFFSET;
 import static io.cucumber.gherkin.Locations.atColumn;
 import static java.util.Objects.requireNonNull;
 
-class ParserException extends RuntimeException {
+class ParserException extends Exception {
     final @Nullable Location location;
-
-    protected ParserException(String message) {
-        super(message);
-        location = null;
-    }
 
     protected ParserException(String message, @Nullable Location location) {
         super(createMessage(message, location));
         this.location = location;
+    }
+
+    @Override
+    public String getMessage() {
+        return Objects.requireNonNull(super.getMessage());
     }
 
     private static String createMessage(String message, @Nullable Location location) {
@@ -89,18 +90,4 @@ class ParserException extends RuntimeException {
         }
     }
 
-    static final class CompositeParserException extends ParserException {
-        final List<ParserException> errors;
-
-        CompositeParserException(List<ParserException> errors) {
-            super(getMessage(errors));
-            this.errors = List.copyOf(errors);
-        }
-
-        private static String getMessage(List<ParserException> errors) {
-            return "Parser errors:\n" + errors.stream()
-                    .map(Throwable::getMessage)
-                    .collect(Collectors.joining("\n"));
-        }
-    }
 }
