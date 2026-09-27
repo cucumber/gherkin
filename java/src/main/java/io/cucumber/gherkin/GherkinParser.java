@@ -121,8 +121,8 @@ public final class GherkinParser {
                     messages.add(Envelope.of(pickle));
                 }
             }
-        } catch (ParserException composite) {
-            composite.errors.stream()
+        } catch (ParserException parserException) {
+            parserException.errors.stream()
                     .map(error -> createParseError(error, uri))
                     .forEach(messages::add);
         }
