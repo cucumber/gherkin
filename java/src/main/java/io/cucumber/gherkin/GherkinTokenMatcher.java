@@ -51,19 +51,23 @@ final class GherkinTokenMatcher implements TokenMatcher {
         activeDocStringSeparator = null;
         indentToRemove = 0;
         currentLanguage = defaultLanguage;
-        currentKeywordMatcher = requireNonNull(activeKeywordMatchers.computeIfAbsent(defaultLanguage, KeywordMatchers::of));
+        currentKeywordMatcher = requireNonNull(findKeywordMatcher(defaultLanguage));
     }
 
     private void setLanguageMatched(String language, @Nullable Location location) throws ParserException {
         if (language.equals(currentLanguage)) {
             return;
         }
-        KeywordMatcher keywordMatcher = activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
+        var keywordMatcher = findKeywordMatcher(language);
         if (keywordMatcher == null) {
             throw new ParserException(new NoSuchLanguage(language, location));
         }
         currentLanguage = language;
         currentKeywordMatcher = keywordMatcher;
+    }
+
+    private @Nullable KeywordMatcher findKeywordMatcher(String language) {
+        return activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
     }
 
     private void setTokenMatched(Token token, TokenType matchedType, @Nullable String text, @Nullable String keyword, int indent, @Nullable StepKeywordType keywordType, @Nullable List<LineSpan> items) {
