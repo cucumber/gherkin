@@ -117,7 +117,7 @@ class GherkinDocumentBuilderTest {
         Assertions.assertThat(compositeParserException).hasMessageContaining("inconsistent cell count within the table");
         Assertions.assertThat(compositeParserException.errors)
                 .singleElement()
-                .extracting(e -> e.location)
+                .extracting(ParserError::getLocation)
                         .isEqualTo(new Location(5, 7));
     }
 

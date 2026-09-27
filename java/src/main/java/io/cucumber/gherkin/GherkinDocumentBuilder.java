@@ -272,8 +272,8 @@ final class GherkinDocumentBuilder implements Builder<GherkinDocument> {
         for (int i = 0, rowsSize = rows.size(); i < rowsSize; i++) {
             TableRow row = rows.get(i);
             if (row.getCells().size() != firstRowCellsSize) {
-                var error = new ParserException.AstBuilderException("inconsistent cell count within the table", row.getLocation());
-                throw new CompositeParserException(Collections.singletonList(error));
+                var error = new ParserError.InConsistentCellCount(row.getLocation());
+                throw new CompositeParserException(error);
             }
         }
     }

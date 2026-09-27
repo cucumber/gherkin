@@ -55,8 +55,8 @@ final class TagLine {
                 indexStartPreviousTag = indexStartCurrentTag;
                 int column = indent + totalCodePointCount + COLUMN_OFFSET;
                 if (containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)) {
-                    var exception = new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
-                    throw new CompositeParserException(Collections.singletonList(exception));
+                    var error = new ParserError.TagMayNotContainWhitespace(Locations.atColumn(location, column));
+                    throw new CompositeParserException(error);
                 }
                 // build the line span
                 String token = text.substring(indexStartCurrentTag, indexEndCurrentTag);

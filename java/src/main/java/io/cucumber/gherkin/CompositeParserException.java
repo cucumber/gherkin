@@ -1,22 +1,27 @@
 package io.cucumber.gherkin;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 final class CompositeParserException extends Exception {
-    final List<ParserException> errors;
+    final List<ParserError> errors;
 
-    CompositeParserException(List<ParserException> errors) {
+    CompositeParserException(ParserError error) {
+        this(Collections.singletonList(error));
+    }
+
+    CompositeParserException(List<ParserError> errors) {
         super(getMessage(errors));
         this.errors = List.copyOf(errors);
     }
 
-    private static String getMessage(List<ParserException> errors) {
+    private static String getMessage(List<ParserError> errors) {
         if (errors.size() == 1) {
             return errors.get(0).getMessage();
         }
         return "Parser errors:\n" + errors.stream()
-                .map(ParserException::getMessage)
+                .map(ParserError::getMessage)
                 .collect(Collectors.joining("\n"));
     }
 }

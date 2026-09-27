@@ -60,8 +60,8 @@ final class GherkinTokenMatcher implements TokenMatcher {
         }
         KeywordMatcher keywordMatcher = activeKeywordMatchers.computeIfAbsent(language, KeywordMatchers::of);
         if (keywordMatcher == null) {
-            var error = new ParserException.NoSuchLanguageException(language, location);
-            throw new CompositeParserException(Collections.singletonList(error));
+            var error = new ParserError.NoSuchLanguage(language, location);
+            throw new CompositeParserException(error);
         }
         currentLanguage = language;
         currentKeywordMatcher = keywordMatcher;
