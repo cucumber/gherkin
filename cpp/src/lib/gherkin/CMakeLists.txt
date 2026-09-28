@@ -78,8 +78,8 @@ target_link_libraries(
 set_target_properties(
     cucumber_gherkin_lib
     PROPERTIES
-        VERSION ${VERSION}
-        SOVERSION ${VER_MAJOR}
+        VERSION ${PROJECT_VERSION}
+        SOVERSION ${PROJECT_VERSION_MAJOR}
         EXPORT_NAME gherkin
         OUTPUT_NAME cucumber_gherkin
 )
