@@ -4,11 +4,27 @@ require 'cucumber/messages'
 
 require_relative '../parser'
 require_relative '../token_matcher'
+require_relative '../token_matcher_markdown'
 require_relative '../pickles/compiler'
 
 module Gherkin
   module Stream
     class ParserMessageStream
+      PLAIN_MEDIA_TYPE = 'text/x.cucumber.gherkin+plain'
+      MARKDOWN_MEDIA_TYPE = 'text/x.cucumber.gherkin+markdown'
+
+      def self.markdown_uri?(uri)
+        uri.to_s.end_with?('.feature.md')
+      end
+
+      def self.media_type_for_uri(uri)
+        markdown_uri?(uri) ? MARKDOWN_MEDIA_TYPE : PLAIN_MEDIA_TYPE
+      end
+
+      def self.markdown_source?(source)
+        source.media_type == MARKDOWN_MEDIA_TYPE || markdown_uri?(source.uri)
+      end
+
       def initialize(paths: [], sources: [], options: {})
         @paths = paths
         @sources = sources
@@ -75,23 +91,35 @@ module Gherkin
             source = Cucumber::Messages::Source.new(
               uri: path,
               data: File.open(path, 'r:UTF-8', &:read),
-              media_type: 'text/x.cucumber.gherkin+plain'
+              media_type: self.class.media_type_for_uri(path)
             )
-            yielder.yield(source)
+            yielder.yield(source_with_markdown_media_type(source))
           end
           @sources.each do |source|
-            yielder.yield(source)
+            yielder.yield(source_with_markdown_media_type(source))
           end
         end
       end
 
+      def source_with_markdown_media_type(source)
+        return source unless self.class.markdown_uri?(source.uri)
+        return source if source.media_type == MARKDOWN_MEDIA_TYPE
+
+        Cucumber::Messages::Source.new(
+          uri: source.uri,
+          data: source.data,
+          media_type: MARKDOWN_MEDIA_TYPE
+        )
+      end
+
       def build_gherkin_document(source)
-        if @options[:default_dialect]
-          token_matcher = TokenMatcher.new(@options[:default_dialect])
-          gherkin_document = @parser.parse(source.data, token_matcher)
-        else
-          gherkin_document = @parser.parse(source.data)
-        end
+        dialect_name = @options[:default_dialect] || 'en'
+        token_matcher = if self.class.markdown_source?(source)
+                          GherkinInMarkdownTokenMatcher.new(dialect_name)
+                        else
+                          TokenMatcher.new(dialect_name)
+                        end
+        gherkin_document = @parser.parse(source.data, token_matcher)
         Cucumber::Messages::GherkinDocument.new(
           uri: source.uri,
           feature: gherkin_document.feature,

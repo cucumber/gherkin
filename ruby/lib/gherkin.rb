@@ -25,7 +25,7 @@ module Gherkin
     Cucumber::Messages::Source.new(
       uri: uri,
       data: data,
-      media_type: 'text/x.cucumber.gherkin+plain'
+      media_type: Stream::ParserMessageStream.media_type_for_uri(uri)
     )
   end
 end
