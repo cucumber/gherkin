@@ -2,9 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import TypedDict
-
-from typing_extensions import Self
+from typing import Self, TypedDict
 
 DIALECT_FILE_PATH = Path(__file__).parent / "gherkin-languages.json"
 

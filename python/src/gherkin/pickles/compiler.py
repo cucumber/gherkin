@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable, Sequence
-from typing import Any, TypedDict, cast, overload
+from typing import Any, NotRequired, TypedDict, cast, overload
 
-from typing_extensions import NotRequired, TypeIs
+from typing_extensions import TypeIs
 
 from gherkin.parser_types import (
     BackgroundEnvelope,
