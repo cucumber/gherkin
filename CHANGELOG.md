@@ -9,6 +9,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
+- [Python] Dropped support for Python 3.10
 
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
