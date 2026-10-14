@@ -2,7 +2,9 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
+/// One line of Gherkin source.
 class GherkinLine {
+  /// Creates a line from its text and 1-based line number.
   GherkinLine(this._lineText, this._lineNumber)
     : _trimmedLineText = _lineText.trimLeft();
 
@@ -26,6 +28,10 @@ class GherkinLine {
   final int _lineNumber;
   final String _trimmedLineText;
 
+  /// The line text with [indentToRemove] leading characters removed.
+  ///
+  /// Returns the left-trimmed line when [indentToRemove] is negative or
+  /// greater than [indent].
   String getLineText([int indentToRemove = 0]) {
     if (indentToRemove < 0 || indentToRemove > indent) {
       return _trimmedLineText;
@@ -33,18 +39,26 @@ class GherkinLine {
     return _lineText.substring(indentToRemove);
   }
 
+  /// The remainder of the trimmed line after skipping [length] characters.
   String getRestTrimmed(int length) =>
       _trimmedLineText.substring(length).trim();
 
+  /// The number of leading whitespace characters on this line.
   int get indent => _lineText.length - _trimmedLineText.length;
 
+  /// Whether this line contains only whitespace.
   bool get isEmptyLine => _trimmedLineText.isEmpty;
 
+  /// Whether the trimmed line starts with [prefix].
   bool startsWith(String prefix) => _trimmedLineText.startsWith(prefix);
 
+  /// Whether the trimmed line starts with [text] followed by `:`.
   bool startsWithTitleKeyword(String text) =>
       startsWith('$text$titleKeywordSeparator');
 
+  /// The tags on this line, ignoring a trailing comment.
+  ///
+  /// Throws a [ParserException] when a tag contains whitespace.
   Iterable<GherkinLineSpan> get tags {
     final tags = <GherkinLineSpan>[];
     final commentMatch = _commentSuffix.firstMatch(_trimmedLineText);
@@ -77,6 +91,10 @@ class GherkinLine {
     return tags;
   }
 
+  /// The cells in this table row.
+  ///
+  /// Cells are split on unescaped `|` characters. `\n`, `\\`, and `\|` are
+  /// unescaped inside a cell. Surrounding horizontal whitespace is removed.
   Iterable<GherkinLineSpan> get tableCells {
     final lineSpans = <GherkinLineSpan>[];
     var cellBuffer = StringBuffer();
@@ -132,10 +150,14 @@ class GherkinLine {
   }
 }
 
+/// A text span on a [GherkinLine], located by column.
 class GherkinLineSpan {
+  /// Creates a span at [column] containing [text].
   const GherkinLineSpan(this.column, this.text);
 
+  /// The 1-based column where [text] begins.
   final int column;
 
+  /// The span text.
   final String text;
 }

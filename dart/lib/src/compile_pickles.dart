@@ -1,5 +1,12 @@
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
+/// Compiles [gherkinDocument] at [uri] into executable pickles.
+///
+/// [idGenerator] supplies an ID for each pickle and pickle step. Background
+/// steps are prepended to each scenario. A scenario outline becomes one
+/// pickle per examples row, with angle-bracket placeholders replaced by
+/// that row's cell values. Returns an empty list when [gherkinDocument] has
+/// no feature.
 List<messages.Pickle> compilePickles(
   messages.GherkinDocument gherkinDocument,
   String uri,

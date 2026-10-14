@@ -3,7 +3,12 @@ import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
+/// A [TokenScanner] that reads tokens from a Gherkin source string.
 class StringTokenScanner implements TokenScanner {
+  /// Creates a scanner that yields one token per line of [source].
+  ///
+  /// A trailing newline does not produce an extra empty line. An empty
+  /// [source] yields only an end-of-file token.
   StringTokenScanner(String source) : _linesIterator = _splitLines(source);
 
   static Iterator<String> _splitLines(String source) {
