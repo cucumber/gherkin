@@ -5,8 +5,8 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/gherkin_document_builder.dart';
 import 'package:cucumber_gherkin/src/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
-import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 /// Controls envelopes emitted by [generateMessages] and ID generation.
@@ -57,7 +57,7 @@ List<messages.Envelope> generateMessages(
 
   final builder = GherkinDocumentBuilder(idGenerator);
   final parser = Parser<messages.GherkinDocument>(builder);
-  final tokenScanner = StringTokenScanner(source.data);
+  final tokenScanner = TokenScanner(source.data);
 
   final messages.GherkinDocument gherkinDocument;
   try {

@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:cucumber_gherkin/src/gherkin_token_matcher.dart';
 import 'package:cucumber_gherkin/src/language/dialects_builtin.g.dart';
-import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
 import 'package:cucumber_gherkin/src/parser/token.dart';
+import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 
 void main(List<String> args) {
   final matcher = GherkinTokenMatcher(builtinDialects);
@@ -14,7 +14,7 @@ void main(List<String> args) {
     final builder = _TokenFormatterBuilder();
     Parser<void>(
       builder,
-    ).parse(StringTokenScanner(File(path).readAsStringSync()), matcher);
+    ).parse(TokenScanner(File(path).readAsStringSync()), matcher);
     stdout.write(builder.tokensText);
   }
 }
