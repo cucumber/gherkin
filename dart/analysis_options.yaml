@@ -15,6 +15,7 @@ analyzer:
   exclude:
     - test/.test_coverage.dart
     - lib/generated_plugin_registrant.dart
+    - lib/src/**/*.g.dart
 
 formatter:
   trailing_commas: preserve
