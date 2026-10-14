@@ -348,13 +348,16 @@ static const wchar_t* create_expanded_text(const wchar_t* original_text, const T
             for (j = 0; j < example_header->table_cells->cell_count; ++j) {
                 int cell_text_length = wcslen(example_header->table_cells->table_cells[j].value);
                 if (cell_text_length < length - i - 1 &&
-                        wcsncmp(original_text + i + 1, example_header->table_cells->table_cells[j].value, cell_text_length) == 0) {
+                        wcsncmp(original_text + i + 1, example_header->table_cells->table_cells[j].value, cell_text_length) == 0 &&
+                        original_text[i + cell_text_length + 1] == L'>') {
                     ReplacementItem* item = (ReplacementItem*)malloc(sizeof(ReplacementItem));
                     item->item_delete = (item_delete_function)ReplacementItem_delete;
                     item->start_position = i;
                     item->old_length = cell_text_length + 2;
                     item->new_text = body_row->table_cells->table_cells[j].value;
                     ItemQueue_add(replacement_list, (Item*)item);
+                    i = i + cell_text_length + 1;
+                    break;
                 }
             }
         }
