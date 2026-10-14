@@ -2,11 +2,16 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:cucumber_gherkin/src/parser/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
+/// Matches tokens using the keywords of a Gherkin dialect.
 class GherkinTokenMatcher implements TokenMatcher {
+  /// Creates a matcher for the given dialect map.
+  ///
+  /// The optional language is the dialect used until a language header
+  /// selects another one. It defaults to `en`.
   GherkinTokenMatcher(this._dialects, [this._defaultLanguage = 'en']) {
     _useLanguage(
       _defaultLanguage,

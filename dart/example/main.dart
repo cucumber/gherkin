@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
 
 void main() {
@@ -6,5 +8,5 @@ void main() {
     'minimal.feature',
   );
 
-  print('Generated ${envelopes.length} message envelopes.');
+  stdout.writeln('Generated ${envelopes.length} message envelopes.');
 }

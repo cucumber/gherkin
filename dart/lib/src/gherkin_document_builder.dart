@@ -2,12 +2,14 @@ import 'dart:collection';
 
 import 'package:cucumber_gherkin/src/ast_node.dart';
 import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
-import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/builder.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
+/// Builds a [messages.GherkinDocument] from tokens and grammar-rule events.
 class GherkinDocumentBuilder implements Builder<messages.GherkinDocument> {
+  /// Creates a builder that assigns AST element IDs with the given function.
   GherkinDocumentBuilder(this._idGenerator) {
     reset();
   }

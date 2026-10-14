@@ -1,5 +1,5 @@
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
-import 'package:cucumber_gherkin/src/language/string_token_scanner.dart';
+import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -10,7 +10,7 @@ void main() {
       '    Given the minimalism\n';
 
   test('represents EOF without a line', () {
-    final token = StringTokenScanner('').read();
+    final token = TokenScanner('').read();
 
     expect(token.isEof, isTrue);
     expect(token.line, isNull);
