@@ -1,5 +1,5 @@
-import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 
 class AstNode {
   AstNode(this.ruleType);

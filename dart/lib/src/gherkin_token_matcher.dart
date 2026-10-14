@@ -2,8 +2,8 @@ import 'package:cucumber_gherkin/src/exceptions/exceptions.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_constants.dart';
 import 'package:cucumber_gherkin/src/language/gherkin_language_keywords.dart';
 import 'package:cucumber_gherkin/src/parser/gherkin_line.dart';
-import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_gherkin/src/parser/parser.g.dart';
+import 'package:cucumber_gherkin/src/parser/token.dart';
 import 'package:cucumber_messages/cucumber_messages.dart' as messages;
 
 class GherkinTokenMatcher implements TokenMatcher {

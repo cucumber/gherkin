@@ -1,5 +1,3 @@
-library;
-
 const tagPrefix = '@';
 
 const commentPrefix = '#';
