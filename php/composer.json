@@ -1,7 +1,12 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "cucumber/gherkin",
     "description": "Gherkin parser",
-    "author": "Cucumber Limited <cukes@googlegroups.com>",
+    "authors": [
+        {
+            "name": "Cucumber Limited <cukes@googlegroups.com>"
+        }
+    ],
     "license": "MIT",
     "type": "library",
     "autoload": {
@@ -20,7 +25,7 @@
     "require-dev": {
         "vimeo/psalm": "^6",
         "phpunit/phpunit": "^13",
-        "psalm/plugin-phpunit": "^0.19",
+        "psalm/plugin-phpunit": "^0",
         "friendsofphp/php-cs-fixer": "^3"
     }
 }
