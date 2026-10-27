@@ -461,7 +461,8 @@ static wchar_t* create_multi_line_text_from_tokens(int text_length, int line_cou
     if (text_length == 0) {
         return (wchar_t*)0;
     }
-    wchar_t* text = (wchar_t*)malloc(text_length * sizeof(wchar_t));
+    wchar_t* text;
+    text = (wchar_t *) malloc((text_length + 1) * sizeof(wchar_t));
     int current_pos = 0;
     Token* token;
     int i;
