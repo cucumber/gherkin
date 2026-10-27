@@ -63,6 +63,8 @@ static const wchar_t* get_doc_string_text(AstNode* ast_node);
 
 static wchar_t* create_multi_line_text_from_tokens(int text_length, int line_count, ItemQueue* line_queue);
 
+static int min(int a, int b);
+
 static const wchar_t* get_description(AstNode* ast_node);
 
 static const Comments* get_comments(AstBuilder* ast_builder);
@@ -441,7 +443,7 @@ static const wchar_t* get_description_text(AstNode* ast_node) {
         }
         queue_item = queue_item->next;
     }
-    text_length += line_count;
+    text_length += line_count; // account for new lines
     return create_multi_line_text_from_tokens(text_length, line_count, line_queue);
 }
 
@@ -450,7 +452,8 @@ static const wchar_t* get_doc_string_text(AstNode* ast_node) {
     int text_length = 0;
     QueueItem* queue_item = line_queue->first;
     while (queue_item) {
-        text_length += wcslen(((Token*)queue_item->item)->matched_text) + 1;
+        text_length += wcslen(((Token*)queue_item->item)->matched_text);
+        text_length += 1; // account for new line
         queue_item = queue_item->next;
     }
     int line_count = ItemQueue_size(line_queue);
@@ -462,20 +465,28 @@ static wchar_t* create_multi_line_text_from_tokens(int text_length, int line_cou
         return (wchar_t*)0;
     }
     wchar_t* text;
-    text = (wchar_t *) malloc((text_length + 1) * sizeof(wchar_t));
+    text = (wchar_t *) malloc(text_length * sizeof(wchar_t));
     int current_pos = 0;
     Token* token;
     int i;
     for (i = 0; i < line_count; ++i) {
         token = (Token*)ItemQueue_remove(line_queue);
-        int length = wcslen(token->matched_text);
-        wmemcpy(&text[current_pos], token->matched_text, length);
-        text[current_pos + length] = L'\n';
-        current_pos += length + 1;
+        if(current_pos < text_length){
+            int length = min(text_length - current_pos, wcslen(token->matched_text));
+            wmemcpy(&text[current_pos], token->matched_text, length);
+            current_pos += length;
+        }
+        if(current_pos < text_length) {
+            text[current_pos++] = L'\n';
+        }
         Token_delete(token);
     }
     text[text_length - 1] = L'\0';
     return text;
+}
+
+static int min(int a, int b) {
+    return a > b ? b : a;
 }
 
 static const wchar_t* get_description(AstNode* ast_node) {
