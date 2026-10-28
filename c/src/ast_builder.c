@@ -453,12 +453,12 @@ static const wchar_t* get_doc_string_text(AstNode* ast_node) {
 static wchar_t* create_multi_line_text_from_tokens(int line_count, ItemQueue* line_queue) {
     // Measure text length
     int text_length = 0;
-    QueueItem* queue_item = line_queue->first;
-    for (int i = 0; i < line_count && queue_item; i++) {
-        const wchar_t* matched_text = ((Token*) queue_item->item)->matched_text;
+    QueueItem* measure_queue_item = line_queue->first;
+    for (int i = 0; i < line_count && measure_queue_item; i++) {
+        const wchar_t* matched_text = ((Token*) measure_queue_item->item)->matched_text;
         text_length += wcslen(matched_text);
         text_length += 1; // account for new lines
-        queue_item = queue_item->next;
+        measure_queue_item = measure_queue_item->next;
     }
 
     if (text_length == 0) {
@@ -467,15 +467,15 @@ static wchar_t* create_multi_line_text_from_tokens(int line_count, ItemQueue* li
 
     // Copy text
     wchar_t* text = (wchar_t *) malloc(text_length * sizeof(wchar_t));
-    queue_item = line_queue->first;
+    QueueItem* copy_queue_item = line_queue->first;
     int current_pos = 0;
-    for (int i = 0; i < line_count && queue_item; i++) {
-        const wchar_t* matched_text = ((Token*) queue_item->item)->matched_text;
+    for (int i = 0; i < line_count && copy_queue_item; i++) {
+        const wchar_t* matched_text = ((Token*) copy_queue_item->item)->matched_text;
         int length = wcslen(matched_text);
         wmemcpy(&text[current_pos], matched_text, length);
         current_pos += length;
         text[current_pos++] = L'\n';
-        queue_item = queue_item->next;
+        copy_queue_item = copy_queue_item->next;
     }
     text[text_length - 1] = L'\0';
     return text;
