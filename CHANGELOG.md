@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [c] Fix heap buffer overflow of 2 bytes in `create_multi_line_text_from_tokens` ([#729](https://github.com/cucumber/gherkin/pull/673)) 
+
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
 - [Python] Dropped support for Python 3.10

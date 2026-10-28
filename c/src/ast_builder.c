@@ -61,7 +61,7 @@ static const wchar_t* get_description_text(AstNode* ast_node);
 
 static const wchar_t* get_doc_string_text(AstNode* ast_node);
 
-static wchar_t* create_multi_line_text_from_tokens(int text_length, int line_count, ItemQueue* line_queue);
+static wchar_t* create_multi_line_text_from_tokens(int line_count, ItemQueue* line_queue);
 
 static const wchar_t* get_description(AstNode* ast_node);
 
@@ -429,49 +429,53 @@ static const Tags* get_tags(IdGenerator* id_generator, AstNode* ast_node) {
 
 static const wchar_t* get_description_text(AstNode* ast_node) {
     ItemQueue* line_queue = AstNode_get_items(ast_node, Rule_Other);
-    int text_length = 0;
     QueueItem* queue_item = line_queue->first;
+
+    // Find last non-empty line
     int line_count = 0;
     int current_line = 0;
     while (queue_item) {
         ++current_line;
-        if (!GherkinLine_is_empty(((Token*)queue_item->item)->line)) {
+        if (!GherkinLine_is_empty(((Token*) queue_item->item)->line)) {
             line_count = current_line;
-            text_length += wcslen(((Token*)queue_item->item)->matched_text);
         }
         queue_item = queue_item->next;
     }
-    text_length += line_count;
-    return create_multi_line_text_from_tokens(text_length, line_count, line_queue);
+    return create_multi_line_text_from_tokens(line_count, line_queue);
 }
 
 static const wchar_t* get_doc_string_text(AstNode* ast_node) {
     ItemQueue* line_queue = AstNode_get_items(ast_node, Rule_Other);
-    int text_length = 0;
-    QueueItem* queue_item = line_queue->first;
-    while (queue_item) {
-        text_length += wcslen(((Token*)queue_item->item)->matched_text) + 1;
-        queue_item = queue_item->next;
-    }
     int line_count = ItemQueue_size(line_queue);
-    return create_multi_line_text_from_tokens(text_length, line_count, line_queue);
+    return create_multi_line_text_from_tokens(line_count, line_queue);
 }
 
-static wchar_t* create_multi_line_text_from_tokens(int text_length, int line_count, ItemQueue* line_queue) {
+static wchar_t* create_multi_line_text_from_tokens(int line_count, ItemQueue* line_queue) {
+    // Measure text length
+    int text_length = 0;
+    QueueItem* measure_queue_item = line_queue->first;
+    for (int i = 0; i < line_count && measure_queue_item; i++) {
+        const wchar_t* matched_text = ((Token*) measure_queue_item->item)->matched_text;
+        text_length += wcslen(matched_text);
+        text_length += 1; // account for new lines
+        measure_queue_item = measure_queue_item->next;
+    }
+
     if (text_length == 0) {
         return (wchar_t*)0;
     }
-    wchar_t* text = (wchar_t*)malloc(text_length * sizeof(wchar_t));
+
+    // Copy text
+    wchar_t* text = (wchar_t *) malloc(text_length * sizeof(wchar_t));
+    QueueItem* copy_queue_item = line_queue->first;
     int current_pos = 0;
-    Token* token;
-    int i;
-    for (i = 0; i < line_count; ++i) {
-        token = (Token*)ItemQueue_remove(line_queue);
-        int length = wcslen(token->matched_text);
-        wmemcpy(&text[current_pos], token->matched_text, length);
-        text[current_pos + length] = L'\n';
-        current_pos += length + 1;
-        Token_delete(token);
+    for (int i = 0; i < line_count && copy_queue_item; i++) {
+        const wchar_t* matched_text = ((Token*) copy_queue_item->item)->matched_text;
+        int length = wcslen(matched_text);
+        wmemcpy(&text[current_pos], matched_text, length);
+        current_pos += length;
+        text[current_pos++] = L'\n';
+        copy_queue_item = copy_queue_item->next;
     }
     text[text_length - 1] = L'\0';
     return text;
