@@ -25,6 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        regex-backend: [std, re2]
         config:
           - { os: ubuntu-24.04, cxx: g++, version: 12 }
           - { os: ubuntu-24.04, cxx: g++, version: 13 }
@@ -44,14 +45,14 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@f09c25b45002a07be2955cbe52e8cee55643f89d # v1.2.24
         with:
-          key: ${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ github.ref }}
+          key: ${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ matrix.regex-backend }}-${{ github.ref }}
           append-timestamp: false
           save: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y nlohmann-json3-dev
+          sudo apt-get install -y nlohmann-json3-dev libgtest-dev ${{ matrix.regex-backend == 're2' && 'libre2-dev' || '' }}
 
       - name: Install cucumber/messages
         uses: cucumber/ci-actions/install-cpp-dep@8bbc6bac84313ef426e8a0e6ffa64659d0dc174b
@@ -61,7 +62,13 @@ jobs:
 
       - name: Build gherkin
         working-directory: cpp
-        run: cmake --workflow --preset host-system
+        run: |
+          cmake --workflow --preset host-system
+
+      - name: Benchmark gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset benchmark-system
 
       - name: Acceptance tests
         working-directory: cpp
@@ -69,6 +76,10 @@ jobs:
 
   test-cpp-system-packages-macos:
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        regex-backend: [std, re2]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -77,12 +88,12 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@f09c25b45002a07be2955cbe52e8cee55643f89d # v1.2.24
         with:
-          key: ${{ github.job }}-${{ github.ref }}
+          key: ${{ github.job }}-${{ matrix.regex-backend }}-${{ github.ref }}
           append-timestamp: false
           save: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Install dependencies
-        run: brew install nlohmann-json
+        run: brew install nlohmann-json googletest ${{ matrix.regex-backend == 're2' && 're2' || '' }}
 
       - name: Install cucumber/messages
         uses: cucumber/ci-actions/install-cpp-dep@8bbc6bac84313ef426e8a0e6ffa64659d0dc174b
@@ -92,7 +103,13 @@ jobs:
 
       - name: Build gherkin
         working-directory: cpp
-        run: cmake --workflow --preset host-system
+        run: |
+          cmake --workflow --preset host-system
+
+      - name: Benchmark gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset benchmark-system
 
       - name: Acceptance tests
         working-directory: cpp
@@ -100,6 +117,10 @@ jobs:
 
   test-cpp-system-packages-windows:
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        regex-backend: [std, re2]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -111,7 +132,7 @@ jobs:
       - name: Install dependencies
         shell: pwsh
         run: |
-          vcpkg install nlohmann-json --triplet x64-windows
+          vcpkg install nlohmann-json gtest ${{ matrix.regex-backend == 're2' && 're2' || '' }} --triplet x64-windows
           # Expose the vcpkg toolchain so find_package() locates the packages.
           echo "CMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
 
@@ -123,7 +144,13 @@ jobs:
 
       - name: Build gherkin
         working-directory: cpp
-        run: cmake --workflow --preset host-system
+        run: |
+          cmake --workflow --preset host-system
+
+      - name: Benchmark gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset benchmark-system
 
       - name: Install gherkin
         working-directory: cpp

@@ -30,7 +30,18 @@
             "inherits": "base",
             "cacheVariables": {
                 "CUCUMBER_GHERKIN_ENABLE_SANITIZERS": "On",
+                "CUCUMBER_GHERKIN_BUILD_TESTS": "On",
                 "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "benchmark-system",
+            "displayName": "Benchmark build (system dependencies)",
+            "description": "Build with benchmarks enabled using system dependencies. Used by CI to build and run the benchmark suite.",
+            "inherits": "base",
+            "cacheVariables": {
+                "CUCUMBER_GHERKIN_BUILD_BENCHMARKS": "On",
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
         },
         {
@@ -40,6 +51,7 @@
             "inherits": "base",
             "cacheVariables": {
                 "CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY": "On",
+                "CUCUMBER_GHERKIN_BUILD_TESTS": "On",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
@@ -54,8 +66,27 @@
             "configurePreset": "test-system"
         },
         {
+            "name": "benchmark-system",
+            "configurePreset": "benchmark-system",
+            "targets": [
+                "run_cucumber_gherkin_benchmark"
+            ]
+        },
+        {
             "name": "tidy",
             "configurePreset": "tidy"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "test-system",
+            "configurePreset": "test-system",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error"
+            }
         }
     ],
     "workflowPresets": [
@@ -81,6 +112,23 @@
                 },
                 {
                     "name": "test-system",
+                    "type": "build"
+                },
+                {
+                    "name": "test-system",
+                    "type": "test"
+                }
+            ]
+        },
+        {
+            "name": "benchmark-system",
+            "steps": [
+                {
+                    "name": "benchmark-system",
+                    "type": "configure"
+                },
+                {
+                    "name": "benchmark-system",
                     "type": "build"
                 }
             ]
