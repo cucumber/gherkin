@@ -1,15 +1,15 @@
 #include "cucumber/gherkin/Regex.hpp"
 #include "cucumber/gherkin/Types.hpp"
+#include "cucumber/gherkin/Utils.hpp"
 #include <memory>
-#include <re2/stringpiece.h>
 #include <string>
 #include <string_view>
 
 #ifdef CUCUMBER_GHERKIN_HAS_RE2
-#include "cucumber/gherkin/Utils.hpp"
 #include <array>
 #include <cstddef>
 #include <re2/re2.h>
+#include <re2/stringpiece.h>
 #include <stdexcept>
 #include <vector>
 #else
