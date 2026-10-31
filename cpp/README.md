@@ -18,6 +18,9 @@ Both backends support the parser's patterns. Custom regex patterns must be
 compatible with the selected backend: RE2 does not support backreferences or
 lookaround. Replacement strings retain the standard `$1`, `$&`, and `$$` syntax
 with either backend.
+Use `$&` to refer to the entire match; `$0` is not portable across standard
+library implementations. The std backend retains its native `std::regex_replace`
+behavior, including platform differences in replacement around empty matches.
 
 RE2 has a rough improvement of 10% on Linux, 15% on Windows and 160% on Macos.
 

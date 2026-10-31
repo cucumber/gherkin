@@ -6,6 +6,7 @@
 #include <array>
 #include <cstddef>
 #include <exception>
+#include <regex>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <iterator>
@@ -113,10 +114,10 @@ namespace cucumber::gherkin
         EXPECT_THAT(Substitute(std::string("abc-42 abc-7"), R"(([a-z]+)-(\d+))", "$2:$1"), testing::Eq("42:abc 7:abc"));
         EXPECT_THAT(Substitute(std::string("aba"), "a", "$$[$&]"), testing::Eq("$[a]b$[a]"));
         EXPECT_THAT(Substitute(std::string("aba"), "a", "$`:$'"), testing::Eq(":babb:"));
-        EXPECT_THAT(Substitute(std::string("x"), "(x)", "$01/$10/$0"), testing::Eq("x//x"));
+        EXPECT_THAT(Substitute(std::string("x"), "(x)", "$01/$10/$&"), testing::Eq("x//x"));
 
         EXPECT_THAT(Substitute(std::string("ab"), "", "-"), testing::Eq("-a-b-"));
-        EXPECT_THAT(Substitute(std::string("a"), "a*", "-"), testing::Eq("--"));
+        EXPECT_THAT(Substitute(std::string("a"), "a+", "-"), testing::Eq("-"));
         EXPECT_THAT(Substitute(std::string{}, "", "-"), testing::Eq("-"));
         EXPECT_THAT(Substitute(std::wstring(L"\u4e16\u754c"), L"", L"-"), testing::Eq(L"-\u4e16-\u754c-"));
 
@@ -125,6 +126,19 @@ namespace cucumber::gherkin
         Substitute(source, R"(\d+)", "!");
 
         EXPECT_THAT(source, testing::Eq("abc!"));
+    }
+
+    TEST(Regex, PreservesBackendReplacementEdgeCases)
+    {
+#ifdef GHERKIN_TEST_RE2
+        EXPECT_THAT(Substitute(std::string("x"), "(x)", "$01/$10/$0"), testing::Eq("x//x"));
+        EXPECT_THAT(Substitute(std::string("a"), "a*", "-"), testing::Eq("--"));
+#else
+        EXPECT_THAT(Substitute(std::string("x"), "(x)", "$01/$10/$0"),
+            testing::Eq(std::regex_replace(std::string("x"), std::regex("(x)"), "$01/$10/$0")));
+        EXPECT_THAT(Substitute(std::string("a"), "a*", "-"),
+            testing::Eq(std::regex_replace(std::string("a"), std::regex("a*"), "-")));
+#endif
     }
 
     TEST(Regex, RejectsInvalidPatterns)
