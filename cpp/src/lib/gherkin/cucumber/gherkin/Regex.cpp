@@ -1,5 +1,6 @@
 #include "cucumber/gherkin/Regex.hpp"
 #include "cucumber/gherkin/Types.hpp"
+#include <iterator>
 #include "cucumber/gherkin/Utils.hpp"
 #include <memory>
 #include <string>
@@ -81,9 +82,11 @@ namespace cucumber::gherkin
 
                 std::match_results<const char*> matches;
                 RegexResult result;
+                const auto* begin = expression.data();
+                const auto* end = std::next(begin, expression.size());
 
-                result.match = full ? std::regex_match(expression.begin(), expression.end(), matches, regex)
-                                    : std::regex_search(expression.begin(), expression.end(), matches, regex);
+                result.match = full ? std::regex_match(begin, end, matches, regex)
+                                    : std::regex_search(begin, end, matches, regex);
 
                 if (result.match)
                 {
