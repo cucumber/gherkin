@@ -74,6 +74,10 @@ jobs:
         working-directory: cpp
         run: make acceptance
 
+      - name: Install gherkin
+        working-directory: cpp
+        run: sudo cmake --install build/test-system
+
   test-cpp-system-packages-macos:
     runs-on: macos-latest
     strategy:
@@ -114,6 +118,10 @@ jobs:
       - name: Acceptance tests
         working-directory: cpp
         run: make acceptance
+
+      - name: Install gherkin
+        working-directory: cpp
+        run: sudo cmake --install build/test-system
 
   test-cpp-system-packages-windows:
     runs-on: windows-latest
@@ -161,4 +169,4 @@ jobs:
 
       - name: Install gherkin
         working-directory: cpp
-        run: cmake --install build/host-system
+        run: cmake --install build/test-system
