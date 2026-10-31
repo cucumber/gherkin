@@ -9,6 +9,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ## [Unreleased]
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
+- [cpp] Added benchmark target. ([#732](https://github.com/cucumber/gherkin/pull/732))
+- [cpp] Added optional RE2 support as a regex engine backend. ([#732](https://github.com/cucumber/gherkin/pull/732))
 - [Python] Dropped support for Python 3.10
 
 ### Fixed

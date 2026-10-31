@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y nlohmann-json3-dev
+          sudo apt-get install -y nlohmann-json3-dev libre2-dev
 
       - name: Install cucumber/messages
         uses: cucumber/ci-actions/install-cpp-dep@8bbc6bac84313ef426e8a0e6ffa64659d0dc174b
@@ -62,9 +62,10 @@ jobs:
           build-mode: manual
           tools: linked
 
-      - name: Configure
+      - name: Build
         working-directory: cpp
-        run: cmake --workflow --preset host-system
+        run: |
+          cmake --workflow --preset host-system
 
       - uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:

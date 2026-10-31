@@ -75,6 +75,11 @@ target_link_libraries(
         cucumber::messages
 )
 
+if(CUCUMBER_GHERKIN_HAS_RE2)
+    target_compile_definitions(cucumber_gherkin_lib PRIVATE CUCUMBER_GHERKIN_HAS_RE2)
+    target_link_libraries(cucumber_gherkin_lib PRIVATE re2::re2)
+endif()
+
 set_target_properties(
     cucumber_gherkin_lib
     PROPERTIES

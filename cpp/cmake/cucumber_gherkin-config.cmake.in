@@ -1,2 +1,14 @@
 @PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+find_dependency(nlohmann_json)
+find_dependency(cucumber_messages)
+
+if(@CUCUMBER_GHERKIN_HAS_RE2@)
+    if(@CUCUMBER_GHERKIN_RE2_USES_PKG_CONFIG@)
+        find_dependency(PkgConfig)
+        pkg_check_modules(RE2 REQUIRED IMPORTED_TARGET re2)
+    else()
+        find_dependency(re2)
+    endif()
+endif()
 include("${CMAKE_CURRENT_LIST_DIR}/cucumber_gherkin-targets.cmake")

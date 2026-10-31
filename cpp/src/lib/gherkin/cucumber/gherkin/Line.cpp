@@ -5,7 +5,6 @@
 #include "cucumber/gherkin/Utils.hpp"
 #include <algorithm>
 #include <cstddef>
-#include <regex>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -15,15 +14,10 @@ namespace cucumber::gherkin
 {
     namespace
     {
-        using UnescapePair = std::pair<std::string, std::string>;
-        using Unescapes = std::vector<UnescapePair>;
-
-        const Unescapes lineUnescapes = { { "\\\\", "\\" }, { "\\|", "|" }, { "\\n", "\n" } };
-
         template<typename Callabble>
         void SplitTableCells(std::string_view row, Callabble&& cellCb)
         {
-            auto wrow = ToWide(std::string(row));
+            auto wrow = ToWide(row);
 
             std::size_t col = 0;
             std::size_t startCol = col + 1;
@@ -147,20 +141,11 @@ namespace cucumber::gherkin
         SplitTableCells(trimmedLineText,
             [&](const auto& cell, auto col)
             {
-                using namespace std::literals;
-
-                auto strippedCell = Lstrip(cell, RePattern::spacesNoNl);
+                auto strippedCell = detail::TrimView<wchar_t, true>(cell, RePattern::spacesNoNl);
                 auto cellIndent = cell.size() - strippedCell.size();
-                strippedCell = Rstrip(strippedCell, RePattern::spacesNoNl);
+                strippedCell = detail::TrimView<wchar_t, false>(strippedCell, RePattern::spacesNoNl);
 
-                Item tableItem{ col + indent + cellIndent, ToNarrow(strippedCell) };
-
-                for (const auto& replacement : lineUnescapes)
-                {
-                    Substitute(tableItem.text, replacement.first, replacement.second);
-                }
-
-                items.emplace_back(std::move(tableItem));
+                items.emplace_back(Item{ col + indent + cellIndent, ToNarrow(strippedCell) });
             });
 
         return items;
@@ -171,14 +156,16 @@ namespace cucumber::gherkin
         Items tags;
 
         auto column = indent + 1;
-        const auto itemsLine = Substitute(trimmedLineText, "\\s+(?:#.*)?$", "");
-        const auto items = Split("@", itemsLine);
-        const std::regex noSpaces("^\\S+$");
+        static const Regex trailingComment("\\s+(?:#.*)?$");
+        static const Regex tagSeparator("@");
+        static const Regex noSpaces("^\\S+$");
+        const auto itemsLine = trailingComment.Replace(trimmedLineText, "");
+        const auto items = tagSeparator.Split(itemsLine);
 
         for (std::size_t i = 1; i < items.size(); ++i)
         {
-            const auto originalItemSize = items[i].size();
-            auto sitem = Strip(items[i]);
+            const auto originalItemSize = items.at(i).size();
+            auto sitem = Strip(items.at(i));
 
             if (sitem.empty())
             {

@@ -6,11 +6,13 @@
 #include "cucumber/gherkin/Types.hpp"
 #include <charconv>
 #include <cstddef>
-#include <regex>
+#include <iterator>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <system_error>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 namespace cucumber::gherkin
@@ -22,6 +24,36 @@ namespace cucumber::gherkin
         StringViews matches;
     };
 
+    namespace detail
+    {
+        class RegexStrategy;
+        class WideRegexStrategy;
+    }
+
+    class Regex
+    {
+    public:
+        explicit Regex(std::string_view pattern);
+
+        [[nodiscard]] RegexResult Match(std::string_view expression, bool full) const;
+        [[nodiscard]] std::string Replace(std::string_view source, std::string_view replacement) const;
+        [[nodiscard]] Strings Split(std::string_view expression) const;
+
+    private:
+        std::shared_ptr<const detail::RegexStrategy> strategy;
+    };
+
+    class WideRegex
+    {
+    public:
+        explicit WideRegex(std::wstring_view pattern);
+
+        [[nodiscard]] std::wstring Replace(std::wstring_view source, std::wstring_view replacement) const;
+
+    private:
+        std::shared_ptr<const detail::WideRegexStrategy> strategy;
+    };
+
     void Split(const std::string& pattern, const std::string& expr, Strings& list);
 
     [[nodiscard]] Strings Split(const std::string& pattern, const std::string& expr);
@@ -29,6 +61,8 @@ namespace cucumber::gherkin
     [[nodiscard]] std::string Substitute(const std::string& source, const std::string& pattern, const std::string& what = {});
 
     void Substitute(std::string& source, const std::string& pattern, const std::string& what = {});
+
+    [[nodiscard]] std::wstring Substitute(const std::wstring& source, const std::wstring& pattern, const std::wstring& what = {});
 
     namespace detail
     {
@@ -42,21 +76,25 @@ namespace cucumber::gherkin
             using ArgType = std::decay_t<Arg>;
             using SvType = std::basic_string_view<CharT>;
 
-            constexpr bool isString = std::is_same_v<ArgType, std::basic_string<CharT>> || std::is_same_v<ArgType, std::basic_string_view<CharT>>;
+            constexpr bool isString =
+                std::is_same_v<ArgType, std::basic_string<CharT>> || std::is_same_v<ArgType, std::basic_string_view<CharT>>;
 
             constexpr bool isNumber = std::is_integral_v<ArgType> || std::is_floating_point_v<ArgType>;
 
-            SvType const view{ submatch.first, static_cast<std::size_t>(submatch.length()) };
+            SvType const view = submatch;
 
             if constexpr (isString)
             {
-                argument.assign(view);
+                argument = view;
             }
             else if constexpr (isNumber)
             {
-                auto [ptr, error_code] = std::from_chars(view.begin(), view.end(), argument);
+                const auto* begin = view.data() == nullptr ? "" : view.data();
+                const auto* end = std::next(begin, view.size());
 
-                DieUnless(error_code == std::errc(), "failed to convert \"", view, "\" to ", Declname(argument));
+                const auto [ptr, errorCode] = std::from_chars(begin, end, argument);
+
+                DieUnless(errorCode == std::errc(), "failed to convert \"", view, "\" to ", Declname(argument).get());
             }
 
             return view;
@@ -95,57 +133,48 @@ namespace cucumber::gherkin
 
             while (++matchIter != matchResult.end())
             {
-                views.push_back(std::basic_string_view<CharT, Traits>{ matchIter->first, matchIter->second });
+                views.push_back(*matchIter);
             }
         }
 
     }
 
-    template<typename CharT, typename Traits, typename ReTraits, typename... Args>
-    bool FullMatch(std::basic_string_view<CharT, Traits> expression, const std::basic_regex<CharT, ReTraits>& regex, Args&&... args)
+    template<typename... Args>
+    bool FullMatch(std::string_view expression, const Regex& regex, Args&&... args)
     {
-        std::match_results<const CharT*> matchResult;
-        auto beginPtr = expression.data();
-        auto endPtr = expression.data() + expression.size();
+        const auto result = regex.Match(expression, true);
 
-        bool const match = std::regex_match(beginPtr, endPtr, matchResult, regex);
-
-        if (match)
+        if (result.match)
         {
-            detail::ExtractSubmatches<CharT>(matchResult, std::forward<Args>(args)...);
+            detail::ExtractSubmatches<char>(result.matches, std::forward<Args>(args)...);
         }
 
-        return match;
+        return result.match;
     }
 
-    template<typename CharT, typename Traits, typename... Args>
-    bool FullMatch(std::basic_string_view<CharT, Traits> expression, std::basic_string_view<CharT, Traits> pat, Args&&... args) // NOLINT(bugprone-easily-swappable-parameters)
+    template<typename... Args>
+    bool FullMatch(std::string_view expression, std::string_view pat, Args&&... args) // NOLINT(bugprone-easily-swappable-parameters)
     {
-        std::basic_regex<CharT> regex(pat.data(), pat.size());
-
-        return full_match(expression, regex, std::forward<Args>(args)...);
+        return FullMatch(expression, Regex(pat), std::forward<Args>(args)...);
     }
 
-    template<typename CharT, typename Traits, typename Allocator, typename... Args>
-    bool FullMatch(const std::basic_string<CharT, Traits, Allocator>& expression, Args&&... args)
+    template<typename... Args>
+    bool PartialMatch(std::string_view expression, const Regex& regex, Args&&... args)
     {
-        return FullMatch(std::basic_string_view<CharT, Traits>{ expression.data(), expression.size() }, std::forward<Args>(args)...);
-    }
+        const auto result = regex.Match(expression, false);
 
-    template<typename CharT, typename Traits, typename... Args>
-    bool PartialMatch(std::basic_string_view<CharT, Traits> expression, std::basic_string_view<CharT, Traits> pat, Args&&... args) // NOLINT(bugprone-easily-swappable-parameters)
-    {
-        std::match_results<const CharT*> matchResult;
-        std::regex regex(pat.data(), pat.size());
-
-        bool match = std::regex_search(expression.begin(), expression.end(), matchResult, regex);
-
-        if (match)
+        if (result.match)
         {
-            detail::ExtractSubmatches(matchResult, std::forward<Args>(args)...);
+            detail::ExtractSubmatches<char>(result.matches, std::forward<Args>(args)...);
         }
 
-        return match;
+        return result.match;
+    }
+
+    template<typename... Args>
+    bool PartialMatch(std::string_view expression, std::string_view pat, Args&&... args)
+    {
+        return PartialMatch(expression, Regex(pat), std::forward<Args>(args)...);
     }
 
 }
