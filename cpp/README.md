@@ -19,6 +19,8 @@ compatible with the selected backend: RE2 does not support backreferences or
 lookaround. Replacement strings retain the standard `$1`, `$&`, and `$$` syntax
 with either backend.
 
+RE2 has a rough improvement of 10% on Linux, 15% on Windows and 160% on Macos.
+
 ## Tests and benchmarks
 
 Enable `CUCUMBER_GHERKIN_BUILD_TESTS` to build regression tests (requires system
