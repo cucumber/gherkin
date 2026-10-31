@@ -63,7 +63,7 @@ jobs:
       - name: Build gherkin
         working-directory: cpp
         run: |
-          cmake --workflow --preset host-system
+          cmake --workflow --preset test-system
 
       - name: Benchmark gherkin
         working-directory: cpp
@@ -104,7 +104,7 @@ jobs:
       - name: Build gherkin
         working-directory: cpp
         run: |
-          cmake --workflow --preset host-system
+          cmake --workflow --preset test-system
 
       - name: Benchmark gherkin
         working-directory: cpp
@@ -142,10 +142,17 @@ jobs:
           dependency: dependencies/messages.version
           working-directory: cpp
 
+      - name: Install cucumber/messages
+        uses: cucumber/ci-actions/install-cpp-dep@8bbc6bac84313ef426e8a0e6ffa64659d0dc174b
+        with:
+          dependency: dependencies/messages.version
+          working-directory: cpp
+          preset: test-system
+
       - name: Build gherkin
         working-directory: cpp
         run: |
-          cmake --workflow --preset host-system
+          cmake --workflow --preset test-system
 
       - name: Benchmark gherkin
         working-directory: cpp
