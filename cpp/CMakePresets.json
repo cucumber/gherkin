@@ -20,7 +20,7 @@
             "description": "Build and install the library using C++ dependencies already installed on the system.",
             "inherits": "base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
         },
         {
