@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y nlohmann-json3-dev libgtest-dev libre2-dev
+          sudo apt-get install -y nlohmann-json3-dev libre2-dev
 
       - name: Install cucumber/messages
         uses: cucumber/ci-actions/install-cpp-dep@8bbc6bac84313ef426e8a0e6ffa64659d0dc174b

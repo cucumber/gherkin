@@ -24,7 +24,7 @@ RE2 has a rough improvement of 10% on Linux, 15% on Windows and 160% on Macos.
 ## Tests and benchmarks
 
 Enable `CUCUMBER_GHERKIN_BUILD_TESTS` to build regression tests (requires system
-GoogleTest), then run `ctest --test-dir <build-directory> --output-on-failure`.
+GoogleTest and GoogleMock), then run `ctest --test-dir <build-directory> --output-on-failure`.
 Enable `CUCUMBER_GHERKIN_BUILD_BENCHMARKS` to build
 `cucumber_gherkin_benchmark`; no benchmark framework is required.
 

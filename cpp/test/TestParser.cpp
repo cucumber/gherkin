@@ -1,12 +1,16 @@
 #include "cucumber/gherkin/AstBuilder.hpp"
 #include "cucumber/gherkin/Exceptions.hpp"
 #include "cucumber/gherkin/Keywords.hpp"
+#include "cucumber/gherkin/Line.hpp"
 #include "cucumber/gherkin/Parser.hpp"
+#include "cucumber/gherkin/Token.hpp"
 #include "cucumber/gherkin/TokenMatcher.hpp"
+#include "cucumber/gherkin/Types.hpp"
 #include "cucumber/gherkin/Utils.hpp"
 #include <cstddef>
 #include <filesystem>
 #include <fstream>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
@@ -23,7 +27,7 @@ namespace cucumber::gherkin
             Token language;
             language.line = Line(std::string("# language: ") + dialectName, 1);
 
-            ASSERT_TRUE(matcher.MatchLanguage(language));
+            ASSERT_THAT(matcher.MatchLanguage(language), testing::IsTrue());
 
             const auto keywords = Keywords(dialectName, StringViews{ "given", "when", "then", "and", "but" });
 
@@ -32,9 +36,9 @@ namespace cucumber::gherkin
                 Token step;
                 step.line = Line(std::string(keyword) + "example", 2);
 
-                ASSERT_TRUE(matcher.MatchStepLine(step));
-                EXPECT_EQ(step.matchedKeyword, keyword);
-                EXPECT_EQ(step.matchedText, "example");
+                ASSERT_THAT(matcher.MatchStepLine(step), testing::IsTrue());
+                EXPECT_THAT(step.matchedKeyword, testing::Optional(testing::Eq(keyword)));
+                EXPECT_THAT(step.matchedText, testing::Eq("example"));
             }
 
             matcher.Reset();
@@ -42,8 +46,8 @@ namespace cucumber::gherkin
             Token step;
             step.line = Line(std::string(keywords.front()) + "after reset", 3);
 
-            EXPECT_TRUE(matcher.MatchStepLine(step));
-            EXPECT_EQ(step.matchedText, "after reset");
+            EXPECT_THAT(matcher.MatchStepLine(step), testing::IsTrue());
+            EXPECT_THAT(step.matchedText, testing::Eq("after reset"));
         }
     }
 
@@ -61,7 +65,7 @@ namespace cucumber::gherkin
             SCOPED_TRACE(entry.path().string());
 
             std::ifstream reference(entry.path().string() + ".ast.ndjson");
-            ASSERT_TRUE(reference.is_open());
+            ASSERT_THAT(reference.is_open(), testing::IsTrue());
 
             nlohmann::json expected;
             reference >> expected;
@@ -69,15 +73,15 @@ namespace cucumber::gherkin
             Parser<AstBuilder> parser;
             const auto document = parser.Parse(expected.at("gherkinDocument").at("uri").get<std::string>(), Slurp(entry.path().string()));
 
-            nlohmann::json actual;
-            document.to_json(actual["gherkinDocument"]);
+            nlohmann::json actual = { { "gherkinDocument", nlohmann::json::object() } };
+            document.to_json(actual.at("gherkinDocument"));
 
-            EXPECT_EQ(actual, expected);
+            EXPECT_THAT(actual, testing::Eq(expected));
 
             ++count;
         }
 
-        EXPECT_GT(count, 0);
+        EXPECT_THAT(count, testing::Gt(0));
     }
 
     TEST(Parser, RejectsBadFixtures)
@@ -95,11 +99,16 @@ namespace cucumber::gherkin
 
             Parser<AstBuilder> parser;
 
-            EXPECT_THROW((void)parser.Parse(entry.path().string(), Slurp(entry.path().string())), ParserError);
+            EXPECT_THAT(
+                [&]
+                {
+                    (void)parser.Parse(entry.path().string(), Slurp(entry.path().string()));
+                },
+                testing::Throws<ParserError>());
 
             ++count;
         }
 
-        EXPECT_GT(count, 0);
+        EXPECT_THAT(count, testing::Gt(0));
     }
 }
