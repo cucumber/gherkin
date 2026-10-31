@@ -15,7 +15,7 @@ endif()
 
 add_custom_target(
     run_cucumber_gherkin_benchmark
-    COMMAND $<TARGET_FILE:cucumber_gherkin_benchmark> 100
+    COMMAND $<TARGET_FILE:cucumber_gherkin_benchmark> 1000
     DEPENDS cucumber_gherkin_benchmark
     COMMENT "Running cucumber gherkin benchmark"
     USES_TERMINAL
