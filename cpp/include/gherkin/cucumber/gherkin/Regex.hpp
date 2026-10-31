@@ -6,6 +6,7 @@
 #include "cucumber/gherkin/Types.hpp"
 #include <charconv>
 #include <cstddef>
+#include <iterator>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -88,7 +89,10 @@ namespace cucumber::gherkin
             }
             else if constexpr (isNumber)
             {
-                auto [ptr, errorCode] = std::from_chars(view.begin(), view.end(), argument);
+                const auto* begin = view.data() == nullptr ? "" : view.data();
+                const auto* end = std::next(begin, view.size());
+
+                const auto [ptr, errorCode] = std::from_chars(begin, end, argument);
 
                 DieUnless(errorCode == std::errc(), "failed to convert \"", view, "\" to ", Declname(argument).get());
             }
