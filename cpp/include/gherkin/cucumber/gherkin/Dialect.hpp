@@ -12,6 +12,23 @@ namespace cucumber::gherkin
 
     struct Dialect
     {
+        Dialect(const StringViews& featureKeywords, const StringViews& ruleKeywords, const StringViews& scenarioKeywords,
+            const StringViews& scenarioOutlineKeywords, const StringViews& backgroundKeywords, const StringViews& examplesKeywords,
+            const StringViews& givenKeywords, const StringViews& whenKeywords, const StringViews& thenKeywords,
+            const StringViews& andKeywords, const StringViews& butKeywords)
+            : featureKeywords(featureKeywords)
+            , ruleKeywords(ruleKeywords)
+            , scenarioKeywords(scenarioKeywords)
+            , scenarioOutlineKeywords(scenarioOutlineKeywords)
+            , backgroundKeywords(backgroundKeywords)
+            , examplesKeywords(examplesKeywords)
+            , givenKeywords(givenKeywords)
+            , whenKeywords(whenKeywords)
+            , thenKeywords(thenKeywords)
+            , andKeywords(andKeywords)
+            , butKeywords(butKeywords)
+        {}
+
         ~Dialect() = default;
         Dialect(const Dialect&) = delete;
         Dialect(Dialect&&) = delete;
