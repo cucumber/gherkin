@@ -15,4 +15,4 @@ dependency-reduced-pom.xml
 .codegen
 # Approval tests
 acceptance/
-bin/lib/
+bin/
