@@ -12,6 +12,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Added benchmark target. ([#732](https://github.com/cucumber/gherkin/pull/732))
 - [cpp] Added optional RE2 support as a regex engine backend. ([#732](https://github.com/cucumber/gherkin/pull/732))
 - [Python] Dropped support for Python 3.10
+- [Ruby] Move the version constant to `lib/gherkin/version.rb`.
 
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
