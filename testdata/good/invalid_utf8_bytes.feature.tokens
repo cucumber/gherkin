@@ -1,0 +1,6 @@
+(1:1)Comment:/# This feature contains an invalid sequence of bytes/
+(2:1)FeatureLine:()Feature//
+(3:1)Other:/text/
+(4:1)Other:/������/
+(5:1)Other:/text/
+EOF
