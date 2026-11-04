@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-version = File.read(File.expand_path('VERSION', __dir__)).strip
+require_relative 'lib/gherkin/version'
 
 Gem::Specification.new do |s|
   s.name        = 'cucumber-gherkin'
-  s.version     = version
+  s.version     = Gherkin::VERSION
   s.authors     = ['Gáspár Nagy', 'Aslak Hellesøy', 'Steve Tooke']
   s.description = 'Gherkin parser'
   s.summary     = "#{s.name}-#{s.version}"
