@@ -1,0 +1,1 @@
+{"source":{"data":"# This feature contains an invalid sequence of bytes\nFeature:\ntext\n������\ntext\n","mediaType":"text/x.cucumber.gherkin+plain","uri":"../testdata/good/invalid_utf8_bytes.feature"}}
