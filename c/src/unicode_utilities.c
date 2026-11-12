@@ -91,6 +91,9 @@ static long get_code_point_from_utf16_surrogate(const wchar_t* text, int pos) {
 }
 
 static void write_utf8_bytes_for_code_point(Utf8Bytes* utf8_bytes, long code_point) {
+    if (code_point > 0x10FFFF || code_point < 0) {
+        code_point = 0xFFFD;
+    }
     if (code_point < 0x80) {
         utf8_bytes->bytes[0] = (unsigned char)code_point;
         utf8_bytes->byte_count = 1;
@@ -101,34 +104,21 @@ static void write_utf8_bytes_for_code_point(Utf8Bytes* utf8_bytes, long code_poi
     } else if (code_point < 0x10000) {
         utf8_bytes->bytes[0] = (unsigned char)(0xE0 | ((code_point & 0xF000) >> 12));
         utf8_bytes->byte_count = 3;
-    } else if (code_point < 0x200000) {
+    } else {
         utf8_bytes->bytes[0] = (unsigned char)(0xF0 | ((code_point & 0x1C0000) >> 18));
         utf8_bytes->byte_count = 4;
-    } else if (code_point < 0x4000000) {
-        utf8_bytes->bytes[0] = (unsigned char)(0xF8 | ((code_point & 0x3000000) >> 24));
-        utf8_bytes->byte_count = 5;
-    } else {
-        utf8_bytes->bytes[0] = (unsigned char)(0xFC | ((code_point & 0x40000000) >> 30));
-        utf8_bytes->byte_count = 6;
     }
     int i = 1;
     switch (utf8_bytes->byte_count) {
-    case 6:
-        utf8_bytes->bytes[i++] = (unsigned char)(0x80 | ((code_point & 0x3F000000) >> 24));
-        /* fall through */
-    case 5:
-        utf8_bytes->bytes[i++] = (unsigned char)(0x80 | ((code_point & 0xFC0000) >> 18));
-        /* fall through */
     case 4:
         utf8_bytes->bytes[i++] = (unsigned char)(0x80 | ((code_point & 0x3F000) >> 12));
-        /* fall through */
     case 3:
         utf8_bytes->bytes[i++] = (unsigned char)(0x80 | ((code_point & 0xFC0) >> 6));
-        /* fall through */
     case 2:
         utf8_bytes->bytes[i++] = (unsigned char)(0x80 | (code_point & 0x3F));
     }
 }
+
 
 void print_code_point_to_utf8_file(FILE* file, Utf8Bytes* utf8_bytes) {
     int i;
