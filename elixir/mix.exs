@@ -10,7 +10,7 @@ defmodule CucumberGherkin.MixProject do
       name: "CucumberGherkin",
       description: description(),
       package: package(),
-      elixir: "~> 1.10",
+      elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]

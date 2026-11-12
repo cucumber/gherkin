@@ -13,6 +13,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [cpp] Added optional RE2 support as a regex engine backend. ([#732](https://github.com/cucumber/gherkin/pull/732))
 - [Python] Dropped support for Python 3.10
 - [Ruby] Move the version constant to `lib/gherkin/version.rb`.
+- [Elixir] Bump minimum elixir version to 1.13 ([#742](https://github.com/cucumber/gherkin/pull/742))
 
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
