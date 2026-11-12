@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24af8a72f37e70f2f8d75890d5d92f7b",
+    "content-hash": "83c422a37fd5cb1c1f3c0ff89d7a5346",
     "packages": [
         {
             "name": "cucumber/messages",
-            "version": "v34.2.1",
+            "version": "v35.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cucumber/messages-php.git",
-                "reference": "b346ece5772654ab047008b7c11d3650478353c2"
+                "reference": "516064e827c5def7d6ca3b9632be4d868e1cae46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cucumber/messages-php/zipball/b346ece5772654ab047008b7c11d3650478353c2",
-                "reference": "b346ece5772654ab047008b7c11d3650478353c2",
+                "url": "https://api.github.com/repos/cucumber/messages-php/zipball/516064e827c5def7d6ca3b9632be4d868e1cae46",
+                "reference": "516064e827c5def7d6ca3b9632be4d868e1cae46",
                 "shasum": ""
             },
             "require": {
@@ -27,9 +27,9 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3",
                 "phpunit/phpunit": "^13",
-                "psalm/plugin-phpunit": "^0.19",
+                "psalm/plugin-phpunit": "^0",
                 "ramsey/uuid": "^4",
-                "vimeo/psalm": "^6"
+                "vimeo/psalm": "^7"
             },
             "type": "library",
             "autoload": {
@@ -44,11 +44,17 @@
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Cucumber Limited <cukes@googlegroups.com>"
+                }
+            ],
             "description": "JSON schema-based messages for Cucumber's inter-process communication",
             "support": {
-                "source": "https://github.com/cucumber/messages-php/tree/v34.2.1"
+                "source": "https://github.com/cucumber/messages-php/tree/v35.0.0"
             },
-            "time": "2026-07-30T19:49:58+00:00"
+            "time": "2026-11-10T01:57:16+00:00",
+            "published-time": "2026-11-12T14:38:56+00:00"
         }
     ],
     "packages-dev": [
