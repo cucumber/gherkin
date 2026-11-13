@@ -14,6 +14,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [Python] Dropped support for Python 3.10
 - [Ruby] Move the version constant to `lib/gherkin/version.rb`.
 - [Elixir] Bump minimum elixir version to 1.13 ([#742](https://github.com/cucumber/gherkin/pull/742))
+- Update dependency `messages` up to v35
 
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
