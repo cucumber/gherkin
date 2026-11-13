@@ -3,7 +3,7 @@ package gherkin
 import (
 	"strings"
 
-	"github.com/cucumber/messages/go/v34"
+	"github.com/cucumber/messages/go/v35"
 )
 
 func Pickles(gherkinDocument messages.GherkinDocument, uri string, newId func() string) []*messages.Pickle {
