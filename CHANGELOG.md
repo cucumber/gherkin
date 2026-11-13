@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [43.0.0] - 2026-11-13
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
 - [cpp] Added benchmark target. ([#732](https://github.com/cucumber/gherkin/pull/732))
@@ -957,7 +959,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v42.0.1...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v43.0.0...HEAD
+[43.0.0]: https://github.com/cucumber/gherkin/compare/v42.0.1...v43.0.0
 [42.0.1]: https://github.com/cucumber/gherkin/compare/v42.0.0...v42.0.1
 [42.0.0]: https://github.com/cucumber/gherkin/compare/v41.0.0...v42.0.0
 [41.0.0]: https://github.com/cucumber/gherkin/compare/v40.0.0...v41.0.0

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
-project(cucumber_gherkin VERSION 42.0.1 LANGUAGES CXX)
+project(cucumber_gherkin VERSION 43.0.0 LANGUAGES CXX)
 
 # Options
 if(POLICY CMP0077)
