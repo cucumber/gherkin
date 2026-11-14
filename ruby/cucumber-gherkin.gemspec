@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop', '~> 1.92.0'
   s.add_development_dependency 'rubocop-rspec', '~> 3.4.0'
   s.add_development_dependency 'rubocop-packaging', '~> 0.6.0'
-  s.add_development_dependency 'rubocop-performance', '~> 1.23.1'
+  s.add_development_dependency 'rubocop-performance', '~> 1.27.0'
   s.add_development_dependency 'rubocop-rake', '~> 0.6.0'
 
   s.executables      = %w[gherkin-ruby gherkin]
