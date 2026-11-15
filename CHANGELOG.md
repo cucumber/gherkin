@@ -8,6 +8,9 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- [c] Fixed the size of struct Utf8Bytes to fit all 6 bytes of Utf8 byte sequences allowed by older specs.
+
 ## [43.0.0] - 2026-11-13
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
