@@ -1,5 +1,4 @@
-# This feature contains an invalid sequence of bytes
 Feature:
 text
-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ý¿¿¿¿¿
 text
