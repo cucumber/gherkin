@@ -8,7 +8,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 ### Fixed
-- [c] Fix heap buffer overflow of 2 bytes in `create_multi_line_text_from_tokens` ([#729](https://github.com/cucumber/gherkin/pull/673)) 
+- [c] Fix heap buffer overflow in `create_multi_line_text_from_tokens` when description lines only contain blank characters ([#729](https://github.com/cucumber/gherkin/pull/729), [#728](https://github.com/cucumber/gherkin/pull/728))
 
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
