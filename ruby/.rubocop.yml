@@ -4,7 +4,7 @@ inherit_mode:
   merge:
     - Exclude
 
-require:
+plugins:
   - rubocop-packaging
   - rubocop-performance
   - rubocop-rake
@@ -34,7 +34,3 @@ Style/RegexpLiteral:
 
 RSpec/MessageSpies:
   EnforcedStyle: receive
-
-# Bug in rubocop auto-gen config: https://github.com/rubocop/rubocop/issues/13795
-Naming/MethodName:
-  Enabled: false
