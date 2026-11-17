@@ -20,6 +20,7 @@ topics:
   - gherkin
   - testing
   - parser
+  - bdd
 
 dependencies:
   cucumber_messages: '>=34.0.2 <36.0.0'
