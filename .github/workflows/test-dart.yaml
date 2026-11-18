@@ -29,12 +29,12 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        dart: ["3.8.0", "3.12.0"]
+        dart: ["3.8.0", "3.14.0"]
         include:
           - os: windows-latest
-            dart: "3.12.0"
+            dart: "3.14.0"
           - os: macos-latest
-            dart: "3.12.0"
+            dart: "3.14.0"
 
     defaults:
       run:
