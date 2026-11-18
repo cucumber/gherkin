@@ -60,10 +60,6 @@ final class GherkinParser
     public function parse(iterable $sources): Generator
     {
         foreach ($sources as $source) {
-            if (!$source instanceof Source) {
-                throw new \InvalidArgumentException('Can only parse Source objects');
-            }
-
             if ($this->includeSource) {
                 yield new Envelope(source: $source);
             }
