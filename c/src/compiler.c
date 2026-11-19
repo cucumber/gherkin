@@ -347,7 +347,7 @@ static const wchar_t* create_expanded_text(const wchar_t* original_text, const T
             int j;
             for (j = 0; j < example_header->table_cells->cell_count; ++j) {
                 int cell_text_length = wcslen(example_header->table_cells->table_cells[j].value);
-                if (cell_text_length < length - i - 1 &&
+                if (i + 1 + cell_text_length < length &&
                         original_text[i + 1 + cell_text_length] == L'>' &&
                         wcsncmp(original_text + i + 1, example_header->table_cells->table_cells[j].value, cell_text_length) == 0) {
                     ReplacementItem* item = (ReplacementItem*)malloc(sizeof(ReplacementItem));
