@@ -73,6 +73,7 @@ namespace cucumber::gherkin
 
         std::string dialectName;
         KeywordTypesMap keywordTypes;
+        StringViews stepKeywords;
         std::string activeDocStringSeparator;
         std::size_t indentToRemove = 0;
     };

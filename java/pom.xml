@@ -6,17 +6,17 @@
     <parent>
         <groupId>io.cucumber</groupId>
         <artifactId>cucumber-parent</artifactId>
-        <version>5.7.0</version>
+        <version>5.8.0</version>
     </parent>
     <artifactId>gherkin</artifactId>
-    <version>42.0.2-SNAPSHOT</version>
+    <version>43.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Gherkin</name>
     <description>Gherkin parser</description>
     <url>https://github.com/cucumber/gherkin</url>
 
     <properties>
-        <project.build.outputTimestamp>1785960122</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1794532045</project.build.outputTimestamp>
         <osgi.bundle-symbolic-name>io.cucumber.gherkin</osgi.bundle-symbolic-name>
     </properties>
 
@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>tools.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>messages</artifactId>
-            <version>[34.0.2,35.0.0)</version>
+            <version>[34.0.2,36.0.0)</version>
         </dependency>
 
         <dependency>
@@ -70,7 +70,7 @@
             <groupId>io.cucumber</groupId>
             <artifactId>messages-ndjson</artifactId>
             <scope>test</scope>
-            <version>0.5.2</version>
+            <version>0.6.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.cucumber</groupId>
@@ -184,11 +184,21 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-wrap-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Run the code generator -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.6.4</version>
                 <executions>
                     <execution>
                         <id>generate-gherkin-dialects</id>

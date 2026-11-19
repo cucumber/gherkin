@@ -27,16 +27,16 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        ruby: ['3.3', '3.4']
+        ruby: ['3.3', '3.4', '4.0']
         include:
           - os: macos-latest
-            ruby: '3.4'
+            ruby: '4.0'
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ruby/setup-ruby@7f797815d8adceb1c412e7abefdd1ab4abc47a5f # v1.335.0
+      - uses: ruby/setup-ruby@f9c4492e86def3e644ab32a0ef185eda5b0c20d0 # v1.342.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true

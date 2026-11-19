@@ -2,7 +2,7 @@
 
 typedef struct Utf8Bytes {
     unsigned char byte_count;
-    unsigned char bytes[5];
+    unsigned char bytes[6];
 } Utf8Bytes;
 
 static long get_code_point_from_utf16_surrogate(const wchar_t* text, int pos);

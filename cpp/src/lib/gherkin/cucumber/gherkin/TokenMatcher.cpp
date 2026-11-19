@@ -12,7 +12,6 @@
 #include <algorithm>
 #include <cucumber/messages/Location.hpp>
 #include <optional>
-#include <regex>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -20,7 +19,7 @@
 namespace cucumber::gherkin
 {
 
-    static const std::regex languageRe{ R"(^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$)" };
+    static const Regex languageRe{ R"(^\s*#\s*language\s*:\s*([a-zA-Z\-_]+)\s*$)" };
 
     TokenMatcher::TokenMatcher(const std::string& dialectName)
     {
@@ -47,7 +46,8 @@ namespace cucumber::gherkin
     {
         auto scenarioType = RuleType::scenarioLine;
 
-        return MatchTitleLine(token, scenarioType, Keywords("scenario")) || MatchTitleLine(token, scenarioType, Keywords("scenarioOutline"));
+        return MatchTitleLine(token, scenarioType, Keywords("scenario")) ||
+               MatchTitleLine(token, scenarioType, Keywords("scenarioOutline"));
     }
 
     bool TokenMatcher::MatchBackgroundLine(Token& token)
@@ -153,7 +153,8 @@ namespace cucumber::gherkin
 
         auto commentText = std::string(token.line.GetLineText(0));
 
-        Substitute(commentText, "[\\r\\n]+$");
+        static const Regex trailingNewlines("[\\r\\n]+$");
+        commentText = trailingNewlines.Replace(commentText, "");
 
         SetTokenMatched(token, RuleType::comment, { commentText, std::nullopt, std::nullopt, 0 });
 
@@ -171,19 +172,7 @@ namespace cucumber::gherkin
 
     bool TokenMatcher::MatchStepLine(Token& token)
     {
-        StringViews const stepKeywordNames = { "given", "when", "then", "and", "but" };
-        auto keywords = cucumber::gherkin::Keywords(dialectName, stepKeywordNames);
-
-        // Prefer the longest step keyword by sorting keywords in descending order
-        // by length (in bytes, not codepoints or graphemes - adequate for dealing
-        // with keywords that are prefixes of each other).
-        std::sort(keywords.begin(), keywords.end(),
-            [](const std::string_view& first, const std::string_view& second)
-            {
-                return first.length() > second.length();
-            });
-
-        for (const auto& keyword : keywords)
+        for (const auto& keyword : stepKeywords)
         {
             if (!token.line.Startswith(keyword))
             {
@@ -284,7 +273,7 @@ namespace cucumber::gherkin
 
             if (keywordList.size() == 1)
             {
-                return keywordList[0];
+                return keywordList.front();
             }
         }
 
@@ -299,6 +288,14 @@ namespace cucumber::gherkin
         }
 
         this->dialectName = dialectName;
+
+        stepKeywords = cucumber::gherkin::Keywords(dialectName, StringViews{ "given", "when", "then", "and", "but" });
+        // Prefer longer keywords when one keyword is a prefix of another.
+        std::sort(stepKeywords.begin(), stepKeywords.end(),
+            [](std::string_view first, std::string_view second)
+            {
+                return first.length() > second.length();
+            });
 
         auto dialect = GetDialect(dialectName);
 
@@ -338,11 +335,13 @@ namespace cucumber::gherkin
 
         if (activeDocStringSeparator == R"(""")")
         {
-            unescaped = Substitute(text, R"(\\"\\"\\")", R"(""")");
+            static const Regex escapedQuotes(R"(\\"\\"\\")");
+            unescaped = escapedQuotes.Replace(text, R"(""")");
         }
         else if (activeDocStringSeparator == "```")
         {
-            unescaped = Substitute(text, R"(\\`\\`\\`)", "```");
+            static const Regex escapedBackticks(R"(\\`\\`\\`)");
+            unescaped = escapedBackticks.Replace(text, "```");
         }
         else
         {

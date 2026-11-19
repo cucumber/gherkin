@@ -6,9 +6,10 @@
 #pragma warning(disable : 4244)
 #endif
 
+#include "cucumber/gherkin/Regex.hpp"
 #include <cstddef>
 #include <cstdint>
-#include <regex>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 
@@ -140,9 +141,13 @@ namespace cucumber::gherkin
     // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
     // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic,cppcoreguidelines-pro-type-reinterpret-cast)
-    inline std::wstring ToWide(const std::string& source)
+    inline std::wstring ToWide(std::string_view source)
     {
         std::wstring result;
+        if (source.empty())
+        {
+            return result;
+        }
         result.reserve(source.size());
 
         const auto* ptr = reinterpret_cast<const unsigned char*>(source.data());
@@ -160,9 +165,13 @@ namespace cucumber::gherkin
         return result;
     }
 
-    inline std::string ToNarrow(const std::wstring& wideString)
+    inline std::string ToNarrow(std::wstring_view wideString)
     {
         std::string result;
+        if (wideString.empty())
+        {
+            return result;
+        }
         result.reserve(wideString.size() * 3);
 
         const auto* ptr = wideString.data();
@@ -175,6 +184,7 @@ namespace cucumber::gherkin
 
         return result;
     }
+
     // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic,cppcoreguidelines-pro-type-reinterpret-cast)
 
     enum class RePattern : std::uint8_t
@@ -185,7 +195,7 @@ namespace cucumber::gherkin
         crlf,
         cr,
         bol,
-        eol
+        eol,
     };
 
     template<typename CharT>
@@ -195,7 +205,7 @@ namespace cucumber::gherkin
         {
             if constexpr (sizeof(CharT) > sizeof(char))
             {
-                return ToWide(std::string(view));
+                return ToWide(view);
             }
             else
             {
@@ -294,19 +304,67 @@ namespace cucumber::gherkin
     template<typename CharT>
     std::basic_string<CharT> Strip(std::basic_string_view<CharT> what, const StripPattern<CharT>& pattern)
     {
-        std::basic_regex<CharT> const regex(pattern.Str());
-        std::basic_string<CharT> const empty;
-        std::basic_string<CharT> result;
+        return Substitute(std::basic_string<CharT>(what), pattern.Str());
+    }
 
-        std::regex_replace(std::back_inserter(result), what.begin(), what.end(), regex, empty);
+    namespace detail
+    {
+        template<typename CharT, bool Left>
+        std::basic_string_view<CharT> TrimView(std::basic_string_view<CharT> text, RePattern pattern)
+        {
+            switch (pattern)
+            {
+                case RePattern::none:
+                case RePattern::bol:
+                case RePattern::eol:
+                    return text;
+                // RePatterns::Get currently maps crlf to a single CR, as it does cr.
+                case RePattern::crlf:
+                case RePattern::cr:
+                    if (!text.empty() && (Left ? text.front() : text.back()) == static_cast<CharT>('\r'))
+                    {
+                        if constexpr (Left)
+                        {
+                            text.remove_prefix(1);
+                        }
+                        else
+                        {
+                            text.remove_suffix(1);
+                        }
+                    }
+                    return text;
+                case RePattern::allSpaces:
+                case RePattern::spacesNoNl:
+                    break;
+                default:
+                    throw std::out_of_range("Invalid trimming pattern");
+            }
 
-        return result;
+            const auto isSpace = [pattern](CharT character)
+            {
+                return character == ' ' || character == '\t' || character == '\v' || character == '\f' || character == '\r' ||
+                       character == static_cast<CharT>(U'\u0085') || character == static_cast<CharT>(U'\u00a0') ||
+                       (pattern == RePattern::allSpaces && character == '\n');
+            };
+            while (!text.empty() && isSpace(Left ? text.front() : text.back()))
+            {
+                if constexpr (Left)
+                {
+                    text.remove_prefix(1);
+                }
+                else
+                {
+                    text.remove_suffix(1);
+                }
+            }
+            return text;
+        }
     }
 
     template<typename CharT>
     std::basic_string<CharT> Lstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::allSpaces)
     {
-        return Strip(text, StripPattern<CharT>(RePattern::bol, RePatterns<CharT>::Get(pattern)));
+        return std::basic_string<CharT>(detail::TrimView<CharT, true>(text, pattern));
     }
 
     template<typename CharT>
@@ -318,7 +376,7 @@ namespace cucumber::gherkin
     template<typename CharT>
     std::basic_string<CharT> Rstrip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::allSpaces)
     {
-        return Strip(text, StripPattern<CharT>(RePatterns<CharT>::Get(pattern), RePattern::eol));
+        return std::basic_string<CharT>(detail::TrimView<CharT, false>(text, pattern));
     }
 
     template<typename CharT>
@@ -330,7 +388,7 @@ namespace cucumber::gherkin
     template<typename CharT>
     std::basic_string<CharT> Strip(std::basic_string_view<CharT> text, RePattern pattern = RePattern::allSpaces)
     {
-        return Lstrip(Rstrip(text, pattern), pattern);
+        return std::basic_string<CharT>(detail::TrimView<CharT, true>(detail::TrimView<CharT, false>(text, pattern), pattern));
     }
 
     template<typename CharT>

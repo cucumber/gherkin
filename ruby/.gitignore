@@ -3,8 +3,4 @@ coverage/
 acceptance/
 pkg/
 *.gem
-.compared
-.built
-.tested*
 *-go
-*.iml
