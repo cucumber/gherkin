@@ -39,6 +39,49 @@ void main() {
     expect(envelopes.single.gherkinDocument, isNotNull);
   });
 
+  test('source-only mode does not parse invalid input or generate IDs', () {
+    final envelopes = generateMessages(
+      'invalid input',
+      'invalid.feature',
+      GherkinOptions(
+        includeGherkinDocument: false,
+        includePickles: false,
+        idGenerator: () => throw StateError('unexpected ID request'),
+      ),
+    );
+    expect(envelopes, hasLength(1));
+    expect(envelopes.single.source!.data, 'invalid input');
+  });
+
+  test('can emit pickles without emitting the document or source', () {
+    final envelopes = generateMessages(
+      source,
+      'minimal.feature',
+      const GherkinOptions(
+        includeSource: false,
+        includeGherkinDocument: false,
+      ),
+    );
+    expect(envelopes, hasLength(1));
+    expect(envelopes.single.pickle!.name, 'minimalistic');
+    expect(envelopes.single.pickle!.uri, 'minimal.feature');
+  });
+
+  test('returns no envelopes when all output is disabled', () {
+    expect(
+      generateMessages(
+        'invalid input',
+        'invalid.feature',
+        const GherkinOptions(
+          includeSource: false,
+          includeGherkinDocument: false,
+          includePickles: false,
+        ),
+      ),
+      isEmpty,
+    );
+  });
+
   test('uses a custom id generator', () {
     var nextId = 0;
     final envelopes = generateMessages(
