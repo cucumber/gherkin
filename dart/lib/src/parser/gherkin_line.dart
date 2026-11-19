@@ -113,8 +113,9 @@ class GherkinLine {
           case tableCellSeparator:
             cellBuffer.write('|');
           default:
-            cellBuffer.write(r'\');
-            cellBuffer.write(chr);
+            cellBuffer
+              ..write(r'\')
+              ..write(chr);
         }
         escape = false;
       } else {

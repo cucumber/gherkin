@@ -7,9 +7,19 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [c] Fixed the size of struct Utf8Bytes to fit all 6 bytes of Utf8 byte sequences allowed by older specs.
+- [c] Fix heap buffer overflow in `create_multi_line_text_from_tokens` when description lines only contain blank characters ([#729](https://github.com/cucumber/gherkin/pull/729), [#728](https://github.com/cucumber/gherkin/pull/728))
+
+## [43.0.0] - 2026-11-13
 ### Changed
 - [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
+- [cpp] Added benchmark target. ([#732](https://github.com/cucumber/gherkin/pull/732))
+- [cpp] Added optional RE2 support as a regex engine backend. ([#732](https://github.com/cucumber/gherkin/pull/732))
 - [Python] Dropped support for Python 3.10
+- [Ruby] Move the version constant to `lib/gherkin/version.rb`.
+- [Elixir] Bump minimum elixir version to 1.13 ([#742](https://github.com/cucumber/gherkin/pull/742))
+- Update dependency `messages` up to v35
 
 ### Fixed
 - (i18n) Remove trailing space from Texan Rule keyword.
@@ -952,7 +962,8 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v42.0.1...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v43.0.0...HEAD
+[43.0.0]: https://github.com/cucumber/gherkin/compare/v42.0.1...v43.0.0
 [42.0.1]: https://github.com/cucumber/gherkin/compare/v42.0.0...v42.0.1
 [42.0.0]: https://github.com/cucumber/gherkin/compare/v41.0.0...v42.0.0
 [41.0.0]: https://github.com/cucumber/gherkin/compare/v40.0.0...v41.0.0

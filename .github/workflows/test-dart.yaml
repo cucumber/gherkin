@@ -29,12 +29,12 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        dart: ["3.8.0", "3.12.0"]
+        dart: ["3.8.0", "3.14.0"]
         include:
           - os: windows-latest
-            dart: "3.12.0"
+            dart: "3.14.0"
           - os: macos-latest
-            dart: "3.12.0"
+            dart: "3.14.0"
 
     defaults:
       run:
@@ -45,7 +45,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+      - uses: dart-lang/setup-dart@2286a0c042b44434fe26d292bbce8d34f7ec662b # v1.8.2
         with:
           sdk: ${{ matrix.dart }}
 

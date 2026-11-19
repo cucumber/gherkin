@@ -28,7 +28,6 @@
 #include <cstddef>
 #include <iterator>
 #include <optional>
-#include <regex>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -56,7 +55,8 @@ namespace cucumber::gherkin
             {
                 if (row.cells.size() != cellCount)
                 {
-                    throw AstBuilderError("inconsistent cell count within the table", { row.location.line, row.location.column.value_or(0) });
+                    throw AstBuilderError("inconsistent cell count within the table",
+                        { row.location.line, row.location.column.value_or(0) });
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace cucumber::gherkin
         messages::DocString MakeDocString(AstNode& node)
         {
             const auto& tokens = node.GetTokens(RuleType::docStringSeparator);
-            const auto& separatorToken = tokens[0];
+            const auto& separatorToken = tokens.front();
 
             StringViews lineViews;
 
@@ -102,11 +102,11 @@ namespace cucumber::gherkin
 
         std::string MakeDescription(AstNode& node)
         {
-            static const std::regex onlySpaces("\\s*");
+            static const Regex onlySpaces("\\s*");
             auto toks = node.GetTokens(RuleType::other);
             std::size_t ntoks = toks.size();
 
-            while ((ntoks != 0U) && FullMatch(toks[ntoks - 1].matchedText, onlySpaces))
+            while ((ntoks != 0U) && FullMatch(toks.at(ntoks - 1).matchedText, onlySpaces))
             {
                 --ntoks;
             }
@@ -115,7 +115,7 @@ namespace cucumber::gherkin
 
             for (std::size_t i = 0; i < ntoks; ++i)
             {
-                descriptionLines.emplace_back(toks[i].matchedText);
+                descriptionLines.emplace_back(toks.at(i).matchedText);
             }
 
             return Join("\n", descriptionLines);
@@ -232,7 +232,15 @@ namespace cucumber::gherkin
     {
         const auto& stepLine = node.GetToken(RuleType::stepLine);
 
-        messages::Step step{ GetLocation(stepLine), stepLine.matchedKeyword.value_or(""), stepLine.matchedKeywordType, stepLine.matchedText, std::nullopt, std::nullopt, NextId() };
+        messages::Step step{
+            GetLocation(stepLine),
+            stepLine.matchedKeyword.value_or(""),
+            stepLine.matchedKeywordType,
+            stepLine.matchedText,
+            std::nullopt,
+            std::nullopt,
+            NextId(),
+        };
 
         node.Set(RuleType::docString, step.docString);
         node.Set(RuleType::dataTable, step.dataTable);
@@ -259,7 +267,14 @@ namespace cucumber::gherkin
     {
         const auto& backgroundLine = node.GetToken(RuleType::backgroundLine);
 
-        messages::Background background{ GetLocation(backgroundLine), backgroundLine.matchedKeyword.value_or(""), backgroundLine.matchedText, {}, {}, NextId() };
+        messages::Background background{
+            GetLocation(backgroundLine),
+            backgroundLine.matchedKeyword.value_or(""),
+            backgroundLine.matchedText,
+            {},
+            {},
+            NextId(),
+        };
 
         node.Set(RuleType::description, background.description);
         node.Set(RuleType::step, background.steps);
@@ -273,7 +288,16 @@ namespace cucumber::gherkin
         const auto& scenarioNode = *pnode;
         const auto& scenarioLine = scenarioNode.GetToken(RuleType::scenarioLine);
 
-        messages::Scenario scenario{ GetLocation(scenarioLine), GetTags(node), scenarioLine.matchedKeyword.value_or(""), scenarioLine.matchedText, {}, {}, {}, NextId() };
+        messages::Scenario scenario{
+            GetLocation(scenarioLine),
+            GetTags(node),
+            scenarioLine.matchedKeyword.value_or(""),
+            scenarioLine.matchedText,
+            {},
+            {},
+            {},
+            NextId(),
+        };
 
         scenarioNode.Set(RuleType::description, scenario.description);
         scenarioNode.Set(RuleType::step, scenario.steps);
@@ -288,7 +312,16 @@ namespace cucumber::gherkin
         const auto& examplesNode = *pnode;
         const auto& examplesLine = examplesNode.GetToken(RuleType::examplesLine);
 
-        messages::Examples examples{ GetLocation(examplesLine), GetTags(node), examplesLine.matchedKeyword.value_or(""), examplesLine.matchedText, {}, std::nullopt, {}, NextId() };
+        messages::Examples examples{
+            GetLocation(examplesLine),
+            GetTags(node),
+            examplesLine.matchedKeyword.value_or(""),
+            examplesLine.matchedText,
+            {},
+            std::nullopt,
+            {},
+            NextId(),
+        };
 
         examplesNode.Set(RuleType::description, examples.description);
 
@@ -322,7 +355,13 @@ namespace cucumber::gherkin
         const auto* ptoken = header.GetSingle<Token>(RuleType::featureLine);
         const auto& featureLine = *ptoken;
 
-        messages::Feature feature{ GetLocation(featureLine), GetTags(header), featureLine.matchedGherkinDialect, featureLine.matchedKeyword.value_or(""), featureLine.matchedText };
+        messages::Feature feature{
+            GetLocation(featureLine),
+            GetTags(header),
+            featureLine.matchedGherkinDialect,
+            featureLine.matchedKeyword.value_or(""),
+            featureLine.matchedText,
+        };
 
         header.Set(RuleType::description, feature.description);
 
@@ -370,7 +409,15 @@ namespace cucumber::gherkin
         const auto* ptoken = header.GetSingle<Token>(RuleType::ruleLine);
         const auto& ruleLine = *ptoken;
 
-        messages::Rule rule{ GetLocation(ruleLine), GetTags(header), ruleLine.matchedKeyword.value_or(""), ruleLine.matchedText, {}, {}, NextId() };
+        messages::Rule rule{
+            GetLocation(ruleLine),
+            GetTags(header),
+            ruleLine.matchedKeyword.value_or(""),
+            ruleLine.matchedText,
+            {},
+            {},
+            NextId(),
+        };
 
         header.Set(RuleType::description, rule.description);
 
