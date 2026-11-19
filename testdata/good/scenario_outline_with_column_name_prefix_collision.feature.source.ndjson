@@ -1,1 +1,0 @@
-{"source":{"data":"Feature: Scenario Outline with example column names that are prefixes of each other\n\nScenario Outline: minimalistic\n    Given the <value> and the <value_2>\n\nExamples:\n  | value | value_2 |\n  | foo   | bar     |\n","mediaType":"text/x.cucumber.gherkin+plain","uri":"../testdata/good/scenario_outline_with_column_name_prefix_collision.feature"}}

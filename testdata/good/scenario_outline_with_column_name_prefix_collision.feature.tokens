@@ -1,9 +1,0 @@
-(1:1)FeatureLine:()Feature/Scenario Outline with example column names that are prefixes of each other/
-(2:1)Empty://
-(3:1)ScenarioLine:()Scenario Outline/minimalistic/
-(4:5)StepLine:(Context)Given /the <value> and the <value_2>/
-(5:1)Empty://
-(6:1)ExamplesLine:()Examples//
-(7:3)TableRow://5:value,13:value_2
-(8:3)TableRow://5:foo,13:bar
-EOF

@@ -356,6 +356,8 @@ static const wchar_t* create_expanded_text(const wchar_t* original_text, const T
                     item->old_length = cell_text_length + 2;
                     item->new_text = body_row->table_cells->table_cells[j].value;
                     ItemQueue_add(replacement_list, (Item*)item);
+                    i += cell_text_length + 1;
+                    break;
                 }
             }
         }
