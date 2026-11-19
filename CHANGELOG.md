@@ -7,9 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org).
 This document is formatted according to the principles of [Keep A CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
 ### Fixed
 - [c] Fixed the size of struct Utf8Bytes to fit all 6 bytes of Utf8 byte sequences allowed by older specs.
+- [c] Fix heap buffer overflow in `create_multi_line_text_from_tokens` when description lines only contain blank characters ([#729](https://github.com/cucumber/gherkin/pull/729), [#728](https://github.com/cucumber/gherkin/pull/728))
 
 ## [43.0.0] - 2026-11-13
 ### Changed
