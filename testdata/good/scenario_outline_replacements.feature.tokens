@@ -19,4 +19,12 @@
 (19:5)ExamplesLine:()Examples//
 (20:7)TableRow://9:a,18:a
 (21:7)TableRow://9:pickle,18:gherkin
+(22:1)Empty://
+(23:3)ScenarioLine:()Scenario Outline/variables with colliding names can appear next to each other/
+(24:5)StepLine:(Context)Given /the <a> and the <ax>/
+(25:5)StepLine:(Action)When /<a><ax>/
+(26:1)Empty://
+(27:5)ExamplesLine:()Examples//
+(28:7)TableRow://9:a,18:ax
+(29:7)TableRow://9:pickle,18:gherkin
 EOF

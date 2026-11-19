@@ -19,3 +19,11 @@ Feature: Scenario Outline replacements
     Examples:
       | a      | a       |
       | pickle | gherkin |
+
+  Scenario Outline: variables with colliding names can appear next to each other
+    Given the <a> and the <ax>
+    When <a><ax>
+
+    Examples:
+      | a      | ax      |
+      | pickle | gherkin |
