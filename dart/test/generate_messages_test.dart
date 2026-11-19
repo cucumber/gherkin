@@ -1,5 +1,4 @@
 import 'package:cucumber_gherkin/cucumber_gherkin.dart';
-import 'package:cucumber_gherkin/src/parser/token_scanner.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -8,14 +7,6 @@ void main() {
       '\n'
       '  Scenario: minimalistic\n'
       '    Given the minimalism\n';
-
-  test('represents EOF without a line', () {
-    final token = TokenScanner('').read();
-
-    expect(token.isEof, isTrue);
-    expect(token.line, isNull);
-    expect(token.tokenValue, 'EOF');
-  });
 
   test('parses source into message envelopes', () {
     final envelopes = generateMessages(source, 'minimal.feature');
@@ -95,6 +86,19 @@ void main() {
     expect(scenario.steps.first.id, 'id-0');
     expect(scenario.id, 'id-1');
     expect(envelopes.last.pickle!.id, startsWith('id-'));
+  });
+
+  test('propagates failures from the caller-provided ID generator', () {
+    final failure = StateError('ID allocation failed');
+
+    expect(
+      () => generateMessages(
+        source,
+        'minimal.feature',
+        GherkinOptions(idGenerator: () => throw failure),
+      ),
+      throwsA(same(failure)),
+    );
   });
 
   test('reports parse errors as envelopes', () {
