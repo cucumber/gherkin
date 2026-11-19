@@ -1,4 +1,0 @@
----
-libs:
-  public:
-    - cucumber::gherkin

@@ -1,7 +1,7 @@
 ext/
 build/
 acceptance/
-stage/
+install/
 .cenv/
 .cmate/
 .built

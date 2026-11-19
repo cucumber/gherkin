@@ -1,5 +1,5 @@
-import { GherkinException } from './Errors'
-import type IToken from './IToken'
+import { GherkinException } from './Errors.js'
+import type IToken from './IToken.js'
 
 export class UnexpectedTokenException extends GherkinException {
   public static create<TokenType>(token: IToken<TokenType>, expectedTokenTypes: string[]) {

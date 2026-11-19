@@ -17,7 +17,7 @@ final class TagLine {
 
     }
 
-    static List<LineSpan> parse(int indent, String text, Location location) {
+    static List<LineSpan> parse(int indent, String text, Location location) throws ParserException {
         int textLength = text.length();
         // parseTags is guarded by token.line.startsWith(TAG_PREFIX_CHAR) 
         // so there is always at least one tag, and it sits at the start of the
@@ -54,7 +54,8 @@ final class TagLine {
                 indexStartPreviousTag = indexStartCurrentTag;
                 int column = indent + totalCodePointCount + COLUMN_OFFSET;
                 if (containsWhitespace(text, indexStartCurrentTag + 1, indexEndCurrentTag)) {
-                    throw new ParserException("A tag may not contain whitespace", Locations.atColumn(location, column));
+                    var error = new ParserError.TagMayNotContainWhitespace(Locations.atColumn(location, column));
+                    throw new ParserException(error);
                 }
                 // build the line span
                 String token = text.substring(indexStartCurrentTag, indexEndCurrentTag);

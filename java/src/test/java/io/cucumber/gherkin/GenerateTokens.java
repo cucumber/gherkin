@@ -17,7 +17,7 @@ public final class GenerateTokens {
         // main class
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         TokenFormatterBuilder builder = new TokenFormatterBuilder();
         Parser<String> parser = new Parser<>(builder);
         GherkinTokenMatcher matcher = new GherkinTokenMatcher();

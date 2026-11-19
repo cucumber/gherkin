@@ -1,48 +1,45 @@
-// This file is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 @using Berp;
 @functions {
-public static string ToSnakeCase(string str)
+public static string ToCamelCase(string str)
 {
-    return
-        string.Concat(
-            str.Select(
-                (x, i) => i > 0 && char.IsUpper(x)
-                ? "_" + x
-                : x.ToString()
-            )
-        ).ToLower();
+    if (string.IsNullOrEmpty(str)) return str;
+    return char.ToLower(str[0]) + str.Substring(1);
 }
 
 public static string NameOf(Rule rule)
-{ return ToSnakeCase(rule.Name.Replace("#", "")); }
+{ return ToCamelCase(rule.Name.Replace("#", "")); }
 
 }
-#pragma once
+#ifndef CUCUMBER_GHERKIN_RULE_TYPE_HPP
+#define CUCUMBER_GHERKIN_RULE_TYPE_HPP
 
+#include <cstdint>
 #include <ostream>
 #include <string_view>
 
-namespace cucumber::gherkin {
+// This File is generated. Do not edit! Edit gherkin-cpp-rule-type.razor instead.
 
-enum class rule_type
+namespace cucumber::gherkin
 {
-    none = 0,
-    @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
-    {<text>    @NameOf(rule),
+
+    enum class RuleType : std::uint8_t
+    {
+        none = 0,
+        @foreach(var rule in Model.RuleSet.Where(r => !r.TempRule))
+        {<text>        @NameOf(rule),
 </text>}
-    count
-};
+        count
+    };
 
-std::string_view
-to_string(rule_type r);
+    [[nodiscard]] std::string_view to_string(RuleType type);
 
-inline
-std::ostream&
-operator<<(std::ostream& os, rule_type r)
-{
-    os << to_string(r);
+    inline std::ostream& operator<<(std::ostream& ostream, RuleType type)
+    {
+        ostream << to_string(type);
 
-    return os;
-}
+        return ostream;
+    }
 
 }
+
+#endif

@@ -7,6 +7,7 @@ defmodule CucumberGherkin.Token do
     :line,
     :matched_type,
     :matched_keyword,
+    :matched_keyword_type,
     :matched_text,
     :matched_gherkin_dialect,
     :items,

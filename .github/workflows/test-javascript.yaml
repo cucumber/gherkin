@@ -1,0 +1,60 @@
+name: test-javascript
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - javascript/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - javascript/**
+      - testdata/**
+      - .github/**
+
+jobs:
+  test-javascript:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        node-version: ["22.x", "24.x", "26.x"]
+        include:
+          - os: windows-latest
+            node-version: "22.x"
+          - os: macos-latest
+            node-version: "22.x"
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: with Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: javascript/package-lock.json
+
+      - run: npm ci
+        working-directory: javascript
+
+      - run: npm run lint
+        working-directory: javascript
+
+      - run: npm test
+        working-directory: javascript
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: javascript

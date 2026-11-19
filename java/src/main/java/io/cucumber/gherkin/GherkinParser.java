@@ -1,7 +1,5 @@
 package io.cucumber.gherkin;
 
-import io.cucumber.gherkin.ParserException.CompositeParserException;
-import io.cucumber.messages.IdGenerator;
 import io.cucumber.messages.types.Envelope;
 import io.cucumber.messages.types.GherkinDocument;
 import io.cucumber.messages.types.ParseError;
@@ -21,7 +19,6 @@ import java.util.stream.Stream;
 import static io.cucumber.gherkin.EncodingParser.readWithEncodingFromSource;
 import static io.cucumber.messages.types.SourceMediaType.TEXT_X_CUCUMBER_GHERKIN_PLAIN;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Main entry point for the Gherkin library
@@ -124,26 +121,23 @@ public final class GherkinParser {
                     messages.add(Envelope.of(pickle));
                 }
             }
-        } catch (CompositeParserException composite) {
-            messages.addAll(composite.errors.stream()
+        } catch (ParserException parserException) {
+            parserException.errors.stream()
                     .map(error -> createParseError(error, uri))
-                    .collect(toList()));
-        } catch (ParserException error) {
-            messages.add(createParseError(error, uri));
+                    .forEach(messages::add);
         }
         return messages;
     }
 
-    private Envelope createParseError(ParserException e, String uri) {
+    private Envelope createParseError(ParserError e, String uri) {
         return Envelope.of(new ParseError(
                 new SourceReference(
                         uri,
                         null,
                         null,
-                        e.location
+                        e.getLocation()
                 ),
-                // ParserException always has a message
-                requireNonNull(e.getMessage())
+                e.getMessage()
         ));
     }
 
@@ -172,6 +166,13 @@ public final class GherkinParser {
             return this;
         }
 
+        @Deprecated
+        public Builder idGenerator(io.cucumber.messages.IdGenerator idGenerator) {
+            requireNonNull(idGenerator);
+            this.idGenerator = idGenerator::newId;
+            return this;
+        }
+
         public Builder idGenerator(IdGenerator idGenerator) {
             this.idGenerator = requireNonNull(idGenerator);
             return this;
@@ -181,5 +182,9 @@ public final class GherkinParser {
             return new GherkinParser(includeSource, includeGherkinDocument, includePickles, idGenerator);
         }
 
+    }
+
+    public interface IdGenerator {
+        String newId();
     }
 }

@@ -4,23 +4,23 @@ permissions: {}
 
 on:
   push:
-    branches: [ release/* ]
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   publish-nuget:
     name: Publish package to NuGet.org
-    # Failing on `ubuntu-24.04` (https://github.com/cucumber/gherkin/issues/349)
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     environment: Release
     permissions:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Setup .NET
-        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: 9.0.x
       - name: NuGet login (OIDC → temp API key)

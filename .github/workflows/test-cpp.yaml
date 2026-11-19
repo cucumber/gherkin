@@ -1,0 +1,172 @@
+name: test-cpp
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - cpp/**
+      - Makefile
+      - testdata/**
+      - .github/**
+  pull_request:
+    paths:
+      - cpp/**
+      - Makefile
+      - testdata/**
+      - .github/**
+
+jobs:
+  test-cpp-system-packages-linux:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        regex-backend: [std, re2]
+        config:
+          - { os: ubuntu-24.04, cxx: g++, version: 12 }
+          - { os: ubuntu-24.04, cxx: g++, version: 13 }
+          - { os: ubuntu-26.04, cxx: g++, version: 14 }
+          - { os: ubuntu-26.04, cxx: g++, version: 15 }
+          - { os: ubuntu-24.04, cxx: clang++, version: 16 }
+          - { os: ubuntu-24.04, cxx: clang++, version: 17 }
+          - { os: ubuntu-26.04, cxx: clang++, version: 21 }
+          - { os: ubuntu-26.04, cxx: clang++, version: 22 }
+    env:
+      CXX: ${{ matrix.config.cxx }}-${{ matrix.config.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@dbeefd73e8e2ffc1bbc412570072735eb4db3607 # v1.2.25
+        with:
+          key: ${{ github.job }}-${{ matrix.config.os }}-${{ matrix.config.cxx }}-${{ matrix.config.version }}-${{ matrix.regex-backend }}-${{ github.ref }}
+          append-timestamp: false
+          save: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nlohmann-json3-dev libgtest-dev libgmock-dev ${{ matrix.regex-backend == 're2' && 'libre2-dev' || '' }}
+
+      - name: Install cucumber/messages
+        uses: cucumber/action-cpp/install-cpp-dep@1eb8cde9e4433c60e66b19df6aec202fadd1abee # v0.1.0
+        with:
+          dependency: dependencies/messages.version
+          working-directory: cpp
+
+      - name: Build gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset test-system
+
+      - name: Benchmark gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset benchmark-system
+
+      - name: Acceptance tests
+        working-directory: cpp
+        run: make acceptance
+
+      - name: Install gherkin
+        working-directory: cpp
+        run: sudo cmake --install build/test-system
+
+  test-cpp-system-packages-macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        regex-backend: [std, re2]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@dbeefd73e8e2ffc1bbc412570072735eb4db3607 # v1.2.25
+        with:
+          key: ${{ github.job }}-${{ matrix.regex-backend }}-${{ github.ref }}
+          append-timestamp: false
+          save: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Install dependencies
+        run: brew install nlohmann-json googletest ${{ matrix.regex-backend == 're2' && 're2' || '' }}
+
+      - name: Install cucumber/messages
+        uses: cucumber/action-cpp/install-cpp-dep@1eb8cde9e4433c60e66b19df6aec202fadd1abee # v0.1.0
+        with:
+          dependency: dependencies/messages.version
+          working-directory: cpp
+
+      - name: Build gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset test-system
+
+      - name: Benchmark gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset benchmark-system
+
+      - name: Acceptance tests
+        working-directory: cpp
+        run: make acceptance
+
+      - name: Install gherkin
+        working-directory: cpp
+        run: sudo cmake --install build/test-system
+
+  test-cpp-system-packages-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        regex-backend: [std, re2]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install build tools
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          vcpkg install nlohmann-json gtest ${{ matrix.regex-backend == 're2' && 're2' || '' }} --triplet x64-windows
+          # Expose the vcpkg toolchain so find_package() locates the packages.
+          echo "CMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
+
+      - name: Install cucumber/messages
+        uses: cucumber/action-cpp/install-cpp-dep@1eb8cde9e4433c60e66b19df6aec202fadd1abee # v0.1.0
+        with:
+          dependency: dependencies/messages.version
+          working-directory: cpp
+
+      - name: Install cucumber/messages
+        uses: cucumber/action-cpp/install-cpp-dep@1eb8cde9e4433c60e66b19df6aec202fadd1abee # v0.1.0
+        with:
+          dependency: dependencies/messages.version
+          working-directory: cpp
+          preset: test-system
+
+      - name: Build gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset test-system
+
+      - name: Benchmark gherkin
+        working-directory: cpp
+        run: |
+          cmake --workflow --preset benchmark-system
+
+      - name: Install gherkin
+        working-directory: cpp
+        run: cmake --install build/test-system

@@ -25,7 +25,9 @@ Examples! := #ExamplesLine DescriptionHelper ExamplesTable?
 ExamplesTable! := #TableRow #TableRow*
 
 Step! := #StepLine StepArg?
-StepArg := (DataTable | DocString)
+StepArg := (DataTableAndMaybeDocString | DocStringAndMaybeDataTable)
+DataTableAndMaybeDocString := DataTable DocString?
+DocStringAndMaybeDataTable := DocString DataTable?
 
 DataTable! := #TableRow+
 DocString! := #DocStringSeparator #Other* #DocStringSeparator

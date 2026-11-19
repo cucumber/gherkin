@@ -11,21 +11,26 @@ require __DIR__ . '/../vendor/autoload.php';
 
 assert(is_array($argv), "Script must be run from the command line");
 
+$options = [];
+
+$selectedOptions = getopt('', $options, $restIndex);
+
+assert($selectedOptions !== false, "getopt returns false only when it cannot find the argv array.");
+
+$paths = array_slice($argv, $restIndex);
+
 $parser = new Parser(new TokenFormatterBuilder());
 
-// first element is the script name
-array_shift($argv);
+foreach($paths as $path) {
+    $data = file_get_contents($path);
 
-foreach($argv as $fileName) {
-    $input = file_get_contents($fileName);
-
-    if ($input === false) {
-        throw new \RuntimeException(\sprintf('Could not read file "%s".', $fileName));
+    if ($data === false) {
+        throw new \RuntimeException(\sprintf('Could not read file "%s".', $path));
     }
 
     $result = $parser->parse(
-            $fileName,
-            new StringTokenScanner($input),
+            $path,
+            new StringTokenScanner($data),
             new TokenMatcher(),
     );
     echo $result;

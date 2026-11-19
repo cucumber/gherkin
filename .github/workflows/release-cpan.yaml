@@ -4,7 +4,8 @@ permissions: {}
 
 on:
   push:
-    branches: [release/*]
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   create-perl-release:
@@ -14,10 +15,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: cucumber/action-publish-cpan@c9880d2be084deb71772a014135b60fe463c364d # v1.0.1
+      - uses: cucumber/action-publish-cpan@e3e5ca8155e815a8e902165ba08caebea598646c # v1.0.2
         with:
           cpan-user: ${{ secrets.CPAN_USER }}
           cpan-password: ${{ secrets.CPAN_PASSWORD }}

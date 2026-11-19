@@ -1,0 +1,49 @@
+name: test-perl
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - perl/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - perl/**
+      - testdata/**
+      - .github/**
+
+jobs:
+  test-perl:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+          - "5.14"
+          - "5.36"
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Perl environment
+        uses: shogo82148/actions-setup-perl@eebc5c886de14ebbfcd2493d49a12007d2c30477 # v1.44.5
+        with:
+          perl-version: ${{ matrix.perl }}
+          install-modules-with: cpanm
+          working-directory: perl
+
+      - name: run tests
+        run: make test
+        working-directory: perl
+
+      - name: run acceptance tests
+        run: make acceptance
+        working-directory: perl

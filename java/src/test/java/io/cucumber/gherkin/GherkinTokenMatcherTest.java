@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GherkinTokenMatcherTest {
 
     @Test
-    void match_Language_change_the_language() {
+    void match_Language_change_the_language() throws Exception{
         // Given
         GherkinTokenMatcher matcher = new GherkinTokenMatcher("en");
         matcher.match_Language(Token.createGherkinLine("# language: ht", Locations.atLine(1)));
@@ -21,7 +21,7 @@ class GherkinTokenMatcherTest {
 
 
     @Test
-    void reset_after_match_Language_change_the_language() {
+    void reset_after_match_Language_change_the_language() throws Exception {
         // Given
         GherkinTokenMatcher matcher = new GherkinTokenMatcher("en");
         matcher.match_Language(Token.createGherkinLine("# language: ht", Locations.atLine(1)));

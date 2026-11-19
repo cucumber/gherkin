@@ -1,17 +1,35 @@
-Please read [CONTRIBUTING](https://github.com/cucumber/gherkin/blob/master/CONTRIBUTING.md) first.
+# Contributing to Gherkin for Dart
 
-## Run tests
+Read the repository root [CONTRIBUTING.md](../CONTRIBUTING.md) before making a
+change.
 
-### MacOS/Linux/Windows
+## Setup
 
-Install the latest version of [Dart](https://dart.dev/get-dart).
+Install the supported [Dart SDK](https://dart.dev/get-dart) and fetch the
+package dependencies from this directory:
 
-At terminal, run `dart test` from this directory.
+```sh
+dart pub get
+```
 
-Alternatively, you can use an IDE that runs Dart projects, such as [IntelliJ Idea Community](https://www.jetbrains.com/idea/download/).
+## Verification
 
-The `dart test` command will run the unit tests and the Dart-transformed acceptance tests. 
-This is good as a first pass check and for debugging.
+Run these commands from the `dart/` directory before opening a pull request:
 
-## Make a release
-``In construction``
+```sh
+dart format --output=none --set-exit-if-changed .
+dart analyze
+dart test
+make acceptance
+dart pub publish --dry-run
+```
+
+## Generated Sources
+
+The parser and dialect definitions are generated sources. Regenerate them after
+changing their inputs:
+
+```sh
+make generate
+make copy-gherkin-languages
+```

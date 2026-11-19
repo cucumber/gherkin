@@ -1,126 +1,131 @@
-set(VERSION 30.0.4)
+cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
+project(cucumber_gherkin VERSION 43.0.0 LANGUAGES CXX)
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
-    file(STRINGS "VERSION" LINES)
-    list(GET LINES 0 VERSION)
-endif()
-
-# Crude Semver parsing
-if("${VERSION}" MATCHES "^([^\\.]+)\\.([^\\.]+)\\.([^\\.]+)$")
-    set(VER_MAJOR ${CMAKE_MATCH_1})
-    set(VER_MINOR ${CMAKE_MATCH_2})
-    set(VER_PATCH ${CMAKE_MATCH_3})
-else()
-    message(FATAL_ERROR "unable to parse version: ${VERSION}")
-endif()
-
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-project(cucumber_gherkin VERSION ${VERSION} LANGUAGES C CXX)
-
-###
-#
-# Main project check
-#
-###
-set(cucumber_gherkin_MAIN_PROJECT OFF)
-
-if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    set(cucumber_gherkin_MAIN_PROJECT ON)
-endif()
-
-###
-#
 # Options
-#
-###
-if(${CUCUMBER_GHERKIN_MAIN_PROJECT})
-    set(CUCUMBER_GHERKIN_BUILD_TESTS_INIT ON)
-    set(CUCUMBER_GHERKIN_EXPORT_COMPILE_INIT ON)
-else()
-    set(CUCUMBER_GHERKIN_BUILD_TESTS_INIT OFF)
-    set(CUCUMBER_GHERKIN_EXPORT_COMPILE_INIT OFF)
+if(POLICY CMP0077)
+    # Allow CMake 3.13+ to override options when using FetchContent / add_subdirectory.
+    cmake_policy(SET CMP0077 NEW)
 endif()
 
-option(
-    CUCUMBER_GHERKIN_BUILD_TESTS
-    "Build the unit tests."
-    ${CUCUMBER_GHERKIN_BUILD_TESTS_INIT}
-)
+option(CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY "Run clang-tidy as part of the build." Off)
+option(CUCUMBER_GHERKIN_ENABLE_COVERAGE "Enable compiler flags for code coverage measurements." Off)
+option(CUCUMBER_GHERKIN_ENABLE_SANITIZERS "Enable compiler flags for the address and undefined behaviour sanitizers." Off)
+option(CUCUMBER_GHERKIN_BUILD_TESTS "Build Gherkin regression tests." Off)
+option(CUCUMBER_GHERKIN_BUILD_BENCHMARKS "Build the Gherkin parser benchmark." Off)
 
-option(
-    CUCUMBER_GHERKIN_EXPORT_COMPILE
-    "Export compile commands."
-    ${CUCUMBER_GHERKIN_EXPORT_COMPILE_INIT}
-)
+if(CUCUMBER_GHERKIN_ENABLE_SANITIZERS AND CUCUMBER_GHERKIN_ENABLE_COVERAGE)
+    message(FATAL_ERROR "CUCUMBER_GHERKIN_ENABLE_SANITIZERS and CUCUMBER_GHERKIN_ENABLE_COVERAGE are mutually exclusive.")
+endif()
 
-option(
-    CUCUMBER_GHERKIN_FETCH_DEPS
-    "Fetch dependencies via FetchContent."
-    ${CUCUMBER_GHERKIN_FETCH_DEPS}
-)
+if(CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_PROGRAM clang-tidy REQUIRED)
+endif()
 
-###
-#
+if(CUCUMBER_GHERKIN_ENABLE_COVERAGE)
+    find_program(GCOVR_PROGRAM gcovr REQUIRED)
+
+    add_custom_target(
+        generate-lcov-report
+        COMMAND ${GCOVR_PROGRAM} --version
+        COMMAND ${GCOVR_PROGRAM} --root ${CMAKE_CURRENT_SOURCE_DIR} --merge-lines --delete --exclude-unreachable-branches --exclude-throw-branches --exclude-noncode-lines --filter include/ --filter src/
+            --txt-summary
+            --lcov ${CMAKE_CURRENT_BINARY_DIR}/lcov.info
+            --cobertura ${CMAKE_CURRENT_BINARY_DIR}/cobertura.xml --cobertura-pretty
+            --markdown-summary ${CMAKE_CURRENT_BINARY_DIR}/coverage-summary.md
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating code coverage reports"
+    )
+endif()
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Compiler cache
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    message(STATUS "Using ccache: ${CCACHE_PROGRAM}")
+else()
+    find_program(SCCACHE_PROGRAM sccache)
+    if(SCCACHE_PROGRAM)
+        set(CMAKE_CXX_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}")
+        message(STATUS "Using sccache: ${SCCACHE_PROGRAM}")
+    endif()
+endif()
+
 # Configuration
-#
-###
 include(GNUInstallDirs)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS)
 endif()
 
-if(CUCUMBER_GHERKIN_EXPORT_COMPILE)
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-endif()
-
-###
-#
 # CMake dependencies
-#
-###
-if(CUCUMBER_GHERKIN_FETCH_DEPS)
-    include(FetchContent)
-
-    FetchContent_Declare(
-        nlohmann_json
-        GIT_REPOSITORY https://github.com/nlohmann/json.git
-        GIT_TAG v3.11.3
-        OVERRIDE_FIND_PACKAGE
-    )
-
-    set(JSON_BuildTests "OFF")
-    set(JSON_Install "ON")
-
-    FetchContent_MakeAvailable(nlohmann_json)
-
-    FetchContent_Declare(
-        cucumber_messages
-        GIT_REPOSITORY https://github.com/cucumber/messages.git
-        GIT_TAG main
-        OVERRIDE_FIND_PACKAGE
-        SOURCE_SUBDIR "cpp"
-    )
-    FetchContent_MakeAvailable(cucumber_messages)
+find_package(nlohmann_json REQUIRED)
+if(NOT TARGET cucumber::messages)
+    find_package(cucumber_messages REQUIRED)
 endif()
 
-find_package(nlohmann_json CONFIG REQUIRED)
-find_package(cucumber_messages CONFIG REQUIRED)
+# Debian/Ubuntu's libre2-dev may only provide pkg-config metadata.
+set(CUCUMBER_GHERKIN_HAS_RE2 OFF)
+set(CUCUMBER_GHERKIN_RE2_USES_PKG_CONFIG OFF)
+find_package(re2 QUIET)
+if(NOT TARGET re2::re2)
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(RE2 QUIET IMPORTED_TARGET re2)
+        if(TARGET PkgConfig::RE2)
+            add_library(re2::re2 ALIAS PkgConfig::RE2)
+            set(CUCUMBER_GHERKIN_RE2_USES_PKG_CONFIG ON)
+        endif()
+    endif()
+endif()
 
-###
-#
+if(TARGET re2::re2)
+    set(CUCUMBER_GHERKIN_HAS_RE2 ON)
+else()
+    message(STATUS "re2 not found, falling back to std::regex")
+endif()
+
+# Target options
+if(CUCUMBER_GHERKIN_ENABLE_CLANG_TIDY)
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_PROGRAM}")
+endif()
+
+if(CUCUMBER_GHERKIN_ENABLE_COVERAGE)
+    add_compile_options(
+        -g -O0 --coverage -fprofile-arcs -ftest-coverage -fno-inline
+        $<$<COMPILE_LANGUAGE:CXX>:-fno-elide-constructors>
+    )
+
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        link_libraries(gcov)
+    else()
+        add_link_options(--coverage)
+    endif()
+endif()
+
+if(CUCUMBER_GHERKIN_ENABLE_SANITIZERS)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-fsanitize=address -fsanitize=undefined)
+        add_link_options(-fsanitize=address -fsanitize=undefined)
+    endif()
+endif()
+
 # Targets
-#
-###
 add_subdirectory(src/lib/gherkin)
 add_subdirectory(src/bin/gherkin)
 add_subdirectory(src/bin/gherkin-generate-tokens)
+if(CUCUMBER_GHERKIN_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()
+if(CUCUMBER_GHERKIN_BUILD_BENCHMARKS)
+    add_subdirectory(benchmark)
+endif()
 
-###
-#
 # Installation support
-#
-###
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
@@ -160,8 +165,7 @@ install(
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cucumber_gherkin"
 )
 
-
 install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/gherkin/"
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cucumber
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )

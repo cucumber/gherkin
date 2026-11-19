@@ -41,7 +41,7 @@ final class TokenTest extends TestCase
     public function testItsValueComesFromTheGherkinLineIfItIsNotEof(): void
     {
         $line = $this->createMock(GherkinLine::class);
-        $line->method('getLineText')->with(-1)->willReturn('TOKENVALUE');
+        $line->method('getLineText')->willReturn('TOKENVALUE');
 
         $token1 = new Token($line, new Location(1, 2));
         $token = $token1;
@@ -52,7 +52,7 @@ final class TokenTest extends TestCase
     public function testItPopulatesMatchFieldsWhenMatched(): void
     {
         $line = $this->createMock(GherkinLine::class);
-        $line->method('getLineText')->with(-1)->willReturn('TOKENVALUE');
+        $line->method('getLineText')->willReturn('TOKENVALUE');
 
         $token1 = new Token($line, new Location(1, 2));
         $token = $token1;
@@ -79,7 +79,7 @@ final class TokenTest extends TestCase
     public function testItPopulatesMatchedLocationWithIndentColumnWhenMatched(): void
     {
         $line = $this->createMock(GherkinLine::class);
-        $line->method('getLineText')->with(-1)->willReturn('TOKENVALUE');
+        $line->method('getLineText')->willReturn('TOKENVALUE');
 
         $token1 = new Token($line, new Location(1, 100));
         $token = $token1;

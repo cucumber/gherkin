@@ -1,6 +1,6 @@
 namespace Gherkin.Ast;
 
-public class DataTable : StepArgument, IHasRows, IHasLocation
+public class DataTable : IHasRows, IHasLocation
 {
     public Location Location { get; private set; }
     public IEnumerable<TableRow> Rows { get; private set; }

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { IdGenerator } from '@cucumber/messages'
 import { Command } from 'commander'
-import { generateMessages, makeSourceEnvelope } from './dist/src/index.js'
+import { generateMessages, makeSourceEnvelope } from './dist/index.js'
 
 const program = new Command()
 program.option('--no-source', 'Do not output Source messages')

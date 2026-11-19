@@ -17,6 +17,9 @@ typedef struct StepArgument {
     GherkinAstType type;
 } StepArgument;
 
+typedef struct DataTable DataTable;
+typedef struct DocString DocString;
+
 typedef struct Step {
     item_delete_function step_delete;
     GherkinAstType type;
@@ -26,6 +29,8 @@ typedef struct Step {
     KeywordType keyword_type;
     wchar_t* text;
     const StepArgument* argument;
+    const DataTable* data_table;
+    const DocString* doc_string;
 } Step;
 
 typedef struct Steps {
@@ -33,7 +38,7 @@ typedef struct Steps {
     Step* steps;
 } Steps;
 
-const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const StepArgument* argument);
+const Step* Step_new(Location location, IdGenerator* id_generator, const wchar_t* keyword, const KeywordType keyword_type, const wchar_t* text, const DataTable* data_table, const DocString* doc_string);
 
 void Step_delete(const Step* step);
 

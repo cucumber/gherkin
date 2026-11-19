@@ -329,12 +329,9 @@ final class GherkinDocumentBuilder implements Builder
         return $lineText;
     }
 
-    private function transformFeatureNode(AstNode $node): ?Feature
+    private function transformFeatureNode(AstNode $node): Feature
     {
         $header = $node->getSingle(AstNode::class, RuleType::FeatureHeader, new AstNode(RuleType::FeatureHeader));
-        if (!$header instanceof AstNode) {
-            return null;
-        }
         $tags = $this->getTags($header);
         $featureLine = $header->getTokenMatch(TokenType::FeatureLine);
 

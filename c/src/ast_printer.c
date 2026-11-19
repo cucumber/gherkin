@@ -132,15 +132,13 @@ static void print_step(FILE* file, const Step* step) {
     print_keyword_type(file, step->keyword_type);
     print_text(file, step->text);
     print_location(file, &step->location);
-    if (step->argument) {
-        if (step->argument->type == Gherkin_DataTable) {
-            fprintf(file, ",\"dataTable\":");
-            print_data_table(file, (DataTable*)step->argument);
-        }
-        else if (step->argument->type == Gherkin_DocString) {
-            fprintf(file, ",\"docString\":");
-            print_doc_string(file, (DocString*)step->argument);
-        }
+    if (step->data_table) {
+        fprintf(file, ",\"dataTable\":");
+        print_data_table(file, step->data_table);
+    }
+    if (step->doc_string) {
+        fprintf(file, ",\"docString\":");
+        print_doc_string(file, step->doc_string);
     }
     fprintf(file, "}");
 }

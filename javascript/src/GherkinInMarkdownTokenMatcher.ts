@@ -1,23 +1,23 @@
-import * as messages from '@cucumber/messages'
-import { compareStepKeywords } from './compareStepKeywords'
-import type Dialect from './Dialect'
-import { NoSuchLanguageException } from './Errors'
-import DIALECTS from './gherkin-languages.json'
-import type { Item } from './IToken'
-import type ITokenMatcher from './ITokenMatcher'
-import { type Token, TokenType } from './Parser'
+import { type Location, StepKeywordType } from '@cucumber/messages'
+import { compareStepKeywords } from './compareStepKeywords.js'
+import type Dialect from './Dialect.js'
+import { NoSuchLanguageException } from './Errors.js'
+import DIALECTS from './gherkin-languages.json' with { type: 'json' }
+import type { Item } from './IToken.js'
+import type ITokenMatcher from './ITokenMatcher.js'
+import { type Token, TokenType } from './Parser.js'
 
 const DIALECT_DICT: { [key: string]: Dialect } = DIALECTS
 const DEFAULT_DOC_STRING_SEPARATOR = /^(```[`]*)(.*)/
 
 function addKeywordTypeMappings(
-  h: { [key: string]: messages.StepKeywordType[] },
+  h: { [key: string]: StepKeywordType[] },
   keywords: readonly string[],
-  keywordType: messages.StepKeywordType
+  keywordType: StepKeywordType
 ) {
   for (const k of keywords) {
     if (!(k in h)) {
-      h[k] = [] as messages.StepKeywordType[]
+      h[k] = [] as StepKeywordType[]
     }
     h[k].push(keywordType)
   }
@@ -32,7 +32,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
   private activeDocStringSeparator: RegExp
   private indentToRemove: number
   private matchedFeatureLine: boolean
-  private keywordTypesMap: { [key: string]: messages.StepKeywordType[] }
+  private keywordTypesMap: { [key: string]: StepKeywordType[] }
 
   constructor(private readonly defaultDialectName: string = 'en') {
     this.dialect = DIALECT_DICT[defaultDialectName]
@@ -66,7 +66,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     this.reset()
   }
 
-  changeDialect(newDialectName: string, location?: messages.Location) {
+  changeDialect(newDialectName: string, location?: Location) {
     const newDialect = DIALECT_DICT[newDialectName]
     if (!newDialect) {
       throw NoSuchLanguageException.create(newDialectName, location)
@@ -79,21 +79,13 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
 
   initializeKeywordTypes() {
     this.keywordTypesMap = {}
-    addKeywordTypeMappings(
-      this.keywordTypesMap,
-      this.dialect.given,
-      messages.StepKeywordType.CONTEXT
-    )
-    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.when, messages.StepKeywordType.ACTION)
-    addKeywordTypeMappings(
-      this.keywordTypesMap,
-      this.dialect.then,
-      messages.StepKeywordType.OUTCOME
-    )
+    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.given, StepKeywordType.CONTEXT)
+    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.when, StepKeywordType.ACTION)
+    addKeywordTypeMappings(this.keywordTypesMap, this.dialect.then, StepKeywordType.OUTCOME)
     addKeywordTypeMappings(
       this.keywordTypesMap,
       [].concat(this.dialect.and).concat(this.dialect.but),
-      messages.StepKeywordType.CONJUNCTION
+      StepKeywordType.CONJUNCTION
     )
   }
 
@@ -101,7 +93,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
   // in Markdown. Users should specify a language globally. This can be done in
   // cucumber-js using the --language [ISO 639-1] option.
   match_Language(token: Token): boolean {
-    if (!token) throw new Error('no token')
+    if (!token) {
+      throw new Error('no token')
+    }
     return false
   }
 
@@ -146,7 +140,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     let result = false
     if (token.line.startsWith('|')) {
       const tableCells = token.line.getTableCells()
-      if (this.isGfmTableSeparator(tableCells)) result = true
+      if (this.isGfmTableSeparator(tableCells)) {
+        result = true
+      }
     }
     return this.setTokenMatched(token, null, result)
   }
@@ -284,7 +280,7 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
       if (match[2] in this.keywordTypesMap) {
         // only set the keyword type if this is a step keyword
         if (this.keywordTypesMap[match[2]].length > 1) {
-          token.matchedKeywordType = messages.StepKeywordType.UNKNOWN
+          token.matchedKeywordType = StepKeywordType.UNKNOWN
         } else {
           token.matchedKeywordType = this.keywordTypesMap[match[2]][0]
         }
@@ -307,7 +303,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
     // Gherkin tables must be indented 2-5 spaces in order to be distinguidedn from non-Gherkin tables
     if (token.line.lineText.match(/^\s\s\s?\s?\s?\|/)) {
       const tableCells = token.line.getTableCells()
-      if (this.isGfmTableSeparator(tableCells)) return false
+      if (this.isGfmTableSeparator(tableCells)) {
+        return false
+      }
 
       token.matchedKeyword = '|'
       token.matchedType = TokenType.TableRow
@@ -338,7 +336,9 @@ export default class GherkinInMarkdownTokenMatcher implements ITokenMatcher<Toke
       }
     } while (m)
 
-    if (tags.length === 0) return false
+    if (tags.length === 0) {
+      return false
+    }
     token.matchedType = TokenType.TagLine
     token.matchedItems = tags
     return true

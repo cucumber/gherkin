@@ -1,0 +1,12 @@
+Makefile
+build/
+coverage/
+bin/
+test/
+benchmark/
+acceptance/
+pubspec.lock
+gherkin-dart.razor
+# Build-time code generator for dialects_builtin.g.dart.
+dialects_builtin.g.dart.jq
+CONTRIBUTING.md

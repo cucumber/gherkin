@@ -189,7 +189,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
     private Step ConvertStep(Ast.Step step)
     {
         DataTable dataTable = null;
-        if (step.Argument is Gherkin.Ast.DataTable astDataTable)
+        if (step.DataTable is { } astDataTable)
         {
             var rows = ConvertToTableRow(astDataTable.Rows);
             dataTable = new DataTable(
@@ -199,7 +199,7 @@ public class AstMessagesConverter(IIdGenerator idGenerator)
         }
 
         DocString docString = null;
-        if (step.Argument is Gherkin.Ast.DocString astDocString)
+        if (step.DocString is { } astDocString)
         {
             docString = new DocString(
                 ConvertLocation(astDocString.Location),

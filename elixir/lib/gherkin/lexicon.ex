@@ -23,7 +23,34 @@ defmodule CucumberGherkin.Lexicon do
   def load_keywords(RuleLine, lex), do: fetch_and_flatten(@rule_keywords, lex)
   def load_keywords(ExamplesLine, lex), do: fetch_and_flatten(@examples_keywords, lex)
 
+  def step_keyword_type(keyword, lexicon) when is_binary(keyword) do
+    keyword
+    |> step_keyword_types(lexicon)
+    |> Enum.uniq()
+    |> case do
+      [type] -> type
+      _ -> "Unknown"
+    end
+  end
+
   defp fetch_and_flatten(keywords, lexicon) do
     keywords |> Enum.map(&Map.fetch!(lexicon, &1)) |> List.flatten()
+  end
+
+  defp step_keyword_types(keyword, lexicon) do
+    []
+    |> maybe_add_step_keyword_type(Map.fetch!(lexicon, "given"), keyword, "Context")
+    |> maybe_add_step_keyword_type(Map.fetch!(lexicon, "when"), keyword, "Action")
+    |> maybe_add_step_keyword_type(Map.fetch!(lexicon, "then"), keyword, "Outcome")
+    |> maybe_add_step_keyword_type(Map.fetch!(lexicon, "and"), keyword, "Conjunction")
+    |> maybe_add_step_keyword_type(Map.fetch!(lexicon, "but"), keyword, "Conjunction")
+  end
+
+  defp maybe_add_step_keyword_type(acc, keywords, keyword, type) do
+    if keyword in keywords do
+      [type | acc]
+    else
+      acc
+    end
   end
 end

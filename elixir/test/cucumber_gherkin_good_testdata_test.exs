@@ -4,9 +4,17 @@ defmodule CucumberGherkinGoodTestdataTest do
 
   @moduletag timeout: :infinity
 
-  @files ["testdata", "good", "*.feature"]
+  @files [ "..", "testdata", "good", "*.feature"]
          |> Path.join()
          |> Path.wildcard()
+         # Not implemented https://github.com/cucumber/gherkin/pull/245
+         |> Enum.filter(fn el -> not String.contains?(el, "extra_table_content.feature") end)
+         # Not implemented https://github.com/cucumber/gherkin/issues/400
+         |> Enum.filter(fn el -> not String.contains?(el, "prefixed-keywords.feature") end)
+         # Not implemented https://github.com/cucumber/gherkin/pull/440
+         |> Enum.filter(fn el -> not String.contains?(el, "trim_space.feature") end)
+         # Not implemented https://github.com/cucumber/gherkin/pull/440
+         |> Enum.filter(fn el -> not String.contains?(el, "trim_tab.feature") end)
 
   @tag :good
   @tag :tokens
@@ -15,10 +23,10 @@ defmodule CucumberGherkinGoodTestdataTest do
       Enum.map(@files, fn path ->
         correct_output = File.read!(path <> ".tokens")
         tokenized_output = CucumberGherkin.tokenize(path)
-        {path, correct_output == tokenized_output}
+        {path, correct_output == tokenized_output, tokenized_output, correct_output}
       end)
 
-    total_result_boolean = Enum.all?(results, fn {_path, result} -> result end)
+    total_result_boolean = Enum.all?(results, fn {_path, result, _actual, _expected} -> result end)
 
     results
     |> construct_info_message("TOKENS TESTDATA (GOOD)")
@@ -33,7 +41,7 @@ defmodule CucumberGherkinGoodTestdataTest do
     opts = [:no_pickles, :predictable_ids, :no_ast]
 
     results = test_files_that_end_with(".source.ndjson", opts)
-    total_result_boolean = Enum.all?(results, fn {_path, result} -> result end)
+    total_result_boolean = Enum.all?(results, fn {_path, result, _actual, _expected} -> result end)
 
     results
     |> construct_info_message("SOURCE TESTDATA (GOOD)")
@@ -48,8 +56,7 @@ defmodule CucumberGherkinGoodTestdataTest do
     opts = [:no_pickles, :predictable_ids, :no_source]
 
     results = test_files_that_end_with(".ast.ndjson", opts)
-    total_result_boolean = Enum.all?(results, fn {_path, result} -> result end)
-
+    total_result_boolean = Enum.all?(results, fn {_path, result, _actual, _expected} -> result end)
     results
     |> construct_info_message("AST TESTDATA (GOOD)")
     |> report_to_logger(total_result_boolean)
@@ -62,7 +69,7 @@ defmodule CucumberGherkinGoodTestdataTest do
   test "PICKLES: compare all testdata" do
     opts = [:no_ast, :predictable_ids, :no_source]
     results = test_files_that_end_with(".pickles.ndjson", opts)
-    total_result_boolean = Enum.all?(results, fn {_path, result} -> result end)
+    total_result_boolean = Enum.all?(results, fn {_path, result, _actual, _expected} -> result end)
 
     results
     |> construct_info_message("PICKLES TESTDATA (GOOD)")
@@ -75,7 +82,7 @@ defmodule CucumberGherkinGoodTestdataTest do
     Enum.map(@files, fn path ->
       correct_output = File.read!(path <> extension)
       result = CucumberGherkin.parse_path(path, opts) |> CucumberGherkin.print_messages(:ndjson)
-      {path, correct_output == result}
+      {path, correct_output == result, result, correct_output }
     end)
   end
 
@@ -86,8 +93,8 @@ defmodule CucumberGherkinGoodTestdataTest do
     Enum.join([start_line, content, end_line], "\n")
   end
 
-  defp construct_info_line({path, false}), do: "# ERROR => #{path}"
-  defp construct_info_line({path, true}), do: "# OK    => #{path}"
+  defp construct_info_line({path, false, actual, expected}), do: "# ERROR => #{path}" <> "\nExpected:\n#{expected}\nActual:\n#{actual}"
+  defp construct_info_line({path, true, _actual, _expected}), do: "# OK    => #{path}"
 
   defp report_to_logger(message, true), do: Logger.debug("\n" <> message)
   defp report_to_logger(message, false), do: Logger.error("\n" <> message)

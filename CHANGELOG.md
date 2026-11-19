@@ -8,6 +8,57 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 
 ## [Unreleased]
 
+### Fixed
+- [c] Fixed the size of struct Utf8Bytes to fit all 6 bytes of Utf8 byte sequences allowed by older specs.
+
+## [43.0.0] - 2026-11-13
+### Changed
+- [cpp] BREAKING CHANGE: Updated coding style, breaks includes, class and member names.  ([#673](https://github.com/cucumber/gherkin/pull/673))
+- [cpp] Added benchmark target. ([#732](https://github.com/cucumber/gherkin/pull/732))
+- [cpp] Added optional RE2 support as a regex engine backend. ([#732](https://github.com/cucumber/gherkin/pull/732))
+- [Python] Dropped support for Python 3.10
+- [Ruby] Move the version constant to `lib/gherkin/version.rb`.
+- [Elixir] Bump minimum elixir version to 1.13 ([#742](https://github.com/cucumber/gherkin/pull/742))
+- Update dependency `messages` up to v35
+
+### Fixed
+- (i18n) Remove trailing space from Texan Rule keyword.
+- [Ruby] Substitute example values into scenario outlines literally, as the other implementations do, instead of reading them as replacement patterns. ([#697](https://github.com/cucumber/gherkin/pull/697))
+
+## [42.0.1] - 2026-08-05
+### Added
+- [Java] Added builder option to use non-deprecated `IdGenerator`.
+
+### Fixed
+- [Java] Use version range for `org.jspecify:jspecify`
+
+## [42.0.0] - 2026-07-19
+### Added
+- (i18n) Added Persian translation of "Rule" ([#642](https://github.com/cucumber/gherkin/pull/642))
+- (i18n) Added new synonyms for existing Persian keywords  ([#642](https://github.com/cucumber/gherkin/pull/642))
+- [Dart] Revived Dart implementation as `cucumber_gherkin` ([#640](https://github.com/cucumber/gherkin/pull/640))
+
+### Changed
+- Allow steps to have both a DocString and a Datatable argument ([#599](https://github.com/cucumber/gherkin/pull/599), [#643](https://github.com/cucumber/gherkin/pull/643))
+- Update dependency messages to at-least v34 ([#652](https://github.com/cucumber/gherkin/pull/652), [#643](https://github.com/cucumber/gherkin/pull/643))
+- [cpp] Removed cmate and all related files. ([#617](https://github.com/cucumber/gherkin/pull/617))
+- [Ruby] Require Ruby 3.3
+
+### Fixed
+- [testdata] removed stray \r\n line endings, replaced with \n. ([#617](https://github.com/cucumber/gherkin/pull/617))
+
+## [41.0.0] - 2026-06-20
+### Changed
+- [PHP] Require PHP 8.4
+
+### Fixed
+- [JavaScript] Remove namespace imports from messages
+
+## [40.0.0] - 2026-06-10
+### Changed
+- [.Net] Replaced FluentAssertions with AwesomeAssertions
+- [JavaScript] Switch to ESM ([#610](https://github.com/cucumber/gherkin/pull/610))
+
 ## [39.1.0] - 2026-05-06
 ### Added
 - (i18n) Expanded Turkish keywords ([#567](https://github.com/cucumber/gherkin/pull/567))
@@ -53,7 +104,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - Add `location` to `Pickle` ([#433](https://github.com/cucumber/gherkin/pull/433))
 
 ### Changed
-- BREAKING CHANGE: Require messages v31 or greater
+- Require messages v31 or greater
 
 ### Fixed
 - [Java] Fixed `AstNode` conditions which never occur in `GherkinDocumentBuilder` ([#497](https://github.com/cucumber/gherkin/pull/497)).
@@ -160,7 +211,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 - [.NET] Changed some types from class to struct, removed IGherkinLine interface and changes some functions from Array to Enumerable
 - [Ruby] Update minimum ruby requirement from 3.0 to 3.2
 - [Ruby] Introduce rubocop subgems to facilitate optimisations
-- [JavaScript] BREAKING CHANGE: Update supported Node.js versions to 18, 20, 22 and 23 ([#365](https://github.com/cucumber/gherkin/pull/365))
+- [JavaScript] Update supported Node.js versions to 18, 20, 22 and 23 ([#365](https://github.com/cucumber/gherkin/pull/365))
 
 ### Fixed
 - [.NET] Fix NuGet package generation
@@ -911,7 +962,12 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Changed
 - First release
 
-[Unreleased]: https://github.com/cucumber/gherkin/compare/v39.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/gherkin/compare/v43.0.0...HEAD
+[43.0.0]: https://github.com/cucumber/gherkin/compare/v42.0.1...v43.0.0
+[42.0.1]: https://github.com/cucumber/gherkin/compare/v42.0.0...v42.0.1
+[42.0.0]: https://github.com/cucumber/gherkin/compare/v41.0.0...v42.0.0
+[41.0.0]: https://github.com/cucumber/gherkin/compare/v40.0.0...v41.0.0
+[40.0.0]: https://github.com/cucumber/gherkin/compare/v39.1.0...v40.0.0
 [39.1.0]: https://github.com/cucumber/gherkin/compare/v39.0.0...v39.1.0
 [39.0.0]: https://github.com/cucumber/gherkin/compare/v38.0.0...v39.0.0
 [38.0.0]: https://github.com/cucumber/gherkin/compare/v37.0.1...v38.0.0

@@ -64,7 +64,7 @@ $(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	for file in build/Generated**; do tail -n +2 $$file > src-generated/$$(head -n 1 $$file); rm $$file; done
 	rm -f build/classes.php
 
-$(GHERKIN_LANGUAGES_JSON):
+$(GHERKIN_LANGUAGES_JSON): ../gherkin-languages.json
 	cp ../gherkin-languages.json $@
 
 acceptance/testdata/%.tokens: ../testdata/% ../testdata/%.tokens

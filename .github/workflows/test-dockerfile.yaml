@@ -1,0 +1,33 @@
+name: test-dockerfile
+
+permissions: {}
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - Dockerfile
+  pull_request:
+    branches:
+      - main
+    paths:
+      - Dockerfile
+
+jobs:
+  test-codegen:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: build dockerfile
+        run: docker build --tag berp-env .
+
+      - name: test dockerfile
+        # A zero exit code should be sufficient confirmation that the docker file
+        # works.
+        run: docker run --interactive berp-env berp --version

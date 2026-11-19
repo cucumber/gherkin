@@ -1,5 +1,5 @@
 {
-  "require": ["ts-node/register", "source-map-support/register"],
+  "node-option": ["import=tsx"],
   "extension": ["ts", "tsx"],
   "recursive": true,
   "timeout": 10000

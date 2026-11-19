@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-version = File.read(File.expand_path('VERSION', __dir__)).strip
+require_relative 'lib/gherkin/version'
 
 Gem::Specification.new do |s|
   s.name        = 'cucumber-gherkin'
-  s.version     = version
+  s.version     = Gherkin::VERSION
   s.authors     = ['Gáspár Nagy', 'Aslak Hellesøy', 'Steve Tooke']
   s.description = 'Gherkin parser'
   s.summary     = "#{s.name}-#{s.version}"
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/cucumber/gherkin'
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 3.2'
+  s.required_ruby_version = '>= 3.3'
   s.required_rubygems_version = '>= 3.2.8'
 
   s.metadata = {
@@ -23,15 +23,15 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/gherkin/blob/main/ruby'
   }
 
-  s.add_runtime_dependency 'cucumber-messages', '>= 31', '< 33'
+  s.add_runtime_dependency 'cucumber-messages', '>= 34', '< 36'
 
   s.add_development_dependency 'rake', '~> 13.1'
   s.add_development_dependency 'rspec', '~> 3.13'
-  s.add_development_dependency 'rubocop', '~> 1.71.2'
-  s.add_development_dependency 'rubocop-rspec', '~> 3.4.0'
-  s.add_development_dependency 'rubocop-packaging', '~> 0.5.2'
-  s.add_development_dependency 'rubocop-performance', '~> 1.23.1'
-  s.add_development_dependency 'rubocop-rake', '~> 0.6.0'
+  s.add_development_dependency 'rubocop', '~> 1.92.0'
+  s.add_development_dependency 'rubocop-rspec', '~> 3.10.0'
+  s.add_development_dependency 'rubocop-packaging', '~> 0.6.0'
+  s.add_development_dependency 'rubocop-performance', '~> 1.27.0'
+  s.add_development_dependency 'rubocop-rake', '~> 0.7.0'
 
   s.executables      = %w[gherkin-ruby gherkin]
   s.files            = Dir['README.md', 'LICENSE', 'lib/**/*']

@@ -1,6 +1,6 @@
 package io.cucumber.gherkin;
 
-import io.cucumber.messages.IdGenerator;
+import io.cucumber.gherkin.GherkinParser.IdGenerator;
 
 class IncrementingIdGenerator implements IdGenerator {
     private int next = 0;

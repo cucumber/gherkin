@@ -1,8 +1,27 @@
-# Gherkin
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/cucumber/cucumber-js/46a5a78107be27e99c6e044c69b6e8f885ce456c/docs/images/logo.svg" alt="Cucumber logo" width="75">
+  <br>
+  Gherkin
+</h1>
+<p align="center">
+  <b>Gherkin is a parser and compiler for the Gherkin language.
+</b>
+</p>
 
-Gherkin is a parser and compiler for the Gherkin language.
+<div align="center">
 
-Gherkin is currently implemented for the following platforms (in order of birthday):
+[![NuGet Version](https://img.shields.io/nuget/v/Gherkin)](https://www.nuget.org/packages/Gherkin)
+[![Maven Central](https://img.shields.io/maven-central/v/io.cucumber/gherkin)](https://central.sonatype.com/artifact/io.cucumber/gherkin)
+[![NPM Version](https://img.shields.io/npm/v/%40cucumber%2Fgherkin)](https://www.npmjs.com/package/@cucumber/gherkin)
+[![Gem Version](https://img.shields.io/gem/v/cucumber-gherkin)](https://rubygems.org/gems/cucumber-gherkin)
+[![PyPI - Python Version](https://img.shields.io/pypi/v/gherkin-official)](https://pypi.org/project/gherkin-official)
+[![CPAN Version](https://img.shields.io/cpan/v/Gherkin)](https://metacpan.org/pod/Gherkin)
+[![Packagist Version](https://img.shields.io/packagist/v/cucumber/gherkin)](https://packagist.org/packages/cucumber/gherkin)
+[![Pub Version](https://img.shields.io/pub/v/cucumber_gherkin)](https://pub.dev/packages/cucumber_gherkin)
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/cucumber/gherkin/badge)](https://scorecard.dev/viewer/?uri=github.com/cucumber/gherkin)
+
+</div>
 
 - [.NET](./dotnet) - [![test dotnet workflow](https://github.com/cucumber/gherkin/actions/workflows/test-dotnet.yml/badge.svg)](./.github/workflows/test-dotnet.yml)
 - [Java](./java) - [![test java workflow](https://github.com/cucumber/gherkin/actions/workflows/test-java.yml/badge.svg)](./.github/workflows/test-java.yml)
@@ -78,14 +97,14 @@ var gherkinDocument = parser.Parse(@"Drive:\PathToGherkinDocument\document.featu
 require 'gherkin/parser'
 require 'gherkin/pickles/compiler'
 
-source = {
+source = Cucumber::Messages::Source.new(
   uri: 'uri_of_the_feature.feature',
   data: 'Feature: ...',
-  mediaType: 'text/x.cucumber.gherkin+plain'
-}
+  media_type: 'text/x.cucumber.gherkin+plain'
+)
 
-gherkin_document = Gherkin::Parser.new.parse(source[:data])
-id_generator = Cucumber::Messages::IdGenerator::UUID.new
+gherkin_document = Gherkin::Parser.new.parse(source.data)
+id_generator = Cucumber::Messages::Helpers::IdGenerator::UUID.new
 
 pickles = Gherkin::Pickles::Compiler.new(id_generator).compile(gherkin_document, source)
 ```
@@ -93,19 +112,19 @@ pickles = Gherkin::Pickles::Compiler.new(id_generator).compile(gherkin_document,
 #### JavaScript
 
 ```javascript
-var Gherkin = require("@cucumber/gherkin");
-var Messages = require("@cucumber/messages");
+import { AstBuilder, compile, GherkinClassicTokenMatcher, Parser } from "@cucumber/gherkin";
+import { IdGenerator } from "@cucumber/messages";
 
-var uuidFn = Messages.IdGenerator.uuid();
-var builder = new Gherkin.AstBuilder(uuidFn);
-var matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInMarkdownTokenMatcher()
+const uuidFn = IdGenerator.uuid();
+const builder = new AstBuilder(uuidFn);
+const matcher = new GherkinClassicTokenMatcher(); // or GherkinInMarkdownTokenMatcher()
 
-var parser = new Gherkin.Parser(builder, matcher);
-var gherkinDocument = parser.parse("Feature: ...");
-var pickles = Gherkin.compile(
-  gherkinDocument,
-  "uri_of_the_feature.feature",
-  uuidFn
+const parser = new Parser(builder, matcher);
+const gherkinDocument = parser.parse("Feature: ...");
+const pickles = compile(
+    gherkinDocument,
+    "uri_of_the_feature.feature",
+    uuidFn
 );
 ```
 
@@ -159,6 +178,17 @@ $path = '/path/to/my.feature';
 
 $parser = new GherkinParser();
 $pickles = $parser->parseString(uri: $path, data: file_get_contents($path));
+```
+
+#### Dart
+
+```dart
+import 'package:cucumber_gherkin/cucumber_gherkin.dart';
+
+final envelopes = generateMessages('Feature: ...', 'uri_of_the_feature.feature');
+final pickles = envelopes
+    .where((envelope) => envelope.pickle != null)
+    .map((envelope) => envelope.pickle!);
 ```
 
 ### CLI
@@ -247,9 +277,8 @@ classDiagram
     TableRow "0..*" --* "1" Examples: rows
     Background "1" *-- "0..*" Step: steps
     Step "0..*" --* "1" ScenarioDefinition: steps
-    StepArgument "0..1" --* "1" Step: stepArgument
-    DataTable --|> StepArgument
-    StepArgument <|-- DocString
+    DataTable "0..1" --* "1" Step: dataTable
+    DocString "0..1" --* "1" Step: docString
     TableRow "0..*" --* "1" DataTable: rows
     TableRow "1" *-- "0..*" TableCell: cells
     class ScenarioDefinition {
@@ -305,6 +334,7 @@ Every class represents a node in the AST. Every node has a `Location` that descr
 the line number and column number in the input file. These numbers are 1-indexed.
 
 All fields on nodes are strings (except for `Location.line` and `Location.column`).
+A step may have at most one `DataTable` and at most one `DocString`.
 
 The implementation is simple objects without behaviour, only data. It's up to
 the implementation to decide whether to use classes or just basic collections,
@@ -352,6 +382,7 @@ Example:
 ```gherkin
 @a
 Feature:
+
   @b @c
   Scenario Outline:
     Given <x>
@@ -521,3 +552,4 @@ See [Markdown with Gherkin](./MARKDOWN_WITH_GHERKIN.md).
 - [cucumber-js](https://github.com/cucumber/cucumber-js)
 - [godog](https://github.com/cucumber/godog)
 - [pytest-bdd](https://github.com/pytest-dev/pytest-bdd)
+- [Reqnroll](https://reqnroll.net/)

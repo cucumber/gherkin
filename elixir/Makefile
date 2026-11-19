@@ -45,5 +45,5 @@ acceptance: ## Build acceptance test dir and compare results with reference
 $(GHERKIN_PARSER): $(GHERKIN_RAZOR) ../gherkin.berp
 	berp -g ../gherkin.berp -t $< -o $@ --noBOM
 
-$(GHERKIN_LANGUAGES_JSON):
+$(GHERKIN_LANGUAGES_JSON): ../gherkin-languages.json
 	cp ../gherkin-languages.json $@

@@ -1,0 +1,18 @@
+(1:1)FeatureLine:()Feature/Step with DataTable and DocString/
+(2:1)Empty://
+(3:3)ScenarioLine:()Scenario/DataTable followed by DocString/
+(4:5)StepLine:(Context)Given /a step with both arguments/
+(5:7)TableRow://9:id,14:name
+(6:7)TableRow://9:1,14:bob
+(7:7)DocStringSeparator:()"""//
+(8:1)Other:/hello/
+(9:7)DocStringSeparator:()"""//
+(10:1)Empty://
+(11:3)ScenarioLine:()Scenario/DocString followed by DataTable/
+(12:5)StepLine:(Context)Given /a step with both arguments/
+(13:7)DocStringSeparator:()"""//
+(14:1)Other:/hello/
+(15:7)DocStringSeparator:()"""//
+(16:7)TableRow://9:id,14:name
+(17:7)TableRow://9:1,14:bob
+EOF

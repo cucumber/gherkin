@@ -1,6 +1,6 @@
 package io.cucumber.gherkin;
 
-import io.cucumber.messages.IdGenerator;
+import io.cucumber.gherkin.GherkinParser.IdGenerator;
 import io.cucumber.messages.types.GherkinDocument;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ParserTest {
 
     @Test
-    void change_default_language() {
+    void change_default_language() throws Exception {
         GherkinTokenMatcher matcher = new GherkinTokenMatcher("no");
         IdGenerator idGenerator = new IncrementingIdGenerator();
         Parser<GherkinDocument> parser = new Parser<>(new GherkinDocumentBuilder(idGenerator, "test.feature"));

@@ -49,7 +49,9 @@ RULE_TYPE = [
     "Examples",  # Examples! := #ExamplesLine DescriptionHelper ExamplesTable?
     "ExamplesTable",  # ExamplesTable! := #TableRow #TableRow*
     "Step",  # Step! := #StepLine StepArg?
-    "StepArg",  # StepArg := (DataTable | DocString)
+    "StepArg",  # StepArg := (DataTableAndMaybeDocString | DocStringAndMaybeDataTable)
+    "DataTableAndMaybeDocString",  # DataTableAndMaybeDocString := DataTable DocString?
+    "DocStringAndMaybeDataTable",  # DocStringAndMaybeDataTable := DocString DataTable?
     "DataTable",  # DataTable! := #TableRow+
     "DocString",  # DocString! := #DocStringSeparator #Other* #DocStringSeparator
     "Tags",  # Tags! := #TagLine+
@@ -306,6 +308,7 @@ class Parser:
             31: self.match_token_at_31,
             32: self.match_token_at_32,
             33: self.match_token_at_33,
+            34: self.match_token_at_34,
             35: self.match_token_at_35,
             36: self.match_token_at_36,
             37: self.match_token_at_37,
@@ -313,7 +316,18 @@ class Parser:
             39: self.match_token_at_39,
             40: self.match_token_at_40,
             41: self.match_token_at_41,
-            42: self.match_token_at_42,
+            43: self.match_token_at_43,
+            44: self.match_token_at_44,
+            45: self.match_token_at_45,
+            46: self.match_token_at_46,
+            47: self.match_token_at_47,
+            48: self.match_token_at_48,
+            49: self.match_token_at_49,
+            50: self.match_token_at_50,
+            51: self.match_token_at_51,
+            52: self.match_token_at_52,
+            53: self.match_token_at_53,
+            54: self.match_token_at_54,
         }
 
         if state not in state_map:
@@ -325,7 +339,7 @@ class Parser:
     def match_token_at_0(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Language(context, token):
             self.start_rule(context, "Feature")
             self.start_rule(context, "FeatureHeader")
@@ -440,7 +454,7 @@ class Parser:
             self.end_rule(context, "FeatureHeader")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Empty(context, token):
             self.build(context, token)
             return 3
@@ -459,26 +473,26 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "FeatureHeader")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "FeatureHeader")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "FeatureHeader")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.start_rule(context, "Description")
             self.build(context, token)
@@ -512,7 +526,7 @@ class Parser:
             self.end_rule(context, "FeatureHeader")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Comment(context, token):
             self.build(context, token)
             return 4
@@ -529,7 +543,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "FeatureHeader")
@@ -537,21 +551,21 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "FeatureHeader")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "FeatureHeader")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.build(context, token)
             return 4
@@ -582,7 +596,7 @@ class Parser:
             self.end_rule(context, "Background")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Empty(context, token):
             self.build(context, token)
             return 5
@@ -600,26 +614,26 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Background")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Background")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Background")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.start_rule(context, "Description")
             self.build(context, token)
@@ -653,7 +667,7 @@ class Parser:
             self.end_rule(context, "Background")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Comment(context, token):
             self.build(context, token)
             return 6
@@ -669,7 +683,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Background")
@@ -677,21 +691,21 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Background")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Background")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.build(context, token)
             return 6
@@ -723,7 +737,7 @@ class Parser:
             self.end_rule(context, "Background")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_TableRow(context, token):
             self.start_rule(context, "DataTable")
             self.build(context, token)
@@ -731,7 +745,7 @@ class Parser:
         if self.match_DocStringSeparator(context, token):
             self.start_rule(context, "DocString")
             self.build(context, token)
-            return 41
+            return 52
         if self.match_StepLine(context, token):
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
@@ -744,7 +758,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Background")
@@ -752,21 +766,21 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Background")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Background")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
             return 7
@@ -796,7 +810,7 @@ class Parser:
         self.add_error(context, error)
         return 7
 
-    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
     def match_token_at_8(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "DataTable")
@@ -804,10 +818,15 @@ class Parser:
             self.end_rule(context, "Background")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_TableRow(context, token):
             self.build(context, token)
             return 8
+        if self.match_DocStringSeparator(context, token):
+            self.end_rule(context, "DataTable")
+            self.start_rule(context, "DocString")
+            self.build(context, token)
+            return 9
         if self.match_StepLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -822,7 +841,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -831,7 +850,7 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -839,7 +858,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -847,7 +866,7 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
             return 8
@@ -855,10 +874,11 @@ class Parser:
             self.build(context, token)
             return 8
 
-        state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
+        state_comment = "State: 8 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#TableRow",
+            "#DocStringSeparator",
             "#StepLine",
             "#TagLine",
             "#ScenarioLine",
@@ -876,29 +896,19 @@ class Parser:
         self.add_error(context, error)
         return 8
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
     def match_token_at_9(self, token: Token, context: ParserContext) -> int:
-        if self.match_TagLine(context, token):
-            self.build(context, token)
-            return 9
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Tags")
-            self.start_rule(context, "Scenario")
+        if self.match_DocStringSeparator(context, token):
             self.build(context, token)
             return 10
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 9
-        if self.match_Empty(context, token):
+        if self.match_Other(context, token):
             self.build(context, token)
             return 9
 
-        state_comment = "State: 9 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
+        state_comment = "State: 9 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
-            "#TagLine",
-            "#ScenarioLine",
-            "#Comment",
-            "#Empty",
+            "#DocStringSeparator",
+            "#Other",
         ]
         error = (
             UnexpectedEOFException(token, expected_tokens, state_comment)
@@ -910,31 +920,141 @@ class Parser:
         self.add_error(context, error)
         return 9
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
     def match_token_at_10(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 7
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DocString")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Background")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 11
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 12
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 10
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 10
+
+        state_comment = "State: 10 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#StepLine",
+            "#TagLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 10
+
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    def match_token_at_11(self, token: Token, context: ParserContext) -> int:
+        if self.match_TagLine(context, token):
+            self.build(context, token)
+            return 11
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Tags")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 12
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 11
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 11
+
+        state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
+        expected_tokens = [
+            "#TagLine",
+            "#ScenarioLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 11
+
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    def match_token_at_12(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 10
+            return 12
         if self.match_Comment(context, token):
             self.start_rule(context, "Description")
             self.build(context, token)
-            return 11
+            return 13
         if self.match_StepLine(context, token):
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 12
+            return 14
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 14
+                return 18
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "Scenario")
@@ -942,7 +1062,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
@@ -950,32 +1070,32 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 15
+            return 19
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.start_rule(context, "Description")
             self.build(context, token)
-            return 11
+            return 13
 
-        state_comment = "State: 10 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"  # fmt: skip
+        state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#Empty",
@@ -995,32 +1115,32 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 10
+        return 12
 
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    def match_token_at_11(self, token: Token, context: ParserContext) -> int:
+    def match_token_at_13(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 11
+            return 13
         if self.match_StepLine(context, token):
             self.end_rule(context, "Description")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 12
+            return 14
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.end_rule(context, "Description")
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 14
+                return 18
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "Description")
@@ -1029,7 +1149,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Scenario")
@@ -1038,13 +1158,13 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.end_rule(context, "Description")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 15
+            return 19
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Scenario")
@@ -1052,7 +1172,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "Scenario")
@@ -1060,12 +1180,12 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.build(context, token)
-            return 11
+            return 13
 
-        state_comment = "State: 11 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -1084,37 +1204,37 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 11
+        return 13
 
     # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
-    def match_token_at_12(self, token: Token, context: ParserContext) -> int:
+    def match_token_at_14(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_TableRow(context, token):
             self.start_rule(context, "DataTable")
             self.build(context, token)
-            return 13
+            return 15
         if self.match_DocStringSeparator(context, token):
             self.start_rule(context, "DocString")
             self.build(context, token)
-            return 39
+            return 49
         if self.match_StepLine(context, token):
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 12
+            return 14
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.end_rule(context, "Step")
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 14
+                return 18
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "Step")
@@ -1123,7 +1243,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
@@ -1132,13 +1252,13 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.end_rule(context, "Step")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 15
+            return 19
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
@@ -1146,7 +1266,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
@@ -1154,15 +1274,15 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 12
+            return 14
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 12
+            return 14
 
-        state_comment = "State: 12 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"  # fmt: skip
+        state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -1183,10 +1303,10 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 12
+        return 14
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-    def match_token_at_13(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
+    def match_token_at_15(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -1194,16 +1314,21 @@ class Parser:
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_TableRow(context, token):
             self.build(context, token)
-            return 13
+            return 15
+        if self.match_DocStringSeparator(context, token):
+            self.end_rule(context, "DataTable")
+            self.start_rule(context, "DocString")
+            self.build(context, token)
+            return 16
         if self.match_StepLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 12
+            return 14
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.end_rule(context, "DataTable")
@@ -1211,7 +1336,7 @@ class Parser:
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 14
+                return 18
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "DataTable")
@@ -1221,7 +1346,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -1231,14 +1356,14 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 15
+            return 19
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -1247,7 +1372,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
@@ -1256,18 +1381,19 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 13
+            return 15
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 13
+            return 15
 
-        state_comment = "State: 13 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
+        state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#TableRow",
+            "#DocStringSeparator",
             "#StepLine",
             "#TagLine",
             "#ExamplesLine",
@@ -1284,234 +1410,20 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 13
-
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
-    def match_token_at_14(self, token: Token, context: ParserContext) -> int:
-        if self.match_TagLine(context, token):
-            self.build(context, token)
-            return 14
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Tags")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 15
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 14
-        if self.match_Empty(context, token):
-            self.build(context, token)
-            return 14
-
-        state_comment = "State: 14 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
-        expected_tokens = [
-            "#TagLine",
-            "#ExamplesLine",
-            "#Comment",
-            "#Empty",
-        ]
-        error = (
-            UnexpectedEOFException(token, expected_tokens, state_comment)
-            if token.eof()
-            else UnexpectedTokenException(token, expected_tokens, state_comment)
-        )
-        if self.stop_at_first_error:
-            raise error
-        self.add_error(context, error)
-        return 14
-
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
-    def match_token_at_15(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_Empty(context, token):
-            self.build(context, token)
-            return 15
-        if self.match_Comment(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
-            return 16
-        if self.match_TableRow(context, token):
-            self.start_rule(context, "ExamplesTable")
-            self.build(context, token)
-            return 17
-        if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 14
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 9
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 15
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 10
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Other(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
-            return 16
-
-        state_comment = "State: 15 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"  # fmt: skip
-        expected_tokens = [
-            "#EOF",
-            "#Empty",
-            "#Comment",
-            "#TableRow",
-            "#TagLine",
-            "#ExamplesLine",
-            "#ScenarioLine",
-            "#RuleLine",
-            "#Other",
-        ]
-        error = (
-            UnexpectedEOFException(token, expected_tokens, state_comment)
-            if token.eof()
-            else UnexpectedTokenException(token, expected_tokens, state_comment)
-        )
-        if self.stop_at_first_error:
-            raise error
-        self.add_error(context, error)
         return 15
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
     def match_token_at_16(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 16
-        if self.match_TableRow(context, token):
-            self.end_rule(context, "Description")
-            self.start_rule(context, "ExamplesTable")
+        if self.match_DocStringSeparator(context, token):
             self.build(context, token)
             return 17
-        if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.end_rule(context, "Description")
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 14
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "Description")
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 9
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 15
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 10
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
         if self.match_Other(context, token):
             self.build(context, token)
             return 16
 
-        state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        state_comment = "State: 16 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
-            "#EOF",
-            "#Comment",
-            "#TableRow",
-            "#TagLine",
-            "#ExamplesLine",
-            "#ScenarioLine",
-            "#RuleLine",
+            "#DocStringSeparator",
             "#Other",
         ]
         error = (
@@ -1524,79 +1436,75 @@ class Parser:
         self.add_error(context, error)
         return 16
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
     def match_token_at_17(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
-            self.end_rule(context, "ExamplesTable")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
-        if self.match_TableRow(context, token):
+            return 42
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
             self.build(context, token)
-            return 17
+            return 14
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
-                self.end_rule(context, "ExamplesTable")
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "DocString")
+                self.end_rule(context, "Step")
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 14
+                return 18
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
-                self.end_rule(context, "ExamplesTable")
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "DocString")
+                self.end_rule(context, "Step")
                 self.end_rule(context, "Scenario")
                 self.end_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
-            self.end_rule(context, "ExamplesTable")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "ExamplesTable")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 15
+            return 19
         if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "ExamplesTable")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
-            self.end_rule(context, "ExamplesTable")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
             return 17
@@ -1604,10 +1512,10 @@ class Parser:
             self.build(context, token)
             return 17
 
-        state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"  # fmt: skip
+        state_comment = "State: 17 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
-            "#TableRow",
+            "#StepLine",
             "#TagLine",
             "#ExamplesLine",
             "#ScenarioLine",
@@ -1625,13 +1533,14 @@ class Parser:
         self.add_error(context, error)
         return 17
 
-    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
     def match_token_at_18(self, token: Token, context: ParserContext) -> int:
         if self.match_TagLine(context, token):
             self.build(context, token)
             return 18
-        if self.match_RuleLine(context, token):
+        if self.match_ExamplesLine(context, token):
             self.end_rule(context, "Tags")
+            self.start_rule(context, "Examples")
             self.build(context, token)
             return 19
         if self.match_Comment(context, token):
@@ -1641,10 +1550,10 @@ class Parser:
             self.build(context, token)
             return 18
 
-        state_comment = "State: 18 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0"  # fmt: skip
+        state_comment = "State: 18 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
         expected_tokens = [
             "#TagLine",
-            "#RuleLine",
+            "#ExamplesLine",
             "#Comment",
             "#Empty",
         ]
@@ -1658,14 +1567,16 @@ class Parser:
         self.add_error(context, error)
         return 18
 
-    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
     def match_token_at_19(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
-            self.end_rule(context, "RuleHeader")
-            self.end_rule(context, "Rule")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Empty(context, token):
             self.build(context, token)
             return 19
@@ -1673,51 +1584,76 @@ class Parser:
             self.start_rule(context, "Description")
             self.build(context, token)
             return 20
-        if self.match_BackgroundLine(context, token):
-            self.end_rule(context, "RuleHeader")
-            self.start_rule(context, "Background")
+        if self.match_TableRow(context, token):
+            self.start_rule(context, "ExamplesTable")
             self.build(context, token)
             return 21
         if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 18
+        if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
-                self.end_rule(context, "RuleHeader")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 11
         if self.match_TagLine(context, token):
-            self.end_rule(context, "RuleHeader")
-            self.end_rule(context, "Rule")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 19
         if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "RuleHeader")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 12
         if self.match_RuleLine(context, token):
-            self.end_rule(context, "RuleHeader")
-            self.end_rule(context, "Rule")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.start_rule(context, "Description")
             self.build(context, token)
             return 20
 
-        state_comment = "State: 19 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0"  # fmt: skip
+        state_comment = "State: 19 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#Empty",
             "#Comment",
-            "#BackgroundLine",
+            "#TableRow",
             "#TagLine",
+            "#ExamplesLine",
             "#ScenarioLine",
             "#RuleLine",
             "#Other",
@@ -1732,24 +1668,335 @@ class Parser:
         self.add_error(context, error)
         return 19
 
-    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_20(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 20
+        if self.match_TableRow(context, token):
+            self.end_rule(context, "Description")
+            self.start_rule(context, "ExamplesTable")
+            self.build(context, token)
+            return 21
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "Description")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 18
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "Description")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 11
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 19
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 12
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Other(context, token):
+            self.build(context, token)
+            return 20
+
+        state_comment = "State: 20 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#Comment",
+            "#TableRow",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Other",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 20
+
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    def match_token_at_21(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "ExamplesTable")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_TableRow(context, token):
+            self.build(context, token)
+            return 21
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "ExamplesTable")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 18
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "ExamplesTable")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 11
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "ExamplesTable")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "ExamplesTable")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 19
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "ExamplesTable")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 12
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "ExamplesTable")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 21
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 21
+
+        state_comment = "State: 21 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 21
+
+    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0
+    def match_token_at_22(self, token: Token, context: ParserContext) -> int:
+        if self.match_TagLine(context, token):
+            self.build(context, token)
+            return 22
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Tags")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 22
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 22
+
+        state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:0>Tags:0>#TagLine:0"  # fmt: skip
+        expected_tokens = [
+            "#TagLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 22
+
+    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0
+    def match_token_at_23(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "RuleHeader")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.start_rule(context, "Description")
+            self.build(context, token)
+            return 24
+        if self.match_BackgroundLine(context, token):
+            self.end_rule(context, "RuleHeader")
+            self.start_rule(context, "Background")
+            self.build(context, token)
+            return 25
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "RuleHeader")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "RuleHeader")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "RuleHeader")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "RuleHeader")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Other(context, token):
+            self.start_rule(context, "Description")
+            self.build(context, token)
+            return 24
+
+        state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:1>#RuleLine:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#Empty",
+            "#Comment",
+            "#BackgroundLine",
+            "#TagLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Other",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 23
+
+    # GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+    def match_token_at_24(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "RuleHeader")
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 20
+            return 24
         if self.match_BackgroundLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "RuleHeader")
             self.start_rule(context, "Background")
             self.build(context, token)
-            return 21
+            return 25
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "Description")
@@ -1757,7 +2004,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "RuleHeader")
@@ -1766,14 +2013,14 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "RuleHeader")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
             self.end_rule(context, "Description")
             self.end_rule(context, "RuleHeader")
@@ -1781,12 +2028,12 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
             self.build(context, token)
-            return 20
+            return 24
 
-        state_comment = "State: 20 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:0>RuleHeader:2>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#Comment",
@@ -1804,343 +2051,70 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 20
-
-    # GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
-    def match_token_at_21(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_Empty(context, token):
-            self.build(context, token)
-            return 21
-        if self.match_Comment(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
-            return 22
-        if self.match_StepLine(context, token):
-            self.start_rule(context, "Step")
-            self.build(context, token)
-            return 23
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "Background")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 25
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Background")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 26
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Other(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
-            return 22
-
-        state_comment = "State: 21 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0"  # fmt: skip
-        expected_tokens = [
-            "#EOF",
-            "#Empty",
-            "#Comment",
-            "#StepLine",
-            "#TagLine",
-            "#ScenarioLine",
-            "#RuleLine",
-            "#Other",
-        ]
-        error = (
-            UnexpectedEOFException(token, expected_tokens, state_comment)
-            if token.eof()
-            else UnexpectedTokenException(token, expected_tokens, state_comment)
-        )
-        if self.stop_at_first_error:
-            raise error
-        self.add_error(context, error)
-        return 21
-
-    # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
-    def match_token_at_22(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 22
-        if self.match_StepLine(context, token):
-            self.end_rule(context, "Description")
-            self.start_rule(context, "Step")
-            self.build(context, token)
-            return 23
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "Description")
-                self.end_rule(context, "Background")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 25
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Background")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 26
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Other(context, token):
-            self.build(context, token)
-            return 22
-
-        state_comment = "State: 22 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
-        expected_tokens = [
-            "#EOF",
-            "#Comment",
-            "#StepLine",
-            "#TagLine",
-            "#ScenarioLine",
-            "#RuleLine",
-            "#Other",
-        ]
-        error = (
-            UnexpectedEOFException(token, expected_tokens, state_comment)
-            if token.eof()
-            else UnexpectedTokenException(token, expected_tokens, state_comment)
-        )
-        if self.stop_at_first_error:
-            raise error
-        self.add_error(context, error)
-        return 22
-
-    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
-    def match_token_at_23(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_TableRow(context, token):
-            self.start_rule(context, "DataTable")
-            self.build(context, token)
-            return 24
-        if self.match_DocStringSeparator(context, token):
-            self.start_rule(context, "DocString")
-            self.build(context, token)
-            return 37
-        if self.match_StepLine(context, token):
-            self.end_rule(context, "Step")
-            self.start_rule(context, "Step")
-            self.build(context, token)
-            return 23
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "Step")
-                self.end_rule(context, "Background")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 25
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 26
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 23
-        if self.match_Empty(context, token):
-            self.build(context, token)
-            return 23
-
-        state_comment = "State: 23 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0"  # fmt: skip
-        expected_tokens = [
-            "#EOF",
-            "#TableRow",
-            "#DocStringSeparator",
-            "#StepLine",
-            "#TagLine",
-            "#ScenarioLine",
-            "#RuleLine",
-            "#Comment",
-            "#Empty",
-        ]
-        error = (
-            UnexpectedEOFException(token, expected_tokens, state_comment)
-            if token.eof()
-            else UnexpectedTokenException(token, expected_tokens, state_comment)
-        )
-        if self.stop_at_first_error:
-            raise error
-        self.add_error(context, error)
-        return 23
-
-    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
-    def match_token_at_24(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_TableRow(context, token):
-            self.build(context, token)
-            return 24
-        if self.match_StepLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.start_rule(context, "Step")
-            self.build(context, token)
-            return 23
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "DataTable")
-                self.end_rule(context, "Step")
-                self.end_rule(context, "Background")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 25
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 26
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Background")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 24
-        if self.match_Empty(context, token):
-            self.build(context, token)
-            return 24
-
-        state_comment = "State: 24 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
-        expected_tokens = [
-            "#EOF",
-            "#TableRow",
-            "#StepLine",
-            "#TagLine",
-            "#ScenarioLine",
-            "#RuleLine",
-            "#Comment",
-            "#Empty",
-        ]
-        error = (
-            UnexpectedEOFException(token, expected_tokens, state_comment)
-            if token.eof()
-            else UnexpectedTokenException(token, expected_tokens, state_comment)
-        )
-        if self.stop_at_first_error:
-            raise error
-        self.add_error(context, error)
         return 24
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0
     def match_token_at_25(self, token: Token, context: ParserContext) -> int:
-        if self.match_TagLine(context, token):
+        if self.match_EOF(context, token):
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
             self.build(context, token)
-            return 25
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Tags")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 26
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 25
+            return 42
         if self.match_Empty(context, token):
             self.build(context, token)
             return 25
+        if self.match_Comment(context, token):
+            self.start_rule(context, "Description")
+            self.build(context, token)
+            return 26
+        if self.match_StepLine(context, token):
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 27
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "Background")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Background")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Other(context, token):
+            self.start_rule(context, "Description")
+            self.build(context, token)
+            return 26
 
-        state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
+        state_comment = "State: 25 - GherkinDocument:0>Feature:3>Rule:1>Background:0>#BackgroundLine:0"  # fmt: skip
         expected_tokens = [
+            "#EOF",
+            "#Empty",
+            "#Comment",
+            "#StepLine",
             "#TagLine",
             "#ScenarioLine",
-            "#Comment",
-            "#Empty",
+            "#RuleLine",
+            "#Other",
         ]
         error = (
             UnexpectedEOFException(token, expected_tokens, state_comment)
@@ -2152,82 +2126,65 @@ class Parser:
         self.add_error(context, error)
         return 25
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_26(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
-        if self.match_Empty(context, token):
+            return 42
+        if self.match_Comment(context, token):
             self.build(context, token)
             return 26
-        if self.match_Comment(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
-            return 27
         if self.match_StepLine(context, token):
+            self.end_rule(context, "Description")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 28
-        if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 30
+            return 27
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
+                self.end_rule(context, "Description")
+                self.end_rule(context, "Background")
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 31
+            return 22
         if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Background")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
-            self.start_rule(context, "Description")
             self.build(context, token)
-            return 27
+            return 26
 
-        state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"  # fmt: skip
+        state_comment = "State: 26 - GherkinDocument:0>Feature:3>Rule:1>Background:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
-            "#Empty",
             "#Comment",
             "#StepLine",
             "#TagLine",
-            "#ExamplesLine",
             "#ScenarioLine",
             "#RuleLine",
             "#Other",
@@ -2242,87 +2199,78 @@ class Parser:
         self.add_error(context, error)
         return 26
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0
     def match_token_at_27(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 27
-        if self.match_StepLine(context, token):
-            self.end_rule(context, "Description")
-            self.start_rule(context, "Step")
+            return 42
+        if self.match_TableRow(context, token):
+            self.start_rule(context, "DataTable")
             self.build(context, token)
             return 28
-        if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.end_rule(context, "Description")
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 30
+        if self.match_DocStringSeparator(context, token):
+            self.start_rule(context, "DocString")
+            self.build(context, token)
+            return 46
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 27
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
-                self.end_rule(context, "Description")
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Background")
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Description")
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 31
+            return 22
         if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
-        if self.match_Other(context, token):
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 27
+        if self.match_Empty(context, token):
             self.build(context, token)
             return 27
 
-        state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        state_comment = "State: 27 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:0>#StepLine:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
-            "#Comment",
+            "#TableRow",
+            "#DocStringSeparator",
             "#StepLine",
             "#TagLine",
-            "#ExamplesLine",
             "#ScenarioLine",
             "#RuleLine",
-            "#Other",
+            "#Comment",
+            "#Empty",
         ]
         error = (
             UnexpectedEOFException(token, expected_tokens, state_comment)
@@ -2334,78 +2282,66 @@ class Parser:
         self.add_error(context, error)
         return 27
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
     def match_token_at_28(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
+            self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_TableRow(context, token):
-            self.start_rule(context, "DataTable")
             self.build(context, token)
-            return 29
+            return 28
         if self.match_DocStringSeparator(context, token):
+            self.end_rule(context, "DataTable")
             self.start_rule(context, "DocString")
             self.build(context, token)
-            return 35
+            return 29
         if self.match_StepLine(context, token):
+            self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 28
-        if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.end_rule(context, "Step")
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 30
+            return 27
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
+                self.end_rule(context, "DataTable")
                 self.end_rule(context, "Step")
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
+                self.end_rule(context, "Background")
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
+            self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Step")
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 31
+            return 22
         if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Background")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
+            self.end_rule(context, "DataTable")
             self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Background")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
             return 28
@@ -2413,14 +2349,13 @@ class Parser:
             self.build(context, token)
             return 28
 
-        state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"  # fmt: skip
+        state_comment = "State: 28 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#TableRow",
             "#DocStringSeparator",
             "#StepLine",
             "#TagLine",
-            "#ExamplesLine",
             "#ScenarioLine",
             "#RuleLine",
             "#Comment",
@@ -2436,99 +2371,19 @@ class Parser:
         self.add_error(context, error)
         return 28
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
     def match_token_at_29(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Rule")
-            self.end_rule(context, "Feature")
+        if self.match_DocStringSeparator(context, token):
             self.build(context, token)
-            return 34
-        if self.match_TableRow(context, token):
-            self.build(context, token)
-            return 29
-        if self.match_StepLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.start_rule(context, "Step")
-            self.build(context, token)
-            return 28
-        if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.end_rule(context, "DataTable")
-                self.end_rule(context, "Step")
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 30
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "DataTable")
-                self.end_rule(context, "Step")
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 25
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
-            self.build(context, token)
-            return 31
-        if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "Scenario")
-            self.build(context, token)
-            return 26
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "DataTable")
-            self.end_rule(context, "Step")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Comment(context, token):
-            self.build(context, token)
-            return 29
-        if self.match_Empty(context, token):
+            return 30
+        if self.match_Other(context, token):
             self.build(context, token)
             return 29
 
-        state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTable:0>#TableRow:0"  # fmt: skip
+        state_comment = "State: 29 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
-            "#EOF",
-            "#TableRow",
-            "#StepLine",
-            "#TagLine",
-            "#ExamplesLine",
-            "#ScenarioLine",
-            "#RuleLine",
-            "#Comment",
-            "#Empty",
+            "#DocStringSeparator",
+            "#Other",
         ]
         error = (
             UnexpectedEOFException(token, expected_tokens, state_comment)
@@ -2540,16 +2395,58 @@ class Parser:
         self.add_error(context, error)
         return 29
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
     def match_token_at_30(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 27
         if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DocString")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Background")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
             self.build(context, token)
-            return 30
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Tags")
-            self.start_rule(context, "Examples")
+            return 22
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 31
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
             return 30
@@ -2557,10 +2454,13 @@ class Parser:
             self.build(context, token)
             return 30
 
-        state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
+        state_comment = "State: 30 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
+            "#EOF",
+            "#StepLine",
             "#TagLine",
-            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
             "#Comment",
             "#Empty",
         ]
@@ -2574,99 +2474,29 @@ class Parser:
         self.add_error(context, error)
         return 30
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0
     def match_token_at_31(self, token: Token, context: ParserContext) -> int:
-        if self.match_EOF(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Rule")
-            self.end_rule(context, "Feature")
-            self.build(context, token)
-            return 34
-        if self.match_Empty(context, token):
-            self.build(context, token)
-            return 31
-        if self.match_Comment(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
-            return 32
-        if self.match_TableRow(context, token):
-            self.start_rule(context, "ExamplesTable")
-            self.build(context, token)
-            return 33
         if self.match_TagLine(context, token):
-            if self.lookahead_1(context, token):
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "ExamplesDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 30
-        if self.match_TagLine(context, token):
-            if self.lookahead_0(context, token):
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
-                self.end_rule(context, "Scenario")
-                self.end_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "ScenarioDefinition")
-                self.start_rule(context, "Tags")
-                self.build(context, token)
-                return 25
-        if self.match_TagLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.start_rule(context, "Tags")
-            self.build(context, token)
-            return 18
-        if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "ExamplesDefinition")
-            self.start_rule(context, "Examples")
             self.build(context, token)
             return 31
         if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.start_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Tags")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
-        if self.match_RuleLine(context, token):
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
-            self.end_rule(context, "Scenario")
-            self.end_rule(context, "ScenarioDefinition")
-            self.end_rule(context, "Rule")
-            self.start_rule(context, "Rule")
-            self.start_rule(context, "RuleHeader")
-            self.build(context, token)
-            return 19
-        if self.match_Other(context, token):
-            self.start_rule(context, "Description")
-            self.build(context, token)
             return 32
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 31
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 31
 
-        state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"  # fmt: skip
+        state_comment = "State: 31 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
         expected_tokens = [
-            "#EOF",
-            "#Empty",
-            "#Comment",
-            "#TableRow",
             "#TagLine",
-            "#ExamplesLine",
             "#ScenarioLine",
-            "#RuleLine",
-            "#Other",
+            "#Comment",
+            "#Empty",
         ]
         error = (
             UnexpectedEOFException(token, expected_tokens, state_comment)
@@ -2678,50 +2508,41 @@ class Parser:
         self.add_error(context, error)
         return 31
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0
     def match_token_at_32(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
-        if self.match_Comment(context, token):
+            return 42
+        if self.match_Empty(context, token):
             self.build(context, token)
             return 32
-        if self.match_TableRow(context, token):
-            self.end_rule(context, "Description")
-            self.start_rule(context, "ExamplesTable")
+        if self.match_Comment(context, token):
+            self.start_rule(context, "Description")
             self.build(context, token)
             return 33
+        if self.match_StepLine(context, token):
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 34
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
-                self.end_rule(context, "Description")
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 30
+                return 38
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
-                self.end_rule(context, "Description")
-                self.end_rule(context, "Examples")
-                self.end_rule(context, "ExamplesDefinition")
                 self.end_rule(context, "Scenario")
                 self.end_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Rule")
@@ -2729,45 +2550,38 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 31
+            return 39
         if self.match_ScenarioLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
-            self.end_rule(context, "Description")
-            self.end_rule(context, "Examples")
-            self.end_rule(context, "ExamplesDefinition")
             self.end_rule(context, "Scenario")
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Rule")
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Other(context, token):
+            self.start_rule(context, "Description")
             self.build(context, token)
-            return 32
+            return 33
 
-        state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        state_comment = "State: 32 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:0>#ScenarioLine:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
+            "#Empty",
             "#Comment",
-            "#TableRow",
+            "#StepLine",
             "#TagLine",
             "#ExamplesLine",
             "#ScenarioLine",
@@ -2784,8 +2598,680 @@ class Parser:
         self.add_error(context, error)
         return 32
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
     def match_token_at_33(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 33
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "Description")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 34
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "Description")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "Description")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Description")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Other(context, token):
+            self.build(context, token)
+            return 33
+
+        state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#Comment",
+            "#StepLine",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Other",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 33
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0
+    def match_token_at_34(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_TableRow(context, token):
+            self.start_rule(context, "DataTable")
+            self.build(context, token)
+            return 35
+        if self.match_DocStringSeparator(context, token):
+            self.start_rule(context, "DocString")
+            self.build(context, token)
+            return 43
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 34
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "Step")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Step")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 34
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 34
+
+        state_comment = "State: 34 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:0>#StepLine:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#DocStringSeparator",
+            "#StepLine",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 34
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0
+    def match_token_at_35(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_TableRow(context, token):
+            self.build(context, token)
+            return 35
+        if self.match_DocStringSeparator(context, token):
+            self.end_rule(context, "DataTable")
+            self.start_rule(context, "DocString")
+            self.build(context, token)
+            return 36
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 34
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 35
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 35
+
+        state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:0>DataTable:0>#TableRow:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#DocStringSeparator",
+            "#StepLine",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 35
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0
+    def match_token_at_36(self, token: Token, context: ParserContext) -> int:
+        if self.match_DocStringSeparator(context, token):
+            self.build(context, token)
+            return 37
+        if self.match_Other(context, token):
+            self.build(context, token)
+            return 36
+
+        state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
+        expected_tokens = [
+            "#DocStringSeparator",
+            "#Other",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 36
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0
+    def match_token_at_37(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 34
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "DocString")
+                self.end_rule(context, "Step")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DocString")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DocString")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 37
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 37
+
+        state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:0>DataTableAndMaybeDocString:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#StepLine",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 37
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0
+    def match_token_at_38(self, token: Token, context: ParserContext) -> int:
+        if self.match_TagLine(context, token):
+            self.build(context, token)
+            return 38
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Tags")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 38
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 38
+
+        state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:0>Tags:0>#TagLine:0"  # fmt: skip
+        expected_tokens = [
+            "#TagLine",
+            "#ExamplesLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 38
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0
+    def match_token_at_39(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 39
+        if self.match_Comment(context, token):
+            self.start_rule(context, "Description")
+            self.build(context, token)
+            return 40
+        if self.match_TableRow(context, token):
+            self.start_rule(context, "ExamplesTable")
+            self.build(context, token)
+            return 41
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Other(context, token):
+            self.start_rule(context, "Description")
+            self.build(context, token)
+            return 40
+
+        state_comment = "State: 39 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:0>#ExamplesLine:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#Empty",
+            "#Comment",
+            "#TableRow",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Other",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 39
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0
+    def match_token_at_40(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 40
+        if self.match_TableRow(context, token):
+            self.end_rule(context, "Description")
+            self.start_rule(context, "ExamplesTable")
+            self.build(context, token)
+            return 41
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "Description")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "Description")
+                self.end_rule(context, "Examples")
+                self.end_rule(context, "ExamplesDefinition")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "Description")
+            self.end_rule(context, "Examples")
+            self.end_rule(context, "ExamplesDefinition")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Other(context, token):
+            self.build(context, token)
+            return 40
+
+        state_comment = "State: 40 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:1>DescriptionHelper:1>Description:0>__alt1:0>#Other:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#Comment",
+            "#TableRow",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Other",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 40
+
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0
+    def match_token_at_41(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "ExamplesTable")
             self.end_rule(context, "Examples")
@@ -2795,10 +3281,10 @@ class Parser:
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
         if self.match_TableRow(context, token):
             self.build(context, token)
-            return 33
+            return 41
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.end_rule(context, "ExamplesTable")
@@ -2807,7 +3293,7 @@ class Parser:
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 30
+                return 38
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "ExamplesTable")
@@ -2818,7 +3304,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
             self.end_rule(context, "ExamplesTable")
             self.end_rule(context, "Examples")
@@ -2830,7 +3316,7 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.end_rule(context, "ExamplesTable")
             self.end_rule(context, "Examples")
@@ -2838,7 +3324,7 @@ class Parser:
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 31
+            return 39
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "ExamplesTable")
             self.end_rule(context, "Examples")
@@ -2848,7 +3334,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
             self.end_rule(context, "ExamplesTable")
             self.end_rule(context, "Examples")
@@ -2859,15 +3345,15 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 33
+            return 41
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 33
+            return 41
 
-        state_comment = "State: 33 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"  # fmt: skip
+        state_comment = "State: 41 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:3>ExamplesDefinition:1>Examples:2>ExamplesTable:0>#TableRow:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
             "#TableRow",
@@ -2886,18 +3372,18 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 33
+        return 41
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_35(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+    def match_token_at_43(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
             self.build(context, token)
-            return 36
+            return 44
         if self.match_Other(context, token):
             self.build(context, token)
-            return 35
+            return 43
 
-        state_comment = "State: 35 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 43 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -2910,10 +3396,10 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 35
+        return 43
 
-    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_36(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+    def match_token_at_44(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -2922,13 +3408,18 @@ class Parser:
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
+        if self.match_TableRow(context, token):
+            self.end_rule(context, "DocString")
+            self.start_rule(context, "DataTable")
+            self.build(context, token)
+            return 45
         if self.match_StepLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 28
+            return 34
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.end_rule(context, "DocString")
@@ -2936,7 +3427,7 @@ class Parser:
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 30
+                return 38
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "DocString")
@@ -2946,7 +3437,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -2957,14 +3448,14 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 31
+            return 39
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -2973,7 +3464,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -2983,17 +3474,18 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 36
+            return 44
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 36
+            return 44
 
-        state_comment = "State: 36 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 44 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
+            "#TableRow",
             "#StepLine",
             "#TagLine",
             "#ExamplesLine",
@@ -3010,18 +3502,122 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 36
+        return 44
 
-    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_37(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+    def match_token_at_45(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_TableRow(context, token):
+            self.build(context, token)
+            return 45
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 34
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 38
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 39
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 45
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 45
+
+        state_comment = "State: 45 - GherkinDocument:0>Feature:3>Rule:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#StepLine",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 45
+
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+    def match_token_at_46(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
             self.build(context, token)
-            return 38
+            return 47
         if self.match_Other(context, token):
             self.build(context, token)
-            return 37
+            return 46
 
-        state_comment = "State: 37 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 46 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3034,10 +3630,10 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 37
+        return 46
 
-    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_38(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+    def match_token_at_47(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3045,13 +3641,18 @@ class Parser:
             self.end_rule(context, "Rule")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
+        if self.match_TableRow(context, token):
+            self.end_rule(context, "DocString")
+            self.start_rule(context, "DataTable")
+            self.build(context, token)
+            return 48
         if self.match_StepLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 23
+            return 27
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "DocString")
@@ -3060,7 +3661,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 25
+                return 31
         if self.match_TagLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3070,7 +3671,7 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3078,7 +3679,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 26
+            return 32
         if self.match_RuleLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3087,17 +3688,18 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 38
+            return 47
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 38
+            return 47
 
-        state_comment = "State: 38 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 47 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
+            "#TableRow",
             "#StepLine",
             "#TagLine",
             "#ScenarioLine",
@@ -3113,18 +3715,101 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 38
+        return 47
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_39(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+    def match_token_at_48(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_TableRow(context, token):
+            self.build(context, token)
+            return 48
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 27
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Background")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 31
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 32
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Rule")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 48
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 48
+
+        state_comment = "State: 48 - GherkinDocument:0>Feature:3>Rule:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#StepLine",
+            "#TagLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 48
+
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+    def match_token_at_49(self, token: Token, context: ParserContext) -> int:
         if self.match_DocStringSeparator(context, token):
             self.build(context, token)
-            return 40
+            return 50
         if self.match_Other(context, token):
             self.build(context, token)
-            return 39
+            return 49
 
-        state_comment = "State: 39 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 49 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3137,10 +3822,10 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 39
+        return 49
 
-    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_40(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+    def match_token_at_50(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3148,13 +3833,18 @@ class Parser:
             self.end_rule(context, "ScenarioDefinition")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
+        if self.match_TableRow(context, token):
+            self.end_rule(context, "DocString")
+            self.start_rule(context, "DataTable")
+            self.build(context, token)
+            return 51
         if self.match_StepLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
             self.start_rule(context, "Step")
             self.build(context, token)
-            return 12
+            return 14
         if self.match_TagLine(context, token):
             if self.lookahead_1(context, token):
                 self.end_rule(context, "DocString")
@@ -3162,7 +3852,7 @@ class Parser:
                 self.start_rule(context, "ExamplesDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 14
+                return 18
         if self.match_TagLine(context, token):
             if self.lookahead_0(context, token):
                 self.end_rule(context, "DocString")
@@ -3172,7 +3862,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3182,14 +3872,14 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ExamplesLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
             self.start_rule(context, "ExamplesDefinition")
             self.start_rule(context, "Examples")
             self.build(context, token)
-            return 15
+            return 19
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3198,7 +3888,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3207,17 +3897,18 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 40
+            return 50
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 40
+            return 50
 
-        state_comment = "State: 40 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 50 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
+            "#TableRow",
             "#StepLine",
             "#TagLine",
             "#ExamplesLine",
@@ -3234,18 +3925,119 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 40
+        return 50
 
-    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0
-    def match_token_at_41(self, token: Token, context: ParserContext) -> int:
-        if self.match_DocStringSeparator(context, token):
+    # GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+    def match_token_at_51(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.end_rule(context, "Feature")
             self.build(context, token)
             return 42
+        if self.match_TableRow(context, token):
+            self.build(context, token)
+            return 51
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 14
+        if self.match_TagLine(context, token):
+            if self.lookahead_1(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.start_rule(context, "ExamplesDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 18
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Scenario")
+                self.end_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 11
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ExamplesLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "ExamplesDefinition")
+            self.start_rule(context, "Examples")
+            self.build(context, token)
+            return 19
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 12
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Scenario")
+            self.end_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 51
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 51
+
+        state_comment = "State: 51 - GherkinDocument:0>Feature:2>ScenarioDefinition:1>Scenario:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#StepLine",
+            "#TagLine",
+            "#ExamplesLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 51
+
+    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0
+    def match_token_at_52(self, token: Token, context: ParserContext) -> int:
+        if self.match_DocStringSeparator(context, token):
+            self.build(context, token)
+            return 53
         if self.match_Other(context, token):
             self.build(context, token)
-            return 41
+            return 52
 
-        state_comment = "State: 41 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:0>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 52 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:0>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#DocStringSeparator",
             "#Other",
@@ -3258,17 +4050,22 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 41
+        return 52
 
-    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0
-    def match_token_at_42(self, token: Token, context: ParserContext) -> int:
+    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0
+    def match_token_at_53(self, token: Token, context: ParserContext) -> int:
         if self.match_EOF(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
             self.end_rule(context, "Background")
             self.end_rule(context, "Feature")
             self.build(context, token)
-            return 34
+            return 42
+        if self.match_TableRow(context, token):
+            self.end_rule(context, "DocString")
+            self.start_rule(context, "DataTable")
+            self.build(context, token)
+            return 54
         if self.match_StepLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3283,7 +4080,7 @@ class Parser:
                 self.start_rule(context, "ScenarioDefinition")
                 self.start_rule(context, "Tags")
                 self.build(context, token)
-                return 9
+                return 11
         if self.match_TagLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3292,7 +4089,7 @@ class Parser:
             self.start_rule(context, "RuleHeader")
             self.start_rule(context, "Tags")
             self.build(context, token)
-            return 18
+            return 22
         if self.match_ScenarioLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3300,7 +4097,7 @@ class Parser:
             self.start_rule(context, "ScenarioDefinition")
             self.start_rule(context, "Scenario")
             self.build(context, token)
-            return 10
+            return 12
         if self.match_RuleLine(context, token):
             self.end_rule(context, "DocString")
             self.end_rule(context, "Step")
@@ -3308,17 +4105,18 @@ class Parser:
             self.start_rule(context, "Rule")
             self.start_rule(context, "RuleHeader")
             self.build(context, token)
-            return 19
+            return 23
         if self.match_Comment(context, token):
             self.build(context, token)
-            return 42
+            return 53
         if self.match_Empty(context, token):
             self.build(context, token)
-            return 42
+            return 53
 
-        state_comment = "State: 42 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocString:2>#DocStringSeparator:0"  # fmt: skip
+        state_comment = "State: 53 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:0>DocString:2>#DocStringSeparator:0"  # fmt: skip
         expected_tokens = [
             "#EOF",
+            "#TableRow",
             "#StepLine",
             "#TagLine",
             "#ScenarioLine",
@@ -3334,7 +4132,87 @@ class Parser:
         if self.stop_at_first_error:
             raise error
         self.add_error(context, error)
-        return 42
+        return 53
+
+    # GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0
+    def match_token_at_54(self, token: Token, context: ParserContext) -> int:
+        if self.match_EOF(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.end_rule(context, "Feature")
+            self.build(context, token)
+            return 42
+        if self.match_TableRow(context, token):
+            self.build(context, token)
+            return 54
+        if self.match_StepLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.start_rule(context, "Step")
+            self.build(context, token)
+            return 7
+        if self.match_TagLine(context, token):
+            if self.lookahead_0(context, token):
+                self.end_rule(context, "DataTable")
+                self.end_rule(context, "Step")
+                self.end_rule(context, "Background")
+                self.start_rule(context, "ScenarioDefinition")
+                self.start_rule(context, "Tags")
+                self.build(context, token)
+                return 11
+        if self.match_TagLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.start_rule(context, "Tags")
+            self.build(context, token)
+            return 22
+        if self.match_ScenarioLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "ScenarioDefinition")
+            self.start_rule(context, "Scenario")
+            self.build(context, token)
+            return 12
+        if self.match_RuleLine(context, token):
+            self.end_rule(context, "DataTable")
+            self.end_rule(context, "Step")
+            self.end_rule(context, "Background")
+            self.start_rule(context, "Rule")
+            self.start_rule(context, "RuleHeader")
+            self.build(context, token)
+            return 23
+        if self.match_Comment(context, token):
+            self.build(context, token)
+            return 54
+        if self.match_Empty(context, token):
+            self.build(context, token)
+            return 54
+
+        state_comment = "State: 54 - GherkinDocument:0>Feature:1>Background:2>Step:1>StepArg:0>__alt0:1>DocStringAndMaybeDataTable:1>DataTable:0>#TableRow:0"  # fmt: skip
+        expected_tokens = [
+            "#EOF",
+            "#TableRow",
+            "#StepLine",
+            "#TagLine",
+            "#ScenarioLine",
+            "#RuleLine",
+            "#Comment",
+            "#Empty",
+        ]
+        error = (
+            UnexpectedEOFException(token, expected_tokens, state_comment)
+            if token.eof()
+            else UnexpectedTokenException(token, expected_tokens, state_comment)
+        )
+        if self.stop_at_first_error:
+            raise error
+        self.add_error(context, error)
+        return 54
 
     def lookahead_0(self, context: ParserContext, currentToken: Token) -> bool:
         token = None

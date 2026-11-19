@@ -30,7 +30,9 @@ typedef enum RuleType {
     Rule_Examples, /* Examples! := #ExamplesLine DescriptionHelper ExamplesTable? */
     Rule_ExamplesTable, /* ExamplesTable! := #TableRow #TableRow* */
     Rule_Step, /* Step! := #StepLine StepArg? */
-    Rule_StepArg, /* StepArg := (DataTable | DocString) */
+    Rule_StepArg, /* StepArg := (DataTableAndMaybeDocString | DocStringAndMaybeDataTable) */
+    Rule_DataTableAndMaybeDocString, /* DataTableAndMaybeDocString := DataTable DocString? */
+    Rule_DocStringAndMaybeDataTable, /* DocStringAndMaybeDataTable := DocString DataTable? */
     Rule_DataTable, /* DataTable! := #TableRow+ */
     Rule_DocString, /* DocString! := #DocStringSeparator #Other* #DocStringSeparator */
     Rule_Tags, /* Tags! := #TagLine+ */

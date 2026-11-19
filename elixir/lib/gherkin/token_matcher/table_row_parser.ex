@@ -35,7 +35,7 @@ defmodule CucumberGherkin.TokenMatcher.TableRowParser do
     |> meta_disable_escape
     |> meta_col_plus1()
     |> meta_offset_plus1()
-    |> meta_add_char('\n')
+    |> meta_add_char("\n")
     |> parse_line(r, a)
   end
 
@@ -44,7 +44,7 @@ defmodule CucumberGherkin.TokenMatcher.TableRowParser do
     |> meta_disable_escape
     |> meta_col_plus1()
     |> meta_offset_plus1()
-    |> meta_add_char('\\')
+    |> meta_add_char("\\")
     |> parse_line(r, a)
   end
 
@@ -53,7 +53,7 @@ defmodule CucumberGherkin.TokenMatcher.TableRowParser do
     |> meta_disable_escape
     |> meta_col_plus1()
     |> meta_offset_plus1()
-    |> meta_add_char('|')
+    |> meta_add_char("|")
     |> parse_line(r, a)
   end
 
@@ -62,7 +62,7 @@ defmodule CucumberGherkin.TokenMatcher.TableRowParser do
     meta
     |> meta_disable_escape
     |> meta_col_plus1()
-    |> meta_add_char('\\')
+    |> meta_add_char("\\")
     |> meta_add_char(char)
     |> parse_line(rem, acc)
   end
