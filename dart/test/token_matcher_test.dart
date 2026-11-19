@@ -70,4 +70,56 @@ void main() {
     matcher.matchOther(after);
     expect(after.matchedText, '    content');
   });
+
+  group('reset', () {
+    test('discards an unclosed doc string and its indentation', () {
+      expect(matcher.matchDocStringSeparator(token('    ```')), isTrue);
+
+      matcher.reset();
+
+      final content = token(r'      \"\"\"');
+      expect(matcher.matchOther(content), isTrue);
+      expect(content.matchedText, r'      \"\"\"');
+
+      final opening = token('  """text/plain');
+      expect(matcher.matchDocStringSeparator(opening), isTrue);
+      expect(opening.matchedText, 'text/plain');
+      final escaped = token(r'    \"\"\"');
+      expect(matcher.matchOther(escaped), isTrue);
+      expect(escaped.matchedText, '  """');
+    });
+
+    test('restores a configured non-English default', () {
+      final frenchMatcher = GherkinTokenMatcher(builtinDialects, 'fr');
+      expect(frenchMatcher.matchLanguage(token('# language: en')), isTrue);
+      expect(frenchMatcher.matchStepLine(token('Given context')), isTrue);
+
+      frenchMatcher.reset();
+
+      expect(frenchMatcher.matchStepLine(token('Given context')), isFalse);
+      final feature = token('Fonctionnalité: exemple');
+      expect(frenchMatcher.matchFeatureLine(feature), isTrue);
+      expect(feature.matchedLanguage, 'fr');
+    });
+  });
+
+  test('matchers maintain independent language and doc string state', () {
+    final other = GherkinTokenMatcher(builtinDialects);
+    expect(matcher.matchLanguage(token('# language: fr')), isTrue);
+    expect(matcher.matchDocStringSeparator(token('    ```')), isTrue);
+
+    final feature = token('Feature: example');
+    expect(other.matchFeatureLine(feature), isTrue);
+    expect(feature.matchedLanguage, 'en');
+    final opening = token('"""text/plain');
+    expect(other.matchDocStringSeparator(opening), isTrue);
+    expect(opening.matchedText, 'text/plain');
+
+    other.reset();
+
+    expect(matcher.matchFeatureLine(token('Fonctionnalité: exemple')), isTrue);
+    final content = token('      content');
+    expect(matcher.matchOther(content), isTrue);
+    expect(content.matchedText, '  content');
+  });
 }
