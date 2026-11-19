@@ -10,6 +10,7 @@ This document is formatted according to the principles of [Keep A CHANGELOG](htt
 ### Fixed
 - [c] Fixed the size of struct Utf8Bytes to fit all 6 bytes of Utf8 byte sequences allowed by older specs.
 - [c] Fix heap buffer overflow in `create_multi_line_text_from_tokens` when description lines only contain blank characters ([#729](https://github.com/cucumber/gherkin/pull/729), [#728](https://github.com/cucumber/gherkin/pull/728))
+- [c] Fixed scenario outline example columns being corrupted when one column's name is a prefix of another's (e.g. `value`/`value_2`). ([#761](https://github.com/cucumber/gherkin/pull/761))
 
 ## [43.0.0] - 2026-11-13
 ### Changed
