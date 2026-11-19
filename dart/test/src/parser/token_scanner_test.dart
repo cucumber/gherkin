@@ -13,7 +13,6 @@ void main() {
 
   test('reads the final line without a trailing newline', () {
     final scanner = TokenScanner('  first\n  last  ')..read();
-
     final last = scanner.read();
     final eof = scanner.read();
 

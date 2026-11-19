@@ -41,7 +41,10 @@ void main() {
         ..add(RuleType.stepLine, second);
 
       expect(node.getToken(TokenType.stepLine), same(first));
-      expect(node.getTokens(TokenType.stepLine), [first, second]);
+      expect(
+        node.getTokens(TokenType.stepLine),
+        orderedEquals([first, second]),
+      );
       expect(node.getTokens(TokenType.comment), isEmpty);
     });
   });

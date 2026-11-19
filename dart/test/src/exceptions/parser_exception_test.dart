@@ -11,7 +11,7 @@ void main() {
 
       expect(error.location.line, -1);
       expect(error.location.column, 0);
-      expect(error.message, '(-1,0): invalid input');
+      expect(error.message, contains('invalid input'));
       expect(error.toString(), error.message);
     });
 

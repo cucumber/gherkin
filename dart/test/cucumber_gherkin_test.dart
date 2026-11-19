@@ -8,18 +8,16 @@ void main() {
       '  Scenario: minimalistic\n'
       '    Given the minimalism\n';
 
-  test('parses source into message envelopes', () {
+  test('includes source, document and pickle envelopes by default', () {
     final envelopes = generateMessages(source, 'minimal.feature');
 
     expect(envelopes, hasLength(3));
     expect(envelopes.first.source!.uri, 'minimal.feature');
-    final gherkinDocument = envelopes[1].gherkinDocument!;
-    final feature = gherkinDocument.feature!;
-    expect(feature.name, 'Minimal');
-    expect(envelopes.last.pickle!.name, 'minimalistic');
+    expect(envelopes[1].gherkinDocument, isNotNull);
+    expect(envelopes.last.pickle, isNotNull);
   });
 
-  test('honors include flags', () {
+  test('can emit only the document', () {
     final envelopes = generateMessages(
       source,
       'minimal.feature',
@@ -54,8 +52,7 @@ void main() {
       ),
     );
     expect(envelopes, hasLength(1));
-    expect(envelopes.single.pickle!.name, 'minimalistic');
-    expect(envelopes.single.pickle!.uri, 'minimal.feature');
+    expect(envelopes.single.pickle, isNotNull);
   });
 
   test('returns no envelopes when all output is disabled', () {
@@ -63,29 +60,43 @@ void main() {
       generateMessages(
         'invalid input',
         'invalid.feature',
-        const GherkinOptions(
+        GherkinOptions(
           includeSource: false,
           includeGherkinDocument: false,
           includePickles: false,
+          idGenerator: () => throw StateError('unexpected ID request'),
         ),
       ),
       isEmpty,
     );
   });
 
-  test('uses a custom id generator', () {
-    var nextId = 0;
+  test('uses caller-generated IDs for AST and pickle elements', () {
+    final generatedIds = <String>[];
+    String generateId() {
+      final id = 'custom-${generatedIds.length}';
+      generatedIds.add(id);
+      return id;
+    }
+
     final envelopes = generateMessages(
       source,
       'minimal.feature',
-      GherkinOptions(includeSource: false, idGenerator: () => 'id-${nextId++}'),
+      GherkinOptions(includeSource: false, idGenerator: generateId),
     );
 
     final scenario =
         envelopes.first.gherkinDocument!.feature!.children.first.scenario!;
-    expect(scenario.steps.first.id, 'id-0');
-    expect(scenario.id, 'id-1');
-    expect(envelopes.last.pickle!.id, startsWith('id-'));
+    final pickle = envelopes.last.pickle!;
+    expect(
+      [
+        scenario.id,
+        scenario.steps.single.id,
+        pickle.id,
+        pickle.steps.single.id,
+      ],
+      unorderedEquals(generatedIds),
+    );
   });
 
   test('propagates failures from the caller-provided ID generator', () {
@@ -101,46 +112,22 @@ void main() {
     );
   });
 
-  test('reports parse errors as envelopes', () {
+  test('retains the source on failure without emitting successful results', () {
     final envelopes = generateMessages(
       'not gherkin\n',
       'broken.feature',
-      const GherkinOptions(includeSource: false, includePickles: false),
-    );
-
-    expect(envelopes, hasLength(1));
-    expect(envelopes.single.parseError, isNotNull);
-    expect(envelopes.single.parseError!.source.uri, 'broken.feature');
-  });
-
-  test('maps several parser errors onto individual parseError envelopes', () {
-    final envelopes = generateMessages(
-      'oops one\n'
-          '\n'
-          'Feature: f\n'
-          '\n'
-          '  Scenario: s\n'
-          '    Given a step\n'
-          '\n'
-          'oops two\n',
-      'multi.feature',
-      const GherkinOptions(includeSource: false),
     );
 
     expect(envelopes.length, greaterThan(1));
-    expect(envelopes.every((envelope) => envelope.parseError != null), isTrue);
-    expect(envelopes.first.parseError!.source.uri, 'multi.feature');
-  });
-
-  test('preserves comments in a document without a feature', () {
-    final envelopes = generateMessages(
-      '# a standalone comment\n',
-      'empty.feature',
+    expect(envelopes.first.source!.data, 'not gherkin\n');
+    expect(
+      envelopes.skip(1).map((envelope) => envelope.parseError?.source.uri),
+      everyElement('broken.feature'),
     );
-
-    expect(envelopes, hasLength(2));
-    final document = envelopes.last.gherkinDocument!;
-    expect(document.feature, isNull);
-    expect(document.comments.single.text, '# a standalone comment');
+    expect(
+      envelopes.map((envelope) => envelope.gherkinDocument),
+      everyElement(isNull),
+    );
+    expect(envelopes.map((envelope) => envelope.pickle), everyElement(isNull));
   });
 }

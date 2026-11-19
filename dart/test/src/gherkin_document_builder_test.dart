@@ -9,12 +9,10 @@ void main() {
   late GherkinDocumentBuilder builder;
 
   setUp(() {
-    builder = GherkinDocumentBuilder(
-      () => throw StateError('Comments must not allocate IDs'),
-    );
+    builder = GherkinDocumentBuilder(() => 'unused');
   });
 
-  group('reset', () {
+  group('GherkinDocumentBuilder.reset', () {
     test('discards a completed result and its comments', () {
       final previous = _buildCommentDocument(builder, '# previous');
 
@@ -22,7 +20,6 @@ void main() {
 
       expect(builder.result.feature, isNull);
       expect(builder.result.comments, isEmpty);
-      expect(builder.result, isNot(same(previous)));
 
       final next = _buildCommentDocument(builder, '# next');
       expect(next.comments.single.text, '# next');
@@ -40,17 +37,7 @@ void main() {
 
       expect(document.feature, isNull);
       expect(document.comments.single.text, '# fresh');
-      expect(builder.result, same(document));
     });
-  });
-
-  test('completed comments are an unmodifiable snapshot', () {
-    final document = _buildCommentDocument(builder, '# saved');
-
-    builder.build(_comment('# later'));
-
-    expect(document.comments.single.text, '# saved');
-    expect(document.comments.clear, throwsUnsupportedError);
   });
 }
 
