@@ -1,0 +1,36 @@
+(1:1)FeatureLine:()Feature/Scenario Outline replacements/
+(2:1)Empty://
+(3:1)Other:/  Variables can be used in scenario outlines. These are replaced by going through/
+(4:1)Other:/  the examples table from left to right, replacing the `<` + header + `>` with the/
+(5:1)Other:/  value from the first matching column./
+(6:1)Other://
+(7:3)ScenarioLine:()Scenario Outline/the variable must match the exact column name/
+(8:5)StepLine:(Context)Given /<a>/
+(9:5)StepLine:(Action)When /<ax>/
+(10:5)StepLine:(Outcome)Then /<ay>/
+(11:1)Empty://
+(12:5)ExamplesLine:()Examples//
+(13:7)TableRow://9:a,18:ax
+(14:7)TableRow://9:pickle,18:gherkin
+(15:1)Empty://
+(16:3)ScenarioLine:()Scenario Outline/the variables are replaced by going through from left to right through the examples table/
+(17:5)StepLine:(Context)Given /<b<a>> and <a>/
+(18:1)Empty://
+(19:5)ExamplesLine:()Examples//
+(20:7)TableRow://9:a,18:b<a>
+(21:7)TableRow://9:pickle,18:gherkin
+(22:1)Empty://
+(23:3)ScenarioLine:()Scenario Outline/the first matching column is used/
+(24:5)StepLine:(Context)Given /<a>/
+(25:1)Empty://
+(26:5)ExamplesLine:()Examples//
+(27:7)TableRow://9:a,18:a
+(28:7)TableRow://9:pickle,18:gherkin
+(29:1)Empty://
+(30:3)ScenarioLine:()Scenario Outline/variables are replaced once/
+(31:5)StepLine:(Context)Given /<a> and <b>/
+(32:1)Empty://
+(33:5)ExamplesLine:()Examples//
+(34:7)TableRow://9:a,15:b
+(35:7)TableRow://9:<b>,15:pickle
+EOF
