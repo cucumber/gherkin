@@ -93,7 +93,7 @@ coverage: ## Run unit and acceptance tests and report their combined coverage
 	rm -rf coverage acceptance
 	dart pub global run coverage:test_with_coverage --out coverage/unit
 	$(MAKE) acceptance COVERAGE=1
-	dart pub global run coverage:format_coverage --lcov --check-ignore --in coverage --out coverage/lcov.info --fail-under 99 --verbose
+	dart pub global run coverage:format_coverage --lcov --check-ignore --in coverage --out coverage/lcov.info --fail-under 99.8 --verbose
 .PHONY: coverage
 
 .DELETE_ON_ERROR:

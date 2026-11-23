@@ -37,7 +37,7 @@ This removes previous coverage and acceptance outputs to force fresh execution.
 The existing token, AST, pickle, source, and error comparisons still run.
 Raw reports are stored in `coverage/unit/` and `coverage/acceptance/`;
 `coverage/lcov.info` combines both suites and honors the existing generated-file
-exclusions. The 99% threshold applies to the combined report.
+exclusions. The 99.8% threshold applies to the combined report.
 
 The coverage target requires Bash, Make, and jq (on Windows, use Git Bash with
 Make and jq on PATH). `make acceptance` remains available without instrumentation.
