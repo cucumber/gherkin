@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Called by make with a unique output path for each acceptance invocation.
+# Called by make with a unique output path, a Dart script, and its arguments.
 output=$1
-shift
+script=$2
+shift 2
 mkdir -p "$(dirname "$output")"
 service_file="${output}.service"
 rm -f "$service_file"
@@ -19,7 +20,7 @@ trap cleanup EXIT
 
 # The VM writes its startup banners to stdout, even with a service-info file.
 dart --disable-dart-dev --enable-vm-service=0 --pause-isolates-on-exit \
-  --write-service-info="$service_file" "$@" > "${output}.stdout" &
+  --write-service-info="$service_file" "$script" "$@" > "${output}.stdout" &
 child=$!
 
 for ((attempt = 0; attempt < 300; attempt++)); do

@@ -11,7 +11,6 @@ GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
 
 ifeq ($(COVERAGE),1)
 GHERKIN = bash tool/coverage.sh coverage/acceptance/$(@F).json bin/gherkin.dart
-GHERKIN_GENERATE_TOKENS = bash tool/coverage.sh coverage/acceptance/$(@F).json bin/gherkin_generate_tokens.dart
 endif
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
