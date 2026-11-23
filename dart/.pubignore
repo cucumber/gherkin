@@ -2,6 +2,7 @@ Makefile
 build/
 coverage/
 bin/
+tool/
 test/
 benchmark/
 acceptance/
