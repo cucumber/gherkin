@@ -26,21 +26,14 @@ dart pub publish --dry-run
 
 ## Coverage
 
-Install the same coverage tool version as CI, then run both suites:
+Run unit and acceptance tests with combined coverage:
 
 ```sh
 dart pub global activate coverage 1.15.0
 make coverage
 ```
 
-This removes previous coverage and acceptance outputs to force fresh execution.
-The existing token, AST, pickle, source, and error comparisons still run.
-Raw reports are stored in `coverage/unit/` and `coverage/acceptance/`;
-`coverage/lcov.info` combines both suites and honors the existing generated-file
-exclusions. The 99.8% threshold applies to the combined report.
-
-The coverage target requires Bash, Make, and jq (on Windows, use Git Bash with
-Make and jq on PATH). `make acceptance` remains available without instrumentation.
+Requires Bash, Make, and jq. Writes `coverage/lcov.info`.
 
 ## Generated Sources
 
