@@ -6967,16 +6967,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "7.16.0",
+            "version": "7.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "708bf98874d359acbdcedb84f8624e9ec215867d"
+                "reference": "b5ea40db593f3acc7a4a20cc1a9bd338ce3bd405"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/708bf98874d359acbdcedb84f8624e9ec215867d",
-                "reference": "708bf98874d359acbdcedb84f8624e9ec215867d",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/b5ea40db593f3acc7a4a20cc1a9bd338ce3bd405",
+                "reference": "b5ea40db593f3acc7a4a20cc1a9bd338ce3bd405",
                 "shasum": ""
             },
             "require": {
@@ -6989,6 +6989,7 @@
                 "danog/advanced-json-rpc": "^3.1",
                 "ext-ctype": "*",
                 "ext-dom": "*",
+                "ext-filter": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
@@ -7034,6 +7035,10 @@
             "suggest": {
                 "ext-curl": "In order to send data to shepherd",
                 "ext-igbinary": "^2.0.5 is required, used to serialize caching data",
+                "ext-pcntl": "Used with ext-posix to analyse in parallel",
+                "ext-posix": "Used with ext-pcntl to analyse in parallel",
+                "ext-readline": "Used by psalm-review",
+                "ext-zlib": "Used to compress caching data when ext-zstd isn't available",
                 "ext-zstd": ">=0.15.0 is required, used to compress caching data"
             },
             "bin": [
@@ -7086,8 +7091,8 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2026-11-22T13:12:53+00:00",
-            "published-time": "2026-11-22T13:17:57+00:00"
+            "time": "2026-11-23T19:11:15+00:00",
+            "published-time": "2026-11-23T19:26:41+00:00"
         },
         {
             "name": "webmozart/assert",
