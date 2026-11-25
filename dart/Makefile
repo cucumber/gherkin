@@ -1,4 +1,5 @@
 SHELL := /usr/bin/env bash
+.SHELLFLAGS := -e -o pipefail -c
 
 GHERKIN_LANGUAGES_JSON = ../gherkin-languages.json
 GHERKIN_DIALECTS = lib/src/language/dialects_builtin.g.dart
@@ -7,6 +8,10 @@ GHERKIN_PARSER = lib/src/parser/parser.g.dart
 GHERKIN_RAZOR = gherkin-dart.razor
 GHERKIN = dart run bin/gherkin.dart
 GHERKIN_GENERATE_TOKENS = dart run bin/gherkin_generate_tokens.dart
+
+ifeq ($(COVERAGE),1)
+GHERKIN = bash tool/coverage.sh coverage/acceptance/$(@F).json bin/gherkin.dart
+endif
 
 GOOD_FEATURE_FILES = $(shell find ../testdata/good -name "*.feature")
 BAD_FEATURE_FILES  = $(shell find ../testdata/bad -name "*.feature")
@@ -82,6 +87,13 @@ acceptance/testdata/%.errors.ndjson: ../testdata/% ../testdata/%.errors.ndjson
 	$(GHERKIN) --predictable-ids --no-source $< | jq --sort-keys --compact-output "." > $@
 	diff --unified <(jq --sort-keys "." $<.errors.ndjson) <(jq --sort-keys "." $@)
 .PHONY: acceptance
+
+coverage: ## Run unit and acceptance tests and report their combined coverage
+	rm -rf coverage acceptance
+	dart pub global run coverage:test_with_coverage --out coverage/unit
+	$(MAKE) acceptance COVERAGE=1
+	dart pub global run coverage:format_coverage --lcov --check-ignore --in coverage --out coverage/lcov.info --fail-under 99.8 --verbose
+.PHONY: coverage
 
 .DELETE_ON_ERROR:
 
